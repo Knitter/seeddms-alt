@@ -58,12 +58,11 @@ if ($targetid != $oldFolder->getID()) {
 		$document->getNotifyList();
 		// Send notification to subscribers.
 		if($notifier) {
-			$folder = $document->getFolder();
 			$subject = "###SITENAME###: ".$document->_name." - ".getMLText("document_moved_email");
 			$message = getMLText("document_moved_email")."\r\n";
 			$message .= 
 				getMLText("document").": ".$document->_name."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
+				getMLText("folder").": ".$oldFolder->getFolderPathPlain()."\r\n".
 				getMLText("new_folder").": ".$targetFolder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
