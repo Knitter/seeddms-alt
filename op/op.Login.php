@@ -68,8 +68,10 @@ if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin()))  {
 //
 
 /* new code by doudoux - TO BE TESTED */
-$ldapSearchAttribut = "uid=";
-$tmpDN = "uid=".$login.",".$settings->_ldapBaseDN;
+if (isset($settings->_ldapBaseDN)) {
+	$ldapSearchAttribut = "uid=";
+	$tmpDN = "uid=".$login.",".$settings->_ldapBaseDN;
+}
 
 if (isset($settings->_ldapType))
 {
