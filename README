@@ -38,7 +38,10 @@ application itself (letoDMS-<version>.tar.gz). The core is a pear package
 which could be installed as one. It is responsible for all the database
 operations. The web application contains the gui not knowing anything about
 the database layout. Second, one letoDMS installation can be used for
-various customer instances by sharing a common source.
+various customer instances by sharing a common source. Starting with
+version 3.2.0 a full text search engine has been added. This requires
+the zend framework and another pear package LetoDMS_Lucene-<version>.tar.gz
+which can be downloaded from the letoDMS web page.
 
 Before you proceed you have to decide how to install letoDMS:
 1. with multiple instances
@@ -55,7 +58,9 @@ at your web hoster.
 0. Quick installation instructions (single instance) ===========================
 
 You need a working web server with MySQL/PHP5 support and the files
-LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tar.gz.
+LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tar.gz. For the 
+full text search engine support, you will also need to unpack
+LetoDMS_Lucene-<version>.tar.gz.
 
 * Unpack all the files in a public web server folder. If you're working on
   a host machine your provider will tell you where to upload the files.
@@ -63,6 +68,10 @@ LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tar.gz.
 * Unless ADODB is not already installed on your system, download
   (http://adodb.sourceforge.net/) and unpack it in the letDMS 
   directory
+
+* The PEAR package Log is also needed. It can be downloaded from
+  http://pear.php.net/package/Log. Unpack it a place where it can be
+  found be php.
 
 * Create a data folder somewhere in your web server. The data folder created
   by the letoDMS archive should work for a test installation and must be
@@ -80,13 +89,8 @@ For security reason the data folder should not be inside the public folders.
 * Import "create_tables.sql" in the new database
   e.g. for mysql:
 	cat create_tables.sql | mysql -uletodms -p letodms
-
-* Copy conf/conf.Settings.php.template to conf/conf.Settings.php and
-	edit it to match your preference and settings.  At least $_rootDir,
-	$_httpRoot, $_contentDir, $_ADOdbPath, $_coreDir, $_dbHostname,
-	$_dbDatabase, $_dbUser, $_dbPass must be edited.  Note that for the
-	path you probably need to ask your provider because the absolute
-	path on the server is not immediatly viewable in a hosted system.
+* create a file ENABLE_INSTALL_TOOL in the conf directory and point
+  your browser at http://host/<letodms-dir>/install
 
 
 NOTE: UPDATING FROM A PREVIOUS VERSION
@@ -122,14 +126,18 @@ You will also need to download and install the ADODB database
 abstraction library from http://adodb.sf.net/ unless it is not installed
 on your system already.
 
+If you plan to use the full text search engine you will have to install
+the zend framework, too.
+
 
 2. Installation & Configuration ================================================
 
-Unzip the downloaded file (LetoDMS-<version>.zip) in a directory that is
+Unzip the downloaded file (LetoDMS-<version>.tar.gz) in a directory that is
 accessible via your web server. Do the same for the file
-LetoDMS_Core-<version>.zip. This file may not be unpacked below the
+LetoDMS_Core-<version>.tgz and LetoDMS_Lucene-<version>.tgz.
+These files may not be unpacked below the
 document root of your web server. Since it is a pear package it can
-also be installed with 'pear install LetoDMS_Core-<version>.zip'
+also be installed with 'pear install LetoDMS_Core-<version>.tgz'
 
 You will also need to create a directory where the uploaded files are
 stored. This directory should not be accessible via your web-server for
