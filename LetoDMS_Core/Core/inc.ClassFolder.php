@@ -721,13 +721,13 @@ class LetoDMS_Core_Folder {
 				return $userAccess->getMode();
 			}
 		}
-		$result = $this->getDefaultAccess();
 		foreach ($accessList["groups"] as $groupAccess) {
 			if ($user->isMemberOfGroup($groupAccess->getGroup())) {
-				if ($groupAccess->getMode()>$result)
-					$result = $groupAccess->getMode();
+//				if ($groupAccess->getMode()>$result)
+					return $groupAccess->getMode();
 			}
 		}
+		$result = $this->getDefaultAccess();
 		return $result;
 	} /* }}} */
 
