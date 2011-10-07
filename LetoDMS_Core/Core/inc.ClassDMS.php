@@ -658,12 +658,40 @@ class LetoDMS_Core_DMS {
 	 * Return a user by its login
 	 *
 	 * This function retrieves a user from the database by its login.
+	 * If the second optional parameter $email is not empty, the user must
+	 * also have the given password.
 	 *
-	 * @param integer $login internal login of user
+	 * @param string $login internal login of user
+	 * @param string $email email of user
 	 * @return object instance of LetoDMS_Core_User or false
 	 */
-	function getUserByLogin($login) { /* {{{ */
+	function getUserByLogin($login, $email='') { /* {{{ */
 		$queryStr = "SELECT * FROM tblUsers WHERE login = '".$login."'";
+		if($email)
+			$queryStr .= " AND email='".$email."'";
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"]);
+		$user->setDMS($this);
+		return $user;
+	} /* }}} */
+
+	/**
+	 * Return a user by its email
+	 *
+	 * This function retrieves a user from the database by its email.
+	 * It is needed when the user requests a new password.
+	 *
+	 * @param integer $email email address of user
+	 * @return object instance of LetoDMS_Core_User or false
+	 */
+	function getUserByEmail($email) { /* {{{ */
+		$queryStr = "SELECT * FROM tblUsers WHERE email = '".$email."'";
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
