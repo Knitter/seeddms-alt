@@ -313,8 +313,7 @@ CREATE TABLE `tblKeywords` (
 CREATE TABLE `tblCategory` (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
-  PRIMARY KEY  (`id`),
-	UNIQUE (`name`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
