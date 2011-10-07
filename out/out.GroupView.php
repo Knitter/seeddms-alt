@@ -50,21 +50,53 @@ UI::contentHeading(getMLText("groups"));
 UI::contentContainerStart();
 
 echo "<ul class=\"groupView\">\n";
+$users = $dms->getAllUsers();
 
 foreach ($groups as $group){
 
-	echo "<li>".$group->getName()." : ".$group->getComment()."</li>";
-	
 	$members = $group->getUsers();
-	
+	$managers = $group->getManagers();
+	$ismanager = false; /* set to true if current user is manager */
+
+	echo "<li>".$group->getName();
+	if($group->getComment())
+		echo " : ".$group->getComment();
+	foreach($managers as $manager)
+		if($manager->getId() == $user->getId()) {
+			echo " : you are the manager of this group";
+			$ismanager = true;
+		}
+	echo "</li>";
+
 	echo "<ul>\n";
-	
+	$memberids = array();
 	foreach ($members as $member) {
-	
+		$memberids[] = $member->getId();
+
 		echo "<li>".$member->getFullName();
 		if ($member->getEmail()!="")
-			echo " (<a href=\"mailto:".$member->getEmail()."\">".$member->getEmail()."</a>)</li>";
-		else echo "</li>";
+			echo " (<a href=\"mailto:".$member->getEmail()."\">".$member->getEmail()."</a>)";
+		foreach($managers as $manager)
+			if($manager->getId() == $member->getId())
+				echo ", Manager";
+		if($ismanager) {
+			echo ' <a href="../op/op.GroupView.php?action=del&groupid='.$group->getId().'&userid='.$member->getId().'"><img src="images/del.gif" width="15" height="15" border="0" align="absmiddle" alt=""> Remove this user</a>';
+		}
+		echo "</li>";
+	}
+	if($ismanager) {
+		echo "<li>Add user to this group:";
+		echo "<form action=\"../op/op.GroupView.php\">";
+		echo "<input type=\"hidden\" name=\"action\" value=\"add\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getId()."\" />";
+		echo "<select name=\"userid\" onChange=\"javascript: submit();\">";
+		echo "<option value=\"\"></option>";
+		foreach($users as $u) {
+			if(!$u->isAdmin() && !$u->isGuest() && !in_array($u->getId(), $memberids))
+				echo "<option value=\"".$u->getId()."\">".$u->getFullName()."</option>";
+		}
+		echo "</select>";
+		echo "</form>";
+		echo "</li>";
 	}
 	echo "</ul>\n";
 }
