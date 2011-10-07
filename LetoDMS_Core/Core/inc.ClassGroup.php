@@ -103,6 +103,25 @@ class LetoDMS_Core_Group {
 		return $this->_users;
 	} /* }}} */
 
+	function getManagers() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT `tblUsers`.* FROM `tblUsers` ".
+			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`userID`=`tblUsers`.`id` ".
+			"WHERE `tblGroupMembers`.`groupID` = '". $this->_id ."' AND tblGroupMembers.manager = 1";
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		$managers = array();
+
+		foreach ($resArr as $row) {
+			$user = new LetoDMS_Core_User($row["id"], $row["login"], $row["pwd"], $row["fullName"], $row["email"], $row["language"], $row["theme"], $row["comment"], $row["role"], $row['hidden']);
+			array_push($managers, $user);
+		}
+		return $managers;
+	} /* }}} */
+
 	function addUser($user,$asManager=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
