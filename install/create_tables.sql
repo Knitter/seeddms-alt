@@ -35,6 +35,20 @@ CREATE TABLE `tblUsers` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `tblUserPasswordRequest`
+-- 
+
+CREATE TABLE `tblUserPasswordRequest` (
+  `id` int(11) NOT NULL auto_increment,
+  `userID` int(11) NOT NULL default '0',
+  `hash` varchar(50) default NULL,
+  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `tblUserImages`
 -- 
 
