@@ -1040,5 +1040,55 @@ class LetoDMS_Core_DMS {
 		return $notifications;
 	} /* }}} */
 
+	/**
+	 * Create a token to request a new password.
+	 * This function will not delete the password but just creates an entry
+	 * in tblUserRequestPassword indicating a password request.
+	 *
+	 * @return string hash value of false in case of an error
+	 */
+	function createPasswordRequest($user) { /* {{{ */
+		$hash = md5(uniqid(time()));
+		$queryStr = "INSERT INTO tblUserPasswordRequest (userID, hash, `date`) VALUES (" . $user->getId() . ", '" . $hash ."', now())";
+		$resArr = $this->db->getResult($queryStr);
+		if (is_bool($resArr) && !$resArr) return false;
+		return $hash;
+
+	} /* }}} */
+
+	/**
+	 * Check if hash for a password request is valid.
+	 * This function searches a previously create password request and
+	 * returns the user.
+	 *
+	 * @param string $hash
+	 */
+	function checkPasswordRequest($hash) { /* {{{ */
+		/* Get the password request from the database */
+		$queryStr = "SELECT * FROM tblUserPasswordRequest where hash='". $hash ."'";
+		$resArr = $this->db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		if (count($resArr) != 1)
+			return false;
+		$resArr = $resArr[0];
+
+		return $this->getUser($resArr['userID']);
+
+	} /* }}} */
+
+	/**
+	 * Delete a password request
+	 *
+	 * @param string $hash
+	 */
+	function deletePasswordRequest($hash) { /* {{{ */
+		/* Delete the request, so nobody can use it a second time */
+		$queryStr = "DELETE FROM tblUserPasswordRequest WHERE hash='" . $hash."'";
+		if (!$this->db->getResult($queryStr))
+			return false;
+		return true;
+	}
 }
 ?>
