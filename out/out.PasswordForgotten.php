@@ -22,7 +22,7 @@ include("../inc/inc.Settings.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 
-UI::htmlStartPage(getMLText("password_forgotten"), "password");
+UI::htmlStartPage(getMLText("password_forgotten"), "login");
 UI::globalBanner();
 UI::pageNavigation(getMLText("password_forgotten"));
 ?>
@@ -56,6 +56,7 @@ if (isset($refer) && strlen($refer)>0) {
 </form>
 <?php UI::contentContainerEnd(); ?>
 <script language="JavaScript">document.form1.email.focus();</script>
+<p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
 <?php
 	UI::htmlEndPage();
 ?>
