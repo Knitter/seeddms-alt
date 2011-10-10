@@ -44,23 +44,13 @@ if($ismanager) {
 	$curuser = $dms->getUser($_REQUEST['userid']);
 	$members = $group->getUsers();
 
-	// Check if user is alread in group
-	$ismember = false;
-	foreach($members as $member) {
-		if($member->getId() == $curuser->getId())
-			$ismember = true;
-	}
 	// Add user to group
 	if ($_REQUEST['action'] == "add") {
-		if(!$ismember) {
-			$group->addUser($curuser);
-		}
+		$curuser->joinGroup($group);
 	}
 	// Delete user from group
 	elseif($_REQUEST['action'] == 'del') {
-		if($ismember) {
-			$group->removeUser($curuser);
-		}
+		$curuser->leaveGroup($group);
 	}
 } else {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
