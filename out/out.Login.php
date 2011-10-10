@@ -110,8 +110,16 @@ if (isset($refer) && strlen($refer)>0) {
 </form>
 <?php UI::contentContainerEnd(); ?>
 <?php
+	$tmpfoot = array();
 	if ($settings->_enableGuestLogin)
-		print "<p><a href=\"javascript:guestLogin()\">" . getMLText("guest_login") . "</a></p>\n";
+		$tmpfoot[] = "<a href=\"javascript:guestLogin()\">" . getMLText("guest_login") . "</a>\n";
+	if ($settings->_enablePasswordForgotten)
+		$tmpfoot[] = "<a href=\"../out/out.PasswordForgotten.php\">" . getMLText("password_forgotten") . "</a>\n";
+	if($tmpfoot) {
+		print "<p>";
+		print implode(' | ', $tmpfoot);
+		print "</p>\n";
+	}
 ?>
 <script language="JavaScript">document.form1.login.focus();</script>
 <?php
