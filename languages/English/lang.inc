@@ -40,6 +40,7 @@ $text["add_multiple_documents"] = "Add multiple documents";
 $text["add_multiple_files"] = "Add multiple files (will use filename as document name)";
 $text["add_subfolder"] = "Add subfolder";
 $text["add_user"] = "Add new user";
+$text["add_user_to_group"] = "Add user to group";
 $text["admin"] = "Administrator";
 $text["admin_tools"] = "Admin-Tools";
 $text["all_categories"] = "All categories";
