@@ -78,14 +78,14 @@ foreach ($groups as $group){
 			echo " (<a href=\"mailto:".$member->getEmail()."\">".$member->getEmail()."</a>)";
 		foreach($managers as $manager)
 			if($manager->getId() == $member->getId())
-				echo ", Manager";
+				echo ", ".getMLText("manager");
 		if($ismanager) {
-			echo ' <a href="../op/op.GroupView.php?action=del&groupid='.$group->getId().'&userid='.$member->getId().'"><img src="images/del.gif" width="15" height="15" border="0" align="absmiddle" alt=""> Remove this user</a>';
+			echo ' <a href="../op/op.GroupView.php?action=del&groupid='.$group->getId().'&userid='.$member->getId().'"><img src="images/del.gif" width="15" height="15" border="0" align="absmiddle" alt=""> '.getMLText("rm_user").'</a>';
 		}
 		echo "</li>";
 	}
 	if($ismanager) {
-		echo "<li>Add user to this group:";
+		echo "<li>".getMLText("add_user_to_group").":";
 		echo "<form action=\"../op/op.GroupView.php\">";
 		echo "<input type=\"hidden\" name=\"action\" value=\"add\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getId()."\" />";
 		echo "<select name=\"userid\" onChange=\"javascript: submit();\">";
