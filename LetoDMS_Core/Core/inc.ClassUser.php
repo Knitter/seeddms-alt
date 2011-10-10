@@ -405,6 +405,15 @@ class LetoDMS_Core_User {
 		return true;
 	} /* }}} */
 
+	/**
+	 * Make the user a member of a group
+	 * This function uses {@link LetoDMS_Group::addUser} but checks before if
+	 * the user is already a member of the group.
+	 *
+	 * @param object $group group to be the member of
+	 * @return boolean true on success or false in case of an error or the user
+	 *        is already a member of the group
+	 */
 	function joinGroup($group) { /* {{{ */
 		if ($group->isMember($this))
 			return false;
@@ -416,6 +425,15 @@ class LetoDMS_Core_User {
 		return true;
 	} /* }}} */
 
+	/**
+	 * Removes the user from a group
+	 * This function uses {@link LetoDMS_Group::removeUser} but checks before if
+	 * the user is a member of the group at all.
+	 *
+	 * @param object $group group to leave
+	 * @return boolean true on success or false in case of an error or the user
+	 *        is not a member of the group
+	 */
 	function leaveGroup($group) { /* {{{ */
 		if (!$group->isMember($this))
 			return false;
@@ -427,6 +445,11 @@ class LetoDMS_Core_User {
 		return true;
 	} /* }}} */
 
+	/**
+	 * Get all groups the user is a member of
+	 *
+	 * @return array list of groups
+	 */
 	function getGroups() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -702,5 +725,6 @@ class LetoDMS_Core_User {
 		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 	} /* }}} */
+
 }
 ?>
