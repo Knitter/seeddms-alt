@@ -30,16 +30,11 @@ UI::pageNavigation(getMLText("password_forgotten"));
 <?php UI::contentContainerStart(); ?>
 <form action="../op/op.PasswordForgotten.php" method="post" name="form1" onsubmit="return checkForm();">
 <?php
-if (isset($_GET["referuri"]) && strlen($_GET["referuri"])>0) {
-	$refer=$_GET["referuri"];
-}
-else if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {
-	$refer=$_POST["referuri"];
-}
-if (isset($refer) && strlen($refer)>0) {
-	echo "<input type='hidden' name='referuri' value='".$refer."'/>";
+if (isset($_REQUEST["referuri"]) && strlen($_REQUEST["referuri"])>0) {
+	echo "<input type='hidden' name='referuri' value='".$_REQUEST["referuri"]."'/>";
 }
 ?>
+  <p><?php printMLText("password_forgotten_text"); ?></p>
 	<table border="0">
 		<tr>
 			<td><?php printMLText("login");?></td>
