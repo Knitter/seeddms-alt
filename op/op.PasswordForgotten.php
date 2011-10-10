@@ -52,14 +52,14 @@ if (empty($email) || empty($login)) {
 
 $user = $dms->getUserByLogin($login, $email);
 if($user) {
+	$hash = $dms->createPasswordRequest($user);
 	$emailobj = new LetoDMS_Email();
-	$newpw = substr(md5(uniqid(time())), 0, 10);
 	$subject = "###SITENAME###: ".getMLText("password_forgotten_email_subject");
-	$message = str_replace('###PASSWORD###', $newpw, getMLText("password_forgotten_email_body"));
+	$message = str_replace('###HASH###', $hash, getMLText("password_forgotten_email_body"));
 	
 	$emailobj->sendPassword('', $user, $subject, $message);
 }
 
-_printMessage(getMLText("password_forgotten_title"), "<p>".getMLText("password_forgotten_send_password")."</p>");
+_printMessage(getMLText("password_forgotten_title"), "<p>".getMLText("password_forgotten_send_hash")."</p>");
 exit;
 ?>
