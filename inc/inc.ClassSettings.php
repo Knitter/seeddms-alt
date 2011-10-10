@@ -38,6 +38,8 @@ class Settings { /* {{{ */
 	var $_rootFolderID = 1;
 	// If you want anybody to login as guest, set the following line to true
 	var $_enableGuestLogin = false;
+	// Allow users to reset their password
+	var $_enablePasswordForgotten = false;
 	// Restricted access: only allow users to log in if they have an entry in
 	// the local database (irrespective of successful authentication with LDAP).
 	var $_restricted = true;
@@ -272,6 +274,7 @@ class Settings { /* {{{ */
 		$node = $xml->xpath('/configuration/system/authentication');
 		$tab = $node[0]->attributes();
 		$this->_enableGuestLogin = Settings::boolVal($tab["enableGuestLogin"]);
+		$this->_enablePasswordForgotten = Settings::boolVal($tab["enablePasswordForgotten"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
 		$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
 		$this->_disableSelfEdit = Settings::boolVal($tab["disableSelfEdit"]);
@@ -480,6 +483,7 @@ class Settings { /* {{{ */
     // XML Path: /configuration/system/authentication
     $node = $this->getXMLNode($xml, '/configuration/system', 'authentication');
     $this->setXMLAttributValue($node, "enableGuestLogin", $this->_enableGuestLogin);
+    $this->setXMLAttributValue($node, "enablePasswordForgotten", $this->_enablePasswordForgotten);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);
     $this->setXMLAttributValue($node, "enableUserImage", $this->_enableUserImage);
     $this->setXMLAttributValue($node, "disableSelfEdit", $this->_disableSelfEdit);
