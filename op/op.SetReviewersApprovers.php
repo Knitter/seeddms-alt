@@ -109,7 +109,7 @@ foreach ($pIndRev as $p) {
 			if (!isset($reviewIndex["i"][$p])) {
 				// Proposed reviewer is not a current reviewer, so add as a new
 				// reviewer.
-				$res = $content->addIndReviewer($docAccess["users"][$accessIndex["i"][$p]], $user, true);
+				$res = $content->addIndReviewer($docAccess["users"][$accessIndex["i"][$p]], $user);
 				$unm = $docAccess["users"][$accessIndex["i"][$p]]->getFullName();
 				$uml = $docAccess["users"][$accessIndex["i"][$p]]->getEmail();
 				
@@ -168,7 +168,7 @@ if (count($reviewIndex["i"]) > 0) {
 				$res = $db->getResult($queryStr);
 			}
 			else {
-				$res = $content->delIndReviewer($docAccess["users"][$accessIndex["i"][$rx]], $user, true);
+				$res = $content->delIndReviewer($docAccess["users"][$accessIndex["i"][$rx]], $user);
 				$unm = $docAccess["users"][$accessIndex["i"][$rx]]->getFullName();
 				$uml = $docAccess["users"][$accessIndex["i"][$rx]]->getEmail();
 				switch ($res) {
@@ -214,7 +214,7 @@ foreach ($pGrpRev as $p) {
 			if (!isset($reviewIndex["g"][$p])) {
 				// Proposed reviewer is not a current reviewer, so add as a new
 				// reviewer.
-				$res = $content->addGrpReviewer($docAccess["groups"][$accessIndex["g"][$p]], $user, true);
+				$res = $content->addGrpReviewer($docAccess["groups"][$accessIndex["g"][$p]], $user);
 				$gnm = $docAccess["groups"][$accessIndex["g"][$p]]->getName();
 				switch ($res) {
 					case 0:
@@ -269,7 +269,7 @@ if (count($reviewIndex["g"]) > 0) {
 				$res = $db->getResult($queryStr);
 			}
 			else {
-				$res = $content->delGrpReviewer($docAccess["groups"][$accessIndex["g"][$rx]], $user, true);
+				$res = $content->delGrpReviewer($docAccess["groups"][$accessIndex["g"][$rx]], $user);
 				$gnm = $docAccess["groups"][$accessIndex["g"][$rx]]->getName();
 				switch ($res) {
 					case 0:
@@ -319,7 +319,7 @@ foreach ($pIndApp as $p) {
 			if (!isset($approvalIndex["i"][$p])) {
 				// Proposed approver is not a current approver, so add as a new
 				// approver.
-				$res = $content->addIndApprover($docAccess["users"][$accessIndex["i"][$p]], $user, ($overallStatus["status"]==0 ? false : true));
+				$res = $content->addIndApprover($docAccess["users"][$accessIndex["i"][$p]], $user);
 				$unm = $docAccess["users"][$accessIndex["i"][$p]]->getFullName();
 				$uml = $docAccess["users"][$accessIndex["i"][$p]]->getEmail();
 				switch ($res) {
@@ -374,7 +374,7 @@ if (count($approvalIndex["i"]) > 0) {
 				$res = $db->getResult($queryStr);
 			}
 			else {
-				$res = $content->delIndApprover($docAccess["users"][$accessIndex["i"][$rx]], $user, true);
+				$res = $content->delIndApprover($docAccess["users"][$accessIndex["i"][$rx]], $user);
 				$unm = $docAccess["users"][$accessIndex["i"][$rx]]->getFullName();
 				$uml = $docAccess["users"][$accessIndex["i"][$rx]]->getEmail();
 				switch ($res) {
@@ -420,7 +420,7 @@ foreach ($pGrpApp as $p) {
 			if (!isset($approvalIndex["g"][$p])) {
 				// Proposed approver is not a current approver, so add as a new
 				// approver.
-				$res = $content->addGrpApprover($docAccess["groups"][$accessIndex["g"][$p]], $user, ($overallStatus["status"]==0 ? false : true));
+				$res = $content->addGrpApprover($docAccess["groups"][$accessIndex["g"][$p]], $user);
 				$gnm = $docAccess["groups"][$accessIndex["g"][$p]]->getName();
 				switch ($res) {
 					case 0:
@@ -475,7 +475,7 @@ if (count($approvalIndex["g"]) > 0) {
 				$res = $db->getResult($queryStr);
 			}
 			else {
-				$res = $content->delGrpApprover($docAccess["groups"][$accessIndex["g"][$rx]], $user, true);
+				$res = $content->delGrpApprover($docAccess["groups"][$accessIndex["g"][$rx]], $user);
 				$gnm = $docAccess["groups"][$accessIndex["g"][$rx]]->getName();
 				switch ($res) {
 					case 0:
