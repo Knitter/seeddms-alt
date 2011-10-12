@@ -538,13 +538,30 @@ class LetoDMS_Core_User {
 		return true;
 	} /* }}} */
 
+	/**
+	 * Get a list of reviews
+	 * This function returns a list of all reviews seperated by individual
+	 * and group reviews. If the document id
+	 * is passed, then only this document will be checked for approvals. The
+	 * same is true for the version of a document which limits the list
+	 * further.
+	 *
+	 * For a detaile description of the result array see
+	 * {link LetoDMS_User::getApprovalStatus}
+	 *
+	 * @param int $documentID optional document id for which to retrieve the
+	 *        reviews
+	 * @param int $version optional version of the document
+	 * @return array list of all reviews
+	 */
 	function getReviewStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
+/*
 		if (!$db->createTemporaryTable("ttreviewid")) {
 			return false;
 		}
-
+*/
 		$status = array("indstatus"=>array(), "grpstatus"=>array());
 
 		// See if the user is assigned as an individual reviewer.
@@ -553,12 +570,11 @@ class LetoDMS_Core_User {
 			"`tblDocumentReviewLog`.`userID` ".
 			"FROM `tblDocumentReviewers` ".
 			"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
-			"LEFT JOIN `ttreviewid` on `ttreviewid`.`maxLogID` = `tblDocumentReviewLog`.`reviewLogID` ".
-			"WHERE `ttreviewid`.`maxLogID`=`tblDocumentReviewLog`.`reviewLogID` ".
+			"WHERE `tblDocumentReviewers`.`type`='0' ".
 			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". $documentID ."' ").
 			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". $version ."' ").
-			"AND `tblDocumentReviewers`.`type`='0' ".
-			"AND `tblDocumentReviewers`.`required`='". $this->_id ."' ";
+			"AND `tblDocumentReviewers`.`required`='". $this->_id ."' ".
+			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT 1";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -575,12 +591,11 @@ class LetoDMS_Core_User {
 			"FROM `tblDocumentReviewers` ".
 			"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
 			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`groupID` = `tblDocumentReviewers`.`required` ".
-			"LEFT JOIN `ttreviewid` on `ttreviewid`.`maxLogID` = `tblDocumentReviewLog`.`reviewLogID` ".
-			"WHERE `ttreviewid`.`maxLogID`=`tblDocumentReviewLog`.`reviewLogID` ".
+			"WHERE `tblDocumentReviewers`.`type`='1' ".
 			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". $documentID ."' ").
 			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". $version ."' ").
-			"AND `tblDocumentReviewers`.`type`='1' ".
-			"AND `tblGroupMembers`.`userID`='". $this->_id ."'";
+			"AND `tblGroupMembers`.`userID`='". $this->_id ."' ".
+			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT 1";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -591,16 +606,46 @@ class LetoDMS_Core_User {
 		return $status;
 	} /* }}} */
 
+	/**
+	 * Get a list of approvals
+	 * This function returns a list of all approvals seperated by individual
+	 * and group approvals. If the document id
+	 * is passed, then only this document will be checked for approvals. The
+	 * same is true for the version of a document which limits the list
+	 * further.
+	 *
+	 * The result array has two elements:
+	 * - indstatus: which contains the approvals by individuals (users)
+	 * - grpstatus: which contains the approvals by groups
+	 *
+	 * Each element is itself an array of approvals with the following elements:
+	 * - approveID: unique id of approval
+	 * - documentID: id of document, that needs to be approved
+	 * - version: version of document, that needs to be approved
+	 * - type: 0 for individual approval, 1 for group approval
+	 * - required: id of user who is required to do the approval
+	 * - status: 0 not approved, ....
+	 * - comment: comment given during approval
+	 * - date: date of approval
+	 * - userID: id of user who has done the approval
+	 *
+	 * @param int $documentID optional document id for which to retrieve the
+	 *        approvals
+	 * @param int $version optional version of the document
+	 * @return array list of all approvals
+	 */
 	function getApprovalStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
+/*
 		if (!$db->createTemporaryTable("ttapproveid")) {
 			return false;
 		}
-
+*/
 		$status = array("indstatus"=>array(), "grpstatus"=>array());
 
 		// See if the user is assigned as an individual approver.
+		/*
 		$queryStr = "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
 			"`tblDocumentApproveLog`.`userID` ".
@@ -612,6 +657,18 @@ class LetoDMS_Core_User {
 			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
 			"AND `tblDocumentApprovers`.`type`='0' ".
 			"AND `tblDocumentApprovers`.`required`='". $this->_id ."' ";
+*/
+		$queryStr = "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
+			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
+			"`tblDocumentApproveLog`.`userID` ".
+			"FROM `tblDocumentApprovers` ".
+			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
+			"WHERE `tblDocumentApprovers`.`type`='0' ".
+			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
+			"AND `tblDocumentApprovers`.`required`='". $this->_id ."' ".
+			"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC LIMIT 1";
+
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -622,6 +679,7 @@ class LetoDMS_Core_User {
 
 		// See if the user is the member of a group that has been assigned to
 		// approve the document version.
+		/*
 		$queryStr = "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
 			"`tblDocumentApproveLog`.`userID` ".
@@ -634,6 +692,19 @@ class LetoDMS_Core_User {
 			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
 			"AND `tblDocumentApprovers`.`type`='1' ".
 			"AND `tblGroupMembers`.`userID`='". $this->_id ."'";
+			*/
+		$queryStr =
+			"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
+			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
+			"`tblDocumentApproveLog`.`userID` ".
+			"FROM `tblDocumentApprovers` ".
+			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
+			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`groupID` = `tblDocumentApprovers`.`required` ".
+			"WHERE `tblDocumentApprovers`.`type`='1' ".
+			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
+			"AND `tblGroupMembers`.`userID`='". $this->_id ."' ".
+			"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC LIMIT 1";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -644,6 +715,16 @@ class LetoDMS_Core_User {
 		return $status;
 	} /* }}} */
 
+	/**
+	 * Get a list of mandatory reviewers
+	 * A user which isn't trusted completely may have assigned mandatory
+	 * reviewers (both users and groups).
+	 * Whenever the user inserts a new document the mandatory reviewers are
+	 * filled in as reviewers.
+	 *
+	 * @return array list of arrays with two elements containing the user id
+	 *         (reviewerUserID) and group id (reviewerGroupID) of the reviewer.
+	 */
 	function getMandatoryReviewers() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -653,6 +734,13 @@ class LetoDMS_Core_User {
 		return $resArr;
 	} /* }}} */
 
+	/**
+	 * Get a list of mandatory approvers
+	 * See {link LetoDMS_User::getMandatoryReviewers}
+	 *
+	 * @return array list of arrays with two elements containing the user id
+	 *         (approverUserID) and group id (approverGroupID) of the approver.
+	 */
 	function getMandatoryApprovers() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -662,6 +750,14 @@ class LetoDMS_Core_User {
 		return $resArr;
 	} /* }}} */
 
+	/**
+	 * Set a mandatory reviewer
+	 * This function sets a mandatory reviewer if it isn't already set.
+	 *
+	 * @param integer $id id of reviewer
+	 * @param boolean $isgroup true if $id is a group
+	 * @return boolean true on success, otherwise false
+	 */
 	function setMandatoryReviewer($id, $isgroup=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -669,7 +765,7 @@ class LetoDMS_Core_User {
 
 			$queryStr = "SELECT * FROM tblMandatoryReviewers WHERE userID = " . $this->_id . " AND reviewerGroupID = " . $id;
 			$resArr = $db->getResultArray($queryStr);
-			if (count($resArr)!=0) return;
+			if (count($resArr)!=0) return true;
 
 			$queryStr = "INSERT INTO tblMandatoryReviewers (userID, reviewerGroupID) VALUES (" . $this->_id . ", " . $id .")";
 			$resArr = $db->getResult($queryStr);
@@ -679,7 +775,7 @@ class LetoDMS_Core_User {
 
 			$queryStr = "SELECT * FROM tblMandatoryReviewers WHERE userID = " . $this->_id . " AND reviewerUserID = " . $id;
 			$resArr = $db->getResultArray($queryStr);
-			if (count($resArr)!=0) return;
+			if (count($resArr)!=0) return true;
 
 			$queryStr = "INSERT INTO tblMandatoryReviewers (userID, reviewerUserID) VALUES (" . $this->_id . ", " . $id .")";
 			$resArr = $db->getResult($queryStr);
@@ -688,6 +784,14 @@ class LetoDMS_Core_User {
 
 	} /* }}} */
 
+	/**
+	 * Set a mandatory approver
+	 * This function sets a mandatory approver if it isn't already set.
+	 *
+	 * @param integer $id id of approver
+	 * @param boolean $isgroup true if $id is a group
+	 * @return boolean true on success, otherwise false
+	 */
 	function setMandatoryApprover($id, $isgroup=false) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -713,17 +817,29 @@ class LetoDMS_Core_User {
 		}
 	} /* }}} */
 
+	/**
+	 * Deletes all mandatory reviewers
+	 *
+	 * @return boolean true on success, otherwise false
+	 */
 	function delMandatoryReviewers() { /* {{{ */
 		$db = $this->_dms->getDB();
 		$queryStr = "DELETE FROM tblMandatoryReviewers WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
+		return true;
 	} /* }}} */
 
+	/**
+	 * Deletes all mandatory approvers
+	 *
+	 * @return boolean true on success, otherwise false
+	 */
 	function delMandatoryApprovers() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
+		return true;
 	} /* }}} */
 
 }
