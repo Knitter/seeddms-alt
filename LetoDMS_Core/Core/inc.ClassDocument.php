@@ -1672,15 +1672,36 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 			return "/" . $this->_document->getID() . "/" . $this->_version . "/index.html";
 	} /* }}} */
 
-	function getStatus($forceTemporaryTable=false) { /* {{{ */
+	/**
+	 * Get the latest status of the content
+	 *
+	 * The status of the content reflects its current review and approval
+	 * state. A status can be a negative or positive number or 0. A negative
+	 * numbers indicate a missing approval, review or an obsolete content.
+	 * Positive numbers indicate some kind of approval but not necessarily
+	 * a release.
+	 * S_DRAFT_REV, 0
+	 * S_DRAFT_APP, 1
+	 * S_RELEASED, 2
+	 * S_REJECTED, -1
+	 * S_OBSOLETE, -2
+	 * S_EXPIRED, -3
+	 * When a content is inserted and does not need approval nor review,
+	 * then its status is set to S_RELEASED immediately. Any change of
+	 * the status is monitored in the table tblDocumentStatusLog. This
+	 * function will always return the latest entry for the content.
+	 */
+	function getStatus($limit=1) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		// Retrieve the current overall status of the content represented by
 		// this object.
 		if (!isset($this->_status)) {
+		/*
 			if (!$db->createTemporaryTable("ttstatid", $forceTemporaryTable)) {
 				return false;
 			}
+		*/
 			$queryStr="SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
 				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
 				"`tblDocumentStatusLog`.`userID` ".
@@ -1690,6 +1711,16 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 				"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
 				"AND `tblDocumentStatus`.`documentID` = '". $this->_document->getID() ."' ".
 				"AND `tblDocumentStatus`.`version` = '". $this->_version ."' ";
+			$queryStr=
+				"SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
+				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
+				"`tblDocumentStatusLog`.`userID` ".
+				"FROM `tblDocumentStatus` ".
+				"LEFT JOIN `tblDocumentStatusLog` USING (`statusID`) ".
+				"WHERE `tblDocumentStatus`.`documentID` = '". $this->_document->getID() ."' ".
+				"AND `tblDocumentStatus`.`version` = '". $this->_version ."' ".
+				"ORDER BY `tblDocumentStatusLog`.`statusLogID` DESC LIMIT ".$limit;
+
 			$res = $db->getResultArray($queryStr);
 			if (is_bool($res) && !$res)
 				return false;
@@ -1700,6 +1731,16 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return $this->_status;
 	} /* }}} */
 
+	/**
+	 * Set the status of the content
+	 * Setting the status means to add another entry into the table
+	 * tblDocumentStatusLog
+	 *
+	 * @param integer $status new status of content
+	 * @param string $comment comment for this status change
+	 * @param object $updateUser user initiating the status change
+	 * @return boolean true on success, otherwise false
+	 */
 	function setStatus($status, $comment, $updateUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
@@ -1730,15 +1771,17 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return true;
 	} /* }}} */
 
-	function getReviewStatus($forceTemporaryTable=false) { /* {{{ */
+	function getReviewStatus($limit=1) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		// Retrieve the current status of each assigned reviewer for the content
 		// represented by this object.
 		if (!isset($this->_reviewStatus)) {
+		/*
 			if (!$db->createTemporaryTable("ttreviewid", $forceTemporaryTable)) {
 				return false;
 			}
+		*/
 			$queryStr="SELECT `tblDocumentReviewers`.*, `tblDocumentReviewLog`.`status`, ".
 				"`tblDocumentReviewLog`.`comment`, `tblDocumentReviewLog`.`date`, ".
 				"`tblDocumentReviewLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
@@ -1750,6 +1793,19 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 				"WHERE `ttreviewid`.`maxLogID`=`tblDocumentReviewLog`.`reviewLogID` ".
 				"AND `tblDocumentReviewers`.`documentID` = '". $this->_document->getID() ."' ".
 				"AND `tblDocumentReviewers`.`version` = '". $this->_version ."' ";
+
+			$queryStr=
+				"SELECT `tblDocumentReviewers`.*, `tblDocumentReviewLog`.`status`, ".
+				"`tblDocumentReviewLog`.`comment`, `tblDocumentReviewLog`.`date`, ".
+				"`tblDocumentReviewLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
+				"FROM `tblDocumentReviewers` ".
+				"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
+				"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentReviewers`.`required`".
+				"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentReviewers`.`required`".
+				"WHERE `tblDocumentReviewers`.`documentID` = '". $this->_document->getID() ."' ".
+				"AND `tblDocumentReviewers`.`version` = '". $this->_version ."' ".
+				"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT ".$limit;
+
 			$res = $db->getResultArray($queryStr);
 			if (is_bool($res) && !$res)
 				return false;
@@ -1760,15 +1816,17 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return $this->_reviewStatus;
 	} /* }}} */
 
-	function getApprovalStatus($forceTemporaryTable=false) { /* {{{ */
+	function getApprovalStatus($limit=1) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		// Retrieve the current status of each assigned approver for the content
 		// represented by this object.
 		if (!isset($this->_approvalStatus)) {
+		/*
 			if (!$db->createTemporaryTable("ttapproveid", $forceTemporaryTable)) {
 				return false;
 			}
+		*/
 			$queryStr="SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 				"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
 				"`tblDocumentApproveLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
@@ -1780,6 +1838,19 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 				"WHERE `ttapproveid`.`maxLogID`=`tblDocumentApproveLog`.`approveLogID` ".
 				"AND `tblDocumentApprovers`.`documentID` = '". $this->_document->getID() ."' ".
 				"AND `tblDocumentApprovers`.`version` = '". $this->_version ."'";
+
+			$queryStr=
+			  "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
+				"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
+				"`tblDocumentApproveLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
+				"FROM `tblDocumentApprovers` ".
+				"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
+				"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentApprovers`.`required` ".
+				"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentApprovers`.`required`".
+				"WHERE `tblDocumentApprovers`.`documentID` = '". $this->_document->getID() ."' ".
+				"AND `tblDocumentApprovers`.`version` = '". $this->_version ."' ".
+				"ORDER BY `tblDocumentApproveLog`.`approveLogId` DESC LIMIT ".$limit;
+
 			$res = $db->getResultArray($queryStr);
 			if (is_bool($res) && !$res)
 				return false;
@@ -1788,7 +1859,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return $this->_approvalStatus;
 	} /* }}} */
 
-	function addIndReviewer($user, $requestUser, $sendEmail=false) { /* {{{ */
+	function addIndReviewer($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -1845,7 +1916,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function addGrpReviewer($group, $requestUser, $sendEmail=false) { /* {{{ */
+	function addGrpReviewer($group, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$groupID = $group->getID();
@@ -1903,7 +1974,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function addIndApprover($user, $requestUser, $sendEmail=false) { /* {{{ */
+	function addIndApprover($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -1958,7 +2029,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function addGrpApprover($group, $requestUser, $sendEmail=false) { /* {{{ */
+	function addGrpApprover($group, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$groupID = $group->getID();
@@ -2016,7 +2087,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delIndReviewer($user, $requestUser, $sendEmail=false) { /* {{{ */
+	function delIndReviewer($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -2047,7 +2118,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delGrpReviewer($group, $requestUser, $sendEmail=false) { /* {{{ */
+	function delGrpReviewer($group, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$groupID = $group->getID();
@@ -2078,7 +2149,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delIndApprover($user, $requestUser, $sendEmail=false) { /* {{{ */
+	function delIndApprover($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
@@ -2109,7 +2180,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return 0;
 	} /* }}} */
 
-	function delGrpApprover($group, $requestUser, $sendEmail=false) { /* {{{ */
+	function delGrpApprover($group, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$groupID = $group->getID();
