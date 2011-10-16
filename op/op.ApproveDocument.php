@@ -56,7 +56,7 @@ if (!is_object($content)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
-// operation is only allowed for last the document version
+// operation is only allowed for the last document version
 $latestContent = $document->getLatestContent();
 if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
@@ -72,30 +72,10 @@ if (!isset($_POST["approvalStatus"]) || !is_numeric($_POST["approvalStatus"]) ||
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_approval_status"));
 }
 
-// retrieve the approve status for the current user.
-$approvalStatus = $user->getApprovalStatus($documentid, $version);
-if (count($approvalStatus["indstatus"]) == 0 && count($approvalStatus["grpstatus"]) == 0) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-}
-
 if ($_POST["approvalType"] == "ind") {
 
-	$indApprover = true;
-	if (count($approvalStatus["indstatus"])==0) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-	}
-	if ($approvalStatus["indstatus"][0]["status"]==-2) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-	}
-	
-	// User is eligible to make this update.
-
 	$comment = sanitizeString($_POST["comment"]);
-	$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-		"VALUES ('". $approvalStatus["indstatus"][0]["approveID"] ."', '".
-		$_POST["approvalStatus"] ."', '". $comment ."', NOW(), '". $user->getID() ."')";
-	$res=$db->getResult($queryStr);
-	if (is_bool($res) && !res) {
+	if(0 > $latestContent->setApprovalByInd($user, $user, $_POST["approvalStatus"], $comment)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("approval_update_failed"));
 	}
 	else {
@@ -126,35 +106,13 @@ if ($_POST["approvalType"] == "ind") {
 	}
 }
 else if ($_POST["approvalType"] == "grp") {
-
-	$grpApprover=false;
-	foreach ($approvalStatus["grpstatus"] as $gs) {
-		if ($_POST["approvalGroup"] == $gs["required"]) {
-			if ($gs["status"]==-2) {
-				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-			}
-			$grpStatus=$gs;
-			$grpApprover=true;
-			break;
-		}
-	}
-	if (!$grpApprover) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-	}
-
-	// User is eligible to make this update.
-
 	$comment = sanitizeString($_POST["comment"]);
-	$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-		"VALUES ('". $grpStatus["approveID"] ."', '".
-		$_POST["approvalStatus"] ."', '". $comment ."', NOW(), '". $user->getID() ."')";
-	$res=$db->getResult($queryStr);
-	if (is_bool($res) && !res) {
+	$group = $dms->getGroup($_POST['approvalGroup']);
+	if(0 > $latestContent->setApprovalByGrp($group, $user, $_POST["approvalStatus"], $comment)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("approval_update_failed"));
 	}
 	else {
 		// Send an email notification to the document updater.
-		$grp = $dms->getGroup($grpStatus["required"]);
 		if($notifier) {
 			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_submit_email");
 			$message = getMLText("approval_submit_email")."\r\n";
@@ -243,7 +201,7 @@ if ($_POST["approvalStatus"]==-1){
 				$message = getMLText("document_status_changed_email")."\r\n";
 				$message .= 
 					getMLText("document").": ".$document->_name."\r\n".
-					getMLText("status").": ".getOverallStatusText($status)."\r\n".
+					getMLText("status").": ".getOverallStatusText($newStatus)."\r\n".
 					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 					getMLText("comment").": ".$document->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
