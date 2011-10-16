@@ -56,35 +56,22 @@ if (!is_object($content)) {
 $latestContent = $document->getLatestContent();
 if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
-}
+}
 // verify if document has expired
 if ($document->hasExpired()){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-// retrieve the approval status for the current user.
-$approvalStatus = $user->getApprovalStatus($documentid, $version);
-if (count($approvalStatus["indstatus"]) == 0 && count($approvalStatus["grpstatus"]) == 0) {
+$approvals = $latestContent->getApprovalStatus();
+if(!$approvals) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("no_action"));
 }
 
-$indApprover = true;
-if (count($approvalStatus["indstatus"])==0){
-	$indApprover = false;
-}
-else if ($approvalStatus["indstatus"][0]["status"]==-2) {
-	$indApprover = false;
-}
-
-$grpApprover=false;
-foreach ($approvalStatus["grpstatus"] as $grpStatus) {
-	if (($grpStatus["status"]!=-2)&&(isset($grpStatus["status"]))) {
-		$grpApprover=true;
+foreach($approvals as $approval) {
+	if($approval['approveID'] == $_GET['approveid']) {
+		$approvalStatus = $approval;
+		break;
 	}
-}
-
-if (!$indApprover && !$grpApprover) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("no_action"));
 }
 
 UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
@@ -110,7 +97,7 @@ function checkIndForm()
 function checkGrpForm()
 {
 	msg = "";
-	if (document.form1.approvalGroup.value == "") msg += "<?php printMLText("js_no_approval_group");?>\n";
+//	if (document.form1.approvalGroup.value == "") msg += "<?php printMLText("js_no_approval_group");?>\n";
 	if (document.form1.approvalStatus.value == "") msg += "<?php printMLText("js_no_approval_status");?>\n";
 	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
 	if (msg != "")
@@ -128,8 +115,8 @@ function checkGrpForm()
 UI::contentContainerStart();
 
 // Display the Approval form.
-if ($indApprover) {
-	if($approvalStatus["indstatus"][0]["status"]!=0) {
+if ($approvalStatus['type'] == 0) {
+	if($approvalStatus["status"]!=0) {
 
 		print "<table class=\"folderView\"><thead><tr>";
 		print "<th>".getMLText("status")."</th>";
@@ -137,11 +124,11 @@ if ($indApprover) {
 		print "<th>".getMLText("last_update")."</th>";
 		print "</tr></thead><tbody><tr>";
 		print "<td>";
-		printApprovalStatusText($approvalStatus["indstatus"][0]["status"]);
+		printApprovalStatusText($approvalStatus["status"]);
 		print "</td>";
-		print "<td>".$approvalStatus["indstatus"][0]["comment"]."</td>";
-		$indUser = $dms->getUser($approvalStatus["indstatus"][0]["userID"]);
-		print "<td>".$approvalStatus["indstatus"][0]["date"]." - ". $indUser->getFullname() ."</td>";
+		print "<td>".$approvalStatus["comment"]."</td>";
+		$indUser = $dms->getUser($approvalStatus["userID"]);
+		print "<td>".$approvalStatus["date"]." - ". $indUser->getFullname() ."</td>";
 		print "</tr></tbody></table><br>\n";
 	}
 ?>
@@ -165,9 +152,9 @@ if ($indApprover) {
 	</form>
 <?php
 }
-else if ($grpApprover) {
+else if ($approvalStatus['type'] == 1) {
 
-	if($approvalStatus["grpstatus"][0]["status"]!=0) {
+	if($approvalStatus["status"]!=0) {
 
 		print "<table class=\"folderView\"><thead><tr>";
 		print "<th>".getMLText("status")."</th>";
@@ -175,58 +162,37 @@ else if ($grpApprover) {
 		print "<th>".getMLText("last_update")."</th>";
 		print "</tr></thead><tbody><tr>";
 		print "<td>";
-		printApprovalStatusText($approvalStatus["grpstatus"][0]["status"]);
+		printApprovalStatusText($approvalStatus["status"]);
 		print "</td>";
-		print "<td>".$approvalStatus["grpstatus"][0]["comment"]."</td>";
-		$indUser = $dms->getUser($approvalStatus["grpstatus"][0]["userID"]);
-		print "<td>".$approvalStatus["grpstatus"][0]["date"]." - ". $indUser->getFullname() ."</td>";
+		print "<td>".$approvalStatus["comment"]."</td>";
+		$indUser = $dms->getUser($approvalStatus["userID"]);
+		print "<td>".$approvalStatus["date"]." - ". $indUser->getFullname() ."</td>";
 		print "</tr></tbody></table><br>\n";
 	}
 
-	$grpSelectBox = "";
-	foreach ($approvalStatus["grpstatus"] as $grp) {
-		if ($grp["status"]!=-2) {
-		
-			$g=$dms->getGroup($grpStatus["required"]);
-
-			if ($grp["status"] != -2) {
-				$grpSelectBox .= (strlen($grpSelectBox)==0 ? "": "<option value=''></option>").
-					"<option value='". $grpStatus["required"] ."'>". $g->getName() ."</option>";
-			}
-		}
-	}
-	if (strlen($grpSelectBox)>0) {
 ?>
-		<form method="POST" action="../op/op.ApproveDocument.php" name="form1" onsubmit="return checkGrpForm();">
-		<table>
-		<tr><td><?php printMLText("comment")?>:</td>
-		<td><textarea name="comment" cols="80" rows="4"></textarea>
-		</td></tr>
-		<tr><td><?php printMLText("approval_group")?>:</td>
-		<td class='infos' valign='top'><select name="approvalGroup"><?php print $grpSelectBox; ?></select>
-		</td></tr>
-		<tr><td><?php printMLText("approval_status")?>:</td>
-		<td>
-		<select name="approvalStatus">
-		<option value=''></option>
-		<option value='1'><?php printMLText("status_approved")?></option>
-		<option value='-1'><?php printMLText("rejected")?></option>
-		</select>
-		</td></tr>
-		<tr><td></td><td>
-		<input type='hidden' name='approvalType' value='grp'/>
-		<input type='hidden' name='documentid' value='<?php echo $documentid ?>'/>
-		<input type='hidden' name='version' value='<?php echo $version ?>'/>
-		<input type='submit' name='groupApproval' value='<?php printMLText("submit_approval")?>'/></td></tr>
-		</table>
-		</form>
+	<form method="POST" action="../op/op.ApproveDocument.php" name="form1" onsubmit="return checkGrpForm();">
+	<table>
+	<tr><td><?php printMLText("comment")?>:</td>
+	<td><textarea name="comment" cols="80" rows="4"></textarea>
+	</td></tr>
+	<tr><td><?php printMLText("approval_status")?>:</td>
+	<td>
+	<select name="approvalStatus">
+	<option value=''></option>
+	<option value='1'><?php printMLText("status_approved")?></option>
+	<option value='-1'><?php printMLText("rejected")?></option>
+	</select>
+	</td></tr>
+	<tr><td></td><td>
+	<input type='hidden' name='approvalGroup' value="<?php echo $approvalStatus['required']; ?>" />
+	<input type='hidden' name='approvalType' value='grp'/>
+	<input type='hidden' name='documentid' value='<?php echo $documentid ?>'/>
+	<input type='hidden' name='version' value='<?php echo $version ?>'/>
+	<input type='submit' name='groupApproval' value='<?php printMLText("submit_approval")?>'/></td></tr>
+	</table>
+	</form>
 <?php
-	}
-	else {
-?>
-	<p><?php printMLText("no_action")?></p>
-<?php
-	}
 }
 
 UI::contentContainerEnd();
