@@ -1701,7 +1701,6 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 			if (!$db->createTemporaryTable("ttstatid", $forceTemporaryTable)) {
 				return false;
 			}
-		*/
 			$queryStr="SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
 				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
 				"`tblDocumentStatusLog`.`userID` ".
@@ -1711,6 +1710,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 				"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
 				"AND `tblDocumentStatus`.`documentID` = '". $this->_document->getID() ."' ".
 				"AND `tblDocumentStatus`.`version` = '". $this->_version ."' ";
+		*/
 			$queryStr=
 				"SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
 				"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
@@ -1771,47 +1771,48 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * Get the current review status of the document content
+	 * The review status is a list of reviewers and its current status
+	 *
+	 * @param integer $limit the number of recent status changes per reviewer
+	 * @return array list of review status
+	 */
 	function getReviewStatus($limit=1) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		// Retrieve the current status of each assigned reviewer for the content
 		// represented by this object.
 		if (!isset($this->_reviewStatus)) {
-		/*
-			if (!$db->createTemporaryTable("ttreviewid", $forceTemporaryTable)) {
-				return false;
-			}
-		*/
-			$queryStr="SELECT `tblDocumentReviewers`.*, `tblDocumentReviewLog`.`status`, ".
-				"`tblDocumentReviewLog`.`comment`, `tblDocumentReviewLog`.`date`, ".
-				"`tblDocumentReviewLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
-				"FROM `tblDocumentReviewers` ".
-				"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
-				"LEFT JOIN `ttreviewid` on `ttreviewid`.`maxLogID` = `tblDocumentReviewLog`.`reviewLogID` ".
-				"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentReviewers`.`required`".
-				"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentReviewers`.`required`".
-				"WHERE `ttreviewid`.`maxLogID`=`tblDocumentReviewLog`.`reviewLogID` ".
-				"AND `tblDocumentReviewers`.`documentID` = '". $this->_document->getID() ."' ".
-				"AND `tblDocumentReviewers`.`version` = '". $this->_version ."' ";
-
+			/* First get a list of all reviews for this document content */
 			$queryStr=
-				"SELECT `tblDocumentReviewers`.*, `tblDocumentReviewLog`.`status`, ".
-				"`tblDocumentReviewLog`.`comment`, `tblDocumentReviewLog`.`date`, ".
-				"`tblDocumentReviewLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
-				"FROM `tblDocumentReviewers` ".
-				"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
-				"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentReviewers`.`required`".
-				"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentReviewers`.`required`".
-				"WHERE `tblDocumentReviewers`.`documentID` = '". $this->_document->getID() ."' ".
-				"AND `tblDocumentReviewers`.`version` = '". $this->_version ."' ".
-				"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT ".$limit;
-
-			$res = $db->getResultArray($queryStr);
-			if (is_bool($res) && !$res)
+				"SELECT reviewId FROM tblDocumentReviewers WHERE `version`='".$this->_version
+				."' AND `documentID` = '". $this->_document->getID() ."' ";
+			$recs = $db->getResultArray($queryStr);
+			if (is_bool($recs) && !$recs)
 				return false;
-			// Is this cheating? Certainly much quicker than copying the result set
-			// into a separate object.
-			$this->_reviewStatus = $res;
+			$this->_reviewStatus = array();
+			if($recs) {
+				foreach($recs as $rec) {
+					$queryStr=
+						"SELECT `tblDocumentReviewers`.*, `tblDocumentReviewLog`.`status`, ".
+						"`tblDocumentReviewLog`.`comment`, `tblDocumentReviewLog`.`date`, ".
+						"`tblDocumentReviewLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
+						"FROM `tblDocumentReviewers` ".
+						"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
+						"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentReviewers`.`required`".
+						"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentReviewers`.`required`".
+						"WHERE `tblDocumentReviewers`.`reviewId` = '". $rec['reviewId'] ."' ".
+						"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT ".$limit;
+
+					$res = $db->getResultArray($queryStr);
+					if (is_bool($res) && !$res) {
+						unset($this->_reviewStatus);
+						return false;
+					}
+					$this->_reviewStatus = array_merge($this->_reviewStatus, $res);
+				}
+			}
 		}
 		return $this->_reviewStatus;
 	} /* }}} */
@@ -1822,39 +1823,35 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		// Retrieve the current status of each assigned approver for the content
 		// represented by this object.
 		if (!isset($this->_approvalStatus)) {
-		/*
-			if (!$db->createTemporaryTable("ttapproveid", $forceTemporaryTable)) {
-				return false;
-			}
-		*/
-			$queryStr="SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
-				"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
-				"`tblDocumentApproveLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
-				"FROM `tblDocumentApprovers` ".
-				"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
-				"LEFT JOIN `ttapproveid` on `ttapproveid`.`maxLogID` = `tblDocumentApproveLog`.`approveLogID` ".
-				"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentApprovers`.`required`".
-				"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentApprovers`.`required`".
-				"WHERE `ttapproveid`.`maxLogID`=`tblDocumentApproveLog`.`approveLogID` ".
-				"AND `tblDocumentApprovers`.`documentID` = '". $this->_document->getID() ."' ".
-				"AND `tblDocumentApprovers`.`version` = '". $this->_version ."'";
-
+			/* First get a list of all approvals for this document content */
 			$queryStr=
-			  "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
-				"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
-				"`tblDocumentApproveLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
-				"FROM `tblDocumentApprovers` ".
-				"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
-				"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentApprovers`.`required` ".
-				"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentApprovers`.`required`".
-				"WHERE `tblDocumentApprovers`.`documentID` = '". $this->_document->getID() ."' ".
-				"AND `tblDocumentApprovers`.`version` = '". $this->_version ."' ".
-				"ORDER BY `tblDocumentApproveLog`.`approveLogId` DESC LIMIT ".$limit;
-
-			$res = $db->getResultArray($queryStr);
-			if (is_bool($res) && !$res)
+				"SELECT approveId FROM tblDocumentApprovers WHERE `version`='".$this->_version
+				."' AND `documentID` = '". $this->_document->getID() ."' ";
+			$recs = $db->getResultArray($queryStr);
+			if (is_bool($recs) && !$recs)
 				return false;
-			$this->_approvalStatus = $res;
+			$this->_approvalStatus = array();
+			if($recs) {
+				foreach($recs as $rec) {
+					$queryStr=
+						"SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
+						"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
+						"`tblDocumentApproveLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
+						"FROM `tblDocumentApprovers` ".
+						"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
+						"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentApprovers`.`required` ".
+						"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentApprovers`.`required`".
+						"WHERE `tblDocumentApprovers`.`approveId` = '". $rec['approveId'] ."' ".
+						"ORDER BY `tblDocumentApproveLog`.`approveLogId` DESC LIMIT ".$limit;
+
+					$res = $db->getResultArray($queryStr);
+					if (is_bool($res) && !$res) {
+						unset($this->_approvalStatus);
+						return false;
+					}
+					$this->_approvalStatus = array_merge($this->_approvalStatus, $res);
+				}
+			}
 		}
 		return $this->_approvalStatus;
 	} /* }}} */
@@ -1974,6 +1971,73 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return 0;
 	} /* }}} */
 
+	function setReviewByInd($user, $requestUser, $status, $comment) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		// Check to see if the user can be removed from the review list.
+		$reviewStatus = $user->getReviewStatus($this->_document->getID(), $this->_version);
+		if (is_bool($reviewStatus) && !$reviewStatus) {
+			return -1;
+		}
+		if (count($reviewStatus["indstatus"])==0) {
+			// User is not assigned to review this document. No action required.
+			// Return an error.
+			return -3;
+		}
+		if ($reviewStatus["indstatus"][0]["status"]==-2) {
+			// User has been deleted from reviewers
+			return -4;
+		}
+		// Check if the status is really different from the current status
+		if ($reviewStatus["indstatus"][0]["status"] == $status)
+			return 0;
+
+		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`,
+  	  `comment`, `date`, `userID`) ".
+			"VALUES ('". $reviewStatus["indstatus"][0]["reviewID"] ."', '".
+			$status ."', '". $comment ."', NOW(), '".
+			$requestUser->getID() ."')";
+		$res=$db->getResult($queryStr);
+		if (is_bool($res) && !$res)
+			return -1;
+		else
+			return 0;
+ } /* }}} */
+
+	function setReviewByGrp($group, $requestUser, $status, $comment) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		// Check to see if the user can be removed from the review list.
+		$reviewStatus = $group->getReviewStatus($this->_document->getID(), $this->_version);
+		if (is_bool($reviewStatus) && !$reviewStatus) {
+			return -1;
+		}
+		if (count($reviewStatus)==0) {
+			// User is not assigned to review this document. No action required.
+			// Return an error.
+			return -3;
+		}
+		if ($reviewStatus[0]["status"]==-2) {
+			// Group has been deleted from reviewers
+			return -4;
+		}
+
+		// Check if the status is really different from the current status
+		if ($reviewStatus[0]["status"] == $status)
+			return 0;
+
+		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`,
+  	  `comment`, `date`, `userID`) ".
+			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '".
+			$status ."', '". $comment ."', NOW(), '".
+			$requestUser->getID() ."')";
+		$res=$db->getResult($queryStr);
+		if (is_bool($res) && !$res)
+			return -1;
+		else
+			return 0;
+ } /* }}} */
+
 	function addIndApprover($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
@@ -2086,6 +2150,101 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 
 		return 0;
 	} /* }}} */
+
+	/**
+	 * Sets approval status of a document content for a user
+	 * This function can be used to approve or reject a document content, or
+	 * to reset its approval state. The user initiating the approval may
+	 * not be the user filled in as an approver of the document content.
+	 * In most cases this will be but an admin may set the approval for
+	 * somebody else.
+	 * It is first checked if the user is in the list of approvers at all.
+	 * Then it is check if the approval status is already -2. In both cases
+	 * the function returns with an error.
+	 *
+	 * @param object $user user in charge for doing the approval
+	 * @param object $requestUser user actually calling this function
+	 * @param integer $status the status of the approval, possible values are
+	 *        0=unprocessed (maybe used to reset a status)
+	 *        1=approved,
+	 *       -1=rejected,
+	 *       -2=user is deleted (use {link
+	 *       LetoDMS_Core_DocumentContent::delIndApprover} instead)
+	 * @param string $comment approval comment
+	 * @return integer 0 on success, < 0 in case of an error
+	 */
+	function setApprovalByInd($user, $requestUser, $status, $comment) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		// Check to see if the user can be removed from the approval list.
+		$approvalStatus = $user->getApprovalStatus($this->_document->getID(), $this->_version);
+		if (is_bool($approvalStatus) && !$approvalStatus) {
+			return -1;
+		}
+		if (count($approvalStatus["indstatus"])==0) {
+			// User is not assigned to approve this document. No action required.
+			// Return an error.
+			return -3;
+		}
+		if ($approvalStatus["indstatus"][0]["status"]==-2) {
+			// User has been deleted from approvers
+			return -4;
+		}
+		// Check if the status is really different from the current status
+		if ($approvalStatus["indstatus"][0]["status"] == $status)
+			return 0;
+
+		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`,
+  	  `comment`, `date`, `userID`) ".
+			"VALUES ('". $approvalStatus["indstatus"][0]["approveID"] ."', '".
+			$status ."', '". $comment ."', NOW(), '".
+			$requestUser->getID() ."')";
+		$res=$db->getResult($queryStr);
+		if (is_bool($res) && !$res)
+			return -1;
+		else
+			return 0;
+ } /* }}} */
+
+	/**
+	 * Sets approval status of a document content for a group
+	 * The functions behaves like
+	 * {link LetoDMS_Core_DocumentContent::setApprovalByInd} but does it for
+	 * group instead of a user
+	 */
+	function setApprovalByGrp($group, $requestUser, $status, $comment) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		// Check to see if the user can be removed from the approval list.
+		$approvalStatus = $group->getApprovalStatus($this->_document->getID(), $this->_version);
+		if (is_bool($approvalStatus) && !$approvalStatus) {
+			return -1;
+		}
+		if (count($approvalStatus)==0) {
+			// User is not assigned to approve this document. No action required.
+			// Return an error.
+			return -3;
+		}
+		if ($approvalStatus[0]["status"]==-2) {
+			// Group has been deleted from approvers
+			return -4;
+		}
+
+		// Check if the status is really different from the current status
+		if ($approvalStatus[0]["status"] == $status)
+			return 0;
+
+		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`,
+  	  `comment`, `date`, `userID`) ".
+			"VALUES ('". $approvalStatus[0]["approveID"] ."', '".
+			$status ."', '". $comment ."', NOW(), '".
+			$requestUser->getID() ."')";
+		$res=$db->getResult($queryStr);
+		if (is_bool($res) && !$res)
+			return -1;
+		else
+			return 0;
+ } /* }}} */
 
 	function delIndReviewer($user, $requestUser) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
