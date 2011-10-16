@@ -192,46 +192,6 @@ print "</ul>";
 echo "</td>";
 print "</tr></tbody>\n</table>\n";
 
-//
-// retrieve if the user is a reviewer or approver for this document.
-//
-$userRStat = $user->getReviewStatus($documentid, $latestContent->getVersion());
-$userAStat = $user->getApprovalStatus($documentid, $latestContent->getVersion());
-$is_reviewer = false;
-$is_approver = false;
-
-if (!is_bool($userRStat)) {
-	if (count($userRStat["indstatus"])>0) {
-		if ($userRStat["indstatus"][0]["status"]==0) {
-			$is_reviewer = true;
-		}
-	}
-	else {
-		foreach ($userRStat["grpstatus"] as $grpstatus) {
-			if ($grpstatus["status"]==0) {
-				$is_reviewer = true;
-				break;
-			}
-		}
-	}
-}
-if (!is_bool($userAStat)) {
-	if (count($userAStat["indstatus"])>0) {
-		if ($userAStat["indstatus"][0]["status"]==0) {
-			$is_approver = true;
-		}
-	}
-	else {
-		foreach ($userAStat["grpstatus"] as $grpstatus) {
-			if ($grpstatus["status"]==0) {
-				$is_approver = true;
-				break;
-			}
-		}
-	}
-}
-
-
 print "<table class=\"folderView\">\n";
 
 if (is_array($reviewStatus) && count($reviewStatus)>0) {
@@ -250,6 +210,7 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 
 	foreach ($reviewStatus as $r) {
 		$required = null;
+		$is_reviewer = false;
 		switch ($r["type"]) {
 			case 0: // Reviewer is an individual.
 				$required = $dms->getUser($r["required"]);
@@ -259,6 +220,8 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 				else {
 					$reqName = $required->getFullName();
 				}
+				if($r["required"] == $user->getId())
+					$is_reviewer = true;
 				break;
 			case 1: // Reviewer is a group.
 				$required = $dms->getGroup($r["required"]);
@@ -268,6 +231,8 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 				else {
 					$reqName = "<i>".$required->getName()."</i>";
 				}
+				if($required->isMember($user))
+					$is_reviewer = true;
 				break;
 		}
 		print "<tr>\n";
@@ -279,10 +244,10 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 		print "<td>".getReviewStatusText($r["status"])."</td>\n";
 		print "<td><ul class=\"actions\">";
 		
-		if (($required==$user) && $is_reviewer && $status["status"]==S_DRAFT_REV) {
-			print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("submit_review")."</a></li>";
+		if ($is_reviewer && $status["status"]==S_DRAFT_REV) {
+			print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\">".getMLText("submit_review")."</a></li>";
 		}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
-			print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit")."</a></li>";
+			print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\">".getMLText("edit")."</a></li>";
 		}
 		
 		print "</ul></td>\n";	
@@ -306,6 +271,7 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 
 	foreach ($approvalStatus as $a) {
 		$required = null;
+		$is_approver = false;
 		switch ($a["type"]) {
 			case 0: // Approver is an individual.
 				$required = $dms->getUser($a["required"]);
@@ -315,6 +281,8 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 				else {
 					$reqName = $required->getFullName();
 				}
+				if($a["required"] == $user->getId())
+					$is_approver = true;
 				break;
 			case 1: // Approver is a group.
 				$required = $dms->getGroup($a["required"]);
@@ -324,6 +292,8 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 				else {
 					$reqName = "<i>".$required->getName()."</i>";
 				}
+				if($required->isMember($user))
+					$is_approver = true;
 				break;
 		}
 		print "<tr>\n";
@@ -334,11 +304,11 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 		print "<td>".$a["comment"]."</td>\n";
 		print "<td>".getApprovalStatusText($a["status"])."</td>\n";
 		print "<td><ul class=\"actions\">";
-		
+	
 		if ($is_approver && $status["status"]==S_DRAFT_APP) {
-			print "<li><a href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("submit_approval")."</a></li>";
+			print "<li><a href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("submit_approval")."</a></li>";
 		}else if (($updateUser==$user)&&(($a["status"]==1)||($a["status"]==-1))&&(!$document->hasExpired())){
-			print "<li><a href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit")."</a></li>";
+			print "<li><a href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
 		}
 		
 		print "</ul></td>\n";	
