@@ -19,9 +19,9 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
+include("../inc/inc.Utils.php");
 include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
-include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
@@ -29,6 +29,7 @@ include("../inc/inc.Authentication.php");
 if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
+
 $documentid = $_POST["documentid"];
 $document = $dms->getDocument($documentid);
 
@@ -51,11 +52,12 @@ if (!is_object($content)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
-// operation is admitted only for last deocument version
+// operation is only allowed for the last document version
 $latestContent = $document->getLatestContent();
 if ($latestContent->getVersion()!=$version) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
+
 // verify if document has expired
 if ($document->hasExpired()){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -66,30 +68,10 @@ if (!isset($_POST["reviewStatus"]) || !is_numeric($_POST["reviewStatus"]) ||
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_review_status"));
 }
 
-// retrieve the review status for the current user.
-$reviewStatus = $user->getReviewStatus($documentid, $version);
-if (count($reviewStatus["indstatus"]) == 0 && count($reviewStatus["grpstatus"]) == 0) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-}
-
 if ($_POST["reviewType"] == "ind") {
 
-	$indReviewer = true;
-	if (count($reviewStatus["indstatus"])==0) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-	}
-	if ($reviewStatus["indstatus"][0]["status"]==-2) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-	}
-
-	// User is eligible to make this update.
-
 	$comment = sanitizeString($_POST["comment"]);
-	$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-		"VALUES ('". $reviewStatus["indstatus"][0]["reviewID"] ."', '".
-		$_POST["reviewStatus"] ."', '". $comment ."', NOW(), '". $user->getID() ."')";
-	$res=$db->getResult($queryStr);
-	if (is_bool($res) && !res) {
+	if(0 > $latestContent->setReviewByInd($user, $user, $_POST["reviewStatus"], $comment)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("review_update_failed"));
 	}
 	else {
@@ -120,35 +102,13 @@ if ($_POST["reviewType"] == "ind") {
 	}
 }
 else if ($_POST["reviewType"] == "grp") {
-	$grpReviewer=false;
-	foreach ($reviewStatus["grpstatus"] as $gs) {
-		if ($_POST["reviewGroup"] == $gs["required"]) {
-			if ($gs["status"]==-2) {
-				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-			}
-			$grpStatus=$gs;
-			$grpReviewer=true;
-			break;
-		}
-	}
-	if (!$grpReviewer) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
-	}
-
-	// User is eligible to make this update.
-
 	$comment = sanitizeString($_POST["comment"]);
-	$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-		"VALUES ('". $grpStatus["reviewID"] ."', '".
-		$_POST["reviewStatus"] ."', '". $comment ."', NOW(), '". $user->getID() ."')";
-	$res=$db->getResult($queryStr);
-	if (is_bool($res) && !res) {
+	$group = $dms->getGroup($_POST['reviewGroup']);
+	if(0 > $latestContent->setReviewByGrp($group, $user, $_POST["reviewStatus"], $comment)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("review_update_failed"));
 	}
 	else {
 		// Send an email notification to the document updater.
-		$grp = $dms->getGroup($grpStatus["required"]);
-
 		if($notifier) {
 			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("review_submit_email");
 			$message = getMLText("review_submit_email")."\r\n";
@@ -164,7 +124,7 @@ else if ($_POST["reviewType"] == "grp") {
 			$message=mydmsDecodeString($message);
 			
 			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
-			
+
 			// Send notification to subscribers.
 			$nl=$document->getNotifyList();
 			$notifier->toList($user, $nl["users"], $subject, $message);
@@ -191,7 +151,7 @@ if ($_POST["reviewStatus"]==-1){
 			$message = getMLText("document_status_changed_email")."\r\n";
 			$message .= 
 				getMLText("document").": ".$document->_name."\r\n".
-				getMLText("status").": ".getOverallStatusText($status)."\r\n".
+				getMLText("status").": ".getOverallStatusText(S_REJECTED)."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
@@ -259,7 +219,7 @@ if ($_POST["reviewStatus"]==-1){
 				$message = getMLText("document_status_changed_email")."\r\n";
 				$message .= 
 					getMLText("document").": ".$document->_name."\r\n".
-					getMLText("status").": ".getOverallStatusText($status)."\r\n".
+					getMLText("status").": ".getOverallStatusText($newStatus)."\r\n".
 					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 					getMLText("comment").": ".$document->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
