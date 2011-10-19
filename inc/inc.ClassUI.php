@@ -96,8 +96,8 @@ $icons["mml"]  = "ooo_formula.png";
 $icons["default"] = "default.png";
 
 class UI {
-	function getStyles() {
-		GLOBAL $settings;
+	function getStyles() { /* {{{ */
+		global $settings;
 
 		$themes = array();
 		$path = $settings->_rootDir . "styles/";
@@ -111,30 +111,38 @@ class UI {
 		}
 		closedir($handle);
 		return $themes;
-	}
+	} /* }}} */
 
-	function htmlStartPage($title="", $bodyClass="") {
+	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
 		global $theme, $settings;
 
-		echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\n".
-			"\"http://www.w3.org/TR/html4/strict.dtd\">\n";
-		echo "<html>\n<head>\n";
-		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
-		echo "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"../styles/".$theme."/style.css\"/>\n";
-		echo "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"../styles/print.css\" media=\"print\"/>\n";
-		echo "<link rel='shortcut icon' href='../styles/".$theme."/favicon.ico' type='image/x-icon'/>\n";
-		echo "<script type='text/javascript' src='../js/jquery.min.js'></script>\n";
-		echo "<title>".(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").(strlen($title)>0 ? ": " : "").$title."</title>\n";
-		echo "</head>\n";
-		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
-	}
+		if(file_exists("../themes/".$theme."/HTMLHead.html")) {
+			include("../themes/".$theme."/HTMLHead.html");
+		} else {
+			echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\"\n".
+				"\"http://www.w3.org/TR/html4/strict.dtd\">\n";
+			echo "<html>\n<head>\n";
+			echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
+			echo "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"../styles/".$theme."/style.css\"/>\n";
+			echo "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"../styles/print.css\" media=\"print\"/>\n";
+			echo "<link rel='shortcut icon' href='../styles/".$theme."/favicon.ico' type='image/x-icon'/>\n";
+			echo "<script type='text/javascript' src='../js/jquery.min.js'></script>\n";
+			echo "<title>".(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").(strlen($title)>0 ? ": " : "").$title."</title>\n";
+			echo "</head>\n";
+			echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
+		}
+	} /* }}} */
 
-	function htmlEndPage() {
+	function htmlEndPage() { /* {{{ */
 		UI::footNote();
-		echo "</body>\n</html>\n";
-	}
+		if(file_exists("../themes/".$theme."/HTMLFoot.html")) {
+			include("../themes/".$theme."/HTMLFoot.html");
+		} else {
+			echo "</body>\n</html>\n";
+		}
+	} /* }}} */
 
-	function footNote() {
+	function footNote() { /* {{{ */
 		global $settings;
 		
 		if ($settings->_printDisclaimer){
@@ -146,9 +154,9 @@ class UI {
 		}
 	
 		return;
-	}
+	} /* }}} */
 
-	function globalBanner() {
+	function globalBanner() { /* {{{ */
 		global $settings;
 
 		echo "<div class=\"globalBox\" id=\"noNav\">\n";
@@ -160,9 +168,9 @@ class UI {
 		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
 			"</div>\n";
 		return;
-	}
+	} /* }}} */
 
-	function globalNavigation($folder=null) {
+	function globalNavigation($folder=null) { /* {{{ */
 	
 		global $settings, $user;
 
@@ -201,9 +209,9 @@ class UI {
 		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
 			"</div>\n";
 		return;
-	}
+	} /* }}} */
 
-	function pageNavigation($pageTitle, $pageType=null, $extra=null) {
+	function pageNavigation($pageTitle, $pageType=null, $extra=null) { /* {{{ */
 		global $settings, $user;
 
 		echo "<div class=\"headingContainer\">\n";
@@ -239,9 +247,9 @@ class UI {
 		}
 
 		return;
-	}
+	} /* }}} */
 
-	function folderNavigationBar($folder) {
+	function folderNavigationBar($folder) { /* {{{ */
 	
 		global $user, $settings, $theme;
 
@@ -272,9 +280,9 @@ class UI {
 		}
 		echo "</ul>\n";
 		return;
-	}
+	} /* }}} */
 
-	function documentNavigationBar()	{
+	function documentNavigationBar()	{ /* {{{ */
 	
 		global $user, $settings, $document;
 
@@ -309,9 +317,9 @@ class UI {
 		}
 		echo "</ul>\n";
 		return;
-	}
+	} /* }}} */
 
-	function accountNavigationBar() {
+	function accountNavigationBar() { /* {{{ */
 	
 		global $settings,$user;
 		
@@ -329,9 +337,9 @@ class UI {
 		}		
 		echo "</ul>\n";
 		return;
-	}
+	} /* }}} */
 
-	function myDocumentsNavigationBar() {
+	function myDocumentsNavigationBar() { /* {{{ */
 
 		echo "<ul class=\"localNav\">\n";
 		echo "<li id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
@@ -340,9 +348,9 @@ class UI {
 		echo "<li><a href=\"../out/out.ApprovalSummary.php\">".getMLText("approval_summary")."</a></li>\n";
 		echo "</ul>\n";
 		return;
-	}
+	} /* }}} */
 
-	function adminToolsNavigationBar() {
+	function adminToolsNavigationBar() { /* {{{ */
 	
 		global $settings;
 
@@ -355,9 +363,9 @@ class UI {
 		echo "<li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
 		echo "</ul>\n";
 		return;
-	}
+	} /* }}} */
 	
-	function calendarNavigationBar($d){
+	function calendarNavigationBar($d){ /* {{{ */
 
 		global $settings,$user;
 
@@ -371,9 +379,9 @@ class UI {
 		echo "</ul>\n";
 		return;
 	
-	}
+	} /* }}} */
 
-	function pageList($pageNumber, $totalPages, $baseURI, $params) {
+	function pageList($pageNumber, $totalPages, $baseURI, $params) { /* {{{ */
 
 		if (!is_numeric($pageNumber) || !is_numeric($totalPages) || $totalPages<2) {
 			return;
@@ -414,42 +422,44 @@ class UI {
 		echo "</div>";
 
 		return;
-	}
+	} /* }}} */
 
-	function contentContainer($content) {
-
+	function contentContainer($content) { /* {{{ */
 		echo "<div class=\"contentContainer\">\n";
 		echo "<div class=\"content\">\n";
 		echo "<div class=\"content-l\"><div class=\"content-r\"><div class=\"content-br\"><div class=\"content-bl\">\n";
 		echo $content;
 		echo "</div></div></div></div>\n</div>\n</div>\n";
 		return;
-	}
-	function contentContainerStart() {
+	} /* }}} */
+
+	function contentContainerStart() { /* {{{ */
 
 		echo "<div class=\"contentContainer\">\n";
 		echo "<div class=\"content\">\n";
 		echo "<div class=\"content-l\"><div class=\"content-r\"><div class=\"content-br\"><div class=\"content-bl\">\n";
 		return;
-	}
-	function contentContainerEnd() {
+	} /* }}} */
+
+	function contentContainerEnd() { /* {{{ */
 
 		echo "</div></div></div></div>\n</div>\n</div>\n";
 		return;
-	}
+	} /* }}} */
 
-	function contentHeading($heading) {
+	function contentHeading($heading) { /* {{{ */
 
 		echo "<div class=\"contentHeading\">".$heading."</div>\n";
 		return;
-	}
-	function contentSubHeading($heading, $first=false) {
+	} /* }}} */
+
+	function contentSubHeading($heading, $first=false) { /* {{{ */
 
 		echo "<div class=\"contentSubHeading\"".($first ? " id=\"first\"" : "").">".$heading."</div>\n";
 		return;
-	}
+	} /* }}} */
 
-	function getMimeIcon($fileType) {
+	function getMimeIcon($fileType) { /* {{{ */
 		global $icons;
 
 		$ext = strtolower(substr($fileType, 1));
@@ -459,9 +469,9 @@ class UI {
 		else {
 			return $icons["default"];
 		}
-	}
+	} /* }}} */
 
-	function printDateChooser($defDate = -1, $varName) {
+	function printDateChooser($defDate = -1, $varName) { /* {{{ */
 	
 		if ($defDate == -1)
 			$defDate = mktime();
@@ -496,9 +506,9 @@ class UI {
 			print ">" . $i . "</option>\n";
 		}
 		print "</select>";
-	}
+	} /* }}} */
 
-	function printSequenceChooser($objArr, $keepID = -1) {
+	function printSequenceChooser($objArr, $keepID = -1) { /* {{{ */
 		if (count($objArr) > 0) {
 			$max = $objArr[count($objArr)-1]->getSequence() + 1;
 			$min = $objArr[0]->getSequence() - 1;
@@ -522,9 +532,9 @@ class UI {
 			print "  <option value=\"".$index."\">" . getMLText("seq_after", array("prevname" => $objArr[$i]->getName() ) );
 		}
 		print "</select>";
-	}
+	} /* }}} */
 	
-	function printDocumentChooser($formName) {
+	function printDocumentChooser($formName) { /* {{{ */
 		global $settings;
 		?>
 		<script language="JavaScript">
@@ -537,9 +547,9 @@ class UI {
 		print "<input type=\"Hidden\" name=\"docid".$formName."\">";
 		print "<input disabled name=\"docname".$formName."\">";
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("document")."...\" onclick=\"chooseDoc".$formName."();\">";
-	}
+	} /* }}} */
 
-	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) {
+	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
 		global $settings;
 		?>
 		<script language="JavaScript">
@@ -552,9 +562,9 @@ class UI {
 		print "<input type=\"Hidden\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<input disabled name=\"targetname".$formName."\" value=\"". (($default) ? $default->getName() : "") ."\">";
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("folder")."...\" onclick=\"chooseFolder".$formName."();\">";
-	}
+	} /* }}} */
 
-	function printCategoryChooser($formName, $categories=array()) {
+	function printCategoryChooser($formName, $categories=array()) { /* {{{ */
 		global $settings;
 ?>
 		<script language="JavaScript">
@@ -575,9 +585,9 @@ class UI {
 		print "<input type=\"hidden\" name=\"categoryid".$formName."\" value=\"".implode(',', $ids)."\">";
 		print "<input disabled name=\"categoryname".$formName."\" value=\"".implode(' ', $names)."\">";
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("category")."...\" onclick=\"chooseCategory".$formName."();\">";
-	}
+	} /* }}} */
 
-	function getImgPath($img) {
+	function getImgPath($img) { /* {{{ */
 		global $theme;
 
 		if ( is_file("../styles/$theme/images/$img") ) {
@@ -587,11 +597,11 @@ class UI {
 			return "../styles/$theme/img/$img";
 		}
 		return "../out/images/$img";
-	}
+	} /* }}} */
 
-	function printImgPath($img) {
+	function printImgPath($img) { /* {{{ */
 		print UI::getImgPath($img);
-	}
+	} /* }}} */
 
 	function exitError($pagetitle,$error) { /* {{{ */
 	
@@ -991,14 +1001,16 @@ mayscript>
          var content = "";
          var uploader = document.jumpLoaderApplet.getUploader();
          var files = uploader.getAllFiles();
-        	var file = getSelectedFile();
-				 for (var i = 0; i < uploader.getFileCount() ; i++) { 
-				 		if(uploader.getFile(i).getID() == file.getID())
-							content += listFileAttributes( uploader.getFile(i), 1, i );
-						else
-							content += listFileAttributes( uploader.getFile(i), 0, i );
-         }
-         document.getElementById( "fileList" ).innerHTML = content;
+         var file = getSelectedFile();
+				 if(file) {
+					 for (var i = 0; i < uploader.getFileCount() ; i++) { 
+						 if(uploader.getFile(i).getIndex() == file.getIndex())
+							 content += listFileAttributes( uploader.getFile(i), 1, i );
+						 else
+							 content += listFileAttributes( uploader.getFile(i), 0, i );
+					 }
+					 document.getElementById( "fileList" ).innerHTML = content;
+				 }
     }
      /**
       * update attributes for the selected file
