@@ -267,7 +267,8 @@ class UI {
 		else if ($accessMode >= M_READWRITE) {
 			echo "<li id=\"first\"><a href=\"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_subfolder")."</a></li>\n";
 			echo "<li><a href=\"../out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_document")."</a></li>\n";
-			echo "<li><a href=\"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_multiple_documents")."</a></li>\n";
+			if($settings->_enableLargeFileUpload)
+				echo "<li><a href=\"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_multiple_documents")."</a></li>\n";
 			echo "<li><a href=\"../out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_props")."</a></li>\n";
 			echo "<li><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_existing_notify")."</a></li>\n";
 			if ($folderID != $settings->_rootFolderID && $folder->getParent())
@@ -802,7 +803,7 @@ mayscript>
 <?php
 	foreach($attributes as $name=>$value) {
 ?>
-        attr = attrSet.createStringAttribute( '<?= $name ?>', <?= $value ?> );
+        attr = attrSet.createStringAttribute( '<?= $name ?>', '<?= $value ?>' );
         attr.setSendToServer(true);
 <?php
 	}
