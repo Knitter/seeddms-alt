@@ -107,9 +107,15 @@ $docAccess = $document->getApproversList();
 <tr>
 	<td class="warning"><?php echo getMLText("max_upload_size")." : ".ini_get( "upload_max_filesize"); ?></td>
 </tr>
+<?php
+	if($settings->_enableLargeFileUpload) {
+?>
 <tr>
   <td><?php printf(getMLText('link_alt_updatedocument'), "out.UpdateDocument2.php?documentid=".$documentid); ?></td>
 </tr>
+<?php
+	}
+?>
 </table><br>
 
 
