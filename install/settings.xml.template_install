@@ -71,18 +71,21 @@
       luceneDir = ""
       logFileEnable = "true"
       logFileRotation = "d"
+      enableLargeFileUpload = "true"
       partitionSize = "2000000"
     >
     </server>
     
     <!-- enableGuestLogin: If you want anybody to login as guest, set the following line to true
        -                   note: guest login should be used only in a trusted environment
+			 - enablePasswordForgotten: Allow users to reset their password
        - restricted: Restricted access: only allow users to log in if they have an entry in the local database (irrespective of successful authentication with LDAP).
        - enableUserImage: enable users images
        - disableSelfEdit: if true user cannot edit his own profile
     -->    
     <authentication
       enableGuestLogin = "false"
+      enablePasswordForgotten = "false"
       restricted = "true"
       enableUserImage = "false"
       disableSelfEdit = "false"
