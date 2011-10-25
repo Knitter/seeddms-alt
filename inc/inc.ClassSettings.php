@@ -90,6 +90,8 @@ class Settings { /* {{{ */
 	var $_logFileEnable = true;
 	// the log file rotation
 	var $_logFileRotation = "d";
+	// Enable file upload by jumploader
+	var $_enableLargeFileUpload = false;
 	// size of partitions for file upload by jumploader
 	var $_partitionSize = 2000000;
 	// enable/disable users images
@@ -268,6 +270,7 @@ class Settings { /* {{{ */
 		$this->_luceneDir = strval($tab["luceneDir"]);
 		$this->_logFileEnable = Settings::boolVal($tab["logFileEnable"]);
 		$this->_logFileRotation = strval($tab["logFileRotation"]);
+		$this->_enableLargeFileUpload = Settings::boolVal($tab["enableLargeFileUpload"]);
 		$this->_partitionSize = strval($tab["partitionSize"]);
 
 		// XML Path: /configuration/system/authentication
@@ -478,6 +481,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "luceneDir", $this->_luceneDir);
     $this->setXMLAttributValue($node, "logFileEnable", $this->_logFileEnable);
     $this->setXMLAttributValue($node, "logFileRotation", $this->_logFileRotation);
+    $this->setXMLAttributValue($node, "enableLargeFileUpload", $this->_enableLargeFileUpload);
     $this->setXMLAttributValue($node, "partitionSize", $this->_partitionSize);
 
     // XML Path: /configuration/system/authentication
