@@ -81,6 +81,7 @@ if ($action == "saveSettings")
   $settings->_luceneDir = $_POST["luceneDir"];
   $settings->_logFileEnable = getBoolValue("logFileEnable");
   $settings->_logFileRotation = $_POST["logFileRotation"];
+  $settings->_enableLargeFileUpload = getBoolValue("enableLargeFileUpload");
   $settings->_partitionSize = $_POST["partitionSize"];
 
   // SETTINGS - SYSTEM - AUTHENTICATION
@@ -88,6 +89,7 @@ if ($action == "saveSettings")
   $settings->_restricted = getBoolValue("restricted");
   $settings->_enableUserImage = getBoolValue("enableUserImage");
   $settings->_disableSelfEdit = getBoolValue("disableSelfEdit");
+  $settings->_enablePasswordForgotten = getBoolValue("enablePasswordForgotten");
 
   // TODO Connectors
 
