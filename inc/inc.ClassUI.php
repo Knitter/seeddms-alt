@@ -134,6 +134,8 @@ class UI {
 	} /* }}} */
 
 	function htmlEndPage() { /* {{{ */
+		global $theme;
+
 		UI::footNote();
 		if(file_exists("../themes/".$theme."/HTMLFoot.html")) {
 			include("../themes/".$theme."/HTMLFoot.html");
