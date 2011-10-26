@@ -41,21 +41,46 @@ the database layout. Second, one letoDMS installation can be used for
 various customer instances by sharing a common source. Starting with
 version 3.2.0 a full text search engine has been added. This requires
 the zend framework and another pear package LetoDMS_Lucene-<version>.tar.gz
-which can be downloaded from the letoDMS web page.
+which can be downloaded from the letoDMS web page. Finally, letoDMS has
+got a web based installation, which takes care of most of the installation
+process.
 
 Before you proceed you have to decide how to install letoDMS:
 1. with multiple instances
 2. as a single instance
 
-Both have its pros and cons but as a general rule, try a setup for
-multiple instances first, even if your currently only planing for
-one instance.
+Both have its pros and cons, but
+1. setting up a single instance is easier if you have not shell access to
+   the web server
+2. the installation script is only tested on single instances
 
 Installation for multiple instances shares the same source by many
 instances but requires to create links which is not in any case possible
-at your web hoster.
+on your web server.
 
-0. Quick installation instructions (single instance) ===========================
+1. Using the installation tool ============================================
+
+The installation tool currently does not support to update an existing
+letoDMS installation!
+
+Unpack LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tar.gz on
+your web server. For the full text search engine support, you will also
+need to unpack LetoDMS_Lucene-<version>.tar.gz. For the following instructions
+we will assume the files of LetoDMS-<version>.tar.gz are accessible through
+http://localhost/letodms/
+
+* Point you web browser towards http://hostname/letodms/install/
+
+* Follow the instructions on the page and create a file ENABLE_INSTALL_TOOL
+  in the conf directory.
+
+* Clicking on 'Start installation' will show a form with all necessary
+  settings for a basic installation.
+
+* After saving your settings you are ready to log in as admin and continue
+  customizing your installation with the 'Admin Tools'
+
+2. Detailed installation instructions (single instance) =====================
 
 You need a working web server with MySQL/PHP5 support and the files
 LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tar.gz. For the 
@@ -73,9 +98,12 @@ LetoDMS_Lucene-<version>.tar.gz.
   http://pear.php.net/package/Log. Unpack it a place where it can be
   found be php.
 
-* Create a data folder somewhere in your web server. The data folder created
-  by the letoDMS archive should work for a test installation and must be
-	writable by the web-server user.
+* The package HTTP_WebDAV_Server is also needed. It can be downloaded from
+  http://pear.php.net/package/HTTP_WebDAV_Server. Unpack it a place where
+	it can be found be php.
+
+* Create a data folder somewhere on your web server and make sure it is
+  writable by your web server.
 
 For security reason the data folder should not be inside the public folders.
 
@@ -111,12 +139,12 @@ one in the folder name. For example to update from a 1.7.1 to 1.9 you need
 to run both UPDATE-v1.8.1/update.php and UPDATE-v1.9/update.php.
 
 
-1. Requirements ================================================================
+3. Requirements ================================================================
 
 letoDMS is a web-based application written in PHP. It uses the MySQL RDBMS to
 manage the documents that were uploaded into the application.
 
-Make sure you have PHP 5.0 and MySQL 4 or higher installed. letoDMS
+Make sure you have PHP 5.0 and MySQL 5 or higher installed. letoDMS
 will work with PHP running in CGI-mode as well as running as module under
 apache. If you want to give your users the opportunity of uploading passport
 photos you have to enable the gd-library (but the rest of letoDMS will
@@ -124,15 +152,16 @@ work without gd, too).
 
 You will also need to download and install the ADODB database
 abstraction library from http://adodb.sf.net/ unless it is not installed
-on your system already.
+on your system already. The webdav server uses the pear packages 'Log' and
+'HTTP_WebDAV_Server'. Both can be downloaded from http://pear.php.net.
 
 If you plan to use the full text search engine you will have to install
 the zend framework, too.
 
 
-2. Installation & Configuration ================================================
+4. Installation & Configuration ================================================
 
-Unzip the downloaded file (LetoDMS-<version>.tar.gz) in a directory that is
+Unpack the downloaded file (LetoDMS-<version>.tar.gz) in a directory that is
 accessible via your web server. Do the same for the file
 LetoDMS_Core-<version>.tgz and LetoDMS_Lucene-<version>.tgz.
 These files may not be unpacked below the
@@ -193,7 +222,7 @@ should also change the value for "post_max_size" and make sure that
 your web-server does not limit the size either).
 
 
-3. Email Notification ==========================================================
+5. Email Notification ==========================================================
 
 A notification system allows users to receive an email when a
 document or folder is changed. This is an event-based mechanism that
@@ -208,7 +237,7 @@ their notification subscriptions. This can be found in the "My Account"
 section under "Notification List".
 
 
-4. Auto-conversion to HTML =====================================================
+6. Auto-conversion to HTML =====================================================
 
 Version 1.3.0 introduces a new feature: Documents can automatically be
 converted to HTML when uploading.
@@ -238,7 +267,7 @@ http://www.qwerksoft.com/products/iisrewrite/
 Post any questions to the LetoDMS forum, please.
 
 
-5. Nearly finished =============================================================
+7. Nearly finished =============================================================
 
 Now point your browser to http://your.server.com/letoDMS-<version>/index.php
 and login with "admin" both as username and password.
