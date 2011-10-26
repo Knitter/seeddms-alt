@@ -183,7 +183,7 @@ class LetoDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '3.2.0';
+			$this->version = '3.3.0';
 	} /* }}} */
 
 	function getDB() { /* {{{ */
