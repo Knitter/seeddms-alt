@@ -1,4 +1,5 @@
 <?php
+define("LETODMS_INSTALL", "on");
 include("../inc/inc.Settings.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
