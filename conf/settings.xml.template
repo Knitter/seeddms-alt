@@ -71,6 +71,7 @@
       luceneDir = ""
       logFileEnable = "true"
       logFileRotation = "d"
+      enableLargeFileUpload = "true"
       partitionSize = "2000000"
     >
     </server>
