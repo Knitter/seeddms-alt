@@ -118,7 +118,7 @@ print "</table>\n";
 					if ($user->isAdmin()) {
 						$allUsers = $dms->getAllUsers();
 						foreach ($allUsers as $userObj) {
-							if (!$userObj->isGuest() && !in_array($userObj->getID(), $userNotifyIDs))
+							if (!$userObj->isGuest() && ($document->getAccessMode($userObj) >= M_READ) && !in_array($userObj->getID(), $userNotifyIDs))
 								print "<option value=\"".$userObj->getID()."\">" . $userObj->getFullName() . "\n";
 						}
 					}
@@ -137,7 +137,7 @@ print "</table>\n";
 				<?php
 					$allGroups = $dms->getAllGroups();
 					foreach ($allGroups as $groupObj) {
-						if (($user->isAdmin() || $groupObj->isMember($user,true)) && !in_array($groupObj->getID(), $groupNotifyIDs)) {
+						if (($user->isAdmin() || $groupObj->isMember($user,true)) && $document->getGroupAccessMode($groupObj) >= M_READ && !in_array($groupObj->getID(), $groupNotifyIDs)) {
 							print "<option value=\"".$groupObj->getID()."\">" . $groupObj->getName() . "\n";
 						}
 					}
