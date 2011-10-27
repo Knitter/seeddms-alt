@@ -227,7 +227,12 @@ class LetoDMS_Core_Document { /* {{{ */
 		return true;
 	} /* }}} */
 
-	function getCategories() {
+	/**
+	 * Retrieve a list of all categories this document belongs to
+	 *
+	 * @return array list of category objects
+	 */
+	function getCategories() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if(!$this->_categories) {
@@ -243,8 +248,15 @@ class LetoDMS_Core_Document { /* {{{ */
 			}
 		}
 		return $this->_categories;
-	}
+	} /* }}} */
 
+	/**
+	 * Set a list of categories for the document
+	 * This function will delete currently assigned categories and sets new
+	 * categories.
+	 *
+	 * @param array $newCategories list of category objects
+	 */
 	function setCategories($newCategories) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -263,7 +275,7 @@ class LetoDMS_Core_Document { /* {{{ */
 	} /* }}} */
 
 	/**
-	 * Return creation date of document
+	 * Return creation date of the document
 	 *
 	 * @return integer unix timestamp of creation date
 	 */
@@ -271,6 +283,11 @@ class LetoDMS_Core_Document { /* {{{ */
 		return $this->_date;
 	} /* }}} */
 
+	/**
+	 * Return the parent folder of the document
+	 *
+	 * @return object parent folder
+	 */
 	function getFolder() { /* {{{ */
 		if (!isset($this->_folder))
 			$this->_folder = $this->_dms->getFolder($this->_folderID);
@@ -418,6 +435,11 @@ class LetoDMS_Core_Document { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * Check if document expires
+	 *
+	 * @return boolean true if document has expiration date set, otherwise false
+	 */
 	function expires() { /* {{{ */
 		if (intval($this->_expires) == 0)
 			return false;
@@ -425,6 +447,11 @@ class LetoDMS_Core_Document { /* {{{ */
 			return true;
 	} /* }}} */
 
+	/**
+	 * Get expiration time of document
+	 *
+	 * @return integer/boolean expiration date as unix timestamp or false
+	 */
 	function getExpires() { /* {{{ */
 		if (intval($this->_expires) == 0)
 			return false;
@@ -432,6 +459,11 @@ class LetoDMS_Core_Document { /* {{{ */
 			return $this->_expires;
 	} /* }}} */
 
+	/**
+	 * Set expiration date as unix timestamp
+	 *
+	 * @param integer unix timestamp of expiration date
+	 */
 	function setExpires($expires) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -655,6 +687,14 @@ class LetoDMS_Core_Document { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * Remove access rights for a user or group
+	 *
+	 * @param integer $userOrGroupID ID of user or group
+	 * @param boolean $isUser true if $userOrGroupID is a user id, false if it
+	 *        is a group id.
+	 * @return boolean true on success, otherwise false
+	 */
 	function removeAccess($userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -666,7 +706,7 @@ class LetoDMS_Core_Document { /* {{{ */
 
 		unset($this->_accessList);
 
-		// Update the notify list, if necessary.
+		// Update the notify list, if the user looses access rights.
 		$mode = ($isUser ? $this->getAccessMode($this->_dms->getUser($userOrGroupID)) : $this->getGroupAccessMode($this->_dms->getGroup($userOrGroupID)));
 		if ($mode == M_NONE) {
 			$this->removeNotify($userOrGroupID, $isUser);
@@ -805,7 +845,7 @@ class LetoDMS_Core_Document { /* {{{ */
 	 *                 -3: User is already subscribed.
 	 *                 -4: Database / internal error.
 	 */
-	function addNotify($userOrGroupID, $isUser,$send_email=TRUE) { /* {{{ */
+	function addNotify($userOrGroupID, $isUser) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$userOrGroup = ($isUser ? "userID" : "groupID");
