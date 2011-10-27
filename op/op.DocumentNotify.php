@@ -67,7 +67,7 @@ if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-//Benachrichtigung löschen ------------------------------------------------------------------------
+// delete notification
 if ($action == "delnotify"){
 	if (isset($userid)) {
 		if($res = $document->removeNotify($userid, true)) {
@@ -124,8 +124,8 @@ if ($action == "delnotify"){
 			break;
 	}
 }
-	
-	//Benachrichtigung hinzufügen ---------------------------------------------------------------------
+
+// add notification
 else if ($action == "addnotify") {
 
 	if ($userid != -1) {
