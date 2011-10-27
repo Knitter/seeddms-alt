@@ -111,7 +111,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 	function check_auth($type, $user, $pass) /* {{{ */
 	{
 		if($this->logger)
-			$this->logger->log('check_auth: user='.$user.'', PEAR_LOG_INFO);
+			$this->logger->log('check_auth: type='.$type.', user='.$user.'', PEAR_LOG_INFO);
 		$userobj = $this->dms->getUserByLogin($user);
 		if(!$userobj)
 			return false;
@@ -133,6 +133,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 	 */
 	function reverseLookup($path) /* {{{ */
 	{
+		$path = urldecode($path);
 		if($this->logger)
 			$this->logger->log('reverseLookup: path='.$path.'', PEAR_LOG_DEBUG);
 
