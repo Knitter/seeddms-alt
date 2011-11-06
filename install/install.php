@@ -89,7 +89,7 @@ function printCheckError($resCheck) { /* {{{ */
  */
 define("LETODMS_INSTALL", "on");
 
-include("../inc/inc.Settings.php");
+require_once('../inc/inc.ClassSettings.php');
 
 $configDir = Settings::getConfigDir();
 
@@ -102,7 +102,10 @@ if (!file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
 }
 
 if (!file_exists($configDir."/settings.xml")) {
-	copy("settings.xml.template_install", $configDir."/settings.xml");
+	if(!copy("settings.xml.template_install", $configDir."/settings.xml")) {
+		echo "Could not create initial configuration file from template. Check directory permission of conf/.";
+		exit;
+	}
 }
 
 // Set folders settings
@@ -122,11 +125,14 @@ do {
 if(!$settings->_rootDir)
 	$settings->_rootDir = $rootDir;
 //$settings->_coreDir = $settings->_rootDir;
-//$settings->_luceneDir = $settings->_rootDir;
-if(!$settings->_contentDir)
-	$settings->_contentDir = $settings->_rootDir . 'data/';
+//$settings->_luceneClassDir = $settings->_rootDir;
 //$settings->_ADOdbPath = $settings->_rootDir;
-//$settings->_httpRoot = $httpRoot;
+if(!$settings->_contentDir) {
+	$settings->_contentDir = $settings->_rootDir . 'data/';
+	$settings->_luceneDir = $settings->_rootDir . 'data/lucene/';
+	$settings->_stagingDir = $settings->_rootDir . 'data/staging/';
+}
+$settings->_httpRoot = $httpRoot;
 
 /**
  * Include GUI + Language
@@ -160,6 +166,10 @@ if (isset($_GET['disableinstall'])) {
 			echo getMLText("settings_install_disabled");
 			echo "<br/><br/>";
 			echo '<a href="' . $httpRoot . '/out/out.Settings.php">' . getMLText("settings_more_settings") .'</a>';
+		} else {
+			echo getMLText("settings_cannot_disable");
+			echo "<br/><br/>";
+			echo '<a href="install.php">' . getMLText("back") . '</a>';
 		}
 	} else {
 		echo getMLText("settings_cannot_disable");
@@ -275,8 +285,6 @@ if ($action=="setSettings") {
 		} // create database
 
 		if (!$hasError) {
-			// Save settings
-			$settings->save();
 
 			// Show Web page
 			echo getMLText("settings_install_success");
@@ -288,6 +296,8 @@ if ($action=="setSettings") {
 			echo '<a href="' . $httpRoot . '/out/out.Settings.php">' . getMLText("settings_more_settings") .'</a>';
 		}
 	}
+	// Save settings
+	$settings->save();
 
 	// Back link
 	echo '<br/>';
