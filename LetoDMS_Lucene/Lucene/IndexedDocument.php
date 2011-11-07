@@ -27,7 +27,18 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 	 * Constructor. Creates our indexable document and adds all
 	 * necessary fields to it using the passed in document
 	 */
-	public function __construct($dms, $document) {
+	public function __construct($dms, $document, $convcmd=null) {
+		$_convcmd = array(
+			'application/pdf' => 'pdftotext -nopgbrk %s - |sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',
+			'application/msword' => 'catdoc %s',
+			'application/vnd.ms-excel' => 'ssconvert -T Gnumeric_stf:stf_csv -S %s fd://1',
+			'audio/mp3' => "id3 -l -R %s | egrep '(Title|Artist|Album)' | sed 's/^[^:]*: //g'",
+			'audio/mpeg' => "id3 -l -R %s | egrep '(Title|Artist|Album)' | sed 's/^[^:]*: //g'",
+			'text/plain' => 'cat %s',
+		);
+		if($convcmd) {
+			$_convcmd = $convcmd;
+		}
 		$version = $document->getLatestContent();
 		$this->addField(Zend_Search_Lucene_Field::Keyword('document_id', $document->getID()));
 		$this->addField(Zend_Search_Lucene_Field::Keyword('mimetype', $version->getMimeType()));
@@ -51,34 +62,20 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		$path = $dms->contentDir . $version->getPath();
 		$content = '';
 		$fp = null;
-		switch($version->getMimeType()) {
-			case "application/pdf":
-				$fp = popen('pdftotext -nopgbrk '.$path.' - |sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'', 'r');
-				break;
-			case "application/msword":
-				$fp = popen('catdoc '.$path, 'r');
-				break;
-			case "application/vnd.ms-excel":
-				$fp = popen('ssconvert -T Gnumeric_stf:stf_csv -S '.$path.' fd://1', 'r');
-				break;
-			case "audio/mpeg":
-				if(function_exists('id3_get_tag')) {
-					echo "lasjfdl";
+		$mimetype = $version->getMimeType();
+		if(isset($_convcmd[$mimetype])) {
+			$cmd = sprintf($_convcmd[$mimetype], $path);
+			$fp = popen($cmd, 'r');
+			if($fp) {
+				$content = '';
+				while(!feof($fp)) {
+					$content .= fread($fp, 2048);
 				}
-				break;
-			case "text/plain":
-				$fp = popen('cat '.$path, 'r');
-				break;
-		}
-		if($fp) {
-			$content = '';
-			while(!feof($fp)) {
-				$content .= fread($fp, 2048);
+				pclose($fp);
 			}
-			pclose($fp);
-		}
-		if($content) {
-			$this->addField(Zend_Search_Lucene_Field::UnStored('content', $content, 'utf-8'));
+			if($content) {
+				$this->addField(Zend_Search_Lucene_Field::UnStored('content', $content, 'utf-8'));
+			}
 		}
 	}
 }
