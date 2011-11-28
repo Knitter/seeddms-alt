@@ -190,7 +190,16 @@ class LetoDMS_Core_Folder {
 			return false;
 		}
 
-		$queryStr = "UPDATE tblFolders SET parent = " . $newParent->getID() . " WHERE id = ". $this->_id;
+		// Update the folderList of the folder
+		$pathPrefix="";
+		$path = $newParent->getPath();
+		foreach ($path as $f) {
+			$pathPrefix .= ":".$f->getID();
+		}
+		if (strlen($pathPrefix)>1) {
+			$pathPrefix .= ":";
+		}
+		$queryStr = "UPDATE tblFolders SET parent = ".$newParent->getID().", folderList='".$pathPrefix."' WHERE id = ". $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -364,9 +373,18 @@ class LetoDMS_Core_Folder {
 	function addSubFolder($name, $comment, $owner, $sequence) { /* {{{ */
 		$db = $this->_dms->getDB();
 
+		// Set the folderList of the folder
+		$pathPrefix="";
+		$path = $this->getPath();
+		foreach ($path as $f) {
+			$pathPrefix .= ":".$f->getID();
+		}
+		if (strlen($pathPrefix)>1) {
+			$pathPrefix .= ":";
+		}
 		//inheritAccess = true, defaultAccess = M_READ
-		$queryStr = "INSERT INTO tblFolders (name, parent, comment, date, owner, inheritAccess, defaultAccess, sequence) ".
-					"VALUES ('".$name."', ".$this->_id.", '".$comment."', ".mktime().", ".$owner->getID().", 1, ".M_READ.", ".$sequence.")";
+		$queryStr = "INSERT INTO tblFolders (name, parent, folderList, comment, date, owner, inheritAccess, defaultAccess, sequence) ".
+					"VALUES ('".$name."', ".$this->_id.", '".$pathPrefix."', '".$comment."', ".mktime().", ".$owner->getID().", 1, ".M_READ.", ".$sequence.")";
 		if (!$db->getResult($queryStr))
 			return false;
 		$newFolder = $this->_dms->getFolder($db->getInsertID());
@@ -1089,6 +1107,53 @@ class LetoDMS_Core_Folder {
 		}
 		return $this->_approversList;
 	} /* }}} */
+
+	/**
+	 * Get the internally used folderList which stores the ids of folders from
+	 * the root folder to the parent folder.
+	 *
+	 * @return string column separated list of folder ids
+	 */
+	function getFolderList() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT folderList FROM tblFolders where id = ".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+		return $resArr[0]['folderList'];
+	} /* }}} */
+
+	/**
+	 * Checks the internal data of the folder and repairs it.
+	 * Currently, this function only repairs an incorrect folderList
+	 *
+	 * @return boolean true on success, otherwise false
+	 */
+	function repair() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$curfolderlist = $this->getFolderList();
+
+		// calculate the folderList of the folder
+		$parent = $this->getParent();
+		$pathPrefix="";
+		$path = $parent->getPath();
+		foreach ($path as $f) {
+			$pathPrefix .= ":".$f->getID();
+		}
+		if (strlen($pathPrefix)>1) {
+			$pathPrefix .= ":";
+		}
+		if($curfolderlist != $pathPrefix) {
+			$queryStr = "UPDATE tblFolders SET folderList='".$pathPrefix."' WHERE id = ". $this->_id;
+			$res = $db->getResult($queryStr);
+			if (!$res)
+				return false;
+		}
+		return true;
+	} /* }}} */
+
 }
 
 ?>

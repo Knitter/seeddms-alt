@@ -1554,6 +1554,53 @@ class LetoDMS_Core_Document { /* {{{ */
 		}
 		return $this->_approversList;
 	} /* }}} */
+
+	/**
+	 * Get the internally used folderList which stores the ids of folders from
+	 * the root folder to the parent folder.
+	 *
+	 * @return string column separated list of folder ids
+	 */
+	function getFolderList() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT folderList FROM tblDocuments where id = ".$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		return $resArr[0]['folderList'];
+	} /* }}} */
+
+	/**
+	 * Checks the internal data of the document and repairs it.
+	 * Currently, this function only repairs an incorrect folderList
+	 *
+	 * @return boolean true on success, otherwise false
+	 */
+	function repair() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$curfolderlist = $this->getFolderList();
+
+		// calculate the folderList of the folder
+		$parent = $this->getFolder();
+		$pathPrefix="";
+		$path = $parent->getPath();
+		foreach ($path as $f) {
+			$pathPrefix .= ":".$f->getID();
+		}
+		if (strlen($pathPrefix)>1) {
+			$pathPrefix .= ":";
+		}
+		if($curfolderlist != $pathPrefix) {
+			$queryStr = "UPDATE tblDocuments SET folderList='".$pathPrefix."' WHERE id = ". $this->_id;
+			$res = $db->getResult($queryStr);
+			if (!$res)
+				return false;
+		}
+		return true;
+	} /* }}} */
 } /* }}} */
 
 

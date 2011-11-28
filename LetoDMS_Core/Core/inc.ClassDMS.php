@@ -214,13 +214,14 @@ class LetoDMS_Core_DMS {
 	 * Check if the version in the database is the same as of this package
 	 * Only the major and minor version number will be checked.
 	 *
-	 * @return boolean returns false if versions do not match
+	 * @return boolean returns false if versions do not match, but returns
+	 *         true if version matches or table tblVersion does not exists.
 	 */
 	function checkVersion() { /* {{{ */
 		$tbllist = $this->db->TableList();
 		$tbllist = explode(',',strtolower(join(',',$tbllist)));
 		if(!array_search('tblversion', $tbllist))
-			return false;
+			return true;
 		$queryStr = "SELECT * FROM tblVersion order by major,minor,subminor limit 1";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
@@ -403,6 +404,7 @@ class LetoDMS_Core_DMS {
 	 * @param offset integer index of first item in result set
 	 * @param mode string either AND or OR
 	 * @param searchin array() list of fields to search in
+	 *        1 = keywords, 2=name, 3=comment
 	 * @param startFolder object search in the folder only (null for root folder)
 	 * @param owner object search for documents owned by this user
 	 * @param status array list of status
@@ -420,6 +422,117 @@ class LetoDMS_Core_DMS {
 		// if none is checkd search all
 		if (count($searchin)==0)
 			$searchin=array( 0, 1, 2, 3);
+
+		/*--------- Do it all over again for folders -------------*/
+		if(0 /* $searchfolders */) {
+			$searchKey = "";
+			// Assemble the arguments for the concatenation function. This allows the
+			// search to be carried across all the relevant fields.
+			$concatFunction = "";
+			if (in_array(2, $searchin)) {
+				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblFolders`.`name`";
+			}
+			if (in_array(3, $searchin)) {
+				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblFolders`.`comment`";
+			}
+
+			if (strlen($concatFunction)>0 && count($tkeys)>0) {
+				$concatFunction = "CONCAT_WS(' ', ".$concatFunction.")";
+				foreach ($tkeys as $key) {
+					$key = trim($key);
+					if (strlen($key)>0) {
+						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE '%".$key."%'";
+					}
+				}
+			}
+
+			// Check to see if the search has been restricted to a particular sub-tree in
+			// the folder hierarchy.
+			$searchFolder = "";
+			if ($startFolder) {
+				$searchFolder = "`tblFolders`.`folderList` LIKE '%:".$startFolder->getID().":%'";
+			}
+
+			// Check to see if the search has been restricted to a particular
+			// document owner.
+			$searchOwner = "";
+			if ($owner) {
+				$searchOwner = "`tblFolders`.`owner` = '".$owner->getId()."'";
+			}
+
+			// Is the search restricted to documents created between two specific dates?
+			$searchCreateDate = "";
+			if ($creationstartdate) {
+				$startdate = makeTimeStamp(0, 0, 0, $creationstartdate['year'], $creationstartdate["month"], $creationstartdate["day"]);
+				if ($startdate) {
+					$searchCreateDate .= "`tblFolders`.`date` >= ".$startdate;
+				}
+			}
+			if ($creationenddate) {
+				$stopdate = makeTimeStamp(23, 59, 59, $creationenddate["year"], $creationenddate["month"], $creationenddate["day"]);
+				if ($stopdate) {
+					if($startdate)
+						$searchCreateDate .= " AND ";
+					$searchCreateDate .= "`tblFolders`.`date` <= ".$stopdate;
+				}
+			}
+
+			$searchQuery = "FROM `tblFolders` WHERE 1=1";
+
+			if (strlen($searchKey)>0) {
+				$searchQuery .= " AND (".$searchKey.")";
+			}
+			if (strlen($searchFolder)>0) {
+				$searchQuery .= " AND ".$searchFolder;
+			}
+			if (strlen($searchOwner)>0) {
+				$searchQuery .= " AND (".$searchOwner.")";
+			}
+			if (strlen($searchCreateDate)>0) {
+				$searchQuery .= " AND (".$searchCreateDate.")";
+			}
+
+			// Count the number of rows that the search will produce.
+			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
+			$totalFolders = 0;
+			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
+				$totalFolders = (integer)$resArr[0]["num"];
+			}
+
+			// If there are no results from the count query, then there is no real need
+			// to run the full query. TODO: re-structure code to by-pass additional
+			// queries when no initial results are found.
+
+			// Only search if the offset is not beyond the number of folders
+			if($totalFolders > $offset) {
+				// Prepare the complete search query, including the LIMIT clause.
+				$searchQuery = "SELECT `tblFolders`.* ".$searchQuery;
+
+				if($limit) {
+					$searchQuery .= " LIMIT ".$offset.",".$limit;
+				}
+
+				// Send the complete search query to the database.
+				$resArr = $this->db->getResultArray($searchQuery);
+			} else {
+				$resArr = array();
+			}
+
+			// ------------------- Ausgabe der Ergebnisse ----------------------------
+			$numResults = count($resArr);
+			if ($numResults == 0) {
+				$folderresult = array('totalFolders'=>$totalFolders, 'folders'=>array());
+			} else {
+				foreach ($resArr as $folderArr) {
+					$folders[] = $this->getFolder($folderArr['id']);
+				}
+				$folderresult = array('totalFolders'=>$totalFolders, 'folders'=>$folders);
+			}
+		} else {
+			$folderresult = array('totalFolders'=>0, 'folders'=>array());
+		}
+
+		/*--------- Do it all over again for documents -------------*/
 
 		$searchKey = "";
 		// Assemble the arguments for the concatenation function. This allows the
@@ -535,8 +648,8 @@ class LetoDMS_Core_DMS {
 			$totalDocs = (integer)$resArr[0]["num"];
 		}
 		if($limit) {
-			$totalPages = (integer)($totalDocs/$limit);
-			if (($totalDocs%$limit) > 0) {
+			$totalPages = (integer)(($totalDocs+$totalFolders)/$limit);
+			if ((($totalDocs+$totalFolders)%$limit) > 0) {
 				$totalPages++;
 			}
 		} else {
@@ -552,23 +665,35 @@ class LetoDMS_Core_DMS {
 			"`tblDocumentContent`.`version`, ".
 			"`tblDocumentStatusLog`.`status`, `tblDocumentLocks`.`userID` as `lockUser` ".$searchQuery;
 
-		if($limit) {
-			$searchQuery .= " LIMIT ".$offset.",".$limit;
-		}
+		// calculate the remaining entrїes of the current page
+		// If page is not full yet, get remaining entries
+		$remain = $limit - count($folderresult['folders']);
+		if($remain) {
+			if($remain == $limit)
+				$offset -= $totalFolders;
+			else
+				$offset = 0;
+			if($limit)
+				$searchQuery .= " LIMIT ".$offset.",".$remain;
 
-		// Send the complete search query to the database.
-		$resArr = $this->db->getResultArray($searchQuery);
+			// Send the complete search query to the database.
+			$resArr = $this->db->getResultArray($searchQuery);
+		} else {
+			$resArr = array();
+		}
 
 		// ------------------- Ausgabe der Ergebnisse ----------------------------
 		$numResults = count($resArr);
 		if ($numResults == 0) {
-			return array('totalDocs'=>$totalDocs, 'totalPages'=>$totalPages, 'docs'=>array());
+			$docresult = array('totalDocs'=>$totalDocs, 'docs'=>array());
+		} else {
+			foreach ($resArr as $docArr) {
+				$docs[] = $this->getDocument($docArr['id']);
+			}
+			$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
 		}
 
-		foreach ($resArr as $docArr) {
-			$docs[] = $this->getDocument($docArr['id']);
-		}
-		return(array('totalDocs'=>$totalDocs, 'totalPages'=>$totalPages, 'docs'=>$docs));
+		return array_merge($docresult, $folderresult, array('totalPages'=>$totalPages));
 	} /* }}} */
 
 	/**
