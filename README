@@ -127,16 +127,15 @@ NOTE: UPDATING FROM A PREVIOUS VERSION
 - make a backup archive of your data folder
 - dump your current database
 - extract the letoDMS archive to your web server
-- edit the conf/conf.Settings.php file to match your previuos settings 
+- edit the conf/settings.xml file to match your previuos settings 
   (you can even replace the file with your own one eventualy adding by hand
   the missing new parameters)
-- login as administrator
-- execute all the update.php script pointing your browser directly:
-  http://www.yoursite/path/to/dms/UPDATE-vX.X.X/update.php
+- run each sql script in the UPDATE-vx.x.x directories, starting with version
+  after your current version.
 
 Each update script must be run, starting from the version previous to the
-one in the folder name. For example to update from a 1.7.1 to 1.9 you need
-to run both UPDATE-v1.8.1/update.php and UPDATE-v1.9/update.php.
+one in the folder name. For example to update from a 3.1.0 to 3.3.0 you need
+to run both UPDATE-v3.2.0/update.sql and UPDATE-v3.3.0/update.sql.
 
 
 3. Requirements ================================================================
