@@ -27,13 +27,14 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
 function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
-	global $dms, $repair;
+	global $dms, $repair, $needsrepair;
 
 	/* Don't do folderlist check for root folder */
 	if($path != ':') {
 		$folderList = $folder->getFolderList();
 		/* Check the folder */
 		if($folderList != $path) {
+			$needsrepair = true;
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
 			$tmppath = $folder->getPath();
@@ -48,8 +49,10 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 			print "<td>Folderlist is '".$folderList."', should be '".$path."'</td>";
 			if($repair) {
 				$folder->repair();
+				print "<td><span class=\"success\">Repaired</span></td>\n";
+			} else {
+				print "<td></td>\n";
 			}
-			print "<td></td>\n";
 			print "</tr>\n";
 		}
 	}
@@ -64,6 +67,7 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 		/* Check the document */
 		$folderList = $document->getFolderList();
 		if($folderList != $path) {
+			$needsrepair = true;
 			$lc = $document->getLatestContent();
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($lc->getFileType())."\" title=\"".$lc->getMimeType()."\"></a></td>";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
@@ -72,14 +76,17 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 			for ($i = 1; $i  < count($tmppath); $i++) {
 				print $tmppath[$i]->getName()."/";
 			}
-			print $docName;
+			print $document->getName();
 			print "</a></td>";
 			$owner = $document->getOwner();
 			print "<td>".$owner->getFullName()."</td>";
 			print "<td>Folderlist is '".$folderList."', should be '".$path."'</td>";
 			if($repair) {
+				$document->repair();
+				print "<td><span class=\"success\">Repaired</span></td>\n";
+			} else {
+				print "<td></td>\n";
 			}
-			print "<td></td>\n";
 			print "</tr>\n";
 		}
 	}
@@ -102,7 +109,6 @@ if(isset($_GET['repair']) && $_GET['repair'] == 1) {
 	echo "<p>".getMLText('repairing_objects')."</p>";
 } else {
 	$repair = 0;
-	echo '<a href="out.ObjectCheck.php?repair=1">'.getMLText('do_object_repair').'</a>';
 }
 
 $folder = $dms->getFolder($settings->_rootFolderID);
@@ -114,8 +120,13 @@ print "<th>".getMLText("owner")."</th>\n";
 print "<th>".getMLText("error")."</th>\n";
 print "<th></th>\n";
 print "</tr>\n</thead>\n<tbody>\n";
+$needsrepair = false;
 tree($folder, $repair);
 print "</tbody></table>\n";
+
+if($needsrepair && $repair == 0) {
+	echo '<p><a href="out.ObjectCheck.php?repair=1">'.getMLText('do_object_repair').'</a></p>';
+}
 
 UI::contentContainerEnd();
 UI::htmlEndPage();
