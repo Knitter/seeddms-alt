@@ -62,6 +62,8 @@
 			 - luceneDir: Where the lucene fulltext index iѕ saved
        - logFileEnable: set false to disable log system
        - logFileRotation: the log file rotation (h=hourly, d=daily, m=monthly)
+       - enableLargeFileUpload: support for jumploader
+       - partitionsize: size of chunk uploaded by jumploader
     -->
     <server
       rootDir = ""
