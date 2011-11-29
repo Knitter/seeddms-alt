@@ -228,7 +228,7 @@ if(isset($_GET['categoryids']) && $_GET['categoryids']) {
 //
 // Default page to display is always one.
 $pageNumber=1;
-$limit = 25;
+$limit = 20;
 if (isset($_GET["pg"])) {
 	if (is_numeric($_GET["pg"]) && $_GET["pg"]>0) {
 		$pageNumber = (int) $_GET["pg"];
@@ -252,12 +252,12 @@ UI::contentContainerStart();
 <tr>
 <td align="left" style="padding:0; margin:0;">
 <?php
-$numResults = count($resArr['docs']);
+$numResults = count($resArr['docs']) + count($resArr['folders']);
 if ($numResults == 0) {
 	printMLText("search_no_results");
 }
 else {
-	printMLText("search_report", array("count" => $resArr['totalDocs']));
+	printMLText("search_report", array("doccount" => $resArr['totalDocs'], "foldercount" => $resArr['totalFolders']));
 }
 ?>
 </td>
@@ -276,7 +276,7 @@ UI::pageList($pageNumber, $resArr['totalPages'], "../op/op.Search.php", $_GET);
 
 print "<table class=\"folderView\">";
 print "<thead>\n<tr>\n";
-//print "<th></th>\n";
+print "<th></th>\n";
 print "<th>".getMLText("name")."</th>\n";
 print "<th>".getMLText("owner")."</th>\n";
 print "<th>".getMLText("status")."</th>\n";
@@ -287,41 +287,75 @@ print "<th>".getMLText("comment")."</th>\n";
 print "</tr>\n</thead>\n<tbody>\n";
 
 $resultsFilteredByAccess = false;
-foreach ($resArr['docs'] as $document) {
-	if ($document->getAccessMode($user) < M_READ) {
-		$resultsFilteredByAccess = true;
-	}
-	else {
-		$lc = $document->getLatestContent();
-		print "<tr>";
-		//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
-		if (in_array(2, $searchin)) {
-			$docName = markQuery($document->getName(), "i");
+$entries = array_merge($resArr['folders'], $resArr['docs']);
+foreach ($entries as $entry) {
+	if(get_class($entry) == 'LetoDMS_Core_Document') {
+		$document = $entry;
+		if ($document->getAccessMode($user) < M_READ) {
+			$resultsFilteredByAccess = true;
 		}
 		else {
-			$docName = $document->getName();
-		}
-		print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
-		$folder = $document->getFolder();
-		$path = $folder->getPath();
-		for ($i = 1; $i  < count($path); $i++) {
-			print $path[$i]->getName()."/";
-		}
-		print $docName;
-		print "</a></td>";
-		
-		$owner = $document->getOwner();
-		print "<td>".$owner->getFullName()."</td>";
-		$display_status=$lc->getStatus();
-		print "<td>".getOverallStatusText($display_status["status"]). "</td>";
+			$lc = $document->getLatestContent();
+			print "<tr>";
+			//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
+			if (in_array(2, $searchin)) {
+				$docName = markQuery($document->getName(), "i");
+			} else {
+				$docName = $document->getName();
+			}
+			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($lc->getFileType())."\" title=\"".$lc->getMimeType()."\"></a></td>";
+			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
+			$folder = $document->getFolder();
+			$path = $folder->getPath();
+			for ($i = 1; $i  < count($path); $i++) {
+				print $path[$i]->getName()."/";
+			}
+			print $docName;
+			print "</a></td>";
+			
+			$owner = $document->getOwner();
+			print "<td>".$owner->getFullName()."</td>";
+			$display_status=$lc->getStatus();
+			print "<td>".getOverallStatusText($display_status["status"]). "</td>";
 
-		print "<td class=\"center\">".$lc->getVersion()."</td>";
-		
-		if (in_array(3, $searchin)) $comment = markQuery($document->getComment());
-		else $comment = $document->getComment();
-		if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
-		print "<td>".$comment."</td>";
-		print "</tr>\n";
+			print "<td class=\"center\">".$lc->getVersion()."</td>";
+			
+			if (in_array(3, $searchin)) $comment = markQuery($document->getComment());
+			else $comment = $document->getComment();
+			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
+			print "<td>".$comment."</td>";
+			print "</tr>\n";
+		}
+	} elseif(get_class($entry) == 'LetoDMS_Core_Folder') {
+		$folder = $entry;
+		if ($folder->getAccessMode($user) < M_READ) {
+			$resultsFilteredByAccess = true;
+		}
+		else {
+			if (in_array(2, $searchin)) {
+				$folderName = markQuery($folder->getName(), "i");
+			} else {
+				$folderName = $folder->getName();
+			}
+			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
+			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
+			$path = $folder->getPath();
+			for ($i = 1; $i  < count($path); $i++) {
+				print "/".$path[$i]->getName();
+			}
+			print $foldername;
+			print "</a></td>";
+			
+			$owner = $folder->getOwner();
+			print "<td>".$owner->getFullName()."</td>";
+			print "<td></td>";
+			print "<td></td>";
+			if (in_array(3, $searchin)) $comment = markQuery($folder->getComment());
+			else $comment = $folder->getComment();
+			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
+			print "<td>".$comment."</td>";
+			print "</tr>\n";
+		}
 	}
 }
 if ($resultsFilteredByAccess) {
