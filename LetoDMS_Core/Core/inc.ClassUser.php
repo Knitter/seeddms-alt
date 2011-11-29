@@ -658,7 +658,8 @@ class LetoDMS_Core_User {
 			"AND `tblDocumentApprovers`.`type`='0' ".
 			"AND `tblDocumentApprovers`.`required`='". $this->_id ."' ";
 */
-		$queryStr = "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
+		$queryStr =
+   "SELECT `tblDocumentApprovers`.*, `tblDocumentApproveLog`.`status`, ".
 			"`tblDocumentApproveLog`.`comment`, `tblDocumentApproveLog`.`date`, ".
 			"`tblDocumentApproveLog`.`userID` ".
 			"FROM `tblDocumentApprovers` ".
