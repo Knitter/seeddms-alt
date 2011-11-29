@@ -156,7 +156,7 @@ class Settings { /* {{{ */
 		// Load config file
 		if (!defined("LETODMS_INSTALL")) {
 			if(!file_exists($configFilePath)) {
-				echo "You does not seem to have a valid configuration. Run the <a href=\"../install/install.php\">install tool</a> first.";
+				echo "You does not seem to have a valid configuration. Run the <a href=\"install/install.php\">install tool</a> first.";
 				exit;
 			}
 		}
@@ -611,9 +611,9 @@ class Settings { /* {{{ */
 				$configFilePath = "conf/settings.xml";
 			else
 			{
-				echo "Configuration file not found <br>";
-				echo "Please create conf/settings.xml file. You can use installation procedure or 'conf/settings.xml.template' file to help you";
-				exit;
+//				echo "Configuration file not found <br>";
+//				echo "Please create conf/settings.xml file. You can use installation procedure or 'conf/settings.xml.template' file to help you";
+//				exit;
 			}
 		}
 
