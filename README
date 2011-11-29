@@ -339,3 +339,19 @@ Create a database and data store for each instance and adjust the database
 settings in conf/conf.Settings.php aѕ described above.
 
 Point your web browser towards the index.php file in your new instance.
+
+LICENSING ======================================================================
+
+LetoDMS is licensed unter GPLv2
+
+Jumploader is licensed as stated by the author on th web site
+(http://jumploader.com/)
+
+-- Taken from web site of jumploader  ---
+You may use this software for free, however, you should not:
+
+- Decompile binaries.
+- Alter or replace class and/or resource files.
+- Redistribute this software under different name or authority.
+
+If you would like a customized version, I can do this for a fee. Don’t hesitate to contact me with questions or comments.
