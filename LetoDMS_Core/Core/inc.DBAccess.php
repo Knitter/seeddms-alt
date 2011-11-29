@@ -121,6 +121,17 @@ class LetoDMS_Core_DatabaseAccess {
 	} /* }}} */
 
 	/**
+	 * Sanitize String used in database operations
+	 *
+	 * @param string text
+	 * @return string sanitized string
+	 */
+	function qstr($text) { /* {{{ */
+		return $this->_conn->qstr($text);
+	} /* }}} */
+
+
+	/**
 	 * Execute SQL query and return result
 	 *
 	 * Call this function only with sql query which return data records.

@@ -66,7 +66,7 @@ class LetoDMS_Session {
 	 * @return boolean true if successful otherwise false
 	 */
 	function load($id) { /* {{{ */
-		$queryStr = "SELECT * FROM tblSessions WHERE id = '".$id."'";
+		$queryStr = "SELECT * FROM tblSessions WHERE id = ".$this->db->qstr($id)."";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
