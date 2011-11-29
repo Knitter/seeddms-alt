@@ -1,4 +1,18 @@
 --------------------------------------------------------------------------------
+                     Changes in version 3.3.0
+--------------------------------------------------------------------------------
+- searching for folders
+- initial consistency check of database with repair function 
+- group managers are allowed to remove and delete users from their group
+- withdraw rights from a group if the group access is set to none
+- added password forgotten function
+
+--------------------------------------------------------------------------------
+                     Changes in version 3.2.1
+--------------------------------------------------------------------------------
+- large file upload with jumploader can be turned off
+
+--------------------------------------------------------------------------------
                      Changes in version 3.2.0
 --------------------------------------------------------------------------------
 - select keywords from list in advanced search form
