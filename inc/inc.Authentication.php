@@ -26,7 +26,7 @@ require_once("inc.ClassEmail.php");
 require_once("inc.ClassSession.php");
 
 /* Load session */
-$dms_session = sanitizeString($_COOKIE["mydms_session"]);
+$dms_session = $_COOKIE["mydms_session"];
 $session = new LetoDMS_Session($db);
 if(!$resArr = $session->load($dms_session)) {
 	setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
