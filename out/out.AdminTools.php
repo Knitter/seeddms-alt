@@ -51,6 +51,7 @@ if($settings->_enableFullSearch) {
 <?php
 }
 ?>
+	<li><a href="../out/out.ObjectCheck.php"><?php echo getMLText("objectcheck")?></a></li>
 	<li><a href="../out/out.Settings.php"><?php echo getMLText("settings")?></a></li>
 	</ul>
 <?php
