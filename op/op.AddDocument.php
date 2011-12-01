@@ -48,7 +48,7 @@ $comment  = sanitizeString($_POST["comment"]);
 $version_comment = sanitizeString($_POST["version_comment"]);
 
 $keywords = sanitizeString($_POST["keywords"]);
-$categories = sanitizeString($_POST["categoryidform1"]);
+$categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]);
 
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
