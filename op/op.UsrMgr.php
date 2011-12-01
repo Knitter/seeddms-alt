@@ -41,7 +41,7 @@ if ($action == "adduser") {
 	$name    = sanitizeString($_POST["name"]);
 	$email   = sanitizeString($_POST["email"]);
 	$comment = sanitizeString($_POST["comment"]);
-	$role    = sanitizeString($_POST["role"]);
+	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 
 	if (is_object($dms->getUserByLogin($login))) {
@@ -150,7 +150,7 @@ else if ($action == "edituser") {
 	$name    = sanitizeString($_POST["name"]);
 	$email   = sanitizeString($_POST["email"]);
 	$comment = sanitizeString($_POST["comment"]);
-	$role    = sanitizeString($_POST["role"]);
+	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 	
 	if ($editedUser->getLogin() != $login)
