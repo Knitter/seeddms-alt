@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 3.3.0
 --------------------------------------------------------------------------------
-- searching for folders
+- searching for folders (run the new consistency check function!)
 - initial consistency check of database with repair function 
 - group managers are allowed to remove and delete users from their group
 - withdraw rights from a group if the group access is set to none
