@@ -36,12 +36,8 @@ function _printMessage($heading, $message) {
 	return;
 }
 
-if (isset($_POST["login"])) {
-	$login = sanitizeString($_POST["login"]);
-	$login = str_replace("*", "", $login);
-}
-else if (isset($_GET["login"])) {
-	$login = sanitizeString($_GET["login"]);
+if (isset($_REQUEST["login"])) {
+	$login = sanitizeString($_REQUEST["login"]);
 	$login = str_replace("*", "", $login);
 }
 
@@ -207,12 +203,8 @@ if (is_bool($user)) {
 }
 
 // Capture the user's language and theme settings.
-if (isset($_POST["lang"]) && strlen($_POST["lang"])>0 && is_numeric(array_search($_POST["lang"],getLanguages())) ) {
-	$lang = sanitizeString($_POST["lang"]);
-	$user->setLanguage($lang);
-}
-else if (isset($_GET["lang"]) && strlen($_GET["lang"])>0 && is_numeric(array_search($_GET["lang"],getLanguages())) ) {
-	$lang = sanitizeString($_GET["lang"]);
+if (isset($_REQUEST["lang"]) && strlen($_REQUEST["lang"])>0 && is_numeric(array_search($_REQUEST["lang"],getLanguages())) ) {
+	$lang = $_REQUEST["lang"];
 	$user->setLanguage($lang);
 }
 else {
@@ -222,12 +214,8 @@ else {
 		$user->setLanguage($lang);
 	}
 }
-if (isset($_POST["sesstheme"]) && strlen($_POST["sesstheme"])>0 && is_numeric(array_search($_POST["sesstheme"],UI::getStyles())) ) {
-	$sesstheme = sanitizeString($_POST["sesstheme"]);
-	$user->setTheme($sesstheme);
-}
-else if (isset($_GET["sesstheme"]) && strlen($_GET["sesstheme"])>0 && is_numeric(array_search($_GET["sesstheme"],UI::getStyles())) ) {
-	$sesstheme = sanitizeString($_GET["sesstheme"]);
+if (isset($_REQUEST["sesstheme"]) && strlen($_REQUEST["sesstheme"])>0 && is_numeric(array_search($_REQUEST["sesstheme"],UI::getStyles())) ) {
+	$sesstheme = $_REQUEST["sesstheme"];
 	$user->setTheme($sesstheme);
 }
 else {
