@@ -273,7 +273,7 @@ class LetoDMS_Core_Folder {
 	function setDefaultAccess($mode) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblFolders set defaultAccess = " . $mode . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblFolders set defaultAccess = " . (int) $mode . " WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -304,7 +304,7 @@ class LetoDMS_Core_Folder {
 
 		$inheritAccess = ($inheritAccess) ? "1" : "0";
 
-		$queryStr = "UPDATE tblFolders SET inheritAccess = " . $inheritAccess . " WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblFolders SET inheritAccess = " . (int) $inheritAccess . " WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -384,7 +384,7 @@ class LetoDMS_Core_Folder {
 		}
 		//inheritAccess = true, defaultAccess = M_READ
 		$queryStr = "INSERT INTO tblFolders (name, parent, folderList, comment, date, owner, inheritAccess, defaultAccess, sequence) ".
-					"VALUES ('".$name."', ".$this->_id.", '".$pathPrefix."', '".$comment."', ".mktime().", ".$owner->getID().", 1, ".M_READ.", ".$sequence.")";
+					"VALUES (".$db->qstr($name).", ".$this->_id.", ".$db->qstr($pathPrefix).", ".$db->qstr($comment).", ".mktime().", ".$owner->getID().", 1, ".M_READ.", ". $sequence.")";
 		if (!$db->getResult($queryStr))
 			return false;
 		$newFolder = $this->_dms->getFolder($db->getInsertID());
@@ -393,7 +393,7 @@ class LetoDMS_Core_Folder {
 		return $newFolder;
 	} /* }}} */
 
-	/*
+	/**
 	 * Returns an array of all parents, grand parent, etc. up to root folder.
 	 * The folder itself is the last element of the array.
 	 *
@@ -415,6 +415,11 @@ class LetoDMS_Core_Folder {
 		}
 	} /* }}} */
 
+	/**
+	 * Returns a unix file system path
+	 *
+	 * @return string path separated with '/'
+	 */
 	function getFolderPathPlain() { /* {{{ */
 		$path="";
 		$folderPath = $this->getPath();
@@ -491,7 +496,7 @@ class LetoDMS_Core_Folder {
 	 * @param string $orgFileName the original file name
 	 * @param string $fileType usually the extension of the filename
 	 * @param string $mimeType mime type of the content
-	 * @param integer $sequence position of new document within the folder
+	 * @param float $sequence position of new document within the folder
 	 * @param array $reviewers list of users who must review this document
 	 * @param array $approvers list of users who must approve this document
 	 * @param string $reqversion version number of the content
@@ -517,7 +522,7 @@ class LetoDMS_Core_Folder {
 		}
 
 		$queryStr = "INSERT INTO tblDocuments (name, comment, date, expires, owner, folder, folderList, inheritAccess, defaultAccess, locked, keywords, sequence) VALUES ".
-					"('".$name."', '".$comment."', " . mktime().", ".$expires.", ".$owner->getID().", ".$this->_id.",'".$pathPrefix."', 1, ".M_READ.", -1, '".$keywords."', " . $sequence . ")";
+					"(".$db->qstr($name).", ".$db->qstr($comment).", " . mktime().", ".(int) $expires.", ".$owner->getID().", ".$this->_id.",".$db->qstr($pathPrefix).", 1, ".M_READ.", -1, ".$db->qstr($keywords).", " . $sequence . ")";
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -593,7 +598,7 @@ class LetoDMS_Core_Folder {
 			}
 			$modeStr = "";
 			if ($mode!=M_ANY) {
-				$modeStr = " AND mode".$op.$mode;
+				$modeStr = " AND mode".$op.(int)$mode;
 			}
 			$queryStr = "SELECT * FROM tblACLs WHERE targetType = ".T_FOLDER.
 				" AND target = " . $this->_id .	$modeStr . " ORDER BY targetType";
@@ -640,7 +645,7 @@ class LetoDMS_Core_Folder {
 		$userOrGroup = ($isUser) ? "userID" : "groupID";
 
 		$queryStr = "INSERT INTO tblACLs (target, targetType, ".$userOrGroup.", mode) VALUES 
-					(".$this->_id.", ".T_FOLDER.", " . $userOrGroupID . ", " .$mode. ")";
+					(".$this->_id.", ".T_FOLDER.", " . (int) $userOrGroupID . ", " .(int) $mode. ")";
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -669,7 +674,7 @@ class LetoDMS_Core_Folder {
 
 		$userOrGroup = ($isUser) ? "userID" : "groupID";
 
-		$queryStr = "UPDATE tblACLs SET mode = " . $newMode . " WHERE targetType = ".T_FOLDER." AND target = " . $this->_id . " AND " . $userOrGroup . " = " . $userOrGroupID;
+		$queryStr = "UPDATE tblACLs SET mode = " . (int) $newMode . " WHERE targetType = ".T_FOLDER." AND target = " . $this->_id . " AND " . $userOrGroup . " = " . (int) $userOrGroupID;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -688,7 +693,7 @@ class LetoDMS_Core_Folder {
 
 		$userOrGroup = ($isUser) ? "userID" : "groupID";
 
-		$queryStr = "DELETE FROM tblACLs WHERE targetType = ".T_FOLDER." AND target = ".$this->_id." AND ".$userOrGroup." = " . $userOrGroupID;
+		$queryStr = "DELETE FROM tblACLs WHERE targetType = ".T_FOLDER." AND target = ".$this->_id." AND ".$userOrGroup." = " . (int) $userOrGroupID;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -912,7 +917,7 @@ class LetoDMS_Core_Folder {
 		//
 		$queryStr = "SELECT * FROM `tblNotify` WHERE `tblNotify`.`target` = '".$this->_id."' ".
 			"AND `tblNotify`.`targetType` = '".T_FOLDER."' ".
-			"AND `tblNotify`.`".$userOrGroup."` = '".$userOrGroupID."'";
+			"AND `tblNotify`.`".$userOrGroup."` = '". (int) $userOrGroupID."'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr)) {
 			return -4;
@@ -921,7 +926,7 @@ class LetoDMS_Core_Folder {
 			return -3;
 		}
 
-		$queryStr = "INSERT INTO tblNotify (target, targetType, " . $userOrGroup . ") VALUES (" . $this->_id . ", " . T_FOLDER . ", " . $userOrGroupID . ")";
+		$queryStr = "INSERT INTO tblNotify (target, targetType, " . $userOrGroup . ") VALUES (" . $this->_id . ", " . T_FOLDER . ", " .  (int) $userOrGroupID . ")";
 		if (!$db->getResult($queryStr))
 			return -4;
 
@@ -985,7 +990,7 @@ class LetoDMS_Core_Folder {
 		//
 		$queryStr = "SELECT * FROM `tblNotify` WHERE `tblNotify`.`target` = '".$this->_id."' ".
 			"AND `tblNotify`.`targetType` = '".T_FOLDER."' ".
-			"AND `tblNotify`.`".$userOrGroup."` = '".$userOrGroupID."'";
+			"AND `tblNotify`.`".$userOrGroup."` = '". (int) $userOrGroupID."'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr)) {
 			return -4;
@@ -994,7 +999,7 @@ class LetoDMS_Core_Folder {
 			return -3;
 		}
 
-		$queryStr = "DELETE FROM tblNotify WHERE target = " . $this->_id . " AND targetType = " . T_FOLDER . " AND " . $userOrGroup . " = " . $userOrGroupID;
+		$queryStr = "DELETE FROM tblNotify WHERE target = " . $this->_id . " AND targetType = " . T_FOLDER . " AND " . $userOrGroup . " = " .  (int) $userOrGroupID;
 		if (!$db->getResult($queryStr))
 			return -4;
 

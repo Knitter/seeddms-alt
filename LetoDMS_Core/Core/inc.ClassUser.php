@@ -133,7 +133,7 @@ class LetoDMS_Core_User {
 	function setLogin($newLogin) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET login ='" . $newLogin . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblUsers SET login =".$db->qstr($newLogin)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -147,7 +147,7 @@ class LetoDMS_Core_User {
 	function setFullName($newFullName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET fullname = '" . $newFullName . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblUsers SET fullname = ".$db->qstr($newFullName)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -161,7 +161,7 @@ class LetoDMS_Core_User {
 	function setPwd($newPwd) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET pwd ='" . $newPwd . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblUsers SET pwd =".$db->qstr($newPwd)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -175,7 +175,7 @@ class LetoDMS_Core_User {
 	function setEmail($newEmail) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET email ='" . $newEmail . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblUsers SET email =".$db->qstr($newEmail)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -189,7 +189,7 @@ class LetoDMS_Core_User {
 	function setLanguage($newLanguage) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET language ='" . $newLanguage . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblUsers SET language =".$db->qstr($newLanguage)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -203,7 +203,7 @@ class LetoDMS_Core_User {
 	function setTheme($newTheme) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET theme ='" . $newTheme . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblUsers SET theme =".$db->qstr($newTheme)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -217,7 +217,7 @@ class LetoDMS_Core_User {
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblUsers SET comment ='" . $newComment . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblUsers SET comment =".$db->qstr($newComment)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -322,7 +322,7 @@ class LetoDMS_Core_User {
 		$queryStr = "DELETE FROM tblNotify WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
-		//Der Besitz von Dokumenten oder Ordnern, deren bisheriger Besitzer der zu löschende war, geht an den Admin über
+		/* Assign documents of the removed user to the given user */
 		$queryStr = "UPDATE tblFolders SET owner = " . $assignTo . " WHERE owner = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
@@ -332,11 +332,11 @@ class LetoDMS_Core_User {
 		$queryStr = "UPDATE tblDocumentContent SET createdBy = " . $assignTo . " WHERE createdBy = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
-		//Verweise auf Dokumente: Private löschen...
+		// Remove private links on documents ...
 		$queryStr = "DELETE FROM tblDocumentLinks WHERE userID = " . $this->_id . " AND public = 0";
 		if (!$db->getResult($queryStr)) return false;
 
-		//... und öffentliche an Admin übergeben
+		// ... but keep public links
 		$queryStr = "UPDATE tblDocumentLinks SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
@@ -348,19 +348,19 @@ class LetoDMS_Core_User {
 		$queryStr = "DELETE FROM tblDocumentLocks WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
-		//User aus allen Gruppen löschen
+		// Delete user from all groups
 		$queryStr = "DELETE FROM tblGroupMembers WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
-		//User aus allen ACLs streichen
+		// User aus allen ACLs streichen
 		$queryStr = "DELETE FROM tblACLs WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
-		//Eintrag aus tblUserImagess löschen
+		// Delete image of user
 		$queryStr = "DELETE FROM tblUserImages WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
-		//Eintrag aus tblUsers löschen
+		// Delete user itself
 		$queryStr = "DELETE FROM tblUsers WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
@@ -528,9 +528,9 @@ class LetoDMS_Core_User {
 		fclose($fp);
 
 		if ($this->hasImage())
-			$queryStr = "UPDATE tblUserImages SET image = '".base64_encode($content)."', mimeType = '". $mimeType."' WHERE userID = " . $this->_id;
+			$queryStr = "UPDATE tblUserImages SET image = '".base64_encode($content)."', mimeType = ".$db->qstr($mimeType)." WHERE userID = " . $this->_id;
 		else
-			$queryStr = "INSERT INTO tblUserImages (userID, image, mimeType) VALUES (" . $this->_id . ", '".base64_encode($content)."', '".$mimeType."')";
+			$queryStr = "INSERT INTO tblUserImages (userID, image, mimeType) VALUES (" . $this->_id . ", '".base64_encode($content)."', ".$db->qstr($mimeType).")";
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -571,8 +571,8 @@ class LetoDMS_Core_User {
 			"FROM `tblDocumentReviewers` ".
 			"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
 			"WHERE `tblDocumentReviewers`.`type`='0' ".
-			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". $version ."' ").
+			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". (int) $version ."' ").
 			"AND `tblDocumentReviewers`.`required`='". $this->_id ."' ".
 			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT 1";
 		$resArr = $db->getResultArray($queryStr);
@@ -592,8 +592,8 @@ class LetoDMS_Core_User {
 			"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
 			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`groupID` = `tblDocumentReviewers`.`required` ".
 			"WHERE `tblDocumentReviewers`.`type`='1' ".
-			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". $version ."' ").
+			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". (int) $version ."' ").
 			"AND `tblGroupMembers`.`userID`='". $this->_id ."' ".
 			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT 1";
 		$resArr = $db->getResultArray($queryStr);
@@ -665,8 +665,8 @@ class LetoDMS_Core_User {
 			"FROM `tblDocumentApprovers` ".
 			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
 			"WHERE `tblDocumentApprovers`.`type`='0' ".
-			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
+			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". (int) $version ."' ").
 			"AND `tblDocumentApprovers`.`required`='". $this->_id ."' ".
 			"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC LIMIT 1";
 
@@ -702,8 +702,8 @@ class LetoDMS_Core_User {
 			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
 			"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`groupID` = `tblDocumentApprovers`.`required` ".
 			"WHERE `tblDocumentApprovers`.`type`='1' ".
-			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
+			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". (int) $version ."' ").
 			"AND `tblGroupMembers`.`userID`='". $this->_id ."' ".
 			"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC LIMIT 1";
 		$resArr = $db->getResultArray($queryStr);
@@ -798,7 +798,7 @@ class LetoDMS_Core_User {
 
 		if ($isgroup){
 
-			$queryStr = "SELECT * FROM tblMandatoryApprovers WHERE userID = " . $this->_id . " AND approverGroupID = " . $id;
+			$queryStr = "SELECT * FROM tblMandatoryApprovers WHERE userID = " . $this->_id . " AND approverGroupID = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return;
 
@@ -808,7 +808,7 @@ class LetoDMS_Core_User {
 
 		}else{
 
-			$queryStr = "SELECT * FROM tblMandatoryApprovers WHERE userID = " . $this->_id . " AND approverUserID = " . $id;
+			$queryStr = "SELECT * FROM tblMandatoryApprovers WHERE userID = " . $this->_id . " AND approverUserID = " . (int) $id;
 			$resArr = $db->getResultArray($queryStr);
 			if (count($resArr)!=0) return;
 

@@ -61,7 +61,7 @@ class LetoDMS_Core_Group {
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblGroups SET name = '" . $newName . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblGroups SET name = ".$db->qstr($newName)." WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -74,7 +74,7 @@ class LetoDMS_Core_Group {
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblGroups SET comment = '" . $newComment . "' WHERE id = " . $this->_id;
+		$queryStr = "UPDATE tblGroups SET comment = ".$db->qstr($newComment)." WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -247,8 +247,8 @@ class LetoDMS_Core_Group {
 			"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
 			"LEFT JOIN `ttreviewid` on `ttreviewid`.`maxLogID` = `tblDocumentReviewLog`.`reviewLogID` ".
 			"WHERE `ttreviewid`.`maxLogID`=`tblDocumentReviewLog`.`reviewLogID` ".
-			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". $version ."' ").
+			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". (int) $version ."' ").
 			"AND `tblDocumentReviewers`.`type`='1' ".
 			"AND `tblDocumentReviewers`.`required`='". $this->_id ."' ";
 		$resArr = $db->getResultArray($queryStr);
@@ -278,8 +278,8 @@ class LetoDMS_Core_Group {
 			"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
 			"LEFT JOIN `ttapproveid` on `ttapproveid`.`maxLogID` = `tblDocumentApproveLog`.`approveLogID` ".
 			"WHERE `ttapproveid`.`maxLogID`=`tblDocumentApproveLog`.`approveLogID` ".
-			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". $documentID ."' ").
-			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". $version ."' ").
+			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". (int) $documentID ."' ").
+			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". (int) $version ."' ").
 			"AND `tblDocumentApprovers`.`type`='1' ".
 			"AND `tblDocumentApprovers`.`required`='". $this->_id ."' ";
 		$resArr = $db->getResultArray($queryStr);

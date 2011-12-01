@@ -56,7 +56,7 @@ class LetoDMS_Core_DocumentCategory {
 	function setName($newName) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblCategory SET name = '$newName' WHERE id = ". $this->_id;
+		$queryStr = "UPDATE tblCategory SET name = ".$db->qstr($newName)." WHERE id = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -84,7 +84,7 @@ class LetoDMS_Core_DocumentCategory {
 	function addCategory($keywords) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "INSERT INTO tblCategory (category) VALUES ('".$keywords."')";
+		$queryStr = "INSERT INTO tblCategory (category) VALUES (".$db->qstr($keywords).")";
 		return $db->getResult($queryStr);
 	}
 

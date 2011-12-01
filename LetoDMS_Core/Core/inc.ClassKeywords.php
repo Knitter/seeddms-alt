@@ -71,7 +71,7 @@ class LetoDMS_Core_KeywordCategory {
 	function setName($newName) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblKeywordCategories SET name = '$newName' WHERE id = ". $this->_id;
+		$queryStr = "UPDATE tblKeywordCategories SET name = ".$db->qstr($newName)." WHERE id = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -101,14 +101,14 @@ class LetoDMS_Core_KeywordCategory {
 	function editKeywordList($listID, $keywords) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblKeywords SET keywords = '$keywords' WHERE id = $listID";
+		$queryStr = "UPDATE tblKeywords SET keywords = ".$db->qstr($keywords)." WHERE id = $listID";
 		return $db->getResult($queryStr);
 	}
 
 	function addKeywordList($keywords) {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "INSERT INTO tblKeywords (category, keywords) VALUES (" . $this->_id . ", '$keywords')";
+		$queryStr = "INSERT INTO tblKeywords (category, keywords) VALUES (" . $this->_id . ", ".$db->qstr($keywords).")";
 		return $db->getResult($queryStr);
 	}
 

@@ -312,7 +312,7 @@ class LetoDMS_Core_DMS {
 	function getDocument($id) { /* {{{ */
 		if (!is_numeric($id)) return false;
 
-		$queryStr = "SELECT * FROM tblDocuments WHERE id = " . $id;
+		$queryStr = "SELECT * FROM tblDocuments WHERE id = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -321,7 +321,7 @@ class LetoDMS_Core_DMS {
 		$resArr = $resArr[0];
 
 		// New Locking mechanism uses a separate table to track the lock.
-		$queryStr = "SELECT * FROM tblDocumentLocks WHERE document = " . $id;
+		$queryStr = "SELECT * FROM tblDocumentLocks WHERE document = " . (int) $id;
 		$lockArr = $this->db->getResultArray($queryStr);
 		if ((is_bool($lockArr) && $lockArr==false) || (count($lockArr)==0)) {
 			// Could not find a lock on the selected document.
@@ -378,7 +378,7 @@ class LetoDMS_Core_DMS {
 		$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser` ".
 			"FROM `tblDocuments` ".
 			"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
-			"WHERE `tblDocuments`.`name` = '" . $name . "'";
+			"WHERE `tblDocuments`.`name` = " . $this->db->qstr($name);
 		if($folder)
 			$queryStr .= " AND `tblDocuments`.`folder` = ". $folder->getID();
 		$queryStr .= " LIMIT 1";
@@ -707,7 +707,7 @@ class LetoDMS_Core_DMS {
 	function getFolder($id) { /* {{{ */
 		if (!is_numeric($id)) return false;
 
-		$queryStr = "SELECT * FROM tblFolders WHERE id = " . $id;
+		$queryStr = "SELECT * FROM tblFolders WHERE id = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -736,7 +736,7 @@ class LetoDMS_Core_DMS {
 	function getFolderByName($name, $folder=null) { /* {{{ */
 		if (!$name) return false;
 
-		$queryStr = "SELECT * FROM tblFolders WHERE name = '" . $name . "'";
+		$queryStr = "SELECT * FROM tblFolders WHERE name = " . $this->db->qstr($name);
 		if($folder)
 			$queryStr .= " AND `parent` = ". $folder->getID();
 		$queryStr .= " LIMIT 1";
@@ -766,7 +766,7 @@ class LetoDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblUsers WHERE id = " . $id;
+		$queryStr = "SELECT * FROM tblUsers WHERE id = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -791,9 +791,9 @@ class LetoDMS_Core_DMS {
 	 * @return object instance of LetoDMS_Core_User or false
 	 */
 	function getUserByLogin($login, $email='') { /* {{{ */
-		$queryStr = "SELECT * FROM tblUsers WHERE login = '".$login."'";
+		$queryStr = "SELECT * FROM tblUsers WHERE login = ".$this->db->qstr($login);
 		if($email)
-			$queryStr .= " AND email='".$email."'";
+			$queryStr .= " AND email=".$this->db->qstr($email);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -816,7 +816,7 @@ class LetoDMS_Core_DMS {
 	 * @return object instance of LetoDMS_Core_User or false
 	 */
 	function getUserByEmail($email) { /* {{{ */
-		$queryStr = "SELECT * FROM tblUsers WHERE email = '".$email."'";
+		$queryStr = "SELECT * FROM tblUsers WHERE email = ".$this->db->qstr($email);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -865,10 +865,12 @@ class LetoDMS_Core_DMS {
 	 *        is still allowed
 	 * @return object of LetoDMS_Core_User
 	 */
-	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role=0, $isHidden=0) { /* {{{ */
+	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0) { /* {{{ */
 		if (is_object($this->getUserByLogin($login))) {
 			return false;
 		}
+		if($role == '')
+			$role = '0';
 		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden) VALUES ('".$login."', '".$pwd."', '".$fullName."', '".$email."', '".$language."', '".$theme."', '".$comment."', '".$role."', '".$isHidden."')";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
@@ -887,7 +889,7 @@ class LetoDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblGroups WHERE id = " . $id;
+		$queryStr = "SELECT * FROM tblGroups WHERE id = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -909,7 +911,7 @@ class LetoDMS_Core_DMS {
 	 * @return object/boolean group or false if no group was found
 	 */
 	function getGroupByName($name) { /* {{{ */
-		$queryStr = "SELECT `tblGroups`.* FROM `tblGroups` WHERE `tblGroups`.`name` = '".$name."'";
+		$queryStr = "SELECT `tblGroups`.* FROM `tblGroups` WHERE `tblGroups`.`name` = ".$this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -972,7 +974,7 @@ class LetoDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblKeywordCategories WHERE id = " . $id;
+		$queryStr = "SELECT * FROM tblKeywordCategories WHERE id = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || (count($resArr) != 1))
 			return false;
@@ -984,7 +986,7 @@ class LetoDMS_Core_DMS {
 	} /* }}} */
 
 	function getKeywordCategoryByName($name, $owner) { /* {{{ */
-		$queryStr = "SELECT * FROM tblKeywordCategories WHERE name = '" . $name . "' AND owner = '" . $owner. "'";
+		$queryStr = "SELECT * FROM tblKeywordCategories WHERE name = " . $this->db->qstr($name) . " AND owner = " . (int) $owner;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || (count($resArr) != 1))
 			return false;
@@ -1017,7 +1019,7 @@ class LetoDMS_Core_DMS {
 	function getAllUserKeywordCategories($userID) { /* {{{ */
 		$queryStr = "SELECT * FROM tblKeywordCategories";
 		if ($userID != -1)
-			$queryStr .= " WHERE owner = " . $userID;
+			$queryStr .= " WHERE owner = " . (int) $userID;
 
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
@@ -1048,7 +1050,7 @@ class LetoDMS_Core_DMS {
 		if (!is_numeric($id))
 			return false;
 
-		$queryStr = "SELECT * FROM tblCategory WHERE id = " . $id;
+		$queryStr = "SELECT * FROM tblCategory WHERE id = " . (int) $id;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || (count($resArr) != 1))
 			return false;
@@ -1085,7 +1087,7 @@ class LetoDMS_Core_DMS {
 	 * @return object instance of LetoDMS_Core_DocumentCategory
 	 */
 	function getDocumentCategoryByName($name) { /* {{{ */
-		$queryStr = "SELECT * FROM tblCategory where name='".$name."'";
+		$queryStr = "SELECT * FROM tblCategory where name=".$this->db->qstr($name);
 
 		$resArr = $this->db->getResultArray($queryStr);
 		if (!$resArr)
@@ -1120,7 +1122,7 @@ class LetoDMS_Core_DMS {
 		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
 		 "WHERE `tblNotify`.`groupID` = ". $group->getID();
 		if($type) {
-			$queryStr .= " AND `tblNotify`.`targetType` = ".$type;
+			$queryStr .= " AND `tblNotify`.`targetType` = ". (int) $type;
 		}
 
 		$resArr = $this->db->getResultArray($queryStr);
@@ -1148,7 +1150,7 @@ class LetoDMS_Core_DMS {
 		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
 		 "WHERE `tblNotify`.`userID` = ". $user->getID();
 		if($type) {
-			$queryStr .= " AND `tblNotify`.`targetType` = ".$type;
+			$queryStr .= " AND `tblNotify`.`targetType` = ". (int) $type;
 		}
 
 		$resArr = $this->db->getResultArray($queryStr);
@@ -1190,7 +1192,7 @@ class LetoDMS_Core_DMS {
 	 */
 	function checkPasswordRequest($hash) { /* {{{ */
 		/* Get the password request from the database */
-		$queryStr = "SELECT * FROM tblUserPasswordRequest where hash='". $hash ."'";
+		$queryStr = "SELECT * FROM tblUserPasswordRequest where hash=".$this->db->qstr($hash);
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
@@ -1210,7 +1212,7 @@ class LetoDMS_Core_DMS {
 	 */
 	function deletePasswordRequest($hash) { /* {{{ */
 		/* Delete the request, so nobody can use it a second time */
-		$queryStr = "DELETE FROM tblUserPasswordRequest WHERE hash='" . $hash."'";
+		$queryStr = "DELETE FROM tblUserPasswordRequest WHERE hash=".$this->db->qstr($hash);
 		if (!$this->db->getResult($queryStr))
 			return false;
 		return true;
