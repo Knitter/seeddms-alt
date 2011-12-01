@@ -38,13 +38,13 @@ function _printMessage($heading, $message) {
 }
 
 if (isset($_POST["hash"])) {
-	$hash = sanitizeString($_POST["hash"]);
+	$hash = $_POST["hash"];
 }
 if (isset($_POST["newpassword"])) {
-	$newpassword = sanitizeString($_POST["newpassword"]);
+	$newpassword = $_POST["newpassword"];
 }
 if (isset($_POST["newpasswordrepeat"])) {
-	$newpasswordrepeat = sanitizeString($_POST["newpasswordrepeat"]);
+	$newpasswordrepeat = $_POST["newpasswordrepeat"];
 }
 
 if (empty($newpassword) || empty($newpasswordrepeat) || $newpassword != $newpasswordrepeat) {
