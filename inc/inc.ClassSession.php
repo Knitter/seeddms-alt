@@ -66,13 +66,13 @@ class LetoDMS_Session {
 	 * @return boolean true if successful otherwise false
 	 */
 	function load($id) { /* {{{ */
-		$queryStr = "SELECT * FROM tblSessions WHERE id = ".$this->db->qstr($id)."";
+		$queryStr = "SELECT * FROM tblSessions WHERE id = ".$this->db->qstr($id);
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		if (count($resArr) == 0)
 			return false;
-		$queryStr = "UPDATE tblSessions SET lastAccess = " . mktime() . " WHERE id = '" . $id . "'";
+		$queryStr = "UPDATE tblSessions SET lastAccess = " . mktime() . " WHERE id = " . $this->db->qstr($id);
 		if (!$this->db->getResult($queryStr))
 			return false;
 		return $resArr[0];
@@ -119,7 +119,7 @@ class LetoDMS_Session {
 	 * @return boolean true if successful otherwise false
 	 */
 	function delete($id) { /* {{{ */
-		$queryStr = "DELETE FROM tblSessions WHERE id = '$id'";
+		$queryStr = "DELETE FROM tblSessions WHERE id = " . $this->db->qstr($id);
 		if (!$this->db->getResult($queryStr)) {
 			return false;
 		}
