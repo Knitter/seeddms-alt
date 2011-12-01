@@ -25,7 +25,7 @@ include("../inc/inc.Language.php");
 include("../inc/inc.Authentication.php");
 
 $folderid = intval($_GET["folderid"]);
-$form = sanitizeString($_GET["form"]);
+$form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
 
 function getImgPath($img) {
   global $theme;
@@ -97,7 +97,7 @@ function printTree($path, $level = 0)
 		print "</ul>\n";
 	}
 	
-}
+}
 
 UI::htmlStartPage(getMLText("choose_target_document"));
 UI::globalBanner();

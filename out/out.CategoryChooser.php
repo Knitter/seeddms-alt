@@ -23,8 +23,8 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Authentication.php");
 
-$form = sanitizeString($_GET["form"]);
-$selcats = sanitizeString($_GET["cats"]);
+$form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
+$selcats = preg_replace('/[^0-9,]+/', '', $_GET["cats"]);
 
 UI::htmlStartPage(getMLText("choose_target_category"));
 UI::globalBanner();

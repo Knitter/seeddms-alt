@@ -23,7 +23,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.Authentication.php");
 
-$form = sanitizeString($_GET["form"]);
+$form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
 $mode = intval($_GET["mode"]);
 $exclude = intval($_GET["exclude"]);
 
