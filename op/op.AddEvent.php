@@ -47,10 +47,10 @@ if (!isset($_POST["name"]) || !isset($_POST["comment"]) ) {
 $name     = sanitizeString($_POST["name"]);
 $comment  = sanitizeString($_POST["comment"]);
 $from = mktime(0,0,0, intval($_POST["frommonth"]), intval($_POST["fromday"]), intval($_POST["fromyear"]));
-$to = mktime(23,59,59, sanitizeString($_POST["tomonth"]), sanitizeString($_POST["today"]), sanitizeString($_POST["toyear"]));
+$to = mktime(23,59,59, intval($_POST["tomonth"]), intval($_POST["today"]), intval($_POST["toyear"]));
 
 if ($to<$from){
-	$to= mktime(23,59,59, sanitizeString($_POST["frommonth"]), sanitizeString($_POST["fromday"]), sanitizeString($_POST["fromyear"]));
+	$to= mktime(23,59,59, intval($_POST["frommonth"]), intval($_POST["fromday"]), intval($_POST["fromyear"]));
 }
 
 $res = addEvent($from, $to, $name, $comment);
