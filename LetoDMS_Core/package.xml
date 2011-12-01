@@ -18,11 +18,11 @@
   <email></email>
   <active>no</active>
  </lead>
- <date>2011-07-23</date>
+ <date>2011-09-26</date>
  <time>08:05:38</time>
  <version>
-  <release>3.2.0</release>
-  <api>3.2.0</api>
+  <release>3.3.0</release>
+  <api>3.3.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -30,7 +30,10 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-New Release
+- added methods to find and repair errors in document and folder records
+- removed sendmail parameter from some methods in LetoDMS_Core_Document
+- do not use some of the temporay tables anymore
+- SetFetchMode(ADODB_FETCH_ASSOC) in LetoDMS_Core_DatabaseAccess::connect()
  </notes>
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
@@ -93,6 +96,22 @@ New Release
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>3.2.0</release>
+    <api>3.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2011-07-23</date>
+   <time>08:05:38</time>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+New release
+   </notes>
+  </release>
   <release>
    <version>
     <release>3.0.0</release>
