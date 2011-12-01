@@ -27,39 +27,34 @@ if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_default_keywords"),getMLText("access_denied"));
 }
 
-if (isset($_POST["action"])) {
-	$action = sanitizeString($_POST["action"]);
-}
-else {
-	$action = sanitizeString($_GET["action"]);
+$action = '';
+if (isset($_REQUEST["action"])) {
+	$action = $_REQUEST["action"];
 }
 
-//Neue Kategorie anlegen -----------------------------------------------------------------------------
+/* Create new category ------------------------------------------------ */
 if ($action == "addcategory") {
 
-	if (isset($_POST["name"])) {
-		$name = sanitizeString($_POST["name"]);
-	}
-	else {
-		$name = sanitizeString($_GET["name"]);
-	}
+	if (isset($_REQUEST["name"]) && $_REQUEST["name"]) {
+		$name = sanitizeString($_REQUEST["name"]);
 	
-	$newCategory = $dms->addKeywordCategory($user->getID(), $name);
-	if (!$newCategory) {
+		$newCategory = $dms->addKeywordCategory($user->getID(), $name);
+		if (!$newCategory) {
+			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
+		}
+		$categoryid=$newCategory->getID();
+	} else {
 		UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 	}
-	$categoryid=$newCategory->getID();
 }
 
 
-//Kategorie löschen ----------------------------------------------------------------------------------
+/* Delete category ---------------------------------------------------- */
 else if ($action == "removecategory") {
 
-	if (isset($_POST["categoryid"])) {
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
 		$categoryid = intval($_POST["categoryid"]);
-	}
-	else {
-		$categoryid = intval($_GET["categoryid"]);
 	}
 	$category = $dms->getKeywordCategory($categoryid);
 	if (is_object($category)) {
@@ -70,19 +65,18 @@ else if ($action == "removecategory") {
 		if (!$category->remove()) {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 		}
+	} else {
+		UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 	}
-	else UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 	$categoryid=-1;
 }
 
-//Kategorie bearbeiten: Neuer Name --------------------------------------------------------------------
+/* Edit category: new name -------------------------------------------- */
 else if ($action == "editcategory") {
 
-	if (isset($_POST["categoryid"])) {
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
 		$categoryid = intval($_POST["categoryid"]);
-	}
-	else {
-		$categoryid = intval($_GET["categoryid"]);
 	}
 	$category = $dms->getKeywordCategory($categoryid);
 	if (is_object($category)) {
@@ -90,28 +84,25 @@ else if ($action == "editcategory") {
 		if ($owner->getID() != $user->getID()) {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
 		}
-		if (isset($_POST["name"])) {
-			$name = sanitizeString($_POST["name"]);
-		}
-		else {
-			$name = sanitizeString($_GET["name"]);
-		}
+		if (isset($_REQUEST["name"]) && $_REQUEST["name"]) {
+			$name = sanitizeString($_REQUEST["name"]);
 
-		if (!$category->setName($name)) {
+			if (!$category->setName($name)) {
+				UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
+			}
+		} else {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 		}
 	}
 	else UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 }
 
-//Kategorie bearbeiten: Neue Stichwortliste  ----------------------------------------------------------
+/* Edit category: new keyword list ----------------------------------- */
 else if ($action == "newkeywords") {
 
-	if (isset($_POST["categoryid"])) {
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
 		$categoryid = intval($_POST["categoryid"]);
-	}
-	else {
-		$categoryid = intval($_GET["categoryid"]);
 	}
 	$category = $dms->getKeywordCategory($categoryid);
 	if (is_object($category)) {
@@ -133,15 +124,14 @@ else if ($action == "newkeywords") {
 	else UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 }
 
-//Kategorie bearbeiten: Stichwortliste bearbeiten ----------------------------------------------------------
+/* Edit category: edit keyword list ----------------------------------*/
 else if ($action == "editkeywords") {
 
-	if (isset($_POST["categoryid"])) {
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
 		$categoryid = intval($_POST["categoryid"]);
 	}
-	else {
-		$categoryid = intval($_GET["categoryid"]);
-	}
+	
 	$category = $dms->getKeywordCategory($categoryid);
 	if (is_object($category)) {
 		$owner = $category->getOwner();
@@ -166,14 +156,12 @@ else if ($action == "editkeywords") {
 	else UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 }
 
-//Kategorie bearbeiten: Neue Stichwortliste löschen ----------------------------------------------------------
+/* Edit category: delete keyword list -------------------------------- */
 else if ($action == "removekeywords") {
 
-	if (isset($_POST["categoryid"])) {
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
 		$categoryid = intval($_POST["categoryid"]);
-	}
-	else {
-		$categoryid = intval($_GET["categoryid"]);
 	}
 	$category = $dms->getKeywordCategory($categoryid);
 	if (is_object($category)) {
