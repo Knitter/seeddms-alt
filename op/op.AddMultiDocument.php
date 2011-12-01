@@ -168,7 +168,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		else
 			$name = basename($userfilename);
 
-		$categories = sanitizeString($_POST["categoryids"]);
+		$categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryids"]);
 		$cats = array();
 		if($categories) {
 			$catids = explode(',', $categories);
