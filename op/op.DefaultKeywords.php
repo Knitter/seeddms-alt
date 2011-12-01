@@ -92,7 +92,7 @@ else if ($action == "editcategory") {
 //Kategorie bearbeiten: Neue Stichwortliste  ----------------------------------------------------------
 else if ($action == "newkeywords") {
 	
-	$categoryid = sanitizeString($_GET["categoryid"]);
+	$categoryid = (int) $_GET["categoryid"];
 	$category = $dms->getKeywordCategory($categoryid);
 	$owner    = $category->getOwner();
 	if (!$owner->isAdmin()) {
