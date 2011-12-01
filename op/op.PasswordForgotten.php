@@ -38,10 +38,10 @@ function _printMessage($heading, $message) {
 }
 
 if (isset($_POST["email"])) {
-	$email = sanitizeString($_POST["email"]);
+	$email = $_POST["email"];
 }
 if (isset($_POST["login"])) {
-	$login = sanitizeString($_POST["login"]);
+	$login = $_POST["login"];
 }
 
 if (empty($email) || empty($login)) {
