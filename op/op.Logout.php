@@ -26,7 +26,6 @@ include("../inc/inc.DBInit.php");
 // Delete session from database
 
 $dms_session = $_COOKIE["mydms_session"];
-$dms_session = sanitizeString($dms_session);
 
 $session = new LetoDMS_Session($db);
 if(!$session->delete($dms_session)) {
