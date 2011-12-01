@@ -47,7 +47,7 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 $name =     sanitizeString($_POST["name"]);
 $comment =  sanitizeString($_POST["comment"]);
 $keywords = sanitizeString($_POST["keywords"]);
-$categories = sanitizeString($_POST["categoryidform1"]);
+$categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]);
 $sequence = $_POST["sequence"];
 if (!is_numeric($sequence)) {
 	$sequence="keep";
