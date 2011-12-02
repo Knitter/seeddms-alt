@@ -84,11 +84,11 @@ function checkForm()
 		</tr>
 		<tr>
 			<td class="inputDescription"><?php printMLText("name");?>:</td>
-			<td><input name="name" value="<?php echo $event["name"];?>" size="60"></td>
+			<td><input name="name" value="<?php echo htmlspecialchars($event["name"]);?>" size="60"></td>
 		</tr>
 		<tr>
 			<td valign="top" class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="80"><?php echo $event["comment"]?></textarea></td>
+			<td><textarea name="comment" rows="4" cols="80"><?php echo htmlspecialchars($event["comment"])?></textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2"><br><input type="Submit" value="<?php printMLText("edit_event");?>"></td>

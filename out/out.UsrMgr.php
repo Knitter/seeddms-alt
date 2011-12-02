@@ -176,7 +176,7 @@ UI::contentContainerStart();
 <?php
 				foreach ($groups as $grp) {
 
-					print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' name='grpReviewers[]' value='". $grp->getID() ."'>".$grp->getName();
+					print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' name='grpReviewers[]' value='". $grp->getID() ."'>".htmlspecialchars($grp->getName());
 				}
 ?>
 				</ul>
@@ -206,7 +206,7 @@ UI::contentContainerStart();
 <?php
 				foreach ($groups as $grp) {
 
-					print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' name='grpApprovers[]' value='". $grp->getID() ."'>".$grp->getName();
+					print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' name='grpApprovers[]' value='". $grp->getID() ."'>".htmlspecialchars($grp->getName());
 				}
 ?>
 				</ul>
@@ -252,7 +252,7 @@ UI::contentContainerStart();
 		</tr>
 		<tr>
 			<td><?php printMLText("user_name");?>:</td>
-			<td><input name="name" value="<?php print $currUser->getFullName();?>"></td>
+			<td><input name="name" value="<?php print htmlspecialchars($currUser->getFullName());?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("email");?>:</td>
@@ -260,7 +260,7 @@ UI::contentContainerStart();
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="50"><?php print $currUser->getComment();?></textarea></td>
+			<td><textarea name="comment" rows="4" cols="50"><?php print htmlspecialchars($currUser->getComment());?></textarea></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("role");?>:</td>
@@ -324,7 +324,7 @@ UI::contentContainerStart();
 					$checked=false;
 					foreach ($res as $r) if ($r['reviewerGroupID']==$grp->getID()) $checked=true;
 
-					print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' ".($checked?"checked='checked' ":"")."name='grpReviewers[]' value='". $grp->getID() ."'>".$grp->getName()."</li>\n";
+					print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' ".($checked?"checked='checked' ":"")."name='grpReviewers[]' value='". $grp->getID() ."'>".htmlspecialchars($grp->getName())."</li>\n";
 				}
 				?>
 				</ul>
@@ -364,7 +364,7 @@ UI::contentContainerStart();
 					$checked=false;
 					foreach ($res as $r) if ($r['approverGroupID']==$grp->getID()) $checked=true;
 
-					print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' ".($checked?"checked='checked' ":"")."name='grpApprovers[]' value='". $grp->getID() ."'>".$grp->getName()."</li>\n";
+					print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' ".($checked?"checked='checked' ":"")."name='grpApprovers[]' value='". $grp->getID() ."'>".htmlspecialchars($grp->getName())."</li>\n";
 				}
 				?>
 				</ul>

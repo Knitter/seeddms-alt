@@ -37,7 +37,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -164,9 +164,9 @@ else if ($approvalStatus['type'] == 1) {
 		print "<td>";
 		printApprovalStatusText($approvalStatus["status"]);
 		print "</td>";
-		print "<td>".$approvalStatus["comment"]."</td>";
+		print "<td>".htmlspecialchars($approvalStatus["comment"])."</td>";
 		$indUser = $dms->getUser($approvalStatus["userID"]);
-		print "<td>".$approvalStatus["date"]." - ". $indUser->getFullname() ."</td>";
+		print "<td>".$approvalStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
 		print "</tr></tbody></table><br>\n";
 	}
 

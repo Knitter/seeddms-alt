@@ -127,7 +127,7 @@ UI::contentContainerStart();
 					if (!$owner->isAdmin())
 						continue;
 					
-					print "<option value=\"".$category->getID()."\">" . $category->getName();
+					print "<option value=\"".$category->getID()."\">" . htmlspecialchars($category->getName());
 				}
 				?>
 			</select>
@@ -149,7 +149,7 @@ UI::contentContainerStart();
 				else {	
 					print "<ul>";
 					foreach ($lists as $list) {
-						print "<li><a href='javascript:insertKeywords(\"$list[keywords]\");'>$list[keywords]</a></li>";
+						print "<li><a href='javascript:insertKeywords(\"".htmlspecialchars($list["keywords"])."\");'>".htmlspecialchars($list["keywords"])."</a></li>";
 					}
 					print "</ul>";
 				}
@@ -171,7 +171,7 @@ UI::contentContainerStart();
 					if ($owner->isAdmin())
 						continue;
 					
-					print "<option value=\"".$category->getID()."\">" . $category->getName();
+					print "<option value=\"".$category->getID()."\">" . htmlspecialchars($category->getName());
 				}
 				?>
 			</select>
@@ -192,7 +192,7 @@ UI::contentContainerStart();
 				else {	
 					print "<ul>";
 					foreach ($lists as $list) {
-						print "<li><a href='javascript:insertKeywords(\"$list[keywords]\");'>$list[keywords]</a></li>";
+						print "<li><a href='javascript:insertKeywords(\"".htmlspecialchars($list["keywords"])."\");'>".htmlspecialchars($list["keywords"])."</a></li>";
 					}
 					print "</ul>";
 				}

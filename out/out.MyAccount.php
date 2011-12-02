@@ -45,13 +45,13 @@ if ($settings->_enableUserImage){
 
 print "<tr>\n";
 print "<td>".getMLText("name")." : </td>\n";
-print "<td>".$user->getFullName().($user->isAdmin() ? " (".getMLText("admin").")" : "")."</td>\n";
+print "<td>".htmlspecialchars($user->getFullName()).($user->isAdmin() ? " (".getMLText("admin").")" : "")."</td>\n";
 print "</tr>\n<tr>\n";
 print "<td>".getMLText("user_login")." : </td>\n";
 print "<td>".$user->getLogin()."</td>\n";
 print "</tr>\n<tr>\n";
 print "<td>".getMLText("email")." : </td>\n";
-print "<td>".$user->getEmail()."</td>\n";
+print "<td>".htmlspecialchars($user->getEmail())."</td>\n";
 print "</tr>\n<tr>\n";
 print "<td>".getMLText("comment")." : </td>\n";
 print "<td>".$user->getComment()."</td>\n";

@@ -36,7 +36,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -52,7 +52,7 @@ UI::contentContainerStart();
 <form action="../op/op.RemoveDocument.php" name="form1" method="POST">
 <input type="Hidden" name="documentid" value="<?php print $documentid;?>">
 <p>
-<?php printMLText("confirm_rm_document", array ("documentname" => $document->getName()));?>
+<?php printMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName())));?>
 </p>
 <p><input type="Submit" value="<?php printMLText("rm_document");?>"></p>
 </form>

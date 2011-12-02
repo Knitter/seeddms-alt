@@ -95,7 +95,7 @@ if ($user->isAdmin()) {
 		print "<option value=\"".$currUser->getID()."\"";
 		if ($currUser->getID() == $owner->getID())
 			print " selected";
-		print ">" . $currUser->getFullname() . "</option>\n";
+		print ">" . htmlspecialchars($currUser->getFullname()) . "</option>\n";
 	}
 	?>
 	</select>
@@ -146,7 +146,7 @@ if ((count($accessList["users"]) != 0) || (count($accessList["groups"]) != 0)) {
 		print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 		print "<tr>\n";
 		print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>\n";
-		print "<td>". $userObj->getFullName() . "</td>\n";
+		print "<td>". htmlspecialchars($userObj->getFullName()) . "</td>\n";
 		print "<td>\n";
 		printAccessModeSelection($userAccess->getMode());
 		print "</td>\n";
@@ -166,7 +166,7 @@ if ((count($accessList["users"]) != 0) || (count($accessList["groups"]) != 0)) {
 		print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">";
 		print "<tr>";
 		print "<td><img src=\"images/groupicon.gif\" class=\"mimeicon\"></td>";
-		print "<td>". $groupObj->getName() . "</td>";
+		print "<td>". htmlspecialchars($groupObj->getName()) . "</td>";
 		print "<td>";
 		printAccessModeSelection($groupAccess->getMode());
 		print "</td>\n";
@@ -194,7 +194,7 @@ foreach ($allUsers as $userObj) {
 	if ($userObj->isGuest()) {
 		continue;
 	}
-	print "<option value=\"".$userObj->getID()."\">" . $userObj->getFullName() . "\n";
+	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";
 }
 ?>
 </select>
@@ -208,7 +208,7 @@ foreach ($allUsers as $userObj) {
 <?php
 $allGroups = $dms->getAllGroups();
 foreach ($allGroups as $groupObj) {
-	print "<option value=\"".$groupObj->getID()."\">" . $groupObj->getName() . "\n";
+	print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
 }
 ?>
 </select>

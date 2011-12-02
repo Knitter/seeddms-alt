@@ -68,7 +68,7 @@ UI::contentContainerStart();
 					if ($owner->getID() != $user->getID()) continue;
 
 					if (isset($_GET["categoryid"]) && $category->getID()==$_GET["categoryid"]) $selected=$count;
-					print "<option value=\"".$category->getID()."\">" . $category->getName();
+					print "<option value=\"".$category->getID()."\">" . htmlspecialchars($category->getName());
 					$count++;
 				}
 				?>
@@ -109,7 +109,7 @@ UI::contentContainerStart();
 						<form action="../op/op.UserDefaultKeywords.php" method="post" name="<?php echo "category".$category->getID()?>">
 							<input type="Hidden" name="action" value="editcategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input name="name" value="<?php echo $category->getName()?>">
+							<input name="name" value="<?php echo htmlspecialchars($category->getName())?>">
 							<input type="Submit" value="<?php printMLText("save");?>">
 						</form>
 					</td>
@@ -133,7 +133,7 @@ UI::contentContainerStart();
 									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="editkeywords">
-									<input name="keywords" value="<?php echo $list["keywords"]?>">
+									<input name="keywords" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
 									<input name="action" value="editkeywords" type="Image" src="images/save.gif" title="<?php echo getMLText("save")?>" border="0">
 									<!--	 <input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"> &nbsp; -->
 									<a href="../op/op.UserDefaultKeywords.php?categoryid=<?php echo $category->getID()?>&keywordsid=<?php echo $list["id"]?>&action=removekeywords"><img src="images/del.gif" title="<?php echo getMLText("delete")?>" border=0></a>

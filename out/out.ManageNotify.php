@@ -83,8 +83,8 @@ function printFolderNotificationList($ret,$deleteaction=true) {
 				$owner = $fld->getOwner();
 				print "<tr class=\"folder\">";
 				print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-				print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$ID."\">" . $fld->getName() . "</a></td>\n";
-				print "<td>".$owner->getFullName()."</td>";
+				print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$ID."\">" . htmlspecialchars($fld->getName()) . "</a></td>\n";
+				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 				print "<td><ul class=\"actions\">";
 				if ($deleteaction) print "<li><a href='../op/op.ManageNotify.php?id=".$ID."&type=folder&action=del'>".getMLText("delete")."</a>";
 				else print "<li><a href='../out/out.FolderNotify.php?folderid=".$ID."'>".getMLText("edit")."</a>";
@@ -119,8 +119,8 @@ function printDocumentNotificationList($ret,$deleteaction=true) {
 				$status = $latest->getStatus();
 				print "<tr>\n";
 				print "<td><img src=\"images/file.gif\" width=18 height=18 border=0></td>";
-				print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$ID."\">" . $doc->getName() . "</a></td>\n";
-				print "<td>".$owner->getFullName()."</td>";
+				print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$ID."\">" . htmlspecialchars($doc->getName()) . "</a></td>\n";
+				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 				print "<td>".getOverallStatusText($status["status"])."</td>";
 				print "<td class=\"center\">".$latest->getVersion()."</td>";
 				print "<td><ul class=\"actions\">";

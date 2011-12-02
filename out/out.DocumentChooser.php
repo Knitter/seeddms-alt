@@ -60,11 +60,10 @@ function printTree($path, $level = 0)
 	else UI::printImgPath("blank.png");
 	print "\" border=0>\n";
 	if ($folder->getAccessMode($user) >= M_READ) {
-		print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folder->getID() . ", '" . sanitizeString($folder->getName()) . "')\">";
-		print "<img src=\"".UI::getImgPath("folder_opened.gif")."\" border=0>".$folder->getName()."</a>\n";
+		print "<img src=\"".UI::getImgPath("folder_opened.gif")."\" border=0>".htmlspecialchars($folder->getName())."\n";
 	}
 	else
-		print "<img src=\"".UI::getImgPath("folder_opened.gif")."\" width=18 height=18 border=0>".$folder->getName()."\n";
+		print "<img src=\"".UI::getImgPath("folder_opened.gif")."\" width=18 height=18 border=0>".htmlspecialchars($folder->getName())."\n";
 	print "  </li>\n";
 
 	print "<ul style='list-style-type: none;'>";
@@ -81,14 +80,14 @@ function printTree($path, $level = 0)
 				print "<a href=\"out.DocumentChooser.php?form=$form&folderid=".$subFolders[$i]->getID()."\"><img class='treeicon' src=\"".getImgPath("plus.png")."\" border=0></a>";
 			else
 				print "<img class='treeicon' src=\"".getImgPath("blank.png")."\">";
-			print "<img src=\"".getImgPath("folder_closed.gif")."\" border=0>".$subFolders[$i]->getName()."\n";
+			print "<img src=\"".getImgPath("folder_closed.gif")."\" border=0>".htmlspecialchars($subFolders[$i]->getName())."\n";
 			print "</li>";
 		}
 	}
 	for ($i = 0; $i < count($documents); $i++) {
 		print "<li>\n";
 		print "<img class='treeicon' src=\"images/blank.png\">";
-		print "<a  class=\"foldertree_selectable\" href=\"javascript:documentSelected(".$documents[$i]->getID().",'".sanitizeString($documents[$i]->getName())."');\"><img src=\"images/file.gif\" border=0>".$documents[$i]->getName()."</a>";
+		print "<a  class=\"foldertree_selectable\" href=\"javascript:documentSelected(".$documents[$i]->getID().",'".htmlspecialchars($documents[$i]->getName(), ENT_QUOTES)."');\"><img src=\"images/file.gif\" border=0>".htmlspecialchars($documents[$i]->getName())."</a>";
 		print "</li>";
 	}
 

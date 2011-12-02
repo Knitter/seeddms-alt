@@ -54,7 +54,7 @@ UI::contentContainerStart();
 <input type="Hidden" name="userid" value="<?php print $userid;?>">
 <input type="Hidden" name="action" value="removeuser">
 <p>
-<?php printMLText("confirm_rm_user", array ("username" => $currUser->getFullName()));?>
+<?php printMLText("confirm_rm_user", array ("username" => htmlspecialchars($currUser->getFullName())));?>
 </p>
 
 <p>
@@ -67,7 +67,7 @@ UI::contentContainerStart();
 			continue;
 
 		if (isset($_GET["userid"]) && $currUser->getID()==$_GET["userid"]) $selected=$count;
-		print "<option value=\"".$currUser->getID()."\">" . $currUser->getLogin();
+		print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin());
 	}
 ?>
 </select>

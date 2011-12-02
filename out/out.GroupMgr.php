@@ -115,7 +115,7 @@ UI::contentContainerStart();
 	foreach ($groups as $group) {
 		
 		if (isset($_GET["groupid"]) && $group->getID()==$_GET["groupid"]) $selected=$count;
-		print "<option value=\"".$group->getID()."\">" . $group->getName();
+		print "<option value=\"".$group->getID()."\">" . htmlspecialchars($group->getName());
 		$count++;
 	}
 ?>
@@ -150,7 +150,7 @@ UI::contentContainerStart();
 	
 		print "<td id=\"keywords".$group->getID()."\" style=\"display : none;\">";
 		
-		UI::contentSubHeading(getMLText("group")." : ".$group->getName());
+		UI::contentSubHeading(getMLText("group")." : ".htmlspecialchars($group->getName()));
 		
 	?>
 	
@@ -166,11 +166,11 @@ UI::contentContainerStart();
 	<table>
 		<tr>
 			<td><?php printMLText("name");?>:</td>
-			<td><input name="name" value="<?php print $group->getName();?>"></td>
+			<td><input name="name" value="<?php print htmlspecialchars($group->getName());?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="50"><?php print $group->getComment();?></textarea></td>
+			<td><textarea name="comment" rows="4" cols="50"><?php print htmlspecialchars($group->getComment());?></textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2"><input type="Submit" value="<?php printMLText("save");?>"></td>
@@ -191,7 +191,7 @@ UI::contentContainerStart();
 				
 					print "<tr>";
 					print "<td><img src=\"images/usericon.gif\" width=16 height=16></td>";
-					print "<td>" . $member->getFullName() . "</td>";
+					print "<td>" . htmlspecialchars($member->getFullName()) . "</td>";
 					print "<td>" . ($group->isMember($member,true)?getMLText("manager"):"&nbsp;") . "</td>";
 					print "<td align=\"right\"><ul class=\"actions\">";
 					print "<li><a href=\"../op/op.GroupMgr.php?groupid=". $group->getID() . "&userid=".$member->getID()."&action=rmmember\">".getMLText("delete")."</a>";
@@ -220,7 +220,7 @@ UI::contentContainerStart();
 						<?php
 							foreach ($allUsers as $currUser)
 								if (!$group->isMember($currUser))
-									print "<option value=\"".$currUser->getID()."\">" . $currUser->getFullName() . "\n";
+									print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getFullName()) . "\n";
 						?>
 					</select>
 				</td>

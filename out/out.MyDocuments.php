@@ -153,10 +153,10 @@ if ($showInProcess){
 				}
 			
 				print "<tr>\n";
-				print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".$docIdx[$st["documentID"]][$st["version"]]["name"]."</a></td>";
-				print "<td>".$docIdx[$st["documentID"]][$st["version"]]["ownerName"]."</td>";
+				print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+				print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 				print "<td>".$st["version"]."</td>";
-				print "<td>".$st["date"]." ". $docIdx[$st["documentID"]][$st["version"]]["statusName"] ."</td>";
+				print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"]) ."</td>";
 				print "<td".($docIdx[$st["documentID"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
 				print "</tr>\n";
 			}
@@ -178,10 +178,10 @@ if ($showInProcess){
 				}
 
 				print "<tr>\n";
-				print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".$docIdx[$st["documentID"]][$st["version"]]["name"]."</a></td>";
-				print "<td>".$docIdx[$st["documentID"]][$st["version"]]["ownerName"]."</td>";
+				print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+				print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 				print "<td>".$st["version"]."</td>";
-				print "<td>".$st["date"]." ". $docIdx[$st["documentID"]][$st["version"]]["statusName"]."</td>";
+				print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"])."</td>";
 				print "<td".($docIdx[$st["documentID"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
 				print "</tr>\n";
 			}
@@ -214,10 +214,10 @@ if ($showInProcess){
 					$printheader=false;
 				}
 				print "<tr>\n";
-				print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".$docIdx[$st["documentID"]][$st["version"]]["name"]."</a></td>";
-				print "<td>".$docIdx[$st["documentID"]][$st["version"]]["ownerName"]."</td>";
+				print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+				print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 				print "<td>".$st["version"]."</td>";
-				print "<td>".$st["date"]." ". $docIdx[$st["documentID"]][$st["version"]]["statusName"]."</td>";
+				print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"])."</td>";
 				print "<td".($docIdx[$st["documentID"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";					
 				print "</tr>\n";
 			}
@@ -237,10 +237,10 @@ if ($showInProcess){
 					$printheader=false;
 				}
 				print "<tr>\n";
-				print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".$docIdx[$st["documentID"]][$st["version"]]["name"]."</a></td>";
-				print "<td>".$docIdx[$st["documentID"]][$st["version"]]["ownerName"]."</td>";
+				print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+				print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 				print "<td>".$st["version"]."</td>";				
-				print "<td>".$st["date"]." ". $docIdx[$st["documentID"]][$st["version"]]["statusName"]."</td>";
+				print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"])."</td>";
 				print "<td".($docIdx[$st["documentID"]][$st["version"]]['status']!=S_EXPIRED?"":" class=\"warning\"").">".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
 				print "</tr>\n";
 			}
@@ -316,10 +316,10 @@ if ($showInProcess){
 			}
 		
 			print "<tr>\n";
-			print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . $res["name"] . "</a></td>\n";
+			print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 			print "<td>".getOverallStatusText($res["status"])."</td>";
 			print "<td>".$res["version"]."</td>";
-			print "<td>".$res["statusDate"]." ".$res["statusName"]."</td>";
+			print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
 			print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
 			print "</tr>\n";
 		}		
@@ -381,10 +381,10 @@ if ($showInProcess){
 			}
 		
 			print "<tr>\n";
-			print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . $res["name"] . "</a></td>\n";
+			print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 			print "<td>".getOverallStatusText($res["status"])."</td>";
 			print "<td>".$res["version"]."</td>";
-			print "<td>".$res["statusDate"]." ".$res["statusName"]."</td>";
+			print "<td>".$res["statusDate"]." ".htmlspecialchars($res["statusName"])."</td>";
 			print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
 			print "</tr>\n";
 		}		
@@ -466,10 +466,10 @@ else {
 			}
 		
 			print "<tr>\n";
-			print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . $res["name"] . "</a></td>\n";
+			print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 			print "<td>".getOverallStatusText($res["status"])."</td>";
 			print "<td>".$res["version"]."</td>";
-			print "<td>".$res["statusDate"]." ". $res["statusName"]."</td>";
+			print "<td>".$res["statusDate"]." ". htmlspecialchars($res["statusName"])."</td>";
 			//print "<td>".(!$res["expires"] ? getMLText("does_not_expire"):getReadableDate($res["expires"]))."</td>";				
 			print "<td>".(!$res["expires"] ? "-":getReadableDate($res["expires"]))."</td>";				
 			print "</tr>\n";

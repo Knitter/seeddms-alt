@@ -113,7 +113,7 @@ foreach ($entries as $entry){
 			
 	print "<tr>\n";
 	print "<td><a href=\"../op/op.Download.php?arkname=".$entry."\">".$entry."</a></td>\n";
-	if (is_object($folder)) print "<td>".$folder->getName()."</td>\n";
+	if (is_object($folder)) print "<td>".htmlspecialchars($folder->getName())."</td>\n";
 	else print "<td>".getMLText("unknown_id")."</td>\n";
 	print "<td>".getLongReadableDate(filectime($settings->_contentDir.$entry))."</td>\n";
 	print "<td>".formatted_size(filesize($settings->_contentDir.$entry))."</td>\n";

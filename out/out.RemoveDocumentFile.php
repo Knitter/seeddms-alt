@@ -35,7 +35,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if (!isset($_GET["fileid"]) || !is_numeric($_GET["fileid"]) || intval($_GET["fileid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_file_id"));
@@ -63,7 +63,7 @@ UI::contentContainerStart();
 <form action="../op/op.RemoveDocumentFile.php" name="form1" method="POST">
 	<input type="Hidden" name="documentid" value="<?php echo $documentid?>">
 	<input type="Hidden" name="fileid" value="<?php echo $fileid?>">
-	<p><?php printMLText("confirm_rm_file", array ("documentname" => $document->getName(), "name" => $file->getName()));?></p>
+	<p><?php printMLText("confirm_rm_file", array ("documentname" => $document->getName(), "name" => htmlspecialchars($file->getName())));?></p>
 	<input type="Submit" value="<?php printMLText("rm_file");?>">
 </form>
 <?php

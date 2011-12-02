@@ -28,14 +28,14 @@ include("../inc/inc.Authentication.php");
 
 function tree($folder, $indent='') { /* {{{ */
 	global $index, $dms;
-	echo $indent."D ".$folder->getName()."\n";
+	echo $indent."D ".htmlspecialchars($folder->getName())."\n";
 	$subfolders = $folder->getSubFolders();
 	foreach($subfolders as $subfolder) {
 		tree($subfolder, $indent.'  ');
 	}
 	$documents = $folder->getDocuments();
 	foreach($documents as $document) {
-		echo $indent."  ".$document->getId().":".$document->getName()." ";
+		echo $indent."  ".$document->getId().":".htmlspecialchars($document->getName())." ";
 		/* If the document wasn't indexed before then just add it */
 		if(!($hits = $index->find('document_id:'.$document->getId()))) {
 			$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document));

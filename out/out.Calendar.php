@@ -94,7 +94,7 @@ if ($mode=="y"){
 			if (($event["start"]<=$xdate)&&($event["stop"]>=$xdate)){
 			
 				if (strlen($event['name']) > 25) $event['name'] = substr($event['name'], 0, 22) . "...";
-				print "<td class='".$class."'><a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".$event['name']."</a></td>";
+				print "<td class='".$class."'><a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a></td>";
 			}else{
 				print "<td class='".$class."'>&nbsp;</td>";
 			}
@@ -163,7 +163,7 @@ if ($mode=="y"){
 		
 		foreach ($events as $event){
 			if (($event["start"]<=$i)&&($event["stop"]>=$i)){
-				print "<td class='".$class."'><a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".$event['name']."</a></td>";
+				print "<td class='".$class."'><a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a></td>";
 			}else{
 				print "<td class='".$class."'>&nbsp;</td>";
 			}

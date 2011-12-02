@@ -71,7 +71,7 @@ echo "</tr>";
 
 echo "<tr>";
 echo "<td>".getMLText("user").": </td>";
-echo "<td>".(is_object($u)?$u->getFullName():getMLText("unknown_user"))."</td>";
+echo "<td>".(is_object($u)?htmlspecialchars($u->getFullName()):getMLText("unknown_user"))."</td>";
 echo "</tr>";
 
 echo "</table>";

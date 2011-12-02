@@ -41,7 +41,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -60,7 +60,7 @@ if ($document->isLocked()) {
 	
 	print "<table><tr><td class=\"warning\">";
 	
-	printMLText("update_locked_msg", array("username" => $lockingUser->getFullName(), "email" => $lockingUser->getEmail()));
+	printMLText("update_locked_msg", array("username" => htmlspecialchars($lockingUser->getFullName()), "email" => htmlspecialchars($lockingUser->getEmail())));
 	
 	if ($lockingUser->getID() == $user->getID())
 		printMLText("unlock_cause_locking_user");

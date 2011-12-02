@@ -114,7 +114,7 @@ function chooseKeywords(target) {
 <?php
 $allCats = $dms->getDocumentCategories();
 foreach ($allCats as $catObj) {
-	print "<option value=\"".$catObj->getID()."\">" . $catObj->getName() . "\n";
+	print "<option value=\"".$catObj->getID()."\">" . htmlspecialchars($catObj->getName()) . "\n";
 }
 ?>
 </select>
@@ -144,7 +144,7 @@ foreach ($allUsers as $userObj)
 {
 	if ($userObj->isGuest())
 		continue;
-	print "<option value=\"".$userObj->getID()."\">" . $userObj->getFullName() . "\n";
+	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";
 }
 ?>
 </select>
@@ -220,7 +220,7 @@ echo "</td>\n</tr>\n";
 <?php
 $allCats = $dms->getDocumentCategories();
 foreach ($allCats as $catObj) {
-	print "<option value=\"".$catObj->getID()."\">" . $catObj->getName() . "\n";
+	print "<option value=\"".$catObj->getID()."\">" . htmlspecialchars($catObj->getName()) . "\n";
 }
 ?>
 </select>
@@ -237,7 +237,7 @@ foreach ($allUsers as $userObj)
 {
 	if ($userObj->isGuest())
 		continue;
-	print "<option value=\"".$userObj->getID()."\">" . $userObj->getFullName() . "\n";
+	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";
 }
 ?>
 </select>

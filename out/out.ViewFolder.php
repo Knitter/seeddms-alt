@@ -61,10 +61,10 @@ UI::contentHeading(getMLText("folder_infos"));
 $owner = $folder->getOwner();
 UI::contentContainer("<table>\n<tr>\n".
 			"<td>".getMLText("owner").":</td>\n".
-			"<td><a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".$owner->getFullName()."</a>".
+			"<td><a class=\"infos\" href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a>".
 			"</td>\n</tr>\n<tr>\n".
 			"<td>".getMLText("comment").":</td>\n".
-			"<td>".$folder->getComment()."</td>\n</tr>\n</table>\n");
+			"<td>".htmlspecialchars($folder->getComment())."</td>\n</tr>\n</table>\n");
 
 UI::contentHeading(getMLText("folder_contents"));
 UI::contentContainerStart();
@@ -101,11 +101,11 @@ foreach($subFolders as $subFolder) {
 	print "<tr class=\"folder\">";
 //	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
 	print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></a></td>\n";
-	print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . $subFolder->getName() . "</a></td>\n";
-	print "<td>".$owner->getFullName()."</td>";
+	print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a></td>\n";
+	print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 	print "<td colspan=\"1\"><small>".count($subsub)." ".getMLText("folders").", ".count($subdoc)." ".getMLText("documents")."</small></td>";
 	print "<td></td>";
-	print "<td>".$comment."</td>";
+	print "<td>".htmlspecialchars($comment)."</td>";
 	print "</tr>\n";
 }
 
@@ -125,15 +125,15 @@ foreach($documents as $document) {
 		print "<td><a href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".$latestContent->getMimeType()."\"></a></td>";
 	else print "<td><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".$latestContent->getMimeType()."\"></td>";
 	
-	print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . $document->getName() . "</a></td>\n";
-	print "<td>".$owner->getFullName()."</td>";
+	print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a></td>\n";
+	print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 	print "<td>";
   if ( $document->isLocked() ) {
-		print "<img src=\"".UI::getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".$document->getLockingUser()->getFullName()."\"> ";
+		print "<img src=\"".UI::getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
 	}
 	print getOverallStatusText($status["status"])."</td>";
 	print "<td>".$version."</td>";
-	print "<td>".$comment."</td>";
+	print "<td>".htmlspecialchars($comment)."</td>";
 	print "</tr>\n";
 }
 

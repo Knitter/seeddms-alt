@@ -37,7 +37,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -64,7 +64,7 @@ UI::contentContainerStart();
 <form action="../op/op.RemoveVersion.php" name="form1" method="POST">
 	<input type="Hidden" name="documentid" value="<?php echo $documentid?>">
 	<input type="Hidden" name="version" value="<?php echo $version->getVersion()?>">
-	<p><?php printMLText("confirm_rm_version", array ("documentname" => $document->getName(), "version" => $version->getVersion()));?></p>
+	<p><?php printMLText("confirm_rm_version", array ("documentname" => htmlspecialchars($document->getName()), "version" => $version->getVersion()));?></p>
 	<input type="Submit" value="<?php printMLText("rm_version");?>">
 </form>
 <?php

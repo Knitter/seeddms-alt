@@ -77,13 +77,13 @@ UI::contentContainerStart();
 <td>
 <?php
 $owner = $document->getOwner();
-print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".$owner->getFullName()."</a>";
+print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".htmlspecialchars($owner->getFullName())."</a>";
 ?>
 </td>
 </tr>
 <tr>
 <td><?php printMLText("comment");?>:</td>
-<td><?php print $document->getComment();?></td>
+<td><?php print htmlspecialchars($document->getComment());?></td>
 </tr>
 <tr>
 <td><?php printMLText("creation_date");?>:</td>
@@ -91,7 +91,7 @@ print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".$owner->getFu
 </tr>
 <tr>
 <td><?php printMLText("keywords");?>:</td>
-<td><?php print $document->getKeywords();?></td>
+<td><?php print htmlspecialchars($document->getKeywords());?></td>
 </tr>
 <?php
 if ($document->isLocked()) {
@@ -99,7 +99,7 @@ if ($document->isLocked()) {
 ?>
 <tr>
 	<td><?php printMLText("lock_status");?>:</td>
-	<td><?php printMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => $lockingUser->getFullName()));?></td>
+	<td><?php printMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName())));?></td>
 </tr>
 <?php
 }
@@ -142,11 +142,11 @@ if ($file_exists) print "<li>". formatted_size(filesize($dms->contentDir . $vers
 else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
 $updatingUser = $version->getUser();
-print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".$updatingUser->getFullName()."</a></li>";
+print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
 print "<li>".getLongReadableDate($version->getDate())."</li>";
 print "</ul></td>\n";
 
-print "<td>".$version->getComment()."</td>";
+print "<td>".htmlspecialchars($version->getComment())."</td>";
 print "<td>".getOverallStatusText($status["status"])."</td>";
 print "<td>";
 
@@ -193,7 +193,7 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 					$reqName = getMLText("unknown_user")." '".$r["required"]."'";
 				}
 				else {
-					$reqName = $required->getFullName();
+					$reqName = htmlspecialchars($required->getFullName());
 				}
 				break;
 			case 1: // Reviewer is a group.
@@ -202,7 +202,7 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 					$reqName = getMLText("unknown_group")." '".$r["required"]."'";
 				}
 				else {
-					$reqName = $required->getName();
+					$reqName = htmlspecialchars($required->getName());
 				}
 				break;
 		}
@@ -239,7 +239,7 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 					$reqName = getMLText("unknown_user")." '".$r["required"]."'";
 				}
 				else {
-					$reqName = $required->getFullName();
+					$reqName = htmlspecialchars($required->getFullName());
 				}
 				break;
 			case 1: // Approver is a group.
@@ -248,7 +248,7 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 					$reqName = getMLText("unknown_group")." '".$r["required"]."'";
 				}
 				else {
-					$reqName = $required->getName();
+					$reqName = htmlspecialchars($required->getName());
 				}
 				break;
 		}
@@ -256,7 +256,7 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 		print "<td>".$reqName."</td>\n";
 		print "<td><ul class=\"documentDetail\"><li>".$a["date"]."</li>";
 		$updateUser = $dms->getUser($a["userID"]);
-		print "<li>".(is_object($updateUser) ? $updateUser->getFullName() : "unknown user id '".$a["userID"]."'")."</li></ul></td>";
+		print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()) : "unknown user id '".$a["userID"]."'")."</li></ul></td>";
 		print "<td>".$a["comment"]."</td>\n";
 		print "<td>".getApprovalStatusText($a["status"])."</td>\n";
 		print "</tr>\n";

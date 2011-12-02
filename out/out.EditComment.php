@@ -36,7 +36,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 $versionid = $_GET["version"];
 $version = $document->getContentByVersion($versionid);
@@ -81,7 +81,7 @@ UI::contentContainerStart();
 	<table cellpadding="3">
 		<tr>
 			<td valign="top" class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="80"><?php print $version->getComment();?></textarea></td>
+			<td><textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($version->getComment());?></textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2"><br><input type="Submit" value="<?php printMLText("save") ?>"></td>

@@ -36,7 +36,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -115,25 +115,25 @@ foreach ($docAccess["users"] as $usr) {
 	
 	if ($mandatory){
 
-		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". $usr->getFullName()." &lt;".$usr->getEmail()."&gt;";
+		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName())." &lt;".$usr->getEmail()."&gt;";
 		print "<input id='revInd".$usr->getID()."' type='hidden' name='indReviewers[]' value='". $usr->getID() ."'>";
 
 	}else if (isset($reviewIndex["i"][$usr->getID()])) {
 
 		switch ($reviewIndex["i"][$usr->getID()]["status"]) {
 			case 0:
-				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."' checked='checked'>".$usr->getFullName();
+				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."' checked='checked'>".htmlspecialchars($usr->getFullName());
 				break;
 			case -2:
-				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>".$usr->getFullName();
+				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>".htmlspecialchars($usr->getFullName());
 				break;
 			default:
-				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."' disabled='disabled'>".$usr->getFullName();
+				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."' disabled='disabled'>".htmlspecialchars($usr->getFullName());
 				break;
 		}
 	}
 	else {
-		print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". $usr->getFullName();
+		print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName());
 	}
 }
 ?>
@@ -150,25 +150,25 @@ foreach ($docAccess["groups"] as $group) {
 	
 	if ($mandatory){
 
-		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".$group->getName();
+		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($group->getName());
 		print "<input id='revGrp".$group->getID()."' type='hidden' name='grpReviewers[]' value='". $group->getID() ."'>";
 
 	}else if (isset($reviewIndex["g"][$group->getID()])) {
 
 		switch ($reviewIndex["g"][$group->getID()]["status"]) {
 			case 0:
-				print "<li class=\"cbSelectItem\"><input id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."' checked='checked'>".$group->getName();
+				print "<li class=\"cbSelectItem\"><input id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."' checked='checked'>".htmlspecialchars($group->getName());
 				break;
 			case -2:
-				print "<li class=\"cbSelectItem\"><input id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."'>".$group->getName();
+				print "<li class=\"cbSelectItem\"><input id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."'>".htmlspecialchars($group->getName());
 				break;
 			default:
-				print "<li class=\"cbSelectItem\"><input id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."' disabled='disabled'>".$group->getName();
+				print "<li class=\"cbSelectItem\"><input id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."' disabled='disabled'>".htmlspecialchars($group->getName());
 				break;
 		}
 	}
 	else {
-		print "<li class=\"cbSelectItem\"><input id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."'>".$group->getName();
+		print "<li class=\"cbSelectItem\"><input id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."'>".htmlspecialchars($group->getName());
 	}
 }
 ?>
@@ -191,25 +191,25 @@ foreach ($docAccess["users"] as $usr) {
 
 	if ($mandatory){
 	
-		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". $usr->getFullName()." &lt;".$usr->getEmail()."&gt;";
+		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName())." &lt;".$usr->getEmail()."&gt;";
 		print "<input id='appInd".$usr->getID()."' type='hidden' name='indApprovers[]' value='". $usr->getID() ."'>";
 
 	}else if (isset($approvalIndex["i"][$usr->getID()])) {
 	
 		switch ($approvalIndex["i"][$usr->getID()]["status"]) {
 			case 0:
-				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."' checked='checked'>".$usr->getFullName();
+				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."' checked='checked'>".htmlspecialchars($usr->getFullName());
 				break;
 			case -2:
-				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>".$usr->getFullName();
+				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>".htmlspecialchars($usr->getFullName());
 				break;
 			default:
-				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."' disabled='disabled'>".$usr->getFullName();
+				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."' disabled='disabled'>".htmlspecialchars($usr->getFullName());
 				break;
 		}
 	}
 	else {
-		print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>". $usr->getFullName();
+		print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName());
 	}
 }
 ?>
@@ -226,25 +226,25 @@ foreach ($docAccess["groups"] as $group) {
 
 	if ($mandatory){
 
-		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".$group->getName();
+		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($group->getName());
 		print "<input id='appGrp".$group->getID()."' type='hidden' name='grpApprovers[]' value='". $group->getID() ."'>";
 
 	}else if (isset($approvalIndex["g"][$group->getID()])) {
 
 		switch ($approvalIndex["g"][$group->getID()]["status"]) {
 			case 0:
-				print "<li class=\"cbSelectItem\"><input id='appGrp".$group->getID()."' type='checkbox' name='grpApprovers[]' value='". $group->getID() ."' checked='checked'>".$group->getName();
+				print "<li class=\"cbSelectItem\"><input id='appGrp".$group->getID()."' type='checkbox' name='grpApprovers[]' value='". $group->getID() ."' checked='checked'>".htmlspecialchars($group->getName());
 				break;
 			case -2:
-				print "<li class=\"cbSelectItem\"><input id='appGrp".$group->getID()."' type='checkbox' name='grpApprovers[]' value='". $group->getID() ."'>".$group->getName();
+				print "<li class=\"cbSelectItem\"><input id='appGrp".$group->getID()."' type='checkbox' name='grpApprovers[]' value='". $group->getID() ."'>".htmlspecialchars($group->getName());
 				break;
 			default:
-				print "<li class=\"cbSelectItem\"><input id='appGrp".$group->getID()."' type='checkbox' name='grpApprovers[]' value='". $group->getID() ."' disabled='disabled'>".$group->getName();
+				print "<li class=\"cbSelectItem\"><input id='appGrp".$group->getID()."' type='checkbox' name='grpApprovers[]' value='". $group->getID() ."' disabled='disabled'>".htmlspecialchars($group->getName());
 				break;
 		}
 	}
 	else {
-		print "<li class=\"cbSelectItem\"><input id='appGrp".$group->getID()."' type='checkbox' name='grpApprovers[]' value='". $group->getID() ."'>".$group->getName();
+		print "<li class=\"cbSelectItem\"><input id='appGrp".$group->getID()."' type='checkbox' name='grpApprovers[]' value='". $group->getID() ."'>".htmlspecialchars($group->getName());
 	}
 }
 ?>

@@ -37,10 +37,10 @@ if (!is_object($folder)) {
 $folderPathHTML = getFolderPathHTML($folder, true);
 
 if ($folder->getAccessMode($user) < M_READWRITE) {
-	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 }
 
-UI::htmlStartPage(getMLText("folder_title", array("foldername" => $folder->getName())));
+UI::htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($folderPathHTML, "view_folder", $folder);
 
@@ -180,8 +180,8 @@ $docAccess = $folder->getApproversList();
 		$mandatory=false;
 		foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 
-		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". $usr->getFullName();
-		else print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". $usr->getFullName();
+		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName());
+		else print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName());
 	}
 ?>
 	</ul>
@@ -195,8 +195,8 @@ $docAccess = $folder->getApproversList();
 		$mandatory=false;
 		foreach ($res as $r) if ($r['reviewerGroupID']==$grp->getID()) $mandatory=true;	
 
-		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".$grp->getName();
-		else print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' name='grpReviewers[]' value='". $grp->getID() ."'>".$grp->getName();
+		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($grp->getName());
+		else print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' name='grpReviewers[]' value='". $grp->getID() ."'>".htmlspecialchars($grp->getName());
 	}
 ?>
 	</ul>
@@ -217,8 +217,8 @@ $docAccess = $folder->getApproversList();
 		$mandatory=false;
 		foreach ($res as $r) if ($r['approverUserID']==$usr->getID()) $mandatory=true;
 		
-		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". $usr->getFullName();
-		else print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>". $usr->getFullName();
+		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName());
+		else print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName());
 	}
 ?>
 	</ul>
@@ -232,8 +232,8 @@ $docAccess = $folder->getApproversList();
 		$mandatory=false;
 		foreach ($res as $r) if ($r['approverGroupID']==$grp->getID()) $mandatory=true;	
 
-		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".$grp->getName();
-		else print "<li class=\"cbSelectItem\"><input id='appGrp".$grp->getID()."' type='checkbox' name='grpApprovers[]' value='". $grp->getID() ."'>".$grp->getName();
+		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($grp->getName());
+		else print "<li class=\"cbSelectItem\"><input id='appGrp".$grp->getID()."' type='checkbox' name='grpApprovers[]' value='". $grp->getID() ."'>".htmlspecialchars($grp->getName());
 
 	}
 ?>

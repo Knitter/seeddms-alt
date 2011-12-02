@@ -87,11 +87,11 @@ function printFolder($folder) {
 	$color = $folder->inheritsAccess() ? "black" : getAccessColor($folder->getDefaultAccess());
 
 	print "<li class=\"folderClass\">";
-	print "<a style=\"color: $color\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."\">".$folder->getName() ."</a>";
+	print "<a style=\"color: $color\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."\">".htmlspecialchars($folder->getName()) ."</a>";
 
 	$owner = $folder->getOwner();
 	$color = getAccessColor(M_ALL);
-	print " [<span style=\"color: $color\">".$owner->getFullName()."</span>] ";
+	print " [<span style=\"color: $color\">".htmlspecialchars($owner->getFullName())."</span>] ";
 
 	if (! $folder->inheritsAccess())
 		printAccessList($folder);
@@ -140,11 +140,11 @@ function printDocument($document) {
 
 	$color = $document->inheritsAccess() ? "black" : getAccessColor($document->getDefaultAccess());
 	print "<li class=\"documentClass\">";
-	print "<a style=\"color: $color\" href=\"out.ViewDocument.php?documentid=".$document->getID()."\">".$document->getName()."</a>";
+	print "<a style=\"color: $color\" href=\"out.ViewDocument.php?documentid=".$document->getID()."\">".htmlspecialchars($document->getName())."</a>";
 
 	$owner = $document->getOwner();
 	$color = getAccessColor(M_ALL);
-	print " [<span style=\"color: $color\">".$owner->getFullName()."</span>] ";
+	print " [<span style=\"color: $color\">".htmlspecialchars($owner->getFullName())."</span>] ";
 
 	if (! $document->inheritsAccess()) printAccessList($document);
 
@@ -167,7 +167,7 @@ function printAccessList($obj) {
 	{
 		$group = $accessList["groups"][$i]->getGroup();
 		$color = getAccessColor($accessList["groups"][$i]->getMode());
-		print "<span style=\"color: $color\">".$group->getName()."</span>";
+		print "<span style=\"color: $color\">".htmlspecialchars($group->getName())."</span>";
 		if ($i+1 < count($accessList["groups"]) || count($accessList["users"]) > 0)
 			print ", ";
 	}
@@ -175,7 +175,7 @@ function printAccessList($obj) {
 	{
 		$user = $accessList["users"][$i]->getUser();
 		$color = getAccessColor($accessList["users"][$i]->getMode());
-		print "<span style=\"color: $color\">".$user->getFullName()."</span>";
+		print "<span style=\"color: $color\">".htmlspecialchars($user->getFullName())."</span>";
 		if ($i+1 < count($accessList["users"]))
 			print ", ";
 	}

@@ -39,13 +39,13 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
 			$tmppath = $folder->getPath();
 			for ($i = 1; $i  < count($tmppath); $i++) {
-				print "/".$tmppath[$i]->getName();
+				print "/".htmlspecialchars($tmppath[$i]->getName());
 			}
 			print $foldername;
 			print "</a></td>";
 			
 			$owner = $folder->getOwner();
-			print "<td>".$owner->getFullName()."</td>";
+			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 			print "<td>Folderlist is '".$folderList."', should be '".$path."'</td>";
 			if($repair) {
 				$folder->repair();
@@ -74,12 +74,12 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 			$folder = $document->getFolder();
 			$tmppath = $folder->getPath();
 			for ($i = 1; $i  < count($tmppath); $i++) {
-				print $tmppath[$i]->getName()."/";
+				print htmlspecialchars($tmppath[$i]->getName())."/";
 			}
 			print $document->getName();
 			print "</a></td>";
 			$owner = $document->getOwner();
-			print "<td>".$owner->getFullName()."</td>";
+			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 			print "<td>Folderlist is '".$folderList."', should be '".$path."'</td>";
 			if($repair) {
 				$document->repair();

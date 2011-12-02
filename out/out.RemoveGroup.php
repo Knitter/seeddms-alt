@@ -49,7 +49,7 @@ UI::contentContainerStart();
 <input type="Hidden" name="groupid" value="<?php print $groupid;?>">
 <input type="Hidden" name="action" value="removegroup">
 <p>
-<?php printMLText("confirm_rm_group", array ("groupname" => $currGroup->getName()));?>
+<?php printMLText("confirm_rm_group", array ("groupname" => htmlspecialchars($currGroup->getName())));?>
 </p>
 <p><input type="Submit" value="<?php printMLText("rm_group");?>"></p>
 </form>

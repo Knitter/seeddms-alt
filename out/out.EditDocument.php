@@ -35,7 +35,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -70,7 +70,7 @@ function checkForm()
 </script>
 
 <?php
-UI::contentHeading(getMLText("edit_document_props") . ": " . $document->getName());
+UI::contentHeading(getMLText("edit_document_props"));
 UI::contentContainerStart();
 ?>
 <form action="../op/op.EditDocument.php" name="form1" onsubmit="return checkForm();" method="POST">
@@ -78,16 +78,16 @@ UI::contentContainerStart();
 	<table cellpadding="3">
 		<tr>
 			<td class="inputDescription"><?php printMLText("name");?>:</td>
-			<td><input name="name" value="<?php print $document->getName();?>" size="60"></td>
+			<td><input name="name" value="<?php print htmlspecialchars($document->getName());?>" size="60"></td>
 		</tr>
 		<tr>
 			<td valign="top" class="inputDescription"><?php printMLText("comment");?>:</td>
-			<td><textarea name="comment" rows="4" cols="80"><?php print $document->getComment();?></textarea></td>
+			<td><textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($document->getComment());?></textarea></td>
 		</tr>
 		<tr>
 			<td valign="top" class="inputDescription"><?php printMLText("keywords");?>:</td>
 			<td class="standardText">
-				<textarea name="keywords" rows="2" cols="80"><?php print $document->getKeywords();?></textarea><br>
+				<textarea name="keywords" rows="2" cols="80"><?php print htmlspecialchars($document->getKeywords());?></textarea><br>
 				<a href="javascript:chooseKeywords('form1.keywords');"><?php printMLText("use_default_keywords");?></a>
 				<script language="JavaScript">
 					var openDlg;

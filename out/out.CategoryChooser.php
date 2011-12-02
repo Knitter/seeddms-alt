@@ -64,7 +64,7 @@ $(document).ready(function(){
 		echo "<option value=\"".$category->getId()."\"";
 		if(in_array($category->getID(), $selcatsarr))
 			echo " selected";
-		echo ">".$category->getName()."</option>\n";
+		echo ">".htmlspecialchars($category->getName())."</option>\n";
 	}
 ?>
 			</select>

@@ -37,7 +37,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -128,7 +128,7 @@ if ($reviewStatus['type'] == 0) {
 		print "</td>";
 		print "<td>".$reviewStatus["comment"]."</td>";
 		$indUser = $dms->getUser($reviewStatus["userID"]);
-		print "<td>".$reviewStatus["date"]." - ". $indUser->getFullname() ."</td>";
+		print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
 		print "</tr></tbody></table><br>";
 	}
 ?>
@@ -166,7 +166,7 @@ else if ($reviewStatus['type'] == 1) {
 		print "</td>";
 		print "<td>".$reviewStatus["comment"]."</td>";
 		$indUser = $dms->getUser($reviewStatus["userID"]);
-		print "<td>".$reviewStatus["date"]." - ". $indUser->getFullname() ."</td>";
+		print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
 		print "</tr></tbody></table><br>\n";
 	}
 

@@ -79,11 +79,11 @@ UI::contentContainerStart();
 <table>
 <tr>
 <td><?php printMLText("name");?>:</td>
-<td><input name="name" value="<?php print $folder->getName();?>" size="60"></td>
+<td><input name="name" value="<?php print htmlspecialchars($folder->getName());?>" size="60"></td>
 </tr>
 <tr>
 <td><?php printMLText("comment");?>:</td>
-<td><textarea name="comment" rows="4" cols="80"><?php print $folder->getComment();?></textarea></td>
+<td><textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($folder->getComment());?></textarea></td>
 </tr>
 <?php
 $parent = ($folder->getID() == $settings->_rootFolderID) ? false : $folder->getParent();

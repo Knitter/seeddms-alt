@@ -60,10 +60,10 @@ foreach ($users as $currUser) {
 		
 	echo "<tr>\n";
 	
-	print "<td>".$currUser->getFullName()."</td>";
+	print "<td>".htmlspecialchars($currUser->getFullName())."</td>";
 	
 	print "<td><a href=\"mailto:".$currUser->getEmail()."\">".$currUser->getEmail()."</a></td>";
-	print "<td>".$currUser->getComment()."</td>";
+	print "<td>".htmlspecialchars($currUser->getComment())."</td>";
 	
 	if ($settings->_enableUserImage){
 		print "<td>";

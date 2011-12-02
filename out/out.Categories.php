@@ -69,7 +69,7 @@ UI::contentContainerStart();
 				foreach ($categories as $category) {
 				
 					if (isset($_GET["categoryid"]) && $category->getID()==$_GET["categoryid"]) $selected=$count;				
-					print "<option value=\"".$category->getID()."\">" . $category->getName();
+					print "<option value=\"".$category->getID()."\">" . htmlspecialchars($category->getName());
 					$count++;
 				}
 				?>
@@ -118,7 +118,7 @@ UI::contentContainerStart();
 						<form action="../op/op.Categories.php" >
 							<input type="Hidden" name="action" value="editcategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input name="name" value="<?php echo $category->getName()?>">&nbsp;
+							<input name="name" value="<?php echo htmlspecialchars($category->getName()) ?>">&nbsp;
 							<input type="Submit" value="<?php printMLText("save");?>">
 						</form>
 					</td>

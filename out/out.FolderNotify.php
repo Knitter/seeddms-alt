@@ -38,12 +38,12 @@ if (!is_object($folder)) {
 $folderPathHTML = getFolderPathHTML($folder, true);
 
 if ($folder->getAccessMode($user) < M_READ) {
-	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 }
 
 $notifyList = $folder->getNotifyList();
 
-UI::htmlStartPage(getMLText("folder_title", array("foldername" => $folder->getName())));
+UI::htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($folderPathHTML, "view_folder", $folder);
 
@@ -81,7 +81,7 @@ else {
 	foreach ($notifyList["users"] as $userNotify) {
 		print "<tr>";
 		print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>";
-		print "<td>" . $userNotify->getFullName() . "</td>";
+		print "<td>" . htmlspecialchars($userNotify->getFullName()) . "</td>";
 		if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
 			print "<td><a href=\"../op/op.FolderNotify.php?folderid=". $folderid . "&action=delnotify&userid=".$userNotify->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete")."</td>";
 		}else print "<td></td>";
@@ -92,7 +92,7 @@ else {
 	foreach ($notifyList["groups"] as $groupNotify) {
 		print "<tr>";
 		print "<td><img src=\"images/groupicon.gif\" class=\"mimeicon\"></td>";
-		print "<td>" . $groupNotify->getName() . "</td>";
+		print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
 		if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
 			print "<td><a href=\"../op/op.FolderNotify.php?folderid=". $folderid . "&action=delnotify&groupid=".$groupNotify->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete")."</td>";
 		}else print "<td></td>";
@@ -118,11 +118,11 @@ print "</table>\n";
 						$allUsers = $dms->getAllUsers();
 						foreach ($allUsers as $userObj) {
 							if (!$userObj->isGuest() && ($folder->getAccessMode($userObj) >= M_READ) && !in_array($userObj->getID(), $userNotifyIDs))
-								print "<option value=\"".$userObj->getID()."\">" . $userObj->getFullName() . "\n";
+								print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";
 						}
 					}
 					elseif (!$user->isGuest() && !in_array($user->getID(), $userNotifyIDs)) {
-						print "<option value=\"".$user->getID()."\">" . $user->getFullName() . "\n";
+						print "<option value=\"".$user->getID()."\">" . htmlspecialchars($user->getFullName()) . "\n";
 					}
 				?>
 			</select>
@@ -137,7 +137,7 @@ print "</table>\n";
 					$allGroups = $dms->getAllGroups();
 					foreach ($allGroups as $groupObj) {
 						if (($user->isAdmin() || $groupObj->isMember($user,true)) && $folder->getGroupAccessMode($groupObj) >= M_READ && !in_array($groupObj->getID(), $groupNotifyIDs)) {
-							print "<option value=\"".$groupObj->getID()."\">" . $groupObj->getName() . "\n";
+							print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
 						}
 					}
 				?>

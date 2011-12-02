@@ -74,15 +74,15 @@ UI::contentContainerStart();
 	</tr>
 	<tr>
 		<td><?php printMLText("name");?>:</td>
-		<td><input name="fullname" value="<?php print $user->getFullName();?>" size="30"></td>
+		<td><input name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30"></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("email");?>:</td>
-		<td><input name="email" value="<?php print $user->getEmail();?>" size="30"></td>
+		<td><input name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30"></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("comment");?>:</td>
-		<td><textarea name="comment" rows="4" cols="80"><?php print $user->getComment();?></textarea></td>
+		<td><textarea name="comment" rows="4" cols="80"><?php print htmlspecialchars($user->getComment());?></textarea></td>
 	</tr>
 
 <?php	

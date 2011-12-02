@@ -48,7 +48,7 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / ".$document->getName();
+$docPathHTML = getFolderPathHTML($folder, true). " / ".htmlspecialchars($document->getName());
 
 if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -80,7 +80,7 @@ if ($document->isLocked()) {
 	$lockingUser = $document->getLockingUser();
 ?>
 <tr>
-	<td class="warning" colspan=2><?php printMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => $lockingUser->getFullName()));?></td>
+	<td class="warning" colspan=2><?php printMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName())));?></td>
 </tr>
 <?php
 }
@@ -96,7 +96,7 @@ print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".$owner->getFu
 </tr>
 <tr>
 <td><?php printMLText("comment");?>:</td>
-<td><?php print $document->getComment();?></td>
+<td><?php print htmlspecialchars($document->getComment());?></td>
 </tr>
 <tr>
 <td><?php printMLText("creation_date");?>:</td>
@@ -104,7 +104,7 @@ print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".$owner->getFu
 </tr>
 <tr>
 <td><?php printMLText("keywords");?>:</td>
-<td><?php print $document->getKeywords();?></td>
+<td><?php print htmlspecialchars($document->getKeywords());?></td>
 </tr>
 <tr>
 <td><?php printMLText("categories");?>:</td>
@@ -113,7 +113,7 @@ print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".$owner->getFu
 	$cats = $document->getCategories();
 	$ct = array();
 	foreach($cats as $cat)
-		$ct[] = $cat->getName();
+		$ct[] = htmlspecialchars($cat->getName());
 	echo implode(', ', $ct);
 ?>
 </td>
@@ -153,11 +153,11 @@ if ($file_exists)
 else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
 $updatingUser = $latestContent->getUser();
-print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".$updatingUser->getFullName()."</a></li>";
+print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
 print "<li>".getLongReadableDate($latestContent->getDate())."</li>";
 
 print "</ul>\n";
-print "<td>".$latestContent->getComment()."</td>";
+print "<td>".htmlspecialchars($latestContent->getComment())."</td>";
 
 print "<td width='10%'>".getOverallStatusText($status["status"]);
 if ( $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP || $status["status"]==S_EXPIRED ){
@@ -218,7 +218,7 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 					$reqName = getMLText("unknown_user")." '".$r["required"]."'";
 				}
 				else {
-					$reqName = $required->getFullName();
+					$reqName = htmlspecialchars($required->getFullName());
 				}
 				if($r["required"] == $user->getId())
 					$is_reviewer = true;
@@ -229,7 +229,7 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 					$reqName = getMLText("unknown_group")." '".$r["required"]."'";
 				}
 				else {
-					$reqName = "<i>".$required->getName()."</i>";
+					$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
 				}
 				if($required->isMember($user))
 					$is_reviewer = true;
@@ -239,8 +239,8 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 		print "<td>".$reqName."</td>\n";
 		print "<td><ul class=\"documentDetail\"><li>".$r["date"]."</li>";
 		$updateUser = $dms->getUser($r["userID"]);
-		print "<li>".(is_object($updateUser) ? $updateUser->getFullName() : "unknown user id '".$r["userID"]."'")."</li></ul></td>";
-		print "<td>".$r["comment"]."</td>\n";
+		print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()) : "unknown user id '".$r["userID"]."'")."</li></ul></td>";
+		print "<td>".htmlspecialchars($r["comment"])."</td>\n";
 		print "<td>".getReviewStatusText($r["status"])."</td>\n";
 		print "<td><ul class=\"actions\">";
 		
@@ -279,7 +279,7 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 					$reqName = getMLText("unknown_user")." '".$r["required"]."'";
 				}
 				else {
-					$reqName = $required->getFullName();
+					$reqName = htmlspecialchars($required->getFullName());
 				}
 				if($a["required"] == $user->getId())
 					$is_approver = true;
@@ -290,7 +290,7 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 					$reqName = getMLText("unknown_group")." '".$r["required"]."'";
 				}
 				else {
-					$reqName = "<i>".$required->getName()."</i>";
+					$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
 				}
 				if($required->isMember($user))
 					$is_approver = true;
@@ -300,8 +300,8 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 		print "<td>".$reqName."</td>\n";
 		print "<td><ul class=\"documentDetail\"><li>".$a["date"]."</li>";
 		$updateUser = $dms->getUser($a["userID"]);
-		print "<li>".(is_object($updateUser) ? $updateUser->getFullName() : "unknown user id '".$a["userID"]."'")."</li></ul></td>";	
-		print "<td>".$a["comment"]."</td>\n";
+		print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()) : "unknown user id '".$a["userID"]."'")."</li></ul></td>";	
+		print "<td>".htmlspecialchars($a["comment"])."</td>\n";
 		print "<td>".getApprovalStatusText($a["status"])."</td>\n";
 		print "<td><ul class=\"actions\">";
 	
@@ -338,7 +338,6 @@ if (count($versions)>1) {
 	for ($i = count($versions)-2; $i >= 0; $i--) {
 		$version = $versions[$i];
 		$vstat = $version->getStatus();
-		$comment = $version->getComment();
 		
 		// verify if file exists
 		$file_exists=file_exists($dms->contentDir . $version->getPath());
@@ -358,10 +357,10 @@ if (count($versions)>1) {
 		if ($file_exists) print "<li>". formatted_size(filesize($dms->contentDir . $version->getPath())) ." ".$version->getMimeType()."</li>";
 		else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 		$updatingUser = $version->getUser();
-		print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".$updatingUser->getFullName()."</a></li>";
+		print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
 		print "<li>".getLongReadableDate($version->getDate())."</li>";
 		print "</ul>\n";
-		print "<td>".$version->getComment()."</td>";
+		print "<td>".htmlspecialchars($version->getComment())."</td>";
 		print "<td>".getOverallStatusText($vstat["status"])."</td>";
 		print "<td>";
 		print "<ul class=\"actions\">";
@@ -402,7 +401,7 @@ if (count($files) > 0) {
 		print "<tr>";
 		print "<td><ul class=\"actions\">";
 		if ($file_exists)
-			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($file->getFileType())."\" title=\"".$file->getMimeType()."\">".$file->getName()."</a>";
+			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($file->getFileType())."\" title=\"".$file->getMimeType()."\">".htmlspecialchars($file->getName())."</a>";
 		else print "<li><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($file->getFileType())."\" title=\"".$file->getMimeType()."\">";
 		print "</ul></td>";
 		
@@ -412,10 +411,10 @@ if (count($files) > 0) {
 			print "<li>". filesize($dms->contentDir . $file->getPath()) ." bytes ".$file->getMimeType()."</li>";
 		else print "<li>".$file->getMimeType()." - <span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
-		print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$responsibleUser->getEmail()."\">".$responsibleUser->getFullName()."</a></li>";
+		print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$responsibleUser->getEmail()."\">".htmlspecialchars($responsibleUser->getFullName())."</a></li>";
 		print "<li>".getLongReadableDate($file->getDate())."</li>";
 
-		print "<td>".$file->getComment()."</td>";
+		print "<td>".htmlspecialchars($file->getComment())."</td>";
 	
 		print "<td><span class=\"actions\">";
 		if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
@@ -456,9 +455,9 @@ if (count($links) > 0) {
 		$targetDoc = $link->getTarget();
 
 		print "<tr>";
-		print "<td><a href=\"out.ViewDocument.php?documentid=".$targetDoc->getID()."\" class=\"linklist\">".$targetDoc->getName()."</a></td>";
-		print "<td>".$targetDoc->getComment()."</td>";
-		print "<td>".$responsibleUser->getFullName();
+		print "<td><a href=\"out.ViewDocument.php?documentid=".$targetDoc->getID()."\" class=\"linklist\">".htmlspecialchars($targetDoc->getName())."</a></td>";
+		print "<td>".htmlspecialchars($targetDoc->getComment())."</td>";
+		print "<td>".htmlspecialchars($responsibleUser->getFullName());
 		if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
 			print "<br>".getMLText("document_link_public").":".(($link->isPublic()) ? getMLText("yes") : getMLText("no"));
 		print "</td>";

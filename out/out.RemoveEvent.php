@@ -46,7 +46,7 @@ UI::contentContainerStart();
 ?>
 <form action="../op/op.RemoveEvent.php" name="form1" method="POST">
 	<input type="Hidden" name="eventid" value="<?php echo $_GET["id"]; ?>">
-	<p><?php printMLText("confirm_rm_event", array ("name" => $event["name"]));?></p>
+	<p><?php printMLText("confirm_rm_event", array ("name" => htmlspecialchars($event["name"])));?></p>
 	<input type="Submit" value="<?php printMLText("delete");?>">
 </form>
 <?php

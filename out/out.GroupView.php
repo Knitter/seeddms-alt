@@ -58,9 +58,9 @@ foreach ($groups as $group){
 	$managers = $group->getManagers();
 	$ismanager = false; /* set to true if current user is manager */
 
-	echo "<li>".$group->getName();
+	echo "<li>".htmlspecialchars($group->getName());
 	if($group->getComment())
-		echo " : ".$group->getComment();
+		echo " : ".htmlspecialchars($group->getComment());
 	foreach($managers as $manager)
 		if($manager->getId() == $user->getId()) {
 			echo " : you are the manager of this group";
@@ -73,7 +73,7 @@ foreach ($groups as $group){
 	foreach ($members as $member) {
 		$memberids[] = $member->getId();
 
-		echo "<li>".$member->getFullName();
+		echo "<li>".htmlspecialchars($member->getFullName());
 		if ($member->getEmail()!="")
 			echo " (<a href=\"mailto:".$member->getEmail()."\">".$member->getEmail()."</a>)";
 		foreach($managers as $manager)
@@ -92,7 +92,7 @@ foreach ($groups as $group){
 		echo "<option value=\"\"></option>";
 		foreach($users as $u) {
 			if(!$u->isAdmin() && !$u->isGuest() && !in_array($u->getId(), $memberids))
-				echo "<option value=\"".$u->getId()."\">".$u->getFullName()."</option>";
+				echo "<option value=\"".$u->getId()."\">".htmlspecialchars($u->getFullName())."</option>";
 		}
 		echo "</select>";
 		echo "</form>";

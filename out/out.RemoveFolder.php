@@ -56,7 +56,7 @@ UI::contentContainerStart();
 	<input type="Hidden" name="folderid" value="<?php print $folderid;?>">
 	<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
 	<p>
-	<?php printMLText("confirm_rm_folder", array ("foldername" => $folder->getName()));?>
+	<?php printMLText("confirm_rm_folder", array ("foldername" => htmlspecialchars($folder->getName())));?>
 	</p>
 	<p><input type="Submit" value="<?php printMLText("rm_folder");?>"></p>
 </form>
