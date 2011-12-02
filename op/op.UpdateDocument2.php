@@ -63,7 +63,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 			else $document->setLocked(false);
 		}
 
-		$comment  = sanitizeString($_POST["comment"]);
+		$comment  = $_POST["comment"];
 
 		$userfiletmp = $settings->_stagingDir.$_POST['fileId'];;
 		$userfiletype = $_FILES[ $file_param_name ]["type"];

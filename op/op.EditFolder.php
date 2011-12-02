@@ -43,8 +43,8 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));	
 }
 
-$name    = sanitizeString($_POST["name"]);
-$comment = sanitizeString($_POST["comment"]);
+$name    = $_POST["name"];
+$comment = $_POST["comment"];
 $sequence = $_POST["sequence"];
 if (!is_numeric($sequence)) {
 	$sequence = "keep";

@@ -49,7 +49,7 @@ if (!is_object($folder)) {
 // in the database: keywords, name and comment.
 
 if (isset($_GET["query"]) && is_string($_GET["query"])) {
-	$query = sanitizeString($_GET["query"]);
+	$query = $_GET["query"];
 }
 else {
 	$query = "";

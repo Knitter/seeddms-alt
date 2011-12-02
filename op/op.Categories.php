@@ -33,7 +33,7 @@ $action = $_GET["action"];
 //Neue Kategorie anlegen -----------------------------------------------------------------------------
 if ($action == "addcategory") {
 	
-	$name = sanitizeString($_GET["name"]);
+	$name = $_GET["name"];
 	if (is_object($dms->getDocumentCategoryByName($name))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("category_exists"));
 	}
@@ -74,7 +74,7 @@ else if ($action == "editcategory") {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_document_category"));
 	}
 
-	$name = sanitizeString($_GET["name"]);
+	$name = $_GET["name"];
 	if (!$category->setName($name)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}

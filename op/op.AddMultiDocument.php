@@ -59,16 +59,16 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		}
 
 		if(isset($_POST["comment"]))
-			$comment  = sanitizeString($_POST["comment"]);
+			$comment  = $_POST["comment"];
 		else
 			$comment = '';
 		if(isset($_POST['version_comment']))
-			$version_comment = sanitizeString($_POST["version_comment"]);
+			$version_comment = $_POST["version_comment"];
 		else
 			$version_comment = '';
 
 		if(isset($_POST["keywords"]))
-			$keywords = sanitizeString($_POST["keywords"]);
+			$keywords = $_POST["keywords"];
 		else
 			$keywords = '';
 
@@ -164,7 +164,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		else $fileType = substr($userfilename, $lastDotIndex);
 
 		if($_POST["name"] != "")
-			$name = sanitizeString($_POST["name"]);
+			$name = $_POST["name"];
 		else
 			$name = basename($userfilename);
 

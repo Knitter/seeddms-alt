@@ -37,8 +37,8 @@ else if (isset($_POST["action"])) $action = $_POST["action"];
 //Neue Gruppe anlegen -----------------------------------------------------------------------------
 if ($action == "addgroup") {
 
-	$name = sanitizeString($_GET["name"]);
-	$comment = sanitizeString($_GET["comment"]);
+	$name = $_GET["name"];
+	$comment = $_GET["comment"];
 
 	if (is_object($dms->getGroupByName($name))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("group_exists"));
@@ -87,8 +87,8 @@ else if ($action == "editgroup") {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_group_id"));
 	}
 	
-	$name = sanitizeString($_GET["name"]);
-	$comment = sanitizeString($_GET["comment"]);
+	$name = $_GET["name"];
+	$comment = $_GET["comment"];
 
 	if ($group->getName() != $name)
 		$group->setName($name);

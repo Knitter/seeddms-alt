@@ -52,7 +52,7 @@ if (!is_object($version)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
-$comment =  sanitizeString($_POST["comment"]);
+$comment =  $_POST["comment"];
 
 if (($oldcomment = $version->getComment()) != $comment) {
 	if($version->setComment($comment)) {

@@ -36,7 +36,7 @@ if (isset($_REQUEST["action"])) {
 if ($action == "addcategory") {
 
 	if (isset($_REQUEST["name"]) && $_REQUEST["name"]) {
-		$name = sanitizeString($_REQUEST["name"]);
+		$name = $_REQUEST["name"];
 	
 		$newCategory = $dms->addKeywordCategory($user->getID(), $name);
 		if (!$newCategory) {
@@ -85,7 +85,7 @@ else if ($action == "editcategory") {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
 		}
 		if (isset($_REQUEST["name"]) && $_REQUEST["name"]) {
-			$name = sanitizeString($_REQUEST["name"]);
+			$name = $_REQUEST["name"];
 
 			if (!$category->setName($name)) {
 				UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
@@ -112,10 +112,10 @@ else if ($action == "newkeywords") {
 		}
 
 		if (isset($_POST["keywords"])) {
-			$keywords = sanitizeString($_POST["keywords"]);
+			$keywords = $_POST["keywords"];
 		}
 		else {
-			$keywords = sanitizeString($_GET["keywords"]);
+			$keywords = $_GET["keywords"];
 		}
 		if (!$category->addKeywordList($keywords)) {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));

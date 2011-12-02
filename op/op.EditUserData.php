@@ -32,9 +32,9 @@ if (!$user->isAdmin() && ($settings->_disableSelfEdit)) {
 	UI::exitError(getMLText("edit_user_details"),getMLText("access_denied"));
 }
 
-$fullname = sanitizeString($_POST["fullname"]);
-$email    = sanitizeString($_POST["email"]);
-$comment  = sanitizeString($_POST["comment"]);
+$fullname = $_POST["fullname"];
+$email    = $_POST["email"];
+$comment  = $_POST["comment"];
 
 if (isset($_POST["pwd"]) && ($_POST["pwd"] != ""))
 	$user->setPwd(md5($_POST["pwd"]));

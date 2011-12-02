@@ -44,9 +44,9 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-$name =     sanitizeString($_POST["name"]);
-$comment =  sanitizeString($_POST["comment"]);
-$keywords = sanitizeString($_POST["keywords"]);
+$name =     $_POST["name"];
+$comment =  $_POST["comment"];
+$keywords = $_POST["keywords"];
 $categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]);
 $sequence = $_POST["sequence"];
 if (!is_numeric($sequence)) {

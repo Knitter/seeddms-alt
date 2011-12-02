@@ -49,8 +49,8 @@ if (!is_numeric($sequence)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_sequence"));
 }
 
-$name = sanitizeString($_POST["name"]);
-$comment = sanitizeString($_POST["comment"]);
+$name = $_POST["name"];
+$comment = $_POST["comment"];
 $subFolder = $folder->addSubFolder($name, $comment, $user, $sequence);
 
 if (is_object($subFolder)) {

@@ -74,7 +74,7 @@ if (!isset($_POST["approvalStatus"]) || !is_numeric($_POST["approvalStatus"]) ||
 
 if ($_POST["approvalType"] == "ind") {
 
-	$comment = sanitizeString($_POST["comment"]);
+	$comment = $_POST["comment"];
 	if(0 > $latestContent->setApprovalByInd($user, $user, $_POST["approvalStatus"], $comment)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("approval_update_failed"));
 	}
@@ -106,7 +106,7 @@ if ($_POST["approvalType"] == "ind") {
 	}
 }
 else if ($_POST["approvalType"] == "grp") {
-	$comment = sanitizeString($_POST["comment"]);
+	$comment = $_POST["comment"];
 	$group = $dms->getGroup($_POST['approvalGroup']);
 	if(0 > $latestContent->setApprovalByGrp($group, $user, $_POST["approvalStatus"], $comment)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("approval_update_failed"));

@@ -37,10 +37,10 @@ else $action=NULL;
 //Neuen Benutzer anlegen --------------------------------------------------------------------------
 if ($action == "adduser") {
 	
-	$login   = sanitizeString($_POST["login"]);
-	$name    = sanitizeString($_POST["name"]);
-	$email   = sanitizeString($_POST["email"]);
-	$comment = sanitizeString($_POST["comment"]);
+	$login   = $_POST["login"];
+	$name    = $_POST["name"];
+	$email   = $_POST["email"];
+	$comment = $_POST["comment"];
 	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 
@@ -145,11 +145,11 @@ else if ($action == "edituser") {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
 	}
 	
-	$login   = sanitizeString($_POST["login"]);
+	$login   = $_POST["login"]);
 	$pwd     = $_POST["pwd"];
-	$name    = sanitizeString($_POST["name"]);
-	$email   = sanitizeString($_POST["email"]);
-	$comment = sanitizeString($_POST["comment"]);
+	$name    = $_POST["name"];
+	$email   = $_POST["email"];
+	$comment = $_POST["comment"];
 	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
 	

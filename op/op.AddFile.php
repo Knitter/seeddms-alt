@@ -46,8 +46,8 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["si
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_failed"));
 }
 
-$name     = sanitizeString($_POST["name"]);
-$comment  = sanitizeString($_POST["comment"]);
+$name     = $_POST["name"];
+$comment  = $_POST["comment"];
 
 if($_FILES["userfile"]["error"]) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));

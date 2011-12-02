@@ -44,10 +44,10 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 }
 
-$comment  = sanitizeString($_POST["comment"]);
-$version_comment = sanitizeString($_POST["version_comment"]);
+$comment  = $_POST["comment"];
+$version_comment = $_POST["version_comment"];
 
-$keywords = sanitizeString($_POST["keywords"]);
+$keywords = $_POST["keywords"];
 $categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]);
 
 $reqversion = (int)$_POST["reqversion"];
@@ -150,7 +150,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	else $fileType = substr($userfilename, $lastDotIndex);
 
 	if ((count($_FILES["userfile"]["tmp_name"])==1)&&($_POST["name"]!=""))
-		$name = sanitizeString($_POST["name"]);
+		$name = $_POST["name"];
 	else $name = basename($userfilename);
 
 	$cats = array();

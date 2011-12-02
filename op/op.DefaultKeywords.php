@@ -32,8 +32,8 @@ $action = $_GET["action"];
 
 //Neue Kategorie anlegen -----------------------------------------------------------------------------
 if ($action == "addcategory") {
-	
-	$name = sanitizeString($_GET["name"]);
+
+	$name = $_GET["name"];
 	if (is_object($dms->getKeywordCategoryByName($name, $user->getID()))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("keyword_exists"));
 	}
@@ -83,7 +83,7 @@ else if ($action == "editcategory") {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	$name = sanitizeString($_GET["name"]);
+	$name = $_GET["name"];
 	if (!$category->setName($name)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
@@ -99,7 +99,7 @@ else if ($action == "newkeywords") {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	$keywords = sanitizeString($_GET["keywords"]);
+	$keywords = $_GET["keywords"];
 	
 	if (!$category->addKeywordList($keywords)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
@@ -129,7 +129,7 @@ else if ($action == "editkeywords")
 	}
 	$keywordsid = $_GET["keywordsid"];
 
-	$keywords = sanitizeString($_GET["keywords"]);
+	$keywords = $_GET["keywords"];
 	if (!$category->editKeywordList($keywordsid, $keywords)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}

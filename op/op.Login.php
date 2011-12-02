@@ -37,7 +37,7 @@ function _printMessage($heading, $message) {
 }
 
 if (isset($_REQUEST["login"])) {
-	$login = sanitizeString($_REQUEST["login"]);
+	$login = $_REQUEST["login"];
 	$login = str_replace("*", "", $login);
 }
 

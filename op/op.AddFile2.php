@@ -60,10 +60,10 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		$userfiletype = $_FILES[ $file_param_name ]["type"];
 		$userfilename = $_FILES[ $file_param_name ]["name"];
 
-		$name     = sanitizeString($_POST["name"]);
+		$name     = $_POST["name"];
 		if(!$name)
 			$name = $userfilename;
-		$comment  = sanitizeString($_POST["comment"]);
+		$comment  = $_POST["comment"];
 
 		$lastDotIndex = strrpos(basename($userfilename), ".");
 		if (is_bool($lastDotIndex) && !$lastDotIndex)

@@ -65,7 +65,7 @@ if ($overallStatus["status"] == S_REJECTED || $overallStatus["status"] == S_EXPI
 $reviewStatus = $content->getReviewStatus();
 $approvalStatus = $content->getApprovalStatus();
 $overrideStatus = $_POST["overrideStatus"];
-$comment = sanitizeString($_POST["comment"]);
+$comment = $_POST["comment"];
 
 if ($overrideStatus != $overallStatus["status"]) {
 

@@ -70,7 +70,7 @@ if (!isset($_POST["reviewStatus"]) || !is_numeric($_POST["reviewStatus"]) ||
 
 if ($_POST["reviewType"] == "ind") {
 
-	$comment = sanitizeString($_POST["comment"]);
+	$comment = $_POST["comment"];
 	if(0 > $latestContent->setReviewByInd($user, $user, $_POST["reviewStatus"], $comment)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("review_update_failed"));
 	}
