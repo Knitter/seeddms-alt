@@ -54,9 +54,12 @@ function sanitizeString($string) { /* {{{ */
 		$string = stripslashes($string);
 	}
 
-	$string = str_replace("\\", "\\\\", $string);
-	$string = str_replace("--", "\-\-", $string);
-	$string = str_replace(";", "\;", $string);
+	// The following three are against sql injection. They are not
+	// needed anymore because strings are quoted propperly when saved into
+	// the database.
+//	$string = str_replace("\\", "\\\\", $string);
+//	$string = str_replace("--", "\-\-", $string);
+//	$string = str_replace(";", "\;", $string);
 	// Use HTML entities to represent the other characters that have special
 	// meaning in SQL. These can be easily converted back to ASCII / UTF-8
 	// with a decode function if need be.
