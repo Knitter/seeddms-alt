@@ -127,7 +127,7 @@ class LetoDMS_Core_Folder {
 	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblFolders SET name = '" . $newName . "' WHERE id = ". $this->_id;
+		$queryStr = "UPDATE tblFolders SET name = " . $db->qstr($newName) . " WHERE id = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -141,7 +141,7 @@ class LetoDMS_Core_Folder {
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "UPDATE tblFolders SET comment = '" . $newComment . "' WHERE id = ". $this->_id;
+		$queryStr = "UPDATE tblFolders SET comment = " . $db->qstr($newComment) . " WHERE id = ". $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 
