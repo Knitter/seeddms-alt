@@ -261,11 +261,11 @@ function _add_log_line($msg="") { /* {{{ */
 		for ($i = 0; $i < count($path); $i++) {
 			if ($i +1 < count($path)) {
 				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\">".
-					$path[$i]->getName()."</a> / ";
+					htmlspecialchars($path[$i]->getName())."</a> / ";
 			}
 			else {
 				$txtpath .= ($tagAll ? "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\">".
-										 $path[$i]->getName()."</a>" : $path[$i]->getName());
+										 htmlspecialchars($path[$i]->getName())."</a>" : htmlspecialchars($path[$i]->getName()));
 			}
 		}
 		return $txtpath;
