@@ -127,7 +127,7 @@ class UI {
 			echo "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"../styles/print.css\" media=\"print\"/>\n";
 			echo "<link rel='shortcut icon' href='../styles/".$theme."/favicon.ico' type='image/x-icon'/>\n";
 			echo "<script type='text/javascript' src='../js/jquery.min.js'></script>\n";
-			echo "<title>".(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").(strlen($title)>0 ? ": " : "").$title."</title>\n";
+			echo "<title>".(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 			echo "</head>\n";
 			echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		}
@@ -206,7 +206,7 @@ class UI {
 			(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").
 			"</div>\n";
 		echo "<span class=\"absSpacerNorm\"></span>\n";
-		echo "<div id=\"signatory\">".getMLText("signed_in_as")." ".$user->getFullName().
+		echo "<div id=\"signatory\">".getMLText("signed_in_as")." ".htmlspecialchars($user->getFullName()).
 			" (<a href=\"../op/op.Logout.php\">".getMLText("sign_out")."</a>).</div>\n";
 		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
 			"</div>\n";
@@ -450,15 +450,18 @@ class UI {
 		return;
 	} /* }}} */
 
-	function contentHeading($heading) { /* {{{ */
+	function contentHeading($heading, $noescape=false) { /* {{{ */
 
-		echo "<div class=\"contentHeading\">".$heading."</div>\n";
+		if($noescape)
+			echo "<div class=\"contentHeading\">".$heading."</div>\n";
+		else
+			echo "<div class=\"contentHeading\">".htmlspecialchars($heading)."</div>\n";
 		return;
 	} /* }}} */
 
 	function contentSubHeading($heading, $first=false) { /* {{{ */
 
-		echo "<div class=\"contentSubHeading\"".($first ? " id=\"first\"" : "").">".$heading."</div>\n";
+		echo "<div class=\"contentSubHeading\"".($first ? " id=\"first\"" : "").">".htmlspecialchars($heading)."</div>\n";
 		return;
 	} /* }}} */
 
@@ -532,7 +535,7 @@ class UI {
 				continue;
 			}
 			$index = ($objArr[$i]->getSequence() + $objArr[$i+1]->getSequence()) / 2;
-			print "  <option value=\"".$index."\">" . getMLText("seq_after", array("prevname" => $objArr[$i]->getName() ) );
+			print "  <option value=\"".$index."\">" . getMLText("seq_after", array("prevname" => htmlspecialchars($objArr[$i]->getName())));
 		}
 		print "</select>";
 	} /* }}} */
@@ -563,7 +566,7 @@ class UI {
 		</script>
 		<?php
 		print "<input type=\"Hidden\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
-		print "<input disabled name=\"targetname".$formName."\" value=\"". (($default) ? $default->getName() : "") ."\">";
+		print "<input disabled name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\">";
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("folder")."...\" onclick=\"chooseFolder".$formName."();\">";
 	} /* }}} */
 
@@ -582,7 +585,7 @@ class UI {
 		if($categories) {
 			foreach($categories as $cat) {
 				$ids[] = $cat->getId();
-				$names[] = $cat->getName();
+				$names[] = htmlspecialchars($cat->getName());
 			}
 		}
 		print "<input type=\"hidden\" name=\"categoryid".$formName."\" value=\"".implode(',', $ids)."\">";
@@ -612,7 +615,7 @@ class UI {
 		UI::globalNavigation();
 
 		print "<div class=\"error\">";
-		print $error;
+		print htmlspecialchars($error);
 		print "</div>";
 		
 		UI::htmlEndPage();
@@ -685,18 +688,18 @@ class UI {
 			if ($folderID != $currentFolderID){
 			
 				if ($navigation) print "<a href=\"../out/out.ViewFolder.php?folderid=" . $folderID . "&showtree=1\">";
-				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . sanitizeString($folder->getName()) . "')\">";
+				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . htmlspecialchars($folder->getName(), ENT_QUOTES) . "')\">";
 
 			}else print "<span class=\"selectedfoldertree\">";
 			
-			if ($is_open) print "<img src=\"".UI::getImgPath("folder_opened.gif")."\" border=0 name=\"treeimg".$folderID."\">".$folder->getName();
-			else print "<img src=\"".UI::getImgPath("folder_closed.gif")."\" border=0 name=\"treeimg".$folderID."\">".$folder->getName();
+			if ($is_open) print "<img src=\"".UI::getImgPath("folder_opened.gif")."\" border=0 name=\"treeimg".$folderID."\">".htmlspecialchars($folder->getName());
+			else print "<img src=\"".UI::getImgPath("folder_closed.gif")."\" border=0 name=\"treeimg".$folderID."\">".htmlspecialchars($folder->getName());
 
 			if ($folderID != $currentFolderID) print "</a>\n";
 			else print "</span>";
 
 		}
-		else print "<img src=\"".UI::getImgPath("folder_closed.gif")."\" width=18 height=18 border=0>".$folder->getName()."\n";
+		else print "<img src=\"".UI::getImgPath("folder_closed.gif")."\" width=18 height=18 border=0>".htmlspecialchars($folder->getName())."\n";
 
 		if ($is_open) print "<ul style='list-style-type: none;' id=\"tree".$folderID."\" >\n";
 		else print "<ul style='list-style-type: none; display: none;' id=\"tree".$folderID."\" >\n";
@@ -742,7 +745,7 @@ class UI {
 
 			print "<td id='tree-open'>";
 
-			UI::contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><img src=\"".UI::getImgPath("m.png")."\" border=0></a>");
+			UI::contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><img src=\"".UI::getImgPath("m.png")."\" border=0></a>", true);
 			UI::contentContainerStart();
 			UI::printFoldersTree(M_READ, -1, $settings->_rootFolderID, $folderid, true);
 			UI::contentContainerEnd();
@@ -751,7 +754,7 @@ class UI {
 		
 			print "<td id='tree-closed'>";		
 		
-			UI::contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><img src=\"".UI::getImgPath("p.png")."\" border=0></a>");
+			UI::contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><img src=\"".UI::getImgPath("p.png")."\" border=0></a>", true);
 			UI::contentContainerStart();
 			UI::contentContainerEnd();
 		}
