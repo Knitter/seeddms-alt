@@ -441,7 +441,7 @@ class LetoDMS_Core_DMS {
 				foreach ($tkeys as $key) {
 					$key = trim($key);
 					if (strlen($key)>0) {
-						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE '%".$key."%'";
+						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
 					}
 				}
 			}
@@ -553,7 +553,7 @@ class LetoDMS_Core_DMS {
 			foreach ($tkeys as $key) {
 				$key = trim($key);
 				if (strlen($key)>0) {
-					$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE '%".$key."%'";
+					$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
 				}
 			}
 		}
