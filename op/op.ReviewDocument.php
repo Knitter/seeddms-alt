@@ -102,7 +102,7 @@ if ($_POST["reviewType"] == "ind") {
 	}
 }
 else if ($_POST["reviewType"] == "grp") {
-	$comment = sanitizeString($_POST["comment"]);
+	$comment = $_POST["comment"];
 	$group = $dms->getGroup($_POST['reviewGroup']);
 	if(0 > $latestContent->setReviewByGrp($group, $user, $_POST["reviewStatus"], $comment)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("review_update_failed"));
@@ -170,7 +170,7 @@ if ($_POST["reviewStatus"]==-1){
 
 }else{
 
-	$docReviewStatus = $content->getReviewStatus(true);
+	$docReviewStatus = $content->getReviewStatus();
 	if (is_bool($docReviewStatus) && !$docReviewStatus) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_review_snapshot"));
 	}
@@ -187,7 +187,7 @@ if ($_POST["reviewStatus"]==-1){
 	// If all reviews have been received and there are no rejections, retrieve a
 	// count of the approvals required for this document.
 	if ($reviewCT == $reviewTotal) {
-		$docApprovalStatus = $content->getApprovalStatus(true);
+		$docApprovalStatus = $content->getApprovalStatus();
 		if (is_bool($docApprovalStatus) && !$docApprovalStatus) {
 			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_approval_snapshot"));
 		}
