@@ -173,7 +173,7 @@ if ($_POST["approvalStatus"]==-1){
 	}
 }else{
 
-	$docApprovalStatus = $content->getApprovalStatus(true);
+	$docApprovalStatus = $content->getApprovalStatus();
 	if (is_bool($docApprovalStatus) && !$docApprovalStatus) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_retrieve_approval_snapshot"));
 	}
