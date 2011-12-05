@@ -126,7 +126,7 @@ if ($approvalStatus['type'] == 0) {
 		print "<td>";
 		printApprovalStatusText($approvalStatus["status"]);
 		print "</td>";
-		print "<td>".$approvalStatus["comment"]."</td>";
+		print "<td>".htmlspecialchars($approvalStatus["comment"])."</td>";
 		$indUser = $dms->getUser($approvalStatus["userID"]);
 		print "<td>".$approvalStatus["date"]." - ". $indUser->getFullname() ."</td>";
 		print "</tr></tbody></table><br>\n";

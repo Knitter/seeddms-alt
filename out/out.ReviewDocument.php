@@ -126,7 +126,7 @@ if ($reviewStatus['type'] == 0) {
 		print "<td>";
 		printReviewStatusText($reviewStatus["status"]);
 		print "</td>";
-		print "<td>".$reviewStatus["comment"]."</td>";
+		print "<td>".htmlspecialchars($reviewStatus["comment"])."</td>";
 		$indUser = $dms->getUser($reviewStatus["userID"]);
 		print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
 		print "</tr></tbody></table><br>";
@@ -164,7 +164,7 @@ else if ($reviewStatus['type'] == 1) {
 		print "<td>";
 		printReviewStatusText($reviewStatus["status"]);
 		print "</td>";
-		print "<td>".$reviewStatus["comment"]."</td>";
+		print "<td>".htmlspecialchars($reviewStatus["comment"])."</td>";
 		$indUser = $dms->getUser($reviewStatus["userID"]);
 		print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
 		print "</tr></tbody></table><br>\n";
