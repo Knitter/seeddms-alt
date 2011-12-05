@@ -129,7 +129,7 @@ function createFolderTar($folder,$ark) { /* {{{ */
 					TarAddHeader(
 						$ark,
 						$dms->contentDir.$latestContent->getPath(),
-						getFolderPathPlainAST($folder)."/".$document->getID()."_".mydmsDecodeString($latestContent->getOriginalFileName()));
+						getFolderPathPlainAST($folder)."/".$document->getID()."_".$latestContent->getOriginalFileName());
 
 					TarWriteContents($ark, $dms->contentDir.$latestContent->getPath());
 				}

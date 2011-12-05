@@ -127,8 +127,8 @@ if ($_GET["type"]=="document"){
 					getMLText("comment").": ".$folder->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-				$subject=mydmsDecodeString($subject);
-				$message=mydmsDecodeString($message);
+//				$subject=mydmsDecodeString($subject);
+//				$message=mydmsDecodeString($message);
 				
 				$notifier->toIndividual($user, $obj, $subject, $message);
 			}

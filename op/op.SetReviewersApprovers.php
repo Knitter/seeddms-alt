@@ -126,8 +126,8 @@ foreach ($pIndRev as $p) {
 								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
 								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-							$subject=mydmsDecodeString($subject);
-							$message=mydmsDecodeString($message);
+//							$subject=mydmsDecodeString($subject);
+//							$message=mydmsDecodeString($message);
 							
 							$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$p]], $subject, $message);
 						}
@@ -184,8 +184,8 @@ if (count($reviewIndex["i"]) > 0) {
 								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
 								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-							$subject=mydmsDecodeString($subject);
-							$message=mydmsDecodeString($message);
+//							$subject=mydmsDecodeString($subject);
+//							$message=mydmsDecodeString($message);
 							
 							$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$rx]], $subject, $message);
 						}
@@ -229,8 +229,8 @@ foreach ($pGrpRev as $p) {
 								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
 								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-							$subject=mydmsDecodeString($subject);
-							$message=mydmsDecodeString($message);
+//							$subject=mydmsDecodeString($subject);
+//							$message=mydmsDecodeString($message);
 							
 							$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$p]], $subject, $message);
 						}
@@ -285,8 +285,8 @@ if (count($reviewIndex["g"]) > 0) {
 								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
 								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-							$subject=mydmsDecodeString($subject);
-							$message=mydmsDecodeString($message);
+//							$subject=mydmsDecodeString($subject);
+//							$message=mydmsDecodeString($message);
 							
 							$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$rx]], $subject, $message);
 						}
@@ -335,8 +335,8 @@ foreach ($pIndApp as $p) {
 								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
 								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-							$subject=mydmsDecodeString($subject);
-							$message=mydmsDecodeString($message);
+//							$subject=mydmsDecodeString($subject);
+//							$message=mydmsDecodeString($message);
 							
 							$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$p]], $subject, $message);
 						}
@@ -390,8 +390,8 @@ if (count($approvalIndex["i"]) > 0) {
 								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
 								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-							$subject=mydmsDecodeString($subject);
-							$message=mydmsDecodeString($message);
+//							$subject=mydmsDecodeString($subject);
+//							$message=mydmsDecodeString($message);
 							
 							$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$rx]], $subject, $message);
 						}
@@ -435,8 +435,8 @@ foreach ($pGrpApp as $p) {
 								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
 								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-							$subject=mydmsDecodeString($subject);
-							$message=mydmsDecodeString($message);
+//							$subject=mydmsDecodeString($subject);
+//							$message=mydmsDecodeString($message);
 							
 							$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$p]], $subject, $message);
 						}
@@ -491,8 +491,8 @@ if (count($approvalIndex["g"]) > 0) {
 								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
 								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-							$subject=mydmsDecodeString($subject);
-							$message=mydmsDecodeString($message);
+//							$subject=mydmsDecodeString($subject);
+//							$message=mydmsDecodeString($message);
 							
 							$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$rx]], $subject, $message);
 						}

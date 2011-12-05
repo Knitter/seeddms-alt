@@ -68,8 +68,8 @@ if (($oldname = $document->getName()) != $name) {
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
@@ -101,8 +101,8 @@ if (($oldcomment = $document->getComment()) != $comment) {
 				getMLText("comment").": ".$comment."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {

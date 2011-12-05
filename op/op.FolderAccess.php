@@ -128,8 +128,8 @@ if ($action == "setowner") {
 				getMLText("comment").": ".$folder->_comment."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
@@ -156,8 +156,8 @@ else if ($action == "notinherit") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
@@ -176,8 +176,8 @@ else if ($action == "notinherit") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
@@ -212,8 +212,8 @@ else if ($action == "inherit") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
@@ -236,8 +236,8 @@ else if ($action == "setdefault") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {

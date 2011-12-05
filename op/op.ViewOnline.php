@@ -56,7 +56,7 @@ if (!is_object($content)) {
 if (isset($settings->_viewOnlineFileTypes) && is_array($settings->_viewOnlineFileTypes) && in_array(strtolower($content->getFileType()), $settings->_viewOnlineFileTypes)) {
 	header("Content-Type: " . $content->getMimeType());
 }
-header("Content-Disposition: filename=\"" . mydmsDecodeString( $document->getName().$content->getFileType()) . "\"");
+header("Content-Disposition: filename=\"" . $document->getName().$content->getFileType()) . "\"";
 header("Content-Length: " . filesize($dms->contentDir . $content->getPath()));
 header("Expires: 0");
 header("Cache-Control: no-cache, must-revalidate");

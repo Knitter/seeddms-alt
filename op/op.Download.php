@@ -62,7 +62,7 @@ if (isset($_GET["version"])) {
 	//header("Content-Type: application/force-download; name=\"" . mydmsDecodeString($content->getOriginalFileName()) . "\"");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
-	header("Content-Disposition: attachment; filename=\"" . mydmsDecodeString($content->getOriginalFileName()) . "\"");
+	header("Content-Disposition: attachment; filename=\"" . $content->getOriginalFileName() . "\"");
 	//header("Expires: 0");
 	header("Content-Type: " . $content->getMimeType());
 	//header("Cache-Control: no-cache, must-revalidate");
@@ -103,10 +103,10 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_file_id"));
 	}
 
-	header("Content-Type: application/force-download; name=\"" . mydmsDecodeString($file->getOriginalFileName()) . "\"");
+	header("Content-Type: application/force-download; name=\"" . $file->getOriginalFileName() . "\"");
 	header("Content-Transfer-Encoding: binary");
 	header("Content-Length: " . filesize($dms->contentDir . $file->getPath() ));
-	header("Content-Disposition: attachment; filename=\"" . mydmsDecodeString($file->getOriginalFileName()) . "\"");
+	header("Content-Disposition: attachment; filename=\"" . $file->getOriginalFileName() . "\"");
 	//header("Expires: 0");
 	header("Content-Type: " . $file->getMimeType());
 	//header("Cache-Control: no-cache, must-revalidate");

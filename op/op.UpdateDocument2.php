@@ -166,8 +166,8 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 					getMLText("comment").": ".$document->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
 
-				$subject=mydmsDecodeString($subject);
-				$message=mydmsDecodeString($message);
+//				$subject=mydmsDecodeString($subject);
+//				$message=mydmsDecodeString($message);
 
 				$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 				foreach ($document->_notifyList["groups"] as $grp) {
@@ -194,8 +194,8 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 						getMLText("comment").": ".$document->getComment()."\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
 
-					$subject=mydmsDecodeString($subject);
-					$message=mydmsDecodeString($message);
+//					$subject=mydmsDecodeString($subject);
+//					$message=mydmsDecodeString($message);
 
 					$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 					foreach ($document->_notifyList["groups"] as $grp) {

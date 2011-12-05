@@ -73,8 +73,8 @@ if (count($document->getContent())==1) {
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			// Send notification to subscribers.
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
@@ -122,8 +122,8 @@ else {
 				getMLText("comment").": ".$version->getComment()."\r\n".
 				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $recipients, $subject, $message);
 			

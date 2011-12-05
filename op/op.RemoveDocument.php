@@ -63,8 +63,8 @@ if (!$document->remove()) {
 			getMLText("comment").": ".$document->getComment()."\r\n".
 			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
 
-		$subject=mydmsDecodeString($subject);
-		$message=mydmsDecodeString($message);
+//		$subject=mydmsDecodeString($subject);
+//		$message=mydmsDecodeString($message);
 		
 		// Send notification to subscribers.
 		$notifier->toList($user, $nl["users"], $subject, $message);

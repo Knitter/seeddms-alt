@@ -65,8 +65,8 @@ if(($oldname = $folder->getName()) != $name) {
 				getMLText("comment").": ".$comment."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
@@ -90,8 +90,8 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 				getMLText("comment").": ".$comment."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {

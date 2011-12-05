@@ -87,8 +87,8 @@ if ($_POST["reviewType"] == "ind") {
 				getMLText("comment").": ".$comment."\r\n".
 				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
 
@@ -120,8 +120,8 @@ else if ($_POST["reviewType"] == "grp") {
 				getMLText("comment").": ".$comment."\r\n".
 				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
 
@@ -156,8 +156,8 @@ if ($_POST["reviewStatus"]==-1){
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 			
 			$notifier->toList($user, $nl["users"], $subject, $message);
 			foreach ($nl["groups"] as $grp) {
@@ -224,8 +224,8 @@ if ($_POST["reviewStatus"]==-1){
 					getMLText("comment").": ".$document->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-				$subject=mydmsDecodeString($subject);
-				$message=mydmsDecodeString($message);
+//				$subject=mydmsDecodeString($subject);
+//				$message=mydmsDecodeString($message);
 				
 				$notifier->toList($user, $nl["users"], $subject, $message);
 				foreach ($nl["groups"] as $grp) {
@@ -248,8 +248,8 @@ if ($_POST["reviewStatus"]==-1){
 						getMLText("comment").": ".$content->getComment()."\r\n".
 						"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."&version=".$version."\r\n";
 
-					$subject=mydmsDecodeString($subject);
-					$message=mydmsDecodeString($message);
+//					$subject=mydmsDecodeString($subject);
+//					$message=mydmsDecodeString($message);
 					
 					foreach ($docApprovalStatus as $dastat) {
 					

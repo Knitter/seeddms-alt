@@ -106,8 +106,8 @@ if ($action == "delnotify") {
 					getMLText("comment").": ".$folder->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-				$subject=mydmsDecodeString($subject);
-				$message=mydmsDecodeString($message);
+//				$subject=mydmsDecodeString($subject);
+//				$message=mydmsDecodeString($message);
 				
 				if ($userid > 0) {
 					$notifier->toIndividual($user, $obj, $subject, $message);
@@ -157,8 +157,8 @@ else if ($action == "addnotify") {
 						getMLText("comment").": ".$folder->getComment()."\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-					$subject=mydmsDecodeString($subject);
-					$message=mydmsDecodeString($message);
+//					$subject=mydmsDecodeString($subject);
+//					$message=mydmsDecodeString($message);
 					
 					$notifier->toIndividual($user, $obj, $subject, $message);
 				}
@@ -200,8 +200,8 @@ else if ($action == "addnotify") {
 						getMLText("comment").": ".$folder->getComment()."\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
 
-					$subject=mydmsDecodeString($subject);
-					$message=mydmsDecodeString($message);
+//					$subject=mydmsDecodeString($subject);
+//					$message=mydmsDecodeString($message);
 					
 					$notifier->toGroup($user, $obj, $subject, $message);
 				}

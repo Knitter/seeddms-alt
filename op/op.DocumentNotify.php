@@ -111,8 +111,8 @@ if ($action == "delnotify"){
 					getMLText("comment").": ".$document->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
 
-				$subject=mydmsDecodeString($subject);
-				$message=mydmsDecodeString($message);
+//				$subject=mydmsDecodeString($subject);
+//				$message=mydmsDecodeString($message);
 		
 				if ($isUser) {
 					$notifier->toIndividual($user, $obj, $subject, $message);
@@ -163,8 +163,8 @@ else if ($action == "addnotify") {
 						getMLText("comment").": ".$document->getComment()."\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
 
-					$subject=mydmsDecodeString($subject);
-					$message=mydmsDecodeString($message);
+//					$subject=mydmsDecodeString($subject);
+//					$message=mydmsDecodeString($message);
 					
 					$notifier->toIndividual($user, $obj, $subject, $message);
 				}
@@ -206,8 +206,8 @@ else if ($action == "addnotify") {
 						getMLText("comment").": ".$document->getComment()."\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
 
-					$subject=mydmsDecodeString($subject);
-					$message=mydmsDecodeString($message);
+//					$subject=mydmsDecodeString($subject);
+//					$message=mydmsDecodeString($message);
 					
 					$notifier->toGroup($user, $obj, $subject, $message);
 				}

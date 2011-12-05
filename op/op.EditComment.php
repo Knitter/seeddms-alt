@@ -67,8 +67,8 @@ if (($oldcomment = $version->getComment()) != $comment) {
 				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->_version."\r\n";
 
-			$subject=mydmsDecodeString($subject);
-			$message=mydmsDecodeString($message);
+//			$subject=mydmsDecodeString($subject);
+//			$message=mydmsDecodeString($message);
 
 			if(isset($document->_notifyList["users"])) {
 				$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
