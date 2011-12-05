@@ -65,7 +65,8 @@ var targetName;
 var targetID;
 
 function folderSelected(id, name) {
-	targetName.value = decodeString(name);
+//	targetName.value = decodeString(name);
+	targetName.value = name;
 	targetID.value = id;
 	window.close();
 	return true;
