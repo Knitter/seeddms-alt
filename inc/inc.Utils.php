@@ -110,7 +110,7 @@ function createVersionigFile($document) { /* {{{ */
 	
 	if (is_bool($handle)&&!$handle) return false;
 	
-	$tmp = mydmsDecodeString($document->getName())." (ID ".$document->getID().")\n\n";
+	$tmp = $document->getName()." (ID ".$document->getID()."\n\n";
 	fwrite($handle, $tmp);
 
 	$owner = $document->getOwner();
@@ -130,7 +130,7 @@ function createVersionigFile($document) { /* {{{ */
 	$tmp = getMLText("file")." = ".$latestContent->getOriginalFileName()." (".$latestContent->getMimeType().")\n";
 	fwrite($handle, $tmp);
 	
-	$tmp = getMLText("comment")." = ". mydmsDecodeString($latestContent->getComment())."\n";
+	$tmp = getMLText("comment")." = ". $latestContent->getComment()."\n";
 	fwrite($handle, $tmp);
 	
 	$status = $latestContent->getStatus();
@@ -162,7 +162,7 @@ function createVersionigFile($document) { /* {{{ */
 		$tmp = getMLText("status")." = ".getReviewStatusText($r["status"])."\n";
 		fwrite($handle, $tmp);
 		
-		$tmp = getMLText("comment")." = ". mydmsDecodeString($r["comment"])."\n";
+		$tmp = getMLText("comment")." = ". $r["comment"]."\n";
 		fwrite($handle, $tmp);
 		
 		$tmp = getMLText("last_update")." = ".$r["date"]."\n";
@@ -196,7 +196,7 @@ function createVersionigFile($document) { /* {{{ */
 		$tmp = getMLText("status")." = ".getApprovalStatusText($r["status"])."\n";
 		fwrite($handle, $tmp);
 		
-		$tmp = getMLText("comment")." = ". mydmsDecodeString($r["comment"])."\n";
+		$tmp = getMLText("comment")." = ". $r["comment"]."\n";
 		fwrite($handle, $tmp);
 		
 		$tmp = getMLText("last_update")." = ".$r["date"]."\n";
@@ -219,7 +219,7 @@ function createVersionigFile($document) { /* {{{ */
 		$tmp = getMLText("file")." = ".$version->getOriginalFileName()." (".$version->getMimeType().")\n";
 		fwrite($handle, $tmp);
 		
-		$tmp = getMLText("comment")." = ". mydmsDecodeString($version->getComment())."\n";
+		$tmp = getMLText("comment")." = ". $version->getComment()."\n";
 		fwrite($handle, $tmp);
 		
 		$status = $latestContent->getStatus();
