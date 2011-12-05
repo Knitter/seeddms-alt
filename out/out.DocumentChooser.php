@@ -87,7 +87,7 @@ function printTree($path, $level = 0)
 	for ($i = 0; $i < count($documents); $i++) {
 		print "<li>\n";
 		print "<img class='treeicon' src=\"images/blank.png\">";
-		print "<a  class=\"foldertree_selectable\" href=\"javascript:documentSelected(".$documents[$i]->getID().",'".htmlspecialchars($documents[$i]->getName(), ENT_QUOTES)."');\"><img src=\"images/file.gif\" border=0>".htmlspecialchars($documents[$i]->getName())."</a>";
+		print "<a  class=\"foldertree_selectable\" href=\"javascript:documentSelected(".$documents[$i]->getID().",'".str_replace("'", "\\'", $documents[$i]->getName())."');\"><img src=\"images/file.gif\" border=0>".htmlspecialchars($documents[$i]->getName())."</a>";
 		print "</li>";
 	}
 
