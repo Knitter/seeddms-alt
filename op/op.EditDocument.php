@@ -147,6 +147,11 @@ if($categories) {
 			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 		}
 	}
+} else {
+	if($document->setCategories(array())) {
+	} else {
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+	}
 }
 
 if($sequence != "keep") {
