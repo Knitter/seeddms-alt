@@ -256,7 +256,7 @@ UI::contentContainerStart();
 		</tr>
 		<tr>
 			<td><?php printMLText("email");?>:</td>
-			<td><input name="email" value="<?php print $currUser->getEmail();?>"></td>
+			<td><input name="email" value="<?php print htmlspecialchars($currUser->getEmail()) ;?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
