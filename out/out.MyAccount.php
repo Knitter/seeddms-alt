@@ -54,7 +54,7 @@ print "<td>".getMLText("email")." : </td>\n";
 print "<td>".htmlspecialchars($user->getEmail())."</td>\n";
 print "</tr>\n<tr>\n";
 print "<td>".getMLText("comment")." : </td>\n";
-print "<td>".$user->getComment()."</td>\n";
+print "<td>".htmlspecialchars($user->getComment())."</td>\n";
 print"</tr>\n</table>\n";
 
 UI::contentContainerEnd();
