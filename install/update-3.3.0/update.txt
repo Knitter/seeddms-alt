@@ -9,7 +9,7 @@ Folder search
 -------------
 The new folder search has introduced a new database field which has to
 be initially filled. Without that field searching for subfolders in a
-folder will not work.
+folder will not work. See below.
 
 Data conversion
 ---------------
@@ -48,4 +48,8 @@ document directories into it. If you have already a document with id 1, you
 must choose a different name for your new sub directory and rename to 1 after
 all document directories have been moved.
 
-
+After finishing update
+----------------------
+Once you are done with the update, log in as administrator and make an
+object check in the admin tools. This will fill the new database field
+needed for the folder search.

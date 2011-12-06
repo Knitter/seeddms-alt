@@ -18,19 +18,8 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-include("../inc/inc.Version.php");
-include("../inc/inc.Settings.php");
-include("../inc/inc.DBInit.php");
-include("../inc/inc.Language.php");
-include("../inc/inc.ClassUI.php");
-include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
-	print "<b>ERROR: You must be administrator to execute the update</b>";
-	die;
-}
-
-function check($doupdate=0) {
+function check($doupdate=0) { /* {{{ */
 	global $db, $settings;
 
 	$arr = array();
@@ -90,12 +79,7 @@ function check($doupdate=0) {
 	echo "<b>Summary of all updates</b><br />\n";
 	echo "<pre>".implode("<br />", $allupdates)."</pre>";
 	return true;
-}
-
-UI::htmlStartPage('Database update');
-UI::globalNavigation();
-UI::pageNavigation('Database update');
-UI::contentContainerStart();
+} /* }}} */
 
 if(isset($_GET['doupdate']) && $_GET['doupdate'] == 1)
 	$doupdate = 1;
@@ -103,14 +87,11 @@ else
 	$doupdate = 0;
 
 if (!check($doupdate)) {
-	die;
+	print "<p>Update failed</p>";
 }
 
 if(!$doupdate) {
 	print "<p>If the above update statements look ok, either execute them in your prefered mysql client or click on the link below.</p>";
 	print "<a href=\"?doupdate=1\">Execute update</a><br />\n";
 }
-
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

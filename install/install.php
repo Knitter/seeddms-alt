@@ -88,6 +88,7 @@ function printCheckError($resCheck) { /* {{{ */
  * Load default settings + set
  */
 define("LETODMS_INSTALL", "on");
+define("LETODMS_VERSION", "3.3.0");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -142,7 +143,7 @@ include("../inc/inc.ClassUI.php");
 
 
 UI::htmlStartPage("INSTALL");
-UI::contentHeading("letoDMS Installation...");
+UI::contentHeading("letoDMS Installation for version ".LETODMS_VERSION);
 UI::contentContainerStart();
 
 
@@ -158,9 +159,9 @@ if (isset($_GET['phpinfo'])) {
 }
 
 /**
- * Show phpinfo
+ * check if ENABLE_INSTALL_TOOL shall be removed
  */
-if (isset($_GET['disableinstall'])) {
+if (isset($_GET['disableinstall'])) { /* {{{ */
 	if(file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
 		if(unlink($configDir."/ENABLE_INSTALL_TOOL")) {
 			echo getMLText("settings_install_disabled");
@@ -179,12 +180,12 @@ if (isset($_GET['disableinstall'])) {
 	UI::contentContainerEnd();
 	UI::htmlEndPage();
   exit();
-}
+} /* }}} */
 
 /**
  * Check System
  */
-if (printCheckError( $settings->checkSystem())) {
+if (printCheckError( $settings->checkSystem())) { /* {{{ */
 	if (function_exists("apache_get_version")) {
   	echo "<br/>Apache version: " . apache_get_version();
 	}
@@ -200,7 +201,7 @@ if (printCheckError( $settings->checkSystem())) {
 	echo '<a href="' . $httpRoot . 'install/install.php?phpinfo">' . getMLText("version_info") . '</a>';
 
 	exit;
-}
+} /* }}} */
 
 
 if (isset($_POST["action"])) $action=$_POST["action"];
@@ -230,7 +231,7 @@ if ($action=="setSettings") {
 	/**
 	 * Check Parameters, require version 3.3.x
 	 */
-	$hasError = printCheckError( $settings->check('33'));
+	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', LETODMS_VERSION), 0,2)));
 
 	if (!$hasError)
 	{
@@ -240,7 +241,7 @@ if ($action=="setSettings") {
 			$createOK = false;
 			$errorMsg = "";
 
-			include $settings->_ADOdbPath."adodb/adodb.inc.php";
+			require_once($settings->_ADOdbPath."adodb/adodb.inc.php");
     	$connTmp = ADONewConnection($settings->_dbDriver);
 	    if ($connTmp) {
 	    	$connTmp->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
@@ -286,18 +287,60 @@ if ($action=="setSettings") {
 
 		if (!$hasError) {
 
+			// Save settings
+			$settings->save();
+
+			$needsupdate = false;
+			require_once($settings->_ADOdbPath."adodb/adodb.inc.php");
+    	$connTmp = ADONewConnection($settings->_dbDriver);
+	    if ($connTmp) {
+	    	$connTmp->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+      	if ($connTmp->IsConnected()) {
+					$res = $connTmp->Execute('select * from tblVersion');
+					if($rec = $res->FetchRow()) {
+						$updatedirs = array();
+						$d = dir(".");
+						while (false !== ($entry = $d->read())) {
+							if(preg_match('/update-([0-9.]*)/', $entry, $matches)) {
+								$updatedirs[] = $matches[1];
+							}
+						}
+						$d->close();
+
+						echo "Your current database schema has version ".$rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']."<br /><br />";
+
+						if($updatedirs) {
+							foreach($updatedirs as $updatedir) {
+								if($updatedir >= $rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']) {
+									$needsupdate = true;
+									print "<h3>Database update to version ".$updatedir." needed</h3>";
+									if(file_exists('update-'.$updatedir.'/update.txt')) {
+										print "<p>Please read the comments on updating this version. <a href=\"update-".$updatedir."/update.txt\">Read now</a></p>";
+									}
+									if(file_exists('update-'.$updatedir.'/update.php')) {
+										print "<p>Afterwards run the <a href=\"update.php?version=".$updatedir."\">update script</a>.</p>";
+									}
+								}
+							}
+						} else {
+							print "<p>Your current database is up to date.</p>";
+						}
+					}
+				}
+			}
 			// Show Web page
-			echo getMLText("settings_install_success");
-			echo "<br/><br/>";
-			echo getMLText("settings_delete_install_folder");
-			echo "<br/><br/>";
-			echo '<a href="install.php?disableinstall=1">' . getMLText("settings_disable_install") . '</a>';
-			echo "<br/><br/>";
-			echo '<a href="' . $httpRoot . '/out/out.Settings.php">' . getMLText("settings_more_settings") .'</a>';
+			if(!$needsupdate) {
+				echo getMLText("settings_install_success");
+				echo "<br/><br/>";
+				echo getMLText("settings_delete_install_folder");
+				echo "<br/><br/>";
+				echo '<a href="install.php?disableinstall=1">' . getMLText("settings_disable_install") . '</a>';
+				echo "<br/><br/>";
+
+				echo '<a href="' . $httpRoot . '/out/out.Settings.php">' . getMLText("settings_more_settings") .'</a>';
+			}
 		}
 	}
-	// Save settings
-	$settings->save();
 
 	// Back link
 	echo '<br/>';
