@@ -215,7 +215,8 @@ if (isset($_GET["expired"])){
 $categories = array();
 if(isset($_GET['categoryids']) && $_GET['categoryids']) {
 	foreach($_GET['categoryids'] as $catid) {
-		$categories[] = $dms->getDocumentCategory($catid);
+		if($catid > 0)
+			$categories[] = $dms->getDocumentCategory($catid);
 	}
 }
 
