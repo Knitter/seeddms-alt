@@ -40,6 +40,7 @@ function check($doupdate=0) {
 	$arr['tblUsers'] = array('key'=>'id', 'fields'=>array('fullName', 'comment'));
 	$arr['tblGroups'] = array('key'=>'id', 'fields'=>array('name', 'comment'));
 	$arr['tblKeywords'] = array('key'=>'id', 'fields'=>array('keywords'));
+	$arr['tblKeywordCategories'] = array('key'=>'id', 'fields'=>array('name'));
 	$arr['tblCategory'] = array('key'=>'id', 'fields'=>array('name'));
 	$arr['tblEvents'] = array('key'=>'id', 'fields'=>array('name', 'comment'));
 	$arr['tblDocumentApproveLog'] = array('key'=>'approveLogId', 'fields'=>array('comment'));
