@@ -145,7 +145,7 @@ else if ($action == "edituser") {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
 	}
 	
-	$login   = $_POST["login"]);
+	$login   = $_POST["login"];
 	$pwd     = $_POST["pwd"];
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
