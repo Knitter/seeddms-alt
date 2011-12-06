@@ -579,6 +579,10 @@ class UI {
 			var current = document.<?= $formName ?>.categoryid<?= $formName ?>;
 			openDlg = open("out.CategoryChooser.php?form=<?php echo $formName?>&cats="+current.value, "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
 		}
+		function clearCategory<?php print $formName ?>() {
+			document.<?= $formName ?>.categoryid<?= $formName ?>.value = '';
+			document.<?= $formName ?>.categoryname<?= $formName ?>.value = '';
+		}
 		</script>
 <?php
 		$ids = $names = array();
@@ -590,6 +594,7 @@ class UI {
 		}
 		print "<input type=\"hidden\" name=\"categoryid".$formName."\" value=\"".implode(',', $ids)."\">";
 		print "<input disabled name=\"categoryname".$formName."\" value=\"".implode(' ', $names)."\">";
+		print "&nbsp;&nbsp;<a href=\"javascript:clearCategory".$formName."();\"><img src=\"images/del.gif\" width=\"15\" height=\"15\" border=\"0\" align=\"absmiddle\" alt=\"\"></a>";
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("category")."...\" onclick=\"chooseCategory".$formName."();\">";
 	} /* }}} */
 
