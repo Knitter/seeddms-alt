@@ -410,9 +410,14 @@ class LetoDMS_Core_DMS {
 	 * @param status array list of status
 	 * @param creationstartdate array search for documents created after this date
 	 * @param creationenddate array search for documents created before this date
+	 * @param categories array list of categories the documents must have assigned
+	 * @param mode int decide whether to search for documents/folders
+	 *        0x1 = documents only
+	 *        0x2 = folders only
+	 *        0x3 = both
 	 * @return array containing the elements total and docs
 	 */
-	function search($query, $limit=0, $offset=0, $mode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $categories=array()) { /* {{{ */
+	function search($query, $limit=0, $offset=0, $mode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $categories=array(), $mode=0x3) { /* {{{ */
 		// Split the search string into constituent keywords.
 		$tkeys=array();
 		if (strlen($query)>0) {
@@ -424,7 +429,7 @@ class LetoDMS_Core_DMS {
 			$searchin=array( 0, 1, 2, 3);
 
 		/*--------- Do it all over again for folders -------------*/
-		if(0 /* $searchfolders */) {
+		if($mode & 0x2) {
 			$searchKey = "";
 			// Assemble the arguments for the concatenation function. This allows the
 			// search to be carried across all the relevant fields.
@@ -534,119 +539,161 @@ class LetoDMS_Core_DMS {
 
 		/*--------- Do it all over again for documents -------------*/
 
-		$searchKey = "";
-		// Assemble the arguments for the concatenation function. This allows the
-		// search to be carried across all the relevant fields.
-		$concatFunction = "";
-		if (in_array(1, $searchin)) {
-			$concatFunction = "`tblDocuments`.`keywords`";
-		}
-		if (in_array(2, $searchin)) {
-			$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblDocuments`.`name`";
-		}
-		if (in_array(3, $searchin)) {
-			$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblDocuments`.`comment`";
-		}
+		if($mode & 0x1) {
+			$searchKey = "";
+			// Assemble the arguments for the concatenation function. This allows the
+			// search to be carried across all the relevant fields.
+			$concatFunction = "";
+			if (in_array(1, $searchin)) {
+				$concatFunction = "`tblDocuments`.`keywords`";
+			}
+			if (in_array(2, $searchin)) {
+				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblDocuments`.`name`";
+			}
+			if (in_array(3, $searchin)) {
+				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblDocuments`.`comment`";
+			}
 
-		if (strlen($concatFunction)>0 && count($tkeys)>0) {
-			$concatFunction = "CONCAT_WS(' ', ".$concatFunction.")";
-			foreach ($tkeys as $key) {
-				$key = trim($key);
-				if (strlen($key)>0) {
-					$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
+			if (strlen($concatFunction)>0 && count($tkeys)>0) {
+				$concatFunction = "CONCAT_WS(' ', ".$concatFunction.")";
+				foreach ($tkeys as $key) {
+					$key = trim($key);
+					if (strlen($key)>0) {
+						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
+					}
 				}
 			}
-		}
 
-		// Check to see if the search has been restricted to a particular sub-tree in
-		// the folder hierarchy.
-		$searchFolder = "";
-		if ($startFolder) {
-			$searchFolder = "`tblDocuments`.`folderList` LIKE '%:".$startFolder->getID().":%'";
-		}
-
-		// Check to see if the search has been restricted to a particular
-		// document owner.
-		$searchOwner = "";
-		if ($owner) {
-			$searchOwner = "`tblDocuments`.`owner` = '".$owner->getId()."'";
-		}
-
-		// Check to see if the search has been restricted to a particular
-		// document category.
-		$searchCategories = "";
-		if ($categories) {
-			$catids = array();
-			foreach($categories as $category)
-				$catids[] = $category->getId();
-			$searchCategories = "`tblDocumentCategory`.`categoryID` in (".implode(',', $catids).")";
-		}
-
-		// Is the search restricted to documents created between two specific dates?
-		$searchCreateDate = "";
-		if ($creationstartdate) {
-			$startdate = makeTimeStamp(0, 0, 0, $creationstartdate['year'], $creationstartdate["month"], $creationstartdate["day"]);
-			if ($startdate) {
-				$searchCreateDate .= "`tblDocuments`.`date` >= ".$startdate;
+			// Check to see if the search has been restricted to a particular sub-tree in
+			// the folder hierarchy.
+			$searchFolder = "";
+			if ($startFolder) {
+				$searchFolder = "`tblDocuments`.`folderList` LIKE '%:".$startFolder->getID().":%'";
 			}
-		}
-		if ($creationenddate) {
-			$stopdate = makeTimeStamp(23, 59, 59, $creationenddate["year"], $creationenddate["month"], $creationenddate["day"]);
-			if ($stopdate) {
-				if($startdate)
-					$searchCreateDate .= " AND ";
-				$searchCreateDate .= "`tblDocuments`.`date` <= ".$stopdate;
+
+			// Check to see if the search has been restricted to a particular
+			// document owner.
+			$searchOwner = "";
+			if ($owner) {
+				$searchOwner = "`tblDocuments`.`owner` = '".$owner->getId()."'";
 			}
+
+			// Check to see if the search has been restricted to a particular
+			// document category.
+			$searchCategories = "";
+			if ($categories) {
+				$catids = array();
+				foreach($categories as $category)
+					$catids[] = $category->getId();
+				$searchCategories = "`tblDocumentCategory`.`categoryID` in (".implode(',', $catids).")";
+			}
+
+			// Is the search restricted to documents created between two specific dates?
+			$searchCreateDate = "";
+			if ($creationstartdate) {
+				$startdate = makeTimeStamp(0, 0, 0, $creationstartdate['year'], $creationstartdate["month"], $creationstartdate["day"]);
+				if ($startdate) {
+					$searchCreateDate .= "`tblDocuments`.`date` >= ".$startdate;
+				}
+			}
+			if ($creationenddate) {
+				$stopdate = makeTimeStamp(23, 59, 59, $creationenddate["year"], $creationenddate["month"], $creationenddate["day"]);
+				if ($stopdate) {
+					if($startdate)
+						$searchCreateDate .= " AND ";
+					$searchCreateDate .= "`tblDocuments`.`date` <= ".$stopdate;
+				}
+			}
+
+			// ---------------------- Suche starten ----------------------------------
+
+			//
+			// Construct the SQL query that will be used to search the database.
+			//
+
+			if (!$this->db->createTemporaryTable("ttcontentid") || !$this->db->createTemporaryTable("ttstatid")) {
+				return false;
+			}
+
+			$searchQuery = "FROM `tblDocumentContent` ".
+				"LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentContent`.`document` ".
+				"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID` = `tblDocumentContent`.`document` ".
+				"LEFT JOIN `tblDocumentStatusLog` ON `tblDocumentStatusLog`.`statusID` = `tblDocumentStatus`.`statusID` ".
+				"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
+				"LEFT JOIN `ttcontentid` ON `ttcontentid`.`maxVersion` = `tblDocumentStatus`.`version` AND `ttcontentid`.`document` = `tblDocumentStatus`.`documentID` ".
+				"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
+				"LEFT JOIN `tblDocumentCategory` ON `tblDocuments`.`id`=`tblDocumentCategory`.`documentID` ".
+				"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
+				"AND `ttcontentid`.`maxVersion` = `tblDocumentContent`.`version`";
+
+			if (strlen($searchKey)>0) {
+				$searchQuery .= " AND (".$searchKey.")";
+			}
+			if (strlen($searchFolder)>0) {
+				$searchQuery .= " AND ".$searchFolder;
+			}
+			if (strlen($searchOwner)>0) {
+				$searchQuery .= " AND (".$searchOwner.")";
+			}
+			if (strlen($searchCategories)>0) {
+				$searchQuery .= " AND (".$searchCategories.")";
+			}
+			if (strlen($searchCreateDate)>0) {
+				$searchQuery .= " AND (".$searchCreateDate.")";
+			}
+
+			// status
+			if ($status) {
+				$searchQuery .= " AND `tblDocumentStatusLog`.`status` IN (".implode(',', $status).")";
+			}
+
+			// Count the number of rows that the search will produce.
+			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
+			$totalDocs = 0;
+			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
+				$totalDocs = (integer)$resArr[0]["num"];
+			}
+
+			// If there are no results from the count query, then there is no real need
+			// to run the full query. TODO: re-structure code to by-pass additional
+			// queries when no initial results are found.
+
+			// Prepare the complete search query, including the LIMIT clause.
+			$searchQuery = "SELECT `tblDocuments`.*, ".
+				"`tblDocumentContent`.`version`, ".
+				"`tblDocumentStatusLog`.`status`, `tblDocumentLocks`.`userID` as `lockUser` ".$searchQuery;
+
+			// calculate the remaining entrїes of the current page
+			// If page is not full yet, get remaining entries
+			$remain = $limit - count($folderresult['folders']);
+			if($remain) {
+				if($remain == $limit)
+					$offset -= $totalFolders;
+				else
+					$offset = 0;
+				if($limit)
+					$searchQuery .= " LIMIT ".$offset.",".$remain;
+
+				// Send the complete search query to the database.
+				$resArr = $this->db->getResultArray($searchQuery);
+			} else {
+				$resArr = array();
+			}
+
+			// ------------------- Ausgabe der Ergebnisse ----------------------------
+			$numResults = count($resArr);
+			if ($numResults == 0) {
+				$docresult = array('totalDocs'=>$totalDocs, 'docs'=>array());
+			} else {
+				foreach ($resArr as $docArr) {
+					$docs[] = $this->getDocument($docArr['id']);
+				}
+				$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
+			}
+		} else {
+			$docresult = array('totalDocs'=>0, 'docs'=>array());
 		}
 
-		// ---------------------- Suche starten ----------------------------------
-
-		//
-		// Construct the SQL query that will be used to search the database.
-		//
-
-		if (!$this->db->createTemporaryTable("ttcontentid") || !$this->db->createTemporaryTable("ttstatid")) {
-			return false;
-		}
-
-		$searchQuery = "FROM `tblDocumentContent` ".
-			"LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentContent`.`document` ".
-			"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID` = `tblDocumentContent`.`document` ".
-			"LEFT JOIN `tblDocumentStatusLog` ON `tblDocumentStatusLog`.`statusID` = `tblDocumentStatus`.`statusID` ".
-			"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
-			"LEFT JOIN `ttcontentid` ON `ttcontentid`.`maxVersion` = `tblDocumentStatus`.`version` AND `ttcontentid`.`document` = `tblDocumentStatus`.`documentID` ".
-			"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
-			"LEFT JOIN `tblDocumentCategory` ON `tblDocuments`.`id`=`tblDocumentCategory`.`documentID` ".
-			"WHERE `ttstatid`.`maxLogID`=`tblDocumentStatusLog`.`statusLogID` ".
-			"AND `ttcontentid`.`maxVersion` = `tblDocumentContent`.`version`";
-
-		if (strlen($searchKey)>0) {
-			$searchQuery .= " AND (".$searchKey.")";
-		}
-		if (strlen($searchFolder)>0) {
-			$searchQuery .= " AND ".$searchFolder;
-		}
-		if (strlen($searchOwner)>0) {
-			$searchQuery .= " AND (".$searchOwner.")";
-		}
-		if (strlen($searchCategories)>0) {
-			$searchQuery .= " AND (".$searchCategories.")";
-		}
-		if (strlen($searchCreateDate)>0) {
-			$searchQuery .= " AND (".$searchCreateDate.")";
-		}
-
-		// status
-		if ($status) {
-			$searchQuery .= " AND `tblDocumentStatusLog`.`status` IN (".implode(',', $status).")";
-		}
-
-		// Count the number of rows that the search will produce.
-		$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
-		$totalDocs = 0;
-		if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
-			$totalDocs = (integer)$resArr[0]["num"];
-		}
 		if($limit) {
 			$totalPages = (integer)(($totalDocs+$totalFolders)/$limit);
 			if ((($totalDocs+$totalFolders)%$limit) > 0) {
@@ -654,43 +701,6 @@ class LetoDMS_Core_DMS {
 			}
 		} else {
 			$totalPages = 1;
-		}
-
-		// If there are no results from the count query, then there is no real need
-		// to run the full query. TODO: re-structure code to by-pass additional
-		// queries when no initial results are found.
-
-		// Prepare the complete search query, including the LIMIT clause.
-		$searchQuery = "SELECT `tblDocuments`.*, ".
-			"`tblDocumentContent`.`version`, ".
-			"`tblDocumentStatusLog`.`status`, `tblDocumentLocks`.`userID` as `lockUser` ".$searchQuery;
-
-		// calculate the remaining entrїes of the current page
-		// If page is not full yet, get remaining entries
-		$remain = $limit - count($folderresult['folders']);
-		if($remain) {
-			if($remain == $limit)
-				$offset -= $totalFolders;
-			else
-				$offset = 0;
-			if($limit)
-				$searchQuery .= " LIMIT ".$offset.",".$remain;
-
-			// Send the complete search query to the database.
-			$resArr = $this->db->getResultArray($searchQuery);
-		} else {
-			$resArr = array();
-		}
-
-		// ------------------- Ausgabe der Ergebnisse ----------------------------
-		$numResults = count($resArr);
-		if ($numResults == 0) {
-			$docresult = array('totalDocs'=>$totalDocs, 'docs'=>array());
-		} else {
-			foreach ($resArr as $docArr) {
-				$docs[] = $this->getDocument($docArr['id']);
-			}
-			$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
 		}
 
 		return array_merge($docresult, $folderresult, array('totalPages'=>$totalPages));
