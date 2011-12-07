@@ -2,7 +2,7 @@ Release information for 3.3.0
 -------------------------------------
 
 This release contains various improvements which require your manual
-interaction during an upgrade from an earlier version. You ѕhould definitely
+interaction during an upgrade from an earlier version. You should definitely
 make a backup of your database and possibly your content folder.
 
 Folder search
@@ -14,13 +14,13 @@ folder will not work. See below.
 Data conversion
 ---------------
 The conversion of strings like names and comments of documents and folders,
-when saved in the database, has been completely droped. This was originally
-done for security reasons, both to prevent sql injections and cross side
-scripting. Basically any field data that could do any harm, was replaced
-by 'harmless' chars. Ampersands, semi colons, quotes, etc., they all have
-been replaced by their html entity or masked by a backslash. The output of
-those fields on html pages was not decoded anymore, but any other application
-that accessed the database had to decode the data.
+when saved in the database, has been completely droped. The conversion was
+originally done for security reasons, both to prevent sql injections and cross
+side scripting. Basically any field data that could do any harm, was replaced
+by 'harmless' chars. Ampersands, semi colons, quotes, etc., they all have been
+replaced by their html entity or masked by a backslash. The output of those
+fields on html pages was not decoded anymore, but any other application that
+accessed the database had to decode the data.
 
 The new approach with less impact on the data keeps the data 
 unmodified when saving it in the database without opening new security

@@ -215,74 +215,72 @@ if ($action=="setSettings") {
 	 * Get Parameters
 	 */
 	$settings->_rootDir = $_POST["rootDir"];
-  $settings->_httpRoot = $_POST["httpRoot"];
-  $settings->_contentDir = $_POST["contentDir"];
-  $settings->_luceneDir = $_POST["luceneDir"];
-  $settings->_stagingDir = $_POST["stagingDir"];
+	$settings->_httpRoot = $_POST["httpRoot"];
+	$settings->_contentDir = $_POST["contentDir"];
+	$settings->_luceneDir = $_POST["luceneDir"];
+	$settings->_stagingDir = $_POST["stagingDir"];
 	$settings->_ADOdbPath = $_POST["ADOdbPath"];
 	$settings->_dbDriver = $_POST["dbDriver"];
 	$settings->_dbHostname = $_POST["dbHostname"];
 	$settings->_dbDatabase = $_POST["dbDatabase"];
 	$settings->_dbUser = $_POST["dbUser"];
 	$settings->_dbPass = $_POST["dbPass"];
-  $settings->_coreDir = $_POST["coreDir"];
-  $settings->_luceneClassDir = $_POST["luceneClassDir"];
+	$settings->_coreDir = $_POST["coreDir"];
+	$settings->_luceneClassDir = $_POST["luceneClassDir"];
 
 	/**
 	 * Check Parameters, require version 3.3.x
 	 */
-	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', LETODMS_VERSION), 0,2)));
+//	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', LETODMS_VERSION), 0,2)));
 
-	if (!$hasError)
-	{
+	if (!$hasError) {
 		// Create database
-		if (isset($_POST["createDatabase"]))
-		{
+		if (isset($_POST["createDatabase"])) {
 			$createOK = false;
 			$errorMsg = "";
 
 			require_once($settings->_ADOdbPath."adodb/adodb.inc.php");
-    	$connTmp = ADONewConnection($settings->_dbDriver);
-	    if ($connTmp) {
-	    	$connTmp->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-      	if ($connTmp->IsConnected()) {
-      		// read SQL file
-      		if ($settings->_dbDriver=="mysql")
-      			$queries = file_get_contents("create_tables-innodb.sql");
-      		else
-      		  $queries = file_get_contents("create_tables.sql");
+			$connTmp = ADONewConnection($settings->_dbDriver);
+			if ($connTmp) {
+			 	$connTmp->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+				if ($connTmp->IsConnected()) {
+					// read SQL file
+					if ($settings->_dbDriver=="mysql")
+						$queries = file_get_contents("create_tables-innodb.sql");
+					else
+					  $queries = file_get_contents("create_tables.sql");
 
-      		// generate SQL query
-      		$queries = explode(";", $queries);
+					// generate SQL query
+					$queries = explode(";", $queries);
 
-      		// execute queries
-      		foreach($queries as $query) {
-      		//	 var_dump($query);
-      			$query = trim($query);
-      			if (!empty($query)) {
-		      		$connTmp->Execute($query);
+					// execute queries
+					foreach($queries as $query) {
+					// var_dump($query);
+						$query = trim($query);
+						if (!empty($query)) {
+							$connTmp->Execute($query);
 
-		      		if ($connTmp->ErrorNo()<>0) {
-		      			$errorMsg .= $connTmp->ErrorMsg() . "<br/>";
-		      		}
-      			}
-      		}
+							if ($connTmp->ErrorNo()<>0) {
+								$errorMsg .= $connTmp->ErrorMsg() . "<br/>";
+							}
+					}
+				}
 
-      		// error ?
-      		if (empty($errorMsg))
-      		  $createOK = true;
+				// error ?
+				if (empty($errorMsg))
+					$createOK = true;
 
-      	} else {
-      		$errorMsg = $connTmp->ErrorMsg();
-      	}
-      	$connTmp->Disconnect();
-	    }
+				} else {
+					$errorMsg = $connTmp->ErrorMsg();
+				}
+				$connTmp->Disconnect();
+			}
 
-	    // Show error
-	    if (!$createOK) {
-	    	echo $errorMsg;
-	    	$hasError = true;
-	    }
+			// Show error
+			if (!$createOK) {
+				echo $errorMsg;
+				$hasError = true;
+			}
 		} // create database
 
 		if (!$hasError) {
@@ -292,10 +290,10 @@ if ($action=="setSettings") {
 
 			$needsupdate = false;
 			require_once($settings->_ADOdbPath."adodb/adodb.inc.php");
-    	$connTmp = ADONewConnection($settings->_dbDriver);
-	    if ($connTmp) {
-	    	$connTmp->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-      	if ($connTmp->IsConnected()) {
+			$connTmp = ADONewConnection($settings->_dbDriver);
+			if ($connTmp) {
+				$connTmp->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+				if ($connTmp->IsConnected()) {
 					$res = $connTmp->Execute('select * from tblVersion');
 					if($rec = $res->FetchRow()) {
 						$updatedirs = array();
@@ -311,7 +309,7 @@ if ($action=="setSettings") {
 
 						if($updatedirs) {
 							foreach($updatedirs as $updatedir) {
-								if($updatedir >= $rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']) {
+								if($updatedir > $rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']) {
 									$needsupdate = true;
 									print "<h3>Database update to version ".$updatedir." needed</h3>";
 									if(file_exists('update-'.$updatedir.'/update.txt')) {

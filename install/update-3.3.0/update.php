@@ -45,7 +45,8 @@ function check($doupdate=0) { /* {{{ */
 			$queryStr = "SELECT ".$schema['key'].", `".implode('`,`', $schema['fields'])."` FROM ".$tblname;
 		elseif(isset($schema['keys']))
 			$queryStr = "SELECT ".implode(',', $schema['keys']).", `".implode('`,`', $schema['fields'])."` FROM ".$tblname;
-		$recs = $db->getResultArray($queryStr);
+		$res = $db->Execute($queryStr);
+		$recs = $res->GetArray();
 		foreach($recs as $rec) {
 			foreach($schema['fields'] as $field) {
 				if($rec[$field] !== mydmsDecodeString($rec[$field])) {
@@ -62,7 +63,7 @@ function check($doupdate=0) { /* {{{ */
 					$allupdates[] = $updateSql;
 					echo "<tr><td>".$tblname."</td><td>".$field."</td><td>".htmlspecialchars($rec[$field])."</td><td>".htmlspecialchars(mydmsDecodeString($rec[$field]))."</td><td><pre>".htmlspecialchars($updateSql)."</pre></td></tr>\n";
 					if($doupdate) {
-						$res = $db->getResult($updateSql);
+						$res = $db->Execute($updateSql);
 						if(!$res) {
 							$errormsg = 'Could not execute update statement';
 							echo "<tr><td colspan=\"5\"><span style=\"color: red;\">".$errormsg."</span></td></tr>\n";
@@ -76,8 +77,10 @@ function check($doupdate=0) { /* {{{ */
 		}
 	}
 	echo "</table>\n";
-	echo "<b>Summary of all updates</b><br />\n";
-	echo "<pre>".implode("<br />", $allupdates)."</pre>";
+	if($allupdates) {
+		echo "<b>Summary of all updates</b><br />\n";
+		echo "<pre>".implode("<br />", $allupdates)."</pre>";
+	}
 	return true;
 } /* }}} */
 
@@ -86,6 +89,7 @@ if(isset($_GET['doupdate']) && $_GET['doupdate'] == 1)
 else
 	$doupdate = 0;
 
+$doupdate = 1;
 if (!check($doupdate)) {
 	print "<p>Update failed</p>";
 }

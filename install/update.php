@@ -49,31 +49,42 @@ if ($db) {
 	}
 }
 
-$queries = file_get_contents('update-'.$_GET['version'].'/update.sql');
-$queries = explode(";", $queries);
-
-// execute queries
 $errorMsg = '';
-if($queries) {
-	echo "<h3>Running sql statements</h3>";
-	foreach($queries as $query) {
-		$query = trim($query);
-		if (!empty($query)) {
-			echo $query."<br />";
-			$db->Execute($query);
+$res = $db->Execute('select * from tblVersion');
+if($rec = $res->FetchRow()) {
+	if($_GET['version'] > $rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']) {
 
-			if ($db->ErrorNo()<>0) {
-				$errorMsg .= $db->ErrorMsg() . "<br/>";
+		$queries = file_get_contents('update-'.$_GET['version'].'/update.sql');
+		$queries = explode(";", $queries);
+
+		// execute queries
+		if($queries) {
+			echo "<h3>Updating database schema</h3>";
+			foreach($queries as $query) {
+				$query = trim($query);
+				if (!empty($query)) {
+					echo $query."<br />";
+					$db->Execute($query);
+
+					if ($db->ErrorNo()<>0) {
+						$errorMsg .= $db->ErrorMsg() . "<br/>";
+					}
+				}
 			}
 		}
+	} else {
+		echo "<p>Database schema already up to date.</p>";
 	}
-}
 
-if(!$errorMsg) {
-	echo "<h3>Running update script</h3>";
-	include('update-'.$_GET['version'].'/update.php');
+
+	if(!$errorMsg) {
+		echo "<h3>Running update script</h3>";
+		include('update-'.$_GET['version'].'/update.php');
+	} else {
+		echo $errorMsg;
+	}
 } else {
-	echo $errorMsg;
+	echo "<p>Could not determine database schema version.</p>";
 }
 
 UI::contentContainerEnd();
