@@ -1,7 +1,10 @@
 <?php
 
 require_once "HTTP/WebDAV/Server.php";
-require_once "LetoDMS/Core.php";
+if(!empty($settings->_coreDir))
+	require_once($settings->_coreDir.'/Core.php');
+else
+	require_once('LetoDMS/Core.php');
 
 /**
  * LetoDMS access using WebDAV
@@ -428,7 +431,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			printf($format, 
 				   number_format($filesize),
 				   strftime("%Y-%m-%d %H:%M:%S", $mtime), 
-				   "<a href='".$_SERVER['SCRIPT_NAME'].$fullpath."'>$name</a>");
+				   "<a href=\"".$_SERVER['SCRIPT_NAME'].htmlspecialchars($fullpath)."\">".htmlspecialchars($name, ENT_QUOTES)."</a>");
 		}
 
 		echo "</pre>";
