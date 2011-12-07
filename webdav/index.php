@@ -2,8 +2,8 @@
 #ini_set('include_path', '.:/etc/letodms-webdav:/usr/share/php');
 
 include("Log.php");
-include("letodms_webdav.php");
 include("../inc/inc.Settings.php");
+include("letodms_webdav.php");
 
 $db = new LetoDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
