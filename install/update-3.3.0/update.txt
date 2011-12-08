@@ -41,28 +41,33 @@ of subdirectories in a directory of the filesystem. The currently most used
 filesystem on Linux (ext3) supports only 31998 directories. In order to
 overcome this limitation another level of directories has been put inbetween
 the content directory and the document directory numbered from 1 to
-maxDirID.  This allows a theorethical maximum of sq(maxDirID) documents. The
-path to the document folder consists of the new path id and the document id
-(<pathid>/<docid>). The path id is derived from the document id by the
+maxDirID.  This allows a theorethical maximum of square(maxDirID) documents.
+The path to the document folder consists of the new path id and the document
+id (<pathid>/<docid>). The path id is derived from the document id by the
 formula
 
   floor(docid/maxDirID) + 1
 
 Hence, all documents with an id from 1 to maxDirID have the path '1/<docid>'.
 The limiting factor of this schema is the number of document ids. It cannot
-be higher than sq(maxDirID).
+be higher than square(maxDirID).
 
-If you intend to switch to the new content directory format, you will have
-to set maxDirID to a value > 0 (possibly 31998) and create a new directory
-with name '1' below the content dir and move all document directories into
-it.  If you have already a document with id 1, you must choose a different
-name for your new sub directory and rename to 1 after all document
-directories have been moved. If you want to keep the current content
-directory structure set maxDirID to 0. Make sure the maxDirID remains
-unchanged for a content directory.
+If you intend to switch to the new multi level content directory format, you
+will have to set maxDirID to a value > 0 (possibly 31998) and create one or
+more new directories starting with name '1' below the content dir and move
+all document directories into it.  How many new directories are needed
+depends on the maximum document id already used. If the maximum document id
+is <= maxDirID, then you will only need one directory named '1'. If the
+maximum document id is <= 2*maxDirID you will need another directory named
+'2'.  If you have already a document with id 1 (or 2, 3, 4, ...), you must
+choose a different name for your new sub directory and rename to 1 (or 2, 3,
+4, ...) after all document directories have been moved.
+
+If you want to keep the current content directory structure set maxDirID to
+0. Make sure the maxDirID remains unchanged for a content directory.
 
 After finishing update
 ----------------------
 Once you are done with the update, log in as administrator and make an
 object check in the admin tools. This will fill the new database field
-needed for the folder search.
+needed for the folder search and fill it with the appropriate value.
