@@ -37,6 +37,7 @@ if(!$dms->checkVersion()) {
 }
 
 $dms->setRootFolderID($settings->_rootFolderID);
+$dms->setMaxDirID($settings->_maxDirID);
 $dms->setEnableAdminRevApp($settings->_enableAdminRevApp);
 $dms->setEnableConverting($settings->_enableConverting);
 $dms->setViewOnlineFileTypes($settings->_viewOnlineFileTypes);
