@@ -1,6 +1,10 @@
 --------------------------------------------------------------------------------
                      Changes in version 3.3.0
 --------------------------------------------------------------------------------
+- smoother installation process with less manual interaction
+- support multi level content directory to overcome the limitations of recent
+  filesystems
+- better approval/review workflow
 - searching for folders (run the new consistency check function!)
 - initial consistency check of database with repair function 
 - group managers are allowed to remove and delete users from their group
