@@ -30,8 +30,8 @@ is placed on a html page.
 As a consequence the complete database has to be searched for those
 previously converted strings and converted back into the original value. 
 
-For both of the above improvements a php script is provided which has to be
-called after the database update.
+The conversion is done right after the database update during the
+installation and upgrade process.
 
 Content directory
 -----------------
@@ -40,13 +40,26 @@ Consequently, there is a limitation of documents set by the maximum number
 of subdirectories in a directory of the filesystem. The currently most used
 filesystem on Linux (ext3) supports only 31998 directories. In order to
 overcome this limitation another level of directories has been put inbetween
-the content directory and the document directory numbered from 1 to maxDirId.
+the content directory and the document directory numbered from 1 to
+maxDirID.  This allows a theorethical maximum of sq(maxDirID) documents. The
+path to the document folder consists of the new path id and the document id
+(<pathid>/<docid>). The path id is derived from the document id by the
+formula
+
+  floor(docid/maxDirID) + 1
+
+Hence, all documents with an id from 1 to maxDirID have the path '1/<docid>'.
+The limiting factor of this schema is the number of document ids. It cannot
+be higher than sq(maxDirID).
 
 If you intend to switch to the new content directory format, you will have
-to create a new directory with name '1' below the content dir and move all
-document directories into it. If you have already a document with id 1, you
-must choose a different name for your new sub directory and rename to 1 after
-all document directories have been moved.
+to set maxDirID to a value > 0 (possibly 31998) and create a new directory
+with name '1' below the content dir and move all document directories into
+it.  If you have already a document with id 1, you must choose a different
+name for your new sub directory and rename to 1 after all document
+directories have been moved. If you want to keep the current content
+directory structure set maxDirID to 0. Make sure the maxDirID remains
+unchanged for a content directory.
 
 After finishing update
 ----------------------
