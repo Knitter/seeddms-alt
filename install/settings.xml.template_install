@@ -190,14 +190,14 @@
        -                   directory ($_contentDir). This requires a base directory from which 
        -                   to begin. Usually leave this to the default setting, 1048576, but can 
        -                   be any number or string that does not already exist within $_contentDir.	
-       - maxDirID: Maximum number of sub-directories per parent directory. Default: 32700.
+       - maxDirID: Maximum number of sub-directories per parent directory. Default: 31998 (maximum number of dirs in ext3).
        - updateNotifyTime: users are notified about document-changes that took place within the last "updateNotifyTime" seconds
     -->
     <server
       coreDir = ""
       luceneClassDir = ""
       contentOffsetDir = "1048576"
-      maxDirID = "32700"
+      maxDirID = "31998"
       updateNotifyTime = "86400"
     >
     </server>
