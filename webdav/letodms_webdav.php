@@ -136,7 +136,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 	 */
 	function reverseLookup($path) /* {{{ */
 	{
-		$path = urldecode($path);
+		$path = rawurldecode($path);
 		if($this->logger)
 			$this->logger->log('reverseLookup: path='.$path.'', PEAR_LOG_DEBUG);
 
@@ -275,12 +275,14 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			array_shift($patharr);
 			$path = '';
 			foreach($patharr as $pathseg)
-				$path .= '/'.rawurlencode($pathseg->getName());
+//				$path .= '/'.rawurlencode($pathseg->getName());
+				$path .= '/'.$pathseg->getName();
 			if(!$path) {
 				$path = '/';
 				$info["props"][] = $this->mkprop("isroot", "true");
 			}
-			$info["path"] = htmlspecialchars($path);
+//			$info["path"] = htmlspecialchars($path);
+			$info["path"] = $path;
 			$info["props"][] = $this->mkprop("displayname", $obj->getName());
 			$info["props"][] = $this->mkprop("resourcetype", "collection");
 			$info["props"][] = $this->mkprop("getcontenttype", "httpd/unix-directory");
@@ -294,8 +296,10 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			array_shift($patharr);
 			$path = '/';
 			foreach($patharr as $pathseg)
-				$path .= rawurlencode($pathseg->getName()).'/';
-			$info["path"] = htmlspecialchars($path.rawurlencode($obj->getName()));
+//				$path .= rawurlencode($pathseg->getName()).'/';
+				$path .= $pathseg->getName().'/';
+//			$info["path"] = htmlspecialchars($path.rawurlencode($obj->getName()));
+			$info["path"] = $path.$obj->getName();
 			$info["props"][] = $this->mkprop("displayname", $obj->getName());
 
 			$info["props"][] = $this->mkprop("resourcetype", "");
