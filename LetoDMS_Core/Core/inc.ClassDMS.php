@@ -178,6 +178,7 @@ class LetoDMS_Core_DMS {
 		else
 			$this->contentDir = $contentDir.'/';
 		$this->rootFolderID = 1;
+		$this->maxDirID = 0; //31998;
 		$this->enableAdminRevApp = false;
 		$this->enableConverting = false;
 		$this->convertFileTypes = array();
@@ -244,6 +245,26 @@ class LetoDMS_Core_DMS {
 	 */
 	function setRootFolderID($id) { /* {{{ */
 		$this->rootFolderID = $id;
+	} /* }}} */
+
+	/**
+	 * Set maximum number of subdirectories per directory
+	 *
+	 * The value of maxDirID is quite crucial because, all documents are
+	 * associated with a directory in the filesystem. Consequently, there is
+	 * maximum number of documents, because depending on the file system
+	 * the maximum number of subdirectories is limited. Since version 3.3.0 of
+	 * letodms an additional directory level has been introduced. All documents
+	 * from 1 to maxDirID-1 will be saved in 1/<docid>, documents from maxDirID
+	 * to 2*maxDirID-1 are stored in 2/<docid> and so on.
+	 *
+	 * This function must be called right after creating an instance of
+	 * LetoDMS_Core_DMS
+	 *
+	 * @param interger $id id of root folder
+	 */
+	function setMaxDirID($id) { /* {{{ */
+		$this->maxDirID = $id;
 	} /* }}} */
 
 	/**
