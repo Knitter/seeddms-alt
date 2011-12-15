@@ -394,7 +394,9 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		$format = "%15s  %-19s  %-s\n";
 
 		$subfolders = $folder->getSubFolders();
+		$subfolders = LetoDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
 		$documents = $folder->getDocuments();
+		$documents = LetoDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
 		$objs = array_merge($subfolders, $documents);
 
 		echo "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><title>Index of ".htmlspecialchars($options['path'])."</title></head>\n";
@@ -496,13 +498,19 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 				else $fileType = substr($name, $lastDotIndex);
 		}
 		if($document = $this->dms->getDocumentByName($name, $folder)) {
-			if(!$document->addContent('', $this->user, $tmpFile, $name, $fileType, $mimetype, array(), array(), 0)) {
+			if ($document->getAccessMode($this->user) < M_READWRITE) {
+				unlink($tmpFile);
+				return "403 Forbidden";
+			} elseif(!$document->addContent('', $this->user, $tmpFile, $name, $fileType, $mimetype, array(), array(), 0)) {
 				unlink($tmpFile);
 				return "409 Conflict";
 			}
 
 		} else {
-			if(!$res = $folder->addDocument($name, '', 0, $this->user, '', array(), $tmpFile, $name, $fileType, $mimetype, 0, array(), array(), 0, "")) {
+			if ($folder->getAccessMode($this->user) < M_READWRITE) {
+				unlink($tmpFile);
+				return "403 Forbidden";
+			} elseif(!$res = $folder->addDocument($name, '', 0, $this->user, '', array(), $tmpFile, $name, $fileType, $mimetype, 0, array(), array(), 0, "")) {
 				unlink($tmpFile);
 				return "409 Conflict";
 			}
@@ -553,6 +561,10 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 
 		/* Check if user is logged in */
 		if(!$this->user) {
+			return "403 Forbidden";				 
+		}
+
+		if ($folder->getAccessMode($this->user) < M_READWRITE) {
 			return "403 Forbidden";				 
 		}
 
@@ -810,6 +822,10 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			$obj = $this->reverseLookup($options["path"].'/');
 			if(!$obj)
 				return false;
+		}
+
+		if ($obj->getAccessMode($this->user) < M_READWRITE) {
+			return false;				 
 		}
 
 		foreach ($options["props"] as $key => $prop) {
