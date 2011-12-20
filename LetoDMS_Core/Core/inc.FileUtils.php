@@ -110,7 +110,7 @@ class LetoDMS_Core_File {
 				continue;
 			else if (is_dir($path . $entry))
 			{
-				if (!removeDir($path . $entry . "/"))
+				if (!self::removeDir($path . $entry . "/"))
 					return false;
 			}
 			else
@@ -130,7 +130,7 @@ class LetoDMS_Core_File {
 				if ($entry == ".." || $entry == ".")
 					continue;
 				else if (is_dir($sourcePath . $entry)) {
-					if (!copyDir($sourcePath . $entry . "/", $targetPath . $entry . "/"))
+					if (!self::copyDir($sourcePath . $entry . "/", $targetPath . $entry . "/"))
 						return false;
 				} else {
 					if (!@copy($sourcePath . $entry, $targetPath . $entry))
