@@ -1,3 +1,7 @@
+Export/Import content as xml (even for subfolders)
+
+Copy recursivly folders
+
 Allow operations like  delete, move, approve, etc. on a list of documents
 
 Do not allow any operation on a document if is locked.
