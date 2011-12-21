@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 3.3.0
 --------------------------------------------------------------------------------
+- all data is saved into database without prior modification
 - smoother installation process with less manual interaction
 - support multi level content directory to overcome the limitations of recent
   filesystems
@@ -10,6 +11,11 @@
 - group managers are allowed to remove and delete users from their group
 - withdraw rights from a group if the group access is set to none
 - added password forgotten function
+
+--------------------------------------------------------------------------------
+                     Changes in version 3.2.2
+--------------------------------------------------------------------------------
+- fixed unallowed access on documents and folders
 
 --------------------------------------------------------------------------------
                      Changes in version 3.2.1
