@@ -53,8 +53,8 @@ if ($action == "adduser") {
 
 		if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 		{
-			$userfiletype = sanitizeString($_FILES["userfile"]["type"]);
-			$userfilename = sanitizeString($_FILES["userfile"]["name"]);
+			$userfiletype = $_FILES["userfile"]["type"];
+			$userfilename = $_FILES["userfile"]["name"];
 			$lastDotIndex = strrpos(basename($userfilename), ".");
 			$fileType = substr($userfilename, $lastDotIndex);
 			if ($fileType != ".jpg" && $filetype != ".jpeg")
@@ -170,8 +170,8 @@ else if ($action == "edituser") {
 
 	if (isset($_FILES['userfile']) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 	{
-		$userfiletype = sanitizeString($_FILES["userfile"]["type"]);
-		$userfilename = sanitizeString($_FILES["userfile"]["name"]);
+		$userfiletype = $_FILES["userfile"]["type"];
+		$userfilename = $_FILES["userfile"]["name"];
 		$lastDotIndex = strrpos(basename($userfilename), ".");
 		$fileType = substr($userfilename, $lastDotIndex);
 		if ($fileType != ".jpg" && $filetype != ".jpeg") {

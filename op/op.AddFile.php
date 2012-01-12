@@ -54,8 +54,8 @@ if($_FILES["userfile"]["error"]) {
 }
 
 $userfiletmp = $_FILES["userfile"]["tmp_name"];
-$userfiletype = sanitizeString($_FILES["userfile"]["type"]);
-$userfilename = sanitizeString($_FILES["userfile"]["name"]);
+$userfiletype = $_FILES["userfile"]["type"];
+$userfilename = $_FILES["userfile"]["name"];
 
 $lastDotIndex = strrpos(basename($userfilename), ".");
 if (is_bool($lastDotIndex) && !$lastDotIndex)
