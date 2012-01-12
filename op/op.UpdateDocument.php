@@ -53,8 +53,8 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["si
 
 	$comment  = $_POST["comment"];
 	$userfiletmp = $_FILES["userfile"]["tmp_name"];
-	$userfiletype = sanitizeString($_FILES["userfile"]["type"]);
-	$userfilename = sanitizeString($_FILES["userfile"]["name"]);
+	$userfiletype = $_FILES["userfile"]["type"];
+	$userfilename = $_FILES["userfile"]["name"];
 
 	$lastDotIndex = strrpos(basename($userfilename), ".");
 	if (is_bool($lastDotIndex) && !$lastDotIndex)
