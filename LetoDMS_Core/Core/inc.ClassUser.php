@@ -492,7 +492,7 @@ class LetoDMS_Core_User {
 
 			$queryStr = "SELECT COUNT(*) AS num FROM tblUserImages WHERE userID = " . $this->_id;
 			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && $resArr == false)
+			if ($resArr === false)
 				return false;
 
 			if ($resArr[0]["num"] == 0)	$this->_hasImage = false;
@@ -512,10 +512,11 @@ class LetoDMS_Core_User {
 
 		$queryStr = "SELECT * FROM tblUserImages WHERE userID = " . $this->_id;
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
+		if ($resArr === false)
 			return false;
 
-		$resArr = $resArr[0];
+		if($resArr)
+			$resArr = $resArr[0];
 		return $resArr;
 	} /* }}} */
 
