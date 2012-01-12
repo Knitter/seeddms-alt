@@ -142,8 +142,8 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	}
 
 	$userfiletmp = $_FILES["userfile"]["tmp_name"][$file_num];
-	$userfiletype = sanitizeString($_FILES["userfile"]["type"][$file_num]);
-	$userfilename = sanitizeString($_FILES["userfile"]["name"][$file_num]);
+	$userfiletype = $_FILES["userfile"]["type"][$file_num];
+	$userfilename = $_FILES["userfile"]["name"][$file_num];
 	
 	$lastDotIndex = strrpos(basename($userfilename), ".");
 	if (is_bool($lastDotIndex) && !$lastDotIndex) $fileType = ".";
