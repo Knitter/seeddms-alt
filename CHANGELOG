@@ -1,11 +1,13 @@
 --------------------------------------------------------------------------------
                      Changes in version 3.3.0
 --------------------------------------------------------------------------------
-- all data is saved into database without prior modification
+- all data is saved into the database without prior modification
 - smoother installation process with less manual interaction
 - support multi level content directory to overcome the limitations of recent
   filesystems
 - better approval/review workflow
+- do not allow any operation on a document if is locked (unless you are the
+  owner)
 - searching for folders (run the new consistency check function!)
 - initial consistency check of database with repair function 
 - group managers are allowed to remove and delete users from their group
