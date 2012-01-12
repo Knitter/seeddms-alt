@@ -583,6 +583,21 @@ class LetoDMS_Core_Folder {
 		return true;
 	} /* }}} */
 
+	/**
+	 * Returns a list of access privileges
+	 *
+	 * If the document inherits the access privileges from the parent folder
+	 * those will be returned.
+	 * $mode and $op can be set to restrict the list of returned access
+	 * privileges. If $mode is set to M_ANY no restriction will apply
+	 * regardless of the value of $op. The returned array contains a list
+	 * of {@link LetoDMS_Core_UserAccess} and
+	 * {@link LetoDMS_Core_GroupAccess} objects.
+	 * 
+	 * @param integer $mode access mode (defaults to M_ANY)
+	 * @param integer $op operation (defaults to O_EQ)
+	 * @return array multi dimensional array
+	 */
 	function getAccessList($mode = M_ANY, $op = O_EQ) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -618,6 +633,11 @@ class LetoDMS_Core_Folder {
 		return $this->_accessList[$mode];
 	} /* }}} */
 
+	/**
+	 * Delete all entries for this folder from the access control list
+	 *
+	 * @return boolean true if operation was successful otherwise false
+	 */
 	function clearAccessList() { /* {{{ */
 		$db = $this->_dms->getDB();
 
