@@ -137,10 +137,10 @@ print "<tr>\n";
 print "<td><ul class=\"actions\">";
 
 if ($file_exists){
-	print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".$latestContent->getMimeType()."\">".getMLText("download")."</a></li>";
+	print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">".getMLText("download")."</a></li>";
 	if ($settings->_viewOnlineFileTypes && in_array(strtolower($latestContent->getFileType()), $settings->_viewOnlineFileTypes))
 		print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=". $latestContent->getVersion()."\"><img src=\"images/view.gif\" class=\"mimeicon\">" . getMLText("view_online") . "</a></li>";
-}else print "<li><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".$latestContent->getMimeType()."\"></li>";
+}else print "<li><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></li>";
 
 print "</ul></td>\n";
 print "<td>".$latestContent->getVersion()."</td>\n";
@@ -149,7 +149,7 @@ print "<td><ul class=\"documentDetail\">\n";
 print "<li>".$latestContent->getOriginalFileName() ."</li>\n";
 
 if ($file_exists)
-	print "<li>". formatted_size(filesize($dms->contentDir . $latestContent->getPath())) ." ".$latestContent->getMimeType()."</li>";
+	print "<li>". formatted_size(filesize($dms->contentDir . $latestContent->getPath())) ." ".htmlspecialchars($latestContent->getMimeType())."</li>";
 else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
 $updatingUser = $latestContent->getUser();
@@ -345,16 +345,16 @@ if (count($versions)>1) {
 		print "<tr>\n";
 		print "<td><ul class=\"actions\">";
 		if ($file_exists){
-			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$version->getVersion()."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\">".getMLText("download")."</a>";
+			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&version=".$version->getVersion()."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">".getMLText("download")."</a>";
 			if ($settings->_viewOnlineFileTypes && in_array(strtolower($latestContent->getFileType()), $settings->_viewOnlineFileTypes))
 				print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=".$version->getVersion()."\"><img src=\"images/view.gif\" class=\"mimeicon\">" . getMLText("view_online") . "</a>";
-		}else print "<li><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\">";
+		}else print "<li><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
 		
 		print "</ul></td>\n";
 		print "<td>".$version->getVersion()."</td>\n";
 		print "<td><ul class=\"documentDetail\">\n";
 		print "<li>".$version->getOriginalFileName()."</li>\n";
-		if ($file_exists) print "<li>". formatted_size(filesize($dms->contentDir . $version->getPath())) ." ".$version->getMimeType()."</li>";
+		if ($file_exists) print "<li>". formatted_size(filesize($dms->contentDir . $version->getPath())) ." ".htmlspecialchars($version->getMimeType())."</li>";
 		else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 		$updatingUser = $version->getUser();
 		print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
@@ -401,15 +401,15 @@ if (count($files) > 0) {
 		print "<tr>";
 		print "<td><ul class=\"actions\">";
 		if ($file_exists)
-			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($file->getFileType())."\" title=\"".$file->getMimeType()."\">".htmlspecialchars($file->getName())."</a>";
-		else print "<li><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($file->getFileType())."\" title=\"".$file->getMimeType()."\">";
+			print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">".htmlspecialchars($file->getName())."</a>";
+		else print "<li><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
 		print "</ul></td>";
 		
 		print "<td><ul class=\"documentDetail\">\n";
 		print "<li>".$file->getOriginalFileName() ."</li>\n";
 		if ($file_exists)
-			print "<li>". filesize($dms->contentDir . $file->getPath()) ." bytes ".$file->getMimeType()."</li>";
-		else print "<li>".$file->getMimeType()." - <span class=\"warning\">".getMLText("document_deleted")."</span></li>";
+			print "<li>". filesize($dms->contentDir . $file->getPath()) ." bytes ".htmlspecialchars($file->getMimeType())."</li>";
+		else print "<li>".htmlspecialchars($file->getMimeType())." - <span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
 		print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$responsibleUser->getEmail()."\">".htmlspecialchars($responsibleUser->getFullName())."</a></li>";
 		print "<li>".getLongReadableDate($file->getDate())."</li>";
