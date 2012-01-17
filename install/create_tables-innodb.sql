@@ -158,7 +158,7 @@ CREATE TABLE `tblDocumentContent` (
   `dir` varchar(255) NOT NULL default '',
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
-  `mimeType` varchar(70) NOT NULL default '',
+  `mimeType` varchar(100) NOT NULL default '',
   UNIQUE (`document`, `version`),
 	CONSTRAINT `tblDocumentDocument_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -196,7 +196,7 @@ CREATE TABLE `tblDocumentFiles` (
   `dir` varchar(255) NOT NULL default '',
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
-  `mimeType` varchar(70) NOT NULL default '',  
+  `mimeType` varchar(100) NOT NULL default '',  
   PRIMARY KEY  (`id`),
 	CONSTRAINT `tblDocumentFiles_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
 	CONSTRAINT `tblDocumentFiles_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
@@ -474,5 +474,5 @@ CREATE TABLE `tblVersion` (
 INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0);
 INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
-INSERT INTO tblVersion VALUES (NOW(), 3, 2, 0);
+INSERT INTO tblVersion VALUES (NOW(), 3, 3, 0);
 INSERT INTO tblCategory VALUES (0, '');
