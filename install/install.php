@@ -231,7 +231,7 @@ if ($action=="setSettings") {
 	/**
 	 * Check Parameters, require version 3.3.x
 	 */
-//	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', LETODMS_VERSION), 0,2)));
+	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', LETODMS_VERSION), 0,2)));
 
 	if (!$hasError) {
 		// Create database
@@ -313,7 +313,7 @@ if ($action=="setSettings") {
 									$needsupdate = true;
 									print "<h3>Database update to version ".$updatedir." needed</h3>";
 									if(file_exists('update-'.$updatedir.'/update.txt')) {
-										print "<p>Please read the comments on updating this version. <a href=\"update-".$updatedir."/update.txt\">Read now</a></p>";
+										print "<p>Please read the comments on updating this version. <a href=\"update-".$updatedir."/update.txt\" target=\"_blank\">Read now</a></p>";
 									}
 									if(file_exists('update-'.$updatedir.'/update.php')) {
 										print "<p>Afterwards run the <a href=\"update.php?version=".$updatedir."\">update script</a>.</p>";
