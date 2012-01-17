@@ -423,7 +423,7 @@ class LetoDMS_Core_DMS {
 	 * @param query string seach query with space separated words
 	 * @param limit integer number of items in result set
 	 * @param offset integer index of first item in result set
-	 * @param mode string either AND or OR
+	 * @param logicalmode string either AND or OR
 	 * @param searchin array() list of fields to search in
 	 *        1 = keywords, 2=name, 3=comment
 	 * @param startFolder object search in the folder only (null for root folder)
@@ -438,7 +438,7 @@ class LetoDMS_Core_DMS {
 	 *        0x3 = both
 	 * @return array containing the elements total and docs
 	 */
-	function search($query, $limit=0, $offset=0, $mode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $categories=array(), $mode=0x3) { /* {{{ */
+	function search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $categories=array(), $mode=0x3) { /* {{{ */
 		// Split the search string into constituent keywords.
 		$tkeys=array();
 		if (strlen($query)>0) {
@@ -467,7 +467,7 @@ class LetoDMS_Core_DMS {
 				foreach ($tkeys as $key) {
 					$key = trim($key);
 					if (strlen($key)>0) {
-						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
+						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
 					}
 				}
 			}
@@ -580,7 +580,7 @@ class LetoDMS_Core_DMS {
 				foreach ($tkeys as $key) {
 					$key = trim($key);
 					if (strlen($key)>0) {
-						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$mode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
+						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
 					}
 				}
 			}
