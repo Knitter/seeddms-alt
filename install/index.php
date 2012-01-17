@@ -1,10 +1,12 @@
 <?php
 define("LETODMS_INSTALL", "on");
 include("../inc/inc.Settings.php");
+$settings = new Settings();
+$rootDir = realpath ("..");
+$settings->_rootDir = $rootDir.'/';
+
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
-
-$settings = new Settings();
 
 UI::htmlStartPage("INSTALL");
 UI::contentHeading("letoDMS Installation...");
