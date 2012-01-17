@@ -762,20 +762,20 @@ class Settings { /* {{{ */
 			$errorMsgPerms = null;
 
 			// perms
-			if (!mkdir($this->_contentDir.'/_CHECK_TEST_')) {
+			if (!@mkdir($this->_contentDir.'/_CHECK_TEST_')) {
 				$errorMsgPerms .= "Create folder - ";
-			}
+			} else {
+				if (is_bool(file_put_contents($this->_contentDir.'/_CHECK_TEST_/_CHECK_TEST_', ""))) {
+					$errorMsgPerms .= "Create file - ";
+				} else {
+					if (!unlink ($this->_contentDir.'/_CHECK_TEST_/_CHECK_TEST_')) {
+						$errorMsgPerms .= "Delete file - ";
+					}
+				}
 
-			if (is_bool(file_put_contents($this->_contentDir.'/_CHECK_TEST_/_CHECK_TEST_', ""))) {
-				$errorMsgPerms .= "Create file - ";
-			}
-
-			if (!unlink ($this->_contentDir.'/_CHECK_TEST_/_CHECK_TEST_')) {
-				$errorMsgPerms .= "Delete file - ";
-			}
-
-			if (!rmdir($this->_contentDir.'/_CHECK_TEST_')) {
-				$errorMsgPerms .= "Delete folder";
+				if (!rmdir($this->_contentDir.'/_CHECK_TEST_')) {
+					$errorMsgPerms .= "Delete folder";
+				}
 			}
 
 			if (!is_null($errorMsgPerms)) {
