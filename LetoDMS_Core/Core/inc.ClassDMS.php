@@ -815,7 +815,7 @@ class LetoDMS_Core_DMS {
 	 *
 	 * This function retrieves a user from the database by its login.
 	 * If the second optional parameter $email is not empty, the user must
-	 * also have the given password.
+	 * also have the given email.
 	 *
 	 * @param string $login internal login of user
 	 * @param string $email email of user
