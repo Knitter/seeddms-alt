@@ -377,6 +377,7 @@ $text["search_mode_or"] = "at least one word";
 $text["search_no_results"] = "There are no documents that match your search";
 $text["search_query"] = "Search for";
 $text["search_report"] = "Found [doccount] documents and [foldercount] folders";
+$text["search_report_fulltext"] = "Found [doccount] documents";
 $text["search_results_access_filtered"] = "Search results may contain content to which access has been denied.";
 $text["search_results"] = "Search results";
 $text["search"] = "Search";
