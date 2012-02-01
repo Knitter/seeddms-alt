@@ -897,6 +897,8 @@ class LetoDMS_Core_Folder {
 			}
 		}
 		else {
+			// FIXME: Why not check the access list first and if this returns
+			// not result, then use the default access?
 			// Groups are a little more complex.
 			if ($this->getDefaultAccess() >= M_READ) {
 				// If the default access is at least READ-ONLY, then just make sure
