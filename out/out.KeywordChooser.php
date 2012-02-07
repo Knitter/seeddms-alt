@@ -44,7 +44,7 @@ UI::htmlStartPage(getMLText("use_default_keywords"));
 
 
 <script language="JavaScript">
-var targetObj = opener.document.<?= $target ?>;
+var targetObj = opener.document.<?php echo $target ?>;
 var myTA;
 
 

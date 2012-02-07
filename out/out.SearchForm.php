@@ -75,7 +75,7 @@ UI::contentContainerStart();
 <?php
 	}
 ?>
-<h2><?= getMLText('databasesearch') ?></h2>
+<h2><?php echo getMLText('databasesearch') ?></h2>
 <form action="../op/op.Search.php" name="form1" onsubmit="return checkForm();">
 <table class="searchform">
 <tr>
@@ -197,7 +197,7 @@ echo "</td>\n</tr>\n";
 <div style="width: 35%; float: left; margin-left: 20px;">
 <form action="../op/op.SearchFulltext.php" name="form2" onsubmit="return checkForm();">
 <table class="searchform">
-<h2><?= getMLText('fullsearch') ?></h2>
+<h2><?php echo getMLText('fullsearch') ?></h2>
 <tr>
 <td><?php printMLText("search_query");?>:</td>
 <td>

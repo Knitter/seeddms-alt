@@ -74,7 +74,7 @@ UI::contentHeading(getMLText("edit_document_props"));
 UI::contentContainerStart();
 ?>
 <form action="../op/op.EditDocument.php" name="form1" onsubmit="return checkForm();" method="POST">
-	<input type="hidden" name="documentid" value="<?= $documentid ?>">
+	<input type="hidden" name="documentid" value="<?php echo $documentid ?>">
 	<table cellpadding="3">
 		<tr>
 			<td class="inputDescription"><?php printMLText("name");?>:</td>

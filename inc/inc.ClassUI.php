@@ -576,12 +576,12 @@ class UI {
 		<script language="JavaScript">
 		var openDlg;
 		function chooseCategory<?php print $formName ?>() {
-			var current = document.<?= $formName ?>.categoryid<?= $formName ?>;
+			var current = document.<?php echo $formName ?>.categoryid<?php echo $formName ?>;
 			openDlg = open("out.CategoryChooser.php?form=<?php echo $formName?>&cats="+current.value, "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
 		}
 		function clearCategory<?php print $formName ?>() {
-			document.<?= $formName ?>.categoryid<?= $formName ?>.value = '';
-			document.<?= $formName ?>.categoryname<?= $formName ?>.value = '';
+			document.<?php echo $formName ?>.categoryid<?php echo $formName ?>.value = '';
+			document.<?php echo $formName ?>.categoryname<?php echo $formName ?>.value = '';
 		}
 		</script>
 <?php
@@ -784,16 +784,16 @@ archive="jl_core_z.jar"
 width="715"
 height="400"
 mayscript>
-  <param name="uc_uploadUrl" value="<?= $uploadurl ?>"/>
+  <param name="uc_uploadUrl" value="<?php echo $uploadurl ?>"/>
   <param name="ac_fireAppletInitialized" value="true"/>
   <param name="ac_fireUploaderSelectionChanged" value="true"/>
   <param name="ac_fireUploaderFileStatusChanged" value="true"/>
   <param name="ac_fireUploaderFileAdded" value="true"/>
-  <param name="uc_partitionLength" value="<?= $settings->_partitionSize ?>"/>
+  <param name="uc_partitionLength" value="<?php echo $settings->_partitionSize ?>"/>
 <?php
 	if($maxfiles) {
 ?>
-  <param name="uc_maxFiles" value="<?= $maxfiles ?>"/>
+  <param name="uc_maxFiles" value="<?php echo $maxfiles ?>"/>
 <?php
 	}
 ?>
@@ -813,7 +813,7 @@ mayscript>
 <?php
 	foreach($attributes as $name=>$value) {
 ?>
-        attr = attrSet.createStringAttribute( '<?= $name ?>', '<?= $value ?>' );
+        attr = attrSet.createStringAttribute( '<?php echo $name ?>', '<?php echo $value ?>' );
         attr.setSendToServer(true);
 <?php
 	}
@@ -870,7 +870,7 @@ mayscript>
 	if(!$fields || (isset($fields['name']) && $fields['name'])) {
 ?>
         content += "<tr class='dataRow'>";
-        content += "<td class='dataField'><?= getMLText('name') ?></td>";
+        content += "<td class='dataField'><?php echo getMLText('name') ?></td>";
 				if(attr = attrSet.getAttributeByName('name'))
 					value = attr.getStringValue();
 				else
@@ -887,7 +887,7 @@ mayscript>
 	if(!$fields || (isset($fields['comment']) && $fields['comment'])) {
 ?>
         content += "<tr class='dataRow'>";
-        content += "<td class='dataField'><?= getMLText('comment') ?></td>";
+        content += "<td class='dataField'><?php echo getMLText('comment') ?></td>";
 				if(attr = attrSet.getAttributeByName('comment'))
 					value = attr.getStringValue();
 				else
@@ -904,7 +904,7 @@ mayscript>
 	if(!$fields || (isset($fields['reqversion']) && $fields['reqversion'])) {
 ?>
         content += "<tr class='dataRow'>";
-        content += "<td class='dataField'><?= getMLText('version') ?></td>";
+        content += "<td class='dataField'><?php echo getMLText('version') ?></td>";
 				if(attr = attrSet.getAttributeByName('reqversion'))
 					value = attr.getStringValue();
 				else
@@ -921,7 +921,7 @@ mayscript>
 	if(!$fields || (isset($fields['version_comment']) && $fields['version_comment'])) {
 ?>
         content += "<tr class='dataRow'>";
-        content += "<td class='dataField'><?= getMLText('comment_for_current_version') ?></td>";
+        content += "<td class='dataField'><?php echo getMLText('comment_for_current_version') ?></td>";
 				if(attr = attrSet.getAttributeByName('version_comment'))
 					value = attr.getStringValue();
 				else
@@ -938,14 +938,14 @@ mayscript>
 	if(!$fields || (isset($fields['keywords']) && $fields['keywords'])) {
 ?>
         content += "<tr class='dataRow'>";
-        content += "<td class='dataField'><?= getMLText('keywords') ?></td>";
+        content += "<td class='dataField'><?php echo getMLText('keywords') ?></td>";
 				if(attr = attrSet.getAttributeByName('keywords'))
 					value = attr.getStringValue();
 				else
 					value = '';
 				if(edit) {
 					value = "<textarea id='keywords" + index + "' name='keywords' cols='40' rows='2'>" + value + "</textarea>";
-					value += "<br /><a href='javascript:chooseKeywords(\"form" + index + ".keywords" + index +"\");'><?= getMLText("use_default_keywords");?></a>";
+					value += "<br /><a href='javascript:chooseKeywords(\"form" + index + ".keywords" + index +"\");'><?php echo getMLText("use_default_keywords");?></a>";
 				}
         content += "<td class='dataText'>" + value + "</td>";
         content += "</tr>";
@@ -957,7 +957,7 @@ mayscript>
 	if(!$fields || (isset($fields['categories']) && $fields['categories'])) {
 ?>
 				content += "<tr class='dataRow'>";
-				content += "<td class='dataField'><?= getMLText('categories') ?></td>";
+				content += "<td class='dataField'><?php echo getMLText('categories') ?></td>";
 				if(attr = attrSet.getAttributeByName('categoryids'))
 					value = attr.getStringValue();
 				else
@@ -969,7 +969,7 @@ mayscript>
 				if(edit) {
 					value = "<input type='hidden' id='categoryidform" + index + "' name='categoryids' value='" + value + "' />";
 					value += "<input disabled id='categorynameform" + index + "' name='categorynames' value='" + value2 + "' />";
-					value += "<br /><a href='javascript:chooseCategory(\"form" + index + "\", \"\");'><?= getMLText("use_default_categories");?></a>";
+					value += "<br /><a href='javascript:chooseCategory(\"form" + index + "\", \"\");'><?php echo getMLText("use_default_categories");?></a>";
 				} else {
 					value = value2;
 				}

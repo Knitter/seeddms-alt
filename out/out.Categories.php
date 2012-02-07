@@ -101,7 +101,7 @@ UI::contentContainerStart();
 <?php
 		} else {
 ?>
-						<p><?= getMLText('category_in_use') ?></p>
+						<p><?php echo getMLText('category_in_use') ?></p>
 <?php
 		}
 ?>
