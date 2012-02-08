@@ -1,4 +1,4 @@
-VERSION=3.3.0-pre2
+VERSION=3.3.0
 SRC=CHANGELOG* inc conf utils index.php languages op out README reset_db.sql drop-tables-innodb.sql delete_all_contents.sql styles js TODO LICENSE Makefile debian webdav install
 
 dist:
