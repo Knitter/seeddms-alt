@@ -77,7 +77,7 @@ UI::contentContainerStart();
 if ($document->isLocked()) {
 
 	$lockingUser = $document->getLockingUser();
-	
+
 	print "<table><tr><td class=\"warning\">";
 	
 	printMLText("update_locked_msg", array("username" => htmlspecialchars($lockingUser->getFullName()), "email" => $lockingUser->getEmail()));
