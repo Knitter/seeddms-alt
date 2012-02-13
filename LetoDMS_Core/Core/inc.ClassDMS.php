@@ -14,7 +14,6 @@
 /**
  * Include some files
  */
-require_once("inc.DBAccess.php");
 require_once("inc.AccessUtils.php");
 require_once("inc.FileUtils.php");
 require_once("inc.ClassAccess.php");
@@ -457,9 +456,11 @@ class LetoDMS_Core_DMS {
 			$concatFunction = "";
 			if (in_array(2, $searchin)) {
 				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblFolders`.`name`";
+				$searchFields[] = "`tblFolders`.`name`";
 			}
 			if (in_array(3, $searchin)) {
 				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblFolders`.`comment`";
+				$searchFields[] = "`tblFolders`.`comment`";
 			}
 
 			if (strlen($concatFunction)>0 && count($tkeys)>0) {
@@ -467,7 +468,8 @@ class LetoDMS_Core_DMS {
 				foreach ($tkeys as $key) {
 					$key = trim($key);
 					if (strlen($key)>0) {
-						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
+						//$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
+						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ")."(".implode(" like ".$this->db->qstr("%".$key."%")." OR ", $searchFields)." like ".$this->db->qstr("%".$key."%").")";
 					}
 				}
 			}
@@ -565,14 +567,18 @@ class LetoDMS_Core_DMS {
 			// Assemble the arguments for the concatenation function. This allows the
 			// search to be carried across all the relevant fields.
 			$concatFunction = "";
+			$searchFields = array();
 			if (in_array(1, $searchin)) {
 				$concatFunction = "`tblDocuments`.`keywords`";
+				$searchFields[] = "`tblDocuments`.`keywords`";
 			}
 			if (in_array(2, $searchin)) {
 				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblDocuments`.`name`";
+				$searchFields[] = "`tblDocuments`.`name`";
 			}
 			if (in_array(3, $searchin)) {
 				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblDocuments`.`comment`";
+				$searchFields[] = "`tblDocuments`.`comment`";
 			}
 
 			if (strlen($concatFunction)>0 && count($tkeys)>0) {
@@ -580,7 +586,8 @@ class LetoDMS_Core_DMS {
 				foreach ($tkeys as $key) {
 					$key = trim($key);
 					if (strlen($key)>0) {
-						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
+						//$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
+						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ")."(".implode(" like ".$this->db->qstr("%".$key."%")." OR ", $searchFields)." like ".$this->db->qstr("%".$key."%").")";
 					}
 				}
 			}
