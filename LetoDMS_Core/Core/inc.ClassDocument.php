@@ -1144,7 +1144,8 @@ class LetoDMS_Core_Document { /* {{{ */
 			$comment="";
 		}
 		$queryStr = "INSERT INTO `tblDocumentStatusLog` (`statusID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $statusID ."', '". $status."', 'New document content submitted". $comment ."', NOW(), '". $user->getID() ."')";
+			"VALUES ('". $statusID ."', '". $status."', 'New document content submitted". $comment ."', CURRENT_TIMESTAMP, '". $user->getID() ."')";
+echo $queryStr;
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -1505,37 +1506,37 @@ class LetoDMS_Core_Document { /* {{{ */
 			$queryStr="";
 			if ($defAccess < M_READ) {
 				if (strlen($groupIDs)>0) {
-					$queryStr = "(SELECT `tblUsers`.* FROM `tblUsers` ".
+					$queryStr = "SELECT `tblUsers`.* FROM `tblUsers` ".
 						"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`userID`=`tblUsers`.`id` ".
 						"WHERE `tblGroupMembers`.`groupID` IN (". $groupIDs .") ".
-						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest.")";
+						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest."";
 				}
 				$queryStr .= (strlen($queryStr)==0 ? "" : " UNION ").
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE (`tblUsers`.`role` != ".LetoDMS_Core_User::role_guest.") ".
 					"AND ((`tblUsers`.`id` = ". $this->_ownerID . ") ".
 					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin.")".
 					(strlen($userIDs) == 0 ? "" : " OR (`tblUsers`.`id` IN (". $userIDs ."))").
-					")) ORDER BY `login`";
+					")";
 			}
 			else {
 				if (strlen($groupIDs)>0) {
-					$queryStr = "(SELECT `tblUsers`.* FROM `tblUsers` ".
+					$queryStr = "SELECT `tblUsers`.* FROM `tblUsers` ".
 						"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`userID`=`tblUsers`.`id` ".
 						"WHERE `tblGroupMembers`.`groupID` NOT IN (". $groupIDs .")".
 						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest .
-						(strlen($userIDs) == 0 ? ")" : " AND (`tblUsers`.`id` NOT IN (". $userIDs .")))");
+						(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))");
 				}
 				$queryStr .= (strlen($queryStr)==0 ? "" : " UNION ").
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE (`tblUsers`.`id` = ". $this->_ownerID . ") ".
-					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin."))".
+					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin.") ".
 					"UNION ".
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest .
-					(strlen($userIDs) == 0 ? ")" : " AND (`tblUsers`.`id` NOT IN (". $userIDs .")))").
-					" ORDER BY `login`";
+					(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))");
 			}
+			$queryStr = "SELECT * FROM (".$queryStr.") ORDER BY `login`";
 			$resArr = $db->getResultArray($queryStr);
 			if (!is_bool($resArr)) {
 				foreach ($resArr as $row) {
@@ -1874,7 +1875,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 			return false;
 		}
 		$queryStr = "INSERT INTO `tblDocumentStatusLog` (`statusID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $this->_status["statusID"] ."', '". (int) $status ."', ".$db->qstr($comment).", NOW(), '". $updateUser->getID() ."')";
+			"VALUES ('". $this->_status["statusID"] ."', '". (int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '". $updateUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res)
 			return false;
@@ -1899,7 +1900,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		if (!isset($this->_reviewStatus)) {
 			/* First get a list of all reviews for this document content */
 			$queryStr=
-				"SELECT reviewId FROM tblDocumentReviewers WHERE `version`='".$this->_version
+				"SELECT reviewID FROM tblDocumentReviewers WHERE `version`='".$this->_version
 				."' AND `documentID` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
@@ -1915,7 +1916,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 						"LEFT JOIN `tblDocumentReviewLog` USING (`reviewID`) ".
 						"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentReviewers`.`required`".
 						"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentReviewers`.`required`".
-						"WHERE `tblDocumentReviewers`.`reviewId` = '". $rec['reviewId'] ."' ".
+						"WHERE `tblDocumentReviewers`.`reviewID` = '". $rec['reviewID'] ."' ".
 						"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT ".(int) $limit;
 
 					$res = $db->getResultArray($queryStr);
@@ -2016,7 +2017,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewID ."', '0', '', NOW(), '". $requestUser->getID() ."')";
+			"VALUES ('". $reviewID ."', '0', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2074,7 +2075,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewID ."', '0', '', NOW(), '". $requestUser->getID() ."')";
+			"VALUES ('". $reviewID ."', '0', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2110,7 +2111,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`,
   	  `comment`, `date`, `userID`) ".
 			"VALUES ('". $reviewStatus["indstatus"][0]["reviewID"] ."', '".
-			(int) $status ."', ".$db->qstr($comment).", NOW(), '".
+			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
@@ -2144,7 +2145,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`,
   	  `comment`, `date`, `userID`) ".
 			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '".
-			(int) $status ."', ".$db->qstr($comment).", NOW(), '".
+			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
@@ -2199,7 +2200,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $approveID ."', '0', '', NOW(), '". $requestUser->getID() ."')";
+			"VALUES ('". $approveID ."', '0', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2254,7 +2255,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $approveID ."', '0', '', NOW(), '". $requestUser->getID() ."')";
+			"VALUES ('". $approveID ."', '0', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2312,7 +2313,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`,
   	  `comment`, `date`, `userID`) ".
 			"VALUES ('". $approvalStatus["indstatus"][0]["approveID"] ."', '".
-			(int) $status ."', ".$db->qstr($comment).", NOW(), '".
+			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
@@ -2352,7 +2353,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`,
   	  `comment`, `date`, `userID`) ".
 			"VALUES ('". $approvalStatus[0]["approveID"] ."', '".
-			(int) $status ."', ".$db->qstr($comment).", NOW(), '".
+			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
@@ -2383,7 +2384,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewStatus["indstatus"][0]["reviewID"] ."', '-2', '', NOW(), '". $requestUser->getID() ."')";
+			"VALUES ('". $reviewStatus["indstatus"][0]["reviewID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2414,7 +2415,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '-2', '', NOW(), '". $requestUser->getID() ."')";
+			"VALUES ('". $reviewStatus[0]["reviewID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2445,7 +2446,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $approvalStatus["indstatus"][0]["approveID"] ."', '-2', '', NOW(), '". $requestUser->getID() ."')";
+			"VALUES ('". $approvalStatus["indstatus"][0]["approveID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2476,7 +2477,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $approvalStatus[0]["approveID"] ."', '-2', '', NOW(), '". $requestUser->getID() ."')";
+			"VALUES ('". $approvalStatus[0]["approveID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
