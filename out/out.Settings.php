@@ -397,8 +397,17 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><input name="maxExecutionTime" value="<?php echo $settings->_maxExecutionTime ?>" /></td>
       </tr>
 
-
-
+      <tr ><td><b> <?php printMLText("index_converters");?></b></td> </tr>
+<?php
+	foreach($settings->_converters as $mimetype=>$cmd) {
+?>
+      <tr title="<?php echo $mimetype;?>">
+        <td><?php echo $mimetype;?>:</td>
+        <td><input name="converters[<?php echo $mimetype;?>]" value="<?php echo $cmd ?>" size="100" /></td>
+      </tr>
+<?php
+	}
+?>
     </table>
   </div>
 
