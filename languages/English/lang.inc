@@ -220,6 +220,7 @@ $text["hourly"] = "Hourly";
 $text["human_readable"] = "Human readable archive"; 
 $text["include_documents"] = "Include documents";
 $text["include_subdirectories"] = "Include subdirectories";
+$text["index_converters"] = "Index document conversion";
 $text["individuals"] = "Individuals";
 $text["inherits_access_msg"] = "Access is being inherited.<p><a class=\"inheritAccess\" href=\"[copyurl]\">Copy inherited access list</a><br><a class=\"inheritAccess\" href=\"[emptyurl]\">Start with empty access list</a>";
 $text["internal_error_exit"] = "Internal error. Unable to complete request. Exiting.";
