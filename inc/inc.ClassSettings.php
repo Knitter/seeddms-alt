@@ -136,7 +136,7 @@ class Settings { /* {{{ */
 	var $_ldapBaseDN = "";
 	var $_ldapAccountDomainName = "";
 	var $_ldapType = 1; // 0 = ldap; 1 = AD
-
+	var $_converters = array(); // list of commands used to convert files to text for Indexer
 
 	/**
 	 * Constructor
@@ -381,6 +381,14 @@ class Settings { /* {{{ */
 			$this->_maxExecutionTime = intval($tab["maxExecutionTime"]);
 		else
 			$this->_maxExecutionTime = ini_get("max_execution_time");
+
+		// XML Path: /configuration/system/advanced/converters
+		$converters = $xml->xpath('/configuration/advanced/converters/converter');
+		$this->_converters = array();
+		foreach($converters as $converter) {
+			$tab = $converter->attributes();
+			$this->_converters[trim(strval($tab['mimeType']))] = trim(strval($converter));
+		}
 	} /* }}} */
 
 	 /**
@@ -581,6 +589,31 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "maxDirID", $this->_maxDirID);
     $this->setXMLAttributValue($node, "updateNotifyTime", $this->_updateNotifyTime);
     $this->setXMLAttributValue($node, "maxExecutionTime", $this->_maxExecutionTime);
+
+    // XML Path: /configuration/advanced/converters
+    foreach($this->_converters as $mimeType => $cmd)
+    {
+      // search XML node
+      $node = $xml->xpath('/configuration/advanced/converters/converter[@mimeType="'. $mimeType .'"]');
+
+      if (isset($node))
+      {
+        if (count($node)>0)
+        {
+          $node = $node[0];
+        }
+        else
+        {
+          $nodeParent = $xml->xpath('/configuration/advanced/converters');
+          $node = $nodeParent[0]->addChild("converters");
+        }
+
+				$node[0] = $cmd;
+        $this->setXMLAttributValue($node, 'mimeType', $mimeType);
+
+      } // isset($node)
+
+    } // foreach
 
 
     // Save
