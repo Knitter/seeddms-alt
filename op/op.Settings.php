@@ -127,6 +127,9 @@ if ($action == "saveSettings")
   $settings->_updateNotifyTime = intval($_POST["updateNotifyTime"]);
   $settings->_maxExecutionTime = intval($_POST["maxExecutionTime"]);
 
+  // SETTINGS - ADVANCED - INDEX CMD
+  $settings->_converters = $_POST["converters"];
+
   // -------------------------------------------------------------------------
   // save
   // -------------------------------------------------------------------------
