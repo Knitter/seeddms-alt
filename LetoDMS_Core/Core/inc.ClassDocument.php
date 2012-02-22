@@ -1145,7 +1145,6 @@ class LetoDMS_Core_Document { /* {{{ */
 		}
 		$queryStr = "INSERT INTO `tblDocumentStatusLog` (`statusID`, `status`, `comment`, `date`, `userID`) ".
 			"VALUES ('". $statusID ."', '". $status."', 'New document content submitted". $comment ."', CURRENT_TIMESTAMP, '". $user->getID() ."')";
-echo $queryStr;
 		if (!$db->getResult($queryStr))
 			return false;
 
