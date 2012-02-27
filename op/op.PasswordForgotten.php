@@ -32,7 +32,7 @@ function _printMessage($heading, $message) {
 	UI::htmlStartPage($heading, "password");
 	UI::globalBanner();
 	UI::pageNavigation($heading);
-	UI::contentContainer($message."<p><a href=\"out/out.Login.php\">" . getMLText("login") . "</a></p>\n");
+	UI::contentContainer($message."<p><a href=\"../out/out.Login.php\">" . getMLText("login") . "</a></p>\n");
 			UI::htmlEndPage();
 	return;
 }
