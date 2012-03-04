@@ -21,7 +21,7 @@
 //    <francisco@debian.org> for LetoDMS-3.0.   2-feb-2011
 //    Reviewed : 15-sept-2011.  Francisco M. Garcia Claramonte
 //    Reviewed (for 3.2.0) : 22-sept-2011.   Francisco M. Garcia Claramonte
-//    Reviewed (for 3.3.0) : 23-feb-2012.   Francisco M. Garcia Claramonte
+//    Reviewed (for 3.3.0) : 3-mar-2012.   Francisco M. Garcia Claramonte
 
 $text = array();
 $text["accept"] = "Aceptar";
@@ -87,9 +87,10 @@ $text["cannot_retrieve_approval_snapshot"] = "No es posible recuperar la instant
 $text["cannot_retrieve_review_snapshot"] = "No es posible recuperar la instantánea de revisión para esta versión de documento.";
 $text["cannot_rm_root"] = "Error: No es posible eliminar la carpeta raíz.";
 $text["category"] = "Categoría";
-$text["category_exists"] = "La categoría ya existe o es nula";
+$text["category_exists"] = "La categoría ya existe.";
 $text["category_filter"] = "Solo categorías";
 $text["category_in_use"] = "Esta categoría está en uso por documentos.";
+$text["category_noname"] = "No ha proporcionado un nombre de categoría.";
 $text["categories"] = "Categorías";
 $text["change_assignments"] = "Cambiar asignaciones";
 $text["change_password"] = "Cambiar contraseña";
