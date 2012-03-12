@@ -230,6 +230,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		if (get_class($obj) == 'LetoDMS_Core_Folder' && !empty($options["depth"])) {
 
 			$subfolders = $obj->getSubFolders();
+			$subfolders = LetoDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
 			if ($subfolders) {
 				// ok, now get all its contents
 				foreach($subfolders as $subfolder) {
@@ -238,6 +239,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 				// TODO recursion needed if "Depth: infinite"
 			}
 			$documents = $obj->getDocuments();
+			$documents = LetoDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
 			if ($documents) {
 				// ok, now get all its contents
 				foreach($documents as $document) {
