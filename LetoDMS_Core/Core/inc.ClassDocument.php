@@ -158,8 +158,8 @@ class LetoDMS_Core_Document { /* {{{ */
 	 * @return string directory of document
 	 */
 	function getDir() { /* {{{ */
-		if($this->_document->_dms->maxDirID) {
-			$dirid = (int) (($this->_id-1) / $this->_document->_dms->maxDirID) + 1; 
+		if($this->_dms->maxDirID) {
+			$dirid = (int) (($this->_id-1) / $this->_dms->maxDirID) + 1; 
 			return $dirid."/".$this->_id."/";
 		} else {
 			return $this->_id."/";
