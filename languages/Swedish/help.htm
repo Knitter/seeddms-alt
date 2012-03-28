@@ -1,27 +1,27 @@
 ﻿<h1>Allmän information</h1>
 
 <p>
-Ett DMS (Document Management System - Dokument hanterings system) är upbyggd för att göra det möjligt
-att byta ut dokument i ett kontrollerad arbetsflöde, med tillgångsrättigheter och organisation generellt.
+Ett DMS (Document Management System - Dokumenthanteringssystem) är utformat för att göra det möjligt
+att dela dokument i ett kontrollerat arbetsflöde, med tillgångsrättigheter och på ett organiserat sätt.
 </p>
 
 <p>
-Vid använding av första nivåns meny har användaren möjlighet att få tillgång till information som lagras i systemet:
+Vid användning av första nivåns meny har användaren möjlighet att få tillgång till information som lagras i systemet:
 <ul>
-<li>Innehål: Dokument kan sökas genom som i en Utforskare.
-<li>Mina dokument: Har ett flertal valmöjligheter för att få tillgång av dokument som är intressant för dig:
+<li>Innehåll: dokument kan sökas igenom som i en Utforskare.
+<li>Mina dokument: har ett flertal valmöjligheter för att få tillgång till dokument som är intressanta för dig:
 <ul>
-<li>Dokument i bearbetning: lista med dokument som väntar på att bli granskat och godkänt av användaren,
-dokument som användaren skapade och väntar på att bli godkänt eller granskat, dokument som har låsts av användaren.
-<li>Alla dokument: lista av alla dokument som har skapats av avändaren.
-<li>Sammanfattning granskningar: lista av alla dokument som har granskats eller väntar på att bli granskat av användaren.
-<li>Sammanfattning godkännande: lista av alla dokument som har godkänts eller som väntar på att bli godkänt.
+<li>Dokument i bearbetning: lista med dokument som väntar på att bli granskade och godkända av användaren,
+dokument som användaren har skapats och som väntar på att bli godkända eller granskade, dokument som har låsts av användaren.
+<li>Alla dokument: lista med alla dokument som har skapats av avändaren.
+<li>Sammanfattning granskningar: lista med alla dokument som har granskats eller väntar på att bli granskade av användaren.
+<li>Sammanfattning godkännande: lista med alla dokument som har godkänts eller som väntar på att bli godkända.
 </ul>
 </ul>
 </p>
 
 <p>
-Detta DMS tillhandahåller en kalender, som fungerar som ett virtuellt anslagstavla för att dela ut meddelanden,
+Detta DMS tillhandahåller en kalender, som fungerar som en virtuell anslagstavla för att dela meddelanden,
 möten, deadlines och åtaganden.
 </p>
 
@@ -29,70 +29,68 @@ möten, deadlines och åtaganden.
 <h1>Rättigheter</h1>
 
 <p>
-Autoriserade användare kan ställa in om och hur andra användare har tillgång till olika mappar och dokument.
+Auktoriserade användare kan ställa in om och hur andra användare har tillgång till olika mappar och dokument.
 </p>
 
-<h2>Rättighets nivå</h2>
+<h2>Rättighetsnivåer</h2>
 <p>
-Möjliga rättighets-nivåer är:
+Möjliga rättighetsnivåer är:
 <ul>
-<li>Full rättighet: användaren kan utföra alla operationer.
-<li>Läs och skriv rättigheter: användaren kan uppdatera dokument och lägga till nya dokument till mapparna.
-<li>Läs rättighet: användaren kan se innehållet av mapparna och ladda ner dokument.
-<li>Ingen tillgång: användaren kan inte se innehållet av mappar eller enskilda dokument.
+<li>Fulla rättigheter: användaren kan utföra alla funktioner.
+<li>Läs och skriv-rättigheter: användaren kan uppdatera dokument och lägga till nya dokument till mapparna.
+<li>Läsrättighet: användaren kan se innehållet i mapparna och ladda ner dokument.
+<li>Ingen tillgång: användaren kan inte se innehållet i mappar eller enskilda dokument.
 </ul>
 </p>
 
 <p>
-Standartmässigt, har administratörer full rättighet on alla dokument och mappar
-i systemet. Likaså, skaparen av ett dokument har full rättighet på sitt eget dokument.
+Som standard, har administratörer fulla rättigheter till alla dokument och mappar
+i systemet. På samma sätt har skaparen av ett dokument fulla rättigheter till sitt eget dokument.
 </p>
 
 <p>
-Bara administratörer kan ändra ägaren (personen som skapade dokumentet) av ett dokument.
+Bara administratörer kan ändra ägaren (personen som skapade dokumentet) till ett dokument.
 </p>
 
-<h2>Rättighets inställningar</h2>
+<h2>Inställning av rättigheter</h2>
 <p>
-För alla mappar och dokument ställs in rättigheter genom två olika inställningar
+För alla mappar och dokument ställs rättigheter in genom två olika inställningar
 <ul>
-<li>Standart rättigheterna används i fall det inte finns specifika rättigheter uppsatt
-<li>I listan med rättigheter kan det sättas upp undantag till standart rättigheterna
+<li>Standardrättigheterna används om inga specifika rättigheter har angetts
+<li>I listan med rättigheter kan undantag till standardrättigheterna anges
 </ul>
 </p>
 
 <h2>Ärva rättigheter</h2>
 <p>
-Rättigheterna av mappar och dokument kan sättas som ett arv.
-Om man gör detta, så ärvar filer och mappar samma rättigheter av den mappen, där de befinner sig.
+Rättigheterna till mappar och dokument kan anges som ett arv.
+Om man gör detta, så ärver filer och mappar rättigheterna hos den mapp där de befinner sig.
 </p>
 
 
 <h1>Arbetsflöde med dokument</h1>
 
 <p>
-Systemet hanterar arbetsflödet för varje dokument automatisk och sparar
-ändringar, versions nummer, kommentarer osv.
+Systemet hanterar automatiskt arbetsflödet för varje dokument och sparar ändringar, versionsnummer, kommentarer osv.
 </p>
 
 <h2>Valideringscykel</h2>
 <p>
-Det normala arbetsflöde kräver, när man laddar ett nytt dokument eller en ny version, att välja några 
-användare eller grupper av användare som personer som granskar och/eller godkänner dokumentet.
-Användare, som ska granska och godkänna andra användares dokument
-måste förklara varför ett dokument har godkännts.
-När denna operation är avslutat och därmed alla listade användare
+När man laddar upp ett nytt dokument eller en ny verision, kräver det normala arbetsflödet att några 
+användare eller grupper av användare väljs ut för att granska och/eller godkänna dokumentet.
+Användare, som ska granska och godkänna andra användares dokument, måste förklara varför ett dokument har godkänts.
+När denna operation är avslutad och alla listade användare
 har gjort sin granskning eller godkänt dokumentet, ändras
-statusen av dokumentet till 'släppt'.
+statusen på dokumentet till 'klart för användning'.
 </p>
 
 <p>
-Personen som granskar/godkänner kan vägra att godkänner dokumentet.
+Personen som granskar/godkänner kan vägra att godkänna dokumentet.
 Då blir dokumentets status satt till 'avvisat'.
 </p>
 
 <p>
-Vid dokument, där det inte har angets personer för granskning eller godkännande, får dokumentet direkt statusen 'släppt'.
+För dokument, där inga personer har angetts för granskning eller godkännande, får dokumentet direkt statusen 'klart för användning'.
 </p>
 
 <p>
@@ -105,79 +103,72 @@ granskningen och sedan godkänna dokumentet.
 Dokumentägaren (personen som skapade dokumentet) har alltid möjlighet att ändra listan av personer som ska granska.
 </p>
 
-<h2>Dokument status</h2>
+<h2>Dokumentstatus</h2>
 <p>
-Möjliga status för dokument är:
+Följande status för dokument är möjliga:
 <ul>
-<li>Utkast väntar godkännande: en eller flera personer som ska godkänna dokumentet har inte gjort det än.
-<li>Utkast väntar granskning: en eller flera personer som ska granska dokumentet har inte gjort det än.
-<li>Släppt: granskningen av dokumentet har genomförts och den har godkänts av alla inblandade personer.
-<li>Avvisat: dokumentet har inte godkännts.
-<li>Har gott ut: deadline för att få klart granskningen/godkännande har överskridits.
-<li>Föråldrat: statusen av ett släppt dokument kan ändras till föråldrat. Detta är
-avsett som en alternativ till att avbryta hanteringen av ett dokument. Föråldrat statusen
-kan ändras till en annan status.
+<li>Utkast som väntar på godkännande: en eller flera personer som ska godkänna dokumentet har inte gjort det ännu.
+<li>Utkast som väntar på granskning: en eller flera personer som ska granska dokumentet har inte gjort det ännu.
+<li>Klart för användning: granskningen av dokumentet har genomförts och den har godkänts av alla inblandade personer.
+<li>Avvisat: dokumentet har inte godkänts.
+<li>Har gått ut: deadline för att få klart granskning/godkännande har överskridits.
+<li>Föråldrat: statusen hos ett dokument som har fått status klart för användning kan ändras till föråldrat. Detta är ett alternativ till att avbryta hanteringen av ett dokument. Statusen föråldrat kan ändras till annan status.
 </ul>
 </p>
 
 <h2>Har gått ut</h2>
 <p>
-För varje dokument i produktion kan det sättas ett datum där det ska vara avslutat.
+För varje dokument som befinner sig i produktion kan det sättas ett datum för när det ska vara avslutat.
 Överskrids denna tidpunkt, sätts dokumentet till status "har gått ut" och dokumentet
 kan inte längre granskas eller godkännas.
 </p>
 
 <p>
-Bara för den senaste versioen av ett dokument används deadline
-och det finner bara använding när dokument bearbetas.
+Deadline används bara för den senaste versionen av ett dokument och det kan bara användas när dokument bearbetas.
 </p>
 
 
 <h1>Andra funktioner</h1>
 
-<h2>Lås funktion</h2>
+<h2>Låsfunktion</h2>
 <p>
-Lås funktionen har skapats för att visa till andra användare att ett visst dokument
-håller på att bearbetas. Användare som har full rättighet på dokumentet kan dock
-sätta låset tillbaka och fortsätta att göra ändringar på dokumentet.
+Låsfunktionen har skapats för att visa andra användare att ett visst dokument
+håller på att bearbetas. Användare som har fulla rättigheter till dokumentet kan dock ta bort låsningen och fortsätta att göra ändringar på dokumentet.
 </p>
 
-<h2>Notifieringar</h2>
+<h2>Meddelanden</h2>
 <p>
-Varje användare kan begära att få notifieringar på dokument och mappar.
-Lägger man till en fil eller mapp i sin egen lista av notifieringar, skickas det
-en rapport som inntehåller information om ändringarna via epost.
+Varje användare kan begära att få meddelanden angående dokument och mappar.
+Lägger man till en fil eller mapp i sin egen lista över meddelanden, skickas en rapport som innehåller information om ändringar via e-post.
 </p>
 
 <p>
-Bara administratören av en grupp har möjlighet att begära att gruppen ska få notifieringar
-vid ändring av dokument eller mappar. När gruppen har lagts till, så att den ska få 
-notifieringar, skickas en notifiering till alla medlemmar av gruppen.
+Bara administratören i en grupp har möjlighet att begära att gruppen ska få meddelanden vid ändring av dokument eller mappar. När det har angetts att gruppen ska få 
+meddelanden, skickas ett meddelande till alla medlemmar i gruppen.
 </p>
 
 <h2>Nyckelord och sök</h2>
 <p>
-För varje dokument kan det läggas till en beskrivning och en sammling av nyckelord.
+För varje dokument kan en beskrivning och en samling av nyckelord anges.
 Denna information används för sök-funktionen.
 </p>
 <p>
 I den personliga menyn, kan varje användare lägga till och spara nyckelord som kan grupperas enligt kategorier,
-för att underlätta infyllningen av fält vid uppladdning av dokument.
+för att det ska gå snabbare att fylla i information när dokument laddas upp.
 </p>
 
 <p>
-Vid tryck på sök knappen kommer man automatisk till sidan för fördjupat sök funktion.
+När man trycker på sök-knappen kommer man automatiskt till sidan för avancerad sökning.
 </p>
 
 
 <h2>Kalender</h2>
 
 <p>
-Det finns tre möjligheter att se på kalendern: visa vecka, månad, år. Händelser visas i den ordningen
+Det finns tre olika visningsmöjligheter för kalendern: per vecka, månad, år. Händelser visas i den ordningen
 som de har lagts till i kalendern.
 </p>
 
 <p>
-Har händelser ärvts, är de offentligt och syns till alla användare. Bara administratören
-och personen som har lagt upp händelsen kan ändra den.
+Alla inlägg är offentliga och synliga för alla användare. Bara administratören och personen som har lagt upp händelsen kan ändra den.
 </p>
