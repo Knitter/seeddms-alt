@@ -1708,7 +1708,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		return $this->_user;
 	} /* }}} */
 //	function getPath() { return $this->_dir . $this->_version . $this->_fileType; }
-	function getPath() { return $this->_document->getID() .'/'. $this->_version . $this->_fileType; }
+	function getPath() { return $this->_document->getDir() . $this->_version . $this->_fileType; }
 
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
