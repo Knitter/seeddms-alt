@@ -2600,7 +2600,7 @@ class LetoDMS_Core_DocumentFile { /* {{{ */
 	}
 
 	function getPath() {
-		return $this->_document->getID() . "/f" .$this->_id . $this->_fileType;
+		return $this->_document->getDir() . "f" .$this->_id . $this->_fileType;
 	}
 
 } /* }}} */
