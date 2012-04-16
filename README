@@ -201,9 +201,9 @@ general, create the database, make sure that the database has been selected
 (e.g. "USE mydms;"), then run the script. As of version 1.6.0, you must
 make sure that the database user has "create temporary table" privileges.
 
-Now edit the configuration file conf/conf.Settings.php.  First, go to
-the "conf" directory and copy (or move) "conf.Settings.php.template"
-to "conf.Settings.php". Open the file and set the variables to the
+Now edit the configuration file conf/settings.xml.  First, go to
+the "install" directory and copy (or move) "settings.xml.template"
+to "conf/settings.xml". Open the file and set the variables to the
 correct values (you will find a short description for each variable in
 the file itself).
 
