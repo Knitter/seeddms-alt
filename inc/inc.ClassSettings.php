@@ -627,43 +627,53 @@ class Settings { /* {{{ */
 	function searchConfigFilePath() { /* {{{ */
 		$configFilePath = null;
 
+		if($configDir = $this->getConfigDir()) {
+			if (file_exists($configDir."/settings.xml"))
+				return $configDir."/settings.xml";
+		}
+/*
 		// Search config file
 		$_tmp = dirname($_SERVER['SCRIPT_FILENAME']);
-		if(is_link($_tmp))
-		{
+		if(is_link($_tmp)) {
 			$_arr = preg_split('/\//', $_tmp);
 			array_pop($_arr);
 
 			$configFilePath = implode('/', $_arr)."/conf/settings.xml";
-		}
-		else
-		{
+		} else {
 			if (file_exists("../conf/settings.xml"))
 				$configFilePath = "../conf/settings.xml";
 			else if (file_exists("conf/settings.xml"))
 				$configFilePath = "conf/settings.xml";
-			else
-			{
-//				echo "Configuration file not found <br>";
-//				echo "Please create conf/settings.xml file. You can use installation procedure or 'conf/settings.xml.template' file to help you";
-//				exit;
-			}
 		}
-
+*/
 		return $configFilePath;
 	} /* }}} */
 
 	/**
 	 * Returns absolute path for configuration files respecting links
 	 *
+	 * This function checks three directories for a configuration directory
+	 * 1. The directory where the current script is located adding '/conf'
+	 * 2. The parent directory of the current script adding '/conf'
+	 * 3. The directory /etc/letodms
 	 * @return NULL|string config directory
 	 */
 	function getConfigDir() { /* {{{ */
 		$_tmp = dirname($_SERVER['SCRIPT_FILENAME']);
 		$_arr = preg_split('/\//', $_tmp);
-		array_pop($_arr);
+		$configDir = null;
+		if(file_exists(implode('/', $_arr)."/conf/"))
+			$configDir = implode('/', $_arr)."/conf/";
+		else {
+			array_pop($_arr);
+			if(file_exists(implode('/', $_arr)."/conf/")) {
+				$configDir = implode('/', $_arr)."/conf/";
+			} else {
+				if(file_exists('/etc/letodms'))
+					$configDir = '/etc/letodms';
+			}
+		}
 
-		$configDir = implode('/', $_arr)."/conf/";
 		return $configDir;
 	} /* }}} */
 
@@ -918,6 +928,7 @@ class Settings { /* {{{ */
 									"systemerror" => $connTmp->ErrorMsg()
 									);
 							} else {
+							/*
 								$dms = new LetoDMS_Core_DMS($db, $this->_contentDir.$this->_contentOffsetDir);
 
 								if(!$dms->checkVersion()) {
@@ -928,6 +939,7 @@ class Settings { /* {{{ */
 										"suggestion" => 'updateDatabase'
 										);
 								}
+							*/
 							}
 						}
 					}
