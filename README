@@ -60,9 +60,6 @@ on your web server.
 
 1. Using the installation tool ============================================
 
-The installation tool currently does not support to update an existing
-letoDMS installation!
-
 Unpack LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tar.gz on
 your web server. For the full text search engine support, you will also
 need to unpack LetoDMS_Lucene-<version>.tar.gz. For the following instructions
@@ -74,38 +71,51 @@ http://localhost/letodms/
 * Follow the instructions on the page and create a file ENABLE_INSTALL_TOOL
   in the conf directory.
 
+* Create a data directory with the two sub directories staging and lucene.
+  Make sure the data directory is either *not* below your document root
+	or is protected with a .htaccess file against web access. The data directory
+  needs to be writable by the web server.
+
 * Clicking on 'Start installation' will show a form with all necessary
   settings for a basic installation.
 
-* After saving your settings you are ready to log in as admin and continue
-  customizing your installation with the 'Admin Tools'
+* After saving your settings succesfully you are ready to log in as admin and
+  continue customizing your installation with the 'Admin Tools'
 
 2. Detailed installation instructions (single instance) =====================
 
 You need a working web server with MySQL/PHP5 support and the files
-LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tar.gz. For the 
+LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tgz. For the 
 full text search engine support, you will also need to unpack
-LetoDMS_Lucene-<version>.tar.gz.
+LetoDMS_Lucene-<version>.tgz.
 
 * Unpack all the files in a public web server folder. If you're working on
   a host machine your provider will tell you where to upload the files.
+  If possible do not unpack LetoDMS_Core-<version>.tgz and
+  LetoDMS_Lucene-<version>.tgz. below the document root of your web server.
+  Since they are pear packages they can also be installed with 'pear install
+  LetoDMS_Core-<version>.tgz' and 'pear install LetoDMS_Lucene-<version>.tgz'
 
 * Unless ADODB is not already installed on your system, download
-  (http://adodb.sourceforge.net/) and unpack it in the letDMS 
+  (http://adodb.sourceforge.net/) and unpack it in the letoDMS 
   directory
 
 * The PEAR package Log is also needed. It can be downloaded from
   http://pear.php.net/package/Log. Unpack it a place where it can be
-  found be php.
+  found by php.
 
 * The package HTTP_WebDAV_Server is also needed. It can be downloaded from
   http://pear.php.net/package/HTTP_WebDAV_Server. Unpack it a place where
-	it can be found be php.
+	it can be found by php.
 
-* Create a data folder somewhere on your web server and make sure it is
-  writable by your web server.
+* Create a data folder somewhere on your web server including the subdirectories
+  staging and lucene and make sure they are writable by your web server,
+  but not accessible through the web.
 
-For security reason the data folder should not be inside the public folders.
+For security reason the data folder should not be inside the public folders
+or should be protected by a .htaccess file.
+
+If you install letodms for the first time continue with the database setup.
 
 * Create a new database on your web server
   e.g. for mysql:
@@ -114,9 +124,10 @@ For security reason the data folder should not be inside the public folders.
   e.g. for mysql:
 	grant all privileges on letodms.* to letodms@localhost identified by 'secret';
 	(replace 'secret' with you own password)
-* Import "create_tables.sql" in the new database
+* Optionally import "create_tables.sql" in the new database
   e.g. for mysql:
 	cat create_tables.sql | mysql -uletodms -p letodms
+  This step can also be done by the install tool.
 * create a file ENABLE_INSTALL_TOOL in the conf directory and point
   your browser at http://host/<letodms-dir>/install
 
@@ -130,12 +141,11 @@ NOTE: UPDATING FROM A PREVIOUS VERSION
 - edit the conf/settings.xml file to match your previuos settings 
   (you can even replace the file with your own one eventualy adding by hand
   the missing new parameters)
-- run each sql script in the UPDATE-vx.x.x directories, starting with version
-  after your current version.
+- create a file ENABLE_INSTALL_TOOL in the conf directory and point
+  your browser at http://host/<letodms-dir>/install
 
-Each update script must be run, starting from the version previous to the
-one in the folder name. For example to update from a 3.1.0 to 3.3.0 you need
-to run both UPDATE-v3.2.0/update.sql and UPDATE-v3.3.0/update.sql.
+The install tool will detect the version of your current letodms installation
+and run the required database updates.
 
 
 3. Requirements ================================================================
@@ -158,70 +168,7 @@ If you plan to use the full text search engine you will have to install
 the zend framework, too.
 
 
-4. Installation & Configuration ================================================
-
-Unpack the downloaded file (LetoDMS-<version>.tar.gz) in a directory that is
-accessible via your web server. Do the same for the file
-LetoDMS_Core-<version>.tgz and LetoDMS_Lucene-<version>.tgz.
-These files may not be unpacked below the
-document root of your web server. Since it is a pear package it can
-also be installed with 'pear install LetoDMS_Core-<version>.tgz'
-
-You will also need to create a directory where the uploaded files are
-stored. This directory should not be accessible via your web-server for
-security reasons (create it outside of your www-root directory or put an
-appropriate .htaccess file in it to prevent direct access by the web
-server.). This directory will hold logfiles, backups, and all document
-content files. It will be specified by $settings->_contentDir. The
-document content files are stored in a subdirectory specified by
-$settings->_contentOffsetDir. The default is 'data/1048576'
-
-After unpacking all files and creating the directories your installation
-directory should look like the following:
-
-letoDMS-<version>/
-LetoDMS_Core-<version>/
-data/1048576
-
-letoDMS-<version> will also be your web-root.
-
-Download the ADODB package from SourceForge. The URL for the ADODB project
-page is:
-
-        http://adodb.sourceforge.net/
-
-Extract the distribution into a suitable directory. For example, one can
-extract the files next to the LetoDMS root directory.
-
-Now, set up your Database. Use the included script create_tables.sql to
-create all tables. Since the exact procedure differs on the
-different database-systems I cannot give you a detailed instruction
-here. Post any questions concering this problem to the letoDMS-Forum. In
-general, create the database, make sure that the database has been selected
-(e.g. "USE mydms;"), then run the script. As of version 1.6.0, you must
-make sure that the database user has "create temporary table" privileges.
-
-Now edit the configuration file conf/settings.xml.  First, go to
-the "install" directory and copy (or move) "settings.xml.template"
-to "conf/settings.xml". Open the file and set the variables to the
-correct values (you will find a short description for each variable in
-the file itself).
-
-TIP: You can find out your root-directory by placing the following
-line into a php-file: <?php phpInfo(); ?>
-Open it with your browser and look for "DOCUMENT_ROOT".
-
-When running into problems with the db-settings, read the readme-file
-in the adodb-directory or post questions to the letoDMS-Forum.
-
-By default PHP allows only files to be uploaded that are up to 2Mb
-in size. You can change this limit by editing php.ini: Search for
-"upload_max_filesize" and set it to the appropriate value (you
-should also change the value for "post_max_size" and make sure that
-your web-server does not limit the size either).
-
-
-5. Email Notification ==========================================================
+4. Email Notification ==========================================================
 
 A notification system allows users to receive an email when a
 document or folder is changed. This is an event-based mechanism that
@@ -236,14 +183,14 @@ their notification subscriptions. This can be found in the "My Account"
 section under "Notification List".
 
 
-6. Auto-conversion to HTML =====================================================
+5. Auto-conversion to HTML =====================================================
 
 Version 1.3.0 introduces a new feature: Documents can automatically be
 converted to HTML when uploading.
-You can enable this feature by setting $_enableConverting (in 
-inc.Settings.php) to true.
-You will also need to edit $_convertFileTypes (again in 
-inc.Settings.php). This array defines which file-types are converted
+You can enable this feature by setting enableConverting (in 
+settings.xml) to true.
+You will also need to edit convertFileTypes (again in 
+settings.xml). This array defines which file-types are converted
 and how.
 Under windows Word-, Excel- and Powerpoint-Files are automatically
 converted using js-Scipts and MS-Office. I tested it with Office 2000
@@ -266,7 +213,7 @@ http://www.qwerksoft.com/products/iisrewrite/
 Post any questions to the LetoDMS forum, please.
 
 
-7. Nearly finished =============================================================
+6. Nearly finished =============================================================
 
 Now point your browser to http://your.server.com/letoDMS-<version>/index.php
 and login with "admin" both as username and password.
@@ -311,6 +258,7 @@ op -> src/op
 out -> src/out
 languages -> src/languages
 styles -> src/styles
+install -> src/install
 index.php -> src/index.php
 
 ln -s ../letoDMS-<version>
@@ -319,14 +267,10 @@ ln -s src/op op
 ln -s src/out out
 ln -s src/languages languages
 ln -s src/styles styles
+ln -s src/install install
 ln -s src/index.php index.php
 
-Create a new directory named conf and copy conf.Settings.php.template from
-your letoDMS source into it without the '.template' in its name.
-Modify it as explained above.
-
-mkdir conf
-cp src/conf/conf.Settings.php.template conf/conf.Settings.php
+Create a new directory named conf and run the installation tool.
 
 Creating the links as above has the advantage that you can easily switch
 to a new version and go back if it is necessary. You could even run various
@@ -335,7 +279,7 @@ instances of letoDMS using different versions.
 3. Create a database and data store for each instance ==========================
 
 Create a database and data store for each instance and adjust the database
-settings in conf/conf.Settings.php aѕ described above.
+settings in conf/settings.xml or run the installation tool.
 
 Point your web browser towards the index.php file in your new instance.
 
