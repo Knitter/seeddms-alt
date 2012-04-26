@@ -161,7 +161,7 @@ if ($numResults == 0) {
 	printMLText("search_no_results");
 }
 else {
-	printMLText("search_report_fulltext", array("count" => $resArr['totalDocs']));
+	printMLText("search_report_fulltext", array("doccount" => $resArr['totalDocs']));
 }
 ?>
 </td>
