@@ -1023,8 +1023,8 @@ class LetoDMS_Core_DMS {
 		return $cat;
 	} /* }}} */
 
-	function getKeywordCategoryByName($name, $owner) { /* {{{ */
-		$queryStr = "SELECT * FROM tblKeywordCategories WHERE name = " . $this->db->qstr($name) . " AND owner = " . (int) $owner;
+	function getKeywordCategoryByName($name, $userID) { /* {{{ */
+		$queryStr = "SELECT * FROM tblKeywordCategories WHERE name = " . $this->db->qstr($name) . " AND owner = " . (int) $userID;
 		$resArr = $this->db->getResultArray($queryStr);
 		if ((is_bool($resArr) && !$resArr) || (count($resArr) != 1))
 			return false;
@@ -1054,6 +1054,9 @@ class LetoDMS_Core_DMS {
 		return $categories;
 	} /* }}} */
 
+	/**
+	 * This function should be replaced by getAllKeywordCategories()
+	 */
 	function getAllUserKeywordCategories($userID) { /* {{{ */
 		$queryStr = "SELECT * FROM tblKeywordCategories";
 		if ($userID != -1)
@@ -1073,11 +1076,11 @@ class LetoDMS_Core_DMS {
 		return $categories;
 	} /* }}} */
 
-	function addKeywordCategory($owner, $name) { /* {{{ */
-		if (is_object($this->getKeywordCategoryByName($name, $owner))) {
+	function addKeywordCategory($userID, $name) { /* {{{ */
+		if (is_object($this->getKeywordCategoryByName($name, $userID))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblKeywordCategories (owner, name) VALUES ($owner, '$name')";
+		$queryStr = "INSERT INTO tblKeywordCategories (owner, name) VALUES (".(int) $userID.", '$name')";
 		if (!$this->db->getResult($queryStr))
 			return false;
 
@@ -1184,7 +1187,7 @@ class LetoDMS_Core_DMS {
 	 * @param integer $type type of item (T_DOCUMENT or T_FOLDER)
 	 * @return array array of notifications
 	 */
-	function getNotificationsByUser($user, $type) { /* {{{ */
+	function getNotificationsByUser($user, $type=0) { /* {{{ */
 		$queryStr = "SELECT `tblNotify`.* FROM `tblNotify` ".
 		 "WHERE `tblNotify`.`userID` = ". $user->getID();
 		if($type) {
