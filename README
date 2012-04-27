@@ -29,7 +29,7 @@ If there is no help in your language:
 If you apply any changes to the language files please send them to the
 letoDMS developers (www.letodms.com).
 
-BEFORE YOU START ===============================================================
+BEFORE YOU START =========================================================
 
 letoDMS has changed its installation process with version 3.0.0. This gives
 you many more options in how to install letoDMS. First of all, letoDMS was
@@ -50,13 +50,38 @@ Before you proceed you have to decide how to install letoDMS:
 2. as a single instance
 
 Both have its pros and cons, but
-1. setting up a single instance is easier if you have not shell access to
+1. setting up a single instance is easier if you have no shell access to
    the web server
 2. the installation script is only tested on single instances
 
 Installation for multiple instances shares the same source by many
 instances but requires to create links which is not in any case possible
 on your web server.
+
+0. Some preparation =======================================================
+
+A common source of problems in the past have been the additional software
+packages needed by letoDMS. Those are the PEAR packages Log and
+HTTP_WebDAV_Server as well as Zend_Framework and ADOdb.
+If you have full access to the server running a Linux distribution it is
+recommended to install those with your package manager if they are provided
+by your Linux distribution. If you can not install it this way then choose
+a directory (preferable not below your web document root), unpack the
+software into it and extend the php include path with your newly created
+directory. Extending the php include can be either done by modifying
+php.ini or adding a line like
+
+php_value include_path '/home/mypath:.:/usr/share/php'
+
+to your apache configuration. Do not forget to add the standard include_path.
+Another way to make letoDMS find all the additional software relies on the
+ADOdb path in the configuration. The ADOdb path also extends the php
+include path. This is done very early during the page creation. Consequently
+all software installed below this path is found as well.
+
+For both the LetoDMS_Core and LetoDMS_Lucene package the path can be set
+in the configuration, but you can also install them like ADOdb and Log
+somewhere in the php include path.
 
 1. Using the installation tool ============================================
 
