@@ -18,6 +18,6 @@ webdav:
 	rm -rf tmp
 
 doc:
-	phpdoc -d LetoDMS_Core -t html
+	phpdoc -d LetoDMS_Core --ignore 'getusers.php,getfoldertree.php,config.php,reverselookup.php' -t html
 
 .PHONY: webdav
