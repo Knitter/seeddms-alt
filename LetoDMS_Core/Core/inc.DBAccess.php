@@ -27,6 +27,7 @@ require_once "adodb/adodb.inc.php";
  * @version    Release: @package_version@
  */
 class LetoDMS_Core_DatabaseAccess {
+	var $_debug;
 	var $_driver;
 	var $_hostname;
 	var $_database;
@@ -84,6 +85,7 @@ class LetoDMS_Core_DatabaseAccess {
 		$this->_ttapproveid = false;
 		$this->_ttstatid = false;
 		$this->_ttcontentid = false;
+		$this->_debug = false;
 	}
 
 	/**
@@ -144,7 +146,8 @@ class LetoDMS_Core_DatabaseAccess {
 		
 		$res = $this->_conn->Execute($queryStr);
 		if (!$res) {
-			print "<br>" . $this->getErrorMsg() . "<br>" . $queryStr . "</br>";
+			if($this->_debug)
+				echo "error: ".$queryStr."<br />";
 			return false;
 		}
 		$resArr = $res->GetArray();
@@ -158,12 +161,16 @@ class LetoDMS_Core_DatabaseAccess {
 	 * Call this function only with sql query which do not return data records.
 	 *
 	 * @param string $queryStr sql query
+	 * @param boolean $silent not used anymore. This was used when this method
+	 *        still issued an error message
 	 * @return boolean true if query could be executed otherwise false
 	 */
 	function getResult($queryStr, $silent=false) { /* {{{ */
 		$res = $this->_conn->Execute($queryStr);
-		if (!$res && !$silent)
-			print "<br>" . $this->getErrorMsg() . "<br>" . $queryStr . "</br>";
+		if(!$res) {
+			if($this->_debug)
+				echo "error: ".$queryStr."<br />";
+		}
 		
 		return $res;
 	} /* }}} */
