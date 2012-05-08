@@ -138,8 +138,11 @@ if (count($accessList["users"]) != 0 || count($accessList["groups"]) != 0) {
 
 	print "<table class=\"defaultView\">";
 
+	/* memorїze users with access rights */
+	$memusers = array();
 	foreach ($accessList["users"] as $userAccess) {
 		$userObj = $userAccess->getUser();
+		$memusers[] = $userObj->getID();
 		print "<form action=\"../op/op.DocumentAccess.php\">\n";
 		print "<input type=\"Hidden\" name=\"documentid\" value=\"".$documentid."\">\n";
 		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">\n";
@@ -157,8 +160,11 @@ if (count($accessList["users"]) != 0 || count($accessList["groups"]) != 0) {
 		print "</form>\n";
 	}
 
+	/* memorїze groups with access rights */
+	$memgroups = array();
 	foreach ($accessList["groups"] as $groupAccess) {
 		$groupObj = $groupAccess->getGroup();
+		$memgroups[] = $groupObj->getID();
 		$mode = $groupAccess->getMode();
 		print "<form action=\"../op/op.DocumentAccess.php\">";
 		print "<input type=\"Hidden\" name=\"documentid\" value=\"".$documentid."\">";
@@ -191,7 +197,7 @@ if (count($accessList["users"]) != 0 || count($accessList["groups"]) != 0) {
 <option value="-1"><?php printMLText("select_one");?></option>
 <?php
 foreach ($allUsers as $userObj) {
-	if ($userObj->isGuest()) {
+	if ($userObj->isGuest() || in_array($userObj->getID(), $memusers)) {
 		continue;
 	}
 	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "</option>\n";
@@ -208,6 +214,8 @@ foreach ($allUsers as $userObj) {
 <?php
 $allGroups = $dms->getAllGroups();
 foreach ($allGroups as $groupObj) {
+	if(in_array($groupObj->getID(), $memgroups))
+		continue;
 	print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "</option>\n";
 }
 ?>
