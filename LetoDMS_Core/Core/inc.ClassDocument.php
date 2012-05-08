@@ -603,7 +603,10 @@ class LetoDMS_Core_Document { /* {{{ */
 	 * privileges. If $mode is set to M_ANY no restriction will apply
 	 * regardless of the value of $op. The returned array contains a list
 	 * of {@link LetoDMS_Core_UserAccess} and
-	 * {@link LetoDMS_Core_GroupAccess} objects.
+	 * {@link LetoDMS_Core_GroupAccess} objects. Even if the document
+	 * has no access list the returned array contains the two elements
+	 * 'users' and 'groups' which are than empty. The methode returns false
+	 * if the function fails.
 	 * 
 	 * @param integer $mode access mode (defaults to M_ANY)
 	 * @param integer $op operation (defaults to O_EQ)
@@ -734,9 +737,18 @@ class LetoDMS_Core_Document { /* {{{ */
 	/**
 	 * Returns the greatest access privilege for a given user
 	 *
-	 * This function searches the access control list for entries of
+	 * This function returns the access mode for a given user. An administrator
+	 * and the owner of the folder has unrestricted access. A guest user has
+	 * read only access or no access if access rights are further limited
+	 * by access control lists. All other users have access rights according
+	 * to the access control lists or the default access. This function will
+	 * recursive check for access rights of parent folders if access rights
+	 * are inherited.
+	 *
+	 * The function searches the access control list for entries of
 	 * user $user. If it finds more than one entry it will return the
-	 * one allowing the greatest privileges. If there is no entry in the
+	 * one allowing the greatest privileges, but user rights will always
+	 * precede group rights. If there is no entry in the
 	 * access control list, it will return the default access mode.
 	 * The function takes inherited access rights into account.
 	 * For a list of possible access rights see @file inc.AccessUtils.php
@@ -767,12 +779,17 @@ class LetoDMS_Core_Document { /* {{{ */
 				return $userAccess->getMode();
 			}
 		}
+		/* Get the highest right defined by a group */
+		$result = 0;
 		foreach ($accessList["groups"] as $groupAccess) {
 			if ($user->isMemberOfGroup($groupAccess->getGroup())) {
-//				if ($groupAccess->getMode()>$result)
-					return $groupAccess->getMode();
+				if ($groupAccess->getMode() > $result)
+					$result = $groupAccess->getMode();
+//					return $groupAccess->getMode();
 			}
 		}
+		if($result)
+			return $result;
 		$result = $this->getDefaultAccess();
 		return $result;
 	} /* }}} */
@@ -1707,7 +1724,6 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 			$this->_user = $this->_document->_dms->getUser($this->_userID);
 		return $this->_user;
 	} /* }}} */
-//	function getPath() { return $this->_dir . $this->_version . $this->_fileType; }
 	function getPath() { return $this->_document->getDir() . $this->_version . $this->_fileType; }
 
 	function setComment($newComment) { /* {{{ */
