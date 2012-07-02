@@ -590,6 +590,9 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 
 		// get folder or document from path
 		$obj = $this->reverseLookup($options["path"]);
+		/* Make a second try if it is a directory with the leading '/' */
+		if(!$obj)
+			$obj = $this->reverseLookup($options["path"].'/');
 
 		// sanity check
 		if (!$obj) return "404 Not found";
