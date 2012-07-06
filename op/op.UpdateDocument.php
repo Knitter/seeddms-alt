@@ -168,29 +168,31 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["si
 
 		$expires = ($_POST["expires"] == "true") ? mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]) : false;
 
-		if ($document->setExpires($expires)) {
-			$document->getNotifyList();
-			if($notifier) {
-				$folder = $document->getFolder();
-				// Send notification to subscribers.
-				$subject = "###SITENAME###: ".$document->_name." - ".getMLText("expiry_changed_email");
-				$message = getMLText("expiry_changed_email")."\r\n";
-				$message .= 
-					getMLText("document").": ".$document->_name."\r\n".
-					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-					getMLText("comment").": ".$document->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+		if ($expires) {
+			if($document->setExpires($expires)) {
+				$document->getNotifyList();
+				if($notifier) {
+					$folder = $document->getFolder();
+					// Send notification to subscribers.
+					$subject = "###SITENAME###: ".$document->_name." - ".getMLText("expiry_changed_email");
+					$message = getMLText("expiry_changed_email")."\r\n";
+					$message .= 
+						getMLText("document").": ".$document->_name."\r\n".
+						getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
+						getMLText("comment").": ".$document->getComment()."\r\n".
+						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
 
-//				$subject=mydmsDecodeString($subject);
-//				$message=mydmsDecodeString($message);
+	//				$subject=mydmsDecodeString($subject);
+	//				$message=mydmsDecodeString($message);
 
-				$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-				foreach ($document->_notifyList["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message);
+					$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
+					foreach ($document->_notifyList["groups"] as $grp) {
+						$notifier->toGroup($user, $grp, $subject, $message);
+					}
 				}
+			} else {
+				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 			}
-		} else {
-			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 		}
 	}
 }
