@@ -47,11 +47,13 @@ foreach ($tables as $table){
 	foreach ($records as $record){
 		
 		$values="";
-		for ($i=0;$i<(count($record)/2);$i++){
-			if (is_numeric($record[$i])) $values .= $record[$i];
-			else $values .= "'".$record[$i]."'";
+		$i = 1;
+		foreach ($record as $column) {
+			if (is_numeric($column)) $values .= $column;
+			else $values .= "'".$column."'";
 			
-			if ($i<(count($record)/2-1)) $values .= ",";
+			if ($i<(count($record))) $values .= ",";
+			$i++;
 		}
 		
 		fwrite($h, "INSERT INTO " . $table . " VALUES (" . $values . ");\n");
