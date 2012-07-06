@@ -1,4 +1,50 @@
 --------------------------------------------------------------------------------
+                     Changes in version 3.3.6
+--------------------------------------------------------------------------------
+- fixed deletion of files over WebDAV for some clients
+- updated russian language
+- comment is no longer needed when adding a user, email is now required
+- added debug mode in DBAccess class
+- list of users/groups on 'Edit Access' page does not contain users/groups
+  which are already on the acl
+- if a document/folder has access rights based on a group, then the highest
+  access right will be used (not the one first assigned)
+- added configuration of path to stop words file
+- fixed creation of database dump file
+
+--------------------------------------------------------------------------------
+                     Changes in version 3.3.5
+--------------------------------------------------------------------------------
+- extend the php include path with ADOdb path much earlier. This fixeѕ
+  problems with Log.php if installed in the same as ADOdb.
+
+--------------------------------------------------------------------------------
+                     Changes in version 3.3.4
+--------------------------------------------------------------------------------
+- fixed another issue of incorrect document access if masDirID != 0
+- updated README
+- use common way to check for configuration file
+
+--------------------------------------------------------------------------------
+                     Changes in version 3.3.3
+--------------------------------------------------------------------------------
+- fixed incorrect document access if masDirID != 0
+- added swedish translation (thanks to Thorsten Michelfelder)
+
+--------------------------------------------------------------------------------
+                     Changes in version 3.3.2
+--------------------------------------------------------------------------------
+- minor bugfixes
+
+--------------------------------------------------------------------------------
+                     Changes in version 3.3.1
+--------------------------------------------------------------------------------
+- added missing check for access right in webdav server
+- update.sql creates table tblUserPasswordRequest
+- minor changes in language files
+- fixed link to login page on password forgotten page
+
+--------------------------------------------------------------------------------
                      Changes in version 3.3.0
 --------------------------------------------------------------------------------
 - all data is saved into the database without prior modification
