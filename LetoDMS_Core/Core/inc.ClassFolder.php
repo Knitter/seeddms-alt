@@ -223,7 +223,7 @@ class LetoDMS_Core_Folder {
 			return false;
 
 		foreach ($resArr as $row) {
-			$newPath = ereg_replace("^.*:".$this->_id.":(.*$)", $pathPrefix."\\1", $row["folderList"]);
+			$newPath = preg_replace("/^.*:".$this->_id.":(.*$)/", $pathPrefix."\\1", $row["folderList"]);
 			$queryStr="UPDATE `tblDocuments` SET `folderList` = '".$newPath."' WHERE `tblDocuments`.`id` = '".$row["id"]."'";
 			$res = $db->getResult($queryStr);
 		}
