@@ -183,7 +183,7 @@ if (is_bool($user)) {
 		exit;
 	}
 
-	//Vergleichen des Passwortes (falls kein guest-login)
+	// Check if password matches (if not a guest user)
 	// Assume that the password has been sent via HTTP POST. It would be careless
 	// (and dangerous) for passwords to be sent via GET.
 	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd())) {
