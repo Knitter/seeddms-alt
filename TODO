@@ -1,3 +1,8 @@
+Settings::searchConfigFilePath() and Settings::getConfigDir() use different
+approaches to get the configuration directory.
+
+Show expiration status of documents in document list
+
 Add a Search Function to Related Documents. When attaching a related document their should be a search function to easily find the document you would like to relate.
 
 Export/Import content as xml (even for subfolders)
