@@ -245,34 +245,25 @@ $startTime = getTime();
 $resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, $categories);
 $searchTime = getTime() - $startTime;
 $searchTime = round($searchTime, 2);
-// ---------------------------------- Ausgabe der Ergebnisse --------------------------------------
+
+$entries = array();
+if($resArr['folders']) {
+	foreach ($resArr['folders'] as $entry) {
+		if ($entry->getAccessMode($user) >= M_READ) {
+			$entries[] = $entry;
+		}
+	}
+}
+if($resArr['docs']) {
+	foreach ($resArr['docs'] as $entry) {
+		if ($entry->getAccessMode($user) >= M_READ) {
+			$entries[] = $entry;
+		}
+	}
+}
+// -------------- Ausgabe der Ergebnisse --------------------------------
 
 UI::contentContainerStart();
-?>
-<table width="100%" style="border-collapse: collapse;">
-<tr>
-<td align="left" style="padding:0; margin:0;">
-<?php
-$numResults = count($resArr['docs']) + count($resArr['folders']);
-if ($numResults == 0) {
-	printMLText("search_no_results");
-}
-else {
-	printMLText("search_report", array("doccount" => $resArr['totalDocs'], "foldercount" => $resArr['totalFolders']));
-}
-?>
-</td>
-<td align="right"><?php printMLText("search_time", array("time" => $searchTime));?></td>
-</tr>
-</table>
-
-<?php
-if ($numResults == 0) {
-	UI::contentContainerEnd();
-	UI::htmlEndPage();
-	exit;
-}
-
 UI::pageList($pageNumber, $resArr['totalPages'], "../op/op.Search.php", $_GET);
 
 print "<table class=\"folderView\">";
@@ -288,14 +279,11 @@ print "<th>".getMLText("comment")."</th>\n";
 print "</tr>\n</thead>\n<tbody>\n";
 
 $resultsFilteredByAccess = false;
-$entries = array_merge($resArr['folders'], $resArr['docs']);
+$foldercount = $doccount = 0;
 foreach ($entries as $entry) {
 	if(get_class($entry) == 'LetoDMS_Core_Document') {
 		$document = $entry;
-		if ($document->getAccessMode($user) < M_READ) {
-			$resultsFilteredByAccess = true;
-		}
-		else {
+			$doccount++;
 			$lc = $document->getLatestContent();
 			print "<tr>";
 			//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
@@ -326,13 +314,9 @@ foreach ($entries as $entry) {
 			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 			print "<td>".$comment."</td>";
 			print "</tr>\n";
-		}
 	} elseif(get_class($entry) == 'LetoDMS_Core_Folder') {
 		$folder = $entry;
-		if ($folder->getAccessMode($user) < M_READ) {
-			$resultsFilteredByAccess = true;
-		}
-		else {
+			$foldercount++;
 			if (in_array(2, $searchin)) {
 				$folderName = markQuery($folder->getName(), "i");
 			} else {
@@ -356,13 +340,19 @@ foreach ($entries as $entry) {
 			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 			print "<td>".$comment."</td>";
 			print "</tr>\n";
-		}
 	}
 }
-if ($resultsFilteredByAccess) {
+if (0 && $resultsFilteredByAccess) {
 	print "<tr><td colspan=\"7\">". getMLText("search_results_access_filtered") . "</td></tr>";
 }
+
 print "</tbody></table>\n";
+$numResults = $doccount + $foldercount;
+if ($numResults == 0) {
+	print "<p>".getMLText("search_no_results")."</p>";
+} else {
+//	print "<p>".getMLText("search_report", array("doccount" => $doccount, "foldercount" => $foldercount, 'searchtime'=>$searchTime))."</p>";
+}
 
 UI::pageList($pageNumber, $resArr['totalPages'], "../op/op.Search.php", $_GET);
 
