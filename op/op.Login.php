@@ -189,6 +189,19 @@ if (is_bool($user)) {
 	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd())) {
 		_printMessage(getMLText("login_error_title"),	"<p>".getMLText("login_error_text").
 									"</p>\n<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
+		/* if counting of login failures is turned on, then increment its value */
+		if($settings->_loginFailure) {
+			$failures = $user->addLoginFailure();
+			if($failures >= $settings->_loginFailure)
+				$user->setDisabled(true);
+		}
+		exit;
+	}
+
+	// Check if account is disabled
+	if($user->isDisabled()) {
+		_printMessage(getMLText("login_disabled_title"),	"<p>".getMLText("login_disabled_text").
+									"</p>\n<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
 		exit;
 	}
 	
@@ -200,6 +213,9 @@ if (is_bool($user)) {
 		exit;
 	}
 	
+	/* Clear login failures if login was successful */
+	$user->clearLoginFailures();
+
 }
 
 // Capture the user's language and theme settings.
