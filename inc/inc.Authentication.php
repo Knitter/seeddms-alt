@@ -49,4 +49,24 @@ $notifier->setSender($user);
 $theme = $resArr["theme"];
 include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
 
+/* Check if password needs to be changed because it expired. If it needs
+ * to be changed redirect to out/out.ForcePasswordChange.php. Do this
+ * check only if password expiration is turned on, we are not on the
+ * page to change the password or the page that changes the password, and
+ * it is not admin */
+
+if (!$user->isAdmin()) {
+	if($settings->_passwordExpiration > 0) {
+		if(basename($_SERVER['SCRIPT_NAME']) != 'out.ForcePasswordChange.php' && basename($_SERVER['SCRIPT_NAME']) != 'op.EditUserData.php') {
+			$pwdexp = $user->getPwdExpiration();
+			if(substr($pwdexp, 0, 10) != '0000-00-00') {
+				$pwdexpts = strtotime($pwdexp); // + $pwdexp*86400;
+				if($pwdexpts > 0 && $pwdexpts < time()) {
+					header("Location: ../out/out.ForcePasswordChange.php");
+					exit;
+				}
+			}
+		}
+	}
+}
 ?>
