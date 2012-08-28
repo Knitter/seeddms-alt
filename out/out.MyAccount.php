@@ -55,7 +55,14 @@ print "<td>".htmlspecialchars($user->getEmail())."</td>\n";
 print "</tr>\n<tr>\n";
 print "<td>".getMLText("comment")." : </td>\n";
 print "<td>".htmlspecialchars($user->getComment())."</td>\n";
-print"</tr>\n</table>\n";
+print "</tr>\n";
+if($settings->_passwordExpiration > 0) {
+	print "<tr>\n";
+	print "<td>".getMLText("password_expiration")." : </td>\n";
+	print "<td>".htmlspecialchars($user->getPwdExpiration())."</td>\n";
+	print "</tr>\n";
+}
+print "</table>\n";
 
 UI::contentContainerEnd();
 UI::htmlEndPage();
