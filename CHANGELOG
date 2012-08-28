@@ -1,4 +1,21 @@
 --------------------------------------------------------------------------------
+                     Changes in version 3.4.0
+--------------------------------------------------------------------------------
+- check for password strength
+- passwords can expire after a given number of days
+- prevent passwords from being reused
+- user can be disabled after n login failures
+- added autocompletion to document chooser
+- do not list documents in search result which cannot be accessed by the user
+
+--------------------------------------------------------------------------------
+                     Changes in version 3.3.7
+--------------------------------------------------------------------------------
+- major security update which fixeѕ lots of possible XSS and CSRF attacts
+- comment is no longer needed when adding a user, email is now required (this
+  time it is really changed)
+
+--------------------------------------------------------------------------------
                      Changes in version 3.3.6
 --------------------------------------------------------------------------------
 - fixed deletion of files over WebDAV for some clients
