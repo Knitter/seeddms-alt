@@ -18,11 +18,11 @@
   <email></email>
   <active>no</active>
  </lead>
- <date>2012-02-08</date>
+ <date>2012-02-13</date>
  <time>08:05:38</time>
  <version>
-  <release>3.3.0</release>
-  <api>3.3.0</api>
+  <release>3.4.0</release>
+  <api>3.4.0</api>
  </version>
  <stability>
   <release>beta</release>
@@ -30,10 +30,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- added methods to find and repair errors in document and folder records
-- removed sendmail parameter from some methods in LetoDMS_Core_Document
-- do not use some of the temporay tables anymore
-- SetFetchMode(ADODB_FETCH_ASSOC) in LetoDMS_Core_DatabaseAccess::connect()
+- added PDO database driver, several sql changes for better compatiblity
  </notes>
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
@@ -98,6 +95,21 @@
  <changelog>
   <release>
    <version>
+    <release>3.0.0</release>
+    <api>3.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2010-04-27</date>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+Initial release
+   </notes>
+  </release>
+  <release>
+   <version>
     <release>3.2.0</release>
     <api>3.2.0</api>
    </version>
@@ -113,18 +125,118 @@ New release
    </notes>
   </release>
   <release>
+   <date>2012-02-08</date>
+   <time>08:05:38</time>
    <version>
-    <release>3.0.0</release>
-    <api>3.0.0</api>
+    <release>3.3.0</release>
+    <api>3.3.0</api>
    </version>
    <stability>
-    <release>stable</release>
+    <release>beta</release>
     <api>stable</api>
    </stability>
-   <date>2010-04-27</date>
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
-Initial release
+- added methods to find and repair errors in document and folder records
+- removed sendmail parameter from some methods in LetoDMS_Core_Document
+- do not use some of the temporay tables anymore
+- SetFetchMode(ADODB_FETCH_ASSOC) in LetoDMS_Core_DatabaseAccess::connect()
+   </notes>
+  </release>
+  <release>
+   <date>2012-03-21</date>
+   <time>07:39:48</time>
+   <version>
+    <release>3.3.1</release>
+    <api>3.3.1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new release
+   </notes>
+  </release>
+  <release>
+   <date>2012-03-22</date>
+   <time>08:07:42</time>
+   <version>
+    <release>3.3.2</release>
+    <api>3.3.2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- fixed bug in LetoDMS_Core_Document::getDir()
+   </notes>
+  </release>
+  <release>
+   <date>2012-03-28</date>
+   <time>08:42:35</time>
+   <version>
+    <release>3.3.3</release>
+    <api>3.3.3</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- fixed bug in LetoDMS_Core_Document::getPath()
+   </notes>
+  </release>
+  <release>
+   <date>2012-04-11</date>
+   <time>13:34:30</time>
+   <version>
+    <release>3.3.4</release>
+    <api>3.3.4</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- fixed bug in LetoDMS_Core_DocumentFile::getPath()
+   </notes>
+  </release>
+  <release>
+   <date>2012-04-30</date>
+   <time>17:11:05</time>
+   <version>
+    <release>3.3.5</release>
+    <api>3.3.5</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- minor corrections
+   </notes>
+  </release>
+  <release>
+   <date>2012-07-16</date>
+   <time>16:04:58</time>
+   <version>
+    <release>3.3.6</release>
+    <api>3.3.6</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- no changes, just keep same version as letodms application
    </notes>
   </release>
  </changelog>
