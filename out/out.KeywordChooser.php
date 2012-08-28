@@ -34,7 +34,7 @@ foreach($allusers as $u) {
 $categories = $dms->getAllKeywordCategories($userids);
 
 if($_GET['target']) {
-	$target = $_GET['target'];
+	$target = sanitizeString($_GET['target']);
 } else {
 	$target = 'form1';
 }

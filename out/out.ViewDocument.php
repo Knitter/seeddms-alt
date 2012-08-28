@@ -40,7 +40,7 @@ if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-$documentid = $_GET["documentid"];
+$documentid = intval($_GET["documentid"]);
 $document = $dms->getDocument($documentid);
 
 if (!is_object($document)) {
@@ -90,7 +90,7 @@ if ($document->isLocked()) {
 <td>
 <?php
 $owner = $document->getOwner();
-print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".$owner->getFullName()."</a>";
+print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".htmlspecialchars($owner->getFullName())."</a>";
 ?>
 </td>
 </tr>

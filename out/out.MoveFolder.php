@@ -29,7 +29,7 @@ if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET[
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
 
-$folderid = $_GET["folderid"];
+$folderid = intval($_GET["folderid"]);
 $folder = $dms->getFolder($folderid);
 
 if (!is_object($folder)) {

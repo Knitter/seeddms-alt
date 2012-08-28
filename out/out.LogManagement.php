@@ -90,7 +90,7 @@ if ($logname && file_exists($settings->_contentDir.$logname)){
 	UI::contentHeading("&nbsp;");
 	UI::contentContainerStart();
 	
-	UI::contentSubHeading($logname);
+	UI::contentSubHeading(sanitizeString($logname));
 
 	echo "<div class=\"logview\">";
 	echo "<pre>\n";

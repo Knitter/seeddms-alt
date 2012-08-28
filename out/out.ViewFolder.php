@@ -29,7 +29,7 @@ if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET[
 	$folderid = $settings->_rootFolderID;
 }
 else {
-	$folderid = $_GET["folderid"];
+	$folderid = intval($_GET["folderid"]);
 }
 
 $folder = $dms->getFolder($folderid);

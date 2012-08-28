@@ -30,7 +30,7 @@ if (!isset($_GET["logname"]) || !file_exists($settings->_contentDir.$_GET["logna
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 }
 
-$logname = $_GET["logname"];
+$logname = sanitizeString($_GET["logname"]);
 
 UI::htmlStartPage(getMLText("backup_tools"));
 UI::globalNavigation();

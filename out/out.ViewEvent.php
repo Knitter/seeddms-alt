@@ -27,7 +27,7 @@ if (!isset($_GET["id"])){
 	UI::exitError(getMLText("event_details"),getMLText("error_occured"));
 }
 
-$event=getEvent($_GET["id"]);
+$event=getEvent(intval($_GET["id"]));
 
 if (is_bool($event)&&!$event){
 	UI::exitError(getMLText("event_details"),getMLText("error_occured"));
@@ -46,12 +46,12 @@ echo "<table>";
 
 echo "<tr>";
 echo "<td>".getMLText("name").": </td>";
-echo "<td>".$event["name"]."</td>";
+echo "<td>".htmlspecialchars($event["name"])."</td>";
 echo "</tr>";
 
 echo "<tr>";
 echo "<td>".getMLText("comment").": </td>";
-echo "<td>".$event["comment"]."</td>";
+echo "<td>".htmlspecialchars($event["comment"])."</td>";
 echo "</tr>";
 
 echo "<tr>";

@@ -40,8 +40,8 @@ UI::contentContainerStart();
 
 ?>
 <form action="../op/op.RemoveArchive.php" name="form1" method="POST">
-	<input type="Hidden" name="arkname" value="<?php echo $arkname?>">
-	<p><?php printMLText("confirm_rm_backup", array ("arkname" => $arkname));?></p>
+	<input type="Hidden" name="arkname" value="<?php echo sanitizeString($arkname); ?>">
+	<p><?php printMLText("confirm_rm_backup", array ("arkname" => sanitizeString($arkname)));?></p>
 	<input type="Submit" value="<?php printMLText("backup_remove");?>">
 </form>
 <?php

@@ -33,7 +33,7 @@ if(!$settings->_enableLargeFileUpload) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("access_denied"));
 }
 
-$documentid = $_GET["documentid"];
+$documentid = intval($_GET["documentid"]);
 $document = $dms->getDocument($documentid);
 
 if (!is_object($document)) {

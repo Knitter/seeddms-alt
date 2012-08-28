@@ -40,8 +40,8 @@ UI::contentContainerStart();
 
 ?>
 <form action="../op/op.RemoveDump.php" name="form1" method="POST">
-	<input type="Hidden" name="dumpname" value="<?php echo $dumpname?>">
-	<p><?php printMLText("confirm_rm_dump", array ("dumpname" => $dumpname));?></p>
+	<input type="Hidden" name="dumpname" value="<?php echo sanitizeString($dumpname); ?>">
+	<p><?php printMLText("confirm_rm_dump", array ("dumpname" => sanitizeString($dumpname)));?></p>
 	<input type="Submit" value="<?php printMLText("dump_remove");?>">
 </form>
 <?php

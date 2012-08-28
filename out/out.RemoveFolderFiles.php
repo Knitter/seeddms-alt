@@ -30,7 +30,7 @@ if (!isset($_GET["targetidform3"]) || !is_numeric($_GET["targetidform3"]) || int
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_folder_id"));
 }
 
-$folderid = $_GET["targetidform3"];
+$folderid = intval($_GET["targetidform3"]);
 $folder = $dms->getFolder($folderid);
 
 if (!is_object($folder)) {
