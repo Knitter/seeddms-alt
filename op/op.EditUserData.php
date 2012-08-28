@@ -23,6 +23,8 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
+include("../inc/inc.ClassPasswordStrength.php");
+include("../inc/inc.ClassPasswordHistoryManager.php");
 
 if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_user_details"),getMLText("access_denied"));
@@ -35,9 +37,47 @@ if (!$user->isAdmin() && ($settings->_disableSelfEdit)) {
 $fullname = $_POST["fullname"];
 $email    = $_POST["email"];
 $comment  = $_POST["comment"];
+$current_pwd  = $_POST["currentpwd"];
 
-if (isset($_POST["pwd"]) && ($_POST["pwd"] != ""))
-	$user->setPwd(md5($_POST["pwd"]));
+if($user->getPwd() != md5($current_pwd)) {
+	UI::exitError(getMLText("edit_user_details"),getMLText("password_wrong"));
+}
+
+if (isset($_POST["pwd"]) && ($_POST["pwd"] != "")) {
+	if($settings->_passwordStrength) {
+		$ps = new Password_Strength();
+		$ps->set_password($_POST["pwd"]);
+		$ps->calculate();
+		$score = $ps->get_score();
+		if($score > $settings->_passwordStrength) {
+			if($settings->_passwordHistory > 0) {
+				$phm = new LetoDMS_PasswordHistoryManager($db);
+				$oldpwd = $phm->search($user, md5($_POST["pwd"]));
+				if($oldpwd) {
+					UI::exitError(getMLText("set_password"),getMLText("password_already_used"));
+				} else {
+					$phm->add($user, md5($_POST["pwd"]));
+				}
+			}
+			$user->setPwd(md5($_POST["pwd"]));
+			$user->setPwdExpiration(date('Y-m-d H:i:s', time()+$settings->_passwordExpiration*86400));
+		} else {
+			UI::exitError(getMLText("set_password"),getMLText("password_strength_insuffient"));
+		}
+	} else {
+		if($settings->_passwordHistory > 0) {
+			$phm = new LetoDMS_PasswordHistoryManager($db);
+			$oldpwd = $phm->search($user, md5($_POST["pwd"]));
+			if($oldpwd) {
+				UI::exitError(getMLText("set_password"),getMLText("password_already_used"));
+			} else {
+				$phm->add($user, md5($_POST["pwd"]));
+			}
+		}
+		$user->setPwd(md5($_POST["pwd"]));
+		$user->setPwdExpiration(date('Y-m-d H:i:s', time()+$settings->_passwordExpiration*86400));
+	}
+}
 
 if ($user->getFullName() != $fullname)
 	$user->setFullName($fullname);
