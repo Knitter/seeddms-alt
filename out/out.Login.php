@@ -21,6 +21,7 @@
 include("../inc/inc.Settings.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.Utils.php");
 
 UI::htmlStartPage(getMLText("sign_in"), "login");
 UI::globalBanner();
@@ -63,7 +64,7 @@ else if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {
 	$refer=$_POST["referuri"];
 }
 if (isset($refer) && strlen($refer)>0) {
-	echo "<input type='hidden' name='referuri' value='".$refer."'/>";
+	echo "<input type='hidden' name='referuri' value='".sanitizeString($refer)."'/>";
 }
 ?>
 	<table border="0">
