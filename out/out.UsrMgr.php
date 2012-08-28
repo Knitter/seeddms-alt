@@ -28,7 +28,7 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$users = $dms->getAllUsers();
+$users = $dms->getAllUsers($settings->_sortUsersInList);
 
 if (is_bool($users)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
@@ -46,6 +46,7 @@ UI::globalNavigation();
 UI::pageNavigation(getMLText("admin_tools"), "admin_tools");
 
 ?>
+<script type="text/javascript" src='../js/jquery.passwordstrength.js'></script>
 <script language="JavaScript">
 
 function checkForm(num)
@@ -57,8 +58,8 @@ function checkForm(num)
 	if ((num == '0') && (formObj.pwd.value == "")) msg += "<?php printMLText("js_no_pwd");?>\n";
 	if ((formObj.pwd.value != formObj.pwdconf.value)&&(formObj.pwd.value != "" )&&(formObj.pwd.value != "" )) msg += "<?php printMLText("js_pwd_not_conf");?>\n";
 	if (formObj.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
-	//if (formObj.email.value == "") msg += "<?php printMLText("js_no_email");?>\n";
-	if (formObj.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+	if (formObj.email.value == "") msg += "<?php printMLText("js_no_email");?>\n";
+	//if (formObj.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
 	if (msg != "")
 	{
 		alert(msg);
@@ -82,6 +83,12 @@ function showUser(selectObj) {
 	obj.style.display = "";
 }
 
+	$(document).ready( function() {
+		$(".pwd").passStrength({
+			url: "../op/op.Ajax.php",
+			minscore: <?php echo (int) $settings->_passwordStrength; ?>
+		});
+	});
 </script>
 <?php
 
@@ -100,7 +107,7 @@ UI::contentContainerStart();
 	$count=2;
 	foreach ($users as $currUser) {
 		if (isset($_GET["userid"]) && $currUser->getID()==$_GET["userid"]) $selected=$count;
-		print "<option value=\"".$currUser->getID()."\">" . $currUser->getLogin();
+		print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin() . " - ". $currUser->getFullName());
 		$count++;
 }
 ?>
@@ -119,12 +126,22 @@ UI::contentContainerStart();
 		</tr>
 		<tr>
 			<td><?php printMLText("password");?>:</td>
-			<td><input name="pwd" type="Password"></td>
+			<td><input class="pwd" name="pwd" type="Password"> <div id="outerstrength" style="min-width: 100px; height: 14px; display: inline-block; border: 1px solid black; padding: 1px;"><div id="innerstrength" style="width: 0px; height: 14px; display: inline-block; border: 0px; padding: 0px; background-color: red;">&nbsp;</div> <div id="strength" style="display: inline-block;"></div></div></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("confirm_pwd");?>:</td>
 			<td><input type="Password" name="pwdconf"></td>
 		</tr>
+<?php
+	if($settings->_passwordExpiration > 0) {
+?>
+		<tr>
+			<td><?php printMLText("password_expiration");?>:</td>
+			<td><select name="pwdexpiration"><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$settings->_passwordExpiration*86400); ?>"><?php printMLText("according_settings");?></option></select></td>
+		</tr>
+<?php
+	}
+?>
 		<tr>
 			<td><?php printMLText("user_name");?>:</td>
 			<td><input name="name"></td>
@@ -144,6 +161,10 @@ UI::contentContainerStart();
 		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
 			<td><input type="checkbox" name="ishidden" value="1"></td>
+		</tr>
+		<tr>
+			<td><?php printMLText("is_disabled");?>:</td>
+			<td><input type="checkbox" name="isdisabled" value="1"></td>
 		</tr>
 
 		<?php if ($settings->_enableUserImage){ ?>
@@ -250,6 +271,16 @@ UI::contentContainerStart();
 			<td><?php printMLText("confirm_pwd");?>:</td>
 			<td><input type="Password" name="pwdconf"></td>
 		</tr>
+<?php
+	if($settings->_passwordExpiration > 0) {
+?>
+		<tr>
+			<td><?php printMLText("password_expiration");?>:</td>
+			<td><select name="pwdexpiration"><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$settings->_passwordExpiration*86400); ?>"><?php printMLText("according_settings");?></option></select> <?php echo $currUser->getPwdExpiration(); ?></td>
+		</tr>
+<?php
+	}
+?>
 		<tr>
 			<td><?php printMLText("user_name");?>:</td>
 			<td><input name="name" value="<?php print htmlspecialchars($currUser->getFullName());?>"></td>
@@ -269,6 +300,10 @@ UI::contentContainerStart();
 		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
 			<td><input type="checkbox" name="ishidden" value="1"<?php print ($currUser->isHidden() ? " checked='checked'" : "");?>></td>
+		</tr>
+		<tr>
+			<td><?php printMLText("is_disabled");?>:</td>
+			<td><input type="checkbox" name="isdisabled" value="1"<?php print ($currUser->isDisabled() ? " checked='checked'" : "");?>></td>
 		</tr>
 
 		<?php if ($settings->_enableUserImage){ ?>
