@@ -384,7 +384,7 @@ class LetoDMS_Core_Folder {
 		}
 		//inheritAccess = true, defaultAccess = M_READ
 		$queryStr = "INSERT INTO tblFolders (name, parent, folderList, comment, date, owner, inheritAccess, defaultAccess, sequence) ".
-					"VALUES (".$db->qstr($name).", ".$this->_id.", ".$db->qstr($pathPrefix).", ".$db->qstr($comment).", ".mktime().", ".$owner->getID().", 1, ".M_READ.", ". $sequence.")";
+					"VALUES (".$db->qstr($name).", ".$this->_id.", ".$db->qstr($pathPrefix).", ".$db->qstr($comment).", ".time().", ".$owner->getID().", 1, ".M_READ.", ". $sequence.")";
 		if (!$db->getResult($queryStr))
 			return false;
 		$newFolder = $this->_dms->getFolder($db->getInsertID());
@@ -523,7 +523,7 @@ class LetoDMS_Core_Folder {
 		}
 
 		$queryStr = "INSERT INTO tblDocuments (name, comment, date, expires, owner, folder, folderList, inheritAccess, defaultAccess, locked, keywords, sequence) VALUES ".
-					"(".$db->qstr($name).", ".$db->qstr($comment).", " . mktime().", ".(int) $expires.", ".$owner->getID().", ".$this->_id.",".$db->qstr($pathPrefix).", 1, ".M_READ.", -1, ".$db->qstr($keywords).", " . $sequence . ")";
+					"(".$db->qstr($name).", ".$db->qstr($comment).", " . time().", ".(int) $expires.", ".$owner->getID().", ".$this->_id.",".$db->qstr($pathPrefix).", 1, ".M_READ.", -1, ".$db->qstr($keywords).", " . $sequence . ")";
 		if (!$db->getResult($queryStr))
 			return false;
 
@@ -587,7 +587,7 @@ class LetoDMS_Core_Folder {
 	/**
 	 * Returns a list of access privileges
 	 *
-	 * If the document inherits the access privileges from the parent folder
+	 * If the folder inherits the access privileges from the parent folder
 	 * those will be returned.
 	 * $mode and $op can be set to restrict the list of returned access
 	 * privileges. If $mode is set to M_ANY no restriction will apply
@@ -755,6 +755,9 @@ class LetoDMS_Core_Folder {
 	 * @return integer access mode
 	 */
 	function getAccessMode($user) { /* {{{ */
+		if(!$user)
+			return M_NONE;
+
 		/* Admins have full access */
 		if ($user->isAdmin()) return M_ALL;
 
