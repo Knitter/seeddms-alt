@@ -29,6 +29,9 @@ CREATE TABLE `tblUsers` (
   `comment` text NOT NULL,
   `role` smallint(1) NOT NULL default '0',
   `hidden` smallint(1) NOT NULL default '0',
+  `pwdExpiration` datetime NOT NULL default '0000-00-00 00:00:00';
+  `loginfailures` tinyint(4) NOT NULL default '0',
+  `disabled` smallint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -42,6 +45,20 @@ CREATE TABLE `tblUserPasswordRequest` (
   `id` int(11) NOT NULL auto_increment,
   `userID` int(11) NOT NULL default '0',
   `hash` varchar(50) default NULL,
+  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblUserPasswordHistory`
+-- 
+
+CREATE TABLE `tblUserPasswordHistory` (
+  `id` int(11) NOT NULL auto_increment,
+  `userID` int(11) NOT NULL default '0',
+  `pwd` varchar(50) default NULL,
   `date` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -453,5 +470,5 @@ CREATE TABLE `tblVersion` (
 INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0);
 INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
-INSERT INTO tblVersion VALUES (NOW(), 3, 3, 0);
+INSERT INTO tblVersion VALUES (NOW(), 3, 4, 0);
 INSERT INTO tblCategory VALUES (0, '');
