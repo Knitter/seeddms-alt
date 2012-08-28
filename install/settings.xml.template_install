@@ -25,6 +25,8 @@
        - expandFolderTree: 0 to start with tree hidden
        -                   1 to start with tree shown and first level expanded
        -                   2 to start with tree shown fully expanded     
+       - stopWordsFile: path to stop word file for indexer
+       - sortUsersInList: how to sort users in lists ('fullname' or '' (default))
     -->   
     <edition
       strictFormCheck = "false"
@@ -35,6 +37,8 @@
       enableFullSearch = "true"
       enableFolderTree = "true"
       expandFolderTree = "1"
+      stopWordsFile = ""
+      sortUsersInList = ""
   
     >
     </edition> 
@@ -82,6 +86,10 @@
        - restricted: Restricted access: only allow users to log in if they have an entry in the local database (irrespective of successful authentication with LDAP).
        - enableUserImage: enable users images
        - disableSelfEdit: if true user cannot edit his own profile
+			 - passwordStrength: minimum strength of password, set to 0 to disable
+			 - passwordExpiration: number of days after password expires
+			 - passwordHistory: number of remembered passwords
+			 - passwordStrengthAlgorithm: algorithm used to calculate password strenght (simple or advanced)
     -->    
     <authentication
       enableGuestLogin = "false"
@@ -89,6 +97,11 @@
       restricted = "true"
       enableUserImage = "false"
       disableSelfEdit = "false"
+			passwordStrength="0"
+			passwordExpiration="0"
+			passwordHistory="0"
+			passwordStrengthAlgorithm="simple"
+			loginFailure="0"
     >
       <connectors>
         <!-- ***** CONNECTOR LDAP  *****
