@@ -45,8 +45,8 @@ function checkForm()
 	msg = "";
 	if (document.form1.pwd.value != document.form1.pwdconf.value) msg += "<?php printMLText("js_pwd_not_conf");?>\n";
 	if (document.form1.fullname.value == "") msg += "<?php printMLText("js_no_name");?>\n";
-	// if (document.form1.email.value == "") msg += "<?php printMLText("js_no_email");?>\n";
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+	if (document.form1.email.value == "") msg += "<?php printMLText("js_no_email");?>\n";
+//	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
 	if (msg != "")
 	{
 		alert(msg);
@@ -61,16 +61,28 @@ function checkForm()
 UI::contentHeading(getMLText("edit_user_details"));
 UI::contentContainerStart();
 ?>
-
 <form action="../op/op.EditUserData.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
 <table>
 	<tr>
+		<td><?php printMLText("current_password");?>:</td>
+		<td><input id="currentpwd" type="Password" name="currentpwd" size="30"></td>
+	</tr>
+	<tr>
 		<td><?php printMLText("password");?>:</td>
-		<td><input type="Password" name="pwd" size="30"></td>
+		<td><input id="pwd" type="Password" name="pwd" size="30"> <div id="outerstrength" style="min-width: 100px; height: 14px; display: inline-block; border: 1px solid black; padding: 1px;"><div id="innerstrength" style="width: 0px; height: 14px; display: inline-block; border: 0px; padding: 0px; background-color: red;">&nbsp;</div> <div id="strength" style="display: inline-block;"></div></div></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("confirm_pwd");?>:</td>
-		<td><input type="Password" name="pwdconf" size="30"></td>
+		<td><input id="pwdconf" type="Password" name="pwdconf" size="30"></td>
+<script type="text/javascript" src='../js/jquery.passwordstrength.js'></script>
+<script>
+	$(document).ready( function() {
+		$("#pwd").passStrength({
+			url: "../op/op.Ajax.php",
+			minscore: <?php echo (int) $settings->_passwordStrength; ?>
+		});
+	});
+</script>
 	</tr>
 	<tr>
 		<td><?php printMLText("name");?>:</td>
@@ -105,7 +117,7 @@ if ($settings->_enableUserImage){
 <?php	} ?>
 
 	<tr>
-		<td colspan="2"><input type="Submit" value="<?php printMLText("update_info") ?>"></td>
+		<td colspan="2"><input type="Submit" value="<?php printMLText("submit_userinfo") ?>"></td>
 	</tr>
 </table>
 </form>
