@@ -434,6 +434,14 @@ class LetoDMS_Core_User {
 		$queryStr = "DELETE FROM tblUserImages WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 
+		// Delete entries in password history
+		$queryStr = "DELETE FROM tblUserPasswordHistory WHERE userID = " . $this->_id;
+		if (!$db->getResult($queryStr)) return false;
+
+		// Delete entries in password request
+		$queryStr = "DELETE FROM tblUserPasswordRequest WHERE userID = " . $this->_id;
+		if (!$db->getResult($queryStr)) return false;
+
 		// Delete user itself
 		$queryStr = "DELETE FROM tblUsers WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
