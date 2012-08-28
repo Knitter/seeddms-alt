@@ -135,6 +135,10 @@ function documentSelected(id, name) {
 
 <?php
 	$folder = $dms->getFolder($folderid);
+	echo "<input type=\"text\" class=\"autocomplete\" />";
+	UI::contentContainerStart();
+	echo "<div id=\"resultautocomplete\"></div>";
+	UI::contentContainerEnd();
 	UI::contentContainerStart();
 	printTree($folder->getPath());
 	UI::contentContainerEnd();
