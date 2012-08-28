@@ -45,6 +45,13 @@ class LetoDMS_Core_User {
 	var $_pwd;
 
 	/**
+	 * @var string date when password expires
+	 *
+	 * @access protected
+	 */
+	var $_pwdExpiration;
+
+	/**
 	 * @var string full human readable name of user
 	 *
 	 * @access protected
@@ -91,11 +98,25 @@ class LetoDMS_Core_User {
 	var $_role;
 
 	/**
-	 * @var string true if user shall be hidden
+	 * @var boolean true if user shall be hidden
 	 *
 	 * @access protected
 	 */
 	var $_isHidden;
+
+	/**
+	 * @var boolean true if user is disabled
+	 *
+	 * @access protected
+	 */
+	var $_isDisabled;
+
+	/**
+	 * @var int number of login failures
+	 *
+	 * @access protected
+	 */
+	var $_loginFailures;
 
 	/**
 	 * @var object reference to the dms instance this user belongs to
@@ -108,7 +129,7 @@ class LetoDMS_Core_User {
 	const role_admin = '1';
 	const role_guest = '2';
 
-	function LetoDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0) {
+	function LetoDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='', $loginFailures=0) {
 		$this->_id = $id;
 		$this->_login = $login;
 		$this->_pwd = $pwd;
@@ -119,6 +140,9 @@ class LetoDMS_Core_User {
 		$this->_comment = $comment;
 		$this->_role = $role;
 		$this->_isHidden = $isHidden;
+		$this->_isDisabled = $isDisabled;
+		$this->_pwdExpiration = $pwdExpiration;
+		$this->_loginFailures = $loginFailures;
 		$this->_dms = null;
 	}
 
@@ -167,6 +191,20 @@ class LetoDMS_Core_User {
 			return false;
 
 		$this->_pwd = $newPwd;
+		return true;
+	} /* }}} */
+
+	function getPwdExpiration() { return $this->_pwdExpiration; }
+
+	function setPwdExpiration($newPwdExpiration) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "UPDATE tblUsers SET pwdExpiration =".$db->qstr($newPwdExpiration)." WHERE id = " . $this->_id;
+		$res = $db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		$this->_pwdExpiration = $newPwdExpiration;
 		return true;
 	} /* }}} */
 
@@ -278,6 +316,42 @@ class LetoDMS_Core_User {
 		$this->_isHidden = $isHidden;
 		return true;
 	}	 /* }}} */
+
+	function isDisabled() { return $this->_isDisabled; }
+
+	function setDisabled($isDisabled) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$isDisabled = ($isDisabled) ? "1" : "0";
+		$queryStr = "UPDATE tblUsers SET disabled = " . $isDisabled . " WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_isDisabled = $isDisabled;
+		return true;
+	}	 /* }}} */
+
+	function addLoginFailure() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$this->_loginFailures++;
+		$queryStr = "UPDATE tblUsers SET loginfailures = " . $this->_loginFailures . " WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		return $this->_loginFailures;
+	} /* }}} */
+
+	function clearLoginFailures() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$this->_loginFailures = 0;
+		$queryStr = "UPDATE tblUsers SET loginfailures = " . $this->_loginFailures . " WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		return true;
+	} /* }}} */
 
 	/**
 	 * Remove the user and also remove all its keywords, notifies, etc.
@@ -548,7 +622,7 @@ class LetoDMS_Core_User {
 	 * further.
 	 *
 	 * For a detaile description of the result array see
-	 * {link LetoDMS_User::getApprovalStatus}
+	 * {link LetoDMS_Core_User::getApprovalStatus}
 	 *
 	 * @param int $documentID optional document id for which to retrieve the
 	 *        reviews
@@ -738,7 +812,7 @@ class LetoDMS_Core_User {
 
 	/**
 	 * Get a list of mandatory approvers
-	 * See {link LetoDMS_User::getMandatoryReviewers}
+	 * See {link LetoDMS_Core_User::getMandatoryReviewers}
 	 *
 	 * @return array list of arrays with two elements containing the user id
 	 *         (approverUserID) and group id (approverGroupID) of the approver.
