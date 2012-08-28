@@ -150,6 +150,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableFullSearch");?>:</td>
         <td><input name="enableFullSearch" type="checkbox" <?php if ($settings->_enableFullSearch) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_stopWordsFile_desc");?>">
+        <td><?php printMLText("settings_stopWordsFile");?>:</td>
+        <td><input name="stopWordsFile" value="<?php echo $settings->_stopWordsFile; ?>" size="100" /></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableFolderTree_desc");?>">
         <td><?php printMLText("settings_enableFolderTree");?>:</td>
         <td><input name="enableFolderTree" type="checkbox" <?php if ($settings->_enableFolderTree) echo "checked" ?> /></td>
@@ -161,6 +165,14 @@ if(!is_writeable($settings->_configFilePath)) {
             <OPTION VALUE="0" <?php if ($settings->_expandFolderTree==0) echo "SELECTED" ?> ><?php printMLText("settings_expandFolderTree_val0");?></OPTION>
             <OPTION VALUE="1" <?php if ($settings->_expandFolderTree==1) echo "SELECTED" ?> ><?php printMLText("settings_expandFolderTree_val1");?></OPTION>
             <OPTION VALUE="2" <?php if ($settings->_expandFolderTree==2) echo "SELECTED" ?> ><?php printMLText("settings_expandFolderTree_val2");?></OPTION>
+          </SELECT>
+      </tr>
+      <tr title="<?php printMLText("settings_sortUsersInList_desc");?>">
+        <td><?php printMLText("settings_sortUsersInList");?>:</td>
+        <td>
+          <SELECT name="sortUsersInList">
+            <OPTION VALUE="" <?php if ($settings->_sortUsersInList=='') echo "SELECTED" ?> ><?php printMLText("settings_sortUsersInList_val_login");?></OPTION>
+            <OPTION VALUE="fullname" <?php if ($settings->_sortUsersInList=='fullname') echo "SELECTED" ?> ><?php printMLText("settings_sortUsersInList_val_fullname");?></OPTION>
           </SELECT>
       </tr>
 
@@ -268,6 +280,31 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_enablePasswordForgotten_desc");?>">
         <td><?php printMLText("settings_enablePasswordForgotten");?>:</td>
         <td><input name="enablePasswordForgotten" type="checkbox" <?php if ($settings->_enablePasswordForgotten) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_passwordЅtrength_desc");?>">
+        <td><?php printMLText("settings_passwordStrength");?>:</td>
+        <td><input name="passwordStrength" value="<?php echo $settings->_passwordStrength; ?>" size="2" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_passwordStrengthAlgorithm_desc");?>">
+        <td><?php printMLText("settings_passwordStrengthAlgorithm");?>:</td>
+        <td>
+				  <select name="passwordStrengthAlgorithm">
+					  <option value="simple" <?php if ($settings->_passwordStrengthAlgorithm=='simple') echo "selected" ?>><?php printMLText("settings_passwordStrengthAlgorithm_valsimple");?></option>
+						<option value="advanced" <?php if ($settings->_passwordStrengthAlgorithm=='advanced') echo "selected" ?>><?php printMLText("settings_passwordStrengthAlgorithm_valadvanced");?></option>
+					</select>
+				</td>
+      </tr>
+      <tr title="<?php printMLText("settings_passwordExpiration_desc");?>">
+        <td><?php printMLText("settings_passwordExpiration");?>:</td>
+        <td><input name="passwordExpiration" value="<?php echo $settings->_passwordExpiration; ?>" size="3" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_passwordHistory_desc");?>">
+        <td><?php printMLText("settings_passwordHistory");?>:</td>
+        <td><input name="passwordHistory" value="<?php echo $settings->_passwordHistory; ?>" size="2" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_loginFailure_desc");?>">
+        <td><?php printMLText("settings_loginFailure");?>:</td>
+        <td><input name="loginFailure" value="<?php echo $settings->_loginFailure; ?>" size="2" /></td>
       </tr>
 
       <!-- TODO Connectors -->

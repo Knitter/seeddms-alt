@@ -40,6 +40,16 @@ class Settings { /* {{{ */
 	var $_enableGuestLogin = false;
 	// Allow users to reset their password
 	var $_enablePasswordForgotten = false;
+	// Minimum password strength (0 - x, 0 means no check)
+	var $_passwordStrength = 0;
+	// Password strength algorithm (simple, advanced)
+	var $_passwordStrengthAlgorithm = 'advanced';
+	// Number of days when a password expires and must be reset
+	var $_passwordExpiration = 10;
+	// Number of different passwords before a password can be reused
+	var $_passwordHistory = 10;
+	// Number of failed logins before account is disabled
+	var $_loginFailure = 0;
 	// Restricted access: only allow users to log in if they have an entry in
 	// the local database (irrespective of successful authentication with LDAP).
 	var $_restricted = true;
@@ -60,6 +70,8 @@ class Settings { /* {{{ */
 	var $_stagingDir = null;
 	// Where the lucene fulltext index is saved
 	var $_luceneDir = null;
+	// Where the stop word file is located
+	var $_stopWordsFile = null;
 	// enable/disable lucene fulltext search
 	var $_enableFullSearch = true;
 	// contentOffsetDirTo
@@ -108,6 +120,9 @@ class Settings { /* {{{ */
 	var $_expandFolderTree = 1;
 	// enable/disable editing of users own profile
 	var $_disableSelfEdit = false;
+	// Sort order of users in lists('fullname' or '' (login))
+	var $_sortUsersInList = '';
+	// enable/disable lucene fulltext search
 	// if enabled admin can login only by specified IP addres
 	var $_adminIP = "";
 	// Max Execution Time
@@ -251,6 +266,8 @@ class Settings { /* {{{ */
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
 		$this->_enableFullSearch = Settings::boolVal($tab["enableFullSearch"]);
+		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
+		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
 		$this->_expandFolderTree = intval($tab["expandFolderTree"]);
 
 		// XML Path: /configuration/site/calendar
@@ -278,6 +295,11 @@ class Settings { /* {{{ */
 		$tab = $node[0]->attributes();
 		$this->_enableGuestLogin = Settings::boolVal($tab["enableGuestLogin"]);
 		$this->_enablePasswordForgotten = Settings::boolVal($tab["enablePasswordForgotten"]);
+		$this->_passwordStrength = intval($tab["passwordStrength"]);
+		$this->_passwordStrengthAlgorithm = strval($tab["passwordStrengthAlgorithm"]);
+		$this->_passwordExpiration = intval($tab["passwordExpiration"]);
+		$this->_passwordHistory = intval($tab["passwordHistory"]);
+		$this->_loginFailure = intval($tab["loginFailure"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
 		$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
 		$this->_disableSelfEdit = Settings::boolVal($tab["disableSelfEdit"]);
@@ -472,6 +494,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
     $this->setXMLAttributValue($node, "enableFullSearch", $this->_enableFullSearch);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);
+    $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
+    $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
 
     // XML Path: /configuration/site/calendar
     $node = $this->getXMLNode($xml, '/configuration/site', 'calendar');
@@ -496,6 +520,11 @@ class Settings { /* {{{ */
     $node = $this->getXMLNode($xml, '/configuration/system', 'authentication');
     $this->setXMLAttributValue($node, "enableGuestLogin", $this->_enableGuestLogin);
     $this->setXMLAttributValue($node, "enablePasswordForgotten", $this->_enablePasswordForgotten);
+    $this->setXMLAttributValue($node, "passwordStrength", $this->_passwordStrength);
+    $this->setXMLAttributValue($node, "passwordStrengthAlgorithm", $this->_passwordStrengthAlgorithm);
+    $this->setXMLAttributValue($node, "passwordExpiration", $this->_passwordExpiration);
+    $this->setXMLAttributValue($node, "passwordHistory", $this->_passwordHistory);
+    $this->setXMLAttributValue($node, "loginFailure", $this->_loginFailure);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);
     $this->setXMLAttributValue($node, "enableUserImage", $this->_enableUserImage);
     $this->setXMLAttributValue($node, "disableSelfEdit", $this->_disableSelfEdit);
@@ -631,21 +660,6 @@ class Settings { /* {{{ */
 			if (file_exists($configDir."/settings.xml"))
 				return $configDir."/settings.xml";
 		}
-/*
-		// Search config file
-		$_tmp = dirname($_SERVER['SCRIPT_FILENAME']);
-		if(is_link($_tmp)) {
-			$_arr = preg_split('/\//', $_tmp);
-			array_pop($_arr);
-
-			$configFilePath = implode('/', $_arr)."/conf/settings.xml";
-		} else {
-			if (file_exists("../conf/settings.xml"))
-				$configFilePath = "../conf/settings.xml";
-			else if (file_exists("conf/settings.xml"))
-				$configFilePath = "conf/settings.xml";
-		}
-*/
 		return $configFilePath;
 	} /* }}} */
 
@@ -854,7 +868,7 @@ class Settings { /* {{{ */
 		// $this->_ADOdbPath
 		$bCheckDB = true;
 		if($this->_ADOdbPath) {
-			if (!file_exists($this->_ADOdbPath."adodb/adodb.inc.php")) {
+			if (!file_exists($this->_ADOdbPath."/adodb/adodb.inc.php")) {
 				$bCheckDB = false;
 				if (file_exists($rootDir."adodb/adodb.inc.php")) {
 					$result["ADOdbPath"] = array(

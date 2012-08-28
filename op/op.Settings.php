@@ -67,6 +67,8 @@ if ($action == "saveSettings")
   $settings->_enableFullSearch = getBoolValue("enableFullSearch");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
   $settings->_expandFolderTree = intval($_POST["expandFolderTree"]);
+	$settings->_stopWordsFile = $_POST["stopWordsFile"];
+	$settings->_sortUsersInList = $_POST["sortUsersInList"];
 
   // SETTINGS - SITE - CALENDAR
   $settings->_enableCalendar = getBoolValue("enableCalendar");
@@ -90,6 +92,11 @@ if ($action == "saveSettings")
   $settings->_enableUserImage = getBoolValue("enableUserImage");
   $settings->_disableSelfEdit = getBoolValue("disableSelfEdit");
   $settings->_enablePasswordForgotten = getBoolValue("enablePasswordForgotten");
+  $settings->_passwordStrength = intval($_POST["passwordStrength"]);
+  $settings->_passwordStrengthAlgorithm = strval($_POST["passwordStrengthAlgorithm"]);
+  $settings->_passwordExpiration = intval($_POST["passwordExpiration"]);
+  $settings->_passwordHistory = intval($_POST["passwordHistory"]);
+  $settings->_loginFailure = intval($_POST["loginFailure"]);
 
   // TODO Connectors
 
