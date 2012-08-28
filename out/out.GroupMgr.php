@@ -3,6 +3,7 @@
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
 //    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2010-2012 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -106,7 +107,7 @@ UI::contentContainerStart();
 <tr>
 <td>
 
-<?php echo getMLText("selection")?>:<select onchange="showUser(this)" id="selector">
+<?php echo getMLText("selection")?>:<select onchange="showUser(this)" id="selector">
 <option value="-1"><?php echo getMLText("choose_group")?>
 <option value="0"><?php echo getMLText("add_group")?>
 <?php
@@ -220,7 +221,7 @@ UI::contentContainerStart();
 						<?php
 							foreach ($allUsers as $currUser)
 								if (!$group->isMember($currUser))
-									print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getFullName()) . "\n";
+									print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName()) . "\n";
 						?>
 					</select>
 				</td>
