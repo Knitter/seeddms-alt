@@ -274,7 +274,7 @@ function _add_log_line($msg="") { /* {{{ */
 function showtree() { /* {{{ */
 	global $settings;
 	
-	if (isset($_GET["showtree"])) return $_GET["showtree"];
+	if (isset($_GET["showtree"])) return intval($_GET["showtree"]);
 	else if ($settings->_enableFolderTree==0) return 0;
 	
 	return 1;
