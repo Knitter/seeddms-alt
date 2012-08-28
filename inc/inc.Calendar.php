@@ -37,9 +37,9 @@ function getEventsInInterval($start, $stop){
 
 	global $db;
 
-	$queryStr = "SELECT * FROM tblEvents WHERE ( start <= " . $start . " AND stop >= " . $start . " ) ".
-	                                       "OR ( start <= " . $stop . " AND stop >= " . $stop . " ) ".
-	                                       "OR ( start >= " . $start . " AND stop <= " . $stop . " )";
+	$queryStr = "SELECT * FROM tblEvents WHERE ( start <= " . (int) $start . " AND stop >= " . (int) $start . " ) ".
+	                                       "OR ( start <= " . (int) $stop . " AND stop >= " . (int) $stop . " ) ".
+	                                       "OR ( start >= " . (int) $start . " AND stop <= " . (int) $stop . " )";
 	$ret = $db->getResultArray($queryStr);	
 	return $ret;
 }
@@ -49,7 +49,7 @@ function addEvent($from, $to, $name, $comment ){
 	global $db,$user;
 
 	$queryStr = "INSERT INTO tblEvents (name, comment, start, stop, date, userID) VALUES ".
-		"('".$name."', '".$comment."', ".$from.", ".$to.", ".mktime().", ".$user->getID().")";
+		"(".$db->qstr($name).", ".$db->qstr($comment).", ".(int) $from.", ".(int) $to.", ".mktime().", ".$user->getID().")";
 	
 	$ret = $db->getResult($queryStr);
 	return $ret;
@@ -61,7 +61,7 @@ function getEvent($id){
 
 	global $db;
 	
-	$queryStr = "SELECT * FROM tblEvents WHERE id = " . $id;
+	$queryStr = "SELECT * FROM tblEvents WHERE id = " . (int) $id;
 	$ret = $db->getResultArray($queryStr);
 	
 	if (is_bool($ret) && $ret == false) return false;
@@ -76,7 +76,7 @@ function editEvent($id, $from, $to, $name, $comment ){
 
 	global $db;
 	
-	$queryStr = "UPDATE tblEvents SET start = " . $from . ", stop = " . $to . ", name = '" . $name . "', comment = '" . $comment . "', date = " . mktime() . " WHERE id = ". $id;
+	$queryStr = "UPDATE tblEvents SET start = " . (int) $from . ", stop = " . (int) $to . ", name = " . $db->qstr($name) . ", comment = " . $db->qstr($comment) . ", date = " . mktime() . " WHERE id = ". (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
 }
@@ -87,7 +87,7 @@ function delEvent($id){
 	
 	global $db;
 	
-	$queryStr = "DELETE FROM tblEvents WHERE id = " . $id;
+	$queryStr = "DELETE FROM tblEvents WHERE id = " . (int) $id;
 	$ret = $db->getResult($queryStr);	
 	return $ret;
 }
