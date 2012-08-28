@@ -183,7 +183,7 @@ class LetoDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '3.3.0';
+			$this->version = '3.4.0';
 	} /* }}} */
 
 	function getDB() { /* {{{ */
@@ -368,6 +368,33 @@ class LetoDMS_Core_DMS {
 			"FROM `tblDocuments` ".
 			"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
 			"WHERE `tblDocuments`.`owner` = " . $user->getID() . " ORDER BY `sequence`";
+
+		$resArr = $this->db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$documents = array();
+		foreach ($resArr as $row) {
+			$document = new LetoDMS_Core_Document($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
+			$document->setDMS($this);
+			$documents[] = $document;
+		}
+		return $documents;
+	} /* }}} */
+
+	/**
+	 * Returns all documents locked by a given user
+	 * FIXME: Not full implemented. Do not use, because it still requires the
+	 * temporary tables!
+	 *
+	 * @param object $user
+	 * @return array list of documents
+	 */
+	function getDocumentsLockedByUser($user) { /* {{{ */
+		$queryStr = "SELECT `tblDocuments`.* ".
+			"FROM `tblDocuments` LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id` = `tblDocumentLocks`.`document` ".
+			"WHERE `tblDocumentLocks`.`userID` = '".$user->getID()."' ".
+			"ORDER BY `id` DESC";
 
 		$resArr = $this->db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
@@ -812,7 +839,7 @@ class LetoDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"]);
+		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"]);
 		$user->setDMS($this);
 		return $user;
 	} /* }}} */
@@ -839,7 +866,7 @@ class LetoDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"]);
+		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"]);
 		$user->setDMS($this);
 		return $user;
 	} /* }}} */
@@ -862,7 +889,7 @@ class LetoDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"]);
+		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"]);
 		$user->setDMS($this);
 		return $user;
 	} /* }}} */
@@ -872,8 +899,11 @@ class LetoDMS_Core_DMS {
 	 *
 	 * @return array of instances of LetoDMS_Core_User or false
 	 */
-	function getAllUsers() { /* {{{ */
-		$queryStr = "SELECT * FROM tblUsers ORDER BY login";
+	function getAllUsers($orderby = '') { /* {{{ */
+		if($orderby == 'fullname')
+			$queryStr = "SELECT * FROM tblUsers ORDER BY fullname";
+		else
+			$queryStr = "SELECT * FROM tblUsers ORDER BY login";
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false)
@@ -882,7 +912,7 @@ class LetoDMS_Core_DMS {
 		$users = array();
 
 		for ($i = 0; $i < count($resArr); $i++) {
-			$user = new LetoDMS_Core_User($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr["language"])?$resArr["language"]:NULL), (isset($resArr["theme"])?$resArr["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"]);
+			$user = new LetoDMS_Core_User($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr["language"])?$resArr["language"]:NULL), (isset($resArr["theme"])?$resArr["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"], $resArr[$i]["disabled"], $resArr[$i]["pwdExpiration"], $resArr[$i]["loginfailures"]);
 			$user->setDMS($this);
 			$users[$i] = $user;
 		}
@@ -901,15 +931,16 @@ class LetoDMS_Core_DMS {
 	 * @param integer $role role of new user (can be 0=normal, 1=admin, 2=guest)
 	 * @param integer $isHidden hide user in all lists, if this is set login
 	 *        is still allowed
+	 * @param integer $isDisabled disable user and prevent login
 	 * @return object of LetoDMS_Core_User
 	 */
-	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0) { /* {{{ */
+	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0, $isDisabled=0, $pwdexpiration='') { /* {{{ */
 		if (is_object($this->getUserByLogin($login))) {
 			return false;
 		}
 		if($role == '')
 			$role = '0';
-		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden) VALUES ('".$login."', '".$pwd."', '".$fullName."', '".$email."', '".$language."', '".$theme."', '".$comment."', '".$role."', '".$isHidden."')";
+		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disable, pwdExpiration) VALUES ('".$login."', '".$pwd."', '".$fullName."', '".$email."', '".$language."', '".$theme."', '".$comment."', '".$role."', '".$isHidden."', '".$isDisabled."', '".$pwdexpiration."')";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;
