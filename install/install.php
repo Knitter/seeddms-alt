@@ -88,7 +88,7 @@ function printCheckError($resCheck) { /* {{{ */
  * Load default settings + set
  */
 define("LETODMS_INSTALL", "on");
-define("LETODMS_VERSION", "3.3.0");
+define("LETODMS_VERSION", "3.4.0");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -97,6 +97,11 @@ $configDir = Settings::getConfigDir();
 /**
  * Check if ENABLE_INSTALL_TOOL exists in config dir
  */
+if (!$configDir) {
+	echo "Fatal error! I could not even find a configuration directory.";
+	exit;
+}
+
 if (!file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
 	echo "For installation of LetoDMS, you must create the file conf/ENABLE_INSTALL_TOOL";
 	exit;
@@ -134,6 +139,9 @@ if(!$settings->_contentDir) {
 	$settings->_stagingDir = $settings->_rootDir . 'data/staging/';
 }
 $settings->_httpRoot = $httpRoot;
+
+if(isset($settings->_ADOdbPath))
+	ini_set('include_path', $settings->_ADOdbPath. PATH_SEPARATOR .ini_get('include_path'));
 
 /**
  * Include GUI + Language
