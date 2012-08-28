@@ -3,6 +3,7 @@
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
 //    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2010-2012 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -25,6 +26,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
+include("../inc/inc.ClassPasswordStrength.php");
 
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
@@ -38,17 +40,20 @@ else $action=NULL;
 if ($action == "adduser") {
 	
 	$login   = $_POST["login"];
+	$pwd     = $_POST["pwd"];
+	$pwdexpiration = $_POST["pwdexpiration"];
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
 	$comment = $_POST["comment"];
 	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
+	$isDisabled = (isset($_POST["isdisabled"]) && $_POST["isdisabled"]==1 ? 1 : 0);
 
 	if (is_object($dms->getUserByLogin($login))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("user_exists"));
 	}
 
-	$newUser = $dms->addUser($login, md5($_POST["pwd"]), $name, $email, $settings->_language, $settings->_theme, $comment, $role, $isHidden);
+	$newUser = $dms->addUser($login, md5($pwd), $name, $email, $settings->_language, $settings->_theme, $comment, $role, $isHidden, $isDisabled, $pwdexpiration);
 	if ($newUser) {
 
 		if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
@@ -147,16 +152,33 @@ else if ($action == "edituser") {
 	
 	$login   = $_POST["login"];
 	$pwd     = $_POST["pwd"];
+	$pwdexpiration = $_POST["pwdexpiration"];
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
 	$comment = $_POST["comment"];
 	$role    = preg_replace('/[^0-2]+/', '', $_POST["role"]);
 	$isHidden = (isset($_POST["ishidden"]) && $_POST["ishidden"]==1 ? 1 : 0);
+	$isDisabled = (isset($_POST["isdisabled"]) && $_POST["isdisabled"]==1 ? 1 : 0);
 	
 	if ($editedUser->getLogin() != $login)
 		$editedUser->setLogin($login);
-	if (isset($pwd) && ($pwd != ""))
-		$editedUser->setPwd(md5($pwd));
+	if (isset($pwd) && ($pwd != "")) {
+		if($settings->_passwordStrength) {
+			$ps = new Password_Strength();
+			$ps->set_password($_POST["pwd"]);
+			$ps->calculate();
+			$score = $ps->get_score();
+			if($score > $settings->_passwordStrength) {
+				$editedUser->setPwd(md5($pwd));
+				$editedUser->setPwdExpiration($pwdexpiration);
+			} else {
+				UI::exitError(getMLText("set_password"),getMLText("password_strength_insuffient"));
+			}
+		} else {
+			$editedUser->setPwd(md5($pwd));
+			$editedUser->setPwdExpiration($pwdexpiration);
+		}
+	}
 	if ($editedUser->getFullName() != $name)
 		$editedUser->setFullName($name);
 	if ($editedUser->getEmail() != $email)
@@ -167,6 +189,11 @@ else if ($action == "edituser") {
 		$editedUser->setRole($role);
 	if ($editedUser->isHidden() != $isHidden)
 		$editedUser->setHidden($isHidden);
+	if ($editedUser->isDisabled() != $isDisabled) {
+		$editedUser->setDisabled($isDisabled);
+		if(!$isDisabled)
+			$editedUser->clearLoginFailures();
+	}
 
 	if (isset($_FILES['userfile']) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 	{
