@@ -757,6 +757,9 @@ class LetoDMS_Core_Document { /* {{{ */
 	 * @return integer access mode
 	 */
 	function getAccessMode($user) { /* {{{ */
+		if(!$user)
+			return M_NONE;
+
 		/* Administrators have unrestricted access */
 		if ($user->isAdmin()) return M_ALL;
 
@@ -1072,7 +1075,7 @@ class LetoDMS_Core_Document { /* {{{ */
 		// the doc path is id/version.filetype
 		$dir = $this->getDir();
 
-		$date = mktime();
+		$date = time();
 
 		/* The version field in table tblDocumentContent used to be auto
 		 * increment but that requires the field to be primary as well if
@@ -1394,7 +1397,7 @@ class LetoDMS_Core_Document { /* {{{ */
 		$dir = $this->getDir();
 
 		$queryStr = "INSERT INTO tblDocumentFiles (comment, date, dir, document, fileType, mimeType, orgFileName, userID, name) VALUES ".
-			"(".$db->qstr($comment).", '".mktime()."', ".$db->qstr($dir).", ".$this->_id.", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$db->qstr($orgFileName).",".$user->getID().",".$db->qstr($name).")";
+			"(".$db->qstr($comment).", '".time()."', ".$db->qstr($dir).", ".$this->_id.", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$db->qstr($orgFileName).",".$user->getID().",".$db->qstr($name).")";
 		if (!$db->getResult($queryStr)) return false;
 
 		$id = $db->getInsertID();
