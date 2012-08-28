@@ -308,19 +308,6 @@ CREATE TABLE `tblDocumentStatusLog` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `tblGroupMembers`
--- 
-
-CREATE TABLE `tblGroupMembers` (
-  `groupID` int(11) NOT NULL default '0',
-  `userID` int(11) NOT NULL default '0',
-  `manager` smallint(1) NOT NULL default '0',
-  PRIMARY KEY  (`groupID`,`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
--- 
 -- Table structure for table `tblGroups`
 -- 
 
@@ -329,6 +316,19 @@ CREATE TABLE `tblGroups` (
   `name` varchar(50) default NULL,
   `comment` text NOT NULL,
   PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblGroupMembers`
+-- 
+
+CREATE TABLE `tblGroupMembers` (
+  `groupID` int(11) NOT NULL default '0',
+  `userID` int(11) NOT NULL default '0',
+  `manager` smallint(1) NOT NULL default '0',
+  PRIMARY KEY  (`groupID`,`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
