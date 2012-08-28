@@ -71,7 +71,7 @@ function checkForm()
 
 <form action="../op/op.EditEvent.php" name="form1" onsubmit="return checkForm();" method="POST">
 
-	<input type="Hidden" name="eventid" value="<?php echo $_GET["id"]; ?>">
+	<input type="Hidden" name="eventid" value="<?php echo (int) $_GET["id"]; ?>">
 
 	<table>
 		<tr>
