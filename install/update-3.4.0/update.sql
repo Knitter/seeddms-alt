@@ -3,7 +3,8 @@ CREATE TABLE `tblUserPasswordHistory` (
   `userID` int(11) NOT NULL default '0',
   `pwd` varchar(50) default NULL,
   `date` datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  CONSTRAINT `tblUserPasswordHistory_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 ALTER TABLE tblUsers ADD COLUMN `pwdExpiration` datetime NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE tblUsers ADD COLUMN `loginfailures` tinyint(4) NOT NULL default '0';
