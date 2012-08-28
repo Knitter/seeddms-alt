@@ -199,7 +199,7 @@
       coreDir = ""
       luceneClassDir = ""
       contentOffsetDir = "1048576"
-      maxDirID = "32700"
+      maxDirID = "0"
       updateNotifyTime = "86400"
     >
     </server>
@@ -207,6 +207,3 @@
   </advanced>
 
 </configuration>
-
-
-
