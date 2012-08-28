@@ -83,6 +83,7 @@ if($rec = $res->FetchRow()) {
 	} else {
 		echo $errorMsg;
 	}
+	echo "<p><a href=\"install.php\">Go back to installation.</a></p>";
 } else {
 	echo "<p>Could not determine database schema version.</p>";
 }
