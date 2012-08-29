@@ -78,7 +78,8 @@ UI::contentContainerStart();
 		</td>
 
 		<td id="categories0" style="display : none;">	
-			<form action="../op/op.Categories.php" >
+			<form action="../op/op.Categories.php" method="post">
+  		<?php echo createHiddenFieldWithKey('addcategory'); ?>
 			<input type="Hidden" name="action" value="addcategory">
 			<?php printMLText("name");?> : <input name="name">
 			<input type="Submit" value="<?php printMLText("new_document_category"); ?>">
@@ -97,7 +98,12 @@ UI::contentContainerStart();
 <?php
 		if(!$category->isUsed()) {
 ?>
-						<a href="../op/op.Categories.php?categoryid=<?php print $category->getID();?>&action=removecategory"><img src="images/del.gif" border="0"><?php printMLText("rm_document_category");?></a>
+						<form style="display: inline-block;" method="post" action="../op/op.Categories.php" >
+						<?php echo createHiddenFieldWithKey('removecategory'); ?>
+						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
+						<input type="Hidden" name="action" value="removecategory">
+						<input value="<?php echo getMLText("rm_document_category")?>" type="submit">
+						</form>
 <?php
 		} else {
 ?>
@@ -116,6 +122,7 @@ UI::contentContainerStart();
 					<td><?php echo getMLText("name")?>:</td>
 					<td>
 						<form action="../op/op.Categories.php" >
+  		        <?php echo createHiddenFieldWithKey('editcategory'); ?>
 							<input type="Hidden" name="action" value="editcategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 							<input name="name" value="<?php echo htmlspecialchars($category->getName()) ?>">&nbsp;

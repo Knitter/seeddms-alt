@@ -116,10 +116,10 @@ print "</table>\n";
 				<option value="-1"><?php printMLText("select_one");?>
 				<?php
 					if ($user->isAdmin()) {
-						$allUsers = $dms->getAllUsers();
+						$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 						foreach ($allUsers as $userObj) {
 							if (!$userObj->isGuest() && ($document->getAccessMode($userObj) >= M_READ) && !in_array($userObj->getID(), $userNotifyIDs))
-								print "<option value=\"".$userObj->getID()."\">" . $userObj->getFullName() . "\n";
+								print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "\n";
 						}
 					}
 					elseif (!$user->isGuest() && !in_array($user->getID(), $userNotifyIDs)) {

@@ -76,7 +76,7 @@ function checkForm()
 </script>
 
 <?php
-$allUsers = $dms->getAllUsers();
+$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
 UI::contentHeading(getMLText("edit_document_access"));
 UI::contentContainerStart();
@@ -97,7 +97,7 @@ if ($user->isAdmin()) {
 		print "<option value=\"".$currUser->getID()."\"";
 		if ($currUser->getID() == $owner->getID())
 			print " selected";
-		print ">" . htmlspecialchars($currUser->getFullname()) . "</option>\n";
+		print ">" . htmlspecialchars($currUser->getLogin() . " - " . $currUser->getFullname()) . "</option>\n";
 	}
 	?>
 	</select>
@@ -200,7 +200,7 @@ foreach ($allUsers as $userObj) {
 	if ($userObj->isGuest() || in_array($userObj->getID(), $memusers)) {
 		continue;
 	}
-	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "</option>\n";
+	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($currUser->getLogin() . " - " . $userObj->getFullName()) . "</option>\n";
 }
 ?>
 </select>

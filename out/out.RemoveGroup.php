@@ -48,6 +48,7 @@ UI::contentContainerStart();
 <form action="../op/op.GroupMgr.php" name="form1" method="POST">
 <input type="Hidden" name="groupid" value="<?php print $groupid;?>">
 <input type="Hidden" name="action" value="removegroup">
+<?php echo createHiddenFieldWithKey('removegroup'); ?>
 <p>
 <?php printMLText("confirm_rm_group", array ("groupname" => htmlspecialchars($currGroup->getName())));?>
 </p>

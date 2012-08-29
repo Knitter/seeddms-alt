@@ -25,10 +25,15 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET["folderid"])<1) {
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('removefolder')) {
+	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
+}
+
+if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
-$folderid = $_GET["folderid"];
+$folderid = $_POST["folderid"];
 $folder = $dms->getFolder($folderid);
 
 if (!is_object($folder)) {
@@ -71,6 +76,6 @@ if ($folder->remove()) {
 
 add_log_line();
 
-header("Location:../out/out.ViewFolder.php?folderid=".$parent->getID()."&showtree=".$_GET["showtree"]);
+header("Location:../out/out.ViewFolder.php?folderid=".$parent->getID()."&showtree=".$_POST["showtree"]);
 
 ?>

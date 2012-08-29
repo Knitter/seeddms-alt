@@ -27,6 +27,11 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('removedump')) {
+	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+}
+
 if (!isset($_POST["dumpname"]) || !file_exists($settings->_contentDir.$_POST["dumpname"]) ) {
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 }

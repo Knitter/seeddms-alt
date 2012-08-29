@@ -41,6 +41,7 @@ UI::contentContainerStart();
 ?>
 <form action="../op/op.RemoveDump.php" name="form1" method="POST">
 	<input type="Hidden" name="dumpname" value="<?php echo sanitizeString($dumpname); ?>">
+  <?php echo createHiddenFieldWithKey('removedump'); ?>
 	<p><?php printMLText("confirm_rm_dump", array ("dumpname" => sanitizeString($dumpname)));?></p>
 	<input type="Submit" value="<?php printMLText("dump_remove");?>">
 </form>

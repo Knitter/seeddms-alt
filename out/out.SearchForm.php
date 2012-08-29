@@ -139,12 +139,12 @@ foreach ($allCats as $catObj) {
 <select name="ownerid">
 <option value="-1"><?php printMLText("all_users");?>
 <?php
-$allUsers = $dms->getAllUsers();
+$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 foreach ($allUsers as $userObj)
 {
 	if ($userObj->isGuest())
 		continue;
-	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";
+	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin()." - ".$userObj->getFullName()) . "\n";
 }
 ?>
 </select>
@@ -232,12 +232,12 @@ foreach ($allCats as $catObj) {
 <select name="ownerid">
 <option value="-1"><?php printMLText("all_users");?>
 <?php
-$allUsers = $dms->getAllUsers();
+$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 foreach ($allUsers as $userObj)
 {
 	if ($userObj->isGuest())
 		continue;
-	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";
+	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin()." - ".$userObj->getFullName()) . "\n";
 }
 ?>
 </select>
