@@ -53,6 +53,9 @@ class Settings { /* {{{ */
 	// Restricted access: only allow users to log in if they have an entry in
 	// the local database (irrespective of successful authentication with LDAP).
 	var $_restricted = true;
+	// abitray string used for creation of unique identifiers (e.g. the form
+	// key created by createFormKey())
+	var $_encryptionKey = '';
 	// Strict form checking
 	var $_strictFormCheck = false;
 	// Path to where letoDMS is located
@@ -300,6 +303,7 @@ class Settings { /* {{{ */
 		$this->_passwordExpiration = intval($tab["passwordExpiration"]);
 		$this->_passwordHistory = intval($tab["passwordHistory"]);
 		$this->_loginFailure = intval($tab["loginFailure"]);
+		$this->_encryptionKey = strval($tab["encryptionKey"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
 		$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
 		$this->_disableSelfEdit = Settings::boolVal($tab["disableSelfEdit"]);
@@ -525,6 +529,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "passwordExpiration", $this->_passwordExpiration);
     $this->setXMLAttributValue($node, "passwordHistory", $this->_passwordHistory);
     $this->setXMLAttributValue($node, "loginFailure", $this->_loginFailure);
+    $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);
     $this->setXMLAttributValue($node, "enableUserImage", $this->_enableUserImage);
     $this->setXMLAttributValue($node, "disableSelfEdit", $this->_disableSelfEdit);
