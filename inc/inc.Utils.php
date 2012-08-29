@@ -280,4 +280,49 @@ function showtree() { /* {{{ */
 	return 1;
 } /* }}} */
 
+/**
+ * Create a unique key which is used for form validation to prevent
+ * CSRF attacks. The key is added to a any form that has to be secured
+ * as a hidden field. Once the form is submitted the key is compared
+ * to the current key in the session and the request is only executed
+ * if both are equal. The key is derived from the session id, a configurable
+ * encryption key and form identifierer.
+ *
+ * @param string $formid individual form identifier
+ * @return string session key
+ */
+function createFormKey($formid='') { /* {{{ */
+	global $settings, $session;
+
+	if($id = $session->getId()) {
+		return md5($id.$settings->_encryptionKey.$formid);
+	} else {
+		return false;
+	}
+} /* }}} */
+
+/**
+ * Create a hidden field with the name 'formtoken' and set its value
+ * to the key returned by createFormKey()
+ *
+ * @param string $formid individual form identifier
+ * @return string input field for html formular
+ */
+function createHiddenFieldWithKey($formid='') { /* {{{ */
+	return '<input type="hidden" name="formtoken" value="'.createFormKey($formid).'" />';	
+} /* }}} */
+
+/**
+ * Check if the form key in the POST variable 'formtoken' has the value
+ * of key returned by createFormKey()
+ *
+ * @param string $formid individual form identifier
+ * @return boolean true if key matches otherwise false
+ */
+function checkFormKey($formid='') { /* {{{ */
+	if(isset($_POST['formtoken']) && $_POST['formtoken'] == createFormKey($formid))
+		return true;
+	
+	return false;
+} /* }}} */
 ?>
