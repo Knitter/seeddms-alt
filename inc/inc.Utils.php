@@ -313,15 +313,26 @@ function createHiddenFieldWithKey($formid='') { /* {{{ */
 } /* }}} */
 
 /**
- * Check if the form key in the POST variable 'formtoken' has the value
- * of key returned by createFormKey()
+ * Check if the form key in the POST or GET request variable 'formtoken'
+ * has the value of key returned by createFormKey(). Request to modify
+ * data in the DMS should always use POST because it is harder to run
+ * CSRF attacks using POST than GET.
  *
  * @param string $formid individual form identifier
+ * @param string $method defines if the form data is pass via GET or
+ * POST (default)
  * @return boolean true if key matches otherwise false
  */
-function checkFormKey($formid='') { /* {{{ */
-	if(isset($_POST['formtoken']) && $_POST['formtoken'] == createFormKey($formid))
-		return true;
+function checkFormKey($formid='', $method='POST') { /* {{{ */
+	switch($method) {
+		case 'GET':
+			if(isset($_GET['formtoken']) && $_GET['formtoken'] == createFormKey($formid))
+				return true;
+			break;
+		default:
+			if(isset($_POST['formtoken']) && $_POST['formtoken'] == createFormKey($formid))
+				return true;
+	}
 	
 	return false;
 } /* }}} */
