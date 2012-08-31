@@ -149,7 +149,7 @@ $text["documents_user_requiring_attention"] = "Ваши документы, тр
 $text["document_title"] = "Документ '[documentname]'";
 $text["document_updated_email"] = "Документ обновлен";
 $text["does_not_expire"] = "Без срока";
-$text["does_not_inherit_access_msg"] = "<a class=\"inheritAccess\" href=\"[inheriturl]\">Наследовать уровень доступа</a>";
+$text["does_not_inherit_access_msg"] = "Наследовать уровень доступа";
 $text["download"] = "Скачать";
 $text["draft_pending_approval"] = "Черновик - ожидает утверждения";
 $text["draft_pending_review"] = "Черновик - ожидает рецензии";
@@ -223,7 +223,9 @@ $text["human_readable"] = "Человекопонятный архив";
 $text["include_documents"] = "Включить документы";
 $text["include_subdirectories"] = "Включить подкаталоги";
 $text["individuals"] = "Личности";
-$text["inherits_access_msg"] = "Доступ унаследован.<p><a class=\"inheritAccess\" href=\"[copyurl]\">Скопировать наследованный список</a><br><a class=\"inheritAccess\" href=\"[emptyurl]\">Начать с пустова списка доступа</a>";
+$text["inherits_access_msg"] = "Доступ унаследован.";
+$text["inherits_access_copy_msg"] = "Скопировать наследованный список";
+$text["inherits_access_empty_msg"] = "Начать с пустова списка доступа";
 $text["internal_error_exit"] = "Внутренняя ошибка. Невозможно выполнить запрос. Завершение.";
 $text["internal_error"] = "Внутренняя ошибка";
 $text["invalid_access_mode"] = "Неверный уровень доступа";
@@ -236,6 +238,7 @@ $text["invalid_file_id"] = "Неверный идентификатор файл
 $text["invalid_folder_id"] = "Неверный идентификатор папки";
 $text["invalid_group_id"] = "Неверный идентификатор группы";
 $text["invalid_link_id"] = "Неверный идентификатор ссылки";
+$text["invalid_request_token"] = "Invalid Request Token";
 $text["invalid_review_status"] = "Неверный статус рецензирования";
 $text["invalid_sequence"] = "Неверное значение последовательности";
 $text["invalid_status"] = "Неверный статус документа";

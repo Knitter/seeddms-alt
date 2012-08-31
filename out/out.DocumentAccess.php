@@ -86,6 +86,7 @@ if ($user->isAdmin()) {
 	UI::contentSubHeading(getMLText("set_owner"));
 ?>
 	<form action="../op/op.DocumentAccess.php">
+  <?php echo createHiddenFieldWithKey('documentaccess'); ?>
 	<input type="Hidden" name="action" value="setowner">
 	<input type="Hidden" name="documentid" value="<?php print $documentid;?>">
 	<?php printMLText("owner");?> : <select name="ownerid">
@@ -109,14 +110,37 @@ if ($user->isAdmin()) {
 UI::contentSubHeading(getMLText("access_inheritance"));
 
 if ($document->inheritsAccess()) {
-	printMLText("inherits_access_msg", array(
-		"copyurl" => "../op/op.DocumentAccess.php?documentid=".$documentid."&action=notinherit&mode=copy", 
-		"emptyurl" => "../op/op.DocumentAccess.php?documentid=".$documentid."&action=notinherit&mode=empty"));
+	printMLText("inherits_access_msg");
+?>
+  <p>
+	<form action="../op/op.DocumentAccess.php" style="display: inline-block;">
+  <?php echo createHiddenFieldWithKey('documentaccess'); ?>
+	<input type="hidden" name="documentid" value="<?php print $documentid;?>">
+	<input type="hidden" name="action" value="notinherit">
+	<input type="hidden" name="mode" value="copy">
+	<input type="submit" value="<?php printMLText("inherits_access_copy_msg")?>">
+	</form>
+	<form action="../op/op.DocumentAccess.php" style="display: inline-block;">
+  <?php echo createHiddenFieldWithKey('documentaccess'); ?>
+	<input type="hidden" name="documentid" value="<?php print $documentid;?>">
+	<input type="hidden" name="action" value="notinherit">
+	<input type="hidden" name="mode" value="empty">
+	<input type="submit" value="<?php printMLText("inherits_access_empty_msg")?>">
+	</form>
+	</p>
+<?php
 	UI::contentContainerEnd();
 	UI::htmlEndPage();
 	exit();
 }
-printMLText("does_not_inherit_access_msg", array("inheriturl" => "../op/op.DocumentAccess.php?documentid=".$documentid."&action=inherit"));
+?>
+	<form action="../op/op.DocumentAccess.php">
+  <?php echo createHiddenFieldWithKey('documentaccess'); ?>
+	<input type="hidden" name="documentid" value="<?php print $documentid;?>">
+	<input type="hidden" name="action" value="inherit">
+	<input type="submit" value="<?php printMLText("does_not_inherit_access_msg")?>">
+	</form>
+<?php
 
 $accessList = $document->getAccessList();
 
@@ -124,6 +148,7 @@ UI::contentSubHeading(getMLText("default_access"));
 
 ?>
 <form action="../op/op.DocumentAccess.php">
+  <?php echo createHiddenFieldWithKey('documentaccess'); ?>
 	<input type="Hidden" name="documentid" value="<?php print $documentid;?>">
 	<input type="Hidden" name="action" value="setdefault">
 	<?php printAccessModeSelection($document->getDefaultAccess()); ?>
@@ -143,43 +168,63 @@ if (count($accessList["users"]) != 0 || count($accessList["groups"]) != 0) {
 	foreach ($accessList["users"] as $userAccess) {
 		$userObj = $userAccess->getUser();
 		$memusers[] = $userObj->getID();
-		print "<form action=\"../op/op.DocumentAccess.php\">\n";
-		print "<input type=\"Hidden\" name=\"documentid\" value=\"".$documentid."\">\n";
-		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">\n";
-		print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 		print "<tr>\n";
 		print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>\n";
 		print "<td>". htmlspecialchars($userObj->getFullName()) . "</td>\n";
 		print "<td>\n";
+		print "<form action=\"../op/op.DocumentAccess.php\">\n";
 		printAccessModeSelection($userAccess->getMode());
 		print "</td>\n";
 		print "<td><span class=\"actions\">\n";
+  	echo createHiddenFieldWithKey('documentaccess')."\n";
+		print "<input type=\"Hidden\" name=\"documentid\" value=\"".$documentid."\">\n";
+		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">\n";
+		print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/save.gif\">".getMLText("save")." ";
-		print "<a href=\"../op/op.DocumentAccess.php?documentid=".$documentid."&action=delaccess&userid=".$userObj->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete");
-		print "</span></td></tr>\n";
+		print "</span></td>\n";
 		print "</form>\n";
+		print "<td><span class=\"actions\">\n";
+		print "<form action=\"../op/op.DocumentAccess.php\">\n";
+  	echo createHiddenFieldWithKey('documentaccess')."\n";
+		print "<input type=\"Hidden\" name=\"documentid\" value=\"".$documentid."\">\n";
+		print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
+		print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
+		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
+		print "</form>\n";
+		print "<span></td>\n";
+		print "</tr>\n";
 	}
 
-	/* memorїze groups with access rights */
+	/* memorize groups with access rights */
 	$memgroups = array();
 	foreach ($accessList["groups"] as $groupAccess) {
 		$groupObj = $groupAccess->getGroup();
 		$memgroups[] = $groupObj->getID();
 		$mode = $groupAccess->getMode();
-		print "<form action=\"../op/op.DocumentAccess.php\">";
-		print "<input type=\"Hidden\" name=\"documentid\" value=\"".$documentid."\">";
-		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">";
-		print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">";
 		print "<tr>";
 		print "<td><img src=\"images/groupicon.gif\" class=\"mimeicon\"></td>";
 		print "<td>". htmlspecialchars($groupObj->getName()) . "</td>";
+		print "<form action=\"../op/op.DocumentAccess.php\">";
 		print "<td>";
 		printAccessModeSelection($groupAccess->getMode());
 		print "</td>\n";
 		print "<td><span class=\"actions\">\n";
+  	echo createHiddenFieldWithKey('documentaccess')."\n";
+		print "<input type=\"Hidden\" name=\"documentid\" value=\"".$documentid."\">";
+		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">";
+		print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">";
 		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/save.gif\">".getMLText("save")." ";
-		print "<a href=\"../op/op.DocumentAccess.php?documentid=".$documentid."&action=delaccess&groupid=".$groupObj->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete");
-		print "</span></td></tr>";
+		print "</span></td>\n";
+		print "</form>";
+		print "<td><span class=\"actions\">\n";
+		print "<form action=\"../op/op.DocumentAccess.php\">\n";
+  	echo createHiddenFieldWithKey('documentaccess')."\n";
+		print "<input type=\"Hidden\" name=\"documentid\" value=\"".$documentid."\">\n";
+		print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
+		print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">\n";
+		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
+		print "</span></td>\n";
+		print "</tr>\n";
 		print "</form>";
 	}
 	
@@ -187,6 +232,7 @@ if (count($accessList["users"]) != 0 || count($accessList["groups"]) != 0) {
 }
 ?>
 <form action="../op/op.DocumentAccess.php" name="form1" onsubmit="return checkForm();">
+<?php echo createHiddenFieldWithKey('documentaccess'); ?>
 <input type="Hidden" name="documentid" value="<?php print $documentid?>">
 <input type="Hidden" name="action" value="addaccess">
 <table>
