@@ -53,6 +53,7 @@ UI::contentContainerStart();
 <form action="../op/op.UsrMgr.php" name="form1" method="POST">
 <input type="Hidden" name="userid" value="<?php print $userid;?>">
 <input type="Hidden" name="action" value="removeuser">
+<?php echo createHiddenFieldWithKey('removeuser'); ?>
 <p>
 <?php printMLText("confirm_rm_user", array ("username" => htmlspecialchars($currUser->getFullName())));?>
 </p>
@@ -61,7 +62,7 @@ UI::contentContainerStart();
 <?php printMLText("assign_user_property_to"); ?> :
 <select name="assignTo">
 <?php
-	$users = $dms->getAllUsers();
+	$users = $dms->getAllUsers($settings->_sortUsersInList);
 	foreach ($users as $currUser) {
 		if ($currUser->isGuest() || ($currUser->getID() == $userid) )
 			continue;

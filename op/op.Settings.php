@@ -97,6 +97,7 @@ if ($action == "saveSettings")
   $settings->_passwordExpiration = intval($_POST["passwordExpiration"]);
   $settings->_passwordHistory = intval($_POST["passwordHistory"]);
   $settings->_loginFailure = intval($_POST["loginFailure"]);
+  $settings->_encryptionKey = strval($_POST["encryptionKey"]);
 
   // TODO Connectors
 

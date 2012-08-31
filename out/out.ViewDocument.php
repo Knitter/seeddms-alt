@@ -418,7 +418,7 @@ if (count($files) > 0) {
 	
 		print "<td><span class=\"actions\">";
 		if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
-			print "<a href=\"../out/out.RemoveDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\">".getMLText("delete")."</a>";
+			print "<form action=\"../out/out.RemoveDocumentFile.php\" method=\"get\"><input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"fileid\" value=\"".$file->getID()."\" /><input type=\"submit\" value=\"".getMLText("delete")."\" /></form>";
 		print "</span></td>";		
 		
 		print "</tr>";
@@ -463,7 +463,7 @@ if (count($links) > 0) {
 		print "</td>";
 		print "<td><span class=\"actions\">";
 		if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
-			print "<a href=\"../op/op.RemoveDocumentLink.php?documentid=".$documentid."&linkid=".$link->getID()."\">".getMLText("delete")."</a>";
+			print "<form action=\"../op/op.RemoveDocumentLink.php\" method=\"post\">".createHiddenFieldWithKey('removedocumentlink')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"linkid\" value=\"".$link->getID()."\" /><input type=\"submit\" value=\"".getMLText("delete")."\" /></form>";
 		print "</span></td>";
 		print "</tr>";
 	}

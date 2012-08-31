@@ -70,6 +70,7 @@ function checkForm()
 </script>
 
 <form action="../op/op.EditEvent.php" name="form1" onsubmit="return checkForm();" method="POST">
+  <?php echo createHiddenFieldWithKey('editevent'); ?>
 
 	<input type="Hidden" name="eventid" value="<?php echo (int) $_GET["id"]; ?>">
 

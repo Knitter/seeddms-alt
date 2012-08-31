@@ -90,6 +90,7 @@
 			 - passwordExpiration: number of days after password expires
 			 - passwordHistory: number of remembered passwords
 			 - passwordStrengthAlgorithm: algorithm used to calculate password strenght (simple or advanced)
+			 - encryptionKey: arbitrary string used for creating identifiers
     -->    
     <authentication
       enableGuestLogin = "false"
@@ -102,6 +103,7 @@
 			passwordHistory="0"
 			passwordStrengthAlgorithm="simple"
 			loginFailure="0"
+			encryptionKey=""
     >
       <connectors>
         <!-- ***** CONNECTOR LDAP  *****

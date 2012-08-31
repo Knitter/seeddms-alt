@@ -52,9 +52,10 @@ UI::contentHeading(getMLText("rm_folder"));
 UI::contentContainerStart();
 
 ?>
-<form action="../op/op.RemoveFolder.php" name="form1">
+<form action="../op/op.RemoveFolder.php" method="post" name="form1">
 	<input type="Hidden" name="folderid" value="<?php print $folderid;?>">
 	<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
+  <?php echo createHiddenFieldWithKey('removefolder'); ?>
 	<p>
 	<?php printMLText("confirm_rm_folder", array ("foldername" => htmlspecialchars($folder->getName())));?>
 	</p>

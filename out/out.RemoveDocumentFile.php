@@ -61,6 +61,7 @@ UI::contentContainerStart();
 
 ?>
 <form action="../op/op.RemoveDocumentFile.php" name="form1" method="POST">
+  <?php echo createHiddenFieldWithKey('removedocumentfile'); ?>
 	<input type="Hidden" name="documentid" value="<?php echo $documentid?>">
 	<input type="Hidden" name="fileid" value="<?php echo $fileid?>">
 	<p><?php printMLText("confirm_rm_file", array ("documentname" => $document->getName(), "name" => htmlspecialchars($file->getName())));?></p>

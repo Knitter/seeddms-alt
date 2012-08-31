@@ -32,6 +32,11 @@ if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_event"),getMLText("access_denied"));
 }
 
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('editevent')) {
+	UI::exitError(getMLText("edit_event"),getMLText("invalid_request_token"));
+}
+
 if (!isset($_POST["frommonth"]) || !isset($_POST["fromday"]) || !isset($_POST["fromyear"]) ) {
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }

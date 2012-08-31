@@ -40,6 +40,7 @@ UI::contentContainerStart();
 
 ?>
 <form action="../op/op.RemoveLog.php" name="form1" method="POST">
+  <?php echo createHiddenFieldWithKey('removelog'); ?>
 	<input type="Hidden" name="logname" value="<?php echo $logname?>">
 	<p><?php printMLText("confirm_rm_log", array ("logname" => $logname));?></p>
 	<input type="Submit" value="<?php printMLText("rm_file");?>">

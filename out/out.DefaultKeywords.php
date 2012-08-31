@@ -81,7 +81,8 @@ UI::contentContainerStart();
 		</td>
 
 		<td id="keywords0" style="display : none;">	
-			<form action="../op/op.DefaultKeywords.php" >
+			<form action="../op/op.DefaultKeywords.php" method="post">
+  		<?php echo createHiddenFieldWithKey('addcategory'); ?>
 			<input type="Hidden" name="action" value="addcategory">
 			<?php printMLText("name");?> : <input name="name">
 			<input type="Submit" value="<?php printMLText("new_default_keyword_category"); ?>">
@@ -100,7 +101,12 @@ UI::contentContainerStart();
 			<table>
 				<tr>
 					<td colspan="2">
-						<a href="../op/op.DefaultKeywords.php?categoryid=<?php print $category->getID();?>&action=removecategory"><img src="images/del.gif" border="0"><?php printMLText("rm_default_keyword_category");?></a>
+						<form action="../op/op.DefaultKeywords.php" method="post">
+  						<?php echo createHiddenFieldWithKey('removecategory'); ?>
+							<input type="Hidden" name="action" value="removecategory">
+							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
+							<input value="<?php printMLText("rm_default_keyword_category");?>" type="submit" title="<?php echo getMLText("delete")?>">
+						</form>
 					</td>
 				</tr>
 				<tr>
@@ -111,7 +117,8 @@ UI::contentContainerStart();
 				<tr>
 					<td><?php echo getMLText("name")?>:</td>
 					<td>
-						<form action="../op/op.DefaultKeywords.php" >
+						<form action="../op/op.DefaultKeywords.php" method="post">
+  						<?php echo createHiddenFieldWithKey('editcategory'); ?>
 							<input type="Hidden" name="action" value="editcategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 							<input name="name" value="<?php echo htmlspecialchars($category->getName()) ?>">&nbsp;
@@ -135,20 +142,29 @@ UI::contentContainerStart();
 							else
 								foreach ($lists as $list) {
 						?>
-									<form action="../op/op.DefaultKeywords.php" >
+									<form style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" >
+  								<?php echo createHiddenFieldWithKey('editkeywords'); ?>
 									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="editkeywords">
 									<input name="keywords" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
-									<input name="action" value="editkeywords" type="Image" src="images/save.gif" title="<?php echo getMLText("save")?>">
+									<input name="action" value="editkeywords" type="Image" src="images/save.gif" title="<?php echo getMLText("save")?>" style="border: 0px;">
 									<!--	 <input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"> &nbsp; -->
-									<a href="../op/op.DefaultKeywords.php?categoryid=<?php echo $category->getID()?>&keywordsid=<?php echo $list["id"]?>&action=removekeywords"><img src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"></a>
-									</form><br>
+									</form>
+									<form style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" >
+  								<?php echo createHiddenFieldWithKey('removekeywords'); ?>
+									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
+									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
+									<input type="Hidden" name="action" value="removekeywords">
+									<input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" style="border: 0px;">
+									</form>
+									<br>
 						<?php }  ?>
 					</td>
 				</tr>			
 				<tr>
-					<form action="../op/op.DefaultKeywords.php" >
+					<form action="../op/op.DefaultKeywords.php" method="post">
+  				<?php echo createHiddenFieldWithKey('newkeywords'); ?>
 					<td><input type="Submit" value="<?php printMLText("new_default_keywords");?>"></td>
 					<td>
 						<input type="Hidden" name="action" value="newkeywords">

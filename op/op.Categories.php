@@ -28,12 +28,18 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$action = $_GET["action"];
+if (isset($_POST["action"])) $action=$_POST["action"];
+else $action=NULL;
 
 //Neue Kategorie anlegen -----------------------------------------------------------------------------
 if ($action == "addcategory") {
 	
-	$name = trim($_GET["name"]);
+	/* Check if the form data comes for a trusted request */
+	if(!checkFormKey('addcategory')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	$name = trim($_POST["name"]);
 	if($name == '') {
 		UI::exitError(getMLText("admin_tools"),getMLText("category_noname"));
 	}
@@ -50,10 +56,15 @@ if ($action == "addcategory") {
 //Kategorie löschen ----------------------------------------------------------------------------------
 else if ($action == "removecategory") {
 
-	if (!isset($_GET["categoryid"]) || !is_numeric($_GET["categoryid"]) || intval($_GET["categoryid"])<1) {
+	/* Check if the form data comes for a trusted request */
+	if(!checkFormKey('removecategory')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	if (!isset($_POST["categoryid"]) || !is_numeric($_POST["categoryid"]) || intval($_POST["categoryid"])<1) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_document_category"));
 	}
-	$categoryid = $_GET["categoryid"];
+	$categoryid = $_POST["categoryid"];
 	$category = $dms->getDocumentCategory($categoryid);
 	if (!is_object($category)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_document_category"));
@@ -68,16 +79,21 @@ else if ($action == "removecategory") {
 //Kategorie bearbeiten: Neuer Name --------------------------------------------------------------------
 else if ($action == "editcategory") {
 
-	if (!isset($_GET["categoryid"]) || !is_numeric($_GET["categoryid"]) || intval($_GET["categoryid"])<1) {
+	/* Check if the form data comes for a trusted request */
+	if(!checkFormKey('editcategory')) {
+		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	}
+
+	if (!isset($_POST["categoryid"]) || !is_numeric($_POST["categoryid"]) || intval($_POST["categoryid"])<1) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_document_category"));
 	}
-	$categoryid = $_GET["categoryid"];
+	$categoryid = $_POST["categoryid"];
 	$category = $dms->getDocumentCategory($categoryid);
 	if (!is_object($category)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_document_category"));
 	}
 
-	$name = $_GET["name"];
+	$name = $_POST["name"];
 	if (!$category->setName($name)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}

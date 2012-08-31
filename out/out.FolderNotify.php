@@ -115,7 +115,7 @@ print "</table>\n";
 				<option value="-1"><?php printMLText("select_one");?>
 				<?php
 					if ($user->isAdmin()) {
-						$allUsers = $dms->getAllUsers();
+						$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 						foreach ($allUsers as $userObj) {
 							if (!$userObj->isGuest() && ($folder->getAccessMode($userObj) >= M_READ) && !in_array($userObj->getID(), $userNotifyIDs))
 								print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";

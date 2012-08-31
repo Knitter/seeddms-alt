@@ -32,9 +32,8 @@ UI::pageNavigation(getMLText("admin_tools"), "admin_tools");
 UI::contentHeading(getMLText("user_list"));
 UI::contentContainerStart();
 
-$users = getAllUsers();
-for ($i = 0; $i < count($users); $i++) {
-	$currUser = $users[$i];
+$users = $dms->getAllUsers($settings->_sortUsersInList);
+foreach ($users as $currUser) {
 	if ($currUser->isGuest())
 		continue;
 

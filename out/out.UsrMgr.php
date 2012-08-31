@@ -118,6 +118,7 @@ UI::contentContainerStart();
 <td id="keywords0" style="display : none;">
 
 	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form0" onsubmit="return checkForm('0');">
+  <?php echo createHiddenFieldWithKey('adduser'); ?>
 	<input type="Hidden" name="action" value="adduser">
 	<table>
 		<tr>
@@ -256,6 +257,7 @@ UI::contentContainerStart();
 	<?php	UI::contentSubHeading(getMLText("edit_user"));?>
 
 	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form<?php print $currUser->getID();?>" onsubmit="return checkForm('<?php print $currUser->getID();?>');">
+	<?php echo createHiddenFieldWithKey('edituser'); ?>
 	<input type="Hidden" name="userid" value="<?php print $currUser->getID();?>">
 	<input type="Hidden" name="action" value="edituser">
 	<table>

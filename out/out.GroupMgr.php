@@ -29,7 +29,7 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$allUsers = $dms->getAllUsers();
+$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
 if (is_bool($allUsers)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
@@ -126,7 +126,8 @@ UI::contentContainerStart();
 
 	<td id="keywords0" style="display : none;">
 	
-	<form action="../op/op.GroupMgr.php" name="form0_1" onsubmit="return checkForm1('0');">
+	<form action="../op/op.GroupMgr.php" name="form0_1" method="post" onsubmit="return checkForm1('0');">
+  <?php echo createHiddenFieldWithKey('addgroup'); ?>
 	<input type="Hidden" name="action" value="addgroup">
 	<table>
 		<tr>
@@ -161,7 +162,8 @@ UI::contentContainerStart();
 	<?php	UI::contentSubHeading(getMLText("edit_group"));?>
 		
 	
-	<form action="../op/op.GroupMgr.php" name="form<?php print $group->getID();?>_1" onsubmit="return checkForm1('<?php print $group->getID();?>');">
+	<form action="../op/op.GroupMgr.php" name="form<?php print $group->getID();?>_1" method="post" onsubmit="return checkForm1('<?php print $group->getID();?>');">
+	<?php echo createHiddenFieldWithKey('editgroup'); ?>
 	<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
 	<input type="Hidden" name="action" value="editgroup">
 	<table>
@@ -195,8 +197,8 @@ UI::contentContainerStart();
 					print "<td>" . htmlspecialchars($member->getFullName()) . "</td>";
 					print "<td>" . ($group->isMember($member,true)?getMLText("manager"):"&nbsp;") . "</td>";
 					print "<td align=\"right\"><ul class=\"actions\">";
-					print "<li><a href=\"../op/op.GroupMgr.php?groupid=". $group->getID() . "&userid=".$member->getID()."&action=rmmember\">".getMLText("delete")."</a>";
-					print "<li><a href=\"../op/op.GroupMgr.php?groupid=". $group->getID() . "&userid=".$member->getID()."&action=tmanager\">".getMLText("toggle_manager")."</a>";
+					print "<li><form action=\"../op/op.GroupMgr.php\" method=\"post\"><input type=\"hidden\" name=\"action\" value=\"rmmember\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('rmmember')."<input type=\"submit\" value=\"".getMLText("delete")."\" /></form>";
+					print "<li><form action=\"../op/op.GroupMgr.php\" method=\"post\"><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"action\" value=\"tmanager\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('tmanager')."<input type=\"submit\" value=\"".getMLText("toggle_manager")."\" /></form>";
 					print "</td></tr>";
 				}
 			}
@@ -210,7 +212,8 @@ UI::contentContainerStart();
 		
 		?>
 		
-		<form action="../op/op.GroupMgr.php" method=POST name="form<?php print $group->getID();?>_2" onsubmit="return checkForm2('<?php print $group->getID();?>');">
+		<form action="../op/op.GroupMgr.php" method="POST" name="form<?php print $group->getID();?>_2" onsubmit="return checkForm2('<?php print $group->getID();?>');">
+		<?php echo createHiddenFieldWithKey('addmember'); ?>
 		<input type="Hidden" name="action" value="addmember">
 		<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
 		<table width="100%">

@@ -46,6 +46,7 @@ UI::contentContainerStart();
 
 ?>
 <form action="../op/op.RemoveFolderFiles.php" name="form1" method="POST">
+  <?php echo createHiddenFieldWithKey('removefolderfiles'); ?>
 	<input type="Hidden" name="folderid" value="<?php echo $folderid?>">
 	<p><?php printMLText("confirm_rm_folder_files", array ("foldername" => htmlspecialchars($folder->getName())));?></p>
 	<input type="Submit" value="<?php printMLText("accept");?>">

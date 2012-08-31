@@ -51,6 +51,7 @@ UI::contentContainerStart();
 ?>
 <form action="../op/op.RemoveDocument.php" name="form1" method="POST">
 <input type="Hidden" name="documentid" value="<?php print $documentid;?>">
+<?php echo createHiddenFieldWithKey('removedocument'); ?>
 <p>
 <?php printMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName())));?>
 </p>

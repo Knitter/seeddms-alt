@@ -57,6 +57,7 @@ class LetoDMS_Session {
 	 */
 	function __construct($db) { /* {{{ */
 		$this->db = $db;
+		$this->id = false;
 	} /* }}} */
 
 	/**
@@ -75,6 +76,7 @@ class LetoDMS_Session {
 		$queryStr = "UPDATE tblSessions SET lastAccess = " . mktime() . " WHERE id = " . $this->db->qstr($id);
 		if (!$this->db->getResult($queryStr))
 			return false;
+		$this->id = $id;
 		return $resArr[0];
 	} /* }}} */
 
@@ -123,7 +125,17 @@ class LetoDMS_Session {
 		if (!$this->db->getResult($queryStr)) {
 			return false;
 		}
+		$this->id = false;
 		return true;
+	} /* }}} */
+
+	/**
+	 * Get session id
+	 *
+	 * @return string session id
+	 */
+	function getId() { /* {{{ */
+		return $this->id;
 	} /* }}} */
 }
 ?>
