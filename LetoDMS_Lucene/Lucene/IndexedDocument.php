@@ -29,7 +29,7 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 	 */
 	public function __construct($dms, $document, $convcmd=null) {
 		$_convcmd = array(
-			'application/pdf' => 'pdftotext -nopgbrk %s - |sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',
+			'application/pdf' => 'pdftotext -enc UTF-8 -nopgbrk %s - |sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',
 			'application/msword' => 'catdoc %s',
 			'application/vnd.ms-excel' => 'ssconvert -T Gnumeric_stf:stf_csv -S %s fd://1',
 			'audio/mp3' => "id3 -l -R %s | egrep '(Title|Artist|Album)' | sed 's/^[^:]*: //g'",
@@ -39,6 +39,7 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		if($convcmd) {
 			$_convcmd = $convcmd;
 		}
+		Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive());
 		$version = $document->getLatestContent();
 		$this->addField(Zend_Search_Lucene_Field::Keyword('document_id', $document->getID()));
 		$this->addField(Zend_Search_Lucene_Field::Keyword('mimetype', $version->getMimeType()));
