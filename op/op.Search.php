@@ -288,29 +288,29 @@ foreach ($entries as $entry) {
 			print "<tr>";
 			//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
 			if (in_array(2, $searchin)) {
-				$docName = markQuery($document->getName(), "i");
+				$docName = markQuery(htmlspecialchars($document->getName()), "i");
 			} else {
-				$docName = $document->getName();
+				$docName = htmlspecialchars($document->getName());
 			}
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($lc->getFileType())."\" title=\"".$lc->getMimeType()."\"></a></td>";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 			$folder = $document->getFolder();
 			$path = $folder->getPath();
 			for ($i = 1; $i  < count($path); $i++) {
-				print $path[$i]->getName()."/";
+				print htmlspecialchars($path[$i]->getName())."/";
 			}
 			print $docName;
 			print "</a></td>";
 			
 			$owner = $document->getOwner();
-			print "<td>".$owner->getFullName()."</td>";
+			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 			$display_status=$lc->getStatus();
 			print "<td>".getOverallStatusText($display_status["status"]). "</td>";
 
 			print "<td class=\"center\">".$lc->getVersion()."</td>";
 			
-			if (in_array(3, $searchin)) $comment = markQuery($document->getComment());
-			else $comment = $document->getComment();
+			if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($document->getComment()));
+			else $comment = htmlspecialchars($document->getComment());
 			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 			print "<td>".$comment."</td>";
 			print "</tr>\n";
@@ -318,25 +318,25 @@ foreach ($entries as $entry) {
 		$folder = $entry;
 			$foldercount++;
 			if (in_array(2, $searchin)) {
-				$folderName = markQuery($folder->getName(), "i");
+				$folderName = markQuery(htmlspecialchars($folder->getName()), "i");
 			} else {
-				$folderName = $folder->getName();
+				$folderName = htmlspecialchars($folder->getName());
 			}
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
 			$path = $folder->getPath();
 			for ($i = 1; $i  < count($path); $i++) {
-				print "/".$path[$i]->getName();
+				print "/".htmlspecialchars($path[$i]->getName());
 			}
 			print $foldername;
 			print "</a></td>";
 			
 			$owner = $folder->getOwner();
-			print "<td>".$owner->getFullName()."</td>";
+			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 			print "<td></td>";
 			print "<td></td>";
-			if (in_array(3, $searchin)) $comment = markQuery($folder->getComment());
-			else $comment = $folder->getComment();
+			if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($folder->getComment()));
+			else $comment = htmlspecialchars($folder->getComment());
 			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 			print "<td>".$comment."</td>";
 			print "</tr>\n";
