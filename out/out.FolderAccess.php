@@ -47,10 +47,10 @@ if (!is_object($folder)) {
 $folderPathHTML = getFolderPathHTML($folder, true);
 
 if ($folder->getAccessMode($user) < M_ALL) {
-	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 }
 
-UI::htmlStartPage(getMLText("folder_title", array("foldername" => $folder->getName())));
+UI::htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($folderPathHTML, "view_folder", $folder);
 
@@ -84,6 +84,7 @@ if ($user->isAdmin()) {
 	UI::contentSubHeading(getMLText("set_owner"));
 ?>
 	<form action="../op/op.FolderAccess.php">
+	<?php echo createHiddenFieldWithKey('folderaccess'); ?>
 	<input type="Hidden" name="action" value="setowner">
 	<input type="Hidden" name="folderid" value="<?php print $folderid;?>">
 	<?php printMLText("owner");?> : <select name="ownerid">
@@ -95,7 +96,7 @@ if ($user->isAdmin()) {
 		print "<option value=\"".$currUser->getID()."\"";
 		if ($currUser->getID() == $owner->getID())
 			print " selected";
-		print ">" . htmlspecialchars($currUser->getFullname()) . "</option>\n";
+		print ">" . htmlspecialchars($currUser->getLogin() . " - " . $currUser->getFullname()) . "</option>\n";
 	}
 	?>
 	</select>
@@ -109,14 +110,37 @@ if ($folderid != $settings->_rootFolderID && $folder->getParent()){
 	UI::contentSubHeading(getMLText("access_inheritance"));
 	
 	if ($folder->inheritsAccess()) {
-		printMLText("inherits_access_msg", array(
-			"copyurl" => "../op/op.FolderAccess.php?folderid=".$folderid."&action=notinherit&mode=copy", 
-			"emptyurl" => "../op/op.FolderAccess.php?folderid=".$folderid."&action=notinherit&mode=empty"));
+		printMLText("inherits_access_msg");
+?>
+  <p>
+	<form action="../op/op.FolderAccess.php" style="display: inline-block;">
+  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
+	<input type="hidden" name="folderid" value="<?php print $folderid;?>">
+	<input type="hidden" name="action" value="notinherit">
+	<input type="hidden" name="mode" value="copy">
+	<input type="submit" value="<?php printMLText("inherits_access_copy_msg")?>">
+	</form>
+	<form action="../op/op.FolderAccess.php" style="display: inline-block;">
+  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
+	<input type="hidden" name="folderid" value="<?php print $folderid;?>">
+	<input type="hidden" name="action" value="notinherit">
+	<input type="hidden" name="mode" value="empty">
+	<input type="submit" value="<?php printMLText("inherits_access_empty_msg")?>">
+	</form>
+	</p>
+<?php
 		UI::contentContainerEnd();
 		UI::htmlEndPage();
 		exit();
 	}
-	printMLText("does_not_inherit_access_msg", array("inheriturl" => "../op/op.FolderAccess.php?folderid=".$folderid."&action=inherit"));
+?>
+	<form action="../op/op.FolderAccess.php">
+  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
+	<input type="hidden" name="folderid" value="<?php print $folderid;?>">
+	<input type="hidden" name="action" value="inherit">
+	<input type="submit" value="<?php printMLText("does_not_inherit_access_msg")?>">
+	</form>
+<?php
 }
 
 $accessList = $folder->getAccessList();
@@ -124,6 +148,7 @@ $accessList = $folder->getAccessList();
 UI::contentSubHeading(getMLText("default_access"));
 ?>
 <form action="../op/op.FolderAccess.php">
+  <?php echo createHiddenFieldWithKey('folderaccess'); ?>
 	<input type="Hidden" name="folderid" value="<?php print $folderid;?>">
 	<input type="Hidden" name="action" value="setdefault">
 	<?php printAccessModeSelection($folder->getDefaultAccess()); ?>
@@ -140,47 +165,68 @@ if ((count($accessList["users"]) != 0) || (count($accessList["groups"]) != 0)) {
 
 	foreach ($accessList["users"] as $userAccess) {
 		$userObj = $userAccess->getUser();
-		print "<form action=\"../op/op.FolderAccess.php\">\n";
-		print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folderid."\">\n";
-		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">\n";
-		print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 		print "<tr>\n";
 		print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>\n";
 		print "<td>". htmlspecialchars($userObj->getFullName()) . "</td>\n";
+		print "<form action=\"../op/op.FolderAccess.php\">\n";
+  	echo createHiddenFieldWithKey('folderaccess')."\n";
+		print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folderid."\">\n";
+		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">\n";
+		print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 		print "<td>\n";
 		printAccessModeSelection($userAccess->getMode());
 		print "</td>\n";
 		print "<td><span class=\"actions\">\n";
 		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/save.gif\">".getMLText("save")." ";
-		print "<a href=\"../op/op.FolderAccess.php?folderid=".$folderid."&action=delaccess&userid=".$userObj->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete");
-		print "</span></td></tr>\n";
+		print "</span></td>\n";
 		print "</form>\n";
+		print "<td><span class=\"actions\">\n";
+		print "<form action=\"../op/op.FolderAccess.php\">\n";
+  	echo createHiddenFieldWithKey('folderaccess')."\n";
+		print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folderid."\">\n";
+		print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
+		print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
+		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
+		print "</form>\n";
+		print "<span></td>\n";
+		print "</tr>\n";
 	}
 
 	foreach ($accessList["groups"] as $groupAccess) {
 		$groupObj = $groupAccess->getGroup();
 		$mode = $groupAccess->getMode();
-		print "<form action=\"../op/op.FolderAccess.php\">";
-		print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folderid."\">";
-		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">";
-		print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">";
 		print "<tr>";
 		print "<td><img src=\"images/groupicon.gif\" class=\"mimeicon\"></td>";
 		print "<td>". htmlspecialchars($groupObj->getName()) . "</td>";
+		print "<form action=\"../op/op.FolderAccess.php\">";
+  	echo createHiddenFieldWithKey('folderaccess')."\n";
+		print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folderid."\">";
+		print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">";
+		print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">";
 		print "<td>";
 		printAccessModeSelection($groupAccess->getMode());
 		print "</td>\n";
 		print "<td><span class=\"actions\">\n";
 		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/save.gif\">".getMLText("save")." ";
-		print "<a href=\"../op/op.FolderAccess.php?folderid=".$folderid."&action=delaccess&groupid=".$groupObj->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete");
-		print "</span></td></tr>\n";
+		print "</span></td>\n";
 		print "</form>";
+		print "<td><span class=\"actions\">\n";
+		print "<form action=\"../op/op.FolderAccess.php\">\n";
+  	echo createHiddenFieldWithKey('folderaccess')."\n";
+		print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folderid."\">\n";
+		print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
+		print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">\n";
+		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
+		print "</form>";
+		print "</span></td>\n";
+		print "</tr>\n";
 	}
 	
 	print "</table><br>";
 }
 ?>
 <form action="../op/op.FolderAccess.php" name="form1" onsubmit="return checkForm();">
+<?php echo createHiddenFieldWithKey('folderaccess'); ?>
 <input type="Hidden" name="folderid" value="<?php print $folderid?>">
 <input type="Hidden" name="action" value="addaccess">
 <table>
@@ -194,7 +240,7 @@ foreach ($allUsers as $userObj) {
 	if ($userObj->isGuest()) {
 		continue;
 	}
-	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getFullName()) . "\n";
+	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "</option>\n";
 }
 ?>
 </select>

@@ -3,7 +3,7 @@
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
 //    Copyright (C) 2010 Matteo Lucarelli
-//    Copyright (C) 2011 Uwe Steinmann
+//    Copyright (C) 2010-2012 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ $folder = $document->getFolder();
 $docPathHTML = getFolderPathHTML($folder, true). " / ".htmlspecialchars($document->getName());
 
 if ($document->getAccessMode($user) < M_READ) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
 if ($document->verifyLastestContentExpriry()){
@@ -67,7 +67,7 @@ $approvalStatus = $latestContent->getApprovalStatus();
 // verify if file exists
 $file_exists=file_exists($dms->contentDir . $latestContent->getPath());
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
+UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($docPathHTML, "view_document");
 UI::contentHeading(getMLText("document_infos"));

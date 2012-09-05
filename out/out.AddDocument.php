@@ -105,6 +105,7 @@ $docAccess = $folder->getApproversList();
 </table><br>
 
 <form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
+<?php echo createHiddenFieldWithKey('adddocument'); ?>
 <input type="hidden" name="folderid" value="<?php print $folderid; ?>">
 <input type="hidden" name="showtree" value="<?php echo showtree();?>">
 <table>

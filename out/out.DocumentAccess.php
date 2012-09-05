@@ -49,10 +49,10 @@ $folder = $document->getFolder();
 $docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_ALL) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
+UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($docPathHTML, "view_document");
 
@@ -223,9 +223,9 @@ if (count($accessList["users"]) != 0 || count($accessList["groups"]) != 0) {
 		print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
 		print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">\n";
 		print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
+		print "</form>";
 		print "</span></td>\n";
 		print "</tr>\n";
-		print "</form>";
 	}
 	
 	print "</table><br>";
@@ -246,7 +246,7 @@ foreach ($allUsers as $userObj) {
 	if ($userObj->isGuest() || in_array($userObj->getID(), $memusers)) {
 		continue;
 	}
-	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($currUser->getLogin() . " - " . $userObj->getFullName()) . "</option>\n";
+	print "<option value=\"".$userObj->getID()."\">" . htmlspecialchars($userObj->getLogin() . " - " . $userObj->getFullName()) . "</option>\n";
 }
 ?>
 </select>

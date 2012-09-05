@@ -3,6 +3,7 @@
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
 //    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2010-2012 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -37,12 +38,11 @@ if (!is_object($folder)) {
 $folderPathHTML = getFolderPathHTML($folder, true);
 
 if ($folder->getAccessMode($user) < M_READWRITE) {
-	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 }
 ?>
-
 <?php
-UI::htmlStartPage(getMLText("folder_title", array("foldername" => $folder->getName())));
+UI::htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($folderPathHTML, "view_folder", $folder);
 UI::contentHeading(getMLText("add_subfolder"));
@@ -71,6 +71,7 @@ function checkForm()
 </script>
 
 <form action="../op/op.AddSubFolder.php" name="form1" onsubmit="return checkForm();" method="POST">
+	<?php echo createHiddenFieldWithKey('addsubfolder'); ?>
 	<input type="Hidden" name="folderid" value="<?php print $folderid;?>">
 	<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
 	<table>
