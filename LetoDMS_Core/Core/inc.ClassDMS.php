@@ -935,12 +935,13 @@ class LetoDMS_Core_DMS {
 	 * @return object of LetoDMS_Core_User
 	 */
 	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0, $isDisabled=0, $pwdexpiration='') { /* {{{ */
+		$db = $this->db;
 		if (is_object($this->getUserByLogin($login))) {
 			return false;
 		}
 		if($role == '')
 			$role = '0';
-		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration) VALUES ('".$login."', '".$pwd."', '".$fullName."', '".$email."', '".$language."', '".$theme."', '".$comment."', '".$role."', '".$isHidden."', '".$isDisabled."', '".$pwdexpiration."')";
+		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;
@@ -1032,7 +1033,7 @@ class LetoDMS_Core_DMS {
 			return false;
 		}
 
-		$queryStr = "INSERT INTO tblGroups (name, comment) VALUES ('".$name."', '" . $comment . "')";
+		$queryStr = "INSERT INTO tblGroups (name, comment) VALUES (".$this->db->qstr($name).", ".$this->db->qstr($comment).")";
 		if (!$this->db->getResult($queryStr))
 			return false;
 
@@ -1111,7 +1112,7 @@ class LetoDMS_Core_DMS {
 		if (is_object($this->getKeywordCategoryByName($name, $userID))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblKeywordCategories (owner, name) VALUES (".(int) $userID.", '$name')";
+		$queryStr = "INSERT INTO tblKeywordCategories (owner, name) VALUES (".(int) $userID.", ".$this->db->qstr($name).")";
 		if (!$this->db->getResult($queryStr))
 			return false;
 
@@ -1176,7 +1177,7 @@ class LetoDMS_Core_DMS {
 		if (is_object($this->getDocumentCategoryByName($name))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblCategory (name) VALUES ('$name')";
+		$queryStr = "INSERT INTO tblCategory (name) VALUES (".$this->db-qstr($name).")";
 		if (!$this->db->getResult($queryStr))
 			return false;
 
@@ -1248,7 +1249,7 @@ class LetoDMS_Core_DMS {
 	 */
 	function createPasswordRequest($user) { /* {{{ */
 		$hash = md5(uniqid(time()));
-		$queryStr = "INSERT INTO tblUserPasswordRequest (userID, hash, `date`) VALUES (" . $user->getId() . ", '" . $hash ."', now())";
+		$queryStr = "INSERT INTO tblUserPasswordRequest (userID, hash, `date`) VALUES (" . $user->getId() . ", " . $this->db->qstr($hash) .", now())";
 		$resArr = $this->db->getResult($queryStr);
 		if (is_bool($resArr) && !$resArr) return false;
 		return $hash;
