@@ -181,8 +181,8 @@ $docAccess = $folder->getApproversList();
 		$mandatory=false;
 		foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 
-		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName());
-		else print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName());
+		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
+		else print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 	}
 ?>
 	</ul>
@@ -218,8 +218,8 @@ $docAccess = $folder->getApproversList();
 		$mandatory=false;
 		foreach ($res as $r) if ($r['approverUserID']==$usr->getID()) $mandatory=true;
 		
-		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName());
-		else print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName());
+		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
+		else print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 	}
 ?>
 	</ul>
