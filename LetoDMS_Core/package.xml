@@ -53,6 +53,9 @@
     <file name="inc.DBAccess.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
+    <file name="inc.DBAccessPDO.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
     <file name="inc.AccessUtils.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
