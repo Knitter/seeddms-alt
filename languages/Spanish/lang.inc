@@ -2,6 +2,8 @@
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2012 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -22,6 +24,7 @@
 //    Reviewed : 15-sept-2011.  Francisco M. Garcia Claramonte
 //    Reviewed (for 3.2.0) : 22-sept-2011.   Francisco M. Garcia Claramonte
 //    Reviewed (for 3.3.0) : 3-mar-2012.   Francisco M. Garcia Claramonte
+//    Reviewed (for 3.3.7) : 04-sept-2012.   Francisco M. Garcia Claramonte
 
 $text = array();
 $text["accept"] = "Aceptar";
@@ -33,7 +36,7 @@ $text["access_mode_none"] = "No hay acceso";
 $text["access_mode_read"] = "Leer";
 $text["access_mode_readwrite"] = "Lectura-Escritura";
 $text["access_permission_changed_email"] = "Permisos cambiados";
-$text["according_settings"] = "translate: according settings";
+$text["according_settings"] = "Conforme a configuración";
 $text["actions"] = "Acciones";
 $text["add"] = "Añadir";
 $text["add_doc_reviewer_approver_warning"] = "Documentos N.B. se marcan automáticamente como publicados si no hay revisores o aprobadores asignados.";
@@ -124,6 +127,7 @@ $text["continue"] = "Continuar";
 $text["create_fulltext_index"] = "Crear índice de texto completo";
 $text["create_fulltext_index_warning"] = "Usted va a regenerar el índice te texto completo. Esto puede tardar un tiempo considerable y consumir capacidad de su equipo. Si realmente quiere regenerar el índice, por favor confirme la operación.";
 $text["creation_date"] = "Creación";
+$text["current_password"] = "Contraseña actual";
 $text["current_version"] = "Versión actual";
 $text["daily"] = "Diaria";
 $text["databasesearch"] = "Búsqueda en base de datos";
@@ -228,7 +232,7 @@ $text["hourly"] = "Horaria";
 $text["human_readable"] = "Archivo legible por humanos"; 
 $text["include_documents"] = "Incluir documentos";
 $text["include_subdirectories"] = "Incluir subdirectorios";
-$text["index_converters"] = "translate: Index document conversion";
+$text["index_converters"] = "Conversión de índice de documentos";
 $text["individuals"] = "Individuales";
 $text["inherits_access_msg"] = "Acceso heredado.";
 $text["inherits_access_copy_msg"] = "Copiar lista de acceso heredado";
@@ -253,7 +257,7 @@ $text["invalid_target_doc_id"] = "ID de documento destino no válido";
 $text["invalid_target_folder"] = "ID de carpeta destino no válido";
 $text["invalid_user_id"] = "ID de usuario no válido";
 $text["invalid_version"] = "Versión de documento no válida";
-$text["is_disabled"] = "translate: Disable account";
+$text["is_disabled"] = "Deshabilitar cuenta";
 $text["is_hidden"] = "Ocultar de la lista de usuarios";
 $text["january"] = "Enero";
 $text["js_no_approval_group"] = "Por favor, seleccione grupo de aprobación";
@@ -287,8 +291,8 @@ $text["lock_document"] = "Bloquear";
 $text["lock_message"] = "Este documento ha sido bloqueado por <a href=\"mailto:[email]\">[username]</a>.<br />Solo usuarios autorizados pueden desbloquear este documento (vea el final de la página).";
 $text["lock_status"] = "Estado";
 $text["login"] = "Iniciar sesión";
-$text["login_disabled_text"] = "translate: Your account is disabled, probably because of too many failed logins.";
-$text["login_disabled_title"] = "translate: Account is disabled";
+$text["login_disabled_text"] = "Su cuenta está deshabilitada, probablemente es debido a demasiados intentos de acceso fallidos.";
+$text["login_disabled_title"] = "La cuenta está deshabilitada";
 $text["login_error_text"] = "Error de acceso. ID de usuario o contraseña incorrectos.";
 $text["login_error_title"] = "Error de acceso";
 $text["login_not_given"] = "Nombre de usuario no facilitado.";
@@ -336,7 +340,7 @@ $text["notify_deleted_email"] = "Se le ha eliminado de la lista de notificación
 $text["no_update_cause_locked"] = "No puede actualizar este documento. Contacte con el usuario que lo bloqueó.";
 $text["no_user_image"] = "No se encontró imagen";
 $text["november"] = "Noviembre";
-$text["now"] = "translate: now";
+$text["now"] = "ahora";
 $text["objectcheck"] = "Chequeo de carpeta/documento";
 $text["obsolete"] = "Obsoleto";
 $text["october"] = "Octubre";
@@ -345,17 +349,18 @@ $text["only_jpg_user_images"] = "Solo puede usar imágenes .jpg como imágenes d
 $text["owner"] = "Propietario";
 $text["ownership_changed_email"] = "Propietario cambiado";
 $text["password"] = "Contraseña";
-$text["password_already_used"] = "translate: Password already used";
+$text["password_already_used"] = "La contraseña ya está en uso";
 $text["password_repeat"] = "Repetir contraseña";
-$text["password_expiration"] = "translate: Password expiration";
-$text["password_expiration_text"] = "translate: Your password has expired. Please choose a new one before you can proceed using LetoDMS.";
+$text["password_expiration"] = "Caducidad de la contraseña";
+$text["password_expiration_text"] = "Su contraseña ha caducado. Por favor seleccione una nueva para seguir usando LetoDMS.";
 $text["password_forgotten"] = "Recordar contraseña";
 $text["password_forgotten_email_subject"] = "Recordatorio de contraseña";
 $text["password_forgotten_email_body"] = "Estimado usuario de LetoDMS,\n\nhemos recibido una petición para cambiar su contraseña.\n\nPuede modificarla haciendo click en el siguiente enlace:\n\n###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###\n\nSi continua teniendo problemas de acceso, por favor contacte con el administrador del sistema."; 
 $text["password_forgotten_send_hash"] = "Las instrucciones para proceder al cambio se han enviado a la dirección de correo de usuario";
 $text["password_forgotten_text"] = "Rellene el siguiente formulario y siga las instrucciones del correo que se le enviará.";
 $text["password_forgotten_title"] = "Envío de contraseña";
-$text["password_strength_insuffient"] = "translate: Insuffient password strength";
+$text["password_wrong"] = "Contraseña incorrecta";
+$text["password_strength_insuffient"] = "Fortaleza de la contraseña insuficiente";
 $text["personal_default_keywords"] = "Listas de palabras clave personales";
 $text["previous_versions"] = "Versiones anteriores";
 $text["refresh"] = "Actualizar";
@@ -413,16 +418,16 @@ $text["sequence"] = "Secuencia";
 $text["set_expiry"] = "Establecer caducidad";
 $text["set_owner_error"] = "Error estableciendo propietario";
 $text["set_owner"] = "Establecer propietario";
-$text["set_password"] = "translate: Set Password";
+$text["set_password"] = "Establecer contraseña";
 $text["settings_install_welcome_title"] = "Bienvenido a la instalación de letoDMS";
 $text["settings_install_welcome_text"] = "<p>Antes de instalar letoDMS asegúrese de haber creado un archivo «ENABLE_INSTALL_TOOL» en su directorio de instalación, en otro caso la instalación no funcionará. En sistemas Unix puede hacerse fácilmente con «touch conf/ENABLE_INSTALL_TOOL». Después de terminar la instalación elimine el archivo.</p><p>letoDMS tiene unos requisitos mínimos. Necesitará una base de datos y un servidor web con soporte para php. Para la búsqueda de texto completo lucene, necesitará tener instalado también el framework Zend donde pueda ser utilizado por php. Desde la versión 3.2.0 de letoDMS ADObd ya no forma parte de la distribución. Consiga una copia de él desde <a href=\"http://adodb.sourceforge.net/\">http://adodb.sourceforge.net</a> e instálelo. La ruta hacia él podrá ser establecida durante la instalación.</p><p> Si prefiere crear la base de datos antes de comenzar la instalación, simplemente créela manualmente con su herramienta preferida, opcionalmente cree un usuario de base de datos con acceso a esta base de datos e importe uno de los volcados del directorio de configuración. El script de instalación puede hacer esto también, pero necesitará acceso con privilegios suficientes para crear bases de datos.</p>";
 $text["settings_start_install"] = "Comenzar instalación";
-$text["settings_sortUsersInList"] = "translate: Sort users in list";
-$text["settings_sortUsersInList_desc"] = "translate: Sets if users in selection menus are ordered by login or by its full name";
-$text["settings_sortUsersInList_val_login"] = "translate: Sort by login";
-$text["settings_sortUsersInList_val_fullname"] = "translate: Sort by full name";
-$text["settings_stopWordsFile"] = "Path to stop words file";
-$text["settings_stopWordsFile_desc"] = "translate: If fulltext search is enabled, this file will contain stop words not being indexed";
+$text["settings_sortUsersInList"] = "Ordenar los usuarios en la lista";
+$text["settings_sortUsersInList_desc"] = "Establecer si los menús de selección de usuarios se ordenan por nombre de acceso o por nombre completo";
+$text["settings_sortUsersInList_val_login"] = "Ordenar por nombre de acceso";
+$text["settings_sortUsersInList_val_fullname"] = "Ordernar por nombre completo";
+$text["settings_stopWordsFile"] = "Ruta al fichero de palabras comunes";
+$text["settings_stopWordsFile_desc"] = "Si la búsqueda de texto completo está habilitada, este fichero contendrá palabras comunes que no se indexarán";
 $text["settings_activate_module"] = "Activar módulo";
 $text["settings_activate_php_extension"] = "Activar extensión PHP";
 $text["settings_adminIP"] = "IP de administración";
@@ -441,8 +446,8 @@ $text["settings_contentOffsetDir"] = "Directorio de contenidos de desplazamiento
 $text["settings_contentOffsetDir_desc"] = "Para tratar las limitaciones del sistema de ficheros subyacente, se ha ideado una estructura de directorios dentro del directorio de contenido. Esto requiere un directorio base desde el que comenzar. Normalmente puede dejar este valor por omisión, 1048576, pero puede ser cualquier número o cadena que no exista ya dentro él (directorio de contenido).";
 $text["settings_coreDir"] = "Directorio de letoDMS Core";
 $text["settings_coreDir_desc"] = "Ruta hacia LetoDMS_Core (opcional)";
-$text["settings_loginFailure_desc"] = "translate: Disable account after n login failures.";
-$text["settings_loginFailure"] = "translate: Login failure";
+$text["settings_loginFailure_desc"] = "Deshabilitar cuenta después de n intentos de acceso.";
+$text["settings_loginFailure"] = "Fallo de acceso";
 $text["settings_luceneClassDir"] = "Directorio de LetoDMS Lucene";
 $text["settings_luceneClassDir_desc"] = "Ruta hacia LetoDMS_Lucene (opcional)";
 $text["settings_luceneDir"] = "Directorio índice de Lucene";
@@ -508,9 +513,9 @@ $text["settings_httpRoot_desc"] = "La ruta relativa de la URL, después de la pa
 $text["settings_httpRoot"] = "Raíz Http";
 $text["settings_installADOdb"] = "Instalar ADOdb";
 $text["settings_install_success"] = "La instalación ha terminado con éxito";
-$text["settings_install_pear_package_log"] = "translate: Install Pear package 'Log'";
-$text["settings_install_pear_package_webdav"] = "translate: Install Pear package 'HTTP_WebDAV_Server', if you intend to use the webdav interface";
-$text["settings_install_zendframework"] = "translate: Install Zend Framework, if you intend to use the full text search engine";
+$text["settings_install_pear_package_log"] = "Instale el paquete Pear 'Log'";
+$text["settings_install_pear_package_webdav"] = "Instale el paquete Pear 'HTTP_WebDAV_Server', si quiere utilizar el interfaz webdav";
+$text["settings_install_zendframework"] = "Instale Zend Framework, si quiere usar el sistema de búsqueda de texto completo";
 $text["settings_language"] = "Idioma por omisión";
 $text["settings_language_desc"] = "Idioma por omisión (nombre de un subdirectorio en el directorio \"languages\")";
 $text["settings_logFileEnable_desc"] = "Habilitar/Deshabilitar archivo de registro";
@@ -528,16 +533,16 @@ $text["settings_notfound"] = "No encontrado";
 $text["settings_notwritable"] = "La configuración no se puede guardar porque el fichero de configuración no es escribible.";
 $text["settings_partitionSize"] = "Tamaño de fichero parcial";
 $text["settings_partitionSize_desc"] = "Tamaño de ficheros parciales en bytes, subidos por jumploader. No configurar un valor mayor que el tamaño máximo de subida configurado en el servidor.";
-$text["settings_passwordExpiration"] = "translate: Password expiration";
-$text["settings_passwordExpiration_desc"] = "translate: The number of days after which a password expireѕ and must be reset. 0 turns password expiration off.";
-$text["settings_passwordHistory"] = "translate: Password history";
-$text["settings_passwordHistory_desc"] = "translate: The number of passwords a user must have been used before a password can be reused. 0 turns the password history off.";
-$text["settings_passwordStrength"] = "translate: Min. password strength";
-$text["settings_passwordЅtrength_desc"] = "translate: The minimum password strength is an integer value from 0 to 100. Setting it to 0 will turn off checking for the minimum password strength.";
-$text["settings_passwordStrengthAlgorithm"] = "translate: Algorithm for password strength";
-$text["settings_passwordStrengthAlgorithm_desc"] = "translate: The algorithm used for calculating the password strength. The 'simple' algorithm just checks for at least eight chars total, a lower case letter, an upper case letter, a number and a special char. If those conditions are met the returned score is 100 otherwise 0.";
-$text["settings_passwordStrengthAlgorithm_valsimple"] = "translate: simple";
-$text["settings_passwordStrengthAlgorithm_valadvanced"] = "translate: advanced";
+$text["settings_passwordExpiration"] = "Caducidad de contraseña";
+$text["settings_passwordExpiration_desc"] = "El número de días tras los cuales una contraseña caduca y debe configurarse. 0 deshabilita la caducidad de contraseña.";
+$text["settings_passwordHistory"] = "Historial de contraseñas";
+$text["settings_passwordHistory_desc"] = "El número de contraseñas que un usuario debe usar antes de que una contraseña pueda volver a ser utilizada. 0 deshabilita el historial de contraseñas.";
+$text["settings_passwordStrength"] = "Min. fortaleza de contraseña";
+$text["settings_passwordЅtrength_desc"] = "La fortaleza mínima de contraseña es un valor numérico de 0 a 100. Configurándolo a 0 deshabilita la validación de fortaleza mínima.";
+$text["settings_passwordStrengthAlgorithm"] = "Algoritmo de fortaleza de contraseña";
+$text["settings_passwordStrengthAlgorithm_desc"] = "El algoritmo utilizado para calcular la fortaleza de contraseña. El algoritmo «simple» solo chequea que haya al menos 8 caracteres en total, una letra minúscula y una mayúscula, un número y un caracter especial. Si se cumplen estas condiciones la puntuación devuelta es 100 de otro modo es 0."; 
+$text["settings_passwordStrengthAlgorithm_valsimple"] = "simple";
+$text["settings_passwordStrengthAlgorithm_valadvanced"] = "avanzada";
 $text["settings_perms"] = "Permisos";
 $text["settings_pear_log"] = "Paquete Pear : Log";
 $text["settings_pear_webdav"] = "Paquete Pear : HTTP_WebDAV_Server";
@@ -604,7 +609,7 @@ $text["submit_login"] = "Conectar";
 $text["submit_password"] = "Fijar nueva contraseña";
 $text["submit_password_forgotten"] = "Comenzar el proceso";
 $text["submit_review"] = "Enviar revisión";
-$text["submit_userinfo"] = "translate: Submit info";
+$text["submit_userinfo"] = "Enviar información";
 $text["sunday"] = "Domingo";
 $text["theme"] = "Tema gráfico";
 $text["thursday"] = "Jueves";
