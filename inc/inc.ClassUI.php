@@ -693,7 +693,7 @@ class UI {
 			if ($folderID != $currentFolderID){
 			
 				if ($navigation) print "<a href=\"../out/out.ViewFolder.php?folderid=" . $folderID . "&showtree=1\">";
-				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . str_replace("'", "\\'", $folder->getName()) . "')\">";
+				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . str_replace("'", "\\'", htmlspecialchars($folder->getName())) . "')\">";
 
 			}else print "<span class=\"selectedfoldertree\">";
 			
