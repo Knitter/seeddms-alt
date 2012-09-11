@@ -547,6 +547,7 @@ class LetoDMS_Core_User {
 			$this->_groups = array();
 			foreach ($resArr as $row) {
 				$group = new LetoDMS_Core_Group($row["id"], $row["name"], $row["comment"]);
+				$group->setDMS($this->_dms);
 				array_push($this->_groups, $group);
 			}
 		}
