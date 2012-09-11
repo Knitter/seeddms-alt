@@ -46,13 +46,15 @@ if (isset($_GET["userid"]) && (!is_numeric($_GET["userid"]) || $_GET["userid"]<-
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("unknown_user"));
 }
 
-$userid = $_GET["userid"];
+if(isset($_GET["userid"]))
+	$userid = $_GET["userid"];
 
 if (isset($_GET["groupid"]) && (!is_numeric($_GET["groupid"]) || $_GET["groupid"]<-1)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("unknown_group"));
 }
 
-$groupid = $_GET["groupid"];
+if(isset($_GET["groupid"]))
+	$groupid = $_GET["groupid"];
 
 if (isset($_GET["groupid"])&&$_GET["groupid"]!=-1){
 	$group=$dms->getGroup($groupid);
@@ -114,10 +116,12 @@ if ($action == "delnotify"){
 //				$subject=mydmsDecodeString($subject);
 //				$message=mydmsDecodeString($message);
 		
-				if ($isUser) {
+				if (isset($userid)) {
+					$obj = $dms->getUser($userid);
 					$notifier->toIndividual($user, $obj, $subject, $message);
 				}
-				else {
+				else if (isset($groupid)) {
+					$obj = $dms->getGroup($groupid);
 					$notifier->toGroup($user, $obj, $subject, $message);
 				}
 			}
