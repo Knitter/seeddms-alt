@@ -132,7 +132,8 @@ if ($reviewStatus['type'] == 0) {
 		print "</tr></tbody></table><br>";
 	}
 ?>
-	<form method="POST" action="../op/op.ReviewDocument.php" name="form1" onsubmit="return checkIndForm();">
+	<form method="post" action="../op/op.ReviewDocument.php" name="form1" onsubmit="return checkIndForm();">
+	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
 	<table>
 	<tr><td class='infos' valign='top'><?php printMLText("comment")?>:</td>
 	<td class='infos' valign='top'><textarea name="comment" cols="80" rows="4"></textarea>
