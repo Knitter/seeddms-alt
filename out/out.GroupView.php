@@ -75,7 +75,7 @@ foreach ($groups as $group){
 
 		echo "<li>".htmlspecialchars($member->getFullName());
 		if ($member->getEmail()!="")
-			echo " (<a href=\"mailto:".$member->getEmail()."\">".$member->getEmail()."</a>)";
+			echo " (<a href=\"mailto:".htmlspecialchars($member->getEmail())."\">".htmlspecialchars($member->getEmail())."</a>)";
 		foreach($managers as $manager)
 			if($manager->getId() == $member->getId())
 				echo ", ".getMLText("manager");
