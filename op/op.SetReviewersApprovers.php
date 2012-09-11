@@ -164,7 +164,6 @@ if (count($reviewIndex["i"]) > 0) {
 				// revision or does not exist.
 				$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $reviewStatus[$rv["idx"]]["reviewID"] ."', '-2', '".getMLText("removed_reviewer")."', NOW(), '". $user->getID() ."')";
-				echo $queryStr;
 				$res = $db->getResult($queryStr);
 			}
 			else {
@@ -265,7 +264,6 @@ if (count($reviewIndex["g"]) > 0) {
 				// revision or does not exist.
 				$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
 					"VALUES ('". $reviewStatus[$rv["idx"]]["reviewID"] ."', '-2', '".getMLText("removed_reviewer")."', NOW(), '". $user->getID() ."')";
-				echo $queryStr;
 				$res = $db->getResult($queryStr);
 			}
 			else {
