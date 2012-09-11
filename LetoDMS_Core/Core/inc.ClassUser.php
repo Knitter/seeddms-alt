@@ -359,7 +359,7 @@ class LetoDMS_Core_User {
 	 * to a different user.
 	 *
 	 * @param object $user the user doing the removal (needed for entry in
-	 *        review log.
+	 *        review and approve log).
 	 * @param object $assignToUser the user who is new owner of folders and
 	 *        documents which previously were owned by the delete user.
 	 * @return boolean true on success or false in case of an error
