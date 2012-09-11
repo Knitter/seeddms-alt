@@ -45,7 +45,10 @@ if ($action == "adduser") {
 
 	$login   = $_POST["login"];
 	$pwd     = $_POST["pwd"];
-	$pwdexpiration = $_POST["pwdexpiration"];
+	if(!isset($_POST["pwdexpiration"]))
+		$pwdexpiration = '';
+	else
+		$pwdexpiration = $_POST["pwdexpiration"];
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
 	$comment = $_POST["comment"];
