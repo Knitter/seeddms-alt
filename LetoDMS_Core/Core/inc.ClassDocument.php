@@ -1677,7 +1677,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 
 		$pendingReview=false;
 		unset($this->_reviewStatus);  // force to be reloaded from DB
-		$reviewStatus=$this->getReviewStatus(true);
+		$reviewStatus=$this->getReviewStatus();
 		if (is_array($reviewStatus) && count($reviewStatus)>0) {
 			foreach ($reviewStatus as $r){
 				if ($r["status"]==0){
@@ -1688,7 +1688,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		}
 		$pendingApproval=false;
 		unset($this->_approvalStatus);  // force to be reloaded from DB
-		$approvalStatus=$this->getApprovalStatus(true);
+		$approvalStatus=$this->getApprovalStatus();
 		if (is_array($approvalStatus) && count($approvalStatus)>0) {
 			foreach ($approvalStatus as $a){
 				if ($a["status"]==0){
