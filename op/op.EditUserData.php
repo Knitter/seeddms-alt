@@ -88,7 +88,7 @@ if ($user->getEmail() != $email)
 if ($user->getComment() != $comment)
 	$user->setComment($comment);
 
-if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
+if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 {
 	$lastDotIndex = strrpos(basename($_FILES["userfile"]["name"]), ".");
 	$fileType = substr($_FILES["userfile"]["name"], $lastDotIndex);
