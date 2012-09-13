@@ -39,11 +39,13 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		if($convcmd) {
 			$_convcmd = $convcmd;
 		}
-		Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive());
+
 		$version = $document->getLatestContent();
 		$this->addField(Zend_Search_Lucene_Field::Keyword('document_id', $document->getID()));
-		$this->addField(Zend_Search_Lucene_Field::Keyword('mimetype', $version->getMimeType()));
-		$this->addField(Zend_Search_Lucene_Field::UnIndexed('created', $version->getDate()));
+		if($version) {
+			$this->addField(Zend_Search_Lucene_Field::Keyword('mimetype', $version->getMimeType()));
+			$this->addField(Zend_Search_Lucene_Field::UnIndexed('created', $version->getDate()));
+		}
 		$this->addField(Zend_Search_Lucene_Field::Text('title', $document->getName()));
 		if($categories = $document->getCategories()) {
 			$names = array();
@@ -60,22 +62,24 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		if($comment = $document->getComment()) {
 			$this->addField(Zend_Search_Lucene_Field::Text('comment', $comment));
 		}
-		$path = $dms->contentDir . $version->getPath();
-		$content = '';
-		$fp = null;
-		$mimetype = $version->getMimeType();
-		if(isset($_convcmd[$mimetype])) {
-			$cmd = sprintf($_convcmd[$mimetype], $path);
-			$fp = popen($cmd, 'r');
-			if($fp) {
-				$content = '';
-				while(!feof($fp)) {
-					$content .= fread($fp, 2048);
+		if($version) {
+			$path = $dms->contentDir . $version->getPath();
+			$content = '';
+			$fp = null;
+			$mimetype = $version->getMimeType();
+			if(isset($_convcmd[$mimetype])) {
+				$cmd = sprintf($_convcmd[$mimetype], $path);
+				$fp = popen($cmd, 'r');
+				if($fp) {
+					$content = '';
+					while(!feof($fp)) {
+						$content .= fread($fp, 2048);
+					}
+					pclose($fp);
 				}
-				pclose($fp);
-			}
-			if($content) {
-				$this->addField(Zend_Search_Lucene_Field::UnStored('content', $content, 'utf-8'));
+				if($content) {
+					$this->addField(Zend_Search_Lucene_Field::UnStored('content', $content, 'utf-8'));
+				}
 			}
 		}
 	}
