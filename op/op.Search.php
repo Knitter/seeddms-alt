@@ -328,7 +328,7 @@ foreach ($entries as $entry) {
 			for ($i = 1; $i  < count($path); $i++) {
 				print "/".htmlspecialchars($path[$i]->getName());
 			}
-			print $foldername;
+			print $folderName;
 			print "</a></td>";
 			
 			$owner = $folder->getOwner();
