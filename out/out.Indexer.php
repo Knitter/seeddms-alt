@@ -89,15 +89,14 @@ if($settings->_enableFullSearch) {
 		$index = Zend_Search_Lucene::open($settings->_luceneDir);
 	}
 
+	$analyzer = new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive();
 	if($settings->_stopWordsFile && file_exists($settings->_stopWordsFile)) {
 		$stopWordsFilter = new Zend_Search_Lucene_Analysis_TokenFilter_StopWords();
 		$stopWordsFilter->loadFromFile($settings->_stopWordsFile);
-	 
-		$analyzer = new Zend_Search_Lucene_Analysis_Analyzer_Common_TextNum_CaseInsensitive();
 		$analyzer->addFilter($stopWordsFilter);
-	 
-		Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
 	}
+	 
+	Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
 
 	$folder = $dms->getFolder($settings->_rootFolderID);
 	echo "<pre>";
