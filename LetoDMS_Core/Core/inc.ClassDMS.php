@@ -478,24 +478,17 @@ class LetoDMS_Core_DMS {
 		/*--------- Do it all over again for folders -------------*/
 		if($mode & 0x2) {
 			$searchKey = "";
-			// Assemble the arguments for the concatenation function. This allows the
-			// search to be carried across all the relevant fields.
-			$concatFunction = "";
 			if (in_array(2, $searchin)) {
-				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblFolders`.`name`";
 				$searchFields[] = "`tblFolders`.`name`";
 			}
 			if (in_array(3, $searchin)) {
-				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblFolders`.`comment`";
 				$searchFields[] = "`tblFolders`.`comment`";
 			}
 
-			if (strlen($concatFunction)>0 && count($tkeys)>0) {
-				$concatFunction = "CONCAT_WS(' ', ".$concatFunction.")";
+			if (count($searchFields)>0) {
 				foreach ($tkeys as $key) {
 					$key = trim($key);
 					if (strlen($key)>0) {
-						//$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
 						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ")."(".implode(" like ".$this->db->qstr("%".$key."%")." OR ", $searchFields)." like ".$this->db->qstr("%".$key."%").")";
 					}
 				}
@@ -547,41 +540,48 @@ class LetoDMS_Core_DMS {
 				$searchQuery .= " AND (".$searchCreateDate.")";
 			}
 
-			// Count the number of rows that the search will produce.
-			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
-			$totalFolders = 0;
-			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
-				$totalFolders = (integer)$resArr[0]["num"];
-			}
-
-			// If there are no results from the count query, then there is no real need
-			// to run the full query. TODO: re-structure code to by-pass additional
-			// queries when no initial results are found.
-
-			// Only search if the offset is not beyond the number of folders
-			if($totalFolders > $offset) {
-				// Prepare the complete search query, including the LIMIT clause.
-				$searchQuery = "SELECT `tblFolders`.* ".$searchQuery;
-
-				if($limit) {
-					$searchQuery .= " LIMIT ".$offset.",".$limit;
+			/* Do not search for folders if not at least a search for a key,
+			 * an owner, or creation date is requested.
+			 */
+			if($searchKey || $searchOwner || $searchCreateDate) {
+				// Count the number of rows that the search will produce.
+				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery." GROUP BY `tblFolders`.`id`");
+				$totalFolders = 0;
+				if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
+					$totalFolders = (integer)$resArr[0]["num"];
 				}
 
-				// Send the complete search query to the database.
-				$resArr = $this->db->getResultArray($searchQuery);
-			} else {
-				$resArr = array();
-			}
+				// If there are no results from the count query, then there is no real need
+				// to run the full query. TODO: re-structure code to by-pass additional
+				// queries when no initial results are found.
 
-			// ------------------- Ausgabe der Ergebnisse ----------------------------
-			$numResults = count($resArr);
-			if ($numResults == 0) {
-				$folderresult = array('totalFolders'=>$totalFolders, 'folders'=>array());
-			} else {
-				foreach ($resArr as $folderArr) {
-					$folders[] = $this->getFolder($folderArr['id']);
+				// Only search if the offset is not beyond the number of folders
+				if($totalFolders > $offset) {
+					// Prepare the complete search query, including the LIMIT clause.
+					$searchQuery = "SELECT `tblFolders`.* ".$searchQuery;
+
+					if($limit) {
+						$searchQuery .= " LIMIT ".$offset.",".$limit;
+					}
+
+					// Send the complete search query to the database.
+					$resArr = $this->db->getResultArray($searchQuery);
+				} else {
+					$resArr = array();
 				}
-				$folderresult = array('totalFolders'=>$totalFolders, 'folders'=>$folders);
+
+				// ------------------- Ausgabe der Ergebnisse ----------------------------
+				$numResults = count($resArr);
+				if ($numResults == 0) {
+					$folderresult = array('totalFolders'=>$totalFolders, 'folders'=>array());
+				} else {
+					foreach ($resArr as $folderArr) {
+						$folders[] = $this->getFolder($folderArr['id']);
+					}
+					$folderresult = array('totalFolders'=>$totalFolders, 'folders'=>$folders);
+				}
+			} else {
+				$folderresult = array('totalFolders'=>0, 'folders'=>array());
 			}
 		} else {
 			$folderresult = array('totalFolders'=>0, 'folders'=>array());
@@ -591,29 +591,22 @@ class LetoDMS_Core_DMS {
 
 		if($mode & 0x1) {
 			$searchKey = "";
-			// Assemble the arguments for the concatenation function. This allows the
-			// search to be carried across all the relevant fields.
-			$concatFunction = "";
 			$searchFields = array();
 			if (in_array(1, $searchin)) {
-				$concatFunction = "`tblDocuments`.`keywords`";
 				$searchFields[] = "`tblDocuments`.`keywords`";
 			}
 			if (in_array(2, $searchin)) {
-				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblDocuments`.`name`";
 				$searchFields[] = "`tblDocuments`.`name`";
 			}
 			if (in_array(3, $searchin)) {
-				$concatFunction = (strlen($concatFunction) == 0 ? "" : $concatFunction.", ")."`tblDocuments`.`comment`";
 				$searchFields[] = "`tblDocuments`.`comment`";
 			}
 
-			if (strlen($concatFunction)>0 && count($tkeys)>0) {
-				$concatFunction = "CONCAT_WS(' ', ".$concatFunction.")";
+
+			if (count($searchFields)>0) {
 				foreach ($tkeys as $key) {
 					$key = trim($key);
 					if (strlen($key)>0) {
-						//$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ").$concatFunction." LIKE ".$this->db->qstr('%'.$key.'%');
 						$searchKey = (strlen($searchKey)==0 ? "" : $searchKey." ".$logicalmode." ")."(".implode(" like ".$this->db->qstr("%".$key."%")." OR ", $searchFields)." like ".$this->db->qstr("%".$key."%").")";
 					}
 				}
