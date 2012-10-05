@@ -168,22 +168,32 @@ print "</td>";
 print "<td>";
 
 print "<ul class=\"actions\">";
-if (($document->getAccessMode($user) >= M_READWRITE) && (count($versions) > 1)) {
+/* Only admin has the right to remove version in any case or a regular
+ * user if enableVersionDeletion is on
+ */
+if ((($settings->_enableVersionDeletion && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin() ) && (count($versions) > 1)) {
+//if (($document->getAccessMode($user) >= M_READWRITE) && (count($versions) > 1)) {
 	print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("rm_version")."</a></li>";
 }
-if ($document->getAccessMode($user) == M_ALL) {
+if (($settings->_enableVersionModification && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin()) {
 	if ( $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE ){
 		print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_status")."</a></li>";
 	}
-	if ( $status["status"]==S_RELEASED || $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP ){
+	// Allow changing reviewers/approvals only if not reviewed
+	if ( $status["status"]==S_DRAFT_REV ){
 		print "<li><a href='../out/out.SetReviewersApprovers.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_assignments")."</a></li>";
 	}
 	if ( $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP || $status["status"]==S_EXPIRED ){
 		print "<li><a href='../out/out.SetExpires.php?documentid=".$documentid."'>".getMLText("set_expiry")."</a></li>";
 	}
 }
-if ($document->getAccessMode($user) >= M_READWRITE) {
-	print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+if (($settings->_enableVersionModification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
+	if($status["status"] != S_OBSOLETE)
+		print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+	// Allow changing reviewers/approvals only if not reviewed
+	if ( $status["status"] == S_DRAFT_REV){
+		print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
+	}
 }
 
 print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\">".getMLText("versioning_info")."</a></li>";	
@@ -231,7 +241,7 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 				else {
 					$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
 				}
-				if($required->isMember($user))
+				if($required->isMember($user) && ($user->getId() != $owner->getId()))
 					$is_reviewer = true;
 				break;
 		}
@@ -243,8 +253,8 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 		print "<td>".htmlspecialchars($r["comment"])."</td>\n";
 		print "<td>".getReviewStatusText($r["status"])."</td>\n";
 		print "<td><ul class=\"actions\">";
-		
-		if ($is_reviewer && $status["status"]==S_DRAFT_REV) {
+
+		if ($is_reviewer && $r["status"]==0) {
 			print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\">".getMLText("submit_review")."</a></li>";
 		}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
 			print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\">".getMLText("edit")."</a></li>";
@@ -292,7 +302,7 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 				else {
 					$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
 				}
-				if($required->isMember($user))
+				if($required->isMember($user) && ($user->getId() != $owner->getId()))
 					$is_approver = true;
 				break;
 		}
@@ -364,7 +374,10 @@ if (count($versions)>1) {
 		print "<td>".getOverallStatusText($vstat["status"])."</td>";
 		print "<td>";
 		print "<ul class=\"actions\">";
-		if (($document->getAccessMode($user) == M_ALL) && (count($versions) > 1)) {
+		/* Only admin has the right to remove version in any case or a regular
+		 * user if enableVersionDeletion is on
+		 */
+		if ((($settings->_enableVersionDeletion && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin() ) && (count($versions) > 1)) {
 			print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("rm_version")."</a></li>";
 		}
 		print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'>".getMLText("details")."</a></li>";
