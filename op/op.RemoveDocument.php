@@ -51,6 +51,23 @@ $nl =	$document->getNotifyList();
 if (!$document->remove()) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
 } else {
+
+	/* Remove the document from the fulltext index */
+	if($settings->_enableFullSearch) {
+		if(!empty($settings->_luceneClassDir))
+			require_once($settings->_luceneClassDir.'/Lucene.php');
+		else
+			require_once('LetoDMS/Lucene.php');
+
+		$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+		if($hits = $index->find('document_id:'.$documentid)) {
+			$hit = $hits[0];
+			echo $hit->id;
+			$index->delete($hit->id);
+			$index->commit();
+		}
+	}
+
 	if ($notifier){
 		$path = "";
 		$folderPath = $folder->getPath();
