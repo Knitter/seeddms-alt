@@ -560,12 +560,12 @@ class LetoDMS_Core_Folder {
 		if (is_bool($res) && !$res) return false;
 
 		foreach ($this->_subFolders as $subFolder) {
-			$res = $subFolder->remove(FALSE);
+			$res = $subFolder->remove();
 			if (!$res) return false;
 		}
 
 		foreach ($this->_documents as $document) {
-			$res = $document->remove(FALSE);
+			$res = $document->remove();
 			if (!$res) return false;
 		}
 
