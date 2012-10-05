@@ -27,7 +27,7 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 	 * Constructor. Creates our indexable document and adds all
 	 * necessary fields to it using the passed in document
 	 */
-	public function __construct($dms, $document, $convcmd=null) {
+	public function __construct($dms, $document, $convcmd=null, $nocontent=false) {
 		$_convcmd = array(
 			'application/pdf' => 'pdftotext -enc UTF-8 -nopgbrk %s - |sed -e \'s/ [a-zA-Z0-9.]\{1\} / /g\' -e \'s/[0-9.]//g\'',
 			'application/msword' => 'catdoc %s',
@@ -44,7 +44,9 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		$this->addField(Zend_Search_Lucene_Field::Keyword('document_id', $document->getID()));
 		if($version) {
 			$this->addField(Zend_Search_Lucene_Field::Keyword('mimetype', $version->getMimeType()));
-			$this->addField(Zend_Search_Lucene_Field::UnIndexed('created', $version->getDate()));
+			$this->addField(Zend_Search_Lucene_Field::Keyword('origfilename', $version->getOriginalFileName()));
+			if(!$nocontent)
+				$this->addField(Zend_Search_Lucene_Field::UnIndexed('created', $version->getDate()));
 		}
 		$this->addField(Zend_Search_Lucene_Field::Text('title', $document->getName()));
 		if($categories = $document->getCategories()) {
@@ -62,7 +64,7 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		if($comment = $document->getComment()) {
 			$this->addField(Zend_Search_Lucene_Field::Text('comment', $comment));
 		}
-		if($version) {
+		if($version && !$nocontent) {
 			$path = $dms->contentDir . $version->getPath();
 			$content = '';
 			$fp = null;
