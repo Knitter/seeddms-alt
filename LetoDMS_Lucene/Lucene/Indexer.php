@@ -22,22 +22,36 @@
  * @copyright  Copyright (C) 2011, Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_Lucene_Indexer extends Zend_Search_Lucene {
+class LetoDMS_Lucene_Indexer {
 	/**
 	 * @var string $indexname name of lucene index
 	 * @access protected
 	 */
 	protected $indexname;
 
+	function open($luceneDir) { /* {{{ */
+		$index = Zend_Search_Lucene::open($luceneDir);
+		return($index);
+	} /* }}} */
+
+	function create($luceneDir) { /* {{{ */
+		$index = Zend_Search_Lucene::create($luceneDir);
+		return($index);
+	} /* }}} */
+
 	/**
-	 * Create a new index
+	 * Do some initialization
 	 *
-	 * @return object instance of LetoDMS_Lucene_Search
 	 */
-	function __construct() { /* {{{ */
-		$this->version = '@package_version@';
-		if($this->version[0] == '@')
-			$this->version = '3.0.0';
+	function init($stopWordsFile='') { /* {{{ */
+		$analyzer = new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive();
+		if($stopWordsFile && file_exists($stopWordsFile)) {
+			$stopWordsFilter = new Zend_Search_Lucene_Analysis_TokenFilter_StopWords();
+			$stopWordsFilter->loadFromFile($stopWordsFile);
+			$analyzer->addFilter($stopWordsFilter);
+		}
+		 
+		Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
 	} /* }}} */
 
 
