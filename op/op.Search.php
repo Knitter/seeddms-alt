@@ -43,42 +43,6 @@ if (isset($_GET["navBar"])) {
 	}
 }
 
-//
-// Supporting functions.
-//
-
-function makeTimeStamp($hour, $min, $sec, $year, $month, $day) {
-	$thirtyone = array (1, 3, 5, 7, 8, 10, 12);
-	$thirty = array (4, 6, 9, 11);
-
-	// Very basic check that the terms are valid. Does not fail for illegal
-	// dates such as 31 Feb.
-	if (!is_numeric($hour) || !is_numeric($min) || !is_numeric($sec) || !is_numeric($year) || !is_numeric($month) || !is_numeric($day) || $month<1 || $month>12 || $day<1 || $day>31 || $hour<0 || $hour>23 || $min<0 || $min>59 || $sec<0 || $sec>59) {
-		return false;
-	}
-	$year = (int) $year;
-	$month = (int) $month;
-	$day = (int) $day;
-
-	if (array_search($month, $thirtyone)) {
-		$max=31;
-	}
-	else if (array_search($month, $thirty)) {
-		$max=30;
-	}
-	else {
-		$max=(($year % 4 == 0) && ($year % 100 != 0 || $year % 400 == 0)) ? 29 : 28;
-	}
-
-	// If the date falls out of bounds, set it to the maximum for the given
-	// month. Makes assumption about the user's intention, rather than failing
-	// for absolutely everything.
-	if ($day>$max) {
-		$day=$max;
-	}
-
-	return mktime($hour, $min, $sec, $month, $day, $year);
-}
 
 function getTime() {
 	if (function_exists('microtime')) {
@@ -176,13 +140,13 @@ if (isset($_GET["ownerid"]) && is_numeric($_GET["ownerid"]) && $_GET["ownerid"]!
 $startdate = array();
 $stopdate = array();
 if (isset($_GET["creationdate"]) && $_GET["creationdate"]!=null) {
-	$startdate = array('year'=>$_GET["createstartyear"], 'month'=>$_GET["createstartmonth"], 'day'=>$_GET["createstartday"]);
+	$startdate = array('year'=>$_GET["createstartyear"], 'month'=>$_GET["createstartmonth"], 'day'=>$_GET["createstartday"], 'hour'=>0, 'minute'=>0, 'second'=>0);
 	if (!checkdate($startdate['month'], $startdate['day'], $startdate['year'])) {
 		UI::contentContainer(getMLText("invalid_create_date_start"));
 		UI::htmlEndPage();
 		exit;
 	}
-	$stopdate = array('year'=>$_GET["createendyear"], 'month'=>$_GET["createendmonth"], 'day'=>$_GET["createendday"]);
+	$stopdate = array('year'=>$_GET["createendyear"], 'month'=>$_GET["createendmonth"], 'day'=>$_GET["createendday"], 'hour'=>23, 'minute'=>59, 'second'=>59);
 	if (!checkdate($stopdate['month'], $stopdate['day'], $stopdate['year'])) {
 		UI::contentContainer(getMLText("invalid_create_date_end"));
 		UI::htmlEndPage();
@@ -240,9 +204,9 @@ if (isset($_GET["pg"])) {
 }
 
 
-// ------------------------------------- Suche starten --------------------------------------------
+// ---------------- Start searching -----------------------------------------
 $startTime = getTime();
-$resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, $categories);
+$resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, array(), array(), $categories);
 $searchTime = getTime() - $startTime;
 $searchTime = round($searchTime, 2);
 
@@ -261,7 +225,7 @@ if($resArr['docs']) {
 		}
 	}
 }
-// -------------- Ausgabe der Ergebnisse --------------------------------
+// -------------- Output results --------------------------------------------
 
 UI::contentContainerStart();
 UI::pageList($pageNumber, $resArr['totalPages'], "../op/op.Search.php", $_GET);
