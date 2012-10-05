@@ -99,6 +99,14 @@ class Settings { /* {{{ */
 	var $_enableUsersView = true;
 	// enable/disable listing administrator as reviewer/approver
 	var $_enableAdminRevApp = false;
+	// enable/disable default notification for owner
+	var $_enableOwnerNotification = false;
+	// enable/disable deleting of versions for regular users
+	var $_enableVersionDeletion = false;
+	// enable/disable to overwrite the status of a version for regular users
+	var $_enableVersionModification = false;
+	// enable/disable notification when added as a reviewer/approver
+	var $_enableNotificationAppRev = true;
 	// the name of the versioning info file created by the backup tool
 	var $_versioningFileName = "versioning_info.txt";
 	// enable/disable log system
@@ -394,6 +402,14 @@ class Settings { /* {{{ */
 		$tab = $node[0]->attributes();
 		$this->_enableAdminRevApp = Settings::boolval($tab["enableAdminRevApp"]);
 		$this->_versioningFileName = strval($tab["versioningFileName"]);
+		$this->_enableVersionDeletion = Settings::boolval($tab["enableVersionDeletion"]);
+		$this->_enableVersionModification = Settings::boolval($tab["enableVersionModification"]);
+
+		// XML Path: /configuration/advanced/notification
+		$node = $xml->xpath('/configuration/advanced/notification');
+		$tab = $node[0]->attributes();
+		$this->_enableNotificationAppRev = Settings::boolval($tab["enableNotificationAppRev"]);
+		$this->_enableOwnerNotification = Settings::boolval($tab["enableOwnerNotification"]);
 
 		// XML Path: /configuration/advanced/server
 		$node = $xml->xpath('/configuration/advanced/server');
@@ -614,6 +630,13 @@ class Settings { /* {{{ */
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'edition');
     $this->setXMLAttributValue($node, "enableAdminRevApp", $this->_enableAdminRevApp);
     $this->setXMLAttributValue($node, "versioningFileName", $this->_versioningFileName);
+    $this->setXMLAttributValue($node, "enableVersionDeletion", $this->_enableVersionDeletion);
+    $this->setXMLAttributValue($node, "enableVersionModification", $this->_enableVersionModification);
+
+    // XML Path: /configuration/advanced/notification
+    $node = $this->getXMLNode($xml, '/configuration/advanced', 'notification');
+    $this->setXMLAttributValue($node, "enableNotificationAppRev", $this->_enableNotificationAppRev);
+    $this->setXMLAttributValue($node, "enableOwnerNotification", $this->_enableOwnerNotification);
 
     // XML Path: /configuration/advanced/server
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'server');
