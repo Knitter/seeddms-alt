@@ -42,7 +42,19 @@ if($settings->_enableFullSearch) {
 	else
 		require_once('LetoDMS/Lucene.php');
 
-	$index = Zend_Search_Lucene::open($settings->_luceneDir);
+	$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+
+	$numDocs = $index->count();
+	echo "<pre>";
+	for ($id = 0; $id < $numDocs; $id++) {
+		if (!$index->isDeleted($id)) {
+			$hit = $index->getDocument($id);
+			echo $hit->document_id.": ".htmlspecialchars($hit->title)."\n";
+		}
+	}
+	echo "</pre>";
+
+
 
 	$terms = $index->terms();
 	echo "<p>".count($terms)." Terms</p>";
