@@ -443,6 +443,39 @@ class LetoDMS_Core_DMS {
 		return $document;
 	} /* }}} */
 
+	function makeTimeStamp($hour, $min, $sec, $year, $month, $day) {
+		$thirtyone = array (1, 3, 5, 7, 8, 10, 12);
+		$thirty = array (4, 6, 9, 11);
+
+		// Very basic check that the terms are valid. Does not fail for illegal
+		// dates such as 31 Feb.
+		if (!is_numeric($hour) || !is_numeric($min) || !is_numeric($sec) || !is_numeric($year) || !is_numeric($month) || !is_numeric($day) || $month<1 || $month>12 || $day<1 || $day>31 || $hour<0 || $hour>23 || $min<0 || $min>59 || $sec<0 || $sec>59) {
+			return false;
+		}
+		$year = (int) $year;
+		$month = (int) $month;
+		$day = (int) $day;
+
+		if (array_search($month, $thirtyone)) {
+			$max=31;
+		}
+		else if (array_search($month, $thirty)) {
+			$max=30;
+		}
+		else {
+			$max=(($year % 4 == 0) && ($year % 100 != 0 || $year % 400 == 0)) ? 29 : 28;
+		}
+
+		// If the date falls out of bounds, set it to the maximum for the given
+		// month. Makes assumption about the user's intention, rather than failing
+		// for absolutely everything.
+		if ($day>$max) {
+			$day=$max;
+		}
+
+		return mktime($hour, $min, $sec, $month, $day, $year);
+	}
+
 	/*
 	 * Search the database for documents
 	 *
@@ -457,6 +490,8 @@ class LetoDMS_Core_DMS {
 	 * @param status array list of status
 	 * @param creationstartdate array search for documents created after this date
 	 * @param creationenddate array search for documents created before this date
+	 * @param modificationstartdate array search for documents modified after this date
+	 * @param modificationenddate array search for documents modified before this date
 	 * @param categories array list of categories the documents must have assigned
 	 * @param mode int decide whether to search for documents/folders
 	 *        0x1 = documents only
@@ -464,7 +499,7 @@ class LetoDMS_Core_DMS {
 	 *        0x3 = both
 	 * @return array containing the elements total and docs
 	 */
-	function search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $categories=array(), $mode=0x3) { /* {{{ */
+	function search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $mode=0x3) { /* {{{ */
 		// Split the search string into constituent keywords.
 		$tkeys=array();
 		if (strlen($query)>0) {
@@ -511,13 +546,13 @@ class LetoDMS_Core_DMS {
 			// Is the search restricted to documents created between two specific dates?
 			$searchCreateDate = "";
 			if ($creationstartdate) {
-				$startdate = makeTimeStamp(0, 0, 0, $creationstartdate['year'], $creationstartdate["month"], $creationstartdate["day"]);
+				$startdate = LetoDMS_Core_DMS::makeTimeStamp($creationstartdate['hour'], $creationstartdate['minute'], $creationstartdate['second'], $creationstartdate['year'], $creationstartdate["month"], $creationstartdate["day"]);
 				if ($startdate) {
 					$searchCreateDate .= "`tblFolders`.`date` >= ".$startdate;
 				}
 			}
 			if ($creationenddate) {
-				$stopdate = makeTimeStamp(23, 59, 59, $creationenddate["year"], $creationenddate["month"], $creationenddate["day"]);
+				$stopdate = LetoDMS_Core_DMS::makeTimeStamp($creationenddate['hour'], $creationstartdate['minute'], $creationstartdate['second'], $creationenddate["year"], $creationenddate["month"], $creationenddate["day"]);
 				if ($stopdate) {
 					if($startdate)
 						$searchCreateDate .= " AND ";
@@ -639,17 +674,33 @@ class LetoDMS_Core_DMS {
 			// Is the search restricted to documents created between two specific dates?
 			$searchCreateDate = "";
 			if ($creationstartdate) {
-				$startdate = makeTimeStamp(0, 0, 0, $creationstartdate['year'], $creationstartdate["month"], $creationstartdate["day"]);
+				$startdate = LetoDMS_Core_DMS::makeTimeStamp($creationstartdate['hour'], $creationstartdate['minute'], $creationstartdate['second'], $creationstartdate['year'], $creationstartdate["month"], $creationstartdate["day"]);
 				if ($startdate) {
 					$searchCreateDate .= "`tblDocuments`.`date` >= ".$startdate;
 				}
 			}
 			if ($creationenddate) {
-				$stopdate = makeTimeStamp(23, 59, 59, $creationenddate["year"], $creationenddate["month"], $creationenddate["day"]);
+				$stopdate = LetoDMS_Core_DMS::makeTimeStamp($creationenddate['hour'], $creationenddate['minute'], $creationenddate['second'], $creationenddate["year"], $creationenddate["month"], $creationenddate["day"]);
 				if ($stopdate) {
-					if($startdate)
+					if($searchCreateDate)
 						$searchCreateDate .= " AND ";
 					$searchCreateDate .= "`tblDocuments`.`date` <= ".$stopdate;
+				}
+			}
+			if ($modificationstartdate) {
+				$startdate = LetoDMS_Core_DMS::makeTimeStamp($modificationstartdate['hour'], $modificationstartdate['minute'], $modificationstartdate['second'], $modificationstartdate['year'], $modificationstartdate["month"], $modificationstartdate["day"]);
+				if ($startdate) {
+					if($searchCreateDate)
+						$searchCreateDate .= " AND ";
+					$searchCreateDate .= "`tblDocumentContent`.`date` >= ".$startdate;
+				}
+			}
+			if ($modificationenddate) {
+				$stopdate = LetoDMS_Core_DMS::makeTimeStamp($modificationenddate['hour'], $modificationenddate['minute'], $modificationenddate['second'], $modificationenddate["year"], $modificationenddate["month"], $modificationenddate["day"]);
+				if ($stopdate) {
+					if($searchCreateDate)
+						$searchCreateDate .= " AND ";
+					$searchCreateDate .= "`tblDocumentContent`.`date` <= ".$stopdate;
 				}
 			}
 
