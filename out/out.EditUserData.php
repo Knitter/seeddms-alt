@@ -68,7 +68,7 @@ UI::contentContainerStart();
 		<td><input id="currentpwd" type="Password" name="currentpwd" size="30"></td>
 	</tr>
 	<tr>
-		<td><?php printMLText("password");?>:</td>
+		<td><?php printMLText("new_password");?>:</td>
 		<td><input id="pwd" type="Password" name="pwd" size="30"> <div id="outerstrength" style="min-width: 100px; height: 14px; display: inline-block; border: 1px solid black; padding: 1px;"><div id="innerstrength" style="width: 0px; height: 14px; display: inline-block; border: 0px; padding: 0px; background-color: red;">&nbsp;</div> <div id="strength" style="display: inline-block;"></div></div></td>
 	</tr>
 	<tr>
