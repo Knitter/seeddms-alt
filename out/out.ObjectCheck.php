@@ -34,6 +34,7 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 		$folderList = $folder->getFolderList();
 		/* Check the folder */
 		if($folderList != $path) {
+			print "<tr>\n";
 			$needsrepair = true;
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
@@ -64,9 +65,10 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 	$path .= $folder->getId().':';
 	$documents = $folder->getDocuments();
 	foreach($documents as $document) {
-		/* Check the document */
+		/* Check the folder list of the document */
 		$folderList = $document->getFolderList();
 		if($folderList != $path) {
+			print "<tr>\n";
 			$needsrepair = true;
 			$lc = $document->getLatestContent();
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($lc->getFileType())."\" title=\"".$lc->getMimeType()."\"></a></td>";
@@ -76,7 +78,7 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 			for ($i = 1; $i  < count($tmppath); $i++) {
 				print htmlspecialchars($tmppath[$i]->getName())."/";
 			}
-			print $document->getName();
+			print htmlspecialchars($document->getName());
 			print "</a></td>";
 			$owner = $document->getOwner();
 			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
@@ -88,6 +90,33 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 				print "<td></td>\n";
 			}
 			print "</tr>\n";
+		}
+
+		/* Check if the content is available */
+		$versions = $document->getContent();
+		foreach($versions as $version) {
+			$filepath = $dms->contentDir . $version->getPath();
+			if(!file_exists($filepath)) {
+			print "<tr>\n";
+			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\"></a></td>";
+			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
+			$folder = $document->getFolder();
+			$tmppath = $folder->getPath();
+			for ($i = 1; $i  < count($tmppath); $i++) {
+				print htmlspecialchars($tmppath[$i]->getName())."/";
+			}
+			print htmlspecialchars($document->getName());
+			print "</a></td>";
+			$owner = $document->getOwner();
+			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+			print "<td>Document content of version ".$version->getVersion()." is missing ('".$path."')</td>";
+			if($repair) {
+				print "<td><span class=\"warning\">Cannot repaired</span></td>\n";
+			} else {
+				print "<td></td>\n";
+			}
+			print "</tr>\n";
+			}
 		}
 	}
 } /* }}} */
