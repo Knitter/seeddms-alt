@@ -100,14 +100,14 @@ function chooseKeywords(target) {
 <tr>
 <td><?php printMLText("search_in");?>:</td>
 <td><ul class="actions">
-<li class="first"><input type="Checkbox" id="keywords" name="searchin[]" value="1"><label for="keywords"><?php printMLText("keywords");?></label></li>
+<li class="first"><input type="Checkbox" id="keywords" name="searchin[]" value="1"><label for="keywords"><?php printMLText("keywords");?></label> (<?php printMLText('documents_only'); ?>)</li>
 <li><input type="Checkbox" name="searchin[]" id="searchName" value="2"><label for="searchName"><?php printMLText("name");?></label></li>
 <li><input type="Checkbox" name="searchin[]" id="comment" value="3"><label for="comment"><?php printMLText("comment");?></label></li>
 </ul>
 </td>
 </tr>
 <tr>
-<td><?php printMLText("category");?>:</td>
+<td><?php printMLText("category");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
 <td>
 <select name="categoryids[]" multiple>
 <option value="-1"><?php printMLText("all_categories");?>
@@ -121,7 +121,7 @@ foreach ($allCats as $catObj) {
 </td>
 </tr>
 <tr>
-<td><?php printMLText("status");?>:</td>
+<td><?php printMLText("status");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
 <td>
 <ul class="actions">
 <li class="first"><input type="checkbox" id="pendingReview" name="pendingReview" value="1"><label for='pendingReview'><?php printOverallStatusText(S_DRAFT_REV);?></label></li>
