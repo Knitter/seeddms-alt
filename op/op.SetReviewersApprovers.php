@@ -116,20 +116,19 @@ foreach ($pIndRev as $p) {
 				switch ($res) {
 					case 0:
 						// Send an email notification to the new reviewer.
-						if ($notifier) {
-							$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("review_request_email");
-							$message = getMLText("review_request_email")."\r\n";
-							$message .= 
-								getMLText("document").": ".$document->getName()."\r\n".
-								getMLText("version").": ".$content->_version."\r\n".
-								getMLText("comment").": ".$content->getComment()."\r\n".
-								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-
-//							$subject=mydmsDecodeString($subject);
-//							$message=mydmsDecodeString($message);
-							
-							$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$p]], $subject, $message);
+						if($settings->_enableNotificationAppRev) {
+							if ($notifier) {
+								$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("review_request_email");
+								$message = getMLText("review_request_email")."\r\n";
+								$message .= 
+									getMLText("document").": ".$document->getName()."\r\n".
+									getMLText("version").": ".$content->_version."\r\n".
+									getMLText("comment").": ".$content->getComment()."\r\n".
+									getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
+									"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
+								
+								$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$p]], $subject, $message);
+							}
 						}
 						break;
 					case -1:
@@ -173,20 +172,19 @@ if (count($reviewIndex["i"]) > 0) {
 				switch ($res) {
 					case 0:
 						// Send an email notification to the reviewer.
-						if ($notifier) {
-							$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("review_deletion_email");
-							$message = getMLText("review_deletion_email")."\r\n";
-							$message .= 
-								getMLText("document").": ".$document->getName()."\r\n".
-								getMLText("version").": ".$content->_version."\r\n".
-								getMLText("comment").": ".$content->getComment()."\r\n".
-								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
-								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-//							$subject=mydmsDecodeString($subject);
-//							$message=mydmsDecodeString($message);
-							
-							$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$rx]], $subject, $message);
+						if($settings->_enableNotificationAppRev) {
+							if ($notifier) {
+								$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("review_deletion_email");
+								$message = getMLText("review_deletion_email")."\r\n";
+								$message .= 
+									getMLText("document").": ".$document->getName()."\r\n".
+									getMLText("version").": ".$content->_version."\r\n".
+									getMLText("comment").": ".$content->getComment()."\r\n".
+									getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
+									"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
+								
+								$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$rx]], $subject, $message);
+							}
 						}
 						break;
 					case -1:
@@ -218,20 +216,19 @@ foreach ($pGrpRev as $p) {
 				switch ($res) {
 					case 0:
 						// Send an email notification to the new reviewer.
-						if ($notifier) {
-							$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("review_request_email");
-							$message = getMLText("review_request_email")."\r\n";
-							$message .=
-								getMLText("document").": ".$document->getName()."\r\n".
-								getMLText("version").": ".$content->_version."\r\n".
-								getMLText("comment").": ".$content->getComment()."\r\n".
-								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
-
-//							$subject=mydmsDecodeString($subject);
-//							$message=mydmsDecodeString($message);
+						if($settings->_enableNotificationAppRev) {
+							if ($notifier) {
+								$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("review_request_email");
+								$message = getMLText("review_request_email")."\r\n";
+								$message .=
+									getMLText("document").": ".$document->getName()."\r\n".
+									getMLText("version").": ".$content->_version."\r\n".
+									getMLText("comment").": ".$content->getComment()."\r\n".
+									getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
+									"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 							
-							$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$p]], $subject, $message);
+								$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$p]], $subject, $message);
+							}
 						}
 						break;
 					case -1:
@@ -272,21 +269,20 @@ if (count($reviewIndex["g"]) > 0) {
 				switch ($res) {
 					case 0:
 						// Send an email notification to the review group.
-						if ($notifier) {
-						
-							$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("review_deletion_email");
-							$message = getMLText("review_deletion_email")."\r\n";
-							$message .= 
-								getMLText("document").": ".$document->getName()."\r\n".
-								getMLText("version").": ".$content->_version."\r\n".
-								getMLText("comment").": ".$content->getComment()."\r\n".
-								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
-								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-//							$subject=mydmsDecodeString($subject);
-//							$message=mydmsDecodeString($message);
+						if($settings->_enableNotificationAppRev) {
+							if ($notifier) {
 							
-							$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$rx]], $subject, $message);
+								$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("review_deletion_email");
+								$message = getMLText("review_deletion_email")."\r\n";
+								$message .= 
+									getMLText("document").": ".$document->getName()."\r\n".
+									getMLText("version").": ".$content->_version."\r\n".
+									getMLText("comment").": ".$content->getComment()."\r\n".
+									getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
+									"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
+
+								$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$rx]], $subject, $message);
+							}
 						}
 						break;
 					case -1:
@@ -323,20 +319,19 @@ foreach ($pIndApp as $p) {
 				switch ($res) {
 					case 0:
 						// Send an email notification to the new approver.
-						if ($overallStatus["status"]!=0 && $notifier) {
-							$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("approval_request_email");
-							$message = getMLText("approval_request_email")."\r\n";
-							$message .= 
-								getMLText("document").": ".$document->getName()."\r\n".
-								getMLText("version").": ".$content->_version."\r\n".
-								getMLText("comment").": ".$content->getComment()."\r\n".
-								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
-								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
+						if($settings->_enableNotificationAppRev) {
+							if ($overallStatus["status"]!=0 && $notifier) {
+								$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("approval_request_email");
+								$message = getMLText("approval_request_email")."\r\n";
+								$message .= 
+									getMLText("document").": ".$document->getName()."\r\n".
+									getMLText("version").": ".$content->_version."\r\n".
+									getMLText("comment").": ".$content->getComment()."\r\n".
+									getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
+									"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-//							$subject=mydmsDecodeString($subject);
-//							$message=mydmsDecodeString($message);
-							
-							$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$p]], $subject, $message);
+								$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$p]], $subject, $message);
+							}
 						}
 						break;
 					case -1:
@@ -378,20 +373,19 @@ if (count($approvalIndex["i"]) > 0) {
 				switch ($res) {
 					case 0:
 						// Send an email notification to the approver.
-						if ($notifier) {
-							$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("approval_deletion_email");
-							$message = getMLText("approval_deletion_email")."\r\n";
-							$message .= 
-								getMLText("document").": ".$document->getName()."\r\n".
-								getMLText("version").": ".$content->_version."\r\n".
-								getMLText("comment").": ".$content->getComment()."\r\n".
-								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
-								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
+						if($settings->_enableNotificationAppRev) {
+							if ($notifier) {
+								$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("approval_deletion_email");
+								$message = getMLText("approval_deletion_email")."\r\n";
+								$message .= 
+									getMLText("document").": ".$document->getName()."\r\n".
+									getMLText("version").": ".$content->_version."\r\n".
+									getMLText("comment").": ".$content->getComment()."\r\n".
+									getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
+									"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//							$subject=mydmsDecodeString($subject);
-//							$message=mydmsDecodeString($message);
-							
-							$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$rx]], $subject, $message);
+								$notifier->toIndividual($user, $docAccess["users"][$accessIndex["i"][$rx]], $subject, $message);
+							}
 						}
 						break;
 					case -1:
@@ -423,20 +417,19 @@ foreach ($pGrpApp as $p) {
 				switch ($res) {
 					case 0:
 						// Send an email notification to the new approver.
-						if ($overallStatus["status"]!=0 && $notifier) {
-							$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("approval_request_email");
-							$message = getMLText("approval_request_email")."\r\n";
-							$message .=
-								getMLText("document").": ".$document->getName()."\r\n".
-								getMLText("version").": ".$content->_version."\r\n".
-								getMLText("comment").": ".$content->getComment()."\r\n".
-								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
-								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
+						if($settings->_enableNotificationAppRev) {
+							if ($overallStatus["status"]!=0 && $notifier) {
+								$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("approval_request_email");
+								$message = getMLText("approval_request_email")."\r\n";
+								$message .=
+									getMLText("document").": ".$document->getName()."\r\n".
+									getMLText("version").": ".$content->_version."\r\n".
+									getMLText("comment").": ".$content->getComment()."\r\n".
+									getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
+									"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-//							$subject=mydmsDecodeString($subject);
-//							$message=mydmsDecodeString($message);
-							
-							$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$p]], $subject, $message);
+								$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$p]], $subject, $message);
+							}
 						}
 						break;
 					case -1:
@@ -478,21 +471,20 @@ if (count($approvalIndex["g"]) > 0) {
 				switch ($res) {
 					case 0:
 						// Send an email notification to the approval group.
-						if ($notifier) {
-						
-							$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("approval_deletion_email");
-							$message = getMLText("approval_deletion_email")."\r\n";
-							$message .= 
-								getMLText("document").": ".$document->getName()."\r\n".
-								getMLText("version").": ".$content->_version."\r\n".
-								getMLText("comment").": ".$content->getComment()."\r\n".
-								getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
-								"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-//							$subject=mydmsDecodeString($subject);
-//							$message=mydmsDecodeString($message);
+						if($settings->_enableNotificationAppRev) {
+							if ($notifier) {
 							
-							$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$rx]], $subject, $message);
+								$subject = "###SITENAME###: ".$document->getName().", v.".$content->_version." - ".getMLText("approval_deletion_email");
+								$message = getMLText("approval_deletion_email")."\r\n";
+								$message .= 
+									getMLText("document").": ".$document->getName()."\r\n".
+									getMLText("version").": ".$content->_version."\r\n".
+									getMLText("comment").": ".$content->getComment()."\r\n".
+									getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".			
+									"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
+
+								$notifier->toGroup($user, $docAccess["groups"][$accessIndex["g"][$rx]], $subject, $message);
+							}
 						}
 						break;
 					case -1:
