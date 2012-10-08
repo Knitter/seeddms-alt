@@ -150,15 +150,22 @@ print "<td>".htmlspecialchars($version->getComment())."</td>";
 print "<td>".getOverallStatusText($status["status"])."</td>";
 print "<td>";
 
-if (($document->getAccessMode($user) >= M_READWRITE)) {
-	print "<ul class=\"actions\">";
+//if (($document->getAccessMode($user) >= M_READWRITE)) {
+print "<ul class=\"actions\">";
+if (($settings->_enableVersionModification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
 	print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("rm_version")."</a></li>";
-	if ($document->getAccessMode($user) == M_ALL) {
-		if ( $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE ){
-			print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$version->getVersion()."'>".getMLText("change_status")."</a></li>";
-		}
+}
+if (($settings->_enableVersionModification && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin()) {
+	if ( $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE ){
+		print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$version->getVersion()."'>".getMLText("change_status")."</a></li>";
 	}
-	print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+}
+if (($settings->_enableVersionModification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
+	if($status["status"] != S_OBSOLETE)
+		print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+	if ( $status["status"] == S_DRAFT_REV){
+		print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
+}
 	print "</ul>";
 }
 else {
