@@ -171,7 +171,7 @@ print "<ul class=\"actions\">";
 /* Only admin has the right to remove version in any case or a regular
  * user if enableVersionDeletion is on
  */
-if ((($settings->_enableVersionDeletion && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin() ) && (count($versions) > 1)) {
+if ((($settings->_enableVersionDeletion && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin() ) && (count($versions) > 1)) {
 //if (($document->getAccessMode($user) >= M_READWRITE) && (count($versions) > 1)) {
 	print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("rm_version")."</a></li>";
 }
@@ -190,7 +190,6 @@ if (($settings->_enableVersionModification && ($document->getAccessMode($user) =
 if (($settings->_enableVersionModification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
 	if($status["status"] != S_OBSOLETE)
 		print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_comment")."</a></li>";
-	// Allow changing reviewers/approvals only if not reviewed
 	if ( $status["status"] == S_DRAFT_REV){
 		print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
 	}
@@ -377,7 +376,7 @@ if (count($versions)>1) {
 		/* Only admin has the right to remove version in any case or a regular
 		 * user if enableVersionDeletion is on
 		 */
-		if ((($settings->_enableVersionDeletion && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin() ) && (count($versions) > 1)) {
+		if ((($settings->_enableVersionDeletion && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin() ) && (count($versions) > 1)) {
 			print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("rm_version")."</a></li>";
 		}
 		print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'>".getMLText("details")."</a></li>";
