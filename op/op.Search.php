@@ -92,6 +92,7 @@ if (isset($_GET['searchin']) && is_array($_GET["searchin"])) {
 				case 1: // keywords
 				case 2: // name
 				case 3: // comment
+				case 4: // attributes
 					$searchin[$si] = $si;
 					break;
 			}
@@ -100,7 +101,7 @@ if (isset($_GET['searchin']) && is_array($_GET["searchin"])) {
 }
 
 // if none is checkd search all
-if (count($searchin)==0) $searchin=array( 0, 1, 2, 3);
+if (count($searchin)==0) $searchin=array( 0, 1, 2, 3, 4);
 
 // Check to see if the search has been restricted to a particular sub-tree in
 // the folder hierarchy.
@@ -184,6 +185,11 @@ if(isset($_GET['categoryids']) && $_GET['categoryids']) {
 	}
 }
 
+if (isset($_GET["attributes"]))
+	$attributes = $_GET["attributes"];
+else
+	$attributes = array();
+
 //
 // Get the page number to display. If the result set contains more than
 // 25 entries, it is displayed across multiple pages.
@@ -206,7 +212,7 @@ if (isset($_GET["pg"])) {
 
 // ---------------- Start searching -----------------------------------------
 $startTime = getTime();
-$resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, array(), array(), $categories);
+$resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, array(), array(), $categories, $attributes);
 $searchTime = getTime() - $startTime;
 $searchTime = round($searchTime, 2);
 
@@ -234,6 +240,7 @@ print "<table class=\"folderView\">";
 print "<thead>\n<tr>\n";
 print "<th></th>\n";
 print "<th>".getMLText("name")."</th>\n";
+print "<th>".getMLText("attributes")."</th>\n";
 print "<th>".getMLText("owner")."</th>\n";
 print "<th>".getMLText("status")."</th>\n";
 print "<th>".getMLText("version")."</th>\n";
@@ -265,7 +272,20 @@ foreach ($entries as $entry) {
 			}
 			print $docName;
 			print "</a></td>";
-			
+
+			$attributes = $lc->getAttributes();
+			print "<td>";
+			print "<ul class=\"documentDetail\">\n";
+			$attributes = $lc->getAttributes();
+			if($attributes) {
+				foreach($attributes as $attribute) {
+					$attrdef = $attribute->getAttributeDefinition();
+					print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
+				}
+			}
+			print "</ul>\n";
+			print "</td>";
+
 			$owner = $document->getOwner();
 			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 			$display_status=$lc->getStatus();
@@ -289,11 +309,13 @@ foreach ($entries as $entry) {
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
 			$path = $folder->getPath();
-			for ($i = 1; $i  < count($path); $i++) {
-				print "/".htmlspecialchars($path[$i]->getName());
+			print "/";
+			for ($i = 1; $i  < count($path)-1; $i++) {
+				print htmlspecialchars($path[$i]->getName())."/";
 			}
 			print $folderName;
 			print "</a></td>";
+			print "<td></td>";
 			
 			$owner = $folder->getOwner();
 			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
