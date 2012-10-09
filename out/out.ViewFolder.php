@@ -59,12 +59,27 @@ if ($settings->_enableFolderTree) UI::printTreeNavigation($folderid,$showtree);
 UI::contentHeading(getMLText("folder_infos"));
 
 $owner = $folder->getOwner();
-UI::contentContainer("<table>\n<tr>\n".
+UI::contentContainerStart();
+print "<table>\n<tr>\n".
 			"<td>".getMLText("owner").":</td>\n".
 			"<td><a class=\"infos\" href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a>".
 			"</td>\n</tr>\n<tr>\n".
 			"<td>".getMLText("comment").":</td>\n".
-			"<td>".htmlspecialchars($folder->getComment())."</td>\n</tr>\n</table>\n");
+			"<td>".htmlspecialchars($folder->getComment())."</td>\n</tr>\n";
+$attributes = $folder->getAttributes();
+if($attributes) {
+	foreach($attributes as $attribute) {
+		$attrdef = $attribute->getAttributeDefinition();
+?>
+		<tr>
+			<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+			<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
+		</tr>
+<?php
+	}
+}
+print "</table>\n";
+UI::contentContainerEnd();
 
 UI::contentHeading(getMLText("folder_contents"));
 UI::contentContainerStart();
