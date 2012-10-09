@@ -198,6 +198,12 @@
       versioningFileName = "versioning_info.txt"
     >
     </edition>
+		<!-- enableNotificationAppRev: true to send notifation if a user is added as a reviewer or approver
+		-->
+    <notification
+      enableNotificationAppRev = "true"
+    >
+    </notification>
     <!-- coreDir: Path to LetoDMS_Core (optional)
        - luceneClassDir: Path to LetoDMS_Lucene (optional)
        - contentOffsetDir: To work around limitations in the underlying file system, a new 
