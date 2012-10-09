@@ -27,12 +27,7 @@
  *             2010 Matteo Lucarelli, 2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_Core_Folder {
-	/**
-	 * @var integer unique id of folder
-	 */
-	var $_id;
-
+class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 	/**
 	 * @var string name of folder
 	 */
@@ -73,12 +68,8 @@ class LetoDMS_Core_Folder {
 	 */
 	var $_sequence;
 
-	/**
-	 * @var object back reference to document management system
-	 */
-	var $_dms;
-
 	function LetoDMS_Core_Folder($id, $name, $parentID, $comment, $date, $ownerID, $inheritAccess, $defaultAccess, $sequence) { /* {{{ */
+		parent::__construct($id);
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_parentID = $parentID;
@@ -89,20 +80,6 @@ class LetoDMS_Core_Folder {
 		$this->_defaultAccess = $defaultAccess;
 		$this->_sequence = $sequence;
 		$this->_notifyList = array();
-		$this->_dms = null;
-	} /* }}} */
-
-	/*
-	 * Set dms this folder belongs to.
-	 *
-	 * Each folder needs a reference to the dms it belongs to. It will be
-	 * set when the folder is created by LetoDMS::getFolder(). The dms has a
-	 * references to the currently logged in user and the database connection.
-	 *
-	 * @param object $dms reference to dms
-	 */
-	function setDMS($dms) { /* {{{ */
-		$this->_dms = $dms;
 	} /* }}} */
 
 	/*
@@ -370,7 +347,19 @@ class LetoDMS_Core_Folder {
 		return $this->_subFolders;
 	} /* }}} */
 
-	function addSubFolder($name, $comment, $owner, $sequence) { /* {{{ */
+	/**
+	 * Add a new subfolder
+	 *
+	 * @param string $name name of folder
+	 * @param string $comment comment of folder
+	 * @param object $owner owner of folder
+	 * @param integer $sequence position of folder in list of sub folders.
+	 * @param array $attributes list of document attributes. The element key
+	 *        must be the id of the attribute definition.
+	 * @return object object of type LetoDMS_Core_Folder or false in case of
+	 *         an error.
+	 */
+	function addSubFolder($name, $comment, $owner, $sequence, $attributes) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		// Set the folderList of the folder
@@ -389,6 +378,16 @@ class LetoDMS_Core_Folder {
 			return false;
 		$newFolder = $this->_dms->getFolder($db->getInsertID());
 		unset($this->_subFolders);
+
+		if($attributes) {
+			foreach($attributes as $attrdefid=>$attribute) {
+				if(trim($attribute))
+					if(!$newFolder->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
+						$newFolder->remove();
+						return false;
+					}
+			}
+		}
 
 		return $newFolder;
 	} /* }}} */
@@ -503,11 +502,15 @@ class LetoDMS_Core_Folder {
 	 * @param string $reqversion version number of the content
 	 * @param string $version_comment comment of the content. If left empty
 	 *        the $comment will be used.
+	 * @param array $attributes list of document attributes. The element key
+	 *        must be the id of the attribute definition.
+	 * @param array $version_attributes list of document version attributes.
+	 *        The element key must be the id of the attribute definition.
 	 * @return array/boolean false in case of error, otherwise an array
 	 *        containing two elements. The first one is the new document, the
 	 *        second one is the result set returned when inserting the content.
 	 */
-	function addDocument($name, $comment, $expires, $owner, $keywords, $categories, $tmpFile, $orgFileName, $fileType, $mimeType, $sequence, $reviewers=array(), $approvers=array(),$reqversion,$version_comment="") { /* {{{ */
+	function addDocument($name, $comment, $expires, $owner, $keywords, $categories, $tmpFile, $orgFileName, $fileType, $mimeType, $sequence, $reviewers=array(), $approvers=array(),$reqversion,$version_comment="", $attributes=array(), $version_attributes=array()) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$expires = (!$expires) ? 0 : $expires;
@@ -530,8 +533,8 @@ class LetoDMS_Core_Folder {
 		$document = $this->_dms->getDocument($db->getInsertID());
 
 		if ($version_comment!="")
-			$res = $document->addContent($version_comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion);
-		else $res = $document->addContent($comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion);
+			$res = $document->addContent($version_comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes);
+		else $res = $document->addContent($comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes);
 
 		if (is_bool($res) && !$res) {
 			$queryStr = "DELETE FROM tblDocuments WHERE id = " . $document->getID();
@@ -542,6 +545,17 @@ class LetoDMS_Core_Folder {
 		if($categories) {
 			$document->setCategories($categories);
 		}
+
+		if($attributes) {
+			foreach($attributes as $attrdefid=>$attribute) {
+				if(trim($attribute))
+					if(!$document->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
+						$document->remove();
+						return false;
+					}
+			}
+		}
+
 		return array($document, $res);
 	} /* }}} */
 
@@ -571,6 +585,9 @@ class LetoDMS_Core_Folder {
 
 		//Entfernen der Datenbankeinträge
 		$queryStr = "DELETE FROM tblFolders WHERE id =  " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+		$queryStr = "DELETE FROM tblFolderAttributes WHERE folder =  " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
 		$queryStr = "DELETE FROM tblACLs WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
