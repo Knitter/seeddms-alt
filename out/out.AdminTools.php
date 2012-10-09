@@ -41,6 +41,7 @@ UI::contentContainerStart();
 		<li><a href="../out/out.GroupMgr.php"><?php echo getMLText("group_management")?></a></li>
 		<li><a href="../out/out.DefaultKeywords.php"><?php echo getMLText("global_default_keywords")?></a></li>
 		<li><a href="../out/out.Categories.php"><?php echo getMLText("global_document_categories")?></a></li>
+		<li><a href="../out/out.AttributeMgr.php"><?php echo getMLText("global_attributedefinitions")?></a></li>
 		<li><a href="../out/out.Info.php"><?php echo getMLText("version_info")?></a></li>
 <?php
 if($settings->_enableFullSearch) {
