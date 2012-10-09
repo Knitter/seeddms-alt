@@ -56,7 +56,8 @@ if (!is_numeric($sequence)) {
 
 $name = $_POST["name"];
 $comment = $_POST["comment"];
-$subFolder = $folder->addSubFolder($name, $comment, $user, $sequence);
+$attributes = $_POST["attributes"];
+$subFolder = $folder->addSubFolder($name, $comment, $user, $sequence, $attributes);
 
 if (is_object($subFolder)) {
 	// Send notification to subscribers.

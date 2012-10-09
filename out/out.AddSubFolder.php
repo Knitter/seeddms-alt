@@ -87,6 +87,19 @@ function checkForm()
 			<td class="inputDescription"><?php printMLText("sequence");?>:</td>
 			<td><?php UI::printSequenceChooser($folder->getSubFolders());?></td>
 		</tr>
+<?php
+	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_folder, LetoDMS_Core_AttributeDefinition::objtype_all));
+	if($attrdefs) {
+		foreach($attrdefs as $attrdef) {
+?>
+<tr>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
+	<td><?php UI::printAttributeEditField($attrdef, '') ?></td>
+</tr>
+<?php
+		}
+	}
+?>
 		<tr>
 			<td colspan="2"><br><input type="Submit" value="<?php printMLText("add_subfolder");?>"></td>
 		</tr>
