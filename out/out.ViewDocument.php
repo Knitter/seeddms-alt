@@ -24,6 +24,7 @@ include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
 function filterDocumentLinks($user, $links) { /* {{{ */
@@ -63,6 +64,9 @@ $latestContent = $document->getLatestContent();
 $status = $latestContent->getStatus();
 $reviewStatus = $latestContent->getReviewStatus();
 $approvalStatus = $latestContent->getApprovalStatus();
+
+/* Create object for checking access to certain operations */
+$accessop = new LetoDMS_AccessOperation($document, $user, $settings);
 
 // verify if file exists
 $file_exists=file_exists($dms->contentDir . $latestContent->getPath());
@@ -118,6 +122,20 @@ print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".htmlspecialch
 ?>
 </td>
 </tr>
+<?php
+$attributes = $document->getAttributes();
+if($attributes) {
+	foreach($attributes as $attribute) {
+		$attrdef = $attribute->getAttributeDefinition();
+?>
+		<tr>
+			<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+			<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
+		</tr>
+<?php
+	}
+}
+?>
 </table>
 <?php
 UI::contentContainerEnd();
@@ -157,6 +175,16 @@ print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEma
 print "<li>".getLongReadableDate($latestContent->getDate())."</li>";
 
 print "</ul>\n";
+print "<ul class=\"documentDetail\">\n";
+$attributes = $latestContent->getAttributes();
+if($attributes) {
+	foreach($attributes as $attribute) {
+		$attrdef = $attribute->getAttributeDefinition();
+		print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
+	}
+}
+print "</ul>\n";
+
 print "<td>".htmlspecialchars($latestContent->getComment())."</td>";
 
 print "<td width='10%'>".getOverallStatusText($status["status"]);
@@ -171,28 +199,24 @@ print "<ul class=\"actions\">";
 /* Only admin has the right to remove version in any case or a regular
  * user if enableVersionDeletion is on
  */
-if ((($settings->_enableVersionDeletion && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin() ) && (count($versions) > 1)) {
-//if (($document->getAccessMode($user) >= M_READWRITE) && (count($versions) > 1)) {
+if($accessop->mayRemoveVersion()) {
 	print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("rm_version")."</a></li>";
 }
-if (($settings->_enableVersionModification && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin()) {
-	if ( $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE ){
-		print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_status")."</a></li>";
-	}
-	// Allow changing reviewers/approvals only if not reviewed
-	if ( $status["status"]==S_DRAFT_REV ){
-		print "<li><a href='../out/out.SetReviewersApprovers.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_assignments")."</a></li>";
-	}
-	if ( $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP || $status["status"]==S_EXPIRED ){
-		print "<li><a href='../out/out.SetExpires.php?documentid=".$documentid."'>".getMLText("set_expiry")."</a></li>";
-	}
+if($accessop->mayOverwriteStatus()) {
+	print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_status")."</a></li>";
 }
-if (($settings->_enableVersionModification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
-	if($status["status"] != S_OBSOLETE)
-		print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_comment")."</a></li>";
-	if ( $status["status"] == S_DRAFT_REV){
-		print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
-	}
+// Allow changing reviewers/approvals only if not reviewed
+if($accessop->maySetReviewersApprovers()) {
+	print "<li><a href='../out/out.SetReviewersApprovers.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_assignments")."</a></li>";
+}
+if($accessop->maySetExpires()) {
+	print "<li><a href='../out/out.SetExpires.php?documentid=".$documentid."'>".getMLText("set_expiry")."</a></li>";
+}
+if($accessop->mayEditComment()) {
+	print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+}
+if($accessop->mayEditAttributes()) {
+	print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
 }
 
 print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\">".getMLText("versioning_info")."</a></li>";	
@@ -369,6 +393,15 @@ if (count($versions)>1) {
 		print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
 		print "<li>".getLongReadableDate($version->getDate())."</li>";
 		print "</ul>\n";
+		print "<ul class=\"documentDetail\">\n";
+		$attributes = $version->getAttributes();
+		if($attributes) {
+			foreach($attributes as $attribute) {
+				$attrdef = $attribute->getAttributeDefinition();
+				print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
+			}
+		}
+		print "</ul>\n";
 		print "<td>".htmlspecialchars($version->getComment())."</td>";
 		print "<td>".getOverallStatusText($vstat["status"])."</td>";
 		print "<td>";
@@ -376,7 +409,7 @@ if (count($versions)>1) {
 		/* Only admin has the right to remove version in any case or a regular
 		 * user if enableVersionDeletion is on
 		 */
-		if ((($settings->_enableVersionDeletion && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin() ) && (count($versions) > 1)) {
+		if($accessop->mayRemoveVersion()) {
 			print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("rm_version")."</a></li>";
 		}
 		print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'>".getMLText("details")."</a></li>";
