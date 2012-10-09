@@ -54,6 +54,8 @@ $version_comment = $_POST["version_comment"];
 
 $keywords = $_POST["keywords"];
 $categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]);
+$attributes = $_POST["attributes"];
+$attributes_version = $_POST["attributes_version"];
 
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
@@ -169,7 +171,8 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
 															$cats, $userfiletmp, basename($userfilename),
 	                            $fileType, $userfiletype, $sequence,
-	                            $reviewers, $approvers, $reqversion,$version_comment);
+	                            $reviewers, $approvers, $reqversion,
+	                            $version_comment, $attributes, $attributes_version);
 
 	if (is_bool($res) && !$res) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));

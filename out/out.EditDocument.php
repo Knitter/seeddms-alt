@@ -112,6 +112,19 @@ UI::contentContainerStart();
 				print "</td></tr>";
 			}
 		?>
+		<?php
+			$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_document, LetoDMS_Core_AttributeDefinition::objtype_all));
+			if($attrdefs) {
+				foreach($attrdefs as $attrdef) {
+?>
+		<tr>
+			<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
+			<td><?php UI::printAttributeEditField($attrdef, $document->getAttributeValue($attrdef)) ?></td>
+		</tr>
+<?php
+				}
+			}
+?>
 		<tr>
 			<td colspan="2"><br><input type="Submit" value="<?php printMLText("save") ?>"></td>
 		</tr>

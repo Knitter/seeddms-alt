@@ -102,7 +102,8 @@ $docAccess = $folder->getApproversList();
 <?php
 	}
 ?>
-</table><br>
+</table>
+<?php UI::contentSubHeading(getMLText("document_infos")); ?>
 
 <form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
 <?php echo createHiddenFieldWithKey('adddocument'); ?>
@@ -110,33 +111,12 @@ $docAccess = $folder->getApproversList();
 <input type="hidden" name="showtree" value="<?php echo showtree();?>">
 <table>
 <tr>
-	<td><?php printMLText("sequence");?>:</td>
-	<td><?php UI::printSequenceChooser($folder->getDocuments());?></td>
-</tr>
-<tr>
-	<td><?php printMLText("version");?>:</td>
-	<td><input name="reqversion" value="1"></td>
-</tr>
-<tr>
-	<td><?php printMLText("local_file");?>:</td>
-	<td>
-	<a href="javascript:addFiles()"><?php printMLtext("add_multiple_files") ?></a>
-	<ol id="files">
-	<li><input type="File" name="userfile[]" size="60"></li>
-	</ol>
-	</td>
-</tr>
-<tr>
 	<td><?php printMLText("name");?>:</td>
 	<td><input name="name" size="60"></td>
 </tr>
 <tr>
 	<td><?php printMLText("comment");?>:</td>
 	<td><textarea name="comment" rows="3" cols="80"></textarea></td>
-</tr>
-<tr>
-	<td><?php printMLText("comment_for_current_version");?>:</td>
-	<td><textarea name="version_comment" rows="3" cols="80"></textarea></td>
 </tr>
 <tr>
 	<td><?php printMLText("keywords");?>:</td>
@@ -152,10 +132,27 @@ $docAccess = $folder->getApproversList();
 	</script>
 	</td>
 </tr>
-		<tr>
-			<td><?php printMLText("categories")?>:</td>
-			<td><?php UI::printCategoryChooser("form1");?></td>
-		</tr>
+<tr>
+	<td><?php printMLText("categories")?>:</td>
+	<td><?php UI::printCategoryChooser("form1");?></td>
+</tr>
+<tr>
+	<td><?php printMLText("sequence");?>:</td>
+	<td><?php UI::printSequenceChooser($folder->getDocuments());?></td>
+</tr>
+<?php
+	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_document, LetoDMS_Core_AttributeDefinition::objtype_all));
+	if($attrdefs) {
+		foreach($attrdefs as $attrdef) {
+?>
+<tr>
+	<td><?php echo $attrdef->getName(); ?></td>
+	<td><?php UI::printAttributeEditField($attrdef, '') ?></td>
+</tr>
+<?php
+		}
+	}
+?>
 <tr>
 	<td><?php printMLText("expires");?>:</td>
 	<td>
@@ -163,6 +160,41 @@ $docAccess = $folder->getApproversList();
 	<input type="radio" name="expires" value="true"><?php UI::printDateChooser(-1, "exp");?>
 	</td>
 </tr>
+
+</table>
+
+<?php UI::contentSubHeading(getMLText("version_info")); ?>
+<table>
+<tr>
+	<td><?php printMLText("version");?>:</td>
+	<td><input name="reqversion" value="1"></td>
+</tr>
+<tr>
+	<td><?php printMLText("local_file");?>:</td>
+	<td>
+	<a href="javascript:addFiles()"><?php printMLtext("add_multiple_files") ?></a>
+	<ol id="files">
+	<li><input type="File" name="userfile[]" size="60"></li>
+	</ol>
+	</td>
+</tr>
+<tr>
+	<td><?php printMLText("comment_for_current_version");?>:</td>
+	<td><textarea name="version_comment" rows="3" cols="80"></textarea></td>
+</tr>
+<?php
+	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_documentcontent, LetoDMS_Core_AttributeDefinition::objtype_all));
+	if($attrdefs) {
+		foreach($attrdefs as $attrdef) {
+?>
+<tr>
+	<td><?php echo $attrdef->getName(); ?></td>
+	<td><?php UI::printAttributeEditField($attrdef, '', 'attributes_version') ?></td>
+</tr>
+<?php
+		}
+	}
+?>
 </table>
 
 <?php UI::contentSubHeading(getMLText("assign_reviewers")); ?>
@@ -181,8 +213,8 @@ $docAccess = $folder->getApproversList();
 		$mandatory=false;
 		foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 
-		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
-		else print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
+		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())."</li>";
+		else print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())."</li>";
 	}
 ?>
 	</ul>
@@ -196,8 +228,8 @@ $docAccess = $folder->getApproversList();
 		$mandatory=false;
 		foreach ($res as $r) if ($r['reviewerGroupID']==$grp->getID()) $mandatory=true;	
 
-		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($grp->getName());
-		else print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' name='grpReviewers[]' value='". $grp->getID() ."'>".htmlspecialchars($grp->getName());
+		if ($mandatory) print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($grp->getName())."</li>";
+		else print "<li class=\"cbSelectItem\"><input id='revGrp".$grp->getID()."' type='checkbox' name='grpReviewers[]' value='". $grp->getID() ."'>".htmlspecialchars($grp->getName())."</li>";
 	}
 ?>
 	</ul>

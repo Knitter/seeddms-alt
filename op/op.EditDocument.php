@@ -52,6 +52,7 @@ $sequence = $_POST["sequence"];
 if (!is_numeric($sequence)) {
 	$sequence="keep";
 }
+$attributes = $_POST["attributes"];
 
 if (($oldname = $document->getName()) != $name) {
 	if($document->setName($name)) {
@@ -151,6 +152,16 @@ if($categories) {
 	if($document->setCategories(array())) {
 	} else {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+	}
+}
+
+if($attributes) {
+	$oldattributes = $document->getAttributes();
+	foreach($attributes as $attrdefid=>$attribute) {
+		if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
+			if(!$document->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
+				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+		}
 	}
 }
 

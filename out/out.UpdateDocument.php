@@ -140,6 +140,19 @@ $docAccess = $document->getApproversList();
 				<input type="radio" name="expires" value="true"<?php if ($document->expires()) print " checked";?>><?php UI::printDateChooser(-1, "exp");?>
 			</td>
 		</tr>
+<?php
+	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_documentcontent, LetoDMS_Core_AttributeDefinition::objtype_all));
+	if($attrdefs) {
+		foreach($attrdefs as $attrdef) {
+?>
+<tr>
+	<td><?php echo $attrdef->getName(); ?></td>
+	<td><?php UI::printAttributeEditField($attrdef, '') ?></td>
+</tr>
+<?php
+		}
+	}
+?>
 		<tr>
 			<td colspan=2>
 			
