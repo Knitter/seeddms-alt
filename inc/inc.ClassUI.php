@@ -598,6 +598,23 @@ class UI {
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("category")."...\" onclick=\"chooseCategory".$formName."();\">";
 	} /* }}} */
 
+	function printAttributeEditField($attrdef, $objvalue, $fieldname='attributes') { /* {{{ */
+		if($valueset = $attrdef->getValueSetAsArray()) {
+			echo "<select name=\"".$fieldname."[".$attrdef->getId()."]\">";
+			if($attrdef->getMinValues() < 1) {
+				echo "<option value=\"\"></option>";
+			}
+			foreach($valueset as $value) {
+				echo "<option value=\"".htmlspecialchars($value)."\"";
+				if($value == $objvalue)
+					echo " selected";
+				echo ">".$value."</option>";
+			}
+		} else {
+			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\" />";
+		}
+	} /* }}} */
+
 	function getImgPath($img) { /* {{{ */
 		global $theme;
 
