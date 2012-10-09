@@ -15,6 +15,18 @@ CREATE TABLE `tblACLs` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `tblCategory`
+-- 
+
+CREATE TABLE `tblCategory` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `tblAttributeDefinitions`
 -- 
 
@@ -433,24 +445,14 @@ CREATE TABLE `tblKeywords` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `tblCategory`
--- 
-
-CREATE TABLE `tblCategory` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` text NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
--- 
 -- Table structure for table `tblDocumentCategory`
 -- 
 
 CREATE TABLE `tblDocumentCategory` (
   `categoryID` int(11) NOT NULL default 0,
-  `documentID` int(11) NOT NULL default 0
+  `documentID` int(11) NOT NULL default 0,
+  CONSTRAINT `tblDocumentCategory_category` FOREIGN KEY (`categoryID`) REFERENCES `tblCategory` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblDocumentCategory_document` FOREIGN KEY (`documentID`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
