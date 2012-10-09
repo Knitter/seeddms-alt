@@ -47,6 +47,15 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 			$this->addField(Zend_Search_Lucene_Field::Keyword('origfilename', $version->getOriginalFileName()));
 			if(!$nocontent)
 				$this->addField(Zend_Search_Lucene_Field::UnIndexed('created', $version->getDate()));
+			if($attributes = $version->getAttributes()) {
+				foreach($attributes as $attribute) {
+					$attrdef = $attribute->getAttributeDefinition();
+					if($attrdef->getValueSet() != '')
+						$this->addField(Zend_Search_Lucene_Field::Keyword('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue()));
+					else
+						$this->addField(Zend_Search_Lucene_Field::Text('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue()));
+				}
+			}
 		}
 		$this->addField(Zend_Search_Lucene_Field::Text('title', $document->getName()));
 		if($categories = $document->getCategories()) {
@@ -56,6 +65,16 @@ class LetoDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 			}
 			$this->addField(Zend_Search_Lucene_Field::Text('category', implode(' ', $names)));
 		}
+		if($attributes = $document->getAttributes()) {
+			foreach($attributes as $attribute) {
+				$attrdef = $attribute->getAttributeDefinition();
+				if($attrdef->getValueSet() != '')
+					$this->addField(Zend_Search_Lucene_Field::Keyword('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue()));
+				else
+					$this->addField(Zend_Search_Lucene_Field::Text('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue()));
+			}
+		}
+
 		$owner = $document->getOwner();
 		$this->addField(Zend_Search_Lucene_Field::Text('owner', $owner->getLogin()));
 		if($keywords = $document->getKeywords()) {
