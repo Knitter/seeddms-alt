@@ -17,12 +17,14 @@
 require_once("inc.AccessUtils.php");
 require_once("inc.FileUtils.php");
 require_once("inc.ClassAccess.php");
+require_once("inc.ClassObject.php");
 require_once("inc.ClassFolder.php");
 require_once("inc.ClassDocument.php");
 require_once("inc.ClassGroup.php");
 require_once("inc.ClassUser.php");
 require_once("inc.ClassKeywords.php");
 require_once("inc.ClassNotification.php");
+require_once("inc.ClassAttribute.php");
 
 /**
  * Class to represent the complete document management system.
@@ -479,6 +481,13 @@ class LetoDMS_Core_DMS {
 	/*
 	 * Search the database for documents
 	 *
+	 * Note: the creation date will be used to check againts the
+	 * date saved with the document
+	 * or folder. The modification date will only be used for documents. It
+	 * is checked against the creation date of the document content. This
+	 * meanѕ that updateѕ of a document will only result in a searchable
+	 * modification if a new version is uploaded.
+	 *
 	 * @param query string seach query with space separated words
 	 * @param limit integer number of items in result set
 	 * @param offset integer index of first item in result set
@@ -493,13 +502,14 @@ class LetoDMS_Core_DMS {
 	 * @param modificationstartdate array search for documents modified after this date
 	 * @param modificationenddate array search for documents modified before this date
 	 * @param categories array list of categories the documents must have assigned
+	 * @param attributes array list of attributes
 	 * @param mode int decide whether to search for documents/folders
 	 *        0x1 = documents only
 	 *        0x2 = folders only
 	 *        0x3 = both
 	 * @return array containing the elements total and docs
 	 */
-	function search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $mode=0x3) { /* {{{ */
+	function search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x3) { /* {{{ */
 		// Split the search string into constituent keywords.
 		$tkeys=array();
 		if (strlen($query)>0) {
@@ -508,7 +518,7 @@ class LetoDMS_Core_DMS {
 
 		// if none is checkd search all
 		if (count($searchin)==0)
-			$searchin=array( 0, 1, 2, 3);
+			$searchin=array( 0, 1, 2, 3, 4);
 
 		/*--------- Do it all over again for folders -------------*/
 		if($mode & 0x2) {
@@ -518,6 +528,9 @@ class LetoDMS_Core_DMS {
 			}
 			if (in_array(3, $searchin)) {
 				$searchFields[] = "`tblFolders`.`comment`";
+			}
+			if (in_array(4, $searchin)) {
+				$searchFields[] = "`tblFolderAttributes`.`value`";
 			}
 
 			if (count($searchFields)>0) {
@@ -560,7 +573,7 @@ class LetoDMS_Core_DMS {
 				}
 			}
 
-			$searchQuery = "FROM `tblFolders` WHERE 1=1";
+			$searchQuery = "FROM `tblFolders` LEFT JOIN `tblFolderAttributes` on `tblFolders`.`id`=`tblFolderAttributes`.`folder` WHERE 1=1";
 
 			if (strlen($searchKey)>0) {
 				$searchQuery .= " AND (".$searchKey.")";
@@ -593,7 +606,7 @@ class LetoDMS_Core_DMS {
 				// Only search if the offset is not beyond the number of folders
 				if($totalFolders > $offset) {
 					// Prepare the complete search query, including the LIMIT clause.
-					$searchQuery = "SELECT `tblFolders`.* ".$searchQuery;
+					$searchQuery = "SELECT DISTINCT `tblFolders`.* ".$searchQuery;
 
 					if($limit) {
 						$searchQuery .= " LIMIT ".$offset.",".$limit;
@@ -636,6 +649,10 @@ class LetoDMS_Core_DMS {
 			if (in_array(3, $searchin)) {
 				$searchFields[] = "`tblDocuments`.`comment`";
 			}
+			if (in_array(4, $searchin)) {
+				$searchFields[] = "`tblDocumentAttributes`.`value`";
+				$searchFields[] = "`tblDocumentContentAttributes`.`value`";
+			}
 
 
 			if (count($searchFields)>0) {
@@ -669,6 +686,28 @@ class LetoDMS_Core_DMS {
 				foreach($categories as $category)
 					$catids[] = $category->getId();
 				$searchCategories = "`tblDocumentCategory`.`categoryID` in (".implode(',', $catids).")";
+			}
+
+			// Check to see if the search has been restricted to a particular
+			// attribute.
+			$searchAttributes = array();
+			if ($attributes) {
+				foreach($attributes as $attrdefid=>$attribute) {
+					if($attribute) {
+						$attrdef = $this->getAttributeDefinition($attrdefid);
+						if($attrdef->getObjType() == LetoDMS_Core_AttributeDefinition::objtype_document) {
+							if($attrdef->getValueSet())
+								$searchAttributes[] = "`tblDocumentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentAttributes`.`value`='".$attribute."'";
+							else
+								$searchAttributes[] = "`tblDocumentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentAttributes`.`value` like '%".$attribute."%'";
+						} elseif($attrdef->getObjType() == LetoDMS_Core_AttributeDefinition::objtype_documentcontent) {
+							if($attrdef->getValueSet())
+								$searchAttributes[] = "`tblDocumentContentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentContentAttributes`.`value`='".$attribute."'";
+							else
+								$searchAttributes[] = "`tblDocumentContentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentContentAttributes`.`value` like '%".$attribute."%'";
+						}
+					}
+				}
 			}
 
 			// Is the search restricted to documents created between two specific dates?
@@ -716,6 +755,8 @@ class LetoDMS_Core_DMS {
 
 			$searchQuery = "FROM `tblDocumentContent` ".
 				"LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentContent`.`document` ".
+				"LEFT JOIN `tblDocumentAttributes` ON `tblDocuments`.`id` = `tblDocumentAttributes`.`document` ".
+				"LEFT JOIN `tblDocumentContentAttributes` ON `tblDocumentContent`.`id` = `tblDocumentContentAttributes`.`content` ".
 				"LEFT JOIN `tblDocumentStatus` ON `tblDocumentStatus`.`documentID` = `tblDocumentContent`.`document` ".
 				"LEFT JOIN `tblDocumentStatusLog` ON `tblDocumentStatusLog`.`statusID` = `tblDocumentStatus`.`statusID` ".
 				"LEFT JOIN `ttstatid` ON `ttstatid`.`maxLogID` = `tblDocumentStatusLog`.`statusLogID` ".
@@ -740,6 +781,9 @@ class LetoDMS_Core_DMS {
 			if (strlen($searchCreateDate)>0) {
 				$searchQuery .= " AND (".$searchCreateDate.")";
 			}
+			if ($searchAttributes) {
+				$searchQuery .= " AND (".implode(" AND ", $searchAttributes).")";
+			}
 
 			// status
 			if ($status) {
@@ -747,7 +791,7 @@ class LetoDMS_Core_DMS {
 			}
 
 			// Count the number of rows that the search will produce.
-			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
+			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery." GROUP BY `tblDocuments`.`id`");
 			$totalDocs = 0;
 			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 				$totalDocs = (integer)$resArr[0]["num"];
@@ -758,7 +802,7 @@ class LetoDMS_Core_DMS {
 			// queries when no initial results are found.
 
 			// Prepare the complete search query, including the LIMIT clause.
-			$searchQuery = "SELECT `tblDocuments`.*, ".
+			$searchQuery = "SELECT DISTINCT `tblDocuments`.*, ".
 				"`tblDocumentContent`.`version`, ".
 				"`tblDocumentStatusLog`.`status`, `tblDocumentLocks`.`userID` as `lockUser` ".$searchQuery;
 
@@ -1333,6 +1377,111 @@ class LetoDMS_Core_DMS {
 		if (!$this->db->getResult($queryStr))
 			return false;
 		return true;
-	}
+	} /* }}} */
+
+	/**
+	 * Return a attribute definition by its id
+	 *
+	 * This function retrieves a attribute definitionr from the database by
+	 * its id.
+	 *
+	 * @param integer $id internal id of attribute defintion
+	 * @return object instance of LetoDMS_Core_AttributeDefinition or false
+	 */
+	function getAttributeDefinition($id) { /* {{{ */
+		if (!is_numeric($id))
+			return false;
+
+		$queryStr = "SELECT * FROM tblAttributeDefinitions WHERE id = " . (int) $id;
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$attrdef = new LetoDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"]);
+		$attrdef->setDMS($this);
+		return $attrdef;
+	} /* }}} */
+
+	/**
+	 * Return a attribute definition by its name
+	 *
+	 * This function retrieves an attribute def. from the database by its name.
+	 *
+	 * @param string $name internal name of attribute def.
+	 * @return object instance of LetoDMS_Core_AttributeDefinition or false
+	 */
+	function getAttributeDefinitionByName($name) { /* {{{ */
+		$queryStr = "SELECT * FROM tblAttributeDefinitions WHERE name = " . $this->db->qstr($name);
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$attrdef = new LetoDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"]);
+		$attrdef->setDMS($this);
+		return $attrdef;
+	} /* }}} */
+
+	/**
+	 * Return list of all attributes definitions
+	 *
+	 * @param integer $objtype select those attributes defined for an object type
+	 * @return array of instances of LetoDMS_Core_AttributeDefinition or false
+	 */
+	function getAllAttributeDefinitions($objtype=0) { /* {{{ */
+		$queryStr = "SELECT * FROM tblAttributeDefinitions";
+		if($objtype) {
+			if(is_array($objtype))
+				$queryStr .= ' WHERE objtype in (\''.implode("','", $objtype).'\')';
+			else
+				$queryStr .= ' WHERE objtype='.intval($objtype);
+		}
+		$queryStr .= ' ORDER BY name';
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		$attrdefs = array();
+
+		for ($i = 0; $i < count($resArr); $i++) {
+			$attrdef = new LetoDMS_Core_AttributeDefinition($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["objtype"], $resArr[$i]["type"], $resArr[$i]["multiple"], $resArr[$i]["minvalues"], $resArr[$i]["maxvalues"], $resArr[$i]["valueset"]);
+			$attrdef->setDMS($this);
+			$attrdefs[$i] = $attrdef;
+		}
+
+		return $attrdefs;
+	} /* }}} */
+
+	/**
+	 * Add a new attribute definition
+	 *
+	 * @param string $name name of attribute
+	 * @param string $type type of attribute
+	 * @param boolean $multiple set to 1 if attribute has multiple attributes
+	 * @param integer $minvalues minimum number of values
+	 * @param integer $maxvalues maximum number of values if multiple is set
+	 * @param string $valueset list of allowed values (csv format)
+	 * @return object of LetoDMS_Core_User
+	 */
+	function addAttributeDefinition($name, $objtype, $type, $multiple=0, $minvalues=0, $maxvalues=1, $valueset='') { /* {{{ */
+		if (is_object($this->getAttributeDefinitionByName($name))) {
+			return false;
+		}
+		if(!$type)
+			return false;
+		$queryStr = "INSERT INTO tblAttributeDefinitions (name, objtype, type, multiple, minvalues, maxvalues, valueset) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).")";
+		$res = $this->db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		return $this->getAttributeDefinition($this->db->getInsertID());
+	} /* }}} */
+
 }
 ?>
