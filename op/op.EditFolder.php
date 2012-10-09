@@ -49,6 +49,7 @@ $sequence = $_POST["sequence"];
 if (!is_numeric($sequence)) {
 	$sequence = "keep";
 }
+$attributes = $_POST["attributes"];
 
 $wasupdated = false;
 if(($oldname = $folder->getName()) != $name) {
@@ -102,6 +103,17 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));	
 	}
 }
+
+if($attributes) {
+	$oldattributes = $folder->getAttributes();
+	foreach($attributes as $attrdefid=>$attribute) {
+		if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
+			if(!$folder->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+		}
+	}
+}
+
 if(strcasecmp($sequence, "keep")) {
 	if($folder->setSequence($sequence)) {
 	} else {
