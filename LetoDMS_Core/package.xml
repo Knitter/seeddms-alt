@@ -74,6 +74,12 @@
     <file name="inc.ClassDocumentCategory.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
+    <file name="inc.ClassObject.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="inc.ClassAttribute.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
    </dir> <!-- /DTD -->
    <dir name="tests">
     <file name="getfoldertree.php" role="test" />
