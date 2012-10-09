@@ -43,12 +43,7 @@ define("S_EXPIRED",  -3);
  *             2010 Matteo Lucarelli, 2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_Core_Document { /* {{{ */
-	/**
-	 * @var integer unique id of document
-	 */
-	var $_id;
-
+class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	/**
 	 * @var string name of document
 	 */
@@ -114,13 +109,8 @@ class LetoDMS_Core_Document { /* {{{ */
 	 */
 	var $_sequence;
 
-	/**
-	 * @var object back reference to document management system
-	 */
-	var $_dms;
-
 	function LetoDMS_Core_Document($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
-		$this->_id = $id;
+		parent::__construct($id);
 		$this->_name = $name;
 		$this->_comment = $comment;
 		$this->_date = $date;
@@ -134,21 +124,6 @@ class LetoDMS_Core_Document { /* {{{ */
 		$this->_sequence = $sequence;
 		$this->_categories = array();
 		$this->_notifyList = array();
-		$this->_dms = null;
-	} /* }}} */
-
-	/*
-	 * Set dms this document belongs to.
-	 *
-	 * Each document needs a reference to the dms it belongs to. It will be
-	 * set when the folder is created by LetoDMS::getDocument() or
-	 * LetoDMS::search(). The dms has a
-	 * references to the currently logged in user and the database connection.
-	 *
-	 * @param object $dms reference to dms
-	 */
-	function setDMS($dms) { /* {{{ */
-		$this->_dms = $dms;
 	} /* }}} */
 
 	/*
@@ -1067,9 +1042,11 @@ class LetoDMS_Core_Document { /* {{{ */
 	 * @param array $reviewers list of reviewers
 	 * @param array $approvers list of approvers
 	 * @param integer $version version number of content or 0 if next higher version shall be used.
+	 * @param array $attributes list of version attributes. The element key
+	 *        must be the id of the attribute definition.
 	 * @return bool/array false in case of an error or a result set
 	 */
-	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0) { /* {{{ */
+	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0, $attributes=array()) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		// the doc path is id/version.filetype
@@ -1094,13 +1071,26 @@ class LetoDMS_Core_Document { /* {{{ */
 						"(".$this->_id.", ".(int)$version.",".$db->qstr($comment).", ".$date.", ".$user->getID().", ".$db->qstr($dir).", ".$db->qstr($orgFileName).", ".$db->qstr($fileType).", ".$db->qstr($mimeType).")";
 		if (!$db->getResult($queryStr)) return false;
 
+		$contentID = $db->getInsertID();
+
 		// copy file
 		if (!LetoDMS_Core_File::makeDir($this->_dms->contentDir . $dir)) return false;
 		if (!LetoDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $dir . $version . $fileType)) return false;
 
 		unset($this->_content);
 		unset($this->_latestContent);
-		$docResultSet = new LetoDMS_Core_AddContentResultSet(new LetoDMS_Core_DocumentContent($this, $version, $comment, $date, $user->getID(), $dir, $orgFileName, $fileType, $mimeType));
+		$content = new LetoDMS_Core_DocumentContent($contentID, $this, $version, $comment, $date, $user->getID(), $dir, $orgFileName, $fileType, $mimeType);
+		$docResultSet = new LetoDMS_Core_AddContentResultSet($content);
+
+		if($attributes) {
+			foreach($attributes as $attrdefid=>$attribute) {
+				if(trim($attribute))
+					if(!$content->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
+						$this->removeContent($content);
+						return false;
+					}
+			}
+		}
 
 		// TODO - verify
 		if ($this->_dms->enableConverting && in_array($docResultSet->_content->getFileType(), array_keys($this->_dms->convertFileTypes)))
@@ -1191,7 +1181,7 @@ class LetoDMS_Core_Document { /* {{{ */
 
 			$this->_content = array();
 			foreach ($resArr as $row)
-				array_push($this->_content, new LetoDMS_Core_DocumentContent($this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"]));
+				array_push($this->_content, new LetoDMS_Core_DocumentContent($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"]));
 		}
 
 		return $this->_content;
@@ -1223,7 +1213,7 @@ class LetoDMS_Core_Document { /* {{{ */
 			return false;
 
 		$resArr = $resArr[0];
-		return new LetoDMS_Core_DocumentContent($this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"]);
+		return new LetoDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"]);
 	} /* }}} */
 
 	function getLatestContent() { /* {{{ */
@@ -1237,7 +1227,7 @@ class LetoDMS_Core_Document { /* {{{ */
 				return false;
 
 			$resArr = $resArr[0];
-			$this->_latestContent = new LetoDMS_Core_DocumentContent($this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"]);
+			$this->_latestContent = new LetoDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"]);
 		}
 		return $this->_latestContent;
 	} /* }}} */
@@ -1259,6 +1249,10 @@ class LetoDMS_Core_Document { /* {{{ */
 		if (!$db->getResult($queryStr))
 			return false;
 
+		$queryStr = "DELETE FROM tblDocumentContentAttributes WHERE content = " . $version->getId();
+		if (!$db->getResult($queryStr))
+			return false;
+
 		$queryStr = "DELETE FROM `tblDocumentStatusLog` WHERE `statusID` = '".$stID."'";
 		if (!$db->getResult($queryStr))
 			return false;
@@ -1275,6 +1269,7 @@ class LetoDMS_Core_Document { /* {{{ */
 				$emailList[] = $st["required"];
 			}
 		}
+
 		if (strlen($stList)>0) {
 			$queryStr = "DELETE FROM `tblDocumentReviewLog` WHERE `tblDocumentReviewLog`.`reviewID` IN (".$stList.")";
 			if (!$db->getResult($queryStr))
@@ -1465,6 +1460,9 @@ class LetoDMS_Core_Document { /* {{{ */
 		$queryStr = "DELETE FROM tblDocuments WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr))
 			return false;
+		$queryStr = "DELETE FROM tblDocumentAttributes WHERE document = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
 		$queryStr = "DELETE FROM tblACLs WHERE target = " . $this->_id . " AND targetType = " . T_DOCUMENT;
 		if (!$db->getResult($queryStr))
 			return false;
@@ -1493,7 +1491,6 @@ class LetoDMS_Core_Document { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_approversList)) {
-
 			$this->_approversList = array("groups" => array(), "users" => array());
 			$userIDs = "";
 			$groupIDs = "";
@@ -1663,7 +1660,7 @@ class LetoDMS_Core_Document { /* {{{ */
  *             2010 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_Core_DocumentContent { /* {{{ */
+class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 	// if status is released and there are reviewers set status draft_rev
 	// if status is released or draft_rev and there are approves set status draft_app
@@ -1697,12 +1694,14 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 				}
 			}
 		}
+
 		if ($pendingReview) $this->setStatus(S_DRAFT_REV,"",$user);
 		else if ($pendingApproval) $this->setStatus(S_DRAFT_APP,"",$user);
 		else $this->setStatus(S_RELEASED,"",$user);
 	} /* }}} */
 
-	function LetoDMS_Core_DocumentContent($document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType) { /* {{{ */
+	function LetoDMS_Core_DocumentContent($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType) { /* {{{ */
+		parent::__construct($id);
 		$this->_document = $document;
 		$this->_version = (int) $version;
 		$this->_comment = $comment;
@@ -1712,6 +1711,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		$this->_orgFileName = $orgFileName;
 		$this->_fileType = $fileType;
 		$this->_mimeType = $mimeType;
+		$this->_dms = $document->_dms;
 	} /* }}} */
 
 	function getVersion() { return $this->_version; }
@@ -1722,11 +1722,14 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 	function getFileName(){ return "data" . $this->_fileType; }
 	function getDir() { return $this->_dir; }
 	function getMimeType() { return $this->_mimeType; }
+	function getDocument() { return $this->_document; }
+
 	function getUser() { /* {{{ */
 		if (!isset($this->_user))
 			$this->_user = $this->_document->_dms->getUser($this->_userID);
 		return $this->_user;
 	} /* }}} */
+
 	function getPath() { return $this->_document->getDir() . $this->_version . $this->_fileType; }
 
 	function setComment($newComment) { /* {{{ */
@@ -1927,7 +1930,7 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 			if($recs) {
 				foreach($recs as $rec) {
 					$queryStr=
-						"SELECT `tblDocumentReviewers`.*, `tblDocumentReviewLog`.`status`, ".
+						"SELECT `tblDocumentReviewers`.*, `tblDocumentReviewLog`.`reviewLogID`, `tblDocumentReviewLog`.`status`, ".
 						"`tblDocumentReviewLog`.`comment`, `tblDocumentReviewLog`.`date`, ".
 						"`tblDocumentReviewLog`.`userID`, `tblUsers`.`fullName`, `tblGroups`.`name` AS `groupName` ".
 						"FROM `tblDocumentReviewers` ".
@@ -2134,8 +2137,10 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
 			return -1;
-		else
-			return 0;
+		else {
+			$reviewLogID = $db->getInsertID();
+			return $reviewLogID;
+		}
  } /* }}} */
 
 	function setReviewByGrp($group, $requestUser, $status, $comment) { /* {{{ */
@@ -2168,8 +2173,10 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		$res=$db->getResult($queryStr);
 		if (is_bool($res) && !$res)
 			return -1;
-		else
-			return 0;
+		else {
+			$reviewLogID = $db->getInsertID();
+			return $reviewLogID;
+		}
  } /* }}} */
 
 	function addIndApprover($user, $requestUser) { /* {{{ */
@@ -2224,7 +2231,8 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 			return -1;
 		}
 
-		return 0;
+		$approveLogID = $db->getInsertID();
+		return $approveLogID;
 	} /* }}} */
 
 	function addGrpApprover($group, $requestUser) { /* {{{ */
@@ -2282,7 +2290,8 @@ class LetoDMS_Core_DocumentContent { /* {{{ */
 		// Add approver to event notification table.
 		//$this->_document->addNotify($groupID, false);
 
-		return 0;
+		$approveLogID = $db->getInsertID();
+		return $approveLogID;
 	} /* }}} */
 
 	/**
