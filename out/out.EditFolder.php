@@ -95,6 +95,19 @@ if ($parent && $parent->getAccessMode($user) > M_READ) {
 	print "</td></tr>\n";
 }
 ?>
+<?php
+	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_folder, LetoDMS_Core_AttributeDefinition::objtype_all));
+	if($attrdefs) {
+		foreach($attrdefs as $attrdef) {
+?>
+<tr>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
+	<td><?php UI::printAttributeEditField($attrdef, $folder->getAttributeValue($attrdef)) ?></td>
+</tr>
+<?php
+		}
+	}
+?>
 <tr>
 <td colspan="2"><input type="Submit" value="<?php printMLText("save"); ?>"></td>
 </tr>
