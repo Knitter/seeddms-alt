@@ -1265,7 +1265,7 @@ class LetoDMS_Core_DMS {
 		if (is_object($this->getDocumentCategoryByName($name))) {
 			return false;
 		}
-		$queryStr = "INSERT INTO tblCategory (name) VALUES (".$this->db-qstr($name).")";
+		$queryStr = "INSERT INTO tblCategory (name) VALUES (".$this->db->qstr($name).")";
 		if (!$this->db->getResult($queryStr))
 			return false;
 
