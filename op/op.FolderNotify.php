@@ -25,33 +25,37 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassEmail.php");
 include("../inc/inc.Authentication.php");
 
-if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET["folderid"])<1) {
+if(!checkFormKey('foldernotify')) {
+	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_request_token"));
+}
+
+if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
 
-$folderid = $_GET["folderid"];
+$folderid = $_POST["folderid"];
 $folder = $dms->getFolder($folderid);
 
 if (!is_object($folder)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
 
-if (!isset($_GET["action"]) || (strcasecmp($_GET["action"], "delnotify") && strcasecmp($_GET["action"], "addnotify"))) {
+if (!isset($_POST["action"]) || (strcasecmp($_POST["action"], "delnotify") && strcasecmp($_POST["action"], "addnotify"))) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_action"));
 }
-$action = $_GET["action"];
+$action = $_POST["action"];
 
-if (isset($_GET["userid"]) && (!is_numeric($_GET["userid"]) || $_GET["userid"]<-1)) {
+if (isset($_POST["userid"]) && (!is_numeric($_POST["userid"]) || $_POST["userid"]<-1)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("unknown_user"));
 }
-$userid = $_GET["userid"];
+$userid = $_POST["userid"];
 
-if (isset($_GET["groupid"]) && (!is_numeric($_GET["groupid"]) || $_GET["groupid"]<-1)) {
+if (isset($_POST["groupid"]) && (!is_numeric($_POST["groupid"]) || $_POST["groupid"]<-1)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("unknown_group"));
 }
-$groupid = $_GET["groupid"];
+$groupid = $_POST["groupid"];
 
-if (isset($_GET["groupid"])&&$_GET["groupid"]!=-1){
+if (isset($_POST["groupid"])&&$_POST["groupid"]!=-1){
 	$group=$dms->getGroup($groupid);
 	if (!$group->isMember($user,true) && !$user->isAdmin())
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));

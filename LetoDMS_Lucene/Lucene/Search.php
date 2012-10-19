@@ -48,10 +48,13 @@ class LetoDMS_Lucene_Search {
 	 * @param object $index lucene index
 	 * @return object instance of LetoDMS_Lucene_Search
 	 */
-	function search($term, $owner, $status='', $categories=array()) { /* {{{ */
+	function search($term, $owner, $status='', $categories=array(), $fields=array()) { /* {{{ */
 		$query = '';
-		if($term)
-			$query .= trim($term);
+		if($fields) {
+		} else {
+			if($term)
+				$query .= trim($term);
+		}
 		if($owner) {
 			if($query)
 				$query .= ' && ';

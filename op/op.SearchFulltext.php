@@ -122,6 +122,8 @@ if($settings->_enableFullSearch) {
 	else
 		require_once('LetoDMS/Lucene.php');
 }
+
+Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
 $index = Zend_Search_Lucene::open($settings->_luceneDir);
 $lucenesearch = new LetoDMS_Lucene_Search($index);
 $hits = $lucenesearch->search($query, $owner ? $owner->getLogin() : '', '', $categories);
@@ -198,23 +200,23 @@ foreach ($resArr['docs'] as $document) {
 	else {
 		$lc = $document->getLatestContent();
 		print "<tr>";
-		$docName = $document->getName();
+		$docName = htmlspecialchars($document->getName());
 		print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 		$folder = $document->getFolder();
 		$path = $folder->getPath();
 		for ($i = 1; $i  < count($path); $i++) {
-			print $path[$i]->getName()."/";
+			print htmlspecialchars($path[$i]->getName())."/";
 		}
 		print $docName;
 		print "</a></td>";
 		
 		$owner = $document->getOwner();
-		print "<td>".$owner->getFullName()."</td>";
+		print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 		print "<td>".getOverallStatusText($lc->getStatus()). "</td>";
 
 		print "<td class=\"center\">".$lc->getVersion()."</td>";
 		
-		$comment = $document->getComment();
+		$comment = htmlspecialchars($document->getComment());
 		if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 		print "<td>".$comment."</td>";
 		print "</tr>\n";

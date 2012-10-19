@@ -14,8 +14,8 @@
  <date>2011-11-06</date>
  <time>08:05:38</time>
  <version>
-  <release>1.0.1</release>
-  <api>1.0.0</api>
+  <release>1.1.0</release>
+  <api>1.1.0</api>
  </version>
  <stability>
   <release>beta</release>
@@ -23,7 +23,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- New Release
+use a configurable list of mime type converters, fixed indexing and searching
+of special chars like german umlaute.
  </notes>
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
@@ -69,6 +70,22 @@
    <date>2009-04-27</date>
    <license uri="http://opensource.org/licenses/bsd-license">BSD License</license>
    <notes>
+   </notes>
+  </release>
+  <release>
+   <date>2011-11-06</date>
+   <time>08:05:38</time>
+   <version>
+    <release>1.0.1</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- New Release
    </notes>
   </release>
  </changelog>

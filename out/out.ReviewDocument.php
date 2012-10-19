@@ -40,31 +40,31 @@ $folder = $document->getFolder();
 $docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READ) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
 if (!isset($_GET["version"]) || !is_numeric($_GET["version"]) || intval($_GET["version"])<1) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 $version = $_GET["version"];
 $content = $document->getContentByVersion($version);
 if (!is_object($content)) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
 // operation is admitted only for last deocument version
 $latestContent = $document->getLatestContent();
 if ($latestContent->getVersion()!=$version) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 // verify if document has expired
 if ($document->hasExpired()){
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
 $reviews = $latestContent->getReviewStatus();
 if(!$reviews) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("no_action"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_action"));
 }
 
 foreach($reviews as $review) {
@@ -74,7 +74,7 @@ foreach($reviews as $review) {
 	}
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
+UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($docPathHTML, "view_document");
 UI::contentHeading(getMLText("submit_review"));
@@ -132,7 +132,8 @@ if ($reviewStatus['type'] == 0) {
 		print "</tr></tbody></table><br>";
 	}
 ?>
-	<form method="POST" action="../op/op.ReviewDocument.php" name="form1" onsubmit="return checkIndForm();">
+	<form method="post" action="../op/op.ReviewDocument.php" name="form1" onsubmit="return checkIndForm();">
+	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
 	<table>
 	<tr><td class='infos' valign='top'><?php printMLText("comment")?>:</td>
 	<td class='infos' valign='top'><textarea name="comment" cols="80" rows="4"></textarea>

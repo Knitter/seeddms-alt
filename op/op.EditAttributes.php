@@ -28,7 +28,7 @@ include("../inc/inc.ClassEmail.php");
 include("../inc/inc.Authentication.php");
 
 /* Check if the form data comes for a trusted request */
-if(!checkFormKey('editcomment')) {
+if(!checkFormKey('editattributes')) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
 }
 
@@ -57,36 +57,40 @@ if (!is_object($version)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 }
 
-$comment =  $_POST["comment"];
+$attributes = $_POST["attributes"];
 
-if (($oldcomment = $version->getComment()) != $comment) {
-	if($version->setComment($comment)) {
-		$document->getNotifyList();
-		if($notifier) {
-			$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("comment_changed_email");
-			$message = getMLText("comment_changed_email")."\r\n";
-			$message .= 
-				getMLText("document").": ".$document->getName()."\r\n".
-				getMLText("version").": ".$version->_version."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->_version."\r\n";
+if($attributes) {
+	$oldattributes = $version->getAttributes();
+	foreach($attributes as $attrdefid=>$attribute) {
+		if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
+			if(!$version->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute)) {
+				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+			} else {
+				$document->getNotifyList();
+				if($notifier) {
+					$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("attribute_changed_email");
+					$message = getMLText("attribute_changed_email")."\r\n";
+					$message .= 
+						getMLText("document").": ".$document->getName()."\r\n".
+						getMLText("version").": ".$version->_version."\r\n".
+						getMLText("attribute").": ".$attribute."\r\n".
+						getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
+						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->_version."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
+		//			$subject=mydmsDecodeString($subject);
+		//			$message=mydmsDecodeString($message);
 
-			if(isset($document->_notifyList["users"])) {
-				$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-			}
-			if(isset($document->_notifyList["groups"])) {
-				foreach ($document->_notifyList["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message);
+					if(isset($document->_notifyList["users"])) {
+						$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
+					}
+					if(isset($document->_notifyList["groups"])) {
+						foreach ($document->_notifyList["groups"] as $grp) {
+							$notifier->toGroup($user, $grp, $subject, $message);
+						}
+					}
 				}
 			}
 		}
-	}
-	else {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}
 }
 

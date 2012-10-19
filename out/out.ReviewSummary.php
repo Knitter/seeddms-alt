@@ -128,7 +128,7 @@ foreach ($reviewStatus["indstatus"] as $st) {
 		print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 		print "<td>".getOverallStatusText($docIdx[$st["documentID"]][$st["version"]]["status"])."</td>";
 		print "<td>".$st["version"]."</td>";
-		print "<td>".$st["date"]." ". $docIdx[$st["documentID"]][$st["version"]]["statusName"] ."</td>";
+		print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"]) ."</td>";
 		print "<td>".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
 		print "</tr>\n";
 	}
@@ -168,7 +168,7 @@ foreach ($reviewStatus["grpstatus"] as $st) {
 		print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 		print "<td>".getOverallStatusText($docIdx[$st["documentID"]][$st["version"]]["status"])."</td>";
 		print "<td>".$st["version"]."</td>";
-		print "<td>".$st["date"]." ". $docIdx[$st["documentID"]][$st["version"]]["statusName"] ."</td>";
+		print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"]) ."</td>";
 		print "<td>".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
 		print "</tr>\n";
 	}

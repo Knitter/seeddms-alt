@@ -136,9 +136,11 @@ if ($showInProcess){
 		UI::contentContainerStart();
 		$printheader=true;
 		$iRev = array();
+		$dList = array();
 		foreach ($reviewStatus["indstatus"] as $st) {
 		
-			if ( $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) ) {
+			if ( $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) ) {
+				$dList[] = $st["documentID"];
 			
 				if ($printheader){
 					print "<table class=\"folderView\">";
@@ -163,7 +165,8 @@ if ($showInProcess){
 		}
 		foreach ($reviewStatus["grpstatus"] as $st) {
 		
-			if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]])) {
+			if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId()) {
+				$dList[] = $st["documentID"];
 
 				if ($printheader){
 					print "<table class=\"folderView\">";
@@ -224,7 +227,7 @@ if ($showInProcess){
 		}
 		foreach ($approvalStatus["grpstatus"] as $st) {
 		
-			if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]])) {
+			if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId()) {
 				if ($printheader){
 					print "<table class=\"folderView\">";
 					print "<thead>\n<tr>\n";

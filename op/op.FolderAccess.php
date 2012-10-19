@@ -43,6 +43,12 @@ if ($folder->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 }
 
+/* Check if the form data comes for a trusted request */
+/* FIXME: Currently GET request are allowed. */
+if(!checkFormKey('folderaccess', 'GET')) {
+	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_request_token"));
+}
+
 switch ($_GET["action"]) {
 	case "setowner":
 	case "delaccess":

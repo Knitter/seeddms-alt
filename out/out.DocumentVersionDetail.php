@@ -37,21 +37,21 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READ) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
 if (!isset($_GET["version"]) || !is_numeric($_GET["version"]) || intval($_GET["version"])<1) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
 $version = $_GET["version"];
 $version = $document->getContentByVersion($version);
 
 if (!is_object($version)) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
 // if version is last got out.ViewDocument
@@ -64,7 +64,7 @@ $status = $version->getStatus();
 $reviewStatus = $version->getReviewStatus();
 $approvalStatus = $version->getApprovalStatus();
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
+UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($docPathHTML, "view_document");
 UI::contentHeading(getMLText("document_infos"));
@@ -150,15 +150,22 @@ print "<td>".htmlspecialchars($version->getComment())."</td>";
 print "<td>".getOverallStatusText($status["status"])."</td>";
 print "<td>";
 
-if (($document->getAccessMode($user) >= M_READWRITE)) {
-	print "<ul class=\"actions\">";
+//if (($document->getAccessMode($user) >= M_READWRITE)) {
+print "<ul class=\"actions\">";
+if (($settings->_enableVersionModification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
 	print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("rm_version")."</a></li>";
-	if ($document->getAccessMode($user) == M_ALL) {
-		if ( $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE ){
-			print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$version->getVersion()."'>".getMLText("change_status")."</a></li>";
-		}
+}
+if (($settings->_enableVersionModification && ($document->getAccessMode($user) == M_ALL)) || $user->isAdmin()) {
+	if ( $status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE ){
+		print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$version->getVersion()."'>".getMLText("change_status")."</a></li>";
 	}
-	print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+}
+if (($settings->_enableVersionModification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
+	if($status["status"] != S_OBSOLETE)
+		print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+	if ( $status["status"] == S_DRAFT_REV){
+		print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
+}
 	print "</ul>";
 }
 else {

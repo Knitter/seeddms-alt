@@ -135,8 +135,9 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["si
 		}
 	}
 
+	$attributes = $_POST["attributes"];
 
-	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers);
+	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes);
 	if (is_bool($contentResult) && !$contentResult) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}

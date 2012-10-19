@@ -598,6 +598,24 @@ class UI {
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("category")."...\" onclick=\"chooseCategory".$formName."();\">";
 	} /* }}} */
 
+	function printAttributeEditField($attrdef, $objvalue, $fieldname='attributes') { /* {{{ */
+		if($valueset = $attrdef->getValueSetAsArray()) {
+			echo "<select name=\"".$fieldname."[".$attrdef->getId()."]\">";
+			if($attrdef->getMinValues() < 1) {
+				echo "<option value=\"\"></option>";
+			}
+			foreach($valueset as $value) {
+				echo "<option value=\"".htmlspecialchars($value)."\"";
+				if($value == $objvalue)
+					echo " selected";
+				echo ">".htmlspecialchars($value)."</option>";
+			}
+			echo "</select>";
+		} else {
+			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\" />";
+		}
+	} /* }}} */
+
 	function getImgPath($img) { /* {{{ */
 		global $theme;
 
@@ -693,7 +711,7 @@ class UI {
 			if ($folderID != $currentFolderID){
 			
 				if ($navigation) print "<a href=\"../out/out.ViewFolder.php?folderid=" . $folderID . "&showtree=1\">";
-				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . str_replace("'", "\\'", $folder->getName()) . "')\">";
+				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . str_replace("'", "\\'", htmlspecialchars($folder->getName())) . "')\">";
 
 			}else print "<span class=\"selectedfoldertree\">";
 			

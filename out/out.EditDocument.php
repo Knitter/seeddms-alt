@@ -38,10 +38,10 @@ $folder = $document->getFolder();
 $docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READWRITE) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
+UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($docPathHTML, "view_document");
 
@@ -112,6 +112,19 @@ UI::contentContainerStart();
 				print "</td></tr>";
 			}
 		?>
+		<?php
+			$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_document, LetoDMS_Core_AttributeDefinition::objtype_all));
+			if($attrdefs) {
+				foreach($attrdefs as $attrdef) {
+?>
+		<tr>
+			<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
+			<td><?php UI::printAttributeEditField($attrdef, $document->getAttributeValue($attrdef)) ?></td>
+		</tr>
+<?php
+				}
+			}
+?>
 		<tr>
 			<td colspan="2"><br><input type="Submit" value="<?php printMLText("save") ?>"></td>
 		</tr>

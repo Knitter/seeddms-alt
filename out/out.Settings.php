@@ -412,6 +412,27 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableAdminRevApp");?>:</td>
         <td><input name="enableAdminRevApp" type="checkbox" <?php if ($settings->_enableAdminRevApp) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_enableVersionDeletion_desc");?>">
+        <td><?php printMLText("settings_enableVersionDeletion");?>:</td>
+        <td><input name="enableVersionDeletion" type="checkbox" <?php if ($settings->_enableVersionDeletion) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_enableVersionModification_desc");?>">
+        <td><?php printMLText("settings_enableVersionModification");?>:</td>
+        <td><input name="enableVersionModification" type="checkbox" <?php if ($settings->_enableVersionModification) echo "checked" ?> /></td>
+      </tr>
+
+      <!--
+        -- SETTINGS - ADVANCED - NOTIFICATION
+      -->
+      <tr ><td><b> <?php printMLText("settings_Notification");?></b></td> </tr>
+      <tr title="<?php printMLText("settings_enableOwnerNotification_desc");?>">
+        <td><?php printMLText("settings_enableOwnerNotification");?>:</td>
+        <td><input name="enableOwnerNotification" type="checkbox" <?php if ($settings->_enableOwnerNotification) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_enableNotificationAppRev_desc");?>">
+        <td><?php printMLText("settings_enableNotificationAppRev");?>:</td>
+        <td><input name="enableNotificationAppRev" type="checkbox" <?php if ($settings->_enableNotificationAppRev) echo "checked" ?> /></td>
+      </tr>
 
       <!--
         -- SETTINGS - ADVANCED - SERVER

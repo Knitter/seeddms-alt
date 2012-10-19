@@ -26,6 +26,11 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('reviewdocument')) {
+	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
+}
+
 if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
@@ -71,7 +76,8 @@ if (!isset($_POST["reviewStatus"]) || !is_numeric($_POST["reviewStatus"]) ||
 if ($_POST["reviewType"] == "ind") {
 
 	$comment = $_POST["comment"];
-	if(0 > $latestContent->setReviewByInd($user, $user, $_POST["reviewStatus"], $comment)) {
+	$reviewLogID = $latestContent->setReviewByInd($user, $user, $_POST["reviewStatus"], $comment);
+	if(0 > $reviewLogID) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("review_update_failed"));
 	}
 	else {
@@ -104,7 +110,8 @@ if ($_POST["reviewType"] == "ind") {
 else if ($_POST["reviewType"] == "grp") {
 	$comment = $_POST["comment"];
 	$group = $dms->getGroup($_POST['reviewGroup']);
-	if(0 > $latestContent->setReviewByGrp($group, $user, $_POST["reviewStatus"], $comment)) {
+	$reviewLogID = $latestContent->setReviewByGrp($group, $user, $_POST["reviewStatus"], $comment);
+	if(0 > $reviewLogID) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("review_update_failed"));
 	}
 	else {

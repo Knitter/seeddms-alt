@@ -38,17 +38,26 @@ function tree($folder, $indent='') { /* {{{ */
 		echo $indent."  ".$document->getId().":".htmlspecialchars($document->getName())." ";
 		/* If the document wasn't indexed before then just add it */
 		if(!($hits = $index->find('document_id:'.$document->getId()))) {
-			$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document));
+			$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document, $settings->_convcmd ? $settings->_convcmd : null));
 			echo "(document added)";
 		} else {
 			$hit = $hits[0];
-			$created = (int) $hit->getDocument()->getFieldValue('created');
+			/* Check if the attribute created is set or has a value older
+			 * than the lasted content. Documents without such an attribute
+			 * where added when a new document was added to the dms. In such
+			 * a case the document content  wasn't indexed.
+			 */
+			try {
+				$created = (int) $hit->getDocument()->getFieldValue('created');
+			} catch (Zend_Search_Lucene_Exception $e) {
+				$created = 0;
+			}
 			$content = $document->getLatestContent();
 			if($created >= $content->getDate()) {
 				echo $indent."(document unchanged)";
 			} else {
 				if($index->delete($hit->id)) {
-					$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document));
+					$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document, $settings->_convcmd ? $settings->_convcmd : null));
 				}
 				echo $indent."(document updated)";
 			}
@@ -76,7 +85,9 @@ if($settings->_enableFullSearch) {
 	if(isset($_GET['create']) && $_GET['create'] == 1) {
 		if(isset($_GET['confirm']) && $_GET['confirm'] == 1) {
 			echo "<p>Recreating index</p>";
-			$index = Zend_Search_Lucene::create($settings->_luceneDir);
+			$index = LetoDMS_Lucene_Indexer::create($settings->_luceneDir);
+			LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+//			$index = Zend_Search_Lucene::create($settings->_luceneDir);
 		} else {
 			echo '<p>'.getMLText('create_fulltext_index_warning').'</p>';
 			echo '<a href="out.Indexer.php?create=1&confirm=1">'.getMLText('confirm_create_fulltext_index').'</a>';
@@ -86,18 +97,22 @@ if($settings->_enableFullSearch) {
 		}
 	} else {
 		echo "<p>Updating index</p>";
-		$index = Zend_Search_Lucene::open($settings->_luceneDir);
+		$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+		LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+//		$index = Zend_Search_Lucene::open($settings->_luceneDir);
 	}
 
+/*
+
+	$analyzer = new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8_CaseInsensitive();
 	if($settings->_stopWordsFile && file_exists($settings->_stopWordsFile)) {
 		$stopWordsFilter = new Zend_Search_Lucene_Analysis_TokenFilter_StopWords();
 		$stopWordsFilter->loadFromFile($settings->_stopWordsFile);
-	 
-		$analyzer = new Zend_Search_Lucene_Analysis_Analyzer_Common_TextNum_CaseInsensitive();
 		$analyzer->addFilter($stopWordsFilter);
-	 
-		Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
 	}
+	 
+	Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
+*/
 
 	$folder = $dms->getFolder($settings->_rootFolderID);
 	echo "<pre>";

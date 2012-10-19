@@ -2,6 +2,7 @@
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005  Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2009-2012 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -88,27 +89,27 @@ if ($user->getEmail() != $email)
 if ($user->getComment() != $comment)
 	$user->setComment($comment);
 
-if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
+if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 {
-	$lastDotIndex = strrpos(basename($_FILES["userfile"]["name"]), ".");
-	$fileType = substr($_FILES["userfile"]["name"], $lastDotIndex);
-	if ($fileType != ".jpg" && $filetype != ".jpeg") {
+	$finfo = new finfo(FILEINFO_MIME);
+	echo $finfo->file($_FILES["userfile"]["tmp_name"]);
+	if(substr($finfo->file($_FILES["userfile"]["tmp_name"]), 0, 10) != "image/jpeg") {;
 		UI::exitError(getMLText("user_info"),getMLText("only_jpg_user_images"));
 	}
-	//verkleinern des Bildes, so dass es 150 Pixel hoch ist
-	// Originalbild einlesen
+	// shrink the image to a max height of 150 px
+	// read original image
 	$origImg = imagecreatefromjpeg($_FILES["userfile"]["tmp_name"]);
 	$width = imagesx($origImg);
 	$height = imagesy($origImg);
-	// Thumbnail im Speicher erzeugen
+	// create thumbnail in memory
 	$newHeight = 150;
 	$newWidth = ($width/$height) * $newHeight;
 	$newImg = imagecreatetruecolor($newWidth, $newHeight);
-	// Verkleinern
+	// shrink image
 	imagecopyresized($newImg, $origImg, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-	// In File speichern 
+	// save image to file
 	imagejpeg($newImg, $_FILES["userfile"]["tmp_name"]);
-	// Aufräumen
+	// clean up
 	imagedestroy($origImg);
 	imagedestroy($newImg);
 	$user->setImage($_FILES["userfile"]["tmp_name"], $_FILES["userfile"]["type"]);

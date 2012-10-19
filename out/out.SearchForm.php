@@ -100,14 +100,28 @@ function chooseKeywords(target) {
 <tr>
 <td><?php printMLText("search_in");?>:</td>
 <td><ul class="actions">
-<li class="first"><input type="Checkbox" id="keywords" name="searchin[]" value="1"><label for="keywords"><?php printMLText("keywords");?></label></li>
+<li class="first"><input type="Checkbox" id="keywords" name="searchin[]" value="1"><label for="keywords"><?php printMLText("keywords");?></label> (<?php printMLText('documents_only'); ?>)</li>
 <li><input type="Checkbox" name="searchin[]" id="searchName" value="2"><label for="searchName"><?php printMLText("name");?></label></li>
 <li><input type="Checkbox" name="searchin[]" id="comment" value="3"><label for="comment"><?php printMLText("comment");?></label></li>
+<li><input type="Checkbox" name="searchin[]" id="attributes" value="4"><label for="attributes"><?php printMLText("attributes");?></label></li>
 </ul>
 </td>
 </tr>
+<?php
+	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_document, LetoDMS_Core_AttributeDefinition::objtype_documentcontent/*, LetoDMS_Core_AttributeDefinition::objtype_all*/));
+	if($attrdefs) {
+		foreach($attrdefs as $attrdef) {
+?>
 <tr>
-<td><?php printMLText("category");?>:</td>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
+	<td><?php UI::printAttributeEditField($attrdef, '') ?></td>
+</tr>
+<?php
+		}
+	}
+?>
+<tr>
+<td><?php printMLText("category");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
 <td>
 <select name="categoryids[]" multiple>
 <option value="-1"><?php printMLText("all_categories");?>
@@ -121,7 +135,7 @@ foreach ($allCats as $catObj) {
 </td>
 </tr>
 <tr>
-<td><?php printMLText("status");?>:</td>
+<td><?php printMLText("status");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
 <td>
 <ul class="actions">
 <li class="first"><input type="checkbox" id="pendingReview" name="pendingReview" value="1"><label for='pendingReview'><?php printOverallStatusText(S_DRAFT_REV);?></label></li>

@@ -39,11 +39,11 @@ $folder = $document->getFolder();
 $docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_ALL) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
 if (!isset($_GET["version"]) || !is_numeric($_GET["version"]) || intval($_GET["version"]<1)) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
 $version = $_GET["version"];
@@ -51,15 +51,15 @@ $content = $document->getContentByVersion($version);
 $overallStatus = $content->getStatus();
 
 if (!is_object($content)) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
 // control for document state
 if ($overallStatus["status"]==S_REJECTED || $overallStatus["status"]==S_OBSOLETE ) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_assign_invalid_state"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("cannot_assign_invalid_state"));
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
+UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($docPathHTML, "view_document");
 UI::contentHeading(getMLText("change_assignments"));
@@ -115,25 +115,25 @@ foreach ($docAccess["users"] as $usr) {
 	
 	if ($mandatory){
 
-		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName())." &lt;".$usr->getEmail()."&gt;";
+		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())." &lt;".$usr->getEmail()."&gt;";
 		print "<input id='revInd".$usr->getID()."' type='hidden' name='indReviewers[]' value='". $usr->getID() ."'>";
 
 	}else if (isset($reviewIndex["i"][$usr->getID()])) {
 
 		switch ($reviewIndex["i"][$usr->getID()]["status"]) {
 			case 0:
-				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."' checked='checked'>".htmlspecialchars($usr->getFullName());
+				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."' checked='checked'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 				break;
 			case -2:
-				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>".htmlspecialchars($usr->getFullName());
+				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 				break;
 			default:
-				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."' disabled='disabled'>".htmlspecialchars($usr->getFullName());
+				print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."' disabled='disabled'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 				break;
 		}
 	}
 	else {
-		print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName());
+		print "<li class=\"cbSelectItem\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 	}
 }
 ?>
@@ -191,25 +191,25 @@ foreach ($docAccess["users"] as $usr) {
 
 	if ($mandatory){
 	
-		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName())." &lt;".$usr->getEmail()."&gt;";
+		print "<li class=\"cbSelectItem\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())." &lt;".$usr->getEmail()."&gt;";
 		print "<input id='appInd".$usr->getID()."' type='hidden' name='indApprovers[]' value='". $usr->getID() ."'>";
 
 	}else if (isset($approvalIndex["i"][$usr->getID()])) {
 	
 		switch ($approvalIndex["i"][$usr->getID()]["status"]) {
 			case 0:
-				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."' checked='checked'>".htmlspecialchars($usr->getFullName());
+				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."' checked='checked'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 				break;
 			case -2:
-				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>".htmlspecialchars($usr->getFullName());
+				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 				break;
 			default:
-				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."' disabled='disabled'>".htmlspecialchars($usr->getFullName());
+				print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."' disabled='disabled'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 				break;
 		}
 	}
 	else {
-		print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName());
+		print "<li class=\"cbSelectItem\"><input id='appInd".$usr->getID()."' type='checkbox' name='indApprovers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName());
 	}
 }
 ?>

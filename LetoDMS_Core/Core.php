@@ -15,7 +15,7 @@
 /**
  * @uses LetoDMS_DatabaseAccess
  */
-define('USE_PDO', 1);
+//define('USE_PDO', 1);
 if(defined('USE_PDO'))
 	require_once('Core/inc.DBAccessPDO.php');
 else
@@ -27,6 +27,11 @@ else
 require_once('Core/inc.ClassDMS.php');
 
 /**
+ * @uses LetoDMS_Object
+ */
+require_once('Core/inc.ClassObject.php');
+
+/**
  * @uses LetoDMS_Folder
  */
 require_once('Core/inc.ClassFolder.php');
@@ -35,6 +40,11 @@ require_once('Core/inc.ClassFolder.php');
  * @uses LetoDMS_Document
  */
 require_once('Core/inc.ClassDocument.php');
+
+/**
+ * @uses LetoDMS_Attribute
+ */
+require_once('Core/inc.ClassAttribute.php');
 
 /**
  * @uses LetoDMS_Group

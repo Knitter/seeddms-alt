@@ -42,10 +42,10 @@ $versionid = $_GET["version"];
 $version = $document->getContentByVersion($versionid);
 
 if (!is_object($version)) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
+UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($docPathHTML, "view_document");
 
@@ -76,6 +76,7 @@ UI::contentHeading(getMLText("edit_comment"));
 UI::contentContainerStart();
 ?>
 <form action="../op/op.EditComment.php" name="form1" onsubmit="return checkForm();" method="POST">
+	<?php echo createHiddenFieldWithKey('editcomment'); ?>
 	<input type="Hidden" name="documentid" value="<?php print $documentid;?>">
 	<input type="Hidden" name="version" value="<?php print $versionid;?>">
 	<table cellpadding="3">

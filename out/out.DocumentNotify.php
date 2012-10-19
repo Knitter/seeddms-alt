@@ -37,15 +37,15 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
+$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READ) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
 $notifyList = $document->getNotifyList();
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => $document->getName())));
+UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($docPathHTML, "view_document");
 
@@ -82,7 +82,7 @@ else {
 	foreach ($notifyList["users"] as $userNotify) {
 		print "<tr>";
 		print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>";
-		print "<td>" . $userNotify->getFullName() . "</td>";
+		print "<td>" . htmlspecialchars($userNotify->getLogin() . " - " . $userNotify->getFullName()) . "</td>";
 		if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
 			print "<td><a href=\"../op/op.DocumentNotify.php?documentid=". $documentid . "&action=delnotify&userid=".$userNotify->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete")."</td>";
 		}else print "<td></td>";
@@ -92,7 +92,7 @@ else {
 	foreach ($notifyList["groups"] as $groupNotify) {
 		print "<tr>";
 		print "<td><img src=\"images/groupicon.gif\" width=16 height=16 border=0></td>";
-		print "<td>" . $groupNotify->getName() . "</td>";
+		print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
 		if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
 			print "<td><a href=\"../op/op.DocumentNotify.php?documentid=". $documentid . "&action=delnotify&groupid=".$groupNotify->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete")."</td>";
 		}else print "<td></td>";
@@ -123,7 +123,7 @@ print "</table>\n";
 						}
 					}
 					elseif (!$user->isGuest() && !in_array($user->getID(), $userNotifyIDs)) {
-						print "<option value=\"".$user->getID()."\">" . $user->getFullName() . "\n";
+						print "<option value=\"".$user->getID()."\">" . htmlspecialchars($user->getLogin() . " - " . $user->getFullName()) . "\n";
 					}
 				?>
 			</select>
@@ -138,7 +138,7 @@ print "</table>\n";
 					$allGroups = $dms->getAllGroups();
 					foreach ($allGroups as $groupObj) {
 						if (($user->isAdmin() || $groupObj->isMember($user,true)) && $document->getGroupAccessMode($groupObj) >= M_READ && !in_array($groupObj->getID(), $groupNotifyIDs)) {
-							print "<option value=\"".$groupObj->getID()."\">" . $groupObj->getName() . "\n";
+							print "<option value=\"".$groupObj->getID()."\">" . htmlspecialchars($groupObj->getName()) . "\n";
 						}
 					}
 				?>

@@ -43,42 +43,6 @@ if (isset($_GET["navBar"])) {
 	}
 }
 
-//
-// Supporting functions.
-//
-
-function makeTimeStamp($hour, $min, $sec, $year, $month, $day) {
-	$thirtyone = array (1, 3, 5, 7, 8, 10, 12);
-	$thirty = array (4, 6, 9, 11);
-
-	// Very basic check that the terms are valid. Does not fail for illegal
-	// dates such as 31 Feb.
-	if (!is_numeric($hour) || !is_numeric($min) || !is_numeric($sec) || !is_numeric($year) || !is_numeric($month) || !is_numeric($day) || $month<1 || $month>12 || $day<1 || $day>31 || $hour<0 || $hour>23 || $min<0 || $min>59 || $sec<0 || $sec>59) {
-		return false;
-	}
-	$year = (int) $year;
-	$month = (int) $month;
-	$day = (int) $day;
-
-	if (array_search($month, $thirtyone)) {
-		$max=31;
-	}
-	else if (array_search($month, $thirty)) {
-		$max=30;
-	}
-	else {
-		$max=(($year % 4 == 0) && ($year % 100 != 0 || $year % 400 == 0)) ? 29 : 28;
-	}
-
-	// If the date falls out of bounds, set it to the maximum for the given
-	// month. Makes assumption about the user's intention, rather than failing
-	// for absolutely everything.
-	if ($day>$max) {
-		$day=$max;
-	}
-
-	return mktime($hour, $min, $sec, $month, $day, $year);
-}
 
 function getTime() {
 	if (function_exists('microtime')) {
@@ -128,6 +92,7 @@ if (isset($_GET['searchin']) && is_array($_GET["searchin"])) {
 				case 1: // keywords
 				case 2: // name
 				case 3: // comment
+				case 4: // attributes
 					$searchin[$si] = $si;
 					break;
 			}
@@ -136,7 +101,7 @@ if (isset($_GET['searchin']) && is_array($_GET["searchin"])) {
 }
 
 // if none is checkd search all
-if (count($searchin)==0) $searchin=array( 0, 1, 2, 3);
+if (count($searchin)==0) $searchin=array( 0, 1, 2, 3, 4);
 
 // Check to see if the search has been restricted to a particular sub-tree in
 // the folder hierarchy.
@@ -176,13 +141,13 @@ if (isset($_GET["ownerid"]) && is_numeric($_GET["ownerid"]) && $_GET["ownerid"]!
 $startdate = array();
 $stopdate = array();
 if (isset($_GET["creationdate"]) && $_GET["creationdate"]!=null) {
-	$startdate = array('year'=>$_GET["createstartyear"], 'month'=>$_GET["createstartmonth"], 'day'=>$_GET["createstartday"]);
+	$startdate = array('year'=>$_GET["createstartyear"], 'month'=>$_GET["createstartmonth"], 'day'=>$_GET["createstartday"], 'hour'=>0, 'minute'=>0, 'second'=>0);
 	if (!checkdate($startdate['month'], $startdate['day'], $startdate['year'])) {
 		UI::contentContainer(getMLText("invalid_create_date_start"));
 		UI::htmlEndPage();
 		exit;
 	}
-	$stopdate = array('year'=>$_GET["createendyear"], 'month'=>$_GET["createendmonth"], 'day'=>$_GET["createendday"]);
+	$stopdate = array('year'=>$_GET["createendyear"], 'month'=>$_GET["createendmonth"], 'day'=>$_GET["createendday"], 'hour'=>23, 'minute'=>59, 'second'=>59);
 	if (!checkdate($stopdate['month'], $stopdate['day'], $stopdate['year'])) {
 		UI::contentContainer(getMLText("invalid_create_date_end"));
 		UI::htmlEndPage();
@@ -220,6 +185,11 @@ if(isset($_GET['categoryids']) && $_GET['categoryids']) {
 	}
 }
 
+if (isset($_GET["attributes"]))
+	$attributes = $_GET["attributes"];
+else
+	$attributes = array();
+
 //
 // Get the page number to display. If the result set contains more than
 // 25 entries, it is displayed across multiple pages.
@@ -240,9 +210,9 @@ if (isset($_GET["pg"])) {
 }
 
 
-// ------------------------------------- Suche starten --------------------------------------------
+// ---------------- Start searching -----------------------------------------
 $startTime = getTime();
-$resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, $categories);
+$resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, array(), array(), $categories, $attributes);
 $searchTime = getTime() - $startTime;
 $searchTime = round($searchTime, 2);
 
@@ -261,7 +231,7 @@ if($resArr['docs']) {
 		}
 	}
 }
-// -------------- Ausgabe der Ergebnisse --------------------------------
+// -------------- Output results --------------------------------------------
 
 UI::contentContainerStart();
 UI::pageList($pageNumber, $resArr['totalPages'], "../op/op.Search.php", $_GET);
@@ -270,6 +240,7 @@ print "<table class=\"folderView\">";
 print "<thead>\n<tr>\n";
 print "<th></th>\n";
 print "<th>".getMLText("name")."</th>\n";
+print "<th>".getMLText("attributes")."</th>\n";
 print "<th>".getMLText("owner")."</th>\n";
 print "<th>".getMLText("status")."</th>\n";
 print "<th>".getMLText("version")."</th>\n";
@@ -288,29 +259,42 @@ foreach ($entries as $entry) {
 			print "<tr>";
 			//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
 			if (in_array(2, $searchin)) {
-				$docName = markQuery($document->getName(), "i");
+				$docName = markQuery(htmlspecialchars($document->getName()), "i");
 			} else {
-				$docName = $document->getName();
+				$docName = htmlspecialchars($document->getName());
 			}
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($lc->getFileType())."\" title=\"".$lc->getMimeType()."\"></a></td>";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 			$folder = $document->getFolder();
 			$path = $folder->getPath();
 			for ($i = 1; $i  < count($path); $i++) {
-				print $path[$i]->getName()."/";
+				print htmlspecialchars($path[$i]->getName())."/";
 			}
 			print $docName;
 			print "</a></td>";
-			
+
+			$attributes = $lc->getAttributes();
+			print "<td>";
+			print "<ul class=\"documentDetail\">\n";
+			$attributes = $lc->getAttributes();
+			if($attributes) {
+				foreach($attributes as $attribute) {
+					$attrdef = $attribute->getAttributeDefinition();
+					print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
+				}
+			}
+			print "</ul>\n";
+			print "</td>";
+
 			$owner = $document->getOwner();
-			print "<td>".$owner->getFullName()."</td>";
+			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 			$display_status=$lc->getStatus();
 			print "<td>".getOverallStatusText($display_status["status"]). "</td>";
 
 			print "<td class=\"center\">".$lc->getVersion()."</td>";
 			
-			if (in_array(3, $searchin)) $comment = markQuery($document->getComment());
-			else $comment = $document->getComment();
+			if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($document->getComment()));
+			else $comment = htmlspecialchars($document->getComment());
 			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 			print "<td>".$comment."</td>";
 			print "</tr>\n";
@@ -318,25 +302,27 @@ foreach ($entries as $entry) {
 		$folder = $entry;
 			$foldercount++;
 			if (in_array(2, $searchin)) {
-				$folderName = markQuery($folder->getName(), "i");
+				$folderName = markQuery(htmlspecialchars($folder->getName()), "i");
 			} else {
-				$folderName = $folder->getName();
+				$folderName = htmlspecialchars($folder->getName());
 			}
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
 			$path = $folder->getPath();
-			for ($i = 1; $i  < count($path); $i++) {
-				print "/".$path[$i]->getName();
+			print "/";
+			for ($i = 1; $i  < count($path)-1; $i++) {
+				print htmlspecialchars($path[$i]->getName())."/";
 			}
-			print $foldername;
+			print $folderName;
 			print "</a></td>";
+			print "<td></td>";
 			
 			$owner = $folder->getOwner();
-			print "<td>".$owner->getFullName()."</td>";
+			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 			print "<td></td>";
 			print "<td></td>";
-			if (in_array(3, $searchin)) $comment = markQuery($folder->getComment());
-			else $comment = $folder->getComment();
+			if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($folder->getComment()));
+			else $comment = htmlspecialchars($folder->getComment());
 			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 			print "<td>".$comment."</td>";
 			print "</tr>\n";

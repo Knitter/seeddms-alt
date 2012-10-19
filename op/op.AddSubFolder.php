@@ -27,6 +27,11 @@ include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassEmail.php");
 include("../inc/inc.Authentication.php");
 
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('addsubfolder')) {
+	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
+}
+
 if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
@@ -51,7 +56,8 @@ if (!is_numeric($sequence)) {
 
 $name = $_POST["name"];
 $comment = $_POST["comment"];
-$subFolder = $folder->addSubFolder($name, $comment, $user, $sequence);
+$attributes = $_POST["attributes"];
+$subFolder = $folder->addSubFolder($name, $comment, $user, $sequence, $attributes);
 
 if (is_object($subFolder)) {
 	// Send notification to subscribers.

@@ -15,6 +15,37 @@ CREATE TABLE `tblACLs` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `tblCategory`
+-- 
+
+CREATE TABLE `tblCategory` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblAttributeDefinitions`
+-- 
+
+CREATE TABLE `tblAttributeDefinitions` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) default NULL,
+  `objtype` tinyint(4) NOT NULL default '0',
+  `type` tinyint(4) NOT NULL default '0',
+  `multiple` tinyint(4) NOT NULL default '0',
+  `minvalues` int(11) NOT NULL default '0',
+  `maxvalues` int(11) NOT NULL default '0',
+  `valueset` text default NULL,
+	UNIQUE(`name`),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `tblUsers`
 -- 
 
@@ -29,7 +60,7 @@ CREATE TABLE `tblUsers` (
   `comment` text NOT NULL,
   `role` smallint(1) NOT NULL default '0',
   `hidden` smallint(1) NOT NULL default '0',
-  `pwdExpiration` datetime NOT NULL default '0000-00-00 00:00:00';
+  `pwdExpiration` datetime NOT NULL default '0000-00-00 00:00:00',
   `loginfailures` tinyint(4) NOT NULL default '0',
   `disabled` smallint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`)
@@ -105,6 +136,23 @@ CREATE TABLE `tblFolders` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `tblFolderAttributes`
+-- 
+
+CREATE TABLE `tblFolderAttributes` (
+  `id` int(11) NOT NULL auto_increment,
+  `folder` int(11) default NULL,
+  `attrdef` int(11) default NULL,
+  `value` text default NULL,
+  PRIMARY KEY  (`id`),
+	UNIQUE (folder, attrdef),
+  CONSTRAINT `tblFolderAttr_folder` FOREIGN KEY (`folder`) REFERENCES `tblFolders` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblFolderAttr_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `tblDocuments`
 -- 
 
@@ -125,6 +173,23 @@ CREATE TABLE `tblDocuments` (
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblDocuments_folder` FOREIGN KEY (`folder`) REFERENCES `tblFolders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblDocuments_owner` FOREIGN KEY (`owner`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblDocumentAttributes`
+-- 
+
+CREATE TABLE `tblDocumentAttributes` (
+  `id` int(11) NOT NULL auto_increment,
+  `document` int(11) default NULL,
+  `attrdef` int(11) default NULL,
+  `value` text default NULL,
+  PRIMARY KEY  (`id`),
+	UNIQUE (document, attrdef),
+  CONSTRAINT `tblDocumentAttributes_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblDocumentAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -169,6 +234,7 @@ CREATE TABLE `tblDocumentApproveLog` (
 -- 
 
 CREATE TABLE `tblDocumentContent` (
+  `id` int(11) NOT NULL auto_increment,
   `document` int(11) NOT NULL default '0',
   `version` smallint(5) unsigned NOT NULL,
   `comment` text,
@@ -178,8 +244,26 @@ CREATE TABLE `tblDocumentContent` (
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
   `mimeType` varchar(100) NOT NULL default '',
+  PRIMARY KEY  (`id`),
   UNIQUE (`document`, `version`),
   CONSTRAINT `tblDocumentDocument_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `tblDocumentContentAttributes`
+-- 
+
+CREATE TABLE `tblDocumentContentAttributes` (
+  `id` int(11) NOT NULL auto_increment,
+  `content` int(11) default NULL,
+  `attrdef` int(11) default NULL,
+  `value` text default NULL,
+  PRIMARY KEY  (`id`),
+	UNIQUE (content, attrdef),
+  CONSTRAINT `tblDocumentContentAttributes_document` FOREIGN KEY (`content`) REFERENCES `tblDocumentContent` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblDocumentContentAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -361,24 +445,14 @@ CREATE TABLE `tblKeywords` (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table `tblCategory`
--- 
-
-CREATE TABLE `tblCategory` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` text NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
--- 
 -- Table structure for table `tblDocumentCategory`
 -- 
 
 CREATE TABLE `tblDocumentCategory` (
   `categoryID` int(11) NOT NULL default 0,
-  `documentID` int(11) NOT NULL default 0
+  `documentID` int(11) NOT NULL default 0,
+  CONSTRAINT `tblDocumentCategory_category` FOREIGN KEY (`categoryID`) REFERENCES `tblCategory` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblDocumentCategory_document` FOREIGN KEY (`documentID`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -490,8 +564,8 @@ CREATE TABLE `tblVersion` (
 -- Initial content for database
 --
 
-INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0);
-INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0);
+INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '', 0, 0);
+INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '', 0, 0);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
 INSERT INTO tblVersion VALUES (NOW(), 3, 4, 0);
 INSERT INTO tblCategory VALUES (0, '');

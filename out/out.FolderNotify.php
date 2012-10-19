@@ -83,7 +83,15 @@ else {
 		print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>";
 		print "<td>" . htmlspecialchars($userNotify->getFullName()) . "</td>";
 		if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
-			print "<td><a href=\"../op/op.FolderNotify.php?folderid=". $folderid . "&action=delnotify&userid=".$userNotify->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete")."</td>";
+			print "<td>";
+			print "<form action=\"../op/op.FolderNotify.php\" method=\"post\">\n";
+			echo createHiddenFieldWithKey('foldernotify')."\n";
+			print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folderid."\">\n";
+			print "<input type=\"Hidden\" name=\"action\" value=\"delnotify\">\n";
+			print "<input type=\"Hidden\" name=\"userid\" value=\"".$userNotify->getID()."\">\n";
+			print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
+			print "</form>\n";
+			print "</td>";
 		}else print "<td></td>";
 		print "</tr>";
 		$userNotifyIDs[] = $userNotify->getID();
@@ -94,7 +102,15 @@ else {
 		print "<td><img src=\"images/groupicon.gif\" class=\"mimeicon\"></td>";
 		print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
 		if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
-			print "<td><a href=\"../op/op.FolderNotify.php?folderid=". $folderid . "&action=delnotify&groupid=".$groupNotify->getID()."\"><img src=\"images/del.gif\" class=\"mimeicon\"></a>".getMLText("delete")."</td>";
+			print "<td>";
+			print "<form action=\"../op/op.FolderNotify.php\" method=\"post\">\n";
+			echo createHiddenFieldWithKey('foldernotify')."\n";
+			print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folderid."\">\n";
+			print "<input type=\"Hidden\" name=\"action\" value=\"delnotify\">\n";
+			print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupNotify->getID()."\">\n";
+			print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
+			print "</form>\n";
+			print "</td>";
 		}else print "<td></td>";
 		print "</tr>";
 		$groupNotifyIDs[] = $groupNotify->getID();
@@ -104,7 +120,8 @@ print "</table>\n";
 
 ?>
 <br>
-<form action="../op/op.FolderNotify.php" name="form1" onsubmit="return checkForm();">
+<form action="../op/op.FolderNotify.php" method="post" name="form1" onsubmit="return checkForm();">
+<?php	echo createHiddenFieldWithKey('foldernotify'); ?>
 <input type="Hidden" name="folderid" value="<?php print $folderid?>">
 <input type="Hidden" name="action" value="addnotify">
 <table>

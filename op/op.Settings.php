@@ -126,6 +126,12 @@ if ($action == "saveSettings")
   // SETTINGS - ADVANCED - EDITION
   $settings->_versioningFileName = $_POST["versioningFileName"];
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
+  $settings->_enableVersionDeletion = getBoolValue("enableVersionDeletion");
+  $settings->_enableVersionModification = getBoolValue("enableVersionModification");
+
+  // SETTINGS - ADVANCED - NOTIFICATION
+  $settings->_enableOwnerNotification = getBoolValue("enableOwnerNotification");
+  $settings->_enableNotificationAppRev = getBoolValue("enableNotificationAppRev");
 
   // SETTINGS - ADVANCED - SERVER
   $settings->_coreDir = $_POST["coreDir"];

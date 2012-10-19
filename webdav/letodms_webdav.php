@@ -409,16 +409,21 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		printf($format, "Size", "Last modified", "Filename");
 		echo "<hr>";
 
+		$parents = $folder->getPath();
+		$_fullpath = '/';
+		if(count($parents) > 1) {
+			$p = array_slice($parents, -2, 1);
+			$p = $p[0];
+			array_shift($parents);
+			$last = array_pop($parents);
+			foreach($parents as $parent)
+				$_fullpath .= $parent->getName().'/';
+			printf($format, 0, strftime("%Y-%m-%d %H:%M:%S", $p->getDate()), "<a href=\"".$_SERVER['SCRIPT_NAME'].htmlspecialchars($_fullpath)."\">..</a>");
+			$_fullpath .= $last->getName().'/';
+		}
 		foreach ($objs as $obj) {
 			$filename = $obj->getName();
-			$parents = $folder->getPath();
-			array_shift($parents);
-			$fullpath = '/';
-			if($parents) {
-				foreach($parents as $parent)
-					$fullpath .= $parent->getName().'/';
-			}
-			$fullpath .= $filename;
+			$fullpath = $_fullpath.$filename;
 			if(get_class($obj) == 'LetoDMS_Core_Folder') {
 				$fullpath .= '/';
 				$filename .= '/';

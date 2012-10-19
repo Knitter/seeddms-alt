@@ -27,6 +27,11 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('adddocument')) {
+	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_request_token"))),getMLText("invalid_request_token"));
+}
+
 if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
@@ -49,6 +54,8 @@ $version_comment = $_POST["version_comment"];
 
 $keywords = $_POST["keywords"];
 $categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]);
+$attributes = $_POST["attributes"];
+$attributes_version = $_POST["attributes_version"];
 
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
@@ -160,10 +167,12 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			$cats[] = $dms->getDocumentCategory($catid);
 		}
 	}
+
 	$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
 															$cats, $userfiletmp, basename($userfilename),
 	                            $fileType, $userfiletype, $sequence,
-	                            $reviewers, $approvers, $reqversion,$version_comment);
+	                            $reviewers, $approvers, $reqversion,
+	                            $version_comment, $attributes, $attributes_version);
 
 	if (is_bool($res) && !$res) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
@@ -176,9 +185,39 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 				}
 			}
 		}
-		// Send notification to subscribers.
+		if($settings->_enableFullSearch) {
+			if(!empty($settings->_luceneClassDir))
+				require_once($settings->_luceneClassDir.'/Lucene.php');
+			else
+				require_once('LetoDMS/Lucene.php');
+
+			$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+			LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+			$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document, $settings->_convcmd ? $settings->_convcmd : null, true));
+		}
+
+		/* Add a default notification for the owner of the document */
+		if($settings->_enableOwnerNotification) {
+			$res = $document->addNotify($user->getID(), true);
+		}
+		// Send notification to subscribers of folder.
 		if($notifier) {
-			$folder->getNotifyList();
+			$notifyList = $folder->getNotifyList();
+			if($settings->_enableNotificationAppRev) {
+				/* Reviewers and approvers will be informed about the new document */
+				foreach($reviewers['i'] as $reviewerid) {
+					$notifyList['users'][] = $dms->getUser($reviewerid);
+				}
+				foreach($approvers['i'] as $approverid) {
+					$notifyList['users'][] = $dms->getUser($approverid);
+				}
+				foreach($reviewers['g'] as $reviewergrpid) {
+					$notifyList['groups'][] = $dms->getGroup($reviewergrpid);
+				}
+				foreach($approvers['g'] as $approvergrpid) {
+					$notifyList['groups'][] = $dms->getGroup($approvergrpid);
+				}
+			}
 			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("new_document_email");
 			$message = getMLText("new_document_email")."\r\n";
 			$message .= 
@@ -188,11 +227,9 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 				getMLText("comment_for_current_version").": ".$version_comment."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-			$subject=$subject;
-			$message=$message;
 			
-			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
-			foreach ($folder->_notifyList["groups"] as $grp) {
+			$notifier->toList($user, $notifyList["users"], $subject, $message);
+			foreach ($notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
 		}

@@ -38,10 +38,10 @@ if (!is_object($folder)) {
 $folderPathHTML = getFolderPathHTML($folder, true);
 
 if ($folder->getAccessMode($user) < M_READWRITE) {
-	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 }
 
-UI::htmlStartPage(getMLText("folder_title", array("foldername" => $folder->getName())));
+UI::htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 UI::globalNavigation($folder);
 UI::pageNavigation($folderPathHTML, "view_folder", $folder);
 
@@ -94,6 +94,19 @@ if ($parent && $parent->getAccessMode($user) > M_READ) {
 	UI::printSequenceChooser($parent->getSubFolders(), $folder->getID());
 	print "</td></tr>\n";
 }
+?>
+<?php
+	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_folder, LetoDMS_Core_AttributeDefinition::objtype_all));
+	if($attrdefs) {
+		foreach($attrdefs as $attrdef) {
+?>
+<tr>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
+	<td><?php UI::printAttributeEditField($attrdef, $folder->getAttributeValue($attrdef)) ?></td>
+</tr>
+<?php
+		}
+	}
 ?>
 <tr>
 <td colspan="2"><input type="Submit" value="<?php printMLText("save"); ?>"></td>

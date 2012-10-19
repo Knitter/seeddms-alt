@@ -125,11 +125,11 @@ foreach ($approvalStatus["indstatus"] as $st) {
 		}
 	
 		print "<tr>\n";
-		print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".$docIdx[$st["documentID"]][$st["version"]]["name"]."</a></td>";
-		print "<td>".$docIdx[$st["documentID"]][$st["version"]]["ownerName"]."</td>";
+		print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+		print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 		print "<td>".getOverallStatusText($docIdx[$st["documentID"]][$st["version"]]["status"])."</td>";
 		print "<td>".$st["version"]."</td>";
-		print "<td>".$st["date"]." ". $docIdx[$st["documentID"]][$st["version"]]["statusName"] ."</td>";
+		print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"]) ."</td>";
 		print "<td>".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
 		print "</tr>\n";
 	}
@@ -166,11 +166,11 @@ foreach ($approvalStatus["grpstatus"] as $st) {
 		}	
 	
 		print "<tr>\n";
-		print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".$docIdx[$st["documentID"]][$st["version"]]["name"]."</a></td>";
-		print "<td>".$docIdx[$st["documentID"]][$st["version"]]["ownerName"]."</td>";
+		print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+		print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 		print "<td>".getOverallStatusText($docIdx[$st["documentID"]][$st["version"]]["status"])."</td>";
 		print "<td>".$st["version"]."</td>";
-		print "<td>".$st["date"]." ". $docIdx[$st["documentID"]][$st["version"]]["statusName"] ."</td>";
+		print "<td>".$st["date"]." ". htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["statusName"]) ."</td>";
 		print "<td>".(!$docIdx[$st["documentID"]][$st["version"]]["expires"] ? "-":getReadableDate($docIdx[$st["documentID"]][$st["version"]]["expires"]))."</td>";				
 		print "</tr>\n";
 	}

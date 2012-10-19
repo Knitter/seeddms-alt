@@ -46,10 +46,10 @@ if (isset($_GET["orderby"]) && strlen($_GET["orderby"])==1 ) {
 $folderPathHTML = getFolderPathHTML($folder);
 
 if ($folder->getAccessMode($user) < M_READ) {
-	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 }
 
-UI::htmlStartPage(getMLText("folder_title", array("foldername" => $folder->getName())));
+UI::htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 
 UI::globalNavigation($folder);
 UI::pageNavigation($folderPathHTML, "view_folder", $folder);
@@ -59,12 +59,27 @@ if ($settings->_enableFolderTree) UI::printTreeNavigation($folderid,$showtree);
 UI::contentHeading(getMLText("folder_infos"));
 
 $owner = $folder->getOwner();
-UI::contentContainer("<table>\n<tr>\n".
+UI::contentContainerStart();
+print "<table>\n<tr>\n".
 			"<td>".getMLText("owner").":</td>\n".
 			"<td><a class=\"infos\" href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a>".
 			"</td>\n</tr>\n<tr>\n".
 			"<td>".getMLText("comment").":</td>\n".
-			"<td>".htmlspecialchars($folder->getComment())."</td>\n</tr>\n</table>\n");
+			"<td>".htmlspecialchars($folder->getComment())."</td>\n</tr>\n";
+$attributes = $folder->getAttributes();
+if($attributes) {
+	foreach($attributes as $attribute) {
+		$attrdef = $attribute->getAttributeDefinition();
+?>
+		<tr>
+			<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+			<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
+		</tr>
+<?php
+	}
+}
+print "</table>\n";
+UI::contentContainerEnd();
 
 UI::contentHeading(getMLText("folder_contents"));
 UI::contentContainerStart();
