@@ -608,8 +608,9 @@ class UI {
 				echo "<option value=\"".htmlspecialchars($value)."\"";
 				if($value == $objvalue)
 					echo " selected";
-				echo ">".$value."</option>";
+				echo ">".htmlspecialchars($value)."</option>";
 			}
+			echo "</select>";
 		} else {
 			echo "<input type=\"text\" name=\"".$fieldname."[".$attrdef->getId()."]\" value=\"".htmlspecialchars($objvalue)."\" />";
 		}

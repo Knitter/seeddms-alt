@@ -407,9 +407,11 @@ class Settings { /* {{{ */
 
 		// XML Path: /configuration/advanced/notification
 		$node = $xml->xpath('/configuration/advanced/notification');
-		$tab = $node[0]->attributes();
-		$this->_enableNotificationAppRev = Settings::boolval($tab["enableNotificationAppRev"]);
-		$this->_enableOwnerNotification = Settings::boolval($tab["enableOwnerNotification"]);
+		if($node) {
+			$tab = $node[0]->attributes();
+			$this->_enableNotificationAppRev = Settings::boolval($tab["enableNotificationAppRev"]);
+			$this->_enableOwnerNotification = Settings::boolval($tab["enableOwnerNotification"]);
+		}
 
 		// XML Path: /configuration/advanced/server
 		$node = $xml->xpath('/configuration/advanced/server');
@@ -471,7 +473,7 @@ class Settings { /* {{{ */
 		$node = $rootNode->xpath($parentNodeName . '/' . $name);
 
 		if (empty($node)) {
-			$node = $xml->xpath($parentNodeName);
+			$node = $rootNode->xpath($parentNodeName);
 			$node = $node[0]->addChild($name);
 		} else {
 			$node = $node[0];

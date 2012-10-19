@@ -18,11 +18,11 @@
   <email></email>
   <active>no</active>
  </lead>
- <date>2012-02-13</date>
- <time>08:05:38</time>
+ <date>2012-10-17</date>
+ <time>09:12:59</time>
  <version>
-  <release>3.4.0RC1</release>
-  <api>3.4.0RC1</api>
+  <release>3.4.0RC2</release>
+  <api>3.4.0RC2</api>
  </version>
  <stability>
   <release>beta</release>
@@ -30,7 +30,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- added PDO database driver, several sql changes for better compatiblity
+- fixed bug when adding a new document category
  </notes>
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
@@ -246,6 +246,70 @@ New release
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - no changes, just keep same version as letodms application
+   </notes>
+  </release>
+  <release>
+   <date>2012-08-25</date>
+   <time>22:07:58</time>
+   <version>
+    <release>3.3.7</release>
+    <api>3.3.7</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- no changes, just keep same version as letodms application
+   </notes>
+  </release>
+  <release>
+   <date>2012-09-16</date>
+   <time>22:14:08</time>
+   <version>
+    <release>3.3.8</release>
+    <api>3.3.8</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- more sql injection protection in LetoDMS_Core_User
+   </notes>
+  </release>
+  <release>
+   <date>2012-09-19</date>
+   <time>08:43:18</time>
+   <version>
+    <release>3.3.9</release>
+    <api>3.3.9</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- version update to be in sync with letodms application
+   </notes>
+  </release>
+  <release>
+   <date>2012-10-08</date>
+   <time>08:05:38</time>
+   <version>
+    <release>3.4.0RC1</release>
+    <api>3.4.0RC1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- added PDO database driver, several sql changes for better compatiblity
    </notes>
   </release>
  </changelog>

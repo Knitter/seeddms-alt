@@ -73,7 +73,7 @@ UI::contentContainerStart();
 						if (isset($_GET["attrdefid"]) && $attrdef->getID()==$_GET["attrdefid"]) $selected=$count;				
 						switch($attrdef->getObjType()) {
 							case LetoDMS_Core_AttributeDefinition::objtype_all:
-								$ot = "all";
+								$ot = getMLText("all");
 								break;
 							case LetoDMS_Core_AttributeDefinition::objtype_folder:
 								$ot = getMLText("folder");

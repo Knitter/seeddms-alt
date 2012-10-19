@@ -121,7 +121,7 @@ UI::contentContainerStart();
 				<tr>
 					<td><?php echo getMLText("name")?>:</td>
 					<td>
-						<form action="../op/op.Categories.php" >
+						<form action="../op/op.Categories.php" method="post">
   		        <?php echo createHiddenFieldWithKey('editcategory'); ?>
 							<input type="Hidden" name="action" value="editcategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">

@@ -219,6 +219,7 @@ CREATE TABLE `tblDocumentContent` (
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
   `mimeType` varchar(100) NOT NULL default '',
+  PRIMARY KEY  (`id`),
   UNIQUE (`document`,`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

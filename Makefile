@@ -1,4 +1,4 @@
-VERSION=3.4.0RC1
+VERSION=3.4.0RC2
 SRC=CHANGELOG* inc conf utils index.php languages op out README README.Notification drop-tables-innodb.sql delete_all_contents.sql styles js TODO LICENSE Makefile webdav install
 
 dist:

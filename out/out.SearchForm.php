@@ -113,7 +113,7 @@ function chooseKeywords(target) {
 		foreach($attrdefs as $attrdef) {
 ?>
 <tr>
-	<td><?php echo $attrdef->getName(); ?></td>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
 	<td><?php UI::printAttributeEditField($attrdef, '') ?></td>
 </tr>
 <?php
