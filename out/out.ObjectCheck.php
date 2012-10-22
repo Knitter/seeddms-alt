@@ -94,11 +94,34 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 
 		/* Check if the content is available */
 		$versions = $document->getContent();
-		foreach($versions as $version) {
-			$filepath = $dms->contentDir . $version->getPath();
-			if(!file_exists($filepath)) {
+		if($versions) {
+			foreach($versions as $version) {
+				$filepath = $dms->contentDir . $version->getPath();
+				if(!file_exists($filepath)) {
+				print "<tr>\n";
+				print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\"></a></td>";
+				print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
+				$folder = $document->getFolder();
+				$tmppath = $folder->getPath();
+				for ($i = 1; $i  < count($tmppath); $i++) {
+					print htmlspecialchars($tmppath[$i]->getName())."/";
+				}
+				print htmlspecialchars($document->getName());
+				print "</a></td>";
+				$owner = $document->getOwner();
+				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+				print "<td>Document content of version ".$version->getVersion()." is missing ('".$path."')</td>";
+				if($repair) {
+					print "<td><span class=\"warning\">Cannot repaired</span></td>\n";
+				} else {
+					print "<td></td>\n";
+				}
+				print "</tr>\n";
+				}
+			}
+		} else {
 			print "<tr>\n";
-			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($version->getFileType())."\" title=\"".$version->getMimeType()."\"></a></td>";
+			print "<td></td>\n";
 			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 			$folder = $document->getFolder();
 			$tmppath = $folder->getPath();
@@ -109,14 +132,8 @@ function tree($folder, $repair, $path=':', $indent='') { /* {{{ */
 			print "</a></td>";
 			$owner = $document->getOwner();
 			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			print "<td>Document content of version ".$version->getVersion()." is missing ('".$path."')</td>";
-			if($repair) {
-				print "<td><span class=\"warning\">Cannot repaired</span></td>\n";
-			} else {
-				print "<td></td>\n";
-			}
+			print "<td>Document has no content! Delete the document manually.</td>";
 			print "</tr>\n";
-			}
 		}
 	}
 } /* }}} */
@@ -155,6 +172,39 @@ print "</tbody></table>\n";
 
 if($needsrepair && $repair == 0) {
 	echo '<p><a href="out.ObjectCheck.php?repair=1">'.getMLText('do_object_repair').'</a></p>';
+}
+UI::contentContainerEnd();
+
+UI::contentHeading(getMLText("unlinked_content"));
+UI::contentContainerStart();
+if(isset($_GET['unlink']) && $_GET['unlink'] == 1) {
+	$unlink = 1;
+	echo "<p>".getMLText('unlinking_objects')."</p>";
+} else {
+	$unlink = 0;
+}
+
+if($versions = $dms->getUnlinkedDocumentContent()) {
+	print "<table class=\"folderView\">";
+	print "<thead>\n<tr>\n";
+	print "<th>".getMLText("document")."</th>\n";
+	print "<th>".getMLText("version")."</th>\n";
+	print "<th>".getMLText("original_filename")."</th>\n";
+	print "<th>".getMLText("mimetype")."</th>\n";
+	print "<th></th>\n";
+	print "</tr>\n</thead>\n<tbody>\n";
+	foreach($versions as $version) {
+		$doc = $version->getDocument();
+		print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
+		if($unlink) {
+			$doc->removeContent($version);
+		}
+		print "</tr>\n";
+	}
+	print "</tbody></table>\n";
+	if($unlink == 0) {
+		echo '<p><a href="out.ObjectCheck.php?unlink=1">'.getMLText('do_object_unlink').'</a></p>';
+	}
 }
 
 UI::contentContainerEnd();
