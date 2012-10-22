@@ -39,6 +39,7 @@ class LetoDMS_Core_DatabaseAccess {
 	var $_ttapproveid;
 	var $_ttstatid;
 	var $_ttcontentid;
+	var $_intransaction;
 	
 	/*
 	Backup functions
@@ -73,6 +74,7 @@ class LetoDMS_Core_DatabaseAccess {
 		$this->_user = $user;
 		$this->_passw = $passw;
 		$this->_connected = false;
+		$this->_intransaction = 0;
 		// $tt*****id is a hack to ensure that we do not try to create the
 		// temporary table twice during a single connection. Can be fixed by
 		// using Views (MySQL 5.0 onward) instead of temporary tables.
@@ -182,6 +184,27 @@ class LetoDMS_Core_DatabaseAccess {
 	 */
 	function getInsertID() { /* {{{ */
 		return $this->_conn->Insert_ID();
+	} /* }}} */
+
+	function startTransaction() { /* {{{ */
+		if(!$this->_intransaction) {
+			$this->_conn->BeginTrans();
+		}
+		$this->_intransaction++;
+	} /* }}} */
+
+	function rollbackTransaction() { /* {{{ */
+		if($this->_intransaction == 1) {
+			$this->_conn->RollbackTrans();
+		}
+		$this->_intransaction--;
+	} /* }}} */
+
+	function commitTransaction() { /* {{{ */
+		if($this->_intransaction == 1) {
+			$this->_conn->CommitTrans();
+		}
+		$this->_intransaction--;
 	} /* }}} */
 
 	function getErrorMsg() { /* {{{ */
