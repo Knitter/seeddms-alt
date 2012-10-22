@@ -130,26 +130,27 @@ foreach($documents as $document) {
 	$comment = $document->getComment();
 	if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 	$docID = $document->getID();
-	$latestContent = $document->getLatestContent();
-	$version = $latestContent->getVersion();
-	$status = $latestContent->getStatus();
-	
-	print "<tr>";
+	if($latestContent = $document->getLatestContent()) {
+		$version = $latestContent->getVersion();
+		$status = $latestContent->getStatus();
+		
+		print "<tr>";
 
-	if (file_exists($dms->contentDir . $latestContent->getPath()))
-		print "<td><a href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></a></td>";
-	else print "<td><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-	
-	print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a></td>\n";
-	print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-	print "<td>";
-  if ( $document->isLocked() ) {
-		print "<img src=\"".UI::getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
+		if (file_exists($dms->contentDir . $latestContent->getPath()))
+			print "<td><a href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\"><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></a></td>";
+		else print "<td><img class=\"mimeicon\" src=\"images/icons/".UI::getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
+		
+		print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a></td>\n";
+		print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+		print "<td>";
+		if ( $document->isLocked() ) {
+			print "<img src=\"".UI::getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
+		}
+		print getOverallStatusText($status["status"])."</td>";
+		print "<td>".$version."</td>";
+		print "<td>".htmlspecialchars($comment)."</td>";
+		print "</tr>\n";
 	}
-	print getOverallStatusText($status["status"])."</td>";
-	print "<td>".$version."</td>";
-	print "<td>".htmlspecialchars($comment)."</td>";
-	print "</tr>\n";
 }
 
 if ((count($subFolders) > 0)||(count($documents) > 0)) echo "</tbody>\n</table>\n";
