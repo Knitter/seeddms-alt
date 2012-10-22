@@ -59,17 +59,8 @@ if ($document->verifyLastestContentExpriry()){
 	header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
 }
 
-$versions = $document->getContent();
-$latestContent = $document->getLatestContent();
-$status = $latestContent->getStatus();
-$reviewStatus = $latestContent->getReviewStatus();
-$approvalStatus = $latestContent->getApprovalStatus();
-
 /* Create object for checking access to certain operations */
 $accessop = new LetoDMS_AccessOperation($document, $user, $settings);
-
-// verify if file exists
-$file_exists=file_exists($dms->contentDir . $latestContent->getPath());
 
 UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 UI::globalNavigation($folder);
@@ -139,6 +130,23 @@ if($attributes) {
 </table>
 <?php
 UI::contentContainerEnd();
+
+$versions = $document->getContent();
+if(!$latestContent = $document->getLatestContent()) {
+	UI::contentHeading(getMLText("current_version"));
+	UI::contentContainerStart();
+	print getMLText('document_content_missing');
+	UI::contentContainerEnd();
+	UI::htmlEndPage();
+	exit;
+}
+
+$status = $latestContent->getStatus();
+$reviewStatus = $latestContent->getReviewStatus();
+$approvalStatus = $latestContent->getApprovalStatus();
+
+// verify if file exists
+$file_exists=file_exists($dms->contentDir . $latestContent->getPath());
 
 UI::contentHeading(getMLText("current_version"));
 UI::contentContainerStart();
