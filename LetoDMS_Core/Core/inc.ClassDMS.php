@@ -1483,5 +1483,30 @@ class LetoDMS_Core_DMS {
 		return $this->getAttributeDefinition($this->db->getInsertID());
 	} /* }}} */
 
+	/**
+	 * Returns document content which is not linked to a document
+	 *
+	 * This method is for finding straying document content without
+	 * a parent document. In normal operation this should not happen
+	 * but little checks for database consistency and possible errors
+	 * in the application may have left over document content though
+	 * the document is gone already.
+	 */
+	function getUnlinkedDocumentContent() { /* {{{ */
+		$queryStr = "SELECT * FROM tblDocumentContent WHERE document NOT IN (SELECT id FROM tblDocuments)";
+		$resArr = $this->db->getResultArray($queryStr);
+		if (!$resArr)
+			return false;
+
+		$versions = array();
+		foreach($resArr as $row) {
+			$document = new LetoDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
+			$document->setDMS($this);
+			$version = new LetoDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType']);
+			$versions[] = $version;
+		}
+		return $versions;
+		
+	} /* }}} */
 }
 ?>
