@@ -122,14 +122,20 @@ class LetoDMS_Core_KeywordCategory {
 	function remove() {
 		$db = $this->_dms->getDB();
 
+		$db->startTransaction();
 		$queryStr = "DELETE FROM tblKeywords WHERE category = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$queryStr = "DELETE FROM tblKeywordCategories WHERE id = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
+		$db->commitTransaction();
 		return true;
 	}
 }

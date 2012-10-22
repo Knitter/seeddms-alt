@@ -191,24 +191,38 @@ class LetoDMS_Core_Group {
 	function remove($user) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = "DELETE FROM tblGroups WHERE id = " . $this->_id;
-		if (!$db->getResult($queryStr))
-			return false;
+		$db->startTransaction();
+
 		$queryStr = "DELETE FROM tblGroupMembers WHERE groupID = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblACLs WHERE groupID = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblNotify WHERE groupID = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblMandatoryReviewers WHERE reviewerGroupID = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE approverGroupID = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
+		$queryStr = "DELETE FROM tblGroups WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// TODO : update document status if reviewer/approver has been deleted
 
@@ -218,6 +232,10 @@ class LetoDMS_Core_Group {
 			$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
 				"VALUES ('". $r["reviewID"] ."', '-2', 'Review group removed from process', NOW(), '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
+			if(!$res) {
+				$db->rollbackTransaction();
+				return false;
+			}
 		}
 
 		$approvalStatus = $this->getApprovalStatus();
@@ -225,7 +243,13 @@ class LetoDMS_Core_Group {
 			$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
 				"VALUES ('". $a["approveID"] ."', '-2', 'Approval group removed from process', NOW(), '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
+			if(!$res) {
+				$db->rollbackTransaction();
+				return false;
+			}
 		}
+
+		$db->commitTransaction();
 
 		return true;
 	} /* }}} */

@@ -376,6 +376,8 @@ class LetoDMS_Core_User {
 			return;
 		$assignTo = $assignToUser->getID();
 
+		$db->startTransaction();
+
 		// delete private keyword lists
 		$queryStr = "SELECT tblKeywords.id FROM tblKeywords, tblKeywordCategories WHERE tblKeywords.category = tblKeywordCategories.id AND tblKeywordCategories.owner = " . $this->_id;
 		$resultArr = $db->getResultArray($queryStr);
@@ -386,83 +388,145 @@ class LetoDMS_Core_User {
 				if ($i + 1 < count($resultArr))
 					$queryStr .= " OR ";
 			}
-			if (!$db->getResult($queryStr))	return false;
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
 		}
 
 		$queryStr = "DELETE FROM tblKeywordCategories WHERE owner = " . $this->_id;
-		if (!$db->getResult($queryStr))	return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		//Benachrichtigungen entfernen
 		$queryStr = "DELETE FROM tblNotify WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		/* Assign documents of the removed user to the given user */
 		$queryStr = "UPDATE tblFolders SET owner = " . $assignTo . " WHERE owner = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		$queryStr = "UPDATE tblDocuments SET owner = " . $assignTo . " WHERE owner = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		$queryStr = "UPDATE tblDocumentContent SET createdBy = " . $assignTo . " WHERE createdBy = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// Remove private links on documents ...
 		$queryStr = "DELETE FROM tblDocumentLinks WHERE userID = " . $this->_id . " AND public = 0";
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// ... but keep public links
 		$queryStr = "UPDATE tblDocumentLinks SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// set administrator for deleted user's attachments
 		$queryStr = "UPDATE tblDocumentFiles SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		//Evtl. von diesem Benutzer gelockte Dokumente werden freigegeben
 		$queryStr = "DELETE FROM tblDocumentLocks WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// Delete user from all groups
 		$queryStr = "DELETE FROM tblGroupMembers WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// User aus allen ACLs streichen
 		$queryStr = "DELETE FROM tblACLs WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// Delete image of user
 		$queryStr = "DELETE FROM tblUserImages WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// Delete entries in password history
 		$queryStr = "DELETE FROM tblUserPasswordHistory WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// Delete entries in password request
 		$queryStr = "DELETE FROM tblUserPasswordRequest WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
-
-		// Delete user itself
-		$queryStr = "DELETE FROM tblUsers WHERE id = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// mandatory review/approve
 		$queryStr = "DELETE FROM tblMandatoryReviewers WHERE reviewerUserID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE approverUserID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		$queryStr = "DELETE FROM tblMandatoryReviewers WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// set administrator for deleted user's events
 		$queryStr = "UPDATE tblEvents SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
+		// Delete user itself
+		$queryStr = "DELETE FROM tblUsers WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		// TODO : update document status if reviewer/approver has been deleted
 		// "DELETE FROM tblDocumentApproveLog WHERE userID = " . $this->_id;
@@ -474,6 +538,10 @@ class LetoDMS_Core_User {
 			$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
 				"VALUES ('". $ri["reviewID"] ."', '-2', 'Reviewer removed from process', NOW(), '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
+			if(!$res) {
+				$db->rollbackTransaction();
+				return false;
+			}
 		}
 
 		$approvalStatus = $this->getApprovalStatus();
@@ -481,8 +549,13 @@ class LetoDMS_Core_User {
 			$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
 				"VALUES ('". $ai["approveID"] ."', '-2', 'Approver removed from process', NOW(), '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
+			if(!$res) {
+				$db->rollbackTransaction();
+				return false;
+			}
 		}
 
+		$db->commitTransaction();
 //		unset($this);
 		return true;
 	} /* }}} */

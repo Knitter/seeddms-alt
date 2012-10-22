@@ -371,11 +371,16 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 		if (strlen($pathPrefix)>1) {
 			$pathPrefix .= ":";
 		}
+
+		$db->startTransaction();
+
 		//inheritAccess = true, defaultAccess = M_READ
 		$queryStr = "INSERT INTO tblFolders (name, parent, folderList, comment, date, owner, inheritAccess, defaultAccess, sequence) ".
 					"VALUES (".$db->qstr($name).", ".$this->_id.", ".$db->qstr($pathPrefix).", ".$db->qstr($comment).", ".time().", ".$owner->getID().", 1, ".M_READ.", ". $sequence.")";
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$newFolder = $this->_dms->getFolder($db->getInsertID());
 		unset($this->_subFolders);
 
@@ -383,12 +388,13 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 			foreach($attributes as $attrdefid=>$attribute) {
 				if(trim($attribute))
 					if(!$newFolder->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
-						$newFolder->remove();
+						$db->rollbackTransaction();
 						return false;
 					}
 			}
 		}
 
+		$db->commitTransaction();
 		return $newFolder;
 	} /* }}} */
 
@@ -525,10 +531,14 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 			$pathPrefix .= ":";
 		}
 
+		$db->startTransaction();
+
 		$queryStr = "INSERT INTO tblDocuments (name, comment, date, expires, owner, folder, folderList, inheritAccess, defaultAccess, locked, keywords, sequence) VALUES ".
 					"(".$db->qstr($name).", ".$db->qstr($comment).", " . time().", ".(int) $expires.", ".$owner->getID().", ".$this->_id.",".$db->qstr($pathPrefix).", 1, ".M_READ.", -1, ".$db->qstr($keywords).", " . $sequence . ")";
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$document = $this->_dms->getDocument($db->getInsertID());
 
@@ -537,8 +547,7 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 		else $res = $document->addContent($comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes);
 
 		if (is_bool($res) && !$res) {
-			$queryStr = "DELETE FROM tblDocuments WHERE id = " . $document->getID();
-			$db->getResult($queryStr);
+			$db->rollbackTransaction();
 			return false;
 		}
 
@@ -551,11 +560,13 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 				if(trim($attribute))
 					if(!$document->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
 						$document->remove();
+						$db->rollbackTransaction();
 						return false;
 					}
 			}
 		}
 
+		$db->commitTransaction();
 		return array($document, $res);
 	} /* }}} */
 
@@ -575,28 +586,42 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 
 		foreach ($this->_subFolders as $subFolder) {
 			$res = $subFolder->remove();
-			if (!$res) return false;
+			if (!$res) {
+				return false;
+			}
 		}
 
 		foreach ($this->_documents as $document) {
 			$res = $document->remove();
-			if (!$res) return false;
+			if (!$res) {
+				return false;
+			}
 		}
 
 		//Entfernen der Datenbankeinträge
+		$db->rollbackTransaction();
 		$queryStr = "DELETE FROM tblFolders WHERE id =  " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblFolderAttributes WHERE folder =  " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblACLs WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$queryStr = "DELETE FROM tblNotify WHERE target = ". $this->_id. " AND targetType = " . T_FOLDER;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
+		$db->commitTransaction();
 
 		return true;
 	} /* }}} */

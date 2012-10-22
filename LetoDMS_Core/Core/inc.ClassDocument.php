@@ -240,16 +240,22 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	function setCategories($newCategories) { /* {{{ */
 		$db = $this->_dms->getDB();
 
+		$db->startTransaction();
 		$queryStr = "DELETE from tblDocumentCategory WHERE documentID = ". $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		foreach($newCategories as $cat) {
 			$queryStr = "INSERT INTO tblDocumentCategory (categoryID, documentID) VALUES (". $cat->getId() .", ". $this->_id .")";
-			if (!$db->getResult($queryStr))
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
 				return false;
+			}
 		}
 
+		$db->commitTransaction();
 		$this->_categories = $newCategories;
 		return true;
 	} /* }}} */
@@ -1067,15 +1073,26 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			$version = $resArr[0]['m']+1;
 		}
 
+		$db->startTransaction();
+
 		$queryStr = "INSERT INTO tblDocumentContent (document, version, comment, date, createdBy, dir, orgFileName, fileType, mimeType) VALUES ".
 						"(".$this->_id.", ".(int)$version.",".$db->qstr($comment).", ".$date.", ".$user->getID().", ".$db->qstr($dir).", ".$db->qstr($orgFileName).", ".$db->qstr($fileType).", ".$db->qstr($mimeType).")";
-		if (!$db->getResult($queryStr)) return false;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		$contentID = $db->getInsertID();
 
 		// copy file
-		if (!LetoDMS_Core_File::makeDir($this->_dms->contentDir . $dir)) return false;
-		if (!LetoDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $dir . $version . $fileType)) return false;
+		if (!LetoDMS_Core_File::makeDir($this->_dms->contentDir . $dir)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+		if (!LetoDMS_Core_File::copyFile($tmpFile, $this->_dms->contentDir . $dir . $version . $fileType)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		unset($this->_content);
 		unset($this->_latestContent);
@@ -1087,6 +1104,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 				if(trim($attribute))
 					if(!$content->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
 						$this->removeContent($content);
+						$db->rollbackTransaction();
 						return false;
 					}
 			}
@@ -1098,8 +1116,11 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 
 		$queryStr = "INSERT INTO `tblDocumentStatus` (`documentID`, `version`) ".
 			"VALUES (". $this->_id .", ". (int) $version .")";
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$this->removeContent($content);
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$statusID = $db->getInsertID();
 
@@ -1155,11 +1176,14 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		}
 		$queryStr = "INSERT INTO `tblDocumentStatusLog` (`statusID`, `status`, `comment`, `date`, `userID`) ".
 			"VALUES ('". $statusID ."', '". $status."', 'New document content submitted". $comment ."', CURRENT_TIMESTAMP, '". $user->getID() ."')";
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$docResultSet->setStatus($status,$comment,$user);
 
+		$db->commitTransaction();
 		return $docResultSet;
 	} /* }}} */
 
@@ -1242,24 +1266,34 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			if (!LetoDMS_Core_File::removeFile( $this->_dms->contentDir.$version->getPath() ))
 				return false;
 
+		$db->startTransaction();
+
 		$status = $version->getStatus();
 		$stID = $status["statusID"];
 
 		$queryStr = "DELETE FROM tblDocumentContent WHERE `document` = " . $this->getID() .	" AND `version` = " . $version->_version;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$queryStr = "DELETE FROM tblDocumentContentAttributes WHERE content = " . $version->getId();
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$queryStr = "DELETE FROM `tblDocumentStatusLog` WHERE `statusID` = '".$stID."'";
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$queryStr = "DELETE FROM `tblDocumentStatus` WHERE `documentID` = '". $this->getID() ."' AND `version` = '" . $version->_version."'";
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		$status = $version->getReviewStatus();
 		$stList = "";
@@ -1272,12 +1306,16 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 
 		if (strlen($stList)>0) {
 			$queryStr = "DELETE FROM `tblDocumentReviewLog` WHERE `tblDocumentReviewLog`.`reviewID` IN (".$stList.")";
-			if (!$db->getResult($queryStr))
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
 				return false;
+			}
 		}
 		$queryStr = "DELETE FROM `tblDocumentReviewers` WHERE `documentID` = '". $this->getID() ."' AND `version` = '" . $version->_version."'";
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$status = $version->getApprovalStatus();
 		$stList = "";
 		foreach ($status as $st) {
@@ -1288,13 +1326,18 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		}
 		if (strlen($stList)>0) {
 			$queryStr = "DELETE FROM `tblDocumentApproveLog` WHERE `tblDocumentApproveLog`.`approveID` IN (".$stList.")";
-			if (!$db->getResult($queryStr))
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
 				return false;
+			}
 		}
 		$queryStr = "DELETE FROM `tblDocumentApprovers` WHERE `documentID` = '". $this->getID() ."' AND `version` = '" . $version->_version."'";
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
+		$db->commitTransaction();
 		return true;
 	} /* }}} */
 
@@ -1432,58 +1475,92 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * Remove a document completly
+	 *
+	 * @return boolean true on success, otherwise false
+	 */
 	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$res = $this->getContent();
 		if (is_bool($res) && !$res) return false;
 
+		$db->startTransaction();
+
 		// FIXME: call a new function removeContent instead
-		foreach ($this->_content as $version)
-			if (!$this->removeContent($version))
+		foreach ($this->_content as $version) {
+			if (!$this->removeContent($version)) {
+				$db->rollbackTransaction();
 				return false;
+			}
+		}
 
 		// remove document file
 		$res = $this->getDocumentFiles();
-		if (is_bool($res) && !$res) return false;
+		if (is_bool($res) && !$res) {
+			$db->rollbackTransaction();
+			return false;
+		}
 
 		foreach ($res as $documentfile)
-			if(!$this->removeDocumentFile($documentfile->getId()))
+			if(!$this->removeDocumentFile($documentfile->getId())) {
+				$db->rollbackTransaction();
 				return false;
+			}
 
 		// TODO: versioning file?
 
 		if (file_exists( $this->_dms->contentDir . $this->getDir() ))
-			if (!LetoDMS_Core_File::removeDir( $this->_dms->contentDir . $this->getDir() ))
+			if (!LetoDMS_Core_File::removeDir( $this->_dms->contentDir . $this->getDir() )) {
+				$db->rollbackTransaction();
 				return false;
+			}
 
 		$queryStr = "DELETE FROM tblDocuments WHERE id = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblDocumentAttributes WHERE document = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblACLs WHERE target = " . $this->_id . " AND targetType = " . T_DOCUMENT;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblDocumentLinks WHERE document = " . $this->_id . " OR target = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblDocumentLocks WHERE document = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblDocumentFiles WHERE document = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 		$queryStr = "DELETE FROM tblDocumentCategory WHERE documentID = " . $this->_id;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
 		// Delete the notification list.
 		$queryStr = "DELETE FROM tblNotify WHERE target = " . $this->_id . " AND targetType = " . T_DOCUMENT;
-		if (!$db->getResult($queryStr))
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
 			return false;
+		}
 
+		$db->commitTransaction();
 		return true;
 	} /* }}} */
 
