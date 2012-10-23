@@ -40,7 +40,7 @@ CREATE TABLE `tblAttributeDefinitions` (
   `maxvalues` int(11) NOT NULL default '0',
   `valueset` text default NULL,
 	UNIQUE(`name`),
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -63,7 +63,8 @@ CREATE TABLE `tblUsers` (
   `pwdExpiration` datetime NOT NULL default '0000-00-00 00:00:00',
   `loginfailures` tinyint(4) NOT NULL default '0',
   `disabled` smallint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`),
+	UNIQUE (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -130,7 +131,7 @@ CREATE TABLE `tblFolders` (
   `sequence` double NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `parent` (`parent`),
-  CONSTRAINT `tblFolders_owner` FOREIGN KEY (`owner`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblFolders_owner` FOREIGN KEY (`owner`) REFERENCES `tblUsers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -146,8 +147,8 @@ CREATE TABLE `tblFolderAttributes` (
   `value` text default NULL,
   PRIMARY KEY  (`id`),
 	UNIQUE (folder, attrdef),
-  CONSTRAINT `tblFolderAttr_folder` FOREIGN KEY (`folder`) REFERENCES `tblFolders` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `tblFolderAttr_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblFolderAttributes_folder` FOREIGN KEY (`folder`) REFERENCES `tblFolders` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblFolderAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -171,8 +172,8 @@ CREATE TABLE `tblDocuments` (
   `keywords` text NOT NULL,
   `sequence` double NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  CONSTRAINT `tblDocuments_folder` FOREIGN KEY (`folder`) REFERENCES `tblFolders` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `tblDocuments_owner` FOREIGN KEY (`owner`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblDocuments_folder` FOREIGN KEY (`folder`) REFERENCES `tblFolders` (`id`),
+  CONSTRAINT `tblDocuments_owner` FOREIGN KEY (`owner`) REFERENCES `tblUsers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -189,7 +190,7 @@ CREATE TABLE `tblDocumentAttributes` (
   PRIMARY KEY  (`id`),
 	UNIQUE (document, attrdef),
   CONSTRAINT `tblDocumentAttributes_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `tblDocumentAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblDocumentAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -246,7 +247,7 @@ CREATE TABLE `tblDocumentContent` (
   `mimeType` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`),
   UNIQUE (`document`, `version`),
-  CONSTRAINT `tblDocumentDocument_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblDocumentContent_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -263,7 +264,7 @@ CREATE TABLE `tblDocumentContentAttributes` (
   PRIMARY KEY  (`id`),
 	UNIQUE (content, attrdef),
   CONSTRAINT `tblDocumentContentAttributes_document` FOREIGN KEY (`content`) REFERENCES `tblDocumentContent` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `tblDocumentContentAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblDocumentContentAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -280,7 +281,7 @@ CREATE TABLE `tblDocumentLinks` (
   `public` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblDocumentLinks_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `tblDocumentLinks_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblDocumentLinks_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -302,7 +303,7 @@ CREATE TABLE `tblDocumentFiles` (
   `mimeType` varchar(100) NOT NULL default '',  
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblDocumentFiles_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `tblDocumentFiles_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblDocumentFiles_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -412,7 +413,9 @@ CREATE TABLE `tblGroupMembers` (
   `groupID` int(11) NOT NULL default '0',
   `userID` int(11) NOT NULL default '0',
   `manager` smallint(1) NOT NULL default '0',
-  PRIMARY KEY  (`groupID`,`userID`)
+  UNIQUE (`groupID`,`userID`),
+	CONSTRAINT `tblGroupMembers_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
+	CONSTRAINT `tblGroupMembers_group` FOREIGN KEY (`groupID`) REFERENCES `tblGroups` (`id`) ON DELETE CASCADE,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
