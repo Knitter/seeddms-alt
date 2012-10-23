@@ -7,6 +7,8 @@
 - user can be disabled after n login failures
 - added autocompletion to document chooser
 - do not list documents in search result which cannot be accessed by the user
+- more database constraints and transaction management
+- documents, folders and document content can have user defined attributes
 
 -------------------------------------------------------------------------------
                      Changes in version 3.3.8
