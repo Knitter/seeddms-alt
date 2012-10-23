@@ -11,14 +11,7 @@ Copy recursivly folders
 
 Allow operations like  delete, move, approve, etc. on a list of documents
 
-Do not use sanitizeString anymore. LetoDMS_Core should take care of
-escaping chars when saving to database. LetoDMS should make sure to replace
-html when the data is output. Check all places where data from the database
-is shown on the page or put in javascript code (like href="javascript: ...").
-
 Upload of multiple documents without an applet
-
-Delete document from full text index when document is deleted
 
 Do not show documents which are not reviewed or approved or rejected
 
