@@ -110,15 +110,15 @@ class LetoDMS_AccessOperation {
 	 *
 	 * This check can only be done for documents. Setting the documents
 	 * expiration date is only allowed if version modification is turned on in
-	 * the settings and the document is in 'draft review', 'draft approval', or
-	 * 'expired' status.  The admin may set the expiration date even if is
+	 * the settings and the document has not been obsoleted.
+	 * The admin may set the expiration date even if is
 	 * disallowed in the settings.
 	 */
 	function maySetExpires() { /* {{{ */
 		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP || $status["status"]==S_EXPIRED)) {
+			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
 				return true;
 			}
 		}
@@ -159,6 +159,42 @@ class LetoDMS_AccessOperation {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV)) {
+				return true;
+			}
+		}
+		return false;
+	} /* }}} */
+
+	/**
+	 * Check if document content may be reviewed
+	 *
+	 * Reviewing a document content is only allowed if the document was not
+	 * obsoleted. There are other requirements which are not taken into
+	 * account here.
+	 */
+	function mayReview() { /* {{{ */
+		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+			$latestContent = $this->obj->getLatestContent();
+			$status = $latestContent->getStatus();
+			if ($status["status"]!=S_OBSOLETE) {
+				return true;
+			}
+		}
+		return false;
+	} /* }}} */
+
+	/**
+	 * Check if document content may be approved
+	 *
+	 * Approving a document content is only allowed if the document was not
+	 * obsoleted. There are other requirements which are not taken into
+	 * account here.
+	 */
+	function mayApprove() { /* {{{ */
+		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+			$latestContent = $this->obj->getLatestContent();
+			$status = $latestContent->getStatus();
+			if ($status["status"]!=S_OBSOLETE) {
 				return true;
 			}
 		}
