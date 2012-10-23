@@ -15,11 +15,41 @@
 /**
  * The different states a document can be in
  */
+/*
+ * Document is in review state. A document is in review state when
+ * it needs to be reviewed by a user or group.
+ */
 define("S_DRAFT_REV", 0);
+
+/*
+ * Document is in approval state. A document is in approval state when
+ * it needs to be approved by a user or group.
+ */
 define("S_DRAFT_APP", 1);
+
+/*
+ * Document is released. A document is in release state either when
+ * it needs no review or approval after uploaded or has been reviewed
+ * and/or approved..
+ */
 define("S_RELEASED",  2);
+
+/*
+ * Document was rejected. A document is in rejected state when
+ * the review failed or approval was not given.
+ */
 define("S_REJECTED", -1);
+
+/*
+ * Document is obsolete. A document can be obsoleted once it was
+ * released.
+ */
 define("S_OBSOLETE", -2);
+
+/*
+ * Document is expired. A document expires when the expiration date
+ * is reached
+ */
 define("S_EXPIRED",  -3);
 
 /**
