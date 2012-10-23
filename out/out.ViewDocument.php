@@ -279,16 +279,19 @@ if (is_array($reviewStatus) && count($reviewStatus)>0) {
 		print "<tr>\n";
 		print "<td>".$reqName."</td>\n";
 		print "<td><ul class=\"documentDetail\"><li>".$r["date"]."</li>";
+		/* $updateUser is the user who has done the review */
 		$updateUser = $dms->getUser($r["userID"]);
 		print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()) : "unknown user id '".$r["userID"]."'")."</li></ul></td>";
 		print "<td>".htmlspecialchars($r["comment"])."</td>\n";
 		print "<td>".getReviewStatusText($r["status"])."</td>\n";
 		print "<td><ul class=\"actions\">";
 
-		if ($is_reviewer && $r["status"]==0) {
-			print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\">".getMLText("submit_review")."</a></li>";
-		}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
-			print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\">".getMLText("edit")."</a></li>";
+		if($accessop->mayReview()) {
+			if ($is_reviewer && $r["status"]==0) {
+				print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\">".getMLText("submit_review")."</a></li>";
+			}else if (($updateUser==$user)&&(($r["status"]==1)||($r["status"]==-1))&&(!$document->hasExpired())){
+				print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\">".getMLText("edit")."</a></li>";
+			}
 		}
 		
 		print "</ul></td>\n";	
@@ -340,16 +343,19 @@ if (is_array($approvalStatus) && count($approvalStatus)>0) {
 		print "<tr>\n";
 		print "<td>".$reqName."</td>\n";
 		print "<td><ul class=\"documentDetail\"><li>".$a["date"]."</li>";
+		/* $updateUser is the user who has done the approval */
 		$updateUser = $dms->getUser($a["userID"]);
 		print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()) : "unknown user id '".$a["userID"]."'")."</li></ul></td>";	
 		print "<td>".htmlspecialchars($a["comment"])."</td>\n";
 		print "<td>".getApprovalStatusText($a["status"])."</td>\n";
 		print "<td><ul class=\"actions\">";
 	
-		if ($is_approver && $status["status"]==S_DRAFT_APP) {
-			print "<li><a href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("submit_approval")."</a></li>";
-		}else if (($updateUser==$user)&&(($a["status"]==1)||($a["status"]==-1))&&(!$document->hasExpired())){
-			print "<li><a href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
+		if($accessop->mayApprove()) {
+			if ($is_approver && $status["status"]==S_DRAFT_APP) {
+				print "<li><a href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("submit_approval")."</a></li>";
+			}else if (($updateUser==$user)&&(($a["status"]==1)||($a["status"]==-1))&&(!$document->hasExpired())){
+				print "<li><a href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
+			}
 		}
 		
 		print "</ul></td>\n";	
