@@ -370,6 +370,7 @@ $text["password_forgotten_email_body"] = "Dear user of LetoDMS,\n\nwe have recei
 $text["password_forgotten_send_hash"] = "Instructions on how to proceed has been send to the user's email address";
 $text["password_forgotten_text"] = "Fill out the form below and follow the instructions in the email, which will be send to you.";
 $text["password_forgotten_title"] = "Password send";
+$text["password_strength"] = "Password strength";
 $text["password_strength_insuffient"] = "Insuffient password strength";
 $text["password_wrong"] = "Wrong password";
 $text["personal_default_keywords"] = "Personal keywordlists";

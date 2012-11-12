@@ -28,6 +28,7 @@
 //    Reviewed (for 3.3.8) : 13 sept-2012. Francisco M. García Claramonte
 //                           18 sept 2012. Francisco M. García Claramonte
 //    Reviewed (for 3.4.0RC1): 15 oct 2012. Francisco M. García Claramonte
+//    Reviewed (for 3.4.0RC3): 6 nov 2012. Francisco M. García Claramonte
 
 $text = array();
 $text["accept"] = "Aceptar";
@@ -525,6 +526,8 @@ $text["settings_enableUserImage_desc"] = "Habilitar imágenes de usuario";
 $text["settings_enableUserImage"] = "Habilitar imágenes de usuario";
 $text["settings_enableUsersView_desc"] = "Habilitar/Deshabilitar vista de usuario y grupo por todos los usuarios";
 $text["settings_enableUsersView"] = "Habilitar vista de usuarios";
+$text["settings_encryptionKey"] = "Clave de cifrado";
+$text["settings_encryptionKey_desc"] = "Esta cadena se utiliza para crear un identificador único añadido como campo oculto a formularios para prevenir ataques CSRF.";
 $text["settings_error"] = "Error";
 $text["settings_expandFolderTree_desc"] = "Expandir árbol de carpetas";
 $text["settings_expandFolderTree"] = "Expandir árbol de carpetas";
