@@ -593,9 +593,9 @@ class LetoDMS_Core_DMS {
 			 */
 			if($searchKey || $searchOwner || $searchCreateDate) {
 				// Count the number of rows that the search will produce.
-				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery." GROUP BY `tblFolders`.`id`");
+				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
 				$totalFolders = 0;
-				if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
+				if ($resArr && isset($resArr[0]) && is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 					$totalFolders = (integer)$resArr[0]["num"];
 				}
 
@@ -606,7 +606,7 @@ class LetoDMS_Core_DMS {
 				// Only search if the offset is not beyond the number of folders
 				if($totalFolders > $offset) {
 					// Prepare the complete search query, including the LIMIT clause.
-					$searchQuery = "SELECT DISTINCT `tblFolders`.* ".$searchQuery;
+					$searchQuery = "SELECT DISTINCT `tblFolders`.* ".$searchQuery." GROUP BY `tblFolders`.`id`";
 
 					if($limit) {
 						$searchQuery .= " LIMIT ".$offset.",".$limit;
