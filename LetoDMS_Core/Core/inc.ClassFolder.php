@@ -319,6 +319,26 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 	} /* }}} */
 
 	/**
+	 * Check if folder has subfolders
+	 * This function just checks if a folder has subfolders disregarding
+	 * any access rights.
+	 *
+	 * @return int number of subfolders or false in case of an error
+	 */
+	function hasSubFolders() { /* {{{ */
+		$db = $this->_dms->getDB();
+		if (isset($this->_subFolders)) {
+			return count($this->subFolders);
+		}
+		$queryStr = "SELECT count(*) as c FROM tblFolders WHERE parent = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		return $resArr[0]['c'];
+	} /* }}} */
+
+	/**
 	 * Returns a list of subfolders
 	 * This function does not check for access rights. Use
 	 * {@link LetoDMS_Core_DMS::filterAccess} for checking each folder against
@@ -452,6 +472,26 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 			return $this->_parent->isDescendant($folder);
 		} else
 			return false;
+	} /* }}} */
+
+	/**
+	 * Check if folder has documents
+	 * This function just checks if a folder has documents diregarding
+	 * any access rights.
+	 *
+	 * @return int number of documents or false in case of an error
+	 */
+	function hasDocuments() { /* {{{ */
+		$db = $this->_dms->getDB();
+		if (isset($this->_documents)) {
+			return count($this->documents);
+		}
+		$queryStr = "SELECT count(*) as c FROM tblDocuments WHERE folder = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		return $resArr[0]['c'];
 	} /* }}} */
 
 	/**
