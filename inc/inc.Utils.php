@@ -232,6 +232,20 @@ function createVersionigFile($document) { /* {{{ */
 	return true;
 } /* }}} */
 
+// funcion by shalless at rubix dot net dot au (php.net)
+function dskspace($dir) { /* {{{ */
+   $s = stat($dir);
+   $space = $s["blocks"]*512;
+   if (is_dir($dir)) {
+     $dh = opendir($dir);
+     while (($file = readdir($dh)) !== false)
+       if ($file != "." and $file != "..")
+         $space += dskspace($dir."/".$file);
+     closedir($dh);
+   }
+   return $space;
+} /* }}} */
+
 function add_log_line($msg="") { /* {{{ */
 	global $logger, $user;
 
@@ -255,7 +269,7 @@ function _add_log_line($msg="") { /* {{{ */
 	}
 } /* }}} */
 
-	function getFolderPathHTML($folder, $tagAll=false) { /* {{{ */
+	function getFolderPathHTML($folder, $tagAll=false, $document=null) { /* {{{ */
 		$path = $folder->getPath();
 		$txtpath = "";
 		for ($i = 0; $i < count($path); $i++) {
@@ -268,9 +282,20 @@ function _add_log_line($msg="") { /* {{{ */
 										 htmlspecialchars($path[$i]->getName())."</a>" : htmlspecialchars($path[$i]->getName()));
 			}
 		}
+		if($document)
+			$txtpath .= " / <a href=\"../out/out.ViewDocument.php?documentid=".$document->getId()."\">".htmlspecialchars($document->getName())."</a>";
+
 		return $txtpath;
 	} /* }}} */
 	
+function filterDocumentLinks($user, $links) { /* {{{ */
+	$tmp = array();
+	foreach ($links as $link)
+		if ($link->isPublic() || ($link->_userID == $user->getID()) || $user->isAdmin())
+			array_push($tmp, $link);
+	return $tmp;
+} /* }}} */
+
 function showtree() { /* {{{ */
 	global $settings;
 	
