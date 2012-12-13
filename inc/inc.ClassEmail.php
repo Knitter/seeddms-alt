@@ -117,9 +117,8 @@ class LetoDMS_Email extends LetoDMS_Notify {
 	function sendPassword($sender, $recipient, $subject, $message) {
 		global $settings;
 
-		$header = "From: " . "\r\n" .
-"Reply-To: " . "\r\n";
-		$header = '';
+		$header = "From: " . $settings->_smtpSendFrom . "\r\n" .
+"Reply-To: " . $settings->_smtpSendFrom . "\r\n";
 
 		return (mail($recipient->getEmail(), $this->replaceMarker($subject), $this->replaceMarker($message), $header) ? 0 : -1);
 	}
