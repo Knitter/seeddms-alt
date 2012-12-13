@@ -4,11 +4,11 @@
 
 IMPORTANT NOTE ABOUT TRANSLATIONS ==============================================
 
-as you can see letoDMS provide a lot of languages but we are not professional 
-translators then we wait for users contributions.
+as you can see letoDMS provides a lot of languages but we are not professional 
+translators and therefore rely on user contributions.
 
 If your language is not present in the login panel:
-- copy the language/english/ folder and rename it appropriately for your
+- copy the language/English/ folder and rename it appropriately for your
   language
 - open the file languages/your_lang/lang.inc and translate it
 - open the help file languages/your_lang/help.htm and translate it too
@@ -65,7 +65,7 @@ packages needed by letoDMS. Those are the PEAR packages Log and
 HTTP_WebDAV_Server as well as Zend_Framework and ADOdb.
 If you have full access to the server running a Linux distribution it is
 recommended to install those with your package manager if they are provided
-by your Linux distribution. If you can not install it this way then choose
+by your Linux distribution. If you cannot install it this way then choose
 a directory (preferable not below your web document root), unpack the
 software into it and extend the php include path with your newly created
 directory. Extending the php include can be either done by modifying
