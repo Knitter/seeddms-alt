@@ -48,6 +48,9 @@ $notifier->setSender($user);
 
 $theme = $resArr["theme"];
 include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
+if(file_exists($settings->_rootDir . "view/".$theme."/languages/" . $resArr["language"] . "/lang.inc")) {
+	include $settings->_rootDir . "view/".$theme."/languages/" . $resArr["language"] . "/lang.inc";
+}
 
 /* Check if password needs to be changed because it expired. If it needs
  * to be changed redirect to out/out.ForcePasswordChange.php. Do this
