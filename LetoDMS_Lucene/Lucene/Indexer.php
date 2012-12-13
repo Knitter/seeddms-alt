@@ -30,8 +30,12 @@ class LetoDMS_Lucene_Indexer {
 	protected $indexname;
 
 	function open($luceneDir) { /* {{{ */
+		try {
 		$index = Zend_Search_Lucene::open($luceneDir);
 		return($index);
+		} catch (Exception $e) {
+			return null;
+		}
 	} /* }}} */
 
 	function create($luceneDir) { /* {{{ */
