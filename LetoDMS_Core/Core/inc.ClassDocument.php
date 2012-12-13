@@ -1851,6 +1851,9 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * This function is deprecated
+	 */
 	function convert() { /* {{{ */
 		if (file_exists($this->_document->_dms->contentDir . $this->_document->getID() .'/' . "index.html"))
 			return true;
@@ -1899,6 +1902,9 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		return file_exists($this->_document->_dms->contentDir . $this->_document->getID() .'/' . "index.html");
 	} /* }}} */
 
+	/**
+	 * This function is deprecated
+	 */
 	function getURL() { /* {{{ */
 		if (!$this->viewOnline())return false;
 
@@ -2619,6 +2625,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 		return 0;
 	} /* }}} */
+
 } /* }}} */
 
 
