@@ -608,10 +608,19 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		}
 
 		if (get_class($obj) == 'LetoDMS_Core_Folder') {
+			if($obj->hasDocuments() || $obj->hasSubFolders()) {
+				return "409 Conflict";
+			}
 			if(!$obj->remove()) {
 				return "409 Conflict";
 			}
 		} else {
+			// check if user is admin
+			// only admins may delete documents
+			if(!$this->user->isAdmin()) {
+				return "403 Forbidden";				 
+			}
+
 			if(!$obj->remove()) {
 				return "409 Conflict";
 			}
