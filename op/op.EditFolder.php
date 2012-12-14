@@ -45,11 +45,18 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 
 $name    = $_POST["name"];
 $comment = $_POST["comment"];
-$sequence = $_POST["sequence"];
-if (!is_numeric($sequence)) {
+if(isset($_POST["sequence"])) {
+	$sequence = $_POST["sequence"];
+	if (!is_numeric($sequence)) {
+		$sequence = "keep";
+	}
+} else {
 	$sequence = "keep";
 }
-$attributes = $_POST["attributes"];
+if(isset($_POST["attributes"]))
+	$attributes = $_POST["attributes"];
+else
+	$attributes = array();
 
 $wasupdated = false;
 if(($oldname = $folder->getName()) != $name) {
