@@ -140,14 +140,32 @@ foreach ($res as $r){
 	}
 }
 
+if($settings->_dropFolderDir) {
+	if($_POST["dropfolderfileform1"]) {
+		$fullfile = $settings->_dropFolderDir.'/'.$user->getLogin().'/'.$_POST["dropfolderfileform1"];
+		if(file_exists($fullfile)) {
+			$finfo = finfo_open(FILEINFO_MIME);
+			$mimetype = explode(';', finfo_file($finfo, $fullfile));
+			$_FILES["userfile"]['tmp_name'][] = $fullfile;
+			$_FILES["userfile"]['type'][] = $mimetype[0];
+			$_FILES["userfile"]['name'][] = $_POST["dropfolderfileform1"];
+			$_FILES["userfile"]['size'][] = filesize($fullfile);
+			$_FILES["userfile"]['error'][] = 0;
+		}
+	}
+}
+
+/* Check files for Errors first */
 for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
-
-	if ($_FILES["userfile"]["size"][$file_num]==0) continue;
-
+	if ($_FILES["userfile"]["size"][$file_num]==0) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_failed"));
+	}
 	if (is_uploaded_file($_FILES["userfile"]["tmp_name"][$file_num]) && $_FILES['userfile']['error'][$file_num]!=0){
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("uploading_failed"));
 	}
+}
 
+for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	$userfiletmp = $_FILES["userfile"]["tmp_name"][$file_num];
 	$userfiletype = $_FILES["userfile"]["type"][$file_num];
 	$userfilename = $_FILES["userfile"]["name"][$file_num];
@@ -193,7 +211,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 			$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
 			LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
-			$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document, $settings->_convcmd ? $settings->_convcmd : null, true));
+			$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_convcmd) ? $settings->_convcmd : null, true));
 		}
 
 		/* Add a default notification for the owner of the document */
