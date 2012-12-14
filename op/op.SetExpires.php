@@ -41,7 +41,15 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-$expires = ($_POST["expires"] == "true") ? mktime(0,0,0, intval($_POST["expmonth"]), intval($_POST["expday"]), intval($_POST["expyear"])) : false;
+$expires = false;
+if ($_POST["expires"] != "false") {
+	if($_POST["expdate"]) {
+		$tmp = explode('-', $_POST["expdate"]);
+		$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
+	} else {
+		$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
+	}
+}
 if (!$document->setExpires($expires)){
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 }
