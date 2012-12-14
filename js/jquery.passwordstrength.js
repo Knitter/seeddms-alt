@@ -37,30 +37,23 @@
 	$.fn.passStrength = function(options) {  
 	  
 		var defaults = {
-			minscore: 50
+			onError: function(data) {},
+			onChange: function(data) {},
 		}; 
 		var opts = $.extend(defaults, options);  
 		      
 		return this.each(function() { 
 			var obj = $(this);
-		 		
+			var target = $(obj).attr('rel');
+
 		 	$(obj).unbind().keyup(function() {
-				if($(this).val())
-					$("#outerstrength").show();
-				else
-					$("#outerstrength").hide();
 				$.getJSON(opts.url,
 					{command: 'checkpwstrength', pwd: $(this).val()},
 					function(data) {
 						if(data.error) {
+							opts.onError(data, target);
 						} else {
-							$("#strength").html(Math.round(data.strength));
-							$("#innerstrength").width(data.strength);
-							if(data.strength > opts.minscore) {
-								$("#innerstrength").css('background-color', 'green');
-							} else {
-								$("#innerstrength").css('background-color', 'red');
-							}
+							opts.onChange(data, target);
 						}
 					}); 
 			});
