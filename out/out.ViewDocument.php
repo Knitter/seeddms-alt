@@ -30,7 +30,7 @@ include("../inc/inc.Authentication.php");
 /**
  * Include class to preview documents
  */
-require_once("LetoDMS_Preview/Preview.php");
+require_once("LetoDMS/Preview.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1]);
