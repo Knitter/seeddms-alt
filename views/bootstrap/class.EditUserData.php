@@ -78,12 +78,18 @@ function checkForm()
 		<td><?php printMLText("new_password");?>:</td>
 		<td><input class="pwd" type="password" rel="strengthbar" name="pwd" size="30"></td>
 	</tr>
-		<tr>
-			<td><?php printMLText("password_strength");?>:</td>
-			<td>
-				<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
-			</td>
-		</tr>
+<?php
+	if($passwordstrength) {
+?>
+	<tr>
+		<td><?php printMLText("password_strength");?>:</td>
+		<td>
+			<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
+		</td>
+	</tr>
+<?php
+	}
+?>
 	<tr>
 		<td><?php printMLText("confirm_pwd");?>:</td>
 		<td><input id="pwdconf" type="Password" name="pwdconf" size="30"></td>
