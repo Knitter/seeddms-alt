@@ -281,6 +281,7 @@ CREATE TABLE `tblDocumentLinks` (
   `public` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblDocumentLinks_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblDocumentLinks_target` FOREIGN KEY (`target`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblDocumentLinks_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -336,6 +337,7 @@ CREATE TABLE `tblDocumentReviewLog` (
   `date` datetime NOT NULL default '0000-00-00 00:00:00',
   `userID` int(11) NOT NULL default '0',
   PRIMARY KEY  (`reviewLogID`),
+  CONSTRAINT `tblDocumentReviewLog_review` FOREIGN KEY (`reviewID`) REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE,
   CONSTRAINT `tblDocumentReviewLog_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -498,7 +500,8 @@ CREATE TABLE `tblMandatoryReviewers` (
   `userID` int(11) NOT NULL default '0',
   `reviewerUserID` int(11) NOT NULL default '0',
   `reviewerGroupID` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`userID`,`reviewerUserID`,`reviewerGroupID`)
+  PRIMARY KEY  (`userID`,`reviewerUserID`,`reviewerGroupID`),
+  CONSTRAINT `tblMandatoryReviewers_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -511,7 +514,8 @@ CREATE TABLE `tblMandatoryApprovers` (
   `userID` int(11) NOT NULL default '0',
   `approverUserID` int(11) NOT NULL default '0',
   `approverGroupID` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`userID`,`approverUserID`,`approverGroupID`)
+  PRIMARY KEY  (`userID`,`approverUserID`,`approverGroupID`),
+  CONSTRAINT `tblMandatoryApprovers_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
