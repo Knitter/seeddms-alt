@@ -49,12 +49,28 @@ if ($document->isLocked()) {
 	else $document->setLocked(false);
 }
 
-if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0) {
+$comment  = $_POST["comment"];
 
-	$comment  = $_POST["comment"];
+if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0) {
 	$userfiletmp = $_FILES["userfile"]["tmp_name"];
 	$userfiletype = $_FILES["userfile"]["type"];
 	$userfilename = $_FILES["userfile"]["name"];
+} elseif($settings->_dropFolderDir) {
+	if($_POST['dropfolderfileform1']) {
+		$fullfile = $settings->_dropFolderDir.'/'.$user->getLogin().'/'.$_POST["dropfolderfileform1"];
+		if(file_exists($fullfile)) {
+			$finfo = finfo_open(FILEINFO_MIME);
+			$mimetype = explode(';', finfo_file($finfo, $fullfile));
+			$userfiletmp = $fullfile;
+			$userfiletype = $mimetype[0];
+			$userfilename= $_POST["dropfolderfileform1"];
+		} else {
+			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+		}
+	} else {
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+	}
+}
 
 	$lastDotIndex = strrpos(basename($userfilename), ".");
 	if (is_bool($lastDotIndex) && !$lastDotIndex)
@@ -167,7 +183,15 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["si
 				$notifier->toIndividual($user, $document->getOwner(), $subject, $message);
 		}
 
-		$expires = ($_POST["expires"] == "true") ? mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]) : false;
+		$expires = false;
+		if ($_POST["expires"] != "false") {
+			if($_POST["expdate"]) {
+				$tmp = explode('/', $_POST["expdate"]);
+				$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
+			} else {
+				$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
+			}
+		}
 
 		if ($expires) {
 			if($document->setExpires($expires)) {
@@ -196,10 +220,6 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["si
 			}
 		}
 	}
-}
-else {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
-}
 
 add_log_line("?documentid=".$documentid);
 header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
