@@ -87,21 +87,13 @@ if (isset($_GET["pg"])) {
 
 // --------------- Suche starten --------------------------------------------
 
-$folderPathHTML = getFolderPathHTML($folder, true);
-UI::htmlStartPage(getMLText("search_results"));
-UI::globalNavigation($folder);
-UI::pageNavigation($folderPathHTML, "", $folder);
-UI::contentHeading(getMLText("search_results"));
-
 // Check to see if the search has been restricted to a particular
 // document owner.
 $owner = null;
 if (isset($_GET["ownerid"]) && is_numeric($_GET["ownerid"]) && $_GET["ownerid"]!=-1) {
 	$owner = $dms->getUser($_GET["ownerid"]);
 	if (!is_object($owner)) {
-		UI::contentContainer(getMLText("unknown_owner"));
-		UI::htmlEndPage();
-		exit;
+		UI::exitError(getMLText("search_results"),getMLText("unknown_owner"));
 	}
 }
 
@@ -127,7 +119,8 @@ Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
 $index = Zend_Search_Lucene::open($settings->_luceneDir);
 $lucenesearch = new LetoDMS_Lucene_Search($index);
 $hits = $lucenesearch->search($query, $owner ? $owner->getLogin() : '', '', $categories);
-$limit = 25;
+$totalDocs = count($hits);
+$limit = 20;
 $resArr = array();
 if($pageNumber != 'all' && count($hits) > $limit) {
 	$resArr['totalPages'] = (int) (count($hits) / $limit);
@@ -139,18 +132,29 @@ if($pageNumber != 'all' && count($hits) > $limit) {
 }
 
 $resArr['docs'] = array();
-$resArr['totalDocs'] = 0;
 if($hits) {
-	$resArr['totalDocs'] = 0; //count($hits);
 	foreach($hits as $hit) {
 		if($tmp = $dms->getDocument($hit['document_id'])) {
 			$resArr['docs'][] = $tmp;
-			$resArr['totalDocs']++;
 		}
 	}
 }
 $searchTime = getTime() - $startTime;
 $searchTime = round($searchTime, 2);
+
+// -------------- Output results --------------------------------------------
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'searchhits'=>$resArr['docs'], 'totalpages'=>$resArr['totalPages'], 'totaldocs'=>$totalDocs, 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET));
+if($view) {
+	$view->show();
+	exit;
+}
+
+UI::htmlStartPage(getMLText("search_results"));
+UI::globalNavigation($folder);
+UI::pageNavigation(getFolderPathHTML($folder, true), "", $folder);
+UI::contentHeading(getMLText("search_results"));
 
 UI::contentContainerStart();
 ?>
@@ -163,7 +167,7 @@ if ($numResults == 0) {
 	printMLText("search_no_results");
 }
 else {
-	printMLText("search_report_fulltext", array("doccount" => $resArr['totalDocs']));
+	printMLText("search_report_fulltext", array("doccount" => $totalDocs));
 }
 ?>
 </td>
@@ -212,7 +216,8 @@ foreach ($resArr['docs'] as $document) {
 		
 		$owner = $document->getOwner();
 		print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-		print "<td>".getOverallStatusText($lc->getStatus()). "</td>";
+		$display_status=$lc->getStatus();
+		print "<td>".getOverallStatusText($display_status["status"]). "</td>";
 
 		print "<td class=\"center\">".$lc->getVersion()."</td>";
 		
