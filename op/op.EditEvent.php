@@ -37,11 +37,11 @@ if(!checkFormKey('editevent')) {
 	UI::exitError(getMLText("edit_event"),getMLText("invalid_request_token"));
 }
 
-if (!isset($_POST["frommonth"]) || !isset($_POST["fromday"]) || !isset($_POST["fromyear"]) ) {
+if (!isset($_POST["from"]) && !(isset($_POST["frommonth"]) && isset($_POST["fromday"]) && isset($_POST["fromyear"])) ) {
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }
 
-if (!isset($_POST["tomonth"]) || !isset($_POST["today"]) || !isset($_POST["toyear"]) ) {
+if (!isset($_POST["to"]) && !(isset($_POST["tomonth"]) && isset($_POST["today"]) && isset($_POST["toyear"])) ) {
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }
 
@@ -55,15 +55,25 @@ if (!isset($_POST["eventid"])) {
 
 $name     = $_POST["name"];
 $comment  = $_POST["comment"];
-$from = mktime(0,0,0, intval($_POST["frommonth"]), intval($_POST["fromday"]), intval($_POST["fromyear"]));
-$to = mktime(23,59,59, intval($_POST["tomonth"]), intval($_POST["today"]), intval($_POST["toyear"]));
+if(isset($_POST["from"])) {
+	$tmp = explode('-', $_POST["from"]);
+	$from = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
+} else {
+	$from = mktime(0,0,0, intval($_POST["frommonth"]), intval($_POST["fromday"]), intval($_POST["fromyear"]));
+}
+if(isset($_POST["to"])) {
+	$tmp = explode('-', $_POST["to"]);
+	$to = mktime(23,59,59, $tmp[1], $tmp[0], $tmp[2]);
+} else {
+	$to = mktime(23,59,59, intval($_POST["tomonth"]), intval($_POST["today"]), intval($_POST["toyear"]));
+}
 
-if ($to<$from){
-	$to= mktime(23,59,59, intval($_POST["frommonth"]), intval($_POST["fromday"]), intval($_POST["fromyear"]));
+if ($to<=$from){
+	$to = $from + 86400 -1;
 }
 
 $res = editEvent($_POST["eventid"], $from, $to, $name, $comment );
-                                
+
 if (is_bool($res) && !$res) {
 	UI::exitError(getMLText("edit_event"),getMLText("error_occured"));
 }
