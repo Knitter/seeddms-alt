@@ -62,11 +62,11 @@ if (!$document->removeDocumentFile($fileid)) {
 	// Send notification to subscribers.
 	$document->getNotifyList();
 	if($notifier) {
-		$subject = "###SITENAME###: ".$document->_name." - ".getMLText("removed_file_email");
+		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("removed_file_email");
 		$message = getMLText("removed_file_email")."\r\n";
 		$message .= 
-			getMLText("name").": ".$name."\r\n".
-			getMLText("comment").": ".$comment."\r\n".
+			getMLText("name").": ".$document->getName()."\r\n".
+			getMLText("file").": ".$file->getOriginalFileName()."\r\n".
 			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".	
 			"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
