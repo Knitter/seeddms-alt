@@ -31,7 +31,7 @@ if (!$user->isAdmin()) {
 if (isset($_POST["action"])) $action=$_POST["action"];
 else $action=NULL;
 
-//Neue Kategorie anlegen -----------------------------------------------------------------------------
+// Create new keyword category ------------------------------------------
 if ($action == "addcategory") {
 
 	/* Check if the form data comes for a trusted request */
@@ -50,7 +50,7 @@ if ($action == "addcategory") {
 	$categoryid=$newCategory->getID();
 }
 
-//Kategorie löschen ----------------------------------------------------------------------------------
+// Delete keyword categorie ---------------------------------------------
 else if ($action == "removecategory") {
 
 	/* Check if the form data comes for a trusted request */
@@ -77,7 +77,7 @@ else if ($action == "removecategory") {
 	$categoryid=-1;
 }
 
-//Kategorie bearbeiten: Neuer Name --------------------------------------------------------------------
+// Modify keyword categorie: new name -----------------------------------
 else if ($action == "editcategory") {
 
 	/* Check if the form data comes for a trusted request */
@@ -105,7 +105,7 @@ else if ($action == "editcategory") {
 	}
 }
 
-//Kategorie bearbeiten: Neue Stichwortliste  ----------------------------------------------------------
+// Modify keyword categorie: new list of keywords -----------------------
 else if ($action == "newkeywords") {
 	
 	/* Check if the form data comes for a trusted request */
@@ -128,7 +128,7 @@ else if ($action == "newkeywords") {
 	}
 }
 
-//Kategorie bearbeiten: Stichwortliste bearbeiten ----------------------------------------------------------
+// Modify keyword categorie: modify list of keywords -------------------
 else if ($action == "editkeywords")
 {
 	/* Check if the form data comes for a trusted request */
@@ -162,7 +162,7 @@ else if ($action == "editkeywords")
 	}
 }
 
-//Kategorie bearbeiten: Neue Stichwortliste löschen ----------------------------------------------------------
+// Modify keyword categorie: delete list of keywords --------------------
 else if ($action == "removekeywords") {
 	
 	/* Check if the form data comes for a trusted request */
