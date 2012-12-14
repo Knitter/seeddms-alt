@@ -79,8 +79,10 @@ if ($action == "saveSettings")
   $settings->_rootDir = $_POST["rootDir"];
   $settings->_httpRoot = $_POST["httpRoot"];
   $settings->_contentDir = $_POST["contentDir"];
+  $settings->_cacheDir = $_POST["cacheDir"];
   $settings->_stagingDir = $_POST["stagingDir"];
   $settings->_luceneDir = $_POST["luceneDir"];
+  $settings->_dropFolderDir = $_POST["dropFolderDir"];
   $settings->_logFileEnable = getBoolValue("logFileEnable");
   $settings->_logFileRotation = $_POST["logFileRotation"];
   $settings->_enableLargeFileUpload = getBoolValue("enableLargeFileUpload");
