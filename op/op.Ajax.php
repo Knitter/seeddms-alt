@@ -59,9 +59,9 @@ switch($command) {
 		$score = $ps->get_score();
 		if($settings->_passwordStrength) {
 			if($score > $settings->_passwordStrength) {
-				echo json_encode(array('error'=>0, 'strength'=>$score, 'ok'=>1));
+				echo json_encode(array('error'=>0, 'strength'=>$score, 'score'=>$score/$settings->_passwordStrength, 'ok'=>1));
 			} else {
-				echo json_encode(array('error'=>0, 'strength'=>$score, 'ok'=>0));
+				echo json_encode(array('error'=>0, 'strength'=>$score, 'score'=>$score/$settings->_passwordStrength, 'ok'=>0));
 			}
 		} else {
 			echo json_encode(array('error'=>0, 'strength'=>$score));
