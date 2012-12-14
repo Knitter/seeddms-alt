@@ -1,5 +1,5 @@
-VERSION=3.4.0RC2
-SRC=CHANGELOG* inc conf utils index.php languages op out README README.Notification drop-tables-innodb.sql delete_all_contents.sql styles js TODO LICENSE Makefile webdav install
+VERSION=4.0.0-pre1
+SRC=CHANGELOG inc conf utils index.php languages views op out README README.Notification drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install
 
 dist:
 	mkdir -p tmp/letoDMS-$(VERSION)
@@ -10,6 +10,7 @@ dist:
 pear:
 	(cd LetoDMS_Core/; pear package)
 	(cd LetoDMS_Lucene/; pear package)
+	(cd LetoDMS_Preview/; pear package)
 
 webdav:
 	mkdir -p tmp/letoDMS-webdav-$(VERSION)
