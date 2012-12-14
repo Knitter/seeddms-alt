@@ -137,17 +137,6 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 //		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$settings->_rootFolderID."\">".getMLText("content")."</a></li>\n";
 //		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$settings->_rootFolderID."\">".getMLText("search")."</a></li>\n";
 		if ($settings->_enableCalendar) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$settings->_calendarDefaultView."\">".getMLText("calendar")."</a></li>\n";
-		if (!$user->isGuest()) {
-			echo "    <li class=\"dropdown\">\n";
-			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">Anwendungen <b class=\"caret\"></b></a>\n";
-			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-			echo "    <li><a href=\"../out/out.ViewFolder.php\">Dokumentenmanagement</a></li>\n";
-			echo "    <li><a href=\"../out/out.DashBoard.php\">Wiki</a></li>\n";
-			echo "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">Diskussionsforen</a></li>\n";
-			echo "     </ul>\n";
-			echo "    </li>\n";
-
-		}
 		if ($user->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
 		echo "    <li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
 		echo "   </ul>\n";
