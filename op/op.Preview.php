@@ -30,7 +30,7 @@ include("../inc/inc.Authentication.php");
 /**
  * Include class to preview documents
  */
-require_once("LetoDMS_Preview/Preview.php");
+require_once("LetoDMS/Preview.php");
 
 $documentid = $_GET["documentid"];
 if (!isset($documentid) || !is_numeric($documentid) || intval($documentid)<1) {
