@@ -35,7 +35,7 @@ if (!$user->isAdmin()) {
 if (isset($_POST["action"])) $action=$_POST["action"];
 else $action=NULL;
 
-//Neuen Benutzer anlegen --------------------------------------------------------------------------
+// add new user ---------------------------------------------------------
 if ($action == "adduser") {
 	
 	/* Check if the form data comes for a trusted request */
@@ -107,7 +107,7 @@ if ($action == "adduser") {
 	add_log_line(".php&action=adduser&login=".$login);
 }
 
-//Benutzer löschen --------------------------------------------------------------------------------
+// delete user ------------------------------------------------------------
 else if ($action == "removeuser") {
 
 	/* Check if the form data comes for a trusted request */
@@ -145,7 +145,7 @@ else if ($action == "removeuser") {
 	$userid=-1;
 }
 
-//Benutzer bearbeiten -----------------------------------------------------------------------------
+// modify user ------------------------------------------------------------
 else if ($action == "edituser") {
 
 	/* Check if the form data comes for a trusted request */
