@@ -39,7 +39,7 @@ CREATE TABLE `tblAttributeDefinitions` (
   `minvalues` int(11) NOT NULL default '0',
   `maxvalues` int(11) NOT NULL default '0',
   `valueset` text default NULL,
-	UNIQUE(`name`),
+  UNIQUE(`name`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -64,7 +64,7 @@ CREATE TABLE `tblUsers` (
   `loginfailures` tinyint(4) NOT NULL default '0',
   `disabled` smallint(1) NOT NULL default '0',
   PRIMARY KEY (`id`),
-	UNIQUE (`login`)
+  UNIQUE (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -146,7 +146,7 @@ CREATE TABLE `tblFolderAttributes` (
   `attrdef` int(11) default NULL,
   `value` text default NULL,
   PRIMARY KEY  (`id`),
-	UNIQUE (folder, attrdef),
+  UNIQUE (folder, attrdef),
   CONSTRAINT `tblFolderAttributes_folder` FOREIGN KEY (`folder`) REFERENCES `tblFolders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblFolderAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -188,7 +188,7 @@ CREATE TABLE `tblDocumentAttributes` (
   `attrdef` int(11) default NULL,
   `value` text default NULL,
   PRIMARY KEY  (`id`),
-	UNIQUE (document, attrdef),
+  UNIQUE (document, attrdef),
   CONSTRAINT `tblDocumentAttributes_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblDocumentAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -262,7 +262,7 @@ CREATE TABLE `tblDocumentContentAttributes` (
   `attrdef` int(11) default NULL,
   `value` text default NULL,
   PRIMARY KEY  (`id`),
-	UNIQUE (content, attrdef),
+  UNIQUE (content, attrdef),
   CONSTRAINT `tblDocumentContentAttributes_document` FOREIGN KEY (`content`) REFERENCES `tblDocumentContent` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblDocumentContentAttributes_attrdef` FOREIGN KEY (`attrdef`) REFERENCES `tblAttributeDefinitions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -490,31 +490,6 @@ CREATE TABLE `tblSessions` (
 
 -- --------------------------------------------------------
 
---
--- dirID is the current target content subdirectory. The last file loaded
--- into MyDMS will be physically stored here. Is updated every time a new
--- file is uploaded.
---
--- dirPath is a essentially a foreign key from tblPathList, referencing the
--- parent directory path for dirID, relative to MyDMS's _contentDir.
---
-
-CREATE TABLE `tblDirPath` (
-  `dirID` int(11) NOT NULL auto_increment,
-  `dirPath` varchar(255) NOT NULL,
-  PRIMARY KEY  (`dirID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
-CREATE TABLE `tblPathList` (
-  `id` int(11) NOT NULL auto_increment,
-  `parentPath` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
 -- 
 -- Table structure for mandatory reviewers
 -- 
@@ -526,6 +501,8 @@ CREATE TABLE `tblMandatoryReviewers` (
   PRIMARY KEY  (`userID`,`reviewerUserID`,`reviewerGroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
 -- 
 -- Table structure for mandatory approvers
 -- 
@@ -536,6 +513,8 @@ CREATE TABLE `tblMandatoryApprovers` (
   `approverGroupID` int(11) NOT NULL default '0',
   PRIMARY KEY  (`userID`,`approverUserID`,`approverGroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
 
 -- 
 -- Table structure for events (calendar)
@@ -552,6 +531,8 @@ CREATE TABLE `tblEvents` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
 -- 
 -- Table structure for version
 -- 
@@ -562,6 +543,8 @@ CREATE TABLE `tblVersion` (
 	`minor` smallint,
 	`subminor` smallint
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
 
 --
 -- Initial content for database
