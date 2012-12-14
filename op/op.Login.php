@@ -28,6 +28,8 @@ include("../inc/inc.ClassEmail.php");
 
 function _printMessage($heading, $message) {
 
+	UI::exitError($heading, $message);
+	exit;
 	UI::htmlStartPage($heading, "login");
 	UI::globalBanner();
 	UI::pageNavigation($heading);
@@ -43,7 +45,7 @@ if (isset($_REQUEST["login"])) {
 
 if (!isset($login) || strlen($login)==0) {
 	_printMessage(getMLText("login_error_title"),	"<p>".getMLText("login_not_given")."</p>\n".
-		"<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
+		"<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
 	exit;
 }
 
@@ -55,7 +57,7 @@ if (get_magic_quotes_gpc()) {
 $guestUser = $dms->getUser($settings->_guestID);
 if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin()))  {
 	_printMessage(getMLText("login_error_title"),	"<p>".getMLText("login_error_text")."</p>\n".
-		"<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
+		"<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
 	exit;
 }
 
@@ -179,7 +181,7 @@ if (is_bool($user)) {
 
 	if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
 		_printMessage(getMLText("login_error_title"),	"<p>".getMLText("guest_login_disabled").
-									"</p>\n<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
+									"</p>\n<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
 		exit;
 	}
 
@@ -188,7 +190,7 @@ if (is_bool($user)) {
 	// (and dangerous) for passwords to be sent via GET.
 	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd())) {
 		_printMessage(getMLText("login_error_title"),	"<p>".getMLText("login_error_text").
-									"</p>\n<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
+									"</p>\n<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
 		/* if counting of login failures is turned on, then increment its value */
 		if($settings->_loginFailure) {
 			$failures = $user->addLoginFailure();
@@ -201,7 +203,7 @@ if (is_bool($user)) {
 	// Check if account is disabled
 	if($user->isDisabled()) {
 		_printMessage(getMLText("login_disabled_title"),	"<p>".getMLText("login_disabled_text").
-									"</p>\n<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
+									"</p>\n<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
 		exit;
 	}
 	
@@ -209,7 +211,7 @@ if (is_bool($user)) {
 	// TODO: extend control to LDAP autentication
 	if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != "") ){
 		_printMessage(getMLText("login_error_title"),	"<p>".getMLText("invalid_user_id").
-									"</p>\n<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
+									"</p>\n<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
 		exit;
 	}
 	
