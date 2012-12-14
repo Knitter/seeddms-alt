@@ -60,7 +60,7 @@ if (!$document->remove()) {
 			require_once('LetoDMS/Lucene.php');
 
 		$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
-		if($hits = $index->find('document_id:'.$documentid)) {
+		if($index && $hits = $index->find('document_id:'.$documentid)) {
 			$hit = $hits[0];
 			$index->delete($hit->id);
 			$index->commit();
