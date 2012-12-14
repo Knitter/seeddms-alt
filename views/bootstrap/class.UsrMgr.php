@@ -187,7 +187,7 @@ function showUser(selectObj) {
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="revUsr[]" multiple="multiple">
+        <select class="chzn-select" name="usrReviewers[]" multiple="multiple">
 <?php
 				foreach ($users as $usr) {
 
@@ -204,7 +204,7 @@ function showUser(selectObj) {
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="revGrp[]" multiple="multiple">
+        <select class="chzn-select" name="grpReviewers[]" multiple="multiple">
 <?php
 				foreach ($groups as $grp) {
 					print "<option value=\"".$grp->getID()."\">". htmlspecialchars($grp->getName())."</option>";
@@ -222,7 +222,7 @@ function showUser(selectObj) {
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="appUsr[]" multiple="multiple">
+        <select class="chzn-select" name="usrApprovers[]" multiple="multiple">
 <?php
 				foreach ($users as $usr) {
 
@@ -239,7 +239,7 @@ function showUser(selectObj) {
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="appGrp[]" multiple="multiple">
+        <select class="chzn-select" name="grpApprovers[]" multiple="multiple">
 <?php
 				foreach ($groups as $grp) {
 
