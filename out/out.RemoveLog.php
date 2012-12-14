@@ -32,20 +32,11 @@ if (!isset($_GET["logname"]) || !file_exists($settings->_contentDir.$_GET["logna
 
 $logname = sanitizeString($_GET["logname"]);
 
-UI::htmlStartPage(getMLText("backup_tools"));
-UI::globalNavigation();
-UI::pageNavigation(getMLText("admin_tools"), "admin_tools");
-UI::contentHeading(getMLText("rm_file"));
-UI::contentContainerStart();
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'logname'=>$logname));
+if($view) {
+	$view->show();
+	exit;
+}
 
-?>
-<form action="../op/op.RemoveLog.php" name="form1" method="POST">
-  <?php echo createHiddenFieldWithKey('removelog'); ?>
-	<input type="Hidden" name="logname" value="<?php echo $logname?>">
-	<p><?php printMLText("confirm_rm_log", array ("logname" => $logname));?></p>
-	<input type="Submit" value="<?php printMLText("rm_file");?>">
-</form>
-<?php
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

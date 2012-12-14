@@ -37,21 +37,16 @@ if (!is_object($document)) {
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-UI::globalNavigation($folder);
-UI::pageNavigation($docPathHTML, "view_document");
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document));
+if($view) {
+	$view->show();
+	exit;
+}
 
-UI::contentHeading(getMLText("linked_files"));
-UI::contentContainerStart();
-
-UI::printUploadApplet('../op/op.AddFile2.php', array('documentid'=>$document->getId()), 1, array('name'=>1, 'comment'=>1));
-
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

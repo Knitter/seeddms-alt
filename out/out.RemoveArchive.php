@@ -32,20 +32,11 @@ if (!isset($_GET["arkname"]) || !file_exists($settings->_contentDir.$_GET["arkna
 
 $arkname = $_GET["arkname"];
 
-UI::htmlStartPage(getMLText("backup_tools"));
-UI::globalNavigation();
-UI::pageNavigation(getMLText("admin_tools"), "admin_tools");
-UI::contentHeading(getMLText("backup_remove"));
-UI::contentContainerStart();
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'archive'=>$arkname));
+if($view) {
+	$view->show();
+	exit;
+}
 
-?>
-<form action="../op/op.RemoveArchive.php" name="form1" method="POST">
-	<input type="Hidden" name="arkname" value="<?php echo sanitizeString($arkname); ?>">
-  <?php echo createHiddenFieldWithKey('removearchive'); ?>
-	<p><?php printMLText("confirm_rm_backup", array ("arkname" => sanitizeString($arkname)));?></p>
-	<input type="Submit" value="<?php printMLText("backup_remove");?>">
-</form>
-<?php
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

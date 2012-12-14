@@ -28,54 +28,26 @@ include("../inc/inc.Authentication.php");
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
-$documentid = $_GET["documentid"];
-$document = $dms->getDocument($documentid);
+$document = $dms->getDocument($_GET["documentid"]);
 
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-$folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
-
-$versionid = $_GET["version"];
-$version = $document->getContentByVersion($versionid);
+$version = $document->getContentByVersion($_GET["version"]);
 
 if (!is_object($version)) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-UI::globalNavigation($folder);
-UI::pageNavigation($docPathHTML, "view_document");
+$folder = $document->getFolder();
+$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_documentcontent, LetoDMS_Core_AttributeDefinition::objtype_all));
 
-UI::contentHeading(getMLText("edit_attributes"));
-UI::contentContainerStart();
-?>
-<form action="../op/op.EditAttributes.php" name="form1" method="POST">
-	<?php echo createHiddenFieldWithKey('editattributes'); ?>
-	<input type="Hidden" name="documentid" value="<?php print $documentid;?>">
-	<input type="Hidden" name="version" value="<?php print $versionid;?>">
-	<table cellpadding="3">
-<?php
-	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_documentcontent, LetoDMS_Core_AttributeDefinition::objtype_all));
-	if($attrdefs) {
-		foreach($attrdefs as $attrdef) {
-?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-	<td><?php UI::printAttributeEditField($attrdef, $version->getAttributeValue($attrdef)) ?></td>
-</tr>
-<?php
-		}
-	}
-?>
-		<tr>
-			<td colspan="2"><br><input type="Submit" value="<?php printMLText("save") ?>"></td>
-		</tr>
-	</table>
-</form>
-<?php
-UI::contentContainerEnd();
-UI::htmlEndPage();
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'attrdefs'=>$attrdefs));
+if($view) {
+	$view->show();
+	exit;
+}
+
 ?>

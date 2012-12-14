@@ -31,30 +31,17 @@ if (!$user->isAdmin()) {
 if (!isset($_GET["groupid"]) || !is_numeric($_GET["groupid"]) || intval($_GET["groupid"])<1) {
 	UI::exitError(getMLText("rm_group"),getMLText("invalid_user_id"));
 }
-$groupid = intval($_GET["groupid"]);
-$currGroup = $dms->getGroup($groupid);
+$group = $dms->getGroup(intval($_GET["groupid"]));
 
-if (!is_object($currGroup)) {
+if (!is_object($group)) {
 	UI::exitError(getMLText("rm_group"),getMLText("invalid_group_id"));
 }
 
-UI::htmlStartPage(getMLText("admin_tools"));
-UI::globalNavigation();
-UI::pageNavigation(getMLText("admin_tools"), "admin_tools");
-UI::contentHeading(getMLText("rm_group"));
-UI::contentContainerStart();
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'group'=>$group));
+if($view) {
+	$view->show();
+	exit;
+}
 
-?>
-<form action="../op/op.GroupMgr.php" name="form1" method="POST">
-<input type="Hidden" name="groupid" value="<?php print $groupid;?>">
-<input type="Hidden" name="action" value="removegroup">
-<?php echo createHiddenFieldWithKey('removegroup'); ?>
-<p>
-<?php printMLText("confirm_rm_group", array ("groupname" => htmlspecialchars($currGroup->getName())));?>
-</p>
-<p><input type="Submit" value="<?php printMLText("rm_group");?>"></p>
-</form>
-<?php
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

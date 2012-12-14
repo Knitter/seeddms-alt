@@ -31,11 +31,11 @@ if (!$user->isAdmin()) {
 
 $v = new LetoDMS_Version;
 
-UI::htmlStartPage($v->banner());
-UI::globalNavigation();
-UI::pageNavigation($v->banner());
-UI::contentContainerStart();
-phpinfo();
-UI::contentContainerEnd();
-UI::htmlEndPage();
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'version'=>$v));
+if($view) {
+	$view->show();
+	exit;
+}
+
 ?>

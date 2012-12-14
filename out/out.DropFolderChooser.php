@@ -1,6 +1,8 @@
 <?php
 //    MyDMS. Document Management System
-//    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2002-2005  Markus Westphal
+//    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010-2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -17,19 +19,15 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
+include("../inc/inc.ClassUI.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
-include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if (!$user->isAdmin()) {
-	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
-}
-
-$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
+$form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allusers'=>$allUsers, 'httproot'=>$settings->_httpRoot));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dropfolderdir'=>$settings->_dropFolderDir, 'dropfolderfile'=>$_GET["dropfolderfile"], 'form'=>$form));
 if($view) {
 	$view->show();
 	exit;

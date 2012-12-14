@@ -30,28 +30,17 @@ if (!isset($_GET["targetidform3"]) || !is_numeric($_GET["targetidform3"]) || int
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_folder_id"));
 }
 
-$folderid = intval($_GET["targetidform3"]);
-$folder = $dms->getFolder($folderid);
+$folder = $dms->getFolder(intval($_GET["targetidform3"]));
 
 if (!is_object($folder)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_folder_id"));
 }
 
-UI::htmlStartPage(getMLText("files_deletion"));
-UI::globalNavigation();
-UI::pageNavigation(getMLText("admin_tools"), "admin_tools");
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder));
+if($view) {
+	$view->show();
+	exit;
+}
 
-UI::contentHeading(getMLText("files_deletion"));
-UI::contentContainerStart();
-
-?>
-<form action="../op/op.RemoveFolderFiles.php" name="form1" method="POST">
-  <?php echo createHiddenFieldWithKey('removefolderfiles'); ?>
-	<input type="Hidden" name="folderid" value="<?php echo $folderid?>">
-	<p><?php printMLText("confirm_rm_folder_files", array ("foldername" => htmlspecialchars($folder->getName())));?></p>
-	<input type="Submit" value="<?php printMLText("accept");?>">
-</form>
-<?php
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

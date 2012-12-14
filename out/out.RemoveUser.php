@@ -32,52 +32,23 @@ if (!isset($_GET["userid"]) || !is_numeric($_GET["userid"]) || intval($_GET["use
 	UI::exitError(getMLText("rm_user"),getMLText("invalid_user_id"));
 }
 
-$userid = intval($_GET["userid"]);
-$currUser = $dms->getUser($userid);
+$rmuser = $dms->getUser(intval($_GET["userid"]));
 
-if ($userid==$user->getID()) {
+if ($rmuser->getID()==$user->getID()) {
 	UI::exitError(getMLText("rm_user"),getMLText("access_denied"));
 }
 
-if (!is_object($currUser)) {
+if (!is_object($rmuser)) {
 	UI::exitError(getMLText("rm_user"),getMLText("invalid_user_id"));
 }
 
-UI::htmlStartPage(getMLText("admin_tools"));
-UI::globalNavigation();
-UI::pageNavigation(getMLText("admin_tools"), "admin_tools");
-UI::contentHeading(getMLText("rm_user"));
-UI::contentContainerStart();
+$allusers = $dms->getAllUsers($settings->_sortUsersInList);
 
-?>
-<form action="../op/op.UsrMgr.php" name="form1" method="POST">
-<input type="Hidden" name="userid" value="<?php print $userid;?>">
-<input type="Hidden" name="action" value="removeuser">
-<?php echo createHiddenFieldWithKey('removeuser'); ?>
-<p>
-<?php printMLText("confirm_rm_user", array ("username" => htmlspecialchars($currUser->getFullName())));?>
-</p>
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'rmuser'=>$rmuser, 'allusers'=>$allusers));
+if($view) {
+	$view->show();
+	exit;
+}
 
-<p>
-<?php printMLText("assign_user_property_to"); ?> :
-<select name="assignTo">
-<?php
-	$users = $dms->getAllUsers($settings->_sortUsersInList);
-	foreach ($users as $currUser) {
-		if ($currUser->isGuest() || ($currUser->getID() == $userid) )
-			continue;
-
-		if (isset($_GET["userid"]) && $currUser->getID()==$_GET["userid"]) $selected=$count;
-		print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin()." - ".$currUser->getFullName());
-	}
-?>
-</select>
-</p>
-
-<p><input type="Submit" value="<?php printMLText("rm_user");?>"></p>
-
-</form>
-<?php
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

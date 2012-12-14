@@ -29,15 +29,11 @@ if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-$documentid = intval($_GET["documentid"]);
-$document = $dms->getDocument($documentid);
+$document = $dms->getDocument(intval($_GET["documentid"]));
 
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
-
-$folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if (!$settings->_enableVersionDeletion && !$user->isAdmin()) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
@@ -58,21 +54,13 @@ if (!is_object($version)) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-UI::globalNavigation($folder);
-UI::pageNavigation($docPathHTML, "view_document");
-UI::contentHeading(getMLText("rm_version"));
-UI::contentContainerStart();
+$folder = $document->getFolder();
 
-?>
-<form action="../op/op.RemoveVersion.php" name="form1" method="POST">
-	<?php echo createHiddenFieldWithKey('removeversion'); ?>
-	<input type="Hidden" name="documentid" value="<?php echo $documentid?>">
-	<input type="Hidden" name="version" value="<?php echo $version->getVersion()?>">
-	<p><?php printMLText("confirm_rm_version", array ("documentname" => htmlspecialchars($document->getName()), "version" => $version->getVersion()));?></p>
-	<input type="Submit" value="<?php printMLText("rm_version");?>">
-</form>
-<?php
-UI::contentContainerEnd();
-UI::htmlEndPage();
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version));
+if($view) {
+	$view->show();
+	exit;
+}
+
 ?>

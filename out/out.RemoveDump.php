@@ -32,20 +32,11 @@ if (!isset($_GET["dumpname"]) || !file_exists($settings->_contentDir.$_GET["dump
 
 $dumpname = $_GET["dumpname"];
 
-UI::htmlStartPage(getMLText("backup_tools"));
-UI::globalNavigation();
-UI::pageNavigation(getMLText("admin_tools"), "admin_tools");
-UI::contentHeading(getMLText("dump_remove"));
-UI::contentContainerStart();
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dumpfile'=>$dumpname));
+if($view) {
+	$view->show();
+	exit;
+}
 
-?>
-<form action="../op/op.RemoveDump.php" name="form1" method="POST">
-	<input type="Hidden" name="dumpname" value="<?php echo sanitizeString($dumpname); ?>">
-  <?php echo createHiddenFieldWithKey('removedump'); ?>
-	<p><?php printMLText("confirm_rm_dump", array ("dumpname" => sanitizeString($dumpname)));?></p>
-	<input type="Submit" value="<?php printMLText("dump_remove");?>">
-</form>
-<?php
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

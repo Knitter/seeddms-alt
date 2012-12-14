@@ -30,42 +30,25 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$v = new LetoDMS_Version;
-
-UI::htmlStartPage(getMLText('fulltext_info'));
-UI::globalNavigation();
-UI::pageNavigation(getMLText('fulltext_info'));
-UI::contentContainerStart();
-if($settings->_enableFullSearch) {
-	if(!empty($settings->_luceneClassDir))
-		require_once($settings->_luceneClassDir.'/Lucene.php');
-	else
-		require_once('LetoDMS/Lucene.php');
-
-	$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
-
-	$numDocs = $index->count();
-	echo "<pre>";
-	for ($id = 0; $id < $numDocs; $id++) {
-		if (!$index->isDeleted($id)) {
-			$hit = $index->getDocument($id);
-			echo $hit->document_id.": ".htmlspecialchars($hit->title)."\n";
-		}
-	}
-	echo "</pre>";
-
-
-
-	$terms = $index->terms();
-	echo "<p>".count($terms)." Terms</p>";
-	echo "<pre>";
-	foreach($terms as $term) {
-		echo $term->field.":".$term->text."\n";
-	}
-	echo "</pre>";
-} else {
-	printMLText("fulltextsearch_disabled");
+if(!$settings->_enableFullSearch) {
+	UI::exitError(getMLText("admin_tools"),getMLText("fulltextsearch_disabled"));
 }
-UI::contentContainerEnd();
-UI::htmlEndPage();
+
+if(!empty($settings->_luceneClassDir))
+	require_once($settings->_luceneClassDir.'/Lucene.php');
+else
+	require_once('LetoDMS/Lucene.php');
+
+$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+if(!$index) {
+	UI::exitError(getMLText("admin_tools"),getMLText("no_fulltextindex"));
+}
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'luceneclassdir'=>$settings->_luceneClassDir, 'lucenedir'=>$settings->_luceneDir, 'index'=>$index));
+if($view) {
+	$view->show();
+	exit;
+}
+
 ?>

@@ -1,6 +1,10 @@
 <?php
 //    MyDMS. Document Management System
+//    Copyright (C) 2002-2005  Markus Westphal
+//    Copyright (C) 2006-2008 Malcolm Cowe
 //    Copyright (C) 2010 Matteo Lucarelli
+//    Copyright (C) 2011 Matteo Lucarelli
+//    Copyright (C) 2011-2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,6 +20,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+include("../inc/inc.Version.php");
 include("../inc/inc.Settings.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
@@ -26,10 +31,12 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
+if(!$settings->_enableFullSearch) {
+	UI::exitError(getMLText("admin_tools"),getMLText("fulltextsearch_disabled"));
+}
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allusers'=>$allUsers, 'httproot'=>$settings->_httpRoot));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'enablefullsearch'=>$settings->_enableFullSearch));
 if($view) {
 	$view->show();
 	exit;

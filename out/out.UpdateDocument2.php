@@ -33,57 +33,23 @@ if(!$settings->_enableLargeFileUpload) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("access_denied"));
 }
 
-$documentid = intval($_GET["documentid"]);
-$document = $dms->getDocument($documentid);
+$document = $dms->getDocument($_GET["documentid"]);
 
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-$folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
-
 if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-UI::globalNavigation($folder);
-UI::pageNavigation($docPathHTML, "view_document");
+$folder = $document->getFolder();
 
-UI::contentHeading(getMLText("update_document") . ": " . htmlspecialchars($document->getName()));
-UI::contentContainerStart();
-
-if ($document->isLocked()) {
-
-	$lockingUser = $document->getLockingUser();
-	
-	print "<table><tr><td class=\"warning\">";
-	
-	printMLText("update_locked_msg", array("username" => htmlspecialchars($lockingUser->getFullName()), "email" => htmlspecialchars($lockingUser->getEmail())));
-	
-	if ($lockingUser->getID() == $user->getID())
-		printMLText("unlock_cause_locking_user");
-	else if ($document->getAccessMode($user) == M_ALL)
-		printMLText("unlock_cause_access_mode_all");
-	else
-	{
-		printMLText("no_update_cause_locked");
-		print "</td></tr></table>";
-		UI::contentContainerEnd();
-		UI::htmlEndPage();
-		exit;
-	}
-
-	print "</td></tr></table><br>";
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document));
+if($view) {
+	$view->show();
+	exit;
 }
 
-// Retrieve a list of all users and groups that have review / approve
-// privileges.
-$docAccess = $document->getApproversList();
-
-UI::printUploadApplet('../op/op.UpdateDocument2.php', array('folderid'=>$folder->getId(), 'documentid'=>$document->getId()), 1, array('version_comment'=>1));
-
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

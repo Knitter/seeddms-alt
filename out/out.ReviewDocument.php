@@ -29,15 +29,13 @@ if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-$documentid = intval($_GET["documentid"]);
-$document = $dms->getDocument($documentid);
+$document = $dms->getDocument(intval($_GET["documentid"]));
 
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
 $folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
@@ -62,140 +60,16 @@ if ($document->hasExpired()){
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
-$reviews = $latestContent->getReviewStatus();
+$reviews = $content->getReviewStatus();
 if(!$reviews) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_action"));
 }
 
-foreach($reviews as $review) {
-	if($review['reviewID'] == $_GET['reviewid']) {
-		$reviewStatus = $review;
-		break;
-	}
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$content));
+if($view) {
+	$view->show();
+	exit;
 }
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-UI::globalNavigation($folder);
-UI::pageNavigation($docPathHTML, "view_document");
-UI::contentHeading(getMLText("submit_review"));
-
-?>
-<script language="JavaScript">
-function checkIndForm()
-{
-	msg = "";
-	if (document.form1.reviewStatus.value == "") msg += "<?php printMLText("js_no_review_status");?>\n";
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
-		return false;
-	}
-	else
-		return true;
-}
-function checkGrpForm()
-{
-	msg = "";
-	if (document.form1.reviewGroup.value == "") msg += "<?php printMLText("js_no_review_group");?>\n";
-	if (document.form1.reviewStatus.value == "") msg += "<?php printMLText("js_no_review_status");?>\n";
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
-		return false;
-	}
-	else
-		return true;
-}
-</script>
-
-<?php
-
-UI::contentContainerStart();
-
-// Display the Review form.
-if ($reviewStatus['type'] == 0) {
-	if($reviewStatus["status"]!=0) {
-
-		print "<table class=\"folderView\"><thead><tr>";
-		print "<th>".getMLText("status")."</th>";
-		print "<th>".getMLText("comment")."</th>";
-		print "<th>".getMLText("last_update")."</th>";
-		print "</tr></thead><tbody><tr>";
-		print "<td>";
-		printReviewStatusText($reviewStatus["status"]);
-		print "</td>";
-		print "<td>".htmlspecialchars($reviewStatus["comment"])."</td>";
-		$indUser = $dms->getUser($reviewStatus["userID"]);
-		print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
-		print "</tr></tbody></table><br>";
-	}
-?>
-	<form method="post" action="../op/op.ReviewDocument.php" name="form1" onsubmit="return checkIndForm();">
-	<?php echo createHiddenFieldWithKey('reviewdocument'); ?>
-	<table>
-	<tr><td class='infos' valign='top'><?php printMLText("comment")?>:</td>
-	<td class='infos' valign='top'><textarea name="comment" cols="80" rows="4"></textarea>
-	</td></tr>
-	<tr><td><?php printMLText("review_status")?></td>
-	<td><select name="reviewStatus">
-	<option value=''></option>
-	<option value='1'><?php printMLText("status_reviewed")?></option>
-	<option value='-1'><?php printMLText("rejected")?></option>
-	</select>
-	</td></tr><tr><td></td><td>
-	<input type='hidden' name='reviewType' value='ind'/>
-	<input type='hidden' name='documentid' value='<?php echo $documentid ?>'/>
-	<input type='hidden' name='version' value='<?php echo $version ?>'/>
-	<input type='submit' name='indReview' value='<?php printMLText("submit_review")?>'/>
-	</td></tr></table>
-	</form>
-<?php
-}
-else if ($reviewStatus['type'] == 1) {
-
-	if($reviewStatus["status"]!=0) {
-
-		print "<table class=\"folderView\"><thead><tr>";
-		print "<th>".getMLText("status")."</th>";
-		print "<th>".getMLText("comment")."</th>";
-		print "<th>".getMLText("last_update")."</th>";
-		print "</tr></thead><tbody><tr>";
-		print "<td>";
-		printReviewStatusText($reviewStatus["status"]);
-		print "</td>";
-		print "<td>".htmlspecialchars($reviewStatus["comment"])."</td>";
-		$indUser = $dms->getUser($reviewStatus["userID"]);
-		print "<td>".$reviewStatus["date"]." - ". htmlspecialchars($indUser->getFullname()) ."</td>";
-		print "</tr></tbody></table><br>\n";
-	}
-
-?>
-	<form method="POST" action="../op/op.ReviewDocument.php" name="form1" onsubmit="return checkGrpForm();">
-	<table>
-	<tr><td><?php printMLText("comment")?>:</td>
-	<td><textarea name="comment" cols="80" rows="4"></textarea>
-	</td></tr>
-	<tr><td><?php printMLText("review_status")?>:</td>
-	<td>
-	<select name="reviewStatus">
-	<option value=''></option>
-	<option value='1'><?php printMLText("status_reviewed")?></option>
-	<option value='-1'><?php printMLText("rejected")?></option>
-	</select>
-	</td></tr>
-	<tr><td></td><td>
-	<input type='hidden' name='reviewType' value='grp'/>
-	<input type='hidden' name='reviewGroup' value='<?php echo $reviewStatus['required']; ?>'/>
-	<input type='hidden' name='documentid' value='<?php echo $documentid ?>'/>
-	<input type='hidden' name='version' value='<?php echo $version ?>'/>
-	<input type='submit' name='groupReview' value='<?php printMLText("submit_review")?>'/></td></tr>
-	</table>
-	</form>
-<?php
-}
-
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>

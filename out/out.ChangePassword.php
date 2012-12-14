@@ -22,39 +22,23 @@ include("../inc/inc.Settings.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 
-UI::htmlStartPage(getMLText("change_password"), "login");
-UI::globalBanner();
-UI::pageNavigation(getMLText("change_password"));
-?>
+if (isset($_REQUEST["referuri"]) && strlen($_REQUEST["referuri"])>0)
+	$referui = $_REQUEST["referuri"];
+else
+	$referui = '';
 
-<?php UI::contentContainerStart(); ?>
-<form action="../op/op.ChangePassword.php" method="post" name="form1" onsubmit="return checkForm();">
-<?php
-if (isset($_REQUEST["referuri"]) && strlen($_REQUEST["referuri"])>0) {
-	echo "<input type='hidden' name='referuri' value='".$_REQUEST["referuri"]."'/>";
-}
 if (isset($_REQUEST["hash"]) && strlen($_REQUEST["hash"])>0) {
-	echo "<input type='hidden' name='hash' value='".$_REQUEST["hash"]."'/>";
+	$hash = $_REQUEST["hash"];
+} else {
+	header("Location: ../out/out.Login.php");
+  exit;
 }
-?>
-	<table border="0">
-		<tr>
-			<td><?php printMLText("password");?></td>
-			<td><input type="password" name="newpassword" id="password"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("password_repeat");?></td>
-			<td><input type="password" name="newpasswordrepeat" id="passwordrepeat"></td>
-		</tr>
-		<tr>
-			<td colspan="2"><input type="Submit" value="<?php printMLText("submit_password") ?>"></td>
-		</tr>
-	</table>
-</form>
-<?php UI::contentContainerEnd(); ?>
-<script language="JavaScript">document.form1.password.focus();</script>
-<p><a href="../out/out.Login.php"><?php echo getMLText("login"); ?></a></p>
-<?php
-	UI::htmlEndPage();
-?>
 
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'referui'=>$referui, 'hash'=>$hash));
+if($view) {
+	$view->show();
+	exit;
+}
+
+?>

@@ -29,15 +29,11 @@ if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-$documentid = intval($_GET["documentid"]);
-$document = $dms->getDocument($documentid);
+$document = $dms->getDocument($_GET["documentid"]);
 
 if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
-
-$folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".htmlspecialchars($document->getName())."</a>";
 
 if ($document->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
@@ -47,8 +43,7 @@ if (!isset($_GET["version"]) || !is_numeric($_GET["version"]) || intval($_GET["v
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
 }
 
-$version = $_GET["version"];
-$content = $document->getContentByVersion($version);
+$content = $document->getContentByVersion($_GET["version"]);
 
 if (!is_object($content)) {
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
@@ -61,61 +56,13 @@ if ($overallStatus["status"] == S_REJECTED || $overallStatus["status"] == S_EXPI
 	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("cannot_change_final_states"));
 }
 
-$reviewStatus = $content->getReviewStatus();
-$approvalStatus = $content->getApprovalStatus();
+$folder = $document->getFolder();
 
-UI::htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-UI::globalNavigation($folder);
-UI::pageNavigation($docPathHTML, "view_document");
-
-UI::contentHeading(getMLText("change_status"));
-
-?>
-<script language="JavaScript">
-function checkForm()
-{
-	msg = "";
-	if (document.form1.overrideStatus.value == "") msg += "<?php printMLText("js_no_override_status");?>\n";
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
-		return false;
-	}
-	else
-		return true;
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$content));
+if($view) {
+	$view->show();
+	exit;
 }
-</script>
-<?php
 
-UI::contentContainerStart();
-
-// Display the Review form.
-?>
-<form method="POST" action="../op/op.OverrideContentStatus.php" name="form1" onsubmit="return checkForm();">
-<table>
-<tr><td><?php echo(printMLText("comment")); ?></td>
-<td><textarea name="comment" cols="40" rows="4"></textarea>
-</td></tr>
-<tr><td><?php echo(printMLText("status")); ?></td>
-<td><select name="overrideStatus">
-<option value=''></option>
-<?php
-
-if ($overallStatus["status"] == S_OBSOLETE) echo "<option value='".S_RELEASED."'>".getOverallStatusText(S_RELEASED)."</option>";
-if ($overallStatus["status"] == S_RELEASED) echo "<option value='".S_OBSOLETE."'>".getOverallStatusText(S_OBSOLETE)."</option>";
-
-?>
-</select>
-</td></tr><tr><td></td><td>
-<input type='hidden' name='documentid' value='<?php echo $documentid ?>'/>
-<input type='hidden' name='version' value='<?php echo $version ?>'/>
-<input type='submit' name='overrideContentStatus' value='<?php echo(printMLText("update")); ?>'/>
-</td></tr></table>
-</form>
-<?php
-
-UI::contentContainerEnd();
-
-UI::htmlEndPage();
 ?>
