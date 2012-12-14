@@ -194,6 +194,27 @@ class LetoDMS_Core_DatabaseAccess {
 		return $res;
 	} /* }}} */
 
+	function startTransaction() { /* {{{ */
+		if(!$this->_intransaction) {
+			$this->_conn->beginTransaction();
+		}
+		$this->_intransaction++;
+	} /* }}} */
+
+	function rollbackTransaction() { /* {{{ */
+		if($this->_intransaction == 1) {
+			$this->_conn->rollBack();
+		}
+		$this->_intransaction--;
+	} /* }}} */
+
+	function commitTransaction() { /* {{{ */
+		if($this->_intransaction == 1) {
+			$this->_conn->commit();
+		}
+		$this->_intransaction--;
+	} /* }}} */
+
 	/**
 	 * Return the id of the last instert record
 	 *
