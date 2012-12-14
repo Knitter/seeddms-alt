@@ -37,7 +37,7 @@ if (isset($_GET["navBar"])) {
 	if(strlen($_GET["query"])==0) {
 		header("Location: ../out/out.SearchForm.php?folderid=".$folderid);
 	} else {
-		if($_GET["fullsearch"]) {
+		if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 			header("Location: ../op/op.SearchFulltext.php?folderid=".$folderid."&query=".$_GET["query"]);
 		}
 	}
@@ -117,20 +117,13 @@ if (!is_object($startFolder)) {
 	UI::exitError(getMLText("search_results"),getMLText("invalid_folder_id"));
 }
 
-// Now that the target folder has been identified, it is possible to create
-// the full navigation bar.
-$folderPathHTML = getFolderPathHTML($startFolder, true);
-UI::htmlStartPage(getMLText("search_results"));
-UI::globalNavigation($startFolder);
-UI::pageNavigation($folderPathHTML, "", $startFolder);
-UI::contentHeading(getMLText("search_results"));
-
 // Check to see if the search has been restricted to a particular
 // document owner.
 $owner = null;
 if (isset($_GET["ownerid"]) && is_numeric($_GET["ownerid"]) && $_GET["ownerid"]!=-1) {
 	$owner = $dms->getUser($_GET["ownerid"]);
 	if (!is_object($owner)) {
+		UI::htmlStartPage(getMLText("search_results"));
 		UI::contentContainer(getMLText("unknown_owner"));
 		UI::htmlEndPage();
 		exit;
@@ -143,12 +136,14 @@ $stopdate = array();
 if (isset($_GET["creationdate"]) && $_GET["creationdate"]!=null) {
 	$startdate = array('year'=>$_GET["createstartyear"], 'month'=>$_GET["createstartmonth"], 'day'=>$_GET["createstartday"], 'hour'=>0, 'minute'=>0, 'second'=>0);
 	if (!checkdate($startdate['month'], $startdate['day'], $startdate['year'])) {
+		UI::htmlStartPage(getMLText("search_results"));
 		UI::contentContainer(getMLText("invalid_create_date_start"));
 		UI::htmlEndPage();
 		exit;
 	}
 	$stopdate = array('year'=>$_GET["createendyear"], 'month'=>$_GET["createendmonth"], 'day'=>$_GET["createendday"], 'hour'=>23, 'minute'=>59, 'second'=>59);
 	if (!checkdate($stopdate['month'], $stopdate['day'], $stopdate['year'])) {
+		UI::htmlStartPage(getMLText("search_results"));
 		UI::contentContainer(getMLText("invalid_create_date_end"));
 		UI::htmlEndPage();
 		exit;
@@ -232,6 +227,20 @@ if($resArr['docs']) {
 	}
 }
 // -------------- Output results --------------------------------------------
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$startFolder, 'searchhits'=>$entries, 'totalpages'=>$resArr['totalPages'], 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'searchin'=>$searchin));
+if($view) {
+	$view->show();
+	exit;
+}
+
+// Now that the target folder has been identified, it is possible to create
+// the full navigation bar.
+UI::htmlStartPage(getMLText("search_results"));
+UI::globalNavigation($startFolder);
+UI::pageNavigation(getFolderPathHTML($startFolder, true), "", $startFolder);
+UI::contentHeading(getMLText("search_results"));
 
 UI::contentContainerStart();
 UI::pageList($pageNumber, $resArr['totalPages'], "../op/op.Search.php", $_GET);
