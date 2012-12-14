@@ -69,10 +69,14 @@ class Settings { /* {{{ */
 	// Where the uploaded files are stored (best to choose a directory that
 	// is not accessible through your web-server)
 	var $_contentDir = null;
+	// Where the preview files are saved
+	var $_cacheDir = null;
 	// Where the partitions of an uploaded file by the jumploader is saved
 	var $_stagingDir = null;
 	// Where the lucene fulltext index is saved
 	var $_luceneDir = null;
+	// Where the drop folders are located
+	var $_dropFolderDir = null;
 	// Where the stop word file is located
 	var $_stopWordsFile = null;
 	// enable/disable lucene fulltext search
@@ -256,7 +260,14 @@ class Settings { /* {{{ */
 	 * @return true/false
 	 */
 	function load($configFilePath) { /* {{{ */
-		$xml = simplexml_load_string(file_get_contents($configFilePath));
+		$contents = file_get_contents($configFilePath);
+		if(!$contents) {
+			return false;
+		}
+		$xml = simplexml_load_string($contents);
+		if(!$xml) {
+			return false;
+		}
 
 		// XML Path: /configuration/site/display
 		$node = $xml->xpath('/configuration/site/display');
@@ -294,8 +305,10 @@ class Settings { /* {{{ */
 		$this->_rootDir = strval($tab["rootDir"]);
 		$this->_httpRoot = strval($tab["httpRoot"]);
 		$this->_contentDir = strval($tab["contentDir"]);
+		$this->_cacheDir = strval($tab["cacheDir"]);
 		$this->_stagingDir = strval($tab["stagingDir"]);
 		$this->_luceneDir = strval($tab["luceneDir"]);
+		$this->_dropFolderDir = strval($tab["dropFolderDir"]);
 		$this->_logFileEnable = Settings::boolVal($tab["logFileEnable"]);
 		$this->_logFileRotation = strval($tab["logFileRotation"]);
 		$this->_enableLargeFileUpload = Settings::boolVal($tab["enableLargeFileUpload"]);
@@ -433,6 +446,7 @@ class Settings { /* {{{ */
 			$tab = $converter->attributes();
 			$this->_converters[trim(strval($tab['mimeType']))] = trim(strval($converter));
 		}
+		return true;
 	} /* }}} */
 
 	 /**
@@ -531,8 +545,10 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "rootDir", $this->_rootDir);
     $this->setXMLAttributValue($node, "httpRoot", $this->_httpRoot);
     $this->setXMLAttributValue($node, "contentDir", $this->_contentDir);
+    $this->setXMLAttributValue($node, "cacheDir", $this->_cacheDir);
     $this->setXMLAttributValue($node, "stagingDir", $this->_stagingDir);
     $this->setXMLAttributValue($node, "luceneDir", $this->_luceneDir);
+    $this->setXMLAttributValue($node, "dropFolderDir", $this->_dropFolderDir);
     $this->setXMLAttributValue($node, "logFileEnable", $this->_logFileEnable);
     $this->setXMLAttributValue($node, "logFileRotation", $this->_logFileRotation);
     $this->setXMLAttributValue($node, "enableLargeFileUpload", $this->_enableLargeFileUpload);
@@ -986,9 +1002,8 @@ class Settings { /* {{{ */
 							*/
 							}
 						}
+						$connTmp->Disconnect();
 					}
-
-					$connTmp->Disconnect();
 				}
 			} catch(Exception $e) {
 				$result["dbDatabase"] = array(
