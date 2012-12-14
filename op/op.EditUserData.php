@@ -38,6 +38,8 @@ if (!$user->isAdmin() && ($settings->_disableSelfEdit)) {
 $fullname = $_POST["fullname"];
 $email    = $_POST["email"];
 $comment  = $_POST["comment"];
+$language  = $_POST["language"];
+$mytheme  = $_POST["theme"];
 $current_pwd  = $_POST["currentpwd"];
 
 if($user->getPwd() != md5($current_pwd)) {
@@ -88,6 +90,12 @@ if ($user->getEmail() != $email)
 
 if ($user->getComment() != $comment)
 	$user->setComment($comment);
+
+if ($user->getLanguage() != $language)
+	$user->setLanguage($language);
+
+if ($user->getTheme() != $mytheme)
+	$user->setTheme($mytheme);
 
 if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 {
