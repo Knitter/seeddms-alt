@@ -56,7 +56,7 @@ if (!is_object($content)) {
 	exit;
 }
 
-$previewer = new LetoDMS_Preview_Previewer('/var/lib/letodms/content/cache', $_GET["width"]);
+$previewer = new LetoDMS_Preview_Previewer($settings->_cacheDir, $_GET["width"]);
 header('Content-Type: image/png');
 $previewer->getPreview($content);
 
