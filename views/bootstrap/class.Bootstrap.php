@@ -206,7 +206,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 					$this->accountNavigationBar();
 					break;
 				case "admin_tools":
-					echo "<a class=\"brand\" href=\"#\">".$pageTitle."</a>"; //echo $pageTitle."\n";
+					echo "<a class=\"brand\" href=\"../out/out.AdminTools.php\">".$pageTitle."</a>"; //echo $pageTitle."\n";
 					$this->adminToolsNavigationBar();
 					break;
 				case "calendar";
@@ -334,13 +334,63 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	
 		global $settings;
 
+		echo "   <ul class=\"nav\">\n";
+		echo "    <li class=\"dropdown\">\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")."<b class=\"caret\"></b></a>\n";
+		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		echo "      <li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
+		echo "     </ul>\n";
+		echo "    </li>\n";
+		echo "   </ul>\n";
+
+		echo "   <ul class=\"nav\">\n";
+		echo "    <li class=\"dropdown\">\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("definitions")."<b class=\"caret\"></b></a>\n";
+		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		echo "      <li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
+		echo "     <li><a href=\"../out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
+		echo "     <li><a href=\"../out/out.AttributeMgr.php\">".getMLText("global_attributedefinitions")."</a></li>\n";
+		echo "     </ul>\n";
+		echo "    </li>\n";
+		echo "   </ul>\n";
+
+		if($settings->_enableFullSearch) {
+			echo "   <ul class=\"nav\">\n";
+			echo "    <li class=\"dropdown\">\n";
+			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")."<b class=\"caret\"></b></a>\n";
+			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+			echo "      <li><a href=\"../out/out.Indexer.php\">".getMLText("update_fulltext_index")."</a></li>\n";
+			echo "      <li><a href=\"../out/out.CreateIndex.php\">".getMLText("create_fulltext_index")."</a></li>\n";
+			echo "      <li><a href=\"../out/out.IndexInfo.php\">".getMLText("fulltext_info")."</a></li>\n";
+			echo "     </ul>\n";
+			echo "    </li>\n";
+			echo "   </ul>\n";
+		}
+
+		echo "   <ul class=\"nav\">\n";
+		echo "    <li class=\"dropdown\">\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")."<b class=\"caret\"></b></a>\n";
+		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		echo "      <li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
+		if ($settings->_logFileEnable)
+			echo "      <li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
+		echo "     </ul>\n";
+		echo "    </li>\n";
+		echo "   </ul>\n";
+
+		echo "   <ul class=\"nav\">\n";
+		echo "    <li class=\"dropdown\">\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")."<b class=\"caret\"></b></a>\n";
+		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		echo "      <li id=\"first\"><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
+		echo "     </ul>\n";
+		echo "    </li>\n";
+		echo "   </ul>\n";
+
 		echo "<ul class=\"nav\">\n";
-		echo "<li id=\"first\"><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
-		echo "<li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
-		if ($settings->_logFileEnable) echo "<li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
-		echo "<li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
-		echo "<li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
-		echo "<li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
 		echo "</ul>\n";
 		return;
 	} /* }}} */
