@@ -58,12 +58,14 @@
 	     -           If the URL is http://www.example.com/, set $_httpRoot = "/".
        - contentDir: Where the uploaded files are stored (best to choose a directory that
        -             is not accessible through your web-server)
-			 - stagingDir: Where partial file uploads are saved
-			 - luceneDir: Where the lucene fulltext index iѕ saved
+       - stagingDir: Where partial file uploads are saved
+       - luceneDir: Where the lucene fulltext index iѕ saved
        - logFileEnable: set false to disable log system
        - logFileRotation: the log file rotation (h=hourly, d=daily, m=monthly)
        - enableLargeFileUpload: support for jumploader
        - partitionsize: size of chunk uploaded by jumploader
+       - dropFolderDir: where files for document upload are located
+       - cacheDir: where the preview images are saved
     -->
     <server
       rootDir = ""
@@ -75,6 +77,8 @@
       logFileRotation = "d"
       enableLargeFileUpload = "true"
       partitionSize = "2000000"
+      dropFolderDir = ""
+      cacheDir = ""
     >
     </server>
     
