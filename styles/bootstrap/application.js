@@ -1,11 +1,16 @@
 
 $(document).ready( function() {
-$('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
-$('#expirationdate, #fromdate, #todate')
-	.datepicker()
-	.on('changeDate', function(ev){
-		$('#expirationdate, #fromdate, #todate').datepicker('hide');
+	$('body').on('hidden', '.modal', function () {
+		$(this).removeData('modal');
 	});
+
+	$('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
+
+	$('#expirationdate, #fromdate, #todate')
+		.datepicker()
+		.on('changeDate', function(ev){
+			$('#expirationdate, #fromdate, #todate').datepicker('hide');
+		});
 
 	$(".chzn-select").chosen();
 	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
