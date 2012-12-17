@@ -54,8 +54,14 @@ $version_comment = $_POST["version_comment"];
 
 $keywords = $_POST["keywords"];
 $categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]);
-$attributes = $_POST["attributes"];
-$attributes_version = $_POST["attributes_version"];
+if(isset($_POST["attributes"]))
+	$attributes = $_POST["attributes"];
+else
+	$attributes = array();
+if(isset($_POST["attributes_version"]))
+	$attributes_version = $_POST["attributes_version"];
+else
+	$attributes_version = array();
 
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
@@ -210,8 +216,10 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 				require_once('LetoDMS/Lucene.php');
 
 			$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
-			LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
-			$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_convcmd) ? $settings->_convcmd : null, true));
+			if($index) {
+				LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+				$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_convcmd) ? $settings->_convcmd : null, true));
+			}
 		}
 
 		/* Add a default notification for the owner of the document */
