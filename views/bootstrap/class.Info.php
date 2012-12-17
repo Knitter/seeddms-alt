@@ -36,10 +36,13 @@ class LetoDMS_View_Info extends LetoDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$version = $this->params['version'];
 
-		$this->htmlStartPage($version->banner());
+		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
 		$this->contentStart();
-		$this->pageNavigation($version->banner());
+		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+		$this->contentContainerStart();
+		echo $version->banner();
+		$this->contentContainerEnd();
 		$this->contentContainerStart();
 		phpinfo();
 		$this->contentContainerEnd();
