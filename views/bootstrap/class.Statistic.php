@@ -210,7 +210,7 @@ echo "</div>\n";
 
 echo "<div class=\"span4\">\n";
 echo "<div class=\"well\">\n";
-print "<legend>Legend</legend>\n";
+print "<legend>".getMLText("legend")."</legend>\n";
 print "<ul class=\"unstyled\">\n";
 print "<li><span style=\"color:black\">".getMLText("access_inheritance")." </span></li>";
 print "<li><span style=\"color:".$this->getAccessColor(M_ALL)."\">".getMLText("access_mode_all")." </span></li>";
