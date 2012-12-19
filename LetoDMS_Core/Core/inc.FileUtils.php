@@ -43,6 +43,46 @@ class LetoDMS_Core_File {
 		return @removeFile($source);
 	}
 
+	function fileSize($file) {
+		if(!$a = fopen($file, 'r'))
+			return false;
+		fseek($a, 0, SEEK_END);
+		$filesize = ftell($a);
+		fclose($a);
+		return $filesize;
+	}
+
+	function format_filesize($size, $sizes = array('Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB')) {
+    if ($size == 0) return('n/a');
+		    return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $sizes[$i]);
+	}
+
+	function parse_filesize($str) {
+		preg_replace('/\s\s+/', ' ', $str);
+		if(strtoupper(substr($str, -1)) == 'B') {
+			$value = (int) substr($str, 0, -2);
+			$unit = substr($str, -2, 1);
+		} else {
+			$value = (int) substr($str, 0, -1);
+			$unit = substr($str, -1);
+		}
+		switch(strtoupper($unit)) {
+			case 'G':
+				return $value * 1024 * 1024 * 1024;
+				break;
+			case 'M':
+				return $value * 1024 * 1024;
+				break;
+			case 'K':
+				return $value * 1024;
+				break;
+			default;
+				return $value;
+				break;
+		}
+		return false;
+	}
+
 	function renameDir($old, $new) {
 		return @rename($old, $new);
 	}
