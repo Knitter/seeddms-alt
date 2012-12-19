@@ -1103,10 +1103,11 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			$version = $resArr[0]['m']+1;
 		}
 
-		$db->startTransaction();
+		$filesize = LetoDMS_Core_File::fileSize($tmpFile);
 
-		$queryStr = "INSERT INTO tblDocumentContent (document, version, comment, date, createdBy, dir, orgFileName, fileType, mimeType) VALUES ".
-						"(".$this->_id.", ".(int)$version.",".$db->qstr($comment).", ".$date.", ".$user->getID().", ".$db->qstr($dir).", ".$db->qstr($orgFileName).", ".$db->qstr($fileType).", ".$db->qstr($mimeType).")";
+		$db->startTransaction();
+		$queryStr = "INSERT INTO tblDocumentContent (document, version, comment, date, createdBy, dir, orgFileName, fileType, mimeType, fileSize) VALUES ".
+						"(".$this->_id.", ".(int)$version.",".$db->qstr($comment).", ".$date.", ".$user->getID().", ".$db->qstr($dir).", ".$db->qstr($orgFileName).", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$filesize.")";
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -1807,7 +1808,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		else $this->setStatus(S_RELEASED,"",$user);
 	} /* }}} */
 
-	function LetoDMS_Core_DocumentContent($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType) { /* {{{ */
+	function LetoDMS_Core_DocumentContent($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType, $fileSize=0) { /* {{{ */
 		parent::__construct($id);
 		$this->_document = $document;
 		$this->_version = (int) $version;
@@ -1819,6 +1820,11 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		$this->_fileType = $fileType;
 		$this->_mimeType = $mimeType;
 		$this->_dms = $document->_dms;
+		if(!$fileSize) {
+			$this->_fileSize = LetoDMS_Core_File::fileSize($this->_dms->contentDir . $this->getPath());
+		} else {
+			$this->_fileSize = $fileSize;
+		}
 	} /* }}} */
 
 	function getVersion() { return $this->_version; }
@@ -1826,7 +1832,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 	function getDate() { return $this->_date; }
 	function getOriginalFileName() { return $this->_orgFileName; }
 	function getFileType() { return $this->_fileType; }
-	function getFileName(){ return "data" . $this->_fileType; }
+	function getFileName(){ return $this->_version . $this->_fileType; }
 	function getDir() { return $this->_dir; }
 	function getMimeType() { return $this->_mimeType; }
 	function getDocument() { return $this->_document; }
@@ -1838,6 +1844,26 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 	} /* }}} */
 
 	function getPath() { return $this->_document->getDir() . $this->_version . $this->_fileType; }
+
+	function getFileSize() {
+		return $this->_fileSize;
+//		return LetoDMS_Core_File::fileSize($this->_dms->contentDir . $this->_document->getDir() . $this->getFileName());
+	}
+
+	function setFileSize() {
+		$filesize = LetoDMS_Core_File::fileSize($this->_dms->contentDir . $this->_document->getDir() . $this->getFileName());
+		if(!$filesize);
+			return false;
+
+echo $filesize;
+		$db = $this->_document->_dms->getDB();
+		$queryStr = "UPDATE tblDocumentContent SET fileSize = ".$filesize." where `document` = " . $this->_document->getID() .  " AND `version` = " . $this->_version;
+		if (!$db->getResult($queryStr))
+			return false;
+		$this->_fileSize = $filesize;
+
+		return true;
+	}
 
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
@@ -1882,7 +1908,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 	} /* }}} */
 
 	/* FIXME: this function should not be part of the DMS. It lies in the duty
-	 * of the application whether a file can viewed online or not.
+	 * of the application whether a file can be viewed online or not.
 	 */
 	function viewOnline() { /* {{{ */
 		if (!isset($this->_document->_dms->_viewOnlineFileTypes) || !is_array($this->_document->_dms->_viewOnlineFileTypes)) {
