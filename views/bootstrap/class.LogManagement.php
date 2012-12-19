@@ -31,35 +31,8 @@ require_once("class.Bootstrap.php");
  */
 class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
 
-	function show() { /* {{{ */
-		$dms = $this->params['dms'];
-		$user = $this->params['user'];
-		$contentdir = $this->params['contentdir'];
-		$logname = $this->params['logname'];
-
-		$this->htmlStartPage(getMLText("backup_tools"));
-		$this->globalNavigation();
-		$this->contentStart();
-		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
-
-		$this->contentHeading(getMLText("log_management"));
-		$this->contentContainerStart();
-
-		$print_header=true;
-
-		$handle = opendir($contentdir);
-		$entries = array();
-		while ($e = readdir($handle)){
-			if (is_dir($contentdir.$e)) continue;
-			if (strpos($e,".log")==FALSE) continue;
-			if (strcmp($e,"current.log")==0) continue;
-			$entries[] = $e;
-		}
-		closedir($handle);
-
-		sort($entries);
-		$entries = array_reverse($entries);
-
+	function filelist($entries) { /* {{{ */
+		$print_header = true;
 		foreach ($entries as $entry){
 			
 			if ($print_header){
@@ -75,6 +48,7 @@ class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
 					
 			print "<tr>\n";
 			print "<td><a href=\"out.LogManagement.php?logname=".$entry."\">".$entry."</a></td>\n";
+			print "\n";
 			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
 			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
 			print "<td>";
@@ -82,33 +56,92 @@ class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
 			print "<a href=\"out.RemoveLog.php?logname=".$entry."\" class=\"btn btn-mini\">".getMLText("rm_file")."</a>";
 			print "&nbsp;";
 			print "<a href=\"../op/op.Download.php?logname=".$entry."\" class=\"btn btn-mini\">".getMLText("download")."</a>";
-				
+			print "&nbsp;";
+			print "<a data-target=\"#logViewer\" data-cache=\"false\" href=\"out.LogManagement.php?logname=".$entry."\" role=\"button\" class=\"btn btn-mini\" data-toggle=\"modal\">View …</a>";
 			print "</td>\n";	
 			print "</tr>\n";
 		}
 
 		if ($print_header) printMLText("empty_notify_list");
 		else print "</table>\n";
+	} /* }}} */
 
+	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
+		$contentdir = $this->params['contentdir'];
+		$logname = $this->params['logname'];
+
+		if(!$logname) {
+		$this->htmlStartPage(getMLText("backup_tools"));
+		$this->globalNavigation();
+		$this->contentStart();
+		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+
+		$this->contentHeading(getMLText("log_management"));
+
+		$handle = opendir($contentdir);
+		$entries = array();
+		$wentries = array();
+		while ($e = readdir($handle)){
+			if (is_dir($contentdir.$e)) continue;
+			if (strpos($e,".log")==FALSE) continue;
+			if (strcmp($e,"current.log")==0) continue;
+			if(substr($e, 0, 6) ==  'webdav') {
+				$wentries[] = $e;
+			} else {
+				$entries[] = $e;
+			}
+		}
+		closedir($handle);
+
+		sort($entries);
+		sort($wentries);
+		$entries = array_reverse($entries);
+		$wentries = array_reverse($wentries);
+?>
+  <ul class="nav nav-tabs" id="logtab">
+	  <li class="active"><a data-target="#regular" data-toggle="tab">web</a></li>
+	  <li><a data-target="#webdav" data-toggle="tab">webdav</a></li>
+	</ul>
+	<div class="tab-content">
+	  <div class="tab-pane active" id="regular">
+<?php
+		$this->contentContainerStart();
+		$this->filelist($entries);
 		$this->contentContainerEnd();
+?>
+		</div>
+	  <div class="tab-pane" id="webdav">
+<?php
+		$this->contentContainerStart();
+		$this->filelist($wentries);
+		$this->contentContainerEnd();
+?>
+		</div>
+	</div>
+  <div class="modal hide" style="width: 900px; margin-left: -450px;" id="logViewer" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
+    <div class="modal-body">
+      <p>Please wait, until document tree is loaded …</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+  </div>
+<?php
+		$this->htmlEndPage();
+		} elseif(file_exists($contentdir.$logname)){
+//			$this->htmlStartPage(getMLText("backup_tools"));
 
-		if ($logname && file_exists($contentdir.$logname)){
+//			$this->contentSubHeading(sanitizeString($logname));
 
-			$this->contentHeading(" ");
-			$this->contentContainerStart();
-			
-			$this->contentSubHeading(sanitizeString($logname));
-
-			echo "<div class=\"logview\">";
-			echo "<pre>\n";
+			echo $logname."<pre>\n";
 			readfile($contentdir.$logname);
 			echo "</pre>\n";
-			echo "</div>";
 
-			$this->contentContainerEnd();
+//			echo "</body>\n</html>\n";
 		}
 
-		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>
