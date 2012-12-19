@@ -927,7 +927,7 @@ class LetoDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"]);
+		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"]);
 		$user->setDMS($this);
 		return $user;
 	} /* }}} */
@@ -954,7 +954,7 @@ class LetoDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"]);
+		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"]);
 		$user->setDMS($this);
 		return $user;
 	} /* }}} */
@@ -977,7 +977,7 @@ class LetoDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"]);
+		$user = new LetoDMS_Core_User($resArr["id"], $resArr["login"], $resArr["pwd"], $resArr["fullName"], $resArr["email"], $resArr["language"], $resArr["theme"], $resArr["comment"], $resArr["role"], $resArr["hidden"], $resArr["disabled"], $resArr["pwdExpiration"], $resArr["loginfailures"], $resArr["quota"]);
 		$user->setDMS($this);
 		return $user;
 	} /* }}} */
@@ -1000,7 +1000,7 @@ class LetoDMS_Core_DMS {
 		$users = array();
 
 		for ($i = 0; $i < count($resArr); $i++) {
-			$user = new LetoDMS_Core_User($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr["language"])?$resArr["language"]:NULL), (isset($resArr["theme"])?$resArr["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"], $resArr[$i]["disabled"], $resArr[$i]["pwdExpiration"], $resArr[$i]["loginfailures"]);
+			$user = new LetoDMS_Core_User($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr["language"])?$resArr["language"]:NULL), (isset($resArr["theme"])?$resArr["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"], $resArr[$i]["disabled"], $resArr[$i]["pwdExpiration"], $resArr[$i]["loginfailures"], $resArr["quota"]);
 			$user->setDMS($this);
 			$users[$i] = $user;
 		}
@@ -1494,6 +1494,30 @@ class LetoDMS_Core_DMS {
 	 */
 	function getUnlinkedDocumentContent() { /* {{{ */
 		$queryStr = "SELECT * FROM tblDocumentContent WHERE document NOT IN (SELECT id FROM tblDocuments)";
+		$resArr = $this->db->getResultArray($queryStr);
+		if (!$resArr)
+			return false;
+
+		$versions = array();
+		foreach($resArr as $row) {
+			$document = new LetoDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
+			$document->setDMS($this);
+			$version = new LetoDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType']);
+			$versions[] = $version;
+		}
+		return $versions;
+		
+	} /* }}} */
+
+	/**
+	 * Returns document content which has no file size set
+	 *
+	 * This method is for finding document content without a file size
+	 * set in the database. The file size of document content was introduced
+	 * in version 4.0.0 of letodms for implementation of user quotas.
+	 */
+	function getNoFileSizeDocumentContent() { /* {{{ */
+		$queryStr = "SELECT * FROM tblDocumentContent WHERE fileSize = 0 or fileSize is null";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (!$resArr)
 			return false;
