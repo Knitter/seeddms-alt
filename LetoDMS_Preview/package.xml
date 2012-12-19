@@ -18,8 +18,8 @@
   <api>1.0.0</api>
  </version>
  <stability>
-  <release>beta</release>
-  <api>beta</api>
+  <release>stable</release>
+  <api>stable</api>
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
@@ -28,7 +28,7 @@ initial version
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
    <dir name="Preview">
-    <file name="Preview.php" role="php">
+    <file name="Previewer.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
    </dir> <!-- /Lucene -->
