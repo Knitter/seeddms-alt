@@ -38,6 +38,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		$document = $this->params['document'];
 		$accessop = $this->params['accessobject'];
 		$viewonlinefiletypes = $this->params['viewonlinefiletypes'];
+		$cachedir = $this->params['cachedir'];
 		$documentid = $document->getId();
 
 		$versions = $document->getContent();
@@ -163,7 +164,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		}else print "<li><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></li>";
 
 		print "</ul>";
-		$previewer = new LetoDMS_Preview_Previewer('/var/lib/letodms/content/cache', 100);
+		$previewer = new LetoDMS_Preview_Previewer($cachedir, 100);
 		$previewer->createPreview($latestContent);
 		if($previewer->hasPreview($latestContent)) {
 			print("<img class=\"mimeicon\" width=\"100\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=100\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">");
@@ -175,7 +176,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		print "<li>".$latestContent->getOriginalFileName() ."</li>\n";
 
 		if ($file_exists)
-			print "<li>". formatted_size(filesize($dms->contentDir . $latestContent->getPath())) ." ".htmlspecialchars($latestContent->getMimeType())."</li>";
+			print "<li>". formatted_size($latestContent->getFileSize()) ." ".htmlspecialchars($latestContent->getMimeType())."</li>";
 		else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
 		$updatingUser = $latestContent->getUser();
@@ -413,7 +414,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 				print "<td>".$version->getVersion()."</td>\n";
 				print "<td><ul class=\"unstyled\">\n";
 				print "<li>".$version->getOriginalFileName()."</li>\n";
-				if ($file_exists) print "<li>". formatted_size(filesize($dms->contentDir . $version->getPath())) ." ".htmlspecialchars($version->getMimeType())."</li>";
+				if ($file_exists) print "<li>". formatted_size($version->getFileSize()) ." ".htmlspecialchars($version->getMimeType())."</li>";
 				else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 				$updatingUser = $version->getUser();
 				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
