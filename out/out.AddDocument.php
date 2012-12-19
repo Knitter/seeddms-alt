@@ -38,6 +38,11 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 }
 
+$remain = checkQuota();
+if ($remain < 0) {
+	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("quota_exceeded", array('bytes'=>LetoDMS_Core_File::format_filesize(abs($remain)))));
+}
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'strictformcheck'=>$settings->_strictFormCheck, 'enablelargefileupload'=>$settings->_enableLargeFileUpload, 'dropfolderdir'=>$settings->_dropFolderDir));
 if($view) {
