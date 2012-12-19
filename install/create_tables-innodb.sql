@@ -63,6 +63,7 @@ CREATE TABLE `tblUsers` (
   `pwdExpiration` datetime NOT NULL default '0000-00-00 00:00:00',
   `loginfailures` tinyint(4) NOT NULL default '0',
   `disabled` smallint(1) NOT NULL default '0',
+  `quota` bigint,
   PRIMARY KEY (`id`),
   UNIQUE (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -245,6 +246,7 @@ CREATE TABLE `tblDocumentContent` (
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
   `mimeType` varchar(100) NOT NULL default '',
+  `fileSize` unsigned bigint,
   PRIMARY KEY  (`id`),
   UNIQUE (`document`, `version`),
   CONSTRAINT `tblDocumentContent_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`)
@@ -557,5 +559,5 @@ CREATE TABLE `tblVersion` (
 INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '', 0, 0);
 INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '', 0, 0);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
-INSERT INTO tblVersion VALUES (NOW(), 3, 4, 0);
+INSERT INTO tblVersion VALUES (NOW(), 4, 0, 0);
 INSERT INTO tblCategory VALUES (0, '');
