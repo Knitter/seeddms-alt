@@ -836,6 +836,12 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		print $this->getImgPath($img);
 	} /* }}} */
 
+	function warningMsg($msg) { /* {{{ */
+		echo "<div class=\"alert alert-warning\">\n";
+		echo $msg;
+		echo "</div>\n";
+	} /* }}} */
+
 	function exitError($pagetitle,$error) { /* {{{ */
 	
 		$this->htmlStartPage($pagetitle);
