@@ -47,6 +47,7 @@ function getLongReadableDate($timestamp) {
 //	return $string;
 //}
 
+/* Deprecated, do not use anymore */
 function sanitizeString($string) { /* {{{ */
 
 	$string = (string) $string;
@@ -79,6 +80,7 @@ function sanitizeString($string) { /* {{{ */
 	return trim($string);
 } /* }}} */
 
+/* Deprecated, do not use anymore */
 function mydmsDecodeString($string) { /* {{{ */
 
 	$string = (string)$string;
@@ -360,5 +362,27 @@ function checkFormKey($formid='', $method='POST') { /* {{{ */
 	}
 	
 	return false;
+} /* }}} */
+
+/**
+ * Check disk usage of currently logged in user
+ *
+ * @return boolean/integer true if no quota is set, number of bytes until
+ *         quota is reached. Negative values indicate a disk usage above quota.
+ */
+function checkQuota() { /* {{{ */
+	global $settings, $dms, $user;
+
+	$quota = 0;
+	$uquota = $user->getQuota();
+	if($uquota > 0)
+		$quota = $uquota;
+	elseif($settings->_quota > 0)
+		$quota = $settings->_quota;
+
+	if($quota == 0)
+		return true;
+
+	return ($quota - $user->getUsedDiskSpace());
 } /* }}} */
 ?>
