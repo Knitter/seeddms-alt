@@ -34,6 +34,7 @@ class LetoDMS_Core_DatabaseAccess {
 	var $_ttapproveid;
 	var $_ttstatid;
 	var $_ttcontentid;
+	var $_intransaction;
 	
 	/*
 	Backup functions
