@@ -78,15 +78,15 @@ function guestLogin()
 ?>
 	<table border="0">
 		<tr>
-			<td><?php printMLText("user_login");?></td>
+			<td><?php printMLText("user_login");?>:</td>
 			<td><input type="text" name="login" id="login"></td>
 		</tr>
 		<tr>
-			<td><?php printMLText("password");?></td>
+			<td><?php printMLText("password");?>:</td>
 			<td><input name="pwd" type="Password"></td>
 		</tr>
 		<tr>
-			<td><?php printMLText("language");?></td>
+			<td><?php printMLText("language");?>:</td>
 			<td>
 <?php
 			print "<select name=\"lang\">";
@@ -100,7 +100,7 @@ function guestLogin()
 			</td>
 		</tr>
 		<tr>
-			<td><?php printMLText("theme");?></td>
+			<td><?php printMLText("theme");?>:</td>
 		<td>
 <?php
 			print "<select name=\"sesstheme\">";

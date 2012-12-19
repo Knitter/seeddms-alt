@@ -50,11 +50,11 @@ class LetoDMS_View_PasswordForgotten extends LetoDMS_Bootstrap_Style {
   <p><?php printMLText("password_forgotten_text"); ?></p>
 	<table class="table-condensed">
 		<tr>
-			<td><?php printMLText("login");?></td>
+			<td><?php printMLText("login");?>:</td>
 			<td><input type="text" name="login" id="login"></td>
 		</tr>
 		<tr>
-			<td><?php printMLText("email");?></td>
+			<td><?php printMLText("email");?>:</td>
 			<td><input type="text" name="email" id="email"></td>
 		</tr>
 		<tr>
