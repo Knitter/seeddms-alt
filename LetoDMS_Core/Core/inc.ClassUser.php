@@ -129,7 +129,7 @@ class LetoDMS_Core_User {
 	const role_admin = '1';
 	const role_guest = '2';
 
-	function LetoDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='', $loginFailures=0) {
+	function LetoDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='', $loginFailures=0, $quota=0) {
 		$this->_id = $id;
 		$this->_login = $login;
 		$this->_pwd = $pwd;
@@ -143,6 +143,7 @@ class LetoDMS_Core_User {
 		$this->_isDisabled = $isDisabled;
 		$this->_pwdExpiration = $pwdExpiration;
 		$this->_loginFailures = $loginFailures;
+		$this->_quota = $quota;
 		$this->_dms = null;
 	}
 
@@ -352,6 +353,31 @@ class LetoDMS_Core_User {
 
 		return true;
 	} /* }}} */
+
+	function getUsedDiskSpace() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT SUM(filesize) sum FROM tblDocumentContent a LEFT JOIN tblDocuments b ON a.document=b.id WHERE b.owner = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		return $resArr[0]['sum'];
+	} /* }}} */
+
+	function getQuota() { return $this->_quota; }
+
+	function setQuota($quota) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$quota = intval($quota);
+		$queryStr = "UPDATE tblUsers SET quota = " . $quota . " WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_quota = $quota;
+		return true;
+	}	 /* }}} */
 
 	/**
 	 * Remove the user and also remove all its keywords, notifies, etc.
