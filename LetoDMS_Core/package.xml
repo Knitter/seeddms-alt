@@ -18,11 +18,11 @@
   <email></email>
   <active>no</active>
  </lead>
- <date>2012-10-17</date>
- <time>09:12:59</time>
+ <date>2012-12-14</date>
+ <time>08:02:34</time>
  <version>
-  <release>3.4.0RC2</release>
-  <api>3.4.0RC2</api>
+  <release>4.0.0</release>
+  <api>4.0.0</api>
  </version>
  <stability>
   <release>beta</release>
@@ -30,7 +30,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- fixed bug when adding a new document category
+- added database transactions
  </notes>
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
@@ -297,11 +297,11 @@ New release
    </notes>
   </release>
   <release>
-   <date>2012-10-08</date>
-   <time>08:05:38</time>
+   <date>2012-12-13</date>
+   <time>08:02:34</time>
    <version>
-    <release>3.4.0RC1</release>
-    <api>3.4.0RC1</api>
+    <release>3.4.0</release>
+    <api>3.4.0</api>
    </version>
    <stability>
     <release>beta</release>
@@ -310,6 +310,8 @@ New release
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - added PDO database driver, several sql changes for better compatiblity
+- fixed bug when adding a new document category
+- make sure the database remains consistent even in case of errors
    </notes>
   </release>
  </changelog>
