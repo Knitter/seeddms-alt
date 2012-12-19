@@ -82,15 +82,12 @@ class LetoDMS_View_AddDocument extends LetoDMS_Bootstrap_Style {
 		
 		</script>
 
-<div class="alert alert-warning">
-<?php echo getMLText("max_upload_size").": ".ini_get( "upload_max_filesize"); ?>
 <?php
-	if($enablelargefileupload) {
-		printf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folderid."&showtree=".showtree());
-	}
-?>
-</div>
-<?php
+		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
+		if($enablelargefileupload) {
+			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folderid."&showtree=".showtree())."</p>";
+		}
+		$this->warningMsg($msg);
 		$this->contentHeading(getMLText("add_document"));
 		$this->contentContainerStart();
 		
