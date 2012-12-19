@@ -146,9 +146,11 @@ class LetoDMS_View_ObjectCheck extends LetoDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
-		$versions = $this->params['unlinkedcontent'];
+		$unlinkedversions = $this->params['unlinkedcontent'];
+		$nofilesizeversions = $this->params['nofilesizeversions'];
 		$repair = $this->params['repair'];
 		$unlink = $this->params['unlink'];
+		$setfilesize = $this->params['setfilesize'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -183,7 +185,7 @@ class LetoDMS_View_ObjectCheck extends LetoDMS_Bootstrap_Style {
 			echo "<p>".getMLText('unlinking_objects')."</p>";
 		}
 
-		if($versions) {
+		if($unlinkedversions) {
 			print "<table class=\"table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("document")."</th>\n";
@@ -192,7 +194,7 @@ class LetoDMS_View_ObjectCheck extends LetoDMS_Bootstrap_Style {
 			print "<th>".getMLText("mimetype")."</th>\n";
 			print "<th></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
-			foreach($versions as $version) {
+			foreach($unlinkedversions as $version) {
 				$doc = $version->getDocument();
 				print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
 				if($unlink) {
@@ -203,6 +205,34 @@ class LetoDMS_View_ObjectCheck extends LetoDMS_Bootstrap_Style {
 			print "</tbody></table>\n";
 			if($unlink == 0) {
 				echo '<p><a href="out.ObjectCheck.php?unlink=1">'.getMLText('do_object_unlink').'</a></p>';
+			}
+		}
+
+		$this->contentContainerEnd();
+
+		$this->contentHeading(getMLText("missing_filesize"));
+		$this->contentContainerStart();
+
+		if($nofilesizeversions) {
+			print "<table class=\"table-condensed\">";
+			print "<thead>\n<tr>\n";
+			print "<th>".getMLText("document")."</th>\n";
+			print "<th>".getMLText("version")."</th>\n";
+			print "<th>".getMLText("original_filename")."</th>\n";
+			print "<th>".getMLText("mimetype")."</th>\n";
+			print "<th></th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+			foreach($nofilesizeversions as $version) {
+				$doc = $version->getDocument();
+				print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
+				if($setfilesize) {
+					$version->setFileSize();
+				}
+				print "</tr>\n";
+			}
+			print "</tbody></table>\n";
+			if($setfilesize == 0) {
+				echo '<p><a href="out.ObjectCheck.php?setfilesize=1">'.getMLText('do_object_setfilesize').'</a></p>';
 			}
 		}
 
