@@ -320,6 +320,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_loginFailure");?>:</td>
         <td><input name="loginFailure" value="<?php echo $settings->_loginFailure; ?>" size="2" /></td>
       </tr>
+      <tr title="<?php printMLText("settings_quota_desc");?>">
+        <td><?php printMLText("settings_quota");?>:</td>
+        <td><input type="text" name="quota" value="<?php echo $settings->_quota; ?>" size="2" /></td>
+      </tr>
       <tr title="<?php printMLText("settings_encryptionKey_desc");?>">
         <td><?php printMLText("settings_encryptionKey");?>:</td>
         <td><input name="encryptionKey" value="<?php echo $settings->_encryptionKey; ?>" size="32" /></td>

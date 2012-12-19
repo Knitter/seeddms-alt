@@ -99,6 +99,7 @@ if ($action == "saveSettings")
   $settings->_passwordExpiration = intval($_POST["passwordExpiration"]);
   $settings->_passwordHistory = intval($_POST["passwordHistory"]);
   $settings->_loginFailure = intval($_POST["loginFailure"]);
+  $settings->_quota = intval($_POST["quota"]);
   $settings->_encryptionKey = strval($_POST["encryptionKey"]);
 
   // TODO Connectors
@@ -156,6 +157,6 @@ if ($action == "saveSettings")
 }
 
 
-header("Location:../out/out.AdminTools.php");
+header("Location:../out/out.Settings.php");
 
 ?>

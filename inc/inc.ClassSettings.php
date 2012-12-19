@@ -50,6 +50,8 @@ class Settings { /* {{{ */
 	var $_passwordHistory = 10;
 	// Number of failed logins before account is disabled
 	var $_loginFailure = 0;
+	// maximum amount of bytes a user may consume, 0 = unlimited
+	var $_quota = 0;
 	// Restricted access: only allow users to log in if they have an entry in
 	// the local database (irrespective of successful authentication with LDAP).
 	var $_restricted = true;
@@ -324,6 +326,7 @@ class Settings { /* {{{ */
 		$this->_passwordExpiration = intval($tab["passwordExpiration"]);
 		$this->_passwordHistory = intval($tab["passwordHistory"]);
 		$this->_loginFailure = intval($tab["loginFailure"]);
+		$this->_quota = intval($tab["quota"]);
 		$this->_encryptionKey = strval($tab["encryptionKey"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
 		$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
@@ -563,6 +566,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "passwordExpiration", $this->_passwordExpiration);
     $this->setXMLAttributValue($node, "passwordHistory", $this->_passwordHistory);
     $this->setXMLAttributValue($node, "loginFailure", $this->_loginFailure);
+    $this->setXMLAttributValue($node, "quota", $this->_quota);
     $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);
     $this->setXMLAttributValue($node, "enableUserImage", $this->_enableUserImage);
