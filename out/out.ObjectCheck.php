@@ -42,11 +42,18 @@ if(isset($_GET['unlink']) && $_GET['unlink'] == 1) {
 	$unlink = 0;
 }
 
+if(isset($_GET['setfilesize']) && $_GET['setfilesize'] == 1) {
+	$setfilesize = 1;
+} else {
+	$setfilesize = 0;
+}
+
 $folder = $dms->getFolder($settings->_rootFolderID);
-$versions = $dms->getUnlinkedDocumentContent();
+$unlinkedversions = $dms->getUnlinkedDocumentContent();
+$nofilesizeversions = $dms->getNoFileSizeDocumentContent();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'unlinkedcontent'=>$versions, 'unlink'=>$unlink, 'repair'=>$repair));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'unlinkedcontent'=>$unlinkedversions, 'nofilesizeversions'=>$nofilesizeversions, 'unlink'=>$unlink, 'setfilesize'=>$setfilesize, 'repair'=>$repair));
 if($view) {
 	$view->show();
 	exit;
