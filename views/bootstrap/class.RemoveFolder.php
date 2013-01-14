@@ -45,7 +45,7 @@ class LetoDMS_View_RemoveFolder extends LetoDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 ?>
 <form action="../op/op.RemoveFolder.php" method="post" name="form1">
-	<input type="Hidden" name="folderid" value="<?php print $folderid;?>">
+	<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
 	<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
   <?php echo createHiddenFieldWithKey('removefolder'); ?>
 	<p>
