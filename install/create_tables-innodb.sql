@@ -246,7 +246,7 @@ CREATE TABLE `tblDocumentContent` (
   `orgFileName` varchar(150) NOT NULL default '',
   `fileType` varchar(10) NOT NULL default '',
   `mimeType` varchar(100) NOT NULL default '',
-  `fileSize` unsigned bigint,
+  `fileSize` BIGINT,
   PRIMARY KEY  (`id`),
   UNIQUE (`document`, `version`),
   CONSTRAINT `tblDocumentContent_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`)
@@ -328,6 +328,23 @@ CREATE TABLE `tblDocumentLocks` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `tblDocumentReviewers`
+-- 
+
+CREATE TABLE `tblDocumentReviewers` (
+  `reviewID` int(11) NOT NULL auto_increment,
+  `documentID` int(11) NOT NULL default '0',
+  `version` smallint(5) unsigned NOT NULL default '0',
+  `type` tinyint(4) NOT NULL default '0',
+  `required` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`reviewID`),
+  UNIQUE KEY `documentID` (`documentID`,`version`,`type`,`required`),
+  CONSTRAINT `tblDocumentReviewers_document` FOREIGN KEY (`documentID`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `tblDocumentReviewLog`
 -- 
 
@@ -341,23 +358,6 @@ CREATE TABLE `tblDocumentReviewLog` (
   PRIMARY KEY  (`reviewLogID`),
   CONSTRAINT `tblDocumentReviewLog_review` FOREIGN KEY (`reviewID`) REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE,
   CONSTRAINT `tblDocumentReviewLog_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `tblDocumentReviewers`
--- 
-
-CREATE TABLE `tblDocumentReviewers` (
-  `reviewID` int(11) NOT NULL auto_increment,
-  `documentID` int(11) NOT NULL default '0',
-  `version` smallint(5) unsigned NOT NULL default '0',
-  `type` tinyint(4) NOT NULL default '0',
-  `required` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`reviewID`),
-  UNIQUE KEY `documentID` (`documentID`,`version`,`type`,`required`),
-  CONSTRAINT `tblDocumentReviewers_document` FOREIGN KEY (`documentID`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -540,6 +540,151 @@ CREATE TABLE `tblEvents` (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for workflow states
+-- 
+
+CREATE TABLE tblWorkflowStates (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text NOT NULL,
+  `visibility` smallint(5) DEFAULT 0,
+	`maxtime` int(11) DEFAULT 0,
+  `precondfunc` text DEFAULT NULL,
+	`documentstatus` smallint(5) DEFAULT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for workflow actions
+-- 
+
+CREATE TABLE tblWorkflowActions (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for workflows
+-- 
+
+CREATE TABLE tblWorkflows (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text NOT NULL,
+  `initstate` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  CONSTRAINT `tblWorkflow_initstate` FOREIGN KEY (`initstate`) REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for workflow transitions
+-- 
+
+CREATE TABLE tblWorkflowTransitions (
+  `id` int(11) NOT NULL auto_increment,
+  `workflow` int(11) default NULL,
+  `state` int(11) default NULL,
+  `action` int(11) default NULL,
+  `nextstate` int(11) default NULL,
+	`maxtime` int(11) DEFAULT 0,
+  PRIMARY KEY  (`id`),
+  CONSTRAINT `tblWorkflowTransitions_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowTransitions_state` FOREIGN KEY (`state`) REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowTransitions_action` FOREIGN KEY (`action`) REFERENCES `tblWorkflowActions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowTransitions_nextstate` FOREIGN KEY (`nextstate`) REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for workflow transition users
+-- 
+
+CREATE TABLE tblWorkflowTransitionUsers (
+  `id` int(11) NOT NULL auto_increment,
+  `transition` int(11) default NULL,
+  `userid` int(11) default NULL,
+  PRIMARY KEY  (`id`),
+  CONSTRAINT `tblWorkflowTransitionUsers_transition` FOREIGN KEY (`transition`) REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for workflow transition groups
+-- 
+
+CREATE TABLE tblWorkflowTransitionGroups (
+  `id` int(11) NOT NULL auto_increment,
+  `transition` int(11) default NULL,
+  `groupid` int(11) default NULL,
+  `minusers` int(11) default NULL,
+  PRIMARY KEY  (`id`),
+  CONSTRAINT `tblWorkflowTransitionGroups_transition` FOREIGN KEY (`transition`) REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for workflow log
+-- 
+
+CREATE TABLE tblWorkflowLog (
+  `id` int(11) NOT NULL auto_increment,
+  `document` int(11) default NULL,
+  `version` smallint(5) default NULL,
+  `workflow` int(11) default NULL,
+  `userid` int(11) default NULL,
+  `transition` int(11) default NULL,
+  `nextstate` int(11) default NULL,
+  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+  `comment` text,
+  PRIMARY KEY  (`id`),
+  CONSTRAINT `tblWorkflowLog_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowLog_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowLog_userid` FOREIGN KEY (`userid`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowLog_transition` FOREIGN KEY (`transition`) REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for workflow document relation
+-- 
+
+CREATE TABLE tblWorkflowDocumentContent (
+  `parentworkflow` int(11) DEFAULT 0,
+  `workflow` int(11) DEFAULT NULL,
+  `document` int(11) DEFAULT NULL,
+  `version` smallint(5) DEFAULT NULL,
+  `state` int(11) DEFAULT NULL,
+  CONSTRAINT `tblWorkflowDocument_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowDocument_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowDocument_state` FOREIGN KEY (`state`) REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for mandatory workflows
+-- 
+
+CREATE TABLE tblWorkflowMandatoryWorkflow (
+  `userid` int(11) default NULL,
+  `workflow` int(11) default NULL,
+	UNIQUE(userid, workflow),
+  CONSTRAINT `tblWorkflowMandatoryWorkflow_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowMandatoryWorkflow_userid` FOREIGN KEY (`userid`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for version
 -- 
 
@@ -556,8 +701,8 @@ CREATE TABLE `tblVersion` (
 -- Initial content for database
 --
 
-INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '', 0, 0);
-INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '', 0, 0);
+INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '', 0, 0, 0);
+INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '', 0, 0, 0);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
 INSERT INTO tblVersion VALUES (NOW(), 4, 0, 0);
 INSERT INTO tblCategory VALUES (0, '');
