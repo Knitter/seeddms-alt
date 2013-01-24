@@ -112,7 +112,7 @@ class LetoDMS_View_BackupTools extends LetoDMS_Bootstrap_Style {
 			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
 			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
 			print "<td>";
-			print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini\">".getMLText("backup_remove")."</a>";
+			print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("backup_remove")."</a>";
 			print "</td>\n";	
 			print "</tr>\n";
 		}
@@ -167,7 +167,7 @@ class LetoDMS_View_BackupTools extends LetoDMS_Bootstrap_Style {
 			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
 			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
 			print "<td>";
-			print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini\">".getMLText("dump_remove")."</a>";
+			print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("dump_remove")."</a>";
 			print "</td>\n";	
 			print "</tr>\n";
 		}
