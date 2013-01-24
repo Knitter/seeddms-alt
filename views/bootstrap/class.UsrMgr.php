@@ -34,12 +34,14 @@ class LetoDMS_View_UsrMgr extends LetoDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$seluser = $this->params['seluser'];
 		$users = $this->params['allusers'];
 		$groups = $this->params['allgroups'];
 		$passwordstrength = $this->params['passwordstrength'];
 		$passwordexpiration = $this->params['passwordexpiration'];
 		$httproot = $this->params['httproot'];
 		$enableuserimage = $this->params['enableuserimage'];
+		$workflowmode = $this->params['workflowmode'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -98,7 +100,7 @@ function showUser(selectObj) {
 		$selected=0;
 		$count=2;
 		foreach ($users as $currUser) {
-			if (isset($_GET["userid"]) && $currUser->getID()==$_GET["userid"]) $selected=$count;
+			if ($seluser && $currUser->getID()==$seluser->getID()) $selected=$count;
 			print "<option value=\"".$currUser->getID()."\">" . htmlspecialchars($currUser->getLogin() . " - ". $currUser->getFullName());
 			$count++;
 		}
@@ -125,12 +127,18 @@ function showUser(selectObj) {
 			<td><?php printMLText("password");?>:</td>
 			<td><input class="pwd" name="pwd" rel="strengthbar" type="password"><td>
 		</tr>
+<?php
+		if($passwordstrength > 0) {
+?>
 		<tr>
 			<td><?php printMLText("password_strength");?>:</td>
 			<td>
 				<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
 			</td>
 		</tr>
+<?php
+		}
+?>
 		<tr>
 			<td><?php printMLText("confirm_pwd");?>:</td>
 			<td><input type="Password" name="pwdconf"></td>
@@ -177,7 +185,10 @@ function showUser(selectObj) {
 			<td><input type="File" name="userfile"></td>
 		</tr>
 
-<?php } ?>
+<?php
+		}
+		if($workflowmode == "traditional") {
+?>
 
 		<tr>
 			<td colspan="2"><?php printMLText("reviewers");?>:</td>
@@ -249,6 +260,31 @@ function showUser(selectObj) {
 				</select>
 			</td>
 		</tr>
+<?php
+		} else {
+			$workflows = $dms->getAllWorkflows();
+			if($workflows) {
+?>
+		<tr>
+			<td>
+				<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
+			</td>
+			<td>
+        <select name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+<?php
+				$workflows = $dms->getAllWorkflows();
+				print "<option value=\"\">"."</option>";
+				foreach ($workflows as $workflow) {
+					print "<option value=\"".$workflow->getID()."\">". htmlspecialchars($workflow->getName())."</option>";
+				}
+?>
+				</select>
+			</td>
+		</tr>
+<?php
+			}
+		}
+?>
 		<tr>
 			<td></td>
 			<td><input type="submit" class="btn" value="<?php printMLText("add_user");?>"></td>
@@ -266,12 +302,12 @@ function showUser(selectObj) {
 ?>
 	<form action="../op/op.UsrMgr.php" method="post" enctype="multipart/form-data" name="form<?php print $currUser->getID();?>" onsubmit="return checkForm('<?php print $currUser->getID();?>');">
 	<?php echo createHiddenFieldWithKey('edituser'); ?>
-	<input type="Hidden" name="userid" value="<?php print $currUser->getID();?>">
-	<input type="Hidden" name="action" value="edituser">
+	<input type="hidden" name="userid" value="<?php print $currUser->getID();?>">
+	<input type="hidden" name="action" value="edituser">
 	<table class="table-condensed">
 		<tr>
 			<td></td>
-			<td><a class="standardText btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><img src="images/del.gif" width="15" height="15" border="0" align="absmiddle" alt=""> <?php printMLText("rm_user");?></a></td>
+			<td><a class="standardText btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("user_login");?>:</td>
@@ -281,12 +317,18 @@ function showUser(selectObj) {
 			<td><?php printMLText("password");?>:</td>
 			<td><input type="Password" class="pwd" rel="strengthbar<?php echo $currUser->getID(); ?>" name="pwd"></td>
 		</tr>
+<?php
+		if($passwordstrength > 0) {
+?>
 		<tr>
 			<td><?php printMLText("password_strength");?>:</td>
 			<td>
 				<div id="strengthbar<?php echo $currUser->getID(); ?>" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
 			</td>
 		</tr>
+<?php
+		}
+?>
 		<tr>
 			<td><?php printMLText("confirm_pwd");?>:</td>
 			<td><input type="Password" name="pwdconf"></td>
@@ -344,7 +386,10 @@ function showUser(selectObj) {
 			<td><input type="file" name="userfile" accept="image/jpeg"></td>
 		</tr>
 
-		<?php } ?>
+<?php
+		}
+		if($workflowmode == "traditional") {
+?>
 
 		<tr>
 			<td colspan="2"><?php printMLText("reviewers");?>:</td>
@@ -434,7 +479,33 @@ function showUser(selectObj) {
 				</select>
 			</td>
 		</tr>
-
+<?php
+		} else {
+			$workflows = $dms->getAllWorkflows();
+			if($workflows) {
+?>
+		<tr>
+			<td>
+				<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
+			</td>
+			<td>
+        <select name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+<?php
+				print "<option value=\"\">"."</option>";
+				foreach ($workflows as $workflow) {
+					print "<option value=\"".$workflow->getID()."\"";
+					if($currUser->getMandatoryWorkflow() && $currUser->getMandatoryWorkflow()->getID() == $workflow->getID())
+						echo " selected=\"selected\"";
+					print ">". htmlspecialchars($workflow->getName())."</option>";
+				}
+?>
+				</select>
+			</td>
+		</tr>
+<?php
+			}
+		}
+?>
 		<tr>
 			<td></td>
 			<td><input type="submit" class="btn" value="<?php printMLText("save");?>"></td>
