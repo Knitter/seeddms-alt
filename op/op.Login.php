@@ -260,7 +260,11 @@ if(!$id = $session->create(array('userid'=>$userid, 'theme'=>$sesstheme, 'lang'=
 }
 
 // Set the session cookie.
-setcookie("mydms_session", $id, 0, $settings->_httpRoot);
+if($settings->_cookieLifetime)
+	$lifetime = time() + intval($settings->_cookieLifetime);
+else
+	$lifetime = 0;
+setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot);
 
 // TODO: by the PHP manual: The superglobals $_GET and $_REQUEST  are already decoded. 
 // Using urldecode() on an element in $_GET or $_REQUEST could have unexpected and dangerous results.
