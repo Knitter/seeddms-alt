@@ -27,21 +27,21 @@ class LetoDMS_Core_Group {
 	 *
 	 * @var integer
 	 */
-	var $_id;
+	protected $_id;
 
 	/**
 	 * The name of the user group
 	 *
 	 * @var string
 	 */
-	var $_name;
+	protected $_name;
 
 	/**
 	 * Back reference to DMS this user group belongs to
 	 *
 	 * @var object
 	 */
-	var $_dms;
+	protected $_dms;
 
 	function LetoDMS_Core_Group($id, $name, $comment) { /* {{{ */
 		$this->_id = $id;
