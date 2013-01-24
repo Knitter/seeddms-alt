@@ -52,6 +52,10 @@ if ($document->getAccessMode($user) < M_READ) {
 	$view->exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
 }
 
+/* Recalculate the status of a document and reload the page if the status
+ * has changed. A status change may occur if the document has expired in
+ * the mean time
+ */
 if ($document->verifyLastestContentExpriry()){
 	header("Location:../out/out.ViewDocument.php?documentid=".$document->getID());
 }
@@ -67,6 +71,7 @@ if($view) {
 	$view->setParam('accessobject', $accessop);
 	$view->setParam('viewonlinefiletypes', $settings->_viewOnlineFileTypes);
 	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->show();
 	exit;
 }
