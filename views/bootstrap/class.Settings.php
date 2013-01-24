@@ -316,6 +316,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_encryptionKey");?>:</td>
         <td><input type="text" name="encryptionKey" value="<?php echo $settings->_encryptionKey; ?>" size="32" /></td>
       </tr>
+      <tr title="<?php printMLText("settings_cookieLifetime_desc");?>">
+        <td><?php printMLText("settings_cookieLifetime");?>:</td>
+        <td><input type="text" name="cookieLifetime" value="<?php echo $settings->_cookieLifetime; ?>" size="32" /></td>
+      </tr>
 
       <!-- TODO Connectors -->
 
@@ -406,6 +410,15 @@ if(!is_writeable($settings->_configFilePath)) {
         -- SETTINGS - ADVANCED - EDITION
       -->
       <tr ><td><b> <?php printMLText("settings_Edition");?></b></td> </tr>
+      <tr title="<?php printMLText("settings_workflowMode_desc");?>">
+        <td><?php printMLText("settings_workflowMode");?>:</td>
+        <td>
+				  <select name="workflowMode">
+					  <option value="traditional" <?php if ($settings->_workflowMode=='traditional') echo "selected" ?>><?php printMLText("settings_workflowMode_valtraditional");?></option>
+						<option value="advanced" <?php if ($settings->_workflowMode=='advanced') echo "selected" ?>><?php printMLText("settings_workflowMode_valadvanced");?></option>
+					</select>
+				</td>
+      </tr>
       <tr title="<?php printMLText("settings_versioningFileName_desc");?>">
         <td><?php printMLText("settings_versioningFileName");?>:</td>
         <td><input type="text" name="versioningFileName" value="<?php echo $settings->_versioningFileName ?>" /></td>
