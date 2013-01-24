@@ -56,5 +56,5 @@ if($workflow->removeTransition($transition)) {
 
 add_log_line("?workflow=".$workflow->getID()."&transition".$transition->getID());
 
-header("Location:../out/out.WorkflowMgr.php?workflow=".$workflow->getID());
+header("Location:../out/out.WorkflowMgr.php?workflowid=".$workflow->getID());
 ?>
