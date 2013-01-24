@@ -34,6 +34,7 @@ class LetoDMS_View_GroupMgr extends LetoDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
+		$selgroup = $this->params['selgroup'];
 		$allUsers = $this->params['allusers'];
 		$allGroups = $this->params['allgroups'];
 		$strictformcheck = $this->params['strictformcheck'];
@@ -110,7 +111,7 @@ function showUser(selectObj) {
 		$selected=0;
 		$count=2;
 		foreach ($allGroups as $group) {
-			if (isset($_GET["groupid"]) && $group->getID()==$_GET["groupid"]) $selected=$count;
+			if ($selgroup && $group->getID()==$selgroup->getID()) $selected=$count;
 			print "<option value=\"".$group->getID()."\">" . htmlspecialchars($group->getName());
 			$count++;
 		}
@@ -157,7 +158,7 @@ function showUser(selectObj) {
 	<table>
 		<tr>
 			<td></td>
-			<td><a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn"><img src="images/del.gif" width="15" height="15" border="0" align="absmiddle" alt=""> <?php printMLText("rm_group");?></a></td>
+			<td><a href="../out/out.RemoveGroup.php?groupid=<?php print $group->getID();?>" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></a></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("name");?>:</td>
@@ -190,9 +191,9 @@ function showUser(selectObj) {
 					print "<td>" . htmlspecialchars($member->getFullName()) . "</td>";
 					print "<td>" . ($group->isMember($member,true)?getMLText("manager"):"&nbsp;") . "</td>";
 					print "<td>";
-					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"action\" value=\"rmmember\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('rmmember')."<input type=\"submit\" class=\"btn btn-mini\" value=\"".getMLText("delete")."\" /></form>";
+					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"action\" value=\"rmmember\" /><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('rmmember')."<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
 					print "&nbsp;";
-					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"action\" value=\"tmanager\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('tmanager')."<input type=\"submit\" class=\"btn btn-mini\" value=\"".getMLText("toggle_manager")."\" /></form>";
+					print "<form action=\"../op/op.GroupMgr.php\" method=\"post\" class=\"form-inline\" style=\"display: inline-block; margin-bottom: 0px;\"><input type=\"hidden\" name=\"groupid\" value=\"".$group->getID()."\" /><input type=\"hidden\" name=\"action\" value=\"tmanager\" /><input type=\"hidden\" name=\"userid\" value=\"".$member->getID()."\" />".createHiddenFieldWithKey('tmanager')."<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-random\"></i> ".getMLText("toggle_manager")."</button></form>";
 					print "</td></tr>";
 				}
 			}
@@ -203,7 +204,7 @@ function showUser(selectObj) {
 			$this->contentSubHeading(getMLText("add_member"));
 ?>
 		
-		<form action="../op/op.GroupMgr.php" method="POST" name="form<?php print $group->getID();?>_2" onsubmit="return checkForm2('<?php print $group->getID();?>');">
+		<form class="form-inline" action="../op/op.GroupMgr.php" method="POST" name="form<?php print $group->getID();?>_2" onsubmit="return checkForm2('<?php print $group->getID();?>');">
 		<?php echo createHiddenFieldWithKey('addmember'); ?>
 		<input type="Hidden" name="action" value="addmember">
 		<input type="Hidden" name="groupid" value="<?php print $group->getID();?>">
