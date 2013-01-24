@@ -24,6 +24,11 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+/**
+ * Include class to preview documents
+ */
+require_once("LetoDMS/Preview.php");
+
 if ($user->isGuest()) {
 	UI::exitError(getMLText("my_documents"),getMLText("access_denied"));
 }
@@ -41,7 +46,7 @@ if (isset($_GET["orderby"]) && strlen($_GET["orderby"])==1 ) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'orderby'=>$orderby, 'showinprocess'=>$showInProcess));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'orderby'=>$orderby, 'showinprocess'=>$showInProcess, 'cachedir'=>$settings->_cacheDir));
 if($view) {
 	$view->show();
 	exit;
