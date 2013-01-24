@@ -51,7 +51,7 @@ class LetoDMS_View_RemoveDocument extends LetoDMS_Bootstrap_Style {
 <p>
 <?php printMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName())));?>
 </p>
-<p><input type="submit" class="btn" value="<?php printMLText("rm_document");?>"></p>
+<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_document");?></button></p>
 </form>
 <?php
 		$this->contentContainerEnd();

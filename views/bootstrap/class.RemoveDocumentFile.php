@@ -51,7 +51,7 @@ class LetoDMS_View_RemoveDocumentFile extends LetoDMS_Bootstrap_Style {
 	<input type="Hidden" name="documentid" value="<?php echo $document->getID()?>">
 	<input type="Hidden" name="fileid" value="<?php echo $file->getID()?>">
 	<p><?php printMLText("confirm_rm_file", array ("documentname" => htmlspecialchars($document->getName()), "name" => htmlspecialchars($file->getName())));?></p>
-	<input type="submit" class="btn" value="<?php printMLText("rm_file");?>">
+	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_file");?></button>
 </form>
 <?php
 		$this->contentContainerEnd();

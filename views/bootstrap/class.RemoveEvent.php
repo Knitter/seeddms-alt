@@ -49,7 +49,7 @@ class LetoDMS_View_RemoveEvent extends LetoDMS_Bootstrap_Style {
   <?php echo createHiddenFieldWithKey('removeevent'); ?>
 	<input type="hidden" name="eventid" value="<?php echo intval($event["id"]); ?>">
 	<p><?php printMLText("confirm_rm_event", array ("name" => htmlspecialchars($event["name"])));?></p>
-	<input class="btn" type="submit" value="<?php printMLText("delete");?>">
+	<button class="btn" type="submit"><i class="icon-remove"></i> <?php printMLText("delete");?></button>
 </form>
 <?php
 		$this->contentContainerEnd();
