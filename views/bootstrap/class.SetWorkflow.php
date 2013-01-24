@@ -62,6 +62,10 @@ function showWorkflow(selectObj) {
 </script>
 	<div class="row-fluid">
 	<div class="span4">
+<?php
+				$workflows = $dms->getAllWorkflows();
+				if($workflows) {
+?>
 		<form action="../op/op.SetWorkflow.php" method="post" name="form1">
 		<?php echo createHiddenFieldWithKey('setworkflow'); ?>
 		<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
@@ -74,8 +78,6 @@ function showWorkflow(selectObj) {
       </td>
       <td>
 <?php
-				$workflows = $dms->getAllWorkflows();
-				if($workflows) {
 					echo "<select onchange=\"showWorkflow(this)\" class=\"_chzn-select-deselect\" name=\"workflow\" data-placeholder=\"".getMLText('select_workflow')."\">";
 					$mandatoryworkflow = $user->getMandatoryWorkflow();
 					$workflows=$dms->getAllWorkflows();
@@ -86,7 +88,6 @@ function showWorkflow(selectObj) {
 						print ">". htmlspecialchars($workflow->getName())."</option>";
 					}
 					echo "</select>";
-				}
 ?>
 				</td>
 			</tr>
@@ -96,6 +97,14 @@ function showWorkflow(selectObj) {
 				<td><input type="submit" class="btn" value="<?php printMLText("set_workflow");?>"></td>
 			</tr>
 		</table>
+		</form>
+<?php
+				} else {
+?>
+		<p><?php printMLText('no_workflow_available'); ?></p>
+<?php
+				}
+?>
 	</div>
 	<div id="workflowgraph" class="span8" style="display: none;">
 	<iframe src="" width="100%" height="500" style="border: 1px solid #AAA;"></iframe>
