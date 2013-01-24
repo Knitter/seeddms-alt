@@ -58,6 +58,8 @@ class Settings { /* {{{ */
 	// abitray string used for creation of unique identifiers (e.g. the form
 	// key created by createFormKey())
 	var $_encryptionKey = '';
+	// lifetime of cookie in seconds or 0 for end of session
+	var $_cookieLifetime = '';
 	// Strict form checking
 	var $_strictFormCheck = false;
 	// Path to where letoDMS is located
@@ -115,6 +117,8 @@ class Settings { /* {{{ */
 	var $_enableNotificationAppRev = true;
 	// the name of the versioning info file created by the backup tool
 	var $_versioningFileName = "versioning_info.txt";
+	// the mode of workflow
+	var $_workflowMode = "traditional";
 	// enable/disable log system
 	var $_logFileEnable = true;
 	// the log file rotation
@@ -328,6 +332,7 @@ class Settings { /* {{{ */
 		$this->_loginFailure = intval($tab["loginFailure"]);
 		$this->_quota = intval($tab["quota"]);
 		$this->_encryptionKey = strval($tab["encryptionKey"]);
+		$this->_cookieLifetime = intval($tab["cookieLifetime"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
 		$this->_enableUserImage = Settings::boolVal($tab["enableUserImage"]);
 		$this->_disableSelfEdit = Settings::boolVal($tab["disableSelfEdit"]);
@@ -418,6 +423,7 @@ class Settings { /* {{{ */
 		$tab = $node[0]->attributes();
 		$this->_enableAdminRevApp = Settings::boolval($tab["enableAdminRevApp"]);
 		$this->_versioningFileName = strval($tab["versioningFileName"]);
+		$this->_workflowMode = strval($tab["workflowMode"]);
 		$this->_enableVersionDeletion = Settings::boolval($tab["enableVersionDeletion"]);
 		$this->_enableVersionModification = Settings::boolval($tab["enableVersionModification"]);
 
@@ -568,6 +574,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "loginFailure", $this->_loginFailure);
     $this->setXMLAttributValue($node, "quota", $this->_quota);
     $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
+    $this->setXMLAttributValue($node, "cookieLifetime", $this->_cookieLifetime);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);
     $this->setXMLAttributValue($node, "enableUserImage", $this->_enableUserImage);
     $this->setXMLAttributValue($node, "disableSelfEdit", $this->_disableSelfEdit);
@@ -652,6 +659,7 @@ class Settings { /* {{{ */
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'edition');
     $this->setXMLAttributValue($node, "enableAdminRevApp", $this->_enableAdminRevApp);
     $this->setXMLAttributValue($node, "versioningFileName", $this->_versioningFileName);
+    $this->setXMLAttributValue($node, "workflowMode", $this->_workflowMode);
     $this->setXMLAttributValue($node, "enableVersionDeletion", $this->_enableVersionDeletion);
     $this->setXMLAttributValue($node, "enableVersionModification", $this->_enableVersionModification);
 
