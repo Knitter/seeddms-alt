@@ -1,8 +1,13 @@
 ALTER TABLE tblDocumentLinks ADD CONSTRAINT `tblDocumentLinks_target` FOREIGN KEY (`target`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE;
+
 ALTER TABLE tblDocumentReviewLog ADD CONSTRAINT `tblDocumentReviewLog_review` FOREIGN KEY (`reviewID`) REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE;
+
 ALTER TABLE tblMandatoryReviewers ADD CONSTRAINT `tblMandatoryReviewers_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE;
+
 ALTER TABLE tblMandatoryApprovers ADD CONSTRAINT `tblMandatoryApprovers_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE;
+
 ALTER TABLE tblDocumentContent ADD COLUMN `fileSize` bigint;
+
 ALTER TABLE tblUsers ADD COLUMN `quota` bigint;
 
 CREATE TABLE tblWorkflowStates (
