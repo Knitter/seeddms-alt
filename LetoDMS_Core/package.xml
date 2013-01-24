@@ -12,16 +12,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <lead>
-  <name>Matteo Lucarelli</name>
-  <user>matteo</user>
-  <email></email>
-  <active>no</active>
- </lead>
- <date>2012-12-14</date>
+ <date>2013-1-24</date>
  <time>08:02:34</time>
  <version>
-  <release>4.0.0</release>
+  <release>4.0.0pre1</release>
   <api>4.0.0</api>
  </version>
  <stability>
@@ -31,6 +25,8 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 - added database transactions
+- new workflow
+- replaced old var declaration
  </notes>
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
@@ -78,6 +74,9 @@
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
     <file name="inc.ClassAttribute.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+    <file name="inc.ClassWorkflow.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
    </dir> <!-- /DTD -->
