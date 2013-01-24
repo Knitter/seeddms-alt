@@ -82,6 +82,12 @@ if ($action == "adduser") {
 	}
 	else UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	
+	if(isset($_POST["workflow"])) {
+		$workflow = $dms->getWorkflow($_POST["workflow"]);
+		if($workflow)
+			$newUser->setWorkflow($workflow);
+	}
+
 	if (isset($_POST["usrReviewers"])){
 		foreach ($_POST["usrReviewers"] as $revID) 
 			$newUser->setMandatoryReviewer($revID,false);
@@ -166,7 +172,10 @@ else if ($action == "edituser") {
 	
 	$login   = $_POST["login"];
 	$pwd     = $_POST["pwd"];
-	$pwdexpiration = $_POST["pwdexpiration"];
+	if(isset($_POST["pwdexpiration"]))
+		$pwdexpiration = $_POST["pwdexpiration"];
+	else
+		$pwdexpiration = '';
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
 	$comment = $_POST["comment"];
@@ -207,6 +216,16 @@ else if ($action == "edituser") {
 		$editedUser->setDisabled($isDisabled);
 		if(!$isDisabled)
 			$editedUser->clearLoginFailures();
+	}
+	if(isset($_POST["workflow"]) && $_POST["workflow"]) {
+		$currworkflow = $editedUser->getMandatoryWorkflow();
+		if (!$currworkflow || ($currworkflow->getID() != $_POST["workflow"])) {
+			$workflow = $dms->getWorkflow($_POST["workflow"]);
+			if($workflow)
+				$editedUser->setMandatoryWorkflow($workflow);
+		}
+	} else {
+		$editedUser->delMandatoryWorkflow();
 	}
 
 	if (isset($_FILES['userfile']) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
