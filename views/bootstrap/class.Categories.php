@@ -88,7 +88,7 @@ function showCategories(selectObj) {
 
 <table class="table-condensed"><tr>
 		<td id="categories0" style="display : none;">	
-			<form action="../op/op.Categories.php" method="post">
+			<form class="form-inline" action="../op/op.Categories.php" method="post">
   		<?php echo createHiddenFieldWithKey('addcategory'); ?>
 			<input type="Hidden" name="action" value="addcategory">
 			<?php printMLText("name");?> : <input type="text" name="name">
@@ -100,9 +100,9 @@ function showCategories(selectObj) {
 			foreach ($categories as $category) {
 				print "<td id=\"categories".$category->getID()."\" style=\"display : none;\">";	
 ?>
-			<table>
+			<table class="table-condensed">
 				<tr>
-					<td colspan="2">
+					<td></td><td>
 <?php
 		if(!$category->isUsed()) {
 ?>
@@ -110,7 +110,7 @@ function showCategories(selectObj) {
 						<?php echo createHiddenFieldWithKey('removecategory'); ?>
 						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 						<input type="Hidden" name="action" value="removecategory">
-						<input value="<?php echo getMLText("rm_document_category")?>" type="submit">
+						<button class="btn" type="submit"><i class="icon-remove"></i> <?php echo getMLText("rm_document_category")?></button>
 						</form>
 <?php
 		} else {
@@ -121,11 +121,6 @@ function showCategories(selectObj) {
 ?>
 					</td>
 				</tr>
-				<tr>
-					<td colspan="2">
-						<?php $this->contentSubHeading("");?>
-					</td>
-				</tr>				
 				<tr>
 					<td><?php echo getMLText("name")?>:</td>
 					<td>
