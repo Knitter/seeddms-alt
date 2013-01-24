@@ -40,7 +40,7 @@ class LetoDMS_View_CreateIndex extends LetoDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 
 		echo '<p>'.getMLText('create_fulltext_index_warning').'</p>';
-		echo '<a href="out.Indexer.php?create=1&confirm=1">'.getMLText('confirm_create_fulltext_index').'</a>';
+		echo '<a href="out.Indexer.php?create=1&confirm=1" class="btn">'.getMLText('confirm_create_fulltext_index').'</a>';
 
 		$this->contentContainerEnd();
 		$this->htmlEndPage();
