@@ -29,35 +29,17 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
-	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
+if (!isset($_GET["workflowid"]) || !is_numeric($_GET["workflowid"]) || intval($_GET["workflowid"])<1) {
+	UI::exitError(getMLText("workflow_title"),getMLText("invalid_workflow_id"));
 }
 
-$document = $dms->getDocument(intval($_POST["documentid"]));
-if (!is_object($document)) {
-	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
-}
-
-if (!isset($_POST["version"]) || !is_numeric($_POST["version"]) || intval($_POST["version"])<1) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
-}
-
-$version = $_POST["version"];
-$version = $document->getContentByVersion($version);
-
-if (!is_object($version)) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("invalid_version"));
-}
-
-$workflow = $version->getWorkflow();
+$workflow = $dms->getWorkflow(intval($_GET["workflowid"]));
 if (!is_object($workflow)) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("document_has_no_workflow"));
+	UI::exitError(getMLText("workflow_title"),getMLText("invalid_workflow_id"));
 }
-
-$folder = $document->getFolder();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'workflow'=>$workflow));
 if($view) {
 	$view->show();
 	exit;

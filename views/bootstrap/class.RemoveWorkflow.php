@@ -34,36 +34,13 @@ class LetoDMS_View_RemoveWorkflow extends LetoDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$folder = $this->params['folder'];
-		$document = $this->params['document'];
+		$workflow = $this->params['workflow'];
 
-		$latestContent = $document->getLatestContent();
-
-		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
-		$this->globalNavigation($folder);
+		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($workflow->getName()))));
+		$this->globalNavigation();
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document");
+		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 		$this->contentHeading(getMLText("rm_workflow"));
-
-		$currentstate = $latestContent->getWorkflowState();
-		$wkflog = $latestContent->getWorkflowLog();
-		$workflow = $latestContent->getWorkflow();
-
-		$msg = "The document is currently in state: ".$currentstate->getName()."<br />";
-		if($wkflog) {
-			foreach($wkflog as $entry) {
-				if($entry->getTransition()->getNextState()->getID() == $currentstate->getID()) {
-					$enterdate = $entry->getDate();
-					$d = strptime($enterdate, '%Y-%m-%d %H:%M:%S');
-					$enterts = mktime($d['tm_hour'], $d['tm_min'], $d['tm_sec'], $d['tm_mon']+1, $d['tm_mday'], $d['tm_year']+1900);
-				}
-			}
-			$msg .= "The state was entered at ".$enterdate." which was ";
-			$msg .= getReadableDuration((time()-$enterts))." ago.<br />";
-		}
-		$msg .= "The document may stay in this state for ".$currentstate->getMaxTime()." sec.";
-		$this->infoMsg($msg);
-
 		$this->contentContainerStart();
 		// Display the Workflow form.
 ?>
@@ -74,8 +51,7 @@ class LetoDMS_View_RemoveWorkflow extends LetoDMS_Bootstrap_Style {
 	<?php echo createHiddenFieldWithKey('removeworkflow'); ?>
 	<table>
 	<tr><td></td><td>
-	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
-	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
+	<input type='hidden' name='workflowid' value='<?php echo $workflow->getId(); ?>'/>
 	<button type='submit' class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow"); ?></button>
 	</td></tr></table>
 	</form>
@@ -86,24 +62,6 @@ class LetoDMS_View_RemoveWorkflow extends LetoDMS_Bootstrap_Style {
 	</div>
 <?php
 		$this->contentContainerEnd();
-
-		if($wkflog) {
-			$this->contentContainerStart();
-			echo "<table class=\"table-condensed\">";
-			echo "<tr><th>".getMLText('action')."</th><th>Start state</th><th>End state</th><th>".getMLText('date')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>";
-			foreach($wkflog as $entry) {
-				echo "<tr>";
-				echo "<td>".getMLText('action_'.$entry->getTransition()->getAction()->getName())."</td>";
-				echo "<td>".$entry->getTransition()->getState()->getName()."</td>";
-				echo "<td>".$entry->getTransition()->getNextState()->getName()."</td>";
-				echo "<td>".$entry->getDate()."</td>";
-				echo "<td>".$entry->getUser()->getFullname()."</td>";
-				echo "<td>".$entry->getComment()."</td>";
-				echo "</tr>";
-			}
-			echo "</table>\n";
-			$this->contentContainerEnd();
-		}
 
 		$this->htmlEndPage();
 	} /* }}} */

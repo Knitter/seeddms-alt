@@ -34,50 +34,19 @@ if(!checkFormKey('removeworkflow')) {
 	UI::exitError(getMLText("workflow_editor"), getMLText("invalid_request_token"));
 }
 
-if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
-	UI::exitError(getMLText("workflow_editor"), getMLText("invalid_doc_id"));
-}
-$documentid = $_POST["documentid"];
-$document = $dms->getDocument($documentid);
-if (!is_object($document)) {
-	UI::exitError(getMLText("workflow_editor"), getMLText("invalid_doc_id"));
+if (!isset($_POST["workflowid"]) || !is_numeric($_POST["workflowid"]) || intval($_POST["workflowid"])<1) {
+	UI::exitError(getMLText("workflow_title"),getMLText("invalid_workflow_id"));
 }
 
-if (!isset($_POST["version"]) || !is_numeric($_POST["version"]) || intval($_POST["version"])<1) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
-}
-
-$version_num = $_POST["version"];
-$version = $document->getContentByVersion($version_num);
-if (!is_object($version)) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
-}
-
-$workflow = $version->getWorkflow();
+$workflow = $dms->getWorkflow(intval($_POST["workflowid"]));
 if (!is_object($workflow)) {
-	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("document_has_no_workflow"));
+	UI::exitError(getMLText("workflow_title"),getMLText("invalid_workflow_id"));
 }
 
-if($version->removeWorkflow($user)) {
-	if ($notifier) {
-		$nl =	$document->getNotifyList();
-
-		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("remove_workflow_email");
-		$message = getMLText("remove_workflow_email")."\r\n";
-		$message .= 
-			getMLText("document").": ".$document->getName()."\r\n".
-			getMLText("workflow").": ".$workflow->getName()."\r\n".
-			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
-
-		// Send notification to subscribers.
-		$notifier->toList($user, $nl["users"], $subject, $message);
-		foreach ($nl["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
-		}
-	}
+if($workflow->remove()) {
 }
 
-add_log_line("?documentid=".$documentid."&version".$version_num);
+add_log_line("");
 
-header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
+header("Location:../out/out.WorkflowMgr.php");
 ?>
