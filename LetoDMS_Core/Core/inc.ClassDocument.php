@@ -1141,7 +1141,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		unset($this->_latestContent);
 		$content = new LetoDMS_Core_DocumentContent($contentID, $this, $version, $comment, $date, $user->getID(), $dir, $orgFileName, $fileType, $mimeType);
 		if($workflow)
-			$content->setWorkflow($workflow);
+			$content->setWorkflow($workflow, $user);
 		$docResultSet = new LetoDMS_Core_AddContentResultSet($content);
 
 		if($attributes) {
@@ -2838,7 +2838,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		$this->getWorkflow();
 		if($workflow && is_object($workflow)) {
 			$initstate = $workflow->getInitState();
-			$queryStr = "INSERT INTO tblWorkflowDocumentContent (workflow, document, version, state, date) VALUES (". $workflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", CURRENT_TIMESTAMP)";
+			$queryStr = "INSERT INTO tblWorkflowDocumentContent (workflow, document, version, state) VALUES (". $workflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().")";
 			if (!$db->getResult($queryStr)) {
 				return false;
 			}
@@ -2864,7 +2864,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 			$queryStr=
 				"SELECT b.* FROM tblWorkflowDocumentContent a LEFT JOIN tblWorkflows b ON a.workflow = b.id WHERE a.`version`='".$this->_version
 				."' AND a.`document` = '". $this->_document->getID() ."' "
-				."ORDER BY `date` DESC LIMIT 1";
+				." LIMIT 1";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
 				return false;
@@ -3012,7 +3012,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 		if($subworkflow) {
 			$initstate = $subworkflow->getInitState();
-			$queryStr = "INSERT INTO tblWorkflowDocumentContent (parentworkflow, workflow, document, version, state, date) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", CURRENT_TIMESTAMP)";
+			$queryStr = "INSERT INTO tblWorkflowDocumentContent (parentworkflow, workflow, document, version, state) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().")";
 			if (!$db->getResult($queryStr)) {
 				return false;
 			}
