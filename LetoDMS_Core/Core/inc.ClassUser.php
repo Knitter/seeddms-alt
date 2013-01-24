@@ -588,7 +588,6 @@ class LetoDMS_Core_User {
 		}
 
 		$db->commitTransaction();
-//		unset($this);
 		return true;
 	} /* }}} */
 
