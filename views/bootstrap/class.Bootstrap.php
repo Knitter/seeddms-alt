@@ -22,11 +22,13 @@
 
 class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	var $imgpath;
+	var $extraheader;
 
 	function __construct($params, $theme='bootstrap') {
 		$this->theme = $theme;
 		$this->params = $params;
 		$this->imgpath = '../views/'.$theme.'/images/';
+		$this->extraheader = '';
 	}
 
 	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
@@ -39,14 +41,19 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
-		echo '<script src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
+		if($this->extraheader)
+			echo $this->extraheader;
+		echo '<script type="text/javascript" src="../styles/bootstrap/jquery/jquery.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "LetoDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
+	} /* }}} */
+
+	function htmlAddHeader($head) { /* {{{ */
+		$this->extraheader .= $head;
 	} /* }}} */
 
 	function htmlEndPage() { /* {{{ */
@@ -110,7 +117,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	} /* }}} */
 
 	function globalNavigation($folder=null) { /* {{{ */
-		global $settings, $user;
+		global $settings, $user, $session;
 
 		echo "<div style=\"padding-top: 60px;\"></div>\n";
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
@@ -128,6 +135,21 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 			echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
 			echo "    <li class=\"divider\"></li>\n";
 		}
+		echo "    <li class=\"dropdown-submenu\">\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("language")."</a>\n";
+		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		$languages = getLanguages();
+		foreach ($languages as $currLang) {
+			if($session->getLanguage() == $currLang)
+				echo "<li class=\"active\">";
+			else
+				echo "<li>";
+			echo "<a href=\"../op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
+			echo $currLang."</a></li>\n";
+		}
+		echo "     </ul>\n";
+		echo "    </li>\n";
+		echo "    <li class=\"divider\"></li>\n";
 		echo "    <li><a href=\"../op/op.Logout.php\">".getMLText("sign_out")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
@@ -140,7 +162,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		if ($user->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
 		echo "    <li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
 		echo "   </ul>\n";
-		echo "     <form action=\"../op/op.Search.php\" class=\"form-inline navbar-search pull-left\">";
+		echo "     <form action=\"../op/op.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
 		if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "LetoDMS_Core_Folder")) {
 			echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 		}
@@ -148,7 +170,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"1\" />";
 		echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"2\" />";
 		echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
-		echo "      <input name=\"query\" class=\"search-query\" type=\"text\" size=\"20\" placeholder=\"".getMLText("search")."\"/>";
+		echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" size=\"20\" placeholder=\"".getMLText("search")."\"/>";
 		if($settings->_enableFullSearch) {
 			echo "      <label class=\"checkbox\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
 		}
@@ -351,6 +373,9 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "      <li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
 		echo "     <li><a href=\"../out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
 		echo "     <li><a href=\"../out/out.AttributeMgr.php\">".getMLText("global_attributedefinitions")."</a></li>\n";
+		echo "     <li><a href=\"../out/out.WorkflowMgr.php\">".getMLText("global_workflows")."</a></li>\n";
+		echo "     <li><a href=\"../out/out.WorkflowStatesMgr.php\">".getMLText("global_workflow_states")."</a></li>\n";
+		echo "     <li><a href=\"../out/out.WorkflowActionsMgr.php\">".getMLText("global_workflow_actions")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
@@ -834,6 +859,12 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 
 	function printImgPath($img) { /* {{{ */
 		print $this->getImgPath($img);
+	} /* }}} */
+
+	function infoMsg($msg) { /* {{{ */
+		echo "<div class=\"alert alert-info\">\n";
+		echo $msg;
+		echo "</div>\n";
 	} /* }}} */
 
 	function warningMsg($msg) { /* {{{ */
