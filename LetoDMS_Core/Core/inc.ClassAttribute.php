@@ -26,47 +26,47 @@ class LetoDMS_Core_Attribute {
 	 *
 	 * @access protected
 	 */
-	var $_id;
+	protected $_id;
 
 	/**
 	 * @var object folder or document this attribute belongs to
 	 *
 	 * @access protected
 	 */
-	var $_obj;
+	protected $_obj;
 
 	/**
 	 * @var object definition of this attribute
 	 *
 	 * @access protected
 	 */
-	var $_attrdef;
+	protected $_attrdef;
 
 	/**
 	 * @var mixed value of this attribute
 	 *
 	 * @access protected
 	 */
-	var $_value;
+	protected $_value;
 
 	/**
 	 * @var object reference to the dms instance this attribute belongs to
 	 *
 	 * @access protected
 	 */
-	var $_dms;
+	protected $_dms;
 
-	function LetoDMS_Core_Attribute($id, $obj, $attrdef, $value) {
+	function LetoDMS_Core_Attribute($id, $obj, $attrdef, $value) { /* {{{ */
 		$this->_id = $id;
 		$this->_obj = $obj;
 		$this->_attrdef = $attrdef;
 		$this->_value = $value;
 		$this->_dms = null;
-	}
+	} /* }}} */
 
-	function setDMS($dms) {
+	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
-	}
+	} /* }}} */
 
 	function getID() { return $this->_id; }
 
@@ -131,21 +131,21 @@ class LetoDMS_Core_AttributeDefinition {
 	 *
 	 * @access protected
 	 */
-	var $_id;
+	protected $_id;
 
 	/**
 	 * @var string name of attribute definition
 	 *
 	 * @access protected
 	 */
-	var $_name;
+	protected $_name;
 
 	/**
 	 * @var object reference to the dms instance this attribute definition belongs to
 	 *
 	 * @access protected
 	 */
-	var $_dms;
+	protected $_dms;
 
 	const type_int = '1';
 	const type_float = '2';
@@ -157,7 +157,7 @@ class LetoDMS_Core_AttributeDefinition {
 	const objtype_document = '2';
 	const objtype_documentcontent = '3';
 
-	function LetoDMS_Core_AttributeDefinition($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset) {
+	function LetoDMS_Core_AttributeDefinition($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_type = $type;
@@ -168,17 +168,17 @@ class LetoDMS_Core_AttributeDefinition {
 		$this->_valueset = $valueset;
 		$this->_separator = '';
 		$this->_dms = null;
-	}
+	} /* }}} */
 
-	function setDMS($dms) {
+	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
-	}
+	} /* }}} */
 
 	function getID() { return $this->_id; }
 
 	function getName() { return $this->_name; }
 
-	function setName($name) {
+	function setName($name) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblAttributeDefinitions SET name =".$db->qstr($name)." WHERE id = " . $this->_id;
@@ -188,11 +188,11 @@ class LetoDMS_Core_AttributeDefinition {
 
 		$this->_name = $name;
 		return true;
-	}
+	} /* }}} */
 
 	function getObjType() { return $this->_objtype; }
 
-	function setObjType($objtype) {
+	function setObjType($objtype) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblAttributeDefinitions SET objtype =".intval($objtype)." WHERE id = " . $this->_id;
@@ -202,11 +202,11 @@ class LetoDMS_Core_AttributeDefinition {
 
 		$this->_objtype = $objtype;
 		return true;
-	}
+	} /* }}} */
 
 	function getType() { return $this->_type; }
 
-	function setType($type) {
+	function setType($type) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblAttributeDefinitions SET type =".intval($type)." WHERE id = " . $this->_id;
@@ -216,11 +216,11 @@ class LetoDMS_Core_AttributeDefinition {
 
 		$this->_type = $type;
 		return true;
-	}
+	} /* }}} */
 
-	function hasMultipleValues() { return $this->_multiple; }
+	function getMultipleValues() { return $this->_multiple; }
 
-	function setMultipleValues($mv) {
+	function setMultipleValues($mv) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblAttributeDefinitions SET multiple =".intval($mv)." WHERE id = " . $this->_id;
@@ -230,11 +230,11 @@ class LetoDMS_Core_AttributeDefinition {
 
 		$this->_multiple = $mv;
 		return true;
-	}
+	} /* }}} */
 
 	function getMinValues() { return $this->_minvalues; }
 
-	function setMinValues($minvalues) {
+	function setMinValues($minvalues) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblAttributeDefinitions SET minvalues =".intval($minvalues)." WHERE id = " . $this->_id;
@@ -244,7 +244,7 @@ class LetoDMS_Core_AttributeDefinition {
 
 		$this->_minvalues = $minvalues;
 		return true;
-	}
+	} /* }}} */
 
 	function getMaxValues() { return $this->_maxvalues; }
 
