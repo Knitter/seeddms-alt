@@ -43,15 +43,18 @@ if ($action == "addworkflow") {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 	}
 
-	$name    = $_POST["name"];
-	$initstate = $_POST["initstate"];
-
+	$name = $_POST["name"];
 	if (is_object($dms->getWorkflowByName($name))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("workflow_exists"));
 	}
 
-	$state = $dms->getWorkflowState($initstate);
-	if (!$state) {
+	if(isset($_POST["initstate"])) {
+		$initstate = $_POST["initstate"];
+		$state = $dms->getWorkflowState($initstate);
+		if (!$state) {
+			UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+		}
+	} else {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
 
@@ -63,7 +66,7 @@ if ($action == "addworkflow") {
 	add_log_line(".php&action=addworkflow&name=".$name);
 }
 
-// delete user ------------------------------------------------------------
+// delete workflow --------------------------------------------------------
 else if ($action == "removeworkflow") {
 
 	/* Check if the form data comes for a trusted request */
