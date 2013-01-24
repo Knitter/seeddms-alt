@@ -97,7 +97,7 @@ function checkForm()
 	}
 ?>
 		<tr>
-			<td colspan="2"><br><input type="submit" class="btn" value="<?php printMLText("add_subfolder");?>"></td>
+			<td></td><td><input type="submit" class="btn" value="<?php printMLText("add_subfolder");?>"></td>
 		</tr>
 	</table>
 </form>
