@@ -39,8 +39,14 @@ if (is_bool($allGroups)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
 }
 
+if(isset($_GET['groupid']) && $_GET['groupid']) {
+	$selgroup = $dms->getGroup($_GET['groupid']);
+} else {
+	$selgroup = null;
+}
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allgroups'=>$allGroups, 'allusers'=>$allUsers, 'strictformcheck'=>$settings->_strictFormCheck));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'selgroup'=>$selgroup, 'allgroups'=>$allGroups, 'allusers'=>$allUsers, 'strictformcheck'=>$settings->_strictFormCheck));
 if($view) {
 	$view->show();
 	exit;
