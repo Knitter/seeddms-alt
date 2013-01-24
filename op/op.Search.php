@@ -134,19 +134,54 @@ if (isset($_GET["ownerid"]) && is_numeric($_GET["ownerid"]) && $_GET["ownerid"]!
 $startdate = array();
 $stopdate = array();
 if (isset($_GET["creationdate"]) && $_GET["creationdate"]!=null) {
-	$startdate = array('year'=>$_GET["createstartyear"], 'month'=>$_GET["createstartmonth"], 'day'=>$_GET["createstartday"], 'hour'=>0, 'minute'=>0, 'second'=>0);
+	if(isset($_GET["createstart"])) {
+		$tmp = explode("-", $_GET["createstart"]);
+		$startdate = array('year'=>(int)$tmp[2], 'month'=>(int)$tmp[1], 'day'=>(int)$tmp[0], 'hour'=>0, 'minute'=>0, 'second'=>0);
+	} else {
+		$startdate = array('year'=>$_GET["createstartyear"], 'month'=>$_GET["createstartmonth"], 'day'=>$_GET["createstartday"], 'hour'=>0, 'minute'=>0, 'second'=>0);
+	}
 	if (!checkdate($startdate['month'], $startdate['day'], $startdate['year'])) {
 		UI::htmlStartPage(getMLText("search_results"));
 		UI::contentContainer(getMLText("invalid_create_date_start"));
 		UI::htmlEndPage();
 		exit;
 	}
-	$stopdate = array('year'=>$_GET["createendyear"], 'month'=>$_GET["createendmonth"], 'day'=>$_GET["createendday"], 'hour'=>23, 'minute'=>59, 'second'=>59);
+	if(isset($_GET["createend"])) {
+		$tmp = explode("-", $_GET["createend"]);
+		$stopdate = array('year'=>(int)$tmp[2], 'month'=>(int)$tmp[1], 'day'=>(int)$tmp[0], 'hour'=>0, 'minute'=>0, 'second'=>0);
+	} else {
+		$stopdate = array('year'=>$_GET["createendyear"], 'month'=>$_GET["createendmonth"], 'day'=>$_GET["createendday"], 'hour'=>23, 'minute'=>59, 'second'=>59);
+	}
 	if (!checkdate($stopdate['month'], $stopdate['day'], $stopdate['year'])) {
 		UI::htmlStartPage(getMLText("search_results"));
 		UI::contentContainer(getMLText("invalid_create_date_end"));
 		UI::htmlEndPage();
 		exit;
+	}
+}
+
+$expstartdate = array();
+$expstopdate = array();
+if (isset($_GET["expirationdate"]) && $_GET["expirationdate"]!=null) {
+	if(isset($_GET["expirationstart"]) && $_GET["expirationstart"]) {
+		$tmp = explode("-", $_GET["expirationstart"]);
+		$expstartdate = array('year'=>(int)$tmp[2], 'month'=>(int)$tmp[1], 'day'=>(int)$tmp[0], 'hour'=>0, 'minute'=>0, 'second'=>0);
+		if (!checkdate($expstartdate['month'], $expstartdate['day'], $expstartdate['year'])) {
+			UI::exitError(getMLText("search"),getMLText("invalid_expiration_date_start"));
+		}
+	} else {
+		$expstartdate = array('year'=>$_GET["expirationstartyear"], 'month'=>$_GET["expirationstartmonth"], 'day'=>$_GET["expirationstartday"], 'hour'=>0, 'minute'=>0, 'second'=>0);
+		$expstartdate = array();
+	}
+	if(isset($_GET["expirationend"]) && $_GET["expirationend"]) {
+		$tmp = explode("-", $_GET["expirationend"]);
+		$expstopdate = array('year'=>(int)$tmp[2], 'month'=>(int)$tmp[1], 'day'=>(int)$tmp[0], 'hour'=>0, 'minute'=>0, 'second'=>0);
+		if (!checkdate($expstopdate['month'], $expstopdate['day'], $expstopdate['year'])) {
+			UI::exitError(getMLText("search"),getMLText("invalid_expiration_date_end"));
+		}
+	} else {
+		$expstopdate = array('year'=>$_GET["expirationendyear"], 'month'=>$_GET["expirationendmonth"], 'day'=>$_GET["expirationendday"], 'hour'=>23, 'minute'=>59, 'second'=>59);
+		$expstopdate = array();
 	}
 }
 
@@ -157,6 +192,9 @@ if (isset($_GET["pendingReview"])){
 }
 if (isset($_GET["pendingApproval"])){
 	$status[] = S_DRAFT_APP;
+}
+if (isset($_GET["inWorkflow"])){
+	$status[] = S_IN_WORKFLOW;
 }
 if (isset($_GET["released"])){
 	$status[] = S_RELEASED;
@@ -194,7 +232,7 @@ else
 //
 // Default page to display is always one.
 $pageNumber=1;
-$limit = 20;
+$limit = 15;
 if (isset($_GET["pg"])) {
 	if (is_numeric($_GET["pg"]) && $_GET["pg"]>0) {
 		$pageNumber = (int) $_GET["pg"];
@@ -207,7 +245,7 @@ if (isset($_GET["pg"])) {
 
 // ---------------- Start searching -----------------------------------------
 $startTime = getTime();
-$resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, array(), array(), $categories, $attributes);
+$resArr = $dms->search($query, $limit, ($pageNumber-1)*$limit, $mode, $searchin, $startFolder, $owner, $status, $startdate, $stopdate, array(), array(), $categories, $attributes, 0x03, $expstartdate, $expstopdate);
 $searchTime = getTime() - $startTime;
 $searchTime = round($searchTime, 2);
 
