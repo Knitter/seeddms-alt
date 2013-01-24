@@ -91,7 +91,7 @@ class LetoDMS_AccessOperation {
 	 * This check can only be done for documents. Overwriting the document
 	 * reviewers/approvers is only allowed if version modification is turned on
 	 * in the settings and the document is in 'draft review' status.  The
-	 * admin may even set reviewers/approvers even if is disallowed in the
+	 * admin may even set reviewers/approvers if is disallowed in the
 	 * settings.
 	 */
 	function maySetReviewersApprovers() { /* {{{ */
@@ -99,6 +99,26 @@ class LetoDMS_AccessOperation {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV)) {
+				return true;
+			}
+		}
+		return false;
+	} /* }}} */
+
+	/**
+	 * Check if workflow may be edited
+	 *
+	 * This check can only be done for documents. Overwriting the document
+	 * workflow is only allowed if version modification is turned on
+	 * in the settings and the document is in it's initial status.  The
+	 * admin may even set the workflow if is disallowed in the
+	 * settings.
+	 */
+	function maySetWorkflow() { /* {{{ */
+		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+			$latestContent = $this->obj->getLatestContent();
+			$workflow = $latestContent->getWorkflow();
+			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && (!$workflow || ($workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()))) {
 				return true;
 			}
 		}
@@ -158,7 +178,8 @@ class LetoDMS_AccessOperation {
 		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV)) {
+			$workflow = $latestContent->getWorkflow();
+			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV || ($workflow && $workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()))) {
 				return true;
 			}
 		}
