@@ -77,6 +77,7 @@ class LetoDMS_Session {
 		if (!$this->db->getResult($queryStr))
 			return false;
 		$this->id = $id;
+		$this->data = array('userid'=>$resArr[0]['userID'], 'theme'=>$resArr[0]['theme'], 'lang'=>$resArr[0]['language'], 'id'=>$resArr[0]['id'], 'lastaccess'=>$resArr[0]['lastAccess'], 'flashmsg'=>'');
 		return $resArr[0];
 	} /* }}} */
 
@@ -90,13 +91,16 @@ class LetoDMS_Session {
 	function create($data) { /* {{{ */
 		$id = "" . rand() . mktime() . rand() . "";
 		$id = md5($id);
+		$lastaccess = mktime();
 		$queryStr = "INSERT INTO tblSessions (id, userID, lastAccess, theme, language) ".
-		  "VALUES ('".$id."', ".$data['userid'].", ".mktime().", '".$data['theme']."', '".$data['lang']."')";
+		  "VALUES ('".$id."', ".$data['userid'].", ".$lastaccess.", '".$data['theme']."', '".$data['lang']."')";
 		if (!$this->db->getResult($queryStr)) {
 			return false;
 		}
 		$this->id = $id;
 		$this->data = $data;
+		$this->data['id'] = $id;
+		$this->data['lastaccess'] = $lastaccess;
 		return $id;
 	} /* }}} */
 
@@ -136,6 +140,31 @@ class LetoDMS_Session {
 	 */
 	function getId() { /* {{{ */
 		return $this->id;
+	} /* }}} */
+
+	/**
+	 * Set language of session
+	 *
+	 * @param $lang language
+	 */
+	function setLanguage($lang) { /* {{{ */
+		/* id is only set if load() was called before */
+		if($this->id) {
+			$queryStr = "UPDATE tblSessions SET language = " . $this->db->qstr($lang) . " WHERE id = " . $this->db->qstr($this->id);
+			if (!$this->db->getResult($queryStr))
+				return false;
+			$this->data['lang'] = $lang;	
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Set language of session
+	 *
+	 * @param $lang language
+	 */
+	function getLanguage() { /* {{{ */
+		return $this->data['lang'];
 	} /* }}} */
 }
 ?>
