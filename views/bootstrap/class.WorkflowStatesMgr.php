@@ -51,12 +51,7 @@ function checkForm(num)
 	msg = "";
 	eval("var formObj = document.form" + num + ";");
 
-	if (formObj.login.value == "") msg += "<?php printMLText("js_no_login");?>\n";
-	if ((num == '0') && (formObj.pwd.value == "")) msg += "<?php printMLText("js_no_pwd");?>\n";
-	if ((formObj.pwd.value != formObj.pwdconf.value)&&(formObj.pwd.value != "" )&&(formObj.pwd.value != "" )) msg += "<?php printMLText("js_pwd_not_conf");?>\n";
 	if (formObj.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
-	if (formObj.email.value == "") msg += "<?php printMLText("js_no_email");?>\n";
-	//if (formObj.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
 	if (msg != "")
 	{
 		alert(msg);
@@ -124,8 +119,8 @@ function showWorkflowState(selectObj) {
 			<td><?php printMLText("workflow_state_docstatus");?>:</td>
 			<td><select name="docstatus">
 				<option value=""></option>
-				<option value="<?php echo S_RELEASED; ?>" <?php if($currWorkflowState->getDocumentStatus() == S_RELEASED) echo "selected"; ?>><?php printMLText('released'); ?></option>
-				<option value="<?php echo S_REJECTED; ?>" <?php if($currWorkflowState->getDocumentStatus() == S_REJECTED) echo "selected"; ?>><?php printMLText('rejected'); ?></option>
+				<option value="<?php echo S_RELEASED; ?>"><?php printMLText('released'); ?></option>
+				<option value="<?php echo S_REJECTED; ?>"><?php printMLText('rejected'); ?></option>
 			</select></td>
 		</tr>
 		<tr>
