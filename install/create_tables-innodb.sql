@@ -418,8 +418,8 @@ CREATE TABLE `tblGroupMembers` (
   `userID` int(11) NOT NULL default '0',
   `manager` smallint(1) NOT NULL default '0',
   UNIQUE (`groupID`,`userID`),
-	CONSTRAINT `tblGroupMembers_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
-	CONSTRAINT `tblGroupMembers_group` FOREIGN KEY (`groupID`) REFERENCES `tblGroups` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblGroupMembers_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblGroupMembers_group` FOREIGN KEY (`groupID`) REFERENCES `tblGroups` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -547,9 +547,9 @@ CREATE TABLE tblWorkflowStates (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
   `visibility` smallint(5) DEFAULT 0,
-	`maxtime` int(11) DEFAULT 0,
+  `maxtime` int(11) DEFAULT 0,
   `precondfunc` text DEFAULT NULL,
-	`documentstatus` smallint(5) DEFAULT NULL,
+  `documentstatus` smallint(5) DEFAULT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -591,7 +591,7 @@ CREATE TABLE tblWorkflowTransitions (
   `state` int(11) default NULL,
   `action` int(11) default NULL,
   `nextstate` int(11) default NULL,
-	`maxtime` int(11) DEFAULT 0,
+  `maxtime` int(11) DEFAULT 0,
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblWorkflowTransitions_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblWorkflowTransitions_state` FOREIGN KEY (`state`) REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE,
@@ -610,7 +610,8 @@ CREATE TABLE tblWorkflowTransitionUsers (
   `transition` int(11) default NULL,
   `userid` int(11) default NULL,
   PRIMARY KEY  (`id`),
-  CONSTRAINT `tblWorkflowTransitionUsers_transition` FOREIGN KEY (`transition`) REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblWorkflowTransitionUsers_transition` FOREIGN KEY (`transition`) REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowTransitionUsers_userid` FOREIGN KEY (`userid`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -625,7 +626,8 @@ CREATE TABLE tblWorkflowTransitionGroups (
   `groupid` int(11) default NULL,
   `minusers` int(11) default NULL,
   PRIMARY KEY  (`id`),
-  CONSTRAINT `tblWorkflowTransitionGroups_transition` FOREIGN KEY (`transition`) REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE
+  CONSTRAINT `tblWorkflowTransitionGroups_transition` FOREIGN KEY (`transition`) REFERENCES `tblWorkflowTransitions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tblWorkflowTransitionGroups_groupid` FOREIGN KEY (`groupID`) REFERENCES `tblGroups` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -641,7 +643,6 @@ CREATE TABLE tblWorkflowLog (
   `workflow` int(11) default NULL,
   `userid` int(11) default NULL,
   `transition` int(11) default NULL,
-  `nextstate` int(11) default NULL,
   `date` datetime NOT NULL default '0000-00-00 00:00:00',
   `comment` text,
   PRIMARY KEY  (`id`),
@@ -677,7 +678,7 @@ CREATE TABLE tblWorkflowDocumentContent (
 CREATE TABLE tblWorkflowMandatoryWorkflow (
   `userid` int(11) default NULL,
   `workflow` int(11) default NULL,
-	UNIQUE(userid, workflow),
+  UNIQUE(userid, workflow),
   CONSTRAINT `tblWorkflowMandatoryWorkflow_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblWorkflowMandatoryWorkflow_userid` FOREIGN KEY (`userid`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -689,10 +690,10 @@ CREATE TABLE tblWorkflowMandatoryWorkflow (
 -- 
 
 CREATE TABLE `tblVersion` (
-	`date` datetime,
-	`major` smallint,
-	`minor` smallint,
-	`subminor` smallint
+  `date` datetime,
+  `major` smallint,
+  `minor` smallint,
+  `subminor` smallint
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
