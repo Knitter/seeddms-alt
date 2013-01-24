@@ -33,6 +33,33 @@ function getLongReadableDate($timestamp) {
 	return date("d/m/Y H:i", $timestamp);
 }
 
+function getReadableDuration($secs) {
+	$s = "";
+	foreach ( getReadableDurationArray($secs) as $k => $v ) {
+		if ( $v ) $s .= $v." ".($v==1? substr($k,0,-1) : $k).", ";
+	}
+
+	return substr($s, 0, -2);
+}
+
+function getReadableDurationArray($secs) {
+	$units = array(
+					getMLText("weeks")   => 7*24*3600,
+					getMLText("days")    =>   24*3600,
+					getMLText("hours")   =>      3600,
+					getMLText("minutes") =>        60,
+					getMLText("seconds") =>         1,
+	);
+
+	foreach ( $units as &$unit ) {
+		$quot  = intval($secs / $unit);
+		$secs -= $quot * $unit;
+		$unit  = $quot;
+	}
+
+	return $units;
+}
+
 //
 // The original string sanitizer, kept for reference.
 //function sanitizeString($string) {
