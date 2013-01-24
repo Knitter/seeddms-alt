@@ -6,10 +6,10 @@ $(document).ready( function() {
 
 	$('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
 
-	$('#expirationdate, #fromdate, #todate')
+	$('#expirationdate, #fromdate, #todate, #createstartdate, #createenddate, #expirationstartdate, #expirationenddate')
 		.datepicker()
 		.on('changeDate', function(ev){
-			$('#expirationdate, #fromdate, #todate').datepicker('hide');
+			$('#expirationdate, #fromdate, #todate, #createstartdate, #createenddate, #expirationstartdate, #expirationenddate').datepicker('hide');
 		});
 
 	$(".chzn-select").chosen();
@@ -27,6 +27,20 @@ $(document).ready( function() {
 				$('#'+target+' div.bar').removeClass('bar-success');
 				$('#'+target+' div.bar').addClass('bar-danger');
 			}
+		}
+	});
+
+	/* The typeahead functionality useѕ the rest api */
+	$("#searchfield").typeahead({
+		minLength: 3,
+		source: function(query, process) {
+			$.get('../restapi/index.php/search', { query: query, limit: 8, mode: 'typeahead' }, function(data) {
+					process(data);
+			});
+		},
+		updater: function (item) {
+			document.location = "../op/op.Search.php?query=" + encodeURIComponent(item);
+			return item;
 		}
 	});
 });
