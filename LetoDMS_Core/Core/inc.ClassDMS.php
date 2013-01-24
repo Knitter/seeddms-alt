@@ -1670,6 +1670,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * Return workflow state by its name
 	 *
+	 * @param string $name name of workflow state
 	 * @return object of instances of LetoDMS_Core_Workflow_State or false
 	 */
 	function getWorkflowStateByName($name) { /* {{{ */
@@ -1712,6 +1713,13 @@ class LetoDMS_Core_DMS {
 		return $wkfstates;
 	} /* }}} */
 
+	/**
+	 * Add new workflow state
+	 *
+	 * @param string $name name of workflow state
+	 * @param integer $docstatus document status when this state is reached
+	 * @return object instance of new workflow state
+	 */
 	function addWorkflowState($name, $docstatus) { /* {{{ */
 		$db = $this->db;
 		if (is_object($this->getWorkflowStateByName($name))) {
@@ -1730,14 +1738,39 @@ class LetoDMS_Core_DMS {
 	 *
 	 * This function retrieves a workflow action from the database by its id.
 	 *
-	 * @param integer $id internal id of workflow state
-	 * @return object instance of LetoDMS_Core_Workflow_State or false
+	 * @param integer $id internal id of workflow action
+	 * @return object instance of LetoDMS_Core_Workflow_Action or false
 	 */
 	function getWorkflowAction($id) { /* {{{ */
 		if (!is_numeric($id))
 			return false;
 
 		$queryStr = "SELECT * FROM tblWorkflowActions WHERE id = " . (int) $id;
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$action = new LetoDMS_Core_Workflow_Action($resArr["id"], $resArr["name"]);
+		$action->setDMS($this);
+		return $action;
+	} /* }}} */
+
+	/**
+	 * Return a workflow action by its name
+	 *
+	 * This function retrieves a workflow action from the database by its name.
+	 *
+	 * @param string $name name of workflow action
+	 * @return object instance of LetoDMS_Core_Workflow_Action or false
+	 */
+	function getWorkflowActionByName($name) { /* {{{ */
+		if (!is_numeric($id))
+			return false;
+
+		$queryStr = "SELECT * FROM tblWorkflowActions WHERE name = " . $this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
 		if (is_bool($resArr) && $resArr == false) return false;
@@ -1770,6 +1803,25 @@ class LetoDMS_Core_DMS {
 		}
 
 		return $wkfactions;
+	} /* }}} */
+
+	/**
+	 * Add new workflow action
+	 *
+	 * @param string $name name of workflow action
+	 * @return object instance new workflow action
+	 */
+	function addWorkflowAction($name) { /* {{{ */
+		$db = $this->db;
+		if (is_object($this->getWorkflowActionByName($name))) {
+			return false;
+		}
+		$queryStr = "INSERT INTO tblWorkflowActions (name) VALUES (".$db->qstr($name).")";
+		$res = $db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		return $this->getWorkflowAction($db->getInsertID());
 	} /* }}} */
 
 	/**
