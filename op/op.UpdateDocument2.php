@@ -158,13 +158,13 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 			$document->getNotifyList();
 			if ($notifier){
 				$folder = $document->getFolder();
-				$subject = "###SITENAME###: ".$document->_name." - ".getMLText("document_updated_email");
+				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_updated_email");
 				$message = getMLText("document_updated_email")."\r\n";
 				$message .= 
-					getMLText("document").": ".$document->_name."\r\n".
+					getMLText("document").": ".$document->getName()."\r\n".
 					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 					getMLText("comment").": ".$document->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //				$subject=mydmsDecodeString($subject);
 //				$message=mydmsDecodeString($message);
@@ -186,13 +186,13 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 				if($notifier) {
 					$folder = $document->getFolder();
 					// Send notification to subscribers.
-					$subject = "###SITENAME###: ".$document->_name." - ".getMLText("expiry_changed_email");
+					$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("expiry_changed_email");
 					$message = getMLText("expiry_changed_email")."\r\n";
 					$message .= 
-						getMLText("document").": ".$document->_name."\r\n".
+						getMLText("document").": ".$document->getName()."\r\n".
 						getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 						getMLText("comment").": ".$document->getComment()."\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //					$subject=mydmsDecodeString($subject);
 //					$message=mydmsDecodeString($message);
