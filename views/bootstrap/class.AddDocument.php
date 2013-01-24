@@ -38,6 +38,7 @@ class LetoDMS_View_AddDocument extends LetoDMS_Bootstrap_Style {
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
+		$workflowmode = $this->params['workflowmode'];
 		$folderid = $folder->getId();
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
@@ -197,9 +198,37 @@ class LetoDMS_View_AddDocument extends LetoDMS_Bootstrap_Style {
 <?php
 				}
 			}
+		if($workflowmode != 'traditional') {
 ?>
-
 		<tr>	
+      <td>
+			<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
+      </td>
+      <td>
+        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+<?php
+				$mandatoryworkflow = $user->getMandatoryWorkflow();
+				$workflows=$dms->getAllWorkflows();
+				print "<option value=\"\">"."</option>";
+				foreach ($workflows as $workflow) {
+					print "<option value=\"".$workflow->getID()."\"";
+					if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
+						echo " selected=\"selected\"";
+					print ">". htmlspecialchars($workflow->getName())."</option>";
+				}
+?>
+        </select>
+      </td>
+    </tr>
+		<tr>	
+      <td colspan="2">
+			<?php $this->warningMsg(getMLText("add_doc_workflow_warning")); ?>
+      </td>
+		</tr>	
+<?php
+		} else {
+?>
+		<tr>
       <td>
 		<?php $this->contentSubHeading(getMLText("assign_reviewers")); ?>
       </td>
@@ -291,9 +320,16 @@ class LetoDMS_View_AddDocument extends LetoDMS_Bootstrap_Style {
 			</select>
 				</td>
 		  </tr>	
+		  <tr>	
+        <td colspan="2">
+			<div class="alert"><?php printMLText("add_doc_reviewer_approver_warning")?></div>
+        </td>
+		  </tr>	
+<?php
+		}
+?>
 		</table>
 
-			<div class="alert"><?php printMLText("add_doc_reviewer_approver_warning")?></div>
 			<p><input type="submit" class="btn" value="<?php printMLText("add_document");?>"></p>
 		</form>
 <?php
