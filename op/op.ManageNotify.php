@@ -125,7 +125,7 @@ if ($_GET["type"]=="document"){
 					getMLText("name").": ".$folder->getName()."\r\n".
 					getMLText("folder").": ".$path."\r\n".
 					getMLText("comment").": ".$folder->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+					"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //				$subject=mydmsDecodeString($subject);
 //				$message=mydmsDecodeString($message);

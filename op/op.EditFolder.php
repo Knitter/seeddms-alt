@@ -64,14 +64,14 @@ if(($oldname = $folder->getName()) != $name) {
 		// Send notification to subscribers.
 		if($notifier) {
 			$folder->getNotifyList();
-			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("folder_renamed_email");
+			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_renamed_email");
 			$message = getMLText("folder_renamed_email")."\r\n";
 			$message .= 
 				getMLText("old").": ".$oldname."\r\n".
-				getMLText("new").": ".$folder->_name."\r\n".
+				getMLText("new").": ".$folder->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				getMLText("comment").": ".$comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);
@@ -90,13 +90,13 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 		// Send notification to subscribers.
 		if($notifier) {
 			$folder->getNotifyList();
-			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("comment_changed_email");
+			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("comment_changed_email");
 			$message = getMLText("comment_changed_email")."\r\n";
 			$message .= 
-				getMLText("name").": ".$folder->_name."\r\n".
+				getMLText("name").": ".$folder->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				getMLText("comment").": ".$comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);

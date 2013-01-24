@@ -127,15 +127,15 @@ if ($action == "setowner") {
 		// Send notification to subscribers.
 		if($notifier) {
 			$folder = $document->getFolder();
-			$subject = "###SITENAME###: ".$document->_name." - ".getMLText("ownership_changed_email");
+			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("ownership_changed_email");
 			$message = getMLText("ownership_changed_email")."\r\n";
 			$message .= 
-				getMLText("document").": ".$document->_name."\r\n".
+				getMLText("document").": ".$document->getName()."\r\n".
 				getMLText("old").": ".$oldOwner->getFullName()."\r\n".
 				getMLText("new").": ".$newOwner->getFullName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$document->_comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+				getMLText("comment").": ".$document->getComment()."\r\n".
+				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);
@@ -159,12 +159,12 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			$folder = $document->getFolder();
 			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->_name." - ".getMLText("access_permission_changed_email");
+			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
-				getMLText("document").": ".$document->_name."\r\n".
+				getMLText("document").": ".$document->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);
@@ -180,12 +180,12 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			$folder = $document->getFolder();
 			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->_name." - ".getMLText("access_permission_changed_email");
+			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
-				getMLText("document").": ".$document->_name."\r\n".
+				getMLText("document").": ".$document->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);
@@ -220,12 +220,12 @@ else if ($action == "setdefault") {
 		if($notifier) {
 			$folder = $document->getFolder();
 			// Send notification to subscribers.
-			$subject = "###SITENAME###: ".$document->_name." - ".getMLText("access_permission_changed_email");
+			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
-				getMLText("document").": ".$document->_name."\r\n".
+				getMLText("document").": ".$document->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);

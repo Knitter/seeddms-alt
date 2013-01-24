@@ -124,15 +124,15 @@ if ($action == "setowner") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$folder->getNotifyList();
-			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("ownership_changed_email");
+			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("ownership_changed_email");
 			$message = getMLText("ownership_changed_email")."\r\n";
 			$message .= 
-				getMLText("name").": ".$folder->_name."\r\n".
+				getMLText("name").": ".$folder->getName()."\r\n".
 				getMLText("old").": ".$oldOwner->getFullName()."\r\n".
 				getMLText("new").": ".$newOwner->getFullName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$folder->_comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+				getMLText("comment").": ".$folder->getComment()."\r\n".
+				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);
@@ -155,12 +155,12 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$folder->getNotifyList();
-			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("access_permission_changed_email");
+			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
-				getMLText("name").": ".$folder->_name."\r\n".
+				getMLText("name").": ".$folder->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);
@@ -175,12 +175,12 @@ else if ($action == "notinherit") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$folder->getNotifyList();
-			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("access_permission_changed_email");
+			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
-				getMLText("name").": ".$folder->_name."\r\n".
+				getMLText("name").": ".$folder->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);
@@ -211,12 +211,12 @@ else if ($action == "inherit") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$folder->getNotifyList();
-			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("access_permission_changed_email");
+			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
-				getMLText("name").": ".$folder->_name."\r\n".
+				getMLText("name").": ".$folder->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);
@@ -235,12 +235,12 @@ else if ($action == "setdefault") {
 		if($notifier) {
 			// Send notification to subscribers.
 			$folder->getNotifyList();
-			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("access_permission_changed_email");
+			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
-				getMLText("name").": ".$folder->_name."\r\n".
+				getMLText("name").": ".$folder->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //			$subject=mydmsDecodeString($subject);
 //			$message=mydmsDecodeString($message);

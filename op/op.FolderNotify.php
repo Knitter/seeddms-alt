@@ -67,7 +67,7 @@ if ($folder->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 }
 
-//Benachrichtigung löschen ------------------------------------------------------------------------
+// Delete notification -------------------------------------------------------
 if ($action == "delnotify") {
 
 	if ($userid > 0) {
@@ -108,7 +108,7 @@ if ($action == "delnotify") {
 					getMLText("name").": ".$folder->getName()."\r\n".
 					getMLText("folder").": ".$path."\r\n".
 					getMLText("comment").": ".$folder->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+					"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //				$subject=mydmsDecodeString($subject);
 //				$message=mydmsDecodeString($message);
@@ -124,7 +124,7 @@ if ($action == "delnotify") {
 	}
 }
 
-//Benachrichtigung hinzufügen ---------------------------------------------------------------------
+//Benachrichtigung hinzufÃ¼gen ---------------------------------------------------------------------
 else if ($action == "addnotify") {
 
 	if ($userid != -1) {
@@ -159,7 +159,7 @@ else if ($action == "addnotify") {
 						getMLText("name").": ".$folder->getName()."\r\n".
 						getMLText("folder").": ".$path."\r\n".
 						getMLText("comment").": ".$folder->getComment()."\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+						"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //					$subject=mydmsDecodeString($subject);
 //					$message=mydmsDecodeString($message);
@@ -202,7 +202,7 @@ else if ($action == "addnotify") {
 						getMLText("name").": ".$folder->getName()."\r\n".
 						getMLText("folder").": ".$path."\r\n".
 						getMLText("comment").": ".$folder->getComment()."\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+						"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //					$subject=mydmsDecodeString($subject);
 //					$message=mydmsDecodeString($message);

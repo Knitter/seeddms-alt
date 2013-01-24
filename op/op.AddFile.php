@@ -72,7 +72,7 @@ if (is_bool($res) && !$res) {
 	$document->getNotifyList();
 	// Send notification to subscribers.
 	if($notifier) {
-		$subject = "###SITENAME###: ".$document->_name." - ".getMLText("new_file_email");
+		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("new_file_email");
 		$message = getMLText("new_file_email")."\r\n";
 		$message .= 
 			getMLText("name").": ".$name."\r\n".

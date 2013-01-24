@@ -111,7 +111,7 @@ if ($action == "delnotify"){
 					getMLText("document").": ".$document->getName()."\r\n".
 					getMLText("folder").": ".$path."\r\n".
 					getMLText("comment").": ".$document->getComment()."\r\n".
-					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //				$subject=mydmsDecodeString($subject);
 //				$message=mydmsDecodeString($message);
@@ -165,7 +165,7 @@ else if ($action == "addnotify") {
 						getMLText("document").": ".$document->getName()."\r\n".
 						getMLText("folder").": ".$path."\r\n".
 						getMLText("comment").": ".$document->getComment()."\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //					$subject=mydmsDecodeString($subject);
 //					$message=mydmsDecodeString($message);
@@ -208,7 +208,7 @@ else if ($action == "addnotify") {
 						getMLText("document").": ".$document->getName()."\r\n".
 						getMLText("folder").": ".$path."\r\n".
 						getMLText("comment").": ".$document->getComment()."\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->_id."\r\n";
+						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
 //					$subject=mydmsDecodeString($subject);
 //					$message=mydmsDecodeString($message);

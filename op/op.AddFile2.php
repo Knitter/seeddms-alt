@@ -80,7 +80,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 			$document->getNotifyList();
 			// Send notification to subscribers.
 			if($notifier) {
-				$subject = "###SITENAME###: ".$document->_name." - ".getMLText("new_file_email");
+				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("new_file_email");
 				$message = getMLText("new_file_email")."\r\n";
 				$message .= 
 					getMLText("name").": ".$name."\r\n".

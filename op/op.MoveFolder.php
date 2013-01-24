@@ -58,13 +58,13 @@ if ($folder->setParent($targetFolder)) {
 	// Send notification to subscribers.
 	if($notifier) {
 		$folder->getNotifyList();
-		$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("folder_moved_email");
+		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_moved_email");
 		$message = getMLText("folder_moved_email")."\r\n";
 		$message .= 
-			getMLText("name").": ".$folder->_name."\r\n".
+			getMLText("name").": ".$folder->getName()."\r\n".
 			getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-			getMLText("comment").": ".$folder->_comment."\r\n".
-			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+			getMLText("comment").": ".$folder->getComment()."\r\n".
+			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 //		$subject=mydmsDecodeString($subject);
 //		$message=mydmsDecodeString($message);

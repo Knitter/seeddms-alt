@@ -50,17 +50,39 @@ if ($folder->getAccessMode($user) < M_ALL) {
 
 $parent=$folder->getParent();
 
+/* Register a callback which removes each document from the fulltext index
+ * The callback must return true other the removal will be canceled.
+ */
+if($settings->_enableFullSearch) {
+	if(!empty($settings->_luceneClassDir))
+		require_once($settings->_luceneClassDir.'/Lucene.php');
+	else
+		require_once('LetoDMS/Lucene.php');
+
+	$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+	function removeFromIndex($index, $document) {
+		if($hits = $index->find('document_id:'.$document->getId())) {
+			$hit = $hits[0];
+			echo $hit->id;
+			$index->delete($hit->id);
+			$index->commit();
+		}
+		return true;
+	}
+	$dms->setCallback('onPreRemoveDocument', 'removeFromIndex', $index);
+}
+
 if ($folder->remove()) {
 	// Send notification to subscribers.
 	if ($notifier) {
 		$folder->getNotifyList();
-		$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("folder_deleted_email");
+		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_deleted_email");
 		$message = getMLText("folder_deleted_email")."\r\n";
 		$message .= 
-			getMLText("name").": ".$folder->_name."\r\n".
+			getMLText("name").": ".$folder->getName()."\r\n".
 			getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-			getMLText("comment").": ".$folder->_comment."\r\n".
-			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->_id."\r\n";
+			getMLText("comment").": ".$folder->getComment()."\r\n".
+			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 		$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 		foreach ($folder->_notifyList["groups"] as $grp) {

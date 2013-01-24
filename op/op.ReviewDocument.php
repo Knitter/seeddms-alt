@@ -154,10 +154,10 @@ if ($_POST["reviewStatus"]==-1){
 		// Send notification to subscribers.
 		if($notifier) {
 			$folder = $document->getFolder();
-			$subject = "###SITENAME###: ".$document->_name." - ".getMLText("document_status_changed_email");
+			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
 			$message = getMLText("document_status_changed_email")."\r\n";
 			$message .= 
-				getMLText("document").": ".$document->_name."\r\n".
+				getMLText("document").": ".$document->getName()."\r\n".
 				getMLText("status").": ".getOverallStatusText(S_REJECTED)."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				getMLText("comment").": ".$document->getComment()."\r\n".
@@ -222,10 +222,10 @@ if ($_POST["reviewStatus"]==-1){
 			$nl=$document->getNotifyList();
 			if($notifier) {
 				$folder = $document->getFolder();
-				$subject = "###SITENAME###: ".$document->_name." - ".getMLText("document_status_changed_email");
+				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
 				$message = getMLText("document_status_changed_email")."\r\n";
 				$message .= 
-					getMLText("document").": ".$document->_name."\r\n".
+					getMLText("document").": ".$document->getName()."\r\n".
 					getMLText("status").": ".getOverallStatusText($newStatus)."\r\n".
 					getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 					getMLText("comment").": ".$document->getComment()."\r\n".

@@ -63,7 +63,7 @@ if (is_object($subFolder)) {
 	// Send notification to subscribers.
 	if($notifier) {
 		$folder->getNotifyList();
-		$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("new_subfolder_email");
+		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("new_subfolder_email");
 		$message = getMLText("new_subfolder_email")."\r\n";
 		$message .= 
 			getMLText("name").": ".$name."\r\n".
