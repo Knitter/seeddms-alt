@@ -46,8 +46,15 @@ $dms->setUser($user);
 $notifier = new LetoDMS_Email();
 $notifier->setSender($user);
 
+/* Include the language file as specified in the session. If that is not
+ * available use the language from the settings
+ */
+if(file_exists($settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc"))
+	include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
+else
+	include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
+
 $theme = $resArr["theme"];
-include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
 if(file_exists($settings->_rootDir . "view/".$theme."/languages/" . $resArr["language"] . "/lang.inc")) {
 	include $settings->_rootDir . "view/".$theme."/languages/" . $resArr["language"] . "/lang.inc";
 }
