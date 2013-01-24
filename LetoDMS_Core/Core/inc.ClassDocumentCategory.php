@@ -25,35 +25,35 @@ class LetoDMS_Core_DocumentCategory {
 	 * @var integer $_id id of document category
 	 * @access protected
 	 */
-	var $_id;
+	protected $_id;
 
 	/**
 	 * @var string $_name name of category
 	 * @access protected
 	 */
-	var $_name;
+	protected $_name;
 
 	/**
 	 * @var object $_dms reference to dms this category belongs to
 	 * @access protected
 	 */
-	var $_dms;
+	protected $_dms;
 
-	function LetoDMS_Core_DocumentCategory($id, $name) {
+	function LetoDMS_Core_DocumentCategory($id, $name) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_dms = null;
-	}
+	} /* }}} */
 
-	function setDMS($dms) {
+	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
-	}
+	} /* }}} */
 
 	function getID() { return $this->_id; }
 
 	function getName() { return $this->_name; }
 
-	function setName($newName) {
+	function setName($newName) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "UPDATE tblCategory SET name = ".$db->qstr($newName)." WHERE id = ". $this->_id;
@@ -62,9 +62,9 @@ class LetoDMS_Core_DocumentCategory {
 
 		$this->_name = $newName;
 		return true;
-	}
+	} /* }}} */
 
-	function isUsed() {
+	function isUsed() { /* {{{ */
 		$db = $this->_dms->getDB();
 		
 		$queryStr = "SELECT * FROM tblDocumentCategory WHERE categoryID=".$this->_id;
@@ -72,23 +72,23 @@ class LetoDMS_Core_DocumentCategory {
 		if (is_array($resArr) && count($resArr) == 0)
 			return false;
 		return true;
-	}
+	} /* }}} */
 
-	function getCategories() {
+	function getCategories() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "SELECT * FROM tblCategory";
 		return $db->getResultArray($queryStr);
-	}
+	} /* }}} */
 
-	function addCategory($keywords) {
+	function addCategory($keywords) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "INSERT INTO tblCategory (category) VALUES (".$db->qstr($keywords).")";
 		return $db->getResult($queryStr);
-	}
+	} /* }}} */
 
-	function remove() {
+	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "DELETE FROM tblCategory WHERE id = " . $this->_id;
@@ -96,9 +96,9 @@ class LetoDMS_Core_DocumentCategory {
 			return false;
 
 		return true;
-	}
+	} /* }}} */
 
-	function getDocumentsByCategory() {
+	function getDocumentsByCategory() { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$queryStr = "SELECT * FROM tblDocumentCategory where categoryID=".$this->_id;
@@ -111,7 +111,7 @@ class LetoDMS_Core_DocumentCategory {
 			array_push($documents, $this->_dms->getDocument($row["id"]));
 		}
 		return $documents;
-	}
+	} /* }}} */
 
 }
 
