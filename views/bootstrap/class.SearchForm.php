@@ -39,6 +39,7 @@ class LetoDMS_View_SearchForm extends LetoDMS_Bootstrap_Style {
 		$allCats = $this->params['allcategories'];
 		$allUsers = $this->params['allusers'];
 		$enablefullsearch = $this->params['enablefullsearch'];
+		$workflowmode = $this->params['workflowmode'];
 
 		$this->htmlStartPage(getMLText("search"));
 		$this->globalNavigation($folder);
@@ -133,8 +134,12 @@ function chooseKeywords(target) {
 <tr>
 <td><?php printMLText("status");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
 <td>
+<?php if($workflowmode == 'traditional') { ?>
 <label class="checkbox" for='pendingReview'><input type="checkbox" id="pendingReview" name="pendingReview" value="1"><?php printOverallStatusText(S_DRAFT_REV);?></label>
 <label class="checkbox" for='pendingApproval'><input type="checkbox" id="pendingApproval" name="pendingApproval" value="1"><?php printOverallStatusText(S_DRAFT_APP);?></label>
+<?php } else { ?>
+<label class="checkbox" for='inWorkflow'><input type="checkbox" id="inWorkflow" name="inWorkflow" value="1"><?php printOverallStatusText(S_IN_WORKFLOW);?></label>
+<?php } ?>
 <label class="checkbox" for='released'><input type="checkbox" id="released" name="released" value="1"><?php printOverallStatusText(S_RELEASED);?></label>
 <label class="checkbox" for='rejected'><input type="checkbox" id="rejected" name="rejected" value="1"><?php printOverallStatusText(S_REJECTED);?></label>
 <label class="checkbox" for='obsolete'><input type="checkbox" id="obsolete" name="obsolete" value="1"><?php printOverallStatusText(S_OBSOLETE);?></label>
@@ -166,41 +171,36 @@ function chooseKeywords(target) {
         <label class="checkbox inline">
 				  <input type="checkbox" name="creationdate" value="true" /><?php printMLText("between");?><br>
         </label>
-        <span class="input-append date" id="createstart" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+        <span class="input-append date" id="createstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
           <input class="span3" size="16" name="createstart" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-th"></i></span>
         </span>&nbsp;
 				<?php printMLText("and"); ?>
-        <span class="input-append date" id="createend" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+        <span class="input-append date" id="createenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
           <input class="span3" size="16" name="createend" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-th"></i></span>
         </span>
-<?php
-//		print "&nbsp;&nbsp;";
-//		$this->printDateChooser(-1, "createstart");
-//		print "&nbsp;&nbsp;";
-//		printMLText("and");
-//		print "&nbsp;&nbsp;";
-//		$this->printDateChooser(-1, "createend");
-?>
 </td>
 </tr>
-<?php
-/*
-echo "<tr>\n<td>".getMLText("last_update").":</td>\n";
-echo "<td><input type=\"Checkbox\" name=\"lastupdate\" value=\"true\">";
-printMLText("between");
-print "&nbsp;&nbsp;";
-$this->printDateChooser(-1, "updatestart");
-print "&nbsp;&nbsp;";
-printMLText("and");
-print "&nbsp;&nbsp;";
-$this->printDateChooser(-1, "updateend");
-echo "</td>\n</tr>\n";
-*/
-?>
 <tr>
-<td colspan="2"><input type="submit" class="btn" value="<?php printMLText("search"); ?>"></td>
+<td><?php printMLText("expires");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
+<td>
+        <label class="checkbox inline">
+				  <input type="checkbox" name="expirationdate" value="true" /><?php printMLText("between");?><br>
+        </label>
+        <span class="input-append date" id="expirationstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+          <input class="span3" size="16" name="expirationstart" type="text" value="<?php echo date('d-m-Y'); ?>">
+          <span class="add-on"><i class="icon-th"></i></span>
+        </span>&nbsp;
+				<?php printMLText("and"); ?>
+        <span class="input-append date" id="expirationenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+          <input class="span3" size="16" name="expirationend" type="text" value="<?php echo date('d-m-Y'); ?>">
+          <span class="add-on"><i class="icon-th"></i></span>
+        </span>
+</td>
+</tr>
+<tr>
+<td></td><td><input type="submit" class="btn" value="<?php printMLText("search"); ?>"></td>
 </tr>
 
 </table>
