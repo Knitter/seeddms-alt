@@ -36,8 +36,10 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$orderby = $this->params['orderby'];
 		$showInProcess = $this->params['showinprocess'];
+		$cachedir = $this->params['cachedir'];
 
 		$db = $dms->getDB();
+		$previewer = new LetoDMS_Preview_Previewer($cachedir, 40);
 
 		$this->htmlStartPage(getMLText("my_documents"));
 		$this->globalNavigation();
@@ -141,10 +143,12 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 				
 					if ( $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) ) {
 						$dList[] = $st["documentID"];
+						$document = $dms->getDocument($st["documentID"]);
 					
 						if ($printheader){
-							print "<table class=\"table-condensed\">";
+							print "<table class=\"table table-condensed\">";
 							print "<thead>\n<tr>\n";
+							print "<th></th>\n";
 							print "<th>".getMLText("name")."</th>\n";
 							print "<th>".getMLText("owner")."</th>\n";
 							print "<th>".getMLText("version")."</th>\n";
@@ -155,6 +159,15 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 						}
 					
 						print "<tr>\n";
+						$latestContent = $document->getLatestContent();
+						$previewer->createPreview($latestContent);
+						print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+						if($previewer->hasPreview($latestContent)) {
+							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						}
+						print "</a></td>";
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
 						print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 						print "<td>".$st["version"]."</td>";
@@ -167,10 +180,12 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 				
 					if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && !in_array($st["documentID"], $dList) && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId()) {
 						$dList[] = $st["documentID"];
+						$document = $dms->getDocument($st["documentID"]);
 
 						if ($printheader){
-							print "<table class=\"table-condensed\">";
+							print "<table class=\"table table-condensed\">";
 							print "<thead>\n<tr>\n";
+							print "<th></th>\n";
 							print "<th>".getMLText("name")."</th>\n";
 							print "<th>".getMLText("owner")."</th>\n";
 							print "<th>".getMLText("version")."</th>\n";
@@ -181,6 +196,15 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 						}
 
 						print "<tr>\n";
+						$latestContent = $document->getLatestContent();
+						$previewer->createPreview($latestContent);
+						print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+						if($previewer->hasPreview($latestContent)) {
+							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						}
+						print "</a></td>";
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
 						print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 						print "<td>".$st["version"]."</td>";
@@ -204,10 +228,12 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 				foreach ($approvalStatus["indstatus"] as $st) {
 				
 					if ( $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]])) {
+						$document = $dms->getDocument($st["documentID"]);
 					
 						if ($printheader){
-							print "<table class=\"table-condensed\">";
+							print "<table class=\"table table-condensed\">";
 							print "<thead>\n<tr>\n";
+							print "<th></th>\n";
 							print "<th>".getMLText("name")."</th>\n";
 							print "<th>".getMLText("owner")."</th>\n";
 							print "<th>".getMLText("version")."</th>\n";
@@ -216,7 +242,17 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 							print "</tr>\n</thead>\n<tbody>\n";
 							$printheader=false;
 						}
+
 						print "<tr>\n";
+						$latestContent = $document->getLatestContent();
+						$previewer->createPreview($latestContent);
+						print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+						if($previewer->hasPreview($latestContent)) {
+							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						}
+						print "</a></td>";
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
 						print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 						print "<td>".$st["version"]."</td>";
@@ -229,8 +265,9 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 				
 					if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId()) {
 						if ($printheader){
-							print "<table class=\"table-condensed\">";
+							print "<table class=\"table table-condensed\">";
 							print "<thead>\n<tr>\n";
+							print "<th></th>\n";
 							print "<th>".getMLText("name")."</th>\n";
 							print "<th>".getMLText("owner")."</th>\n";
 							print "<th>".getMLText("version")."</th>\n";
@@ -240,6 +277,15 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 							$printheader=false;
 						}
 						print "<tr>\n";
+						$latestContent = $document->getLatestContent();
+						$previewer->createPreview($latestContent);
+						print "<td><a href=\"../op/op.Download.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">";
+						if($previewer->hasPreview($latestContent)) {
+							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						}
+						print "</a></td>";
 						print "<td><a href=\"out.ViewDocument.php?documentid=".$st["documentID"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
 						print "<td>".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["ownerName"])."</td>";
 						print "<td>".$st["version"]."</td>";				
@@ -300,8 +346,9 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 			if (count($resArr)>0) {
 
-				print "<table class=\"table-condensed\">";
+				print "<table class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
+				print "<th></th>";
 				print "<th>".getMLText("name")."</th>\n";
 				print "<th>".getMLText("status")."</th>\n";
 				print "<th>".getMLText("version")."</th>\n";
@@ -310,6 +357,7 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 				print "</tr>\n</thead>\n<tbody>\n";
 
 				foreach ($resArr as $res) {
+					$document = $dms->getDocument($res["documentID"]);
 				
 					// verify expiry
 					if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
@@ -319,6 +367,15 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 					}
 				
 					print "<tr>\n";
+					$latestContent = $document->getLatestContent();
+					$previewer->createPreview($latestContent);
+					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					if($previewer->hasPreview($latestContent)) {
+						print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					print "</a></td>";
 					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 					print "<td>".getOverallStatusText($res["status"])."</td>";
 					print "<td>".$res["version"]."</td>";
@@ -365,8 +422,9 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 			if (count($resArr)>0) {
 
-				print "<table class=\"table-condensed\">";
+				print "<table class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
+				print "<th></th>";
 				print "<th>".getMLText("name")."</th>\n";
 				print "<th>".getMLText("status")."</th>\n";
 				print "<th>".getMLText("version")."</th>\n";
@@ -375,6 +433,7 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 				print "</tr>\n</thead>\n<tbody>\n";
 
 				foreach ($resArr as $res) {
+					$document = $dms->getDocument($res["documentID"]);
 				
 					// verify expiry
 					if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
@@ -384,6 +443,15 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 					}
 				
 					print "<tr>\n";
+					$latestContent = $document->getLatestContent();
+					$previewer->createPreview($latestContent);
+					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					if($previewer->hasPreview($latestContent)) {
+						print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					print "</a></td>";
 					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 					print "<td>".getOverallStatusText($res["status"])."</td>";
 					print "<td>".$res["version"]."</td>";
@@ -450,8 +518,9 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 
 			if (count($resArr)>0) {
 
-				print "<table class=\"table-condensed\">";
+				print "<table class=\"table table-condensed\">";
 				print "<thead>\n<tr>\n";
+				print "<th></th>";
 				print "<th><a href=\"../out/out.MyDocuments.php?orderby=n\">".getMLText("name")."</a></th>\n";
 				print "<th><a href=\"../out/out.MyDocuments.php?orderby=s\">".getMLText("status")."</a></th>\n";
 				print "<th>".getMLText("version")."</th>\n";
@@ -459,7 +528,9 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 				print "<th><a href=\"../out/out.MyDocuments.php?orderby=e\">".getMLText("expires")."</a></th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 
+				$previewer = new LetoDMS_Preview_Previewer($cachedir, 40);
 				foreach ($resArr as $res) {
+					$document = $dms->getDocument($res["documentID"]);
 				
 					// verify expiry
 					if ( $res["expires"] && time()>$res["expires"]+24*60*60 ){
@@ -469,6 +540,15 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 					}
 				
 					print "<tr>\n";
+					$latestContent = $document->getLatestContent();
+					$previewer->createPreview($latestContent);
+					print "<td><a href=\"../op/op.Download.php?documentid=".$res["documentID"]."&version=".$res["version"]."\">";
+					if($previewer->hasPreview($latestContent)) {
+						print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					}
+					print "</a></td>";
 					print "<td><a href=\"out.ViewDocument.php?documentid=".$res["documentID"]."\">" . htmlspecialchars($res["name"]) . "</a></td>\n";
 					print "<td>".getOverallStatusText($res["status"])."</td>";
 					print "<td>".$res["version"]."</td>";
