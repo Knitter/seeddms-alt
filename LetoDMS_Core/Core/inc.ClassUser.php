@@ -540,6 +540,12 @@ class LetoDMS_Core_User {
 			return false;
 		}
 
+		$queryStr = "DELETE FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
 		// set administrator for deleted user's events
 		$queryStr = "UPDATE tblEvents SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
@@ -757,13 +763,20 @@ class LetoDMS_Core_User {
 			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". (int) $documentID ."' ").
 			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". (int) $version ."' ").
 			"AND `tblDocumentReviewers`.`required`='". $this->_id ."' ".
-			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT 1";
+			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		if (count($resArr)>0) {
-			foreach ($resArr as $res)
-				$status["indstatus"][] = $res;
+			foreach ($resArr as $res) {
+				if(isset($status["indstatus"][$res['documentID']])) {
+					if($status["indstatus"][$res['documentID']]['date'] < $res['date']) {
+						$status["indstatus"][$res['documentID']] = $res;
+					}
+				} else {
+					$status["indstatus"][$res['documentID']] = $res;
+				}
+			}
 		}
 
 		// See if the user is the member of a group that has been assigned to
@@ -778,13 +791,20 @@ class LetoDMS_Core_User {
 			($documentID==null ? "" : "AND `tblDocumentReviewers`.`documentID` = '". (int) $documentID ."' ").
 			($version==null ? "" : "AND `tblDocumentReviewers`.`version` = '". (int) $version ."' ").
 			"AND `tblGroupMembers`.`userID`='". $this->_id ."' ".
-			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC LIMIT 1";
+			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		if (count($resArr)>0) {
-			foreach ($resArr as $res)
-				$status["grpstatus"][] = $res;
+			foreach ($resArr as $res) {
+				if(isset($status["grpstatus"][$res['documentID']])) {
+					if($status["grpstatus"][$res['documentID']]['date'] < $res['date']) {
+						$status["grpstatus"][$res['documentID']] = $res;
+					}
+				} else {
+					$status["grpstatus"][$res['documentID']] = $res;
+				}
+			}
 		}
 		return $status;
 	} /* }}} */
@@ -851,14 +871,21 @@ class LetoDMS_Core_User {
 			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". (int) $documentID ."' ").
 			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". (int) $version ."' ").
 			"AND `tblDocumentApprovers`.`required`='". $this->_id ."' ".
-			"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC LIMIT 1";
+			"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC";
 
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		if (count($resArr)>0) {
-			foreach ($resArr as $res)
-				$status["indstatus"][] = $res;
+			foreach ($resArr as $res) {
+				if(isset($status["indstatus"][$res['documentID']])) {
+					if($status["indstatus"][$res['documentID']]['date'] < $res['date']) {
+						$status["indstatus"][$res['documentID']] = $res;
+					}
+				} else {
+					$status["indstatus"][$res['documentID']] = $res;
+				}
+			}
 		}
 
 		// See if the user is the member of a group that has been assigned to
@@ -888,13 +915,20 @@ class LetoDMS_Core_User {
 			($documentID==null ? "" : "AND `tblDocumentApprovers`.`documentID` = '". (int) $documentID ."' ").
 			($version==null ? "" : "AND `tblDocumentApprovers`.`version` = '". (int) $version ."' ").
 			"AND `tblGroupMembers`.`userID`='". $this->_id ."' ".
-			"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC LIMIT 1";
+			"ORDER BY `tblDocumentApproveLog`.`approveLogID` DESC";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
 		if (count($resArr)>0) {
-			foreach ($resArr as $res)
-				$status["grpstatus"][] = $res;
+			foreach ($resArr as $res) {
+				if(isset($status["grpstatus"][$res['documentID']])) {
+					if($status["grpstatus"][$res['documentID']]['date'] < $res['date']) {
+						$status["grpstatus"][$res['documentID']] = $res;
+					}
+				} else {
+					$status["grpstatus"][$res['documentID']] = $res;
+				}
+			}
 		}
 		return $status;
 	} /* }}} */
@@ -932,6 +966,29 @@ class LetoDMS_Core_User {
 		$resArr = $db->getResultArray($queryStr);
 
 		return $resArr;
+	} /* }}} */
+
+	/**
+	 * Get the mandatory workflow
+	 * A user which isn't trusted completely may have assigned mandatory
+	 * workflow
+	 * Whenever the user inserts a new document the mandatory workflow is
+	 * filled in as the workflow.
+	 *
+	 * @return object workflow
+	 */
+	function getMandatoryWorkflow() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr) return false;
+
+		if(!$resArr)
+			return null;
+
+		$workflow = $this->_dms->getWorkflow($resArr[0]['workflow']);
+		return $workflow;
 	} /* }}} */
 
 	/**
@@ -1002,6 +1059,25 @@ class LetoDMS_Core_User {
 	} /* }}} */
 
 	/**
+	 * Set a mandatory workflow
+	 * This function sets a mandatory workflow if it isn't already set.
+	 *
+	 * @param object $workflow workflow
+	 * @return boolean true on success, otherwise false
+	 */
+	function setMandatoryWorkflow($workflow) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT * FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id . " AND workflow = " . (int) $workflow->getID();
+		$resArr = $db->getResultArray($queryStr);
+		if (count($resArr)!=0) return;
+
+		$queryStr = "INSERT INTO tblWorkflowMandatoryWorkflow (userid, workflow) VALUES (" . $this->_id . ", " . $workflow->getID() .")";
+		$resArr = $db->getResult($queryStr);
+		if (is_bool($resArr) && !$resArr) return false;
+	} /* }}} */
+
+	/**
 	 * Deletes all mandatory reviewers
 	 *
 	 * @return boolean true on success, otherwise false
@@ -1022,6 +1098,18 @@ class LetoDMS_Core_User {
 		$db = $this->_dms->getDB();
 
 		$queryStr = "DELETE FROM tblMandatoryApprovers WHERE userID = " . $this->_id;
+		if (!$db->getResult($queryStr)) return false;
+		return true;
+	} /* }}} */
+
+	/**
+	 * Deletes the  mandatory workflow
+	 *
+	 * @return boolean true on success, otherwise false
+	 */
+	function delMandatoryWorkflow() { /* {{{ */
+		$db = $this->_dms->getDB();
+		$queryStr = "DELETE FROM tblWorkflowMandatoryWorkflow WHERE userid = " . $this->_id;
 		if (!$db->getResult($queryStr)) return false;
 		return true;
 	} /* }}} */
