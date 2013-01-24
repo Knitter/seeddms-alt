@@ -38,6 +38,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		$document = $this->params['document'];
 		$accessop = $this->params['accessobject'];
 		$viewonlinefiletypes = $this->params['viewonlinefiletypes'];
+		$workflowmode = $this->params['workflowmode'];
 		$cachedir = $this->params['cachedir'];
 		$documentid = $document->getId();
 
@@ -63,8 +64,20 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		  <li><a data-target="#current" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
 			<?php if (count($versions)>1) { ?>
 		  <li><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
-			<?php } ?>
+<?php
+			}
+			if($workflowmode == 'traditional') {
+?>
 		  <li><a data-target="#revapp" data-toggle="tab"><?php echo getMLText('reviewers')."/".getMLText('approvers'); ?></a></li>
+<?php
+			} else {
+				if($document->getLatestContent()->getWorkflow()) {
+?>
+		  <li><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
+<?php
+				}
+			}
+?>
 		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); ?></a></li>
 		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); ?></a></li>
 		</ul>
@@ -196,8 +209,9 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 
 		print "<td>".htmlspecialchars($latestContent->getComment())."</td>";
 
-		print "<td width='10%'>".getOverallStatusText($status["status"]);
-		if ( $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP || $status["status"]==S_EXPIRED ){
+		print "<td width='10%'>";
+		print getOverallStatusText($status["status"]);
+		if ( $status["status"]==S_DRAFT_REV || $status["status"]==S_DRAFT_APP || $status["status"]==S_IN_WORKFLOW || $status["status"]==S_EXPIRED ){
 			print "<br><span".($document->hasExpired()?" class=\"warning\" ":"").">".(!$document->getExpires() ? getMLText("does_not_expire") : getMLText("expires").": ".getReadableDate($document->getExpires()))."</span>";
 		}
 		print "</td>";
@@ -211,21 +225,30 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		if($accessop->mayRemoveVersion()) {
 			print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("rm_version")."</a></li>";
 		}
-		if($accessop->mayOverwriteStatus()) {
-			print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_status")."</a></li>";
-		}
-		// Allow changing reviewers/approvals only if not reviewed
-		if($accessop->maySetReviewersApprovers()) {
-			print "<li><a href='../out/out.SetReviewersApprovers.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_assignments")."</a></li>";
+		if($workflowmode == 'traditional') {
+			if($accessop->mayOverwriteStatus()) {
+				print "<li><a href='../out/out.OverrideContentStatus.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_status")."</a></li>";
+			}
+			// Allow changing reviewers/approvals only if not reviewed
+			if($accessop->maySetReviewersApprovers()) {
+				print "<li><a href='../out/out.SetReviewersApprovers.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_assignments")."</a></li>";
+			}
+		} else {
+			if($accessop->maySetWorkflow()) {
+				$workflow = $latestContent->getWorkflow();
+				if(!$workflow) {
+					print "<li><i class=\"icon-random\"></i> <a href='../out/out.SetWorkflow.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("set_workflow")."</a></li>";
+				}
+			}
 		}
 		if($accessop->maySetExpires()) {
-			print "<li><a href='../out/out.SetExpires.php?documentid=".$documentid."'>".getMLText("set_expiry")."</a></li>";
+			print "<li><i class=\"icon-time\"></i> <a href='../out/out.SetExpires.php?documentid=".$documentid."'>".getMLText("set_expiry")."</a></li>";
 		}
 		if($accessop->mayEditComment()) {
-			print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+			print "<li><i class=\"icon-edit\"></i> <a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_comment")."</a></li>";
 		}
 		if($accessop->mayEditAttributes()) {
-			print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
+			print "<li><i class=\"icon-edit\"></i> <a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
 		}
 
 		print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\"><i class=\"icon-download\"></i> ".getMLText("versioning_info")."</a></li>";	
@@ -233,9 +256,24 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		print "</ul>";
 		echo "</td>";
 		print "</tr></tbody>\n</table>\n";
+
+		if($user->isAdmin()) {
+			$status = $latestContent->getStatusLog();
+			echo "<table class=\"table table-condensed\"><thead>";
+			echo "<th>".getMLText('date')."</th><th>".getMLText('status')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>\n";
+			echo "</thead><tbody>";
+			foreach($status as $entry) {
+				$suser = $dms->getUser($entry['userID']);
+				echo "<tr><td>".$entry['date']."</td><td>".getOverallStatusText($entry['status'])."</td><td>".$suser->getFullName()."</td><td>".$entry['comment']."</td></tr>\n";
+			}
+			print "</tbody>\n</table>\n";
+		}
 		$this->contentContainerEnd();
 ?>
 		  </div>
+<?php
+		if($workflowmode == 'traditional') {
+?>
 		  <div class="tab-pane" id="revapp">
 <?php
 		$this->contentContainerstart();
@@ -364,7 +402,8 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 					}
 				}
 				
-				print "</ul></td>\n";	
+				print "</ul>";
+				print "</td>\n";	
 				print "</td>\n</tr>\n";
 			}
 		}
@@ -374,6 +413,188 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 ?>
 		  </div>
 <?php
+		} else {
+			$workflow = $latestContent->getWorkflow();
+			if($workflow) {
+?>
+		  <div class="tab-pane" id="workflow">
+<?php
+			$this->contentContainerStart();
+			if(LetoDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState())) {
+				print "<form action=\"../out/out.RemoveWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('removeworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"submit\" class=\"btn\" value=\"".getMLText('rm_workflow')."\" /></form>";
+			} else {
+				if($user->isAdmin())
+					print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"submit\" class=\"btn\" value=\"".getMLText('rewind_workflow')."\" /></form>";
+			}
+
+			$workflowstate = $latestContent->getWorkflowState();
+			$transitions = $workflow->getNextTransitions($workflowstate);
+			echo "<h4>".$workflow->getName()."</h4>";
+			if($parentworkflow = $latestContent->getParentWorkflow()) {
+				echo "<p>Sub workflow of '".$parentworkflow->getName()."'</p>";
+			}
+			echo "<div class=\"row-fluid\">";
+			echo "<div class=\"span8\">";
+			echo "<h5>Current State: ".$workflowstate->getName()."</h5>";
+			echo "<table class=\"table table-condensed\">\n";
+			echo "<tr>";
+			echo "<td>Next state:</td>";
+			foreach($transitions as $transition) {
+				$nextstate = $transition->getNextState();
+				echo "<td>".$nextstate->getName()."</td>";
+			}
+			echo "</tr>";
+			echo "<tr>";
+			echo "<td>Action:</td>";
+			foreach($transitions as $transition) {
+				$action = $transition->getAction();
+				echo "<td>".getMLText('action_'.$action->getName())."</td>";
+			}
+			echo "</tr>";
+			echo "<tr>";
+			echo "<td>Users:</td>";
+			foreach($transitions as $transition) {
+				$transusers = $transition->getUsers();
+				echo "<td>";
+				foreach($transusers as $transuser) {
+					$u = $transuser->getUser();
+					echo $u->getFullName();
+					if($document->getAccessMode($u) < M_READ) {
+						echo " (no access)";
+					}
+					echo "<br />";
+				}
+				echo "</td>";
+			}
+			echo "</tr>";
+			echo "<tr>";
+			echo "<td>Groups:</td>";
+			foreach($transitions as $transition) {
+				$transgroups = $transition->getGroups();
+				echo "<td>";
+				foreach($transgroups as $transgroup) {
+					$g = $transgroup->getGroup();
+					echo "At least ".$transgroup->getNumOfUsers()." users of ".$g->getName();
+					if ($document->getGroupAccessMode($g) < M_READ) {
+						echo " (no access)";
+					}
+					echo "<br />";
+				}
+				echo "</td>";
+			}
+			echo "</tr>";
+			echo "<tr class=\"success\">";
+			echo "<td>User done work:</td>";
+			foreach($transitions as $transition) {
+				echo "<td>";
+				if($latestContent->executeWorkflowTransitionIsAllowed($transition)) {
+					echo "Done";
+				}
+				$wkflogs = $latestContent->getWorkflowLog($transition);
+				foreach($wkflogs as $wkflog) {
+					$loguser = $wkflog->getUser();
+					echo $loguser->getFullName()." (";
+					$names = array();
+					foreach($loguser->getGroups() as $loggroup) {
+						$names[] =  $loggroup->getName();
+					}
+					echo implode(", ", $names);
+					echo ") - ";
+					echo $wkflog->getDate();
+				}
+				echo "</td>";
+			}
+			echo "</tr>";
+			echo "<tr>";
+			echo "<td></td>";
+			foreach($transitions as $transition) {
+				echo "<td>";
+				if($latestContent->triggerWorkflowTransitionIsAllowed($user, $transition)) {
+					$action = $transition->getAction();
+					print "<form action=\"../out/out.TriggerWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('triggerworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"hidden\" name=\"transition\" value=\"".$transition->getID()."\" /><input type=\"submit\" class=\"btn\" value=\"".getMLText('action_'.$action->getName())."\" /></form>";
+				}
+				echo "</td>";
+			}
+			echo "</tr>";
+			echo "</table>";
+
+			$workflows = $dms->getAllWorkflows();
+			if($workflows) {
+				$subworkflows = array();
+				foreach($workflows as $wkf) {
+					if($wkf->getInitState()->getID() == $workflowstate->getID()) {
+						if($workflow->getID() != $wkf->getID()) {
+							$subworkflows[] = $wkf;
+						}
+					}
+				}
+				if($subworkflows) {
+					echo "<form action=\"../out/out.RunSubWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('runsubworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" />";
+					echo "<select name=\"subworkflow\">";
+					foreach($subworkflows as $subworkflow) {
+						echo "<option value=\"".$subworkflow->getID()."\">".$subworkflow->getName()."</option>";
+					}
+					echo "</select>";
+					echo "<label class=\"inline\">";
+					echo "<input type=\"submit\" class=\"btn\" value=\"".getMLText('run_subworkflow')."\" />";
+					echo "</lable>";
+					echo "</form>";
+				}
+			}
+			/* If in a sub workflow, the check if return the parent workflow
+			 * is possible.
+			 */
+			if($parentworkflow = $latestContent->getParentWorkflow()) {
+				$states = $parentworkflow->getStates();
+				foreach($states as $state) {
+					/* Check if the current workflow state is also a state in the
+					 * parent workflow
+					 */
+					if($latestContent->getWorkflowState()->getID() == $state->getID()) {
+						echo "Switch from sub workflow '".$workflow->getName()."' into state ".$state->getName()." of parent workflow '".$parentworkflow->getName()."' is possible<br />";
+						/* Check if the transition from the state where the sub workflow
+						 * starts into the current state is also allowed in the parent
+						 * workflow. Checking at this point is actually too late, because
+						 * the sub workflow shouldn't be entered in the first place,
+						 * but that is difficult to check.
+						 */
+						/* If the init state has not been left, return is always possible */
+						if($workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()) {
+							echo "Initial state of sub workflow has not been left. Return to parent workflow is possible<br />";
+							echo "<form action=\"../out/out.ReturnFromSubWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('returnfromsubworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" />";
+							echo "<input type=\"submit\" class=\"btn\" value=\"".getMLText('return_from_subworkflow')."\" />";
+							echo "</form>";
+						} else {
+							/* Get a transition from the last state in the parent workflow
+							 * (which is the initial state of the sub workflow) into
+							 * current state.
+							 */
+							echo "Check for transition from ".$workflow->getInitState()->getName()." into ".$latestContent->getWorkflowState()->getName()." is possible in parentworkflow ".$parentworkflow->getID()."<br />";
+							$transitions = $parentworkflow->getTransitionsByStates($workflow->getInitState(), $latestContent->getWorkflowState());
+							if($transitions) {
+								echo "Found transitions in workflow ".$parentworkflow->getID()."<br />";
+								foreach($transitions as $transition) {
+									if($latestContent->triggerWorkflowTransitionIsAllowed($user, $transition)) {
+										echo "Triggering transition is allowed<br />";
+										echo "<form action=\"../out/out.ReturnFromSubWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('returnfromsubworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"hidden\" name=\"transition\" value=\"".$transition->getID()."\" />";
+										echo "<input type=\"submit\" class=\"btn\" value=\"".getMLText('return_from_subworkflow')."\" />";
+										echo "</form>";
+
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			echo "</div>";
+			echo "</div>";
+			$this->contentContainerEnd();
+?>
+		  </div>
+<?php
+			}
+		}
 		if (count($versions)>1) {
 ?>
 		  <div class="tab-pane" id="previous">
@@ -393,6 +614,8 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 			for ($i = count($versions)-2; $i >= 0; $i--) {
 				$version = $versions[$i];
 				$vstat = $version->getStatus();
+				$workflow = $version->getWorkflow();
+				$workflowstate = $version->getWorkflowState();
 				
 				// verify if file exists
 				$file_exists=file_exists($dms->contentDir . $version->getPath());
@@ -495,7 +718,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 			
 				print "<td><span class=\"actions\">";
 				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
-					print "<form action=\"../out/out.RemoveDocumentFile.php\" method=\"get\"><input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"fileid\" value=\"".$file->getID()."\" /><input type=\"submit\" class=\"btn btn-mini\" value=\"".getMLText("delete")."\" /></form>";
+					print "<form action=\"../out/out.RemoveDocumentFile.php\" method=\"get\"><input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"fileid\" value=\"".$file->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
 				print "</span></td>";		
 				
 				print "</tr>";
@@ -519,28 +742,37 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 
 		if (count($links) > 0) {
 
-			print "<table class=\"table-condensed\">";
+			print "<table class=\"table table-condensed\">";
 			print "<thead>\n<tr>\n";
-			print "<th width='40%'></th>\n";
-			print "<th width='25%'>".getMLText("comment")."</th>\n";
-			print "<th width='15%'>".getMLText("document_link_by")."</th>\n";
-			print "<th width='20%'></th>\n";
+			print "<th></th>\n";
+			print "<th></th>\n";
+			print "<th>".getMLText("comment")."</th>\n";
+			print "<th>".getMLText("document_link_by")."</th>\n";
+			print "<th></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
 			foreach($links as $link) {
 				$responsibleUser = $link->getUser();
 				$targetDoc = $link->getTarget();
+				$targetlc = $targetDoc->getLatestContent();
 
 				print "<tr>";
+				print "<td><a href=\"../op/op.Download.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."\">";
+				if($previewer->hasPreview($targetlc)) {
+					print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."&width=40\" title=\"".htmlspecialchars($targetlc->getMimeType())."\">";
+				} else {
+					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($targetlc->getFileType())."\" title=\"".htmlspecialchars($targetlc->getMimeType())."\">";
+				}
+				print "</td>";
 				print "<td><a href=\"out.ViewDocument.php?documentid=".$targetDoc->getID()."\" class=\"linklist\">".htmlspecialchars($targetDoc->getName())."</a></td>";
 				print "<td>".htmlspecialchars($targetDoc->getComment())."</td>";
 				print "<td>".htmlspecialchars($responsibleUser->getFullName());
 				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
-					print "<br>".getMLText("document_link_public").": ".(($link->isPublic()) ? getMLText("yes") : getMLText("no"));
+					print ", ".getMLText("document_link_public").": ".(($link->isPublic()) ? getMLText("yes") : getMLText("no"));
 				print "</td>";
 				print "<td><span class=\"actions\">";
 				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
-					print "<form action=\"../op/op.RemoveDocumentLink.php\" method=\"post\">".createHiddenFieldWithKey('removedocumentlink')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"linkid\" value=\"".$link->getID()."\" /><input type=\"submit\" class=\"btn btn-mini\" value=\"".getMLText("delete")."\" /></form>";
+					print "<form action=\"../op/op.RemoveDocumentLink.php\" method=\"post\">".createHiddenFieldWithKey('removedocumentlink')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"linkid\" value=\"".$link->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
 				print "</span></td>";
 				print "</tr>";
 			}
@@ -568,7 +800,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 ?>
 			<tr>
 			<td></td>
-			<td><input type="Submit" class="btn" value="<?php printMLText("update");?>"></td>
+			<td><input type="Submit" class="btn" value="<?php printMLText("save");?>"></td>
 			</tr>
 			</table>
 			</form>
