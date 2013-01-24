@@ -100,7 +100,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 			print "<th>".getMLText("comment")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 		}
-		else printMLText("empty_notify_list");
+		else printMLText("empty_folder_list");
 
 
 		foreach($subFolders as $subFolder) {
