@@ -231,12 +231,58 @@ class LetoDMS_Core_Workflow { /* {{{ */
 
 	/**
 	 * Remove a transition from a workflow
+	 * Deprecated! User LetoDMS_Core_Workflow_Transition::remove() instead.
 	 *
 	 * @param object $transition
 	 * @return boolean true if no error occured, otherwise false
 	 */
 	function removeTransition($transition) { /* {{{ */
 		return $transition->remove();
+	} /* }}} */
+
+	/**
+	 * Add new transition to workflow
+	 *
+	 * @param object $state 
+	 * @param object $action 
+	 * @param object $nextstate 
+	 * @param array $users 
+	 * @param array $groups 
+	 * @return object instance of new transition
+	 */
+	function addTransition($state, $action, $nextstate, $users, $groups) { /* {{{ */
+		$db = $this->_dms->getDB();
+		
+		$db->startTransaction();
+		$queryStr = "INSERT INTO tblWorkflowTransitions (workflow, state, action, nextstate) VALUES (".$this->_id.", ".$state->getID().", ".$action->getID().", ".$nextstate->getID().")";
+		echo $queryStr;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$transition = $this->getTransition($db->getInsertID());
+
+		foreach($users as $user) {
+			$queryStr = "INSERT INTO tblWorkflowTransitionUsers (transition, userid) VALUES (".$transition->getID().", ".$user->getID().")";
+		echo $queryStr;
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+		}
+
+		foreach($groups as $group) {
+			$queryStr = "INSERT INTO tblWorkflowTransitionGroups (transition, groupid, minusers) VALUES (".$transition->getID().", ".$group->getID().", 1)";
+		echo $queryStr;
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+		}
+
+		$db->commitTransaction();
+		return $transition;
 	} /* }}} */
 
 	/**
