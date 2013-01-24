@@ -63,6 +63,11 @@ if(isset($_POST["attributes_version"]))
 else
 	$attributes_version = array();
 
+if(isset($_POST["workflow"]))
+	$workflow = $dms->getWorkflow($_POST["workflow"]);
+else
+	$workflow = null;
+
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
 
@@ -196,7 +201,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 															$cats, $userfiletmp, basename($userfilename),
 	                            $fileType, $userfiletype, $sequence,
 	                            $reviewers, $approvers, $reqversion,
-	                            $version_comment, $attributes, $attributes_version);
+	                            $version_comment, $attributes, $attributes_version, $workflow);
 
 	if (is_bool($res) && !$res) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
@@ -244,7 +249,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 					$notifyList['groups'][] = $dms->getGroup($approvergrpid);
 				}
 			}
-			$subject = "###SITENAME###: ".$folder->_name." - ".getMLText("new_document_email");
+			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("new_document_email");
 			$message = getMLText("new_document_email")."\r\n";
 			$message .= 
 				getMLText("name").": ".$name."\r\n".
