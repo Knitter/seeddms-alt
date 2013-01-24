@@ -99,7 +99,7 @@ function checkForm()
 	}
 	?>
 	</select>
-	<input type="submit" class="btn" value="<?php printMLText("save")?>">
+	<button type="submit" class="btn"><i class="icon-download-alt"></i> <?php printMLText("save")?></button>
 	</form>
 <?php
 
@@ -147,19 +147,21 @@ function checkForm()
 	<input type="Hidden" name="documentid" value="<?php print $document->getId();?>">
 	<input type="Hidden" name="action" value="setdefault">
 	<?php $this->printAccessModeSelection($document->getDefaultAccess()); ?>
-	<input type="submit" class="btn" value="<?php printMLText("save");?>">
+	<button type="submit" class="btn"><i class="icon-download-alt"></i> <?php printMLText("save")?></button>
 </form>
 
 <?php
 
 		$this->contentSubHeading(getMLText("edit_existing_access"));
 
+		/* memorize users with access rights */
+		$memusers = array();
+		/* memorize groups with access rights */
+		$memgroups = array();
 		if (count($accessList["users"]) != 0 || count($accessList["groups"]) != 0) {
 
 			print "<table class=\"table-condensed\">";
 
-			/* memorїze users with access rights */
-			$memusers = array();
 			foreach ($accessList["users"] as $userAccess) {
 				$userObj = $userAccess->getUser();
 				$memusers[] = $userObj->getID();
@@ -190,8 +192,6 @@ function checkForm()
 				print "</tr>\n";
 			}
 
-			/* memorize groups with access rights */
-			$memgroups = array();
 			foreach ($accessList["groups"] as $groupAccess) {
 				$groupObj = $groupAccess->getGroup();
 				$memgroups[] = $groupObj->getID();

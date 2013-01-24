@@ -91,10 +91,10 @@ function showKeywords(selectObj) {
 
 <table class="table-condensed"><tr>
 		<td id="keywords0" style="display : none;">	
-			<form action="../op/op.DefaultKeywords.php" method="post">
+			<form class="form-inline" action="../op/op.DefaultKeywords.php" method="post">
   		<?php echo createHiddenFieldWithKey('addcategory'); ?>
 			<input type="Hidden" name="action" value="addcategory">
-			<?php printMLText("name");?> : <input type="text" name="name">
+			<?php printMLText("name");?>: <input type="text" name="name">
 			<input type="submit" class="btn" value="<?php printMLText("new_default_keyword_category"); ?>">
 			</form>
 		</td>
@@ -114,7 +114,7 @@ function showKeywords(selectObj) {
   						<?php echo createHiddenFieldWithKey('removecategory'); ?>
 							<input type="Hidden" name="action" value="removecategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input value="<?php printMLText("rm_default_keyword_category");?>" type="submit" class="btn" title="<?php echo getMLText("delete")?>">
+							<button type="submit" class="btn" title="<?php echo getMLText("delete")?>"><i class="icon-remove"></i> <?php printMLText("rm_default_keyword_category");?></button>
 						</form>
 					</td>
 				</tr>
@@ -146,15 +146,15 @@ function showKeywords(selectObj) {
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="editkeywords">
 									<input name="keywords" type="text" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
-									<input name="action" value="editkeywords" type="Image" src="images/save.gif" class="btn" title="<?php echo getMLText("save")?>" style="border: 0px;">
+									<button class="btn" title="<?php echo getMLText("save")?>"><i class="icon-download-alt"></i> <?php echo getMLText("save")?></button>
 									<!--	 <input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"> &nbsp; -->
 									</form>
 									<form style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" >
   								<?php echo createHiddenFieldWithKey('removekeywords'); ?>
-									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
-									<input type="Hidden" name="action" value="removekeywords">
-									<input name="action" value="removekeywords" type="Image" src="images/del.gif" class="btn" title="<?php echo getMLText("delete")?>" style="border: 0px;">
+									<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+									<input type="hidden" name="keywordsid" value="<?php echo $list["id"]?>">
+									<input type="hidden" name="action" value="removekeywords">
+									<button class="btn" title="<?php echo getMLText("delete")?>"><i class="icon-remove"></i> <?php echo getMLText("delete")?></button>
 									</form>
 									<br>
 						<?php }  ?>
