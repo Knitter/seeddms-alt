@@ -101,6 +101,7 @@ if ($action == "saveSettings")
   $settings->_loginFailure = intval($_POST["loginFailure"]);
   $settings->_quota = intval($_POST["quota"]);
   $settings->_encryptionKey = strval($_POST["encryptionKey"]);
+  $settings->_cookieLifetime = intval($_POST["cookieLifetime"]);
 
   // TODO Connectors
 
@@ -128,6 +129,7 @@ if ($action == "saveSettings")
 
   // SETTINGS - ADVANCED - EDITION
   $settings->_versioningFileName = $_POST["versioningFileName"];
+  $settings->_workflowMode = $_POST["workflowMode"];
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
   $settings->_enableVersionDeletion = getBoolValue("enableVersionDeletion");
   $settings->_enableVersionModification = getBoolValue("enableVersionModification");
