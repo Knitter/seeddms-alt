@@ -68,7 +68,7 @@ class LetoDMS_View_SetExpires extends LetoDMS_Bootstrap_Style {
 </tr>
 <tr>
 	<td></td>
-	<td><input type="submit" class="btn" value="<?php printMLText("update");?>"></td>
+	<td><input type="submit" class="btn" value="<?php printMLText("save");?>"></td>
 </tr>
 </table>
 </form>
