@@ -35,6 +35,12 @@ define("S_DRAFT_APP", 1);
 define("S_RELEASED",  2);
 
 /*
+ * Document is in workflow. A document is in workflow if a workflow
+ * has been started and has not reached a final state.
+ */
+define("S_IN_WORKFLOW",  3);
+
+/*
  * Document was rejected. A document is in rejected state when
  * the review failed or approval was not given.
  */
@@ -77,67 +83,67 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	/**
 	 * @var string name of document
 	 */
-	var $_name;
+	protected $_name;
 
 	/**
 	 * @var string comment of document
 	 */
-	var $_comment;
+	protected $_comment;
 
 	/**
 	 * @var integer unix timestamp of creation date
 	 */
-	var $_date;
+	protected $_date;
 
 	/**
 	 * @var integer id of user who is the owner
 	 */
-	var $_ownerID;
+	protected $_ownerID;
 
 	/**
 	 * @var integer id of folder this document belongs to
 	 */
-	var $_folderID;
+	protected $_folderID;
 
 	/**
 	 * @var integer timestamp of expiration date
 	 */
-	var $_expires;
+	protected $_expires;
 
 	/**
 	 * @var boolean true if access is inherited, otherwise false
 	 */
-	var $_inheritAccess;
+	protected $_inheritAccess;
 
 	/**
 	 * @var integer default access if access rights are not inherited
 	 */
-	var $_defaultAccess;
+	protected $_defaultAccess;
 
 	/**
 	 * @var array list of notifications for users and groups
 	 */
-	var $_notifyList;
+	public $_notifyList;
 
 	/**
 	 * @var boolean true if document is locked, otherwise false
 	 */
-	var $_locked;
+	protected $_locked;
 
 	/**
 	 * @var string list of keywords
 	 */
-	var $_keywords;
+	protected $_keywords;
 
 	/**
 	 * @var array list of categories
 	 */
-	var $_categories;
+	protected $_categories;
 
 	/**
 	 * @var integer position of document within the parent folder
 	 */
-	var $_sequence;
+	protected $_sequence;
 
 	function LetoDMS_Core_Document($id, $name, $comment, $date, $expires, $ownerID, $folderID, $inheritAccess, $defaultAccess, $locked, $keywords, $sequence) { /* {{{ */
 		parent::__construct($id);
@@ -509,13 +515,19 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		return false;
 	} /* }}} */
 
-	// return true if status has changed (to reload page)
+	/**
+	 * Check if the document has expired and set the status accordingly
+	 * It will also recalculate the status if the current status is
+	 * set to S_EXPIRED but the document isn't actually expired.
+	 *
+	 * @return boolean true if status has changed
+	 */
 	function verifyLastestContentExpriry(){ /* {{{ */
 		$lc=$this->getLatestContent();
 		if($lc) {
 			$st=$lc->getStatus();
 
-			if (($st["status"]==S_DRAFT_REV || $st["status"]==S_DRAFT_APP) && $this->hasExpired()){
+			if (($st["status"]==S_DRAFT_REV || $st["status"]==S_DRAFT_APP || $st["status"]==S_IN_WORKFLOW) && $this->hasExpired()){
 				$lc->setStatus(S_EXPIRED,"", $this->getOwner());
 				return true;
 			}
@@ -1082,7 +1094,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	 *        must be the id of the attribute definition.
 	 * @return bool/array false in case of an error or a result set
 	 */
-	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0, $attributes=array()) { /* {{{ */
+	function addContent($comment, $user, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers=array(), $approvers=array(), $version=0, $attributes=array(), $workflow=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		// the doc path is id/version.filetype
@@ -1128,6 +1140,8 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		unset($this->_content);
 		unset($this->_latestContent);
 		$content = new LetoDMS_Core_DocumentContent($contentID, $this, $version, $comment, $date, $user->getID(), $dir, $orgFileName, $fileType, $mimeType);
+		if($workflow)
+			$content->setWorkflow($workflow);
 		$docResultSet = new LetoDMS_Core_AddContentResultSet($content);
 
 		if($attributes) {
@@ -1142,8 +1156,8 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		}
 
 		// TODO - verify
-		if ($this->_dms->enableConverting && in_array($docResultSet->_content->getFileType(), array_keys($this->_dms->convertFileTypes)))
-			$docResultSet->_content->convert(); // Even if if fails, do not return false
+		if ($this->_dms->enableConverting && in_array($docResultSet->getContent()->getFileType(), array_keys($this->_dms->convertFileTypes)))
+			$docResultSet->getContent()->convert(); // Even if if fails, do not return false
 
 		$queryStr = "INSERT INTO `tblDocumentStatus` (`documentID`, `version`) ".
 			"VALUES (". $this->_id .", ". (int) $version .")";
@@ -1164,7 +1178,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			if (isset($reviewers[$i])) {
 				foreach ($reviewers[$i] as $reviewerID) {
 					$reviewer=($i=="i" ?$this->_dms->getUser($reviewerID) : $this->_dms->getGroup($reviewerID));
-					$res = ($i=="i" ? $docResultSet->_content->addIndReviewer($reviewer, $user, true) : $docResultSet->_content->addGrpReviewer($reviewer, $user, true));
+					$res = ($i=="i" ? $docResultSet->getContent()->addIndReviewer($reviewer, $user, true) : $docResultSet->getContent()->addGrpReviewer($reviewer, $user, true));
 					$docResultSet->addReviewer($reviewer, $i, $res);
 					// If no error is returned, or if the error is just due to email
 					// failure, mark the state as "pending review".
@@ -1182,7 +1196,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			if (isset($approvers[$i])) {
 				foreach ($approvers[$i] as $approverID) {
 					$approver=($i=="i" ? $this->_dms->getUser($approverID) : $this->_dms->getGroup($approverID));
-					$res=($i=="i" ? $docResultSet->_content->addIndApprover($approver, $user, !$pendingReview) : $docResultSet->_content->addGrpApprover($approver, $user, !$pendingReview));
+					$res=($i=="i" ? $docResultSet->getContent()->addIndApprover($approver, $user, !$pendingReview) : $docResultSet->getContent()->addGrpApprover($approver, $user, !$pendingReview));
 					$docResultSet->addApprover($approver, $i, $res);
 					if ($res==0 || $res=-3 || $res=-4) {
 						$pendingApproval=true;
@@ -1197,13 +1211,16 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			$status = S_DRAFT_REV;
 			$comment = "";
 		}
-		else if ($pendingApproval) {
+		elseif ($pendingApproval) {
 			$status = S_DRAFT_APP;
 			$comment = "";
 		}
-		else {
+		elseif($workflow) {
+			$status = S_IN_WORKFLOW;
+			$comment = ", workflow: ".$workflow->getName();
+		} else {
 			$status = S_RELEASED;
-			$comment="";
+			$comment = "";
 		}
 		$queryStr = "INSERT INTO `tblDocumentStatusLog` (`statusID`, `status`, `comment`, `date`, `userID`) ".
 			"VALUES ('". $statusID ."', '". $status."', 'New document content submitted". $comment ."', CURRENT_TIMESTAMP, '". $user->getID() ."')";
@@ -1368,6 +1385,12 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			return false;
 		}
 
+		$queryStr = "DELETE FROM `tblWorkflowDocumentContent` WHERE `document` = '". $this->getID() ."' AND `version` = '" . $version->_version."'";
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
 		$db->commitTransaction();
 		return true;
 	} /* }}} */
@@ -1509,10 +1532,26 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	/**
 	 * Remove a document completly
 	 *
+	 * This methods calls the callback 'onPreRemoveDocument' before removing
+	 * the document. The current document will be passed as the second
+	 * parameter to the callback function. After successful deletion the
+	 * 'onPostRemoveDocument' callback will be used. The current document id
+	 * will be passed as the second parameter. If onPreRemoveDocument fails
+	 * the whole function will fail and the document will not be deleted.
+	 * The return value of 'onPostRemoveDocument' will be disregarded.
+	 *
 	 * @return boolean true on success, otherwise false
 	 */
 	function remove() { /* {{{ */
 		$db = $this->_dms->getDB();
+
+		/* Check if 'onPreRemoveDocument' callback is set */
+		if(isset($this->_dms->callbacks['onPreRemoveDocument'])) {
+			$callback = $this->_dms->callbacks['onPreRemoveDocument'];
+			if(!call_user_func($callback[0], $callback[1], $this)) {
+				return false;
+			}
+		}
 
 		$res = $this->getContent();
 		if (is_bool($res) && !$res) return false;
@@ -1592,6 +1631,14 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		}
 
 		$db->commitTransaction();
+
+		/* Check if 'onPostRemoveDocument' callback is set */
+		if(isset($this->_dms->callbacks['onPostRemoveDocument'])) {
+			$callback = $this->_dms->callbacks['onPostRemoveDocument'];
+			if(!call_user_func($callback[0], $callback[1], $this->_id)) {
+			}
+		}
+
 		return true;
 	} /* }}} */
 
@@ -1770,9 +1817,23 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
  */
 class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
-	// if status is released and there are reviewers set status draft_rev
-	// if status is released or draft_rev and there are approves set status draft_app
-	// if status is draft and there are no approver and no reviewers set status to release
+	/**
+	 * Recalculate the status of a document
+	 * The methods checks the review and approval status and sets the
+	 * status of the document accordingly.
+	 * If status is S_RELEASED and there are reviewers set status S_DRAFT_REV
+	 * If status is S_RELEASED or S_DRAFT_REV and there are approvers set
+	 * status S_DRAFT_APP
+	 * If status is draft and there are no approver and no reviewers set
+	 * status to S_RELEASED
+	 * The status of a document with the current status S_OBSOLETE, S_REJECTED,
+	 * or S_EXPIRED will not be changed unless the parameter
+	 * $ignorecurrentstatus is set to true.
+	 *
+	 * @param boolean $ignorecurrentstatus ignore the current status and
+	 *        recalculate a new status in any case
+	 * @param object $user the user initiating this method
+	 */
 	function verifyStatus($ignorecurrentstatus=false, $user=null) { /* {{{ */
 
 		unset($this->_status);
@@ -1805,6 +1866,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 		if ($pendingReview) $this->setStatus(S_DRAFT_REV,"",$user);
 		else if ($pendingApproval) $this->setStatus(S_DRAFT_APP,"",$user);
+		else if ($this->getWorkflow()) $this->setStatus(S_IN_WORKFLOW,"",$user);
 		else $this->setStatus(S_RELEASED,"",$user);
 	} /* }}} */
 
@@ -1825,6 +1887,8 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		} else {
 			$this->_fileSize = $fileSize;
 		}
+		$this->_workflow = null;
+		$this->_workflowState = null;
 	} /* }}} */
 
 	function getVersion() { return $this->_version; }
@@ -1845,17 +1909,16 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 	function getPath() { return $this->_document->getDir() . $this->_version . $this->_fileType; }
 
-	function getFileSize() {
+	function getFileSize() { /* {{{ */
 		return $this->_fileSize;
 //		return LetoDMS_Core_File::fileSize($this->_dms->contentDir . $this->_document->getDir() . $this->getFileName());
-	}
+	} /* }}} */
 
-	function setFileSize() {
+	function setFileSize() { /* {{{ */
 		$filesize = LetoDMS_Core_File::fileSize($this->_dms->contentDir . $this->_document->getDir() . $this->getFileName());
-		if(!$filesize);
+		if($filesize === false);
 			return false;
 
-echo $filesize;
 		$db = $this->_document->_dms->getDB();
 		$queryStr = "UPDATE tblDocumentContent SET fileSize = ".$filesize." where `document` = " . $this->_document->getID() .  " AND `version` = " . $this->_version;
 		if (!$db->getResult($queryStr))
@@ -1863,7 +1926,7 @@ echo $filesize;
 		$this->_fileSize = $filesize;
 
 		return true;
-	}
+	} /* }}} */
 
 	function setComment($newComment) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
@@ -2002,6 +2065,36 @@ echo $filesize;
 	} /* }}} */
 
 	/**
+	 * Get current and former states of the document content
+	 *
+	 * @param integer $limit if not set all log entries will be returned
+	 * @return array list of status changes
+	 */
+	function getStatusLog($limit=0) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if (!is_numeric($limit)) return false;
+
+		$queryStr=
+			"SELECT `tblDocumentStatus`.*, `tblDocumentStatusLog`.`status`, ".
+			"`tblDocumentStatusLog`.`comment`, `tblDocumentStatusLog`.`date`, ".
+			"`tblDocumentStatusLog`.`userID` ".
+			"FROM `tblDocumentStatus` ".
+			"LEFT JOIN `tblDocumentStatusLog` USING (`statusID`) ".
+			"WHERE `tblDocumentStatus`.`documentID` = '". $this->_document->getID() ."' ".
+			"AND `tblDocumentStatus`.`version` = '". $this->_version ."' ".
+			"ORDER BY `tblDocumentStatusLog`.`statusLogID` DESC ";
+		if($limit)
+			$queryStr .= "LIMIT ".(int) $limit;
+
+		$res = $db->getResultArray($queryStr);
+		if (is_bool($res) && !$res)
+			return false;
+
+		return $res;
+	} /* }}} */
+
+	/**
 	 * Set the status of the content
 	 * Setting the status means to add another entry into the table
 	 * tblDocumentStatusLog
@@ -2022,7 +2115,7 @@ echo $filesize;
 
 		// If the supplied value lies outside of the accepted range, return an
 		// error.
-		if ($status < -3 || $status > 2) {
+		if ($status < -3 || $status > 3) {
 			return false;
 		}
 
@@ -2041,6 +2134,40 @@ echo $filesize;
 			return false;
 
 		return true;
+	} /* }}} */
+
+	/**
+	 * Returns the access mode similar to a document
+	 * There is no real access mode for document content, so this is more
+	 * like a virtual access mode, derived from the status or workflow
+	 * of the document content. The idea is to return an access mode
+	 * M_NONE if the user is still in a workflow or under review/approval.
+	 * In such a case only those user involved in the workflow/review/approval
+	 * process should be allowed to see the document. This method could
+	 * be called by any function that returns the content e.g. getLatestContent() 
+	 * It may as well be used by LetoDMS_Core_Document::getAccessMode() to
+	 * prevent access on the whole document if there is just one version.
+	 * The return value is planed to be either M_NONE or M_READ.
+	 *
+	 * @param object $user
+	 * @return integer mode
+	 */
+	function getAccessMode($u) { /* {{{ */
+		if(!$this->_workflow)
+			$this->getWorkflow();
+
+		if($this->_workflow) {
+			if (!$this->_workflowState)
+				$this->getWorkflowState();
+			$transitions = $this->_workflow->getNextTransitions($this->_workflowState);
+			foreach($transitions as $transition) {
+				if($this->triggerWorkflowTransitionIsAllowed($u, $transition))
+					return M_READ;
+			}
+			return M_NONE;
+		}
+
+		return M_READ;
 	} /* }}} */
 
 	/**
@@ -2652,6 +2779,659 @@ echo $filesize;
 		return 0;
 	} /* }}} */
 
+	/**
+	 * Set state of workflow assigned to the document content
+	 *
+	 * @param object $state
+	 */
+	function setWorkflowState($state) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if($this->_workflow) {
+			$queryStr = "UPDATE tblWorkflowDocumentContent set state=". $state->getID() ." WHERE workflow=". intval($this->_workflow->getID()). " AND document=". intval($this->_document->getID()) ." AND version=". intval($this->_version) ."";
+			if (!$db->getResult($queryStr)) {
+				return false;
+			}
+			$this->_workflowState = $state;
+			return true;
+		}
+		return false;
+	} /* }}} */
+
+	/**
+	 * Get state of workflow assigned to the document content
+	 *
+	 * @return object/boolean an object of class LetoDMS_Core_Workflow_State
+	 *         or false in case of error, e.g. the version has not a workflow
+	 */
+	function getWorkflowState() { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!$this->_workflow)
+			$this->getWorkflow();
+
+		if(!$this->_workflow)
+			return false;
+
+		if (!$this->_workflowState) {
+			$queryStr=
+				"SELECT b.* FROM tblWorkflowDocumentContent a LEFT JOIN tblWorkflowStates b ON a.state = b.id WHERE workflow=". intval($this->_workflow->getID())
+				." AND a.version='".$this->_version
+				."' AND a.document = '". $this->_document->getID() ."' ";
+			$recs = $db->getResultArray($queryStr);
+			if (is_bool($recs) && !$recs)
+				return false;
+			$this->_workflowState = new LetoDMS_Core_Workflow_State($recs[0]['id'], $recs[0]['name'], $recs[0]['maxtime'], $recs[0]['precondfunc'], $recs[0]['documentstatus']); 
+			$this->_workflowState->setDMS($this->_document->_dms);
+		}
+		return $this->_workflowState;
+	} /* }}} */
+
+	/**
+	 * Assign a workflow to a document
+	 *
+	 * @param object $workflow
+	 */
+	function setWorkflow($workflow, $user) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$this->getWorkflow();
+		if($workflow && is_object($workflow)) {
+			$initstate = $workflow->getInitState();
+			$queryStr = "INSERT INTO tblWorkflowDocumentContent (workflow, document, version, state, date) VALUES (". $workflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", CURRENT_TIMESTAMP)";
+			if (!$db->getResult($queryStr)) {
+				return false;
+			}
+			$this->_workflow = $workflow;	
+			$this->setStatus(S_IN_WORKFLOW, "Added workflow '".$workflow->getName()."'", $user);
+			return true;
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Get workflow assigned to the document content
+	 *
+	 * The method returns the last sub workflow if one was assigned.
+	 *
+	 * @return object/boolean an object of class LetoDMS_Core_Workflow
+	 *         or false in case of error, e.g. the version has not a workflow
+	 */
+	function getWorkflow() { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if (!isset($this->_workflow)) {
+			$queryStr=
+				"SELECT b.* FROM tblWorkflowDocumentContent a LEFT JOIN tblWorkflows b ON a.workflow = b.id WHERE a.`version`='".$this->_version
+				."' AND a.`document` = '". $this->_document->getID() ."' "
+				."ORDER BY `date` DESC LIMIT 1";
+			$recs = $db->getResultArray($queryStr);
+			if (is_bool($recs) && !$recs)
+				return false;
+			if(!$recs)
+				return false;
+			$this->_workflow = new LetoDMS_Core_Workflow($recs[0]['id'], $recs[0]['name'], $this->_document->_dms->getWorkflowState($recs[0]['initstate'])); 
+			$this->_workflow->setDMS($this->_document->_dms);
+		}
+		return $this->_workflow;
+	} /* }}} */
+
+	/**
+	 * Restart workflow from its initial state
+	 *
+	 * @return boolean true if workflow could be restarted
+	 *         or false in case of error
+	 */
+	function rewindWorkflow() { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$this->getWorkflow();
+
+		if (!isset($this->_workflow)) {
+			return true;
+		}
+
+		$db->startTransaction();
+		$queryStr = "DELETE from tblWorkflowLog WHERE `document` = ". $this->_document->getID() ." AND `version` = ".$this->_version." AND `workflow` = ".$this->_workflow->getID();
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
+		$this->setWorkflowState($this->_workflow->getInitState());
+		$db->commitTransaction();
+
+		return true;
+	} /* }}} */
+
+	/**
+	 * Remove workflow
+	 *
+	 * Fully removing a workflow including entries in the workflow log is
+	 * only allowed if the workflow is still its initial state.
+	 * At a later point of time only unlinking the document from the
+	 * workflow is allowed. It will keep any log entries.
+	 * A workflow is unlinked from a document when enterNextState()
+	 * succeeds.
+	 *
+	 * @param object $user user doing initiating the removal
+	 * @param boolean $unlink if true, just unlink the workflow from the
+	 *        document but do not remove the workflow log. The $unlink
+	 *        flag has been added to detach the workflow from the document
+	 *        when it has reached a valid end state
+	          (see LetoDMS_Core_DocumentContent::enterNextState())
+	 * @return boolean true if workflow could be removed
+	 *         or false in case of error
+	 */
+	function removeWorkflow($user, $unlink=false) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		$this->getWorkflow();
+
+		if (!isset($this->_workflow)) {
+			return true;
+		}
+
+		if(LetoDMS_Core_DMS::checkIfEqual($this->_workflow->getInitState(), $this->getWorkflowState()) || $unlink == true) {
+			$db->startTransaction();
+			$queryStr=
+				"DELETE FROM tblWorkflowDocumentContent WHERE "
+				."`version`='".$this->_version."' "
+				." AND `document` = '". $this->_document->getID() ."' "
+				." AND `workflow` = '". $this->_workflow->getID() ."' ";
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+			if(!$unlink) {
+				$queryStr=
+					"DELETE FROM tblWorkflowLog WHERE "
+					."`version`='".$this->_version."' "
+					." AND `document` = '". $this->_document->getID() ."' "
+					." AND `workflow` = '". $this->_workflow->getID() ."' ";
+				if (!$db->getResult($queryStr)) {
+					$db->rollbackTransaction();
+					return false;
+				}
+			}
+			$this->_workflow = null;
+			$this->_workflowState = null;
+			$this->verifyStatus(false, $user);
+			$db->commitTransaction();
+		}
+
+		return true;
+	} /* }}} */
+
+	/**
+	 * Run a sub workflow
+	 *
+	 * @param object $subworkflow
+	 */
+	function getParentWorkflow() { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		/* document content must be in a workflow */
+		$this->getWorkflow();
+		if(!$this->_workflow)
+			return false;
+
+		$queryStr=
+			"SELECT * FROM tblWorkflowDocumentContent WHERE "
+			."`version`='".$this->_version."' "
+			." AND `document` = '". $this->_document->getID() ."' "
+			." AND `workflow` = '". $this->_workflow->getID() ."' ";
+		$recs = $db->getResultArray($queryStr);
+		if (is_bool($recs) && !$recs)
+			return false;
+		if(!$recs)
+			return false;
+
+		if($recs[0]['parentworkflow'])
+			return $this->_document->_dms->getWorkflow($recs[0]['parentworkflow']);
+		
+		return false;
+	} /* }}} */
+
+	/**
+	 * Run a sub workflow
+	 *
+	 * @param object $subworkflow
+	 */
+	function runSubWorkflow($subworkflow) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		/* document content must be in a workflow */
+		$this->getWorkflow();
+		if(!$this->_workflow)
+			return false;
+
+		/* The current workflow state must match the sub workflows initial state */
+		if($subworkflow->getInitState()->getID() != $this->_workflowState->getID())
+			return false;
+
+		if($subworkflow) {
+			$initstate = $subworkflow->getInitState();
+			$queryStr = "INSERT INTO tblWorkflowDocumentContent (parentworkflow, workflow, document, version, state, date) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", CURRENT_TIMESTAMP)";
+			if (!$db->getResult($queryStr)) {
+				return false;
+			}
+			$this->_workflow = $subworkflow;	
+			return true;
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Return from sub workflow to parent workflow.
+	 * The method will trigger the given transition
+	 *
+	 * FIXME: Needs much better checking if this is allowed
+	 *
+	 * @param object $user intiating the return
+	 * @param object $transtion to trigger
+	 * @param string comment for the transition trigger
+	 */
+	function returnFromSubWorkflow($user, $transition=null, $comment='') { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		/* document content must be in a workflow */
+		$this->getWorkflow();
+		if(!$this->_workflow)
+			return false;
+
+		if (isset($this->_workflow)) {
+			$db->startTransaction();
+
+			$queryStr=
+				"SELECT * FROM tblWorkflowDocumentContent WHERE workflow=". intval($this->_workflow->getID())
+				. " AND `version`='".$this->_version
+				."' AND `document` = '". $this->_document->getID() ."' ";
+				echo $queryStr;
+			$recs = $db->getResultArray($queryStr);
+			if (is_bool($recs) && !$recs) {
+				$db->rollbackTransaction();
+				return false;
+			}
+			if(!$recs) {
+				$db->rollbackTransaction();
+				return false;
+			}
+
+			$queryStr = "DELETE FROM `tblWorkflowDocumentContent` WHERE `workflow` =". intval($this->_workflow->getID())." AND `document` = '". $this->_document->getID() ."' AND `version` = '" . $this->_version."'";
+				echo $queryStr;
+			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+
+			$this->_workflow = $this->_document->_dms->getWorkflow($recs[0]['parentworkflow']); 
+			$this->_workflow->setDMS($this->_document->_dms);
+
+			if($transition) {
+			echo "Trigger transition";
+				if(false === $this->triggerWorkflowTransition($user, $transition, $comment)) {
+					$db->rollbackTransaction();
+					return false;
+				}
+			}
+
+			$db->commitTransaction();
+		}
+		return $this->_workflow;
+	} /* }}} */
+
+	/**
+	 * Check if the user is allowed to trigger the transition
+	 * A user is allowed if either the user itself or
+	 * a group of which the user is a member of is registered for
+	 * triggering a transition. This method does not change the workflow
+	 * state of the document content.
+	 *
+	 * @param object $user
+	 * @return boolean true if user may trigger transaction
+	 */
+	function triggerWorkflowTransitionIsAllowed($user, $transition) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!$this->_workflow)
+			$this->getWorkflow();
+
+		if(!$this->_workflow)
+			return false;
+
+		if(!$this->_workflowState)
+			$this->getWorkflowState();
+
+		/* Check if the user has already triggered the transition */
+		$queryStr=
+			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID(). " AND userid = ".$user->getID();
+		$queryStr .= " AND `transition` = ".$transition->getID();
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		if(count($resArr))
+			return false;
+
+		/* Get all transition users allowed to trigger the transition */
+		$transusers = $transition->getUsers();
+		if($transusers) {
+			foreach($transusers as $transuser) {
+				if($user->getID() == $transuser->getUser()->getID())
+					return true;
+			}
+		}
+
+		/* Get all transition groups whose members are allowed to trigger
+		 * the transition */
+		$transgroups = $transition->getGroups();
+		if($transgroups) {
+			foreach($transgroups as $transgroup) {
+				$group = $transgroup->getGroup();
+				if($group->isMember($user))
+					return true;
+			}
+		}
+
+		return false;
+	} /* }}} */
+
+	/**
+	 * Check if all conditions are met to change the workflow state
+	 * of a document content (run the transition).
+	 * The conditions are met if all explicitly set users and a sufficient
+	 * number of users of the groups have acknowledged the content.
+	 *
+	 * @return boolean true if transaction maybe executed
+	 */
+	function executeWorkflowTransitionIsAllowed($transition) { /* {{{ */
+		if(!$this->_workflow)
+			$this->getWorkflow();
+
+		if(!$this->_workflow)
+			return false;
+
+		if(!$this->_workflowState)
+			$this->getWorkflowState();
+
+		/* Get the Log of transition triggers */
+		$entries = $this->getWorkflowLog($transition);
+		if(!$entries)
+			return false;
+
+		/* Get all transition users allowed to trigger the transition
+		 * $allowedusers is a list of all users allowed to trigger the
+		 * transition
+		 */
+		$transusers = $transition->getUsers();
+		$allowedusers = array();
+		foreach($transusers as $transuser) {
+			$a = $transuser->getUser();
+			$allowedusers[$a->getID()] = $a;
+		}
+
+		/* Get all transition groups whose members are allowed to trigger
+		 * the transition */
+		$transgroups = $transition->getGroups();
+		foreach($entries as $entry) {
+			$loguser = $entry->getUser();
+			/* Unset each allowed user if it was found in the log */
+			if(isset($allowedusers[$loguser->getID()]))
+				unset($allowedusers[$loguser->getID()]);
+			/* Also check groups if required. Count the group membership of
+			 * each user in the log in the array $gg
+			 */
+			if($transgroups) {
+				$loggroups = $loguser->getGroups();
+				foreach($loggroups as $loggroup) {
+					if(!isset($gg[$loggroup->getID()]))
+						$gg[$loggroup->getID()] = 1;
+					else
+						$gg[$loggroup->getID()]++;
+				}
+			}
+		}
+		/* If there are allowed users left, then there some users still
+		 * need to trigger the transition.
+		 */
+		if($allowedusers)
+			return false;
+
+		if($transgroups) {
+			foreach($transgroups as $transgroup) {
+				$group = $transgroup->getGroup();
+				$minusers = $transgroup->getNumOfUsers();
+				if(!isset($gg[$group->getID()]))
+					return false;
+				if($gg[$group->getID()] < $minusers)
+					return false;
+			}
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Trigger transition
+	 *
+	 * This method will be deprecated
+	 *
+	 * The method will first check if the user is allowed to trigger the
+	 * transition. If the user is allowed, an entry in the workflow log
+	 * will be added, which is later used to check if the transition
+	 * can actually be processed. The method will finally call
+	 * executeWorkflowTransitionIsAllowed() which checks all log entries
+	 * and does the transitions post function if all users and groups have
+	 * triggered the transition. Finally enterNextState() is called which
+	 * will try to enter the next state.
+	 *
+	 * @param object $user
+	 * @param object $transition
+	 * @param string $comment user comment
+	 * @return boolean/object next state if transition could be triggered and
+	 *         then next state could be entered,
+	 *         true if the transition could just be triggered or
+	 *         false in case of an error
+	 */
+	function triggerWorkflowTransition($user, $transition, $comment='') { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!$this->_workflow)
+			$this->getWorkflow();
+
+		if(!$this->_workflow)
+			return false;
+
+		if(!$this->_workflowState)
+			$this->getWorkflowState();
+
+		if(!$this->_workflowState)
+			return false;
+
+		/* Check if the user is allowed to trigger the transition.
+		 */
+		if(!$this->triggerWorkflowTransitionIsAllowed($user, $transition))
+			return false;
+
+		$state = $this->_workflowState;
+		$queryStr = "INSERT INTO tblWorkflowLog (document, version, workflow, userid, transition, date, comment) VALUES (".$this->_document->getID().", ".$this->_version.", " . (int) $this->_workflow->getID() . ", " .(int) $user->getID(). ", ".(int) $transition->getID().", CURRENT_TIMESTAMP, ".$db->qstr($comment).")";
+		if (!$db->getResult($queryStr))
+			return false;
+
+		/* Check if this transition is processed. Run the post function in
+		 * that case. A transition is processed when all users and groups
+		 * have triggered it.
+		 */
+		if($this->executeWorkflowTransitionIsAllowed($transition)) {
+			/* run post function of transition */
+//			echo "run post function of transition ".$transition->getID()."<br />";
+		}
+
+		/* Go into the next state. This will only succeed if the pre condition
+		 * function of that states succeeds.
+		 */
+		$nextstate = $transition->getNextState();
+		if($this->enterNextState($user, $nextstate)) {
+			return $nextstate;
+		}
+		return true;
+		
+	} /* }}} */
+
+	/**
+	 * Enter next state of workflow if possible
+	 *
+	 * The method will check if one of the following states in the workflow
+	 * can be reached.
+	 * It does it by running
+	 * the precondition function of that state. The precondition function
+	 * gets a list of all transitions leading to the state. It will
+	 * determine, whether the transitions has been triggered and if that
+	 * is sufficient to enter the next state. If no pre condition function
+	 * is set, then 1 of n transtions are enough to enter the next state.
+	 *
+	 * If moving in the next state is possible and this state has a
+	 * corresponding document state, then the document state will be
+	 * updated and the workflow will be detached from the document.
+	 *
+	 * @param object $user
+	 * @param object $nextstate
+	 * @return boolean true if the state could be reached
+	 *         false if not
+	 */
+	function enterNextState($user, $nextstate) { /* {{{ */
+
+			/* run the pre condition of the next state. If it is not set
+			 * the next state will be reached if one of the transitions
+			 * leading to the given state can be processed.
+			 */
+			if($nextstate->getPreCondFunc() == '') {
+				$transitions = $this->_workflow->getPreviousTransitions($nextstate);
+				foreach($transitions as $transition) {
+//				echo "transition ".$transition->getID()." led to state ".$nextstate->getName()."<br />";
+					if($this->executeWorkflowTransitionIsAllowed($transition)) {
+//					echo "stepping into next state<br />";
+						$this->setWorkflowState($nextstate);
+
+						/* Check if the new workflow state has a mapping into a
+						 * document state. If yes, set the document state will
+						 * be updated and the workflow will be removed from the
+						 * document.
+						 */
+						$docstate = $nextstate->getDocumentStatus();
+						if($docstate == S_RELEASED || $docstate == S_REJECTED) {
+							$this->setStatus($docstate, "Workflow has ended", $user);
+							/* Detach the workflow from the document, but keep the
+							 * workflow log
+							 */
+							$this->removeWorkflow($user, true);
+							return true ;
+						}
+
+						/* make sure the users and groups allowed to trigger the next
+						 * transitions are also allowed to read the document
+						 */
+						$transitions = $this->_workflow->getNextTransitions($nextstate);
+						foreach($transitions as $tran) {
+//							echo "checking access for users/groups allowed to trigger transition ".$tran->getID()."<br />";
+							$transusers = $tran->getUsers();
+							foreach($transusers as $transuser) {
+								$u = $transuser->getUser();
+//								echo $u->getFullName()."<br />";
+								if($this->_document->getAccessMode($u) < M_READ) {
+									$this->_document->addAccess(M_READ, $u->getID(), 1);
+//									echo "granted read access<br />";
+								} else {
+//									echo "has already access<br />";
+								}
+							}
+							$transgroups = $tran->getGroups();
+							foreach($transgroups as $transgroup) {
+								$g = $transgroup->getGroup();
+//								echo $g->getName()."<br />";
+								if ($this->_document->getGroupAccessMode($g) < M_READ) {
+									$this->_document->addAccess(M_READ, $g->getID(), 0);
+//									echo "granted read access<br />";
+								} else {
+//									echo "has already access<br />";
+								}
+							}
+						}
+						return(true);
+					} else {
+//						echo "transition not ready for process now<br />";
+					}
+				}
+				return false;
+			} else {
+			}
+
+	} /* }}} */
+
+	/**
+	 * Get the so far logged operations on the document content within the
+	 * workflow
+	 *
+	 * @return array list of operations
+	 */
+	function getWorkflowLog($transition = null) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!$this->_workflow)
+			$this->getWorkflow();
+
+		if(!$this->_workflow)
+			return false;
+
+		$queryStr=
+			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID();
+		if($transition)
+			$queryStr .= " AND `transition` = ".$transition->getID();
+		$queryStr .= " ORDER BY `date`";
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$workflowlogs = array();
+		for ($i = 0; $i < count($resArr); $i++) {
+			$workflowlog = new LetoDMS_Core_Workflow_Log($resArr[$i]["id"], $this->_document->_dms->getDocument($resArr[$i]["document"]), $resArr[$i]["version"], $this->_workflow, $this->_document->_dms->getUser($resArr[$i]["userid"]), $this->_workflow->getTransition($resArr[$i]["transition"]), $resArr[$i]["date"], $resArr[$i]["comment"]);
+			$workflowlog->setDMS($this);
+			$workflowlogs[$i] = $workflowlog;
+		}
+
+		return $workflowlogs;
+	} /* }}} */
+
+	/**
+	 * Get the latest logged transition for the document content within the
+	 * workflow
+	 *
+	 * @return array list of operations
+	 */
+	function getLastWorkflowTransition() { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!$this->_workflow)
+			$this->getWorkflow();
+
+		if(!$this->_workflow)
+			return false;
+
+		$queryStr=
+			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID();
+		$queryStr .= " ORDER BY `id` DESC LIMIT 1";
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$workflowlogs = array();
+		$i = 0;
+		$workflowlog = new LetoDMS_Core_Workflow_Log($resArr[$i]["id"], $this->_document->_dms->getDocument($resArr[$i]["document"]), $resArr[$i]["version"], $this->_workflow, $this->_document->_dms->getUser($resArr[$i]["userid"]), $this->_workflow->getTransition($resArr[$i]["transition"]), $resArr[$i]["date"], $resArr[$i]["comment"]);
+		$workflowlog->setDMS($this);
+
+		return $workflowlog;
+	} /* }}} */
+
 } /* }}} */
 
 
@@ -2674,11 +3454,30 @@ echo $filesize;
  * @version    Release: @package_version@
  */
 class LetoDMS_Core_DocumentLink { /* {{{ */
-	var $_id;
-	var $_document;
-	var $_target;
-	var $_userID;
-	var $_public;
+	/**
+	 * @var integer internal id of document link
+	 */
+	protected $_id;
+
+	/**
+	 * @var object reference to document this link belongs to
+	 */
+	protected $_document;
+
+	/**
+	 * @var object reference to target document this link points to
+	 */
+	protected $_target;
+
+	/**
+	 * @var integer id of user who is the owner of this link
+	 */
+	protected $_userID;
+
+	/**
+	 * @var integer 1 if this link is public, or 0 if is only visible to the owner
+	 */
+	protected $_public;
 
 	function LetoDMS_Core_DocumentLink($id, $document, $target, $userID, $public) {
 		$this->_id = $id;
@@ -2726,16 +3525,58 @@ class LetoDMS_Core_DocumentLink { /* {{{ */
  * @version    Release: @package_version@
  */
 class LetoDMS_Core_DocumentFile { /* {{{ */
-	var $_id;
-	var $_document;
-	var $_userID;
-	var $_comment;
-	var $_date;
-	var $_dir;
-	var $_fileType;
-	var $_mimeType;
-	var $_orgFileName;
-	var $_name;
+	/**
+	 * @var integer internal id of document file
+	 */
+	protected $_id;
+
+	/**
+	 * @var object reference to document this file belongs to
+	 */
+	protected $_document;
+
+	/**
+	 * @var integer id of user who is the owner of this link
+	 */
+	protected $_userID;
+
+	/**
+	 * @var string comment for the attached file
+	 */
+	protected $_comment;
+
+	/**
+	 * @var string date when the file was attached
+	 */
+	protected $_date;
+
+	/**
+	 * @var string directory where the file is stored. This is the
+	 * document id with a proceding '/'.
+	 * FIXME: looks like this isn't used anymore. The file path is
+	 * constructed by getPath()
+	 */
+	protected $_dir;
+
+	/**
+	 * @var string extension of the original file name with a leading '.'
+	 */
+	protected $_fileType;
+
+	/**
+	 * @var string mime type of the file
+	 */
+	protected $_mimeType;
+
+	/**
+	 * @var string name of the file that was originally uploaded
+	 */
+	protected $_orgFileName;
+
+	/**
+	 * @var string name of the file as given by the user
+	 */
+	protected $_name;
 
 	function LetoDMS_Core_DocumentFile($id, $document, $userID, $comment, $date, $dir, $fileType, $mimeType, $orgFileName,$name) {
 		$this->_id = $id;
@@ -2793,24 +3634,23 @@ class LetoDMS_Core_DocumentFile { /* {{{ */
  */
 class LetoDMS_Core_AddContentResultSet { /* {{{ */
 
-	var $_indReviewers;
-	var $_grpReviewers;
-	var $_indApprovers;
-	var $_grpApprovers;
-	var $_content;
-	var $_status;
+	protected $_indReviewers;
+	protected $_grpReviewers;
+	protected $_indApprovers;
+	protected $_grpApprovers;
+	protected $_content;
+	protected $_status;
 
-	function LetoDMS_Core_AddContentResultSet($content) {
-
+	function LetoDMS_Core_AddContentResultSet($content) { /* {{{ */
 		$this->_content = $content;
 		$this->_indReviewers = null;
 		$this->_grpReviewers = null;
 		$this->_indApprovers = null;
 		$this->_grpApprovers = null;
 		$this->_status = null;
-	}
+	} /* }}} */
 
-	function addReviewer($reviewer, $type, $status) {
+	function addReviewer($reviewer, $type, $status) { /* {{{ */
 
 		if (!is_object($reviewer) || (strcasecmp($type, "i") && strcasecmp($type, "g")) && !is_integer($status)){
 			return false;
@@ -2834,9 +3674,9 @@ class LetoDMS_Core_AddContentResultSet { /* {{{ */
 			$this->_grpReviewers[$status][] = $reviewer;
 		}
 		return true;
-	}
+	} /* }}} */
 
-	function addApprover($approver, $type, $status) {
+	function addApprover($approver, $type, $status) { /* {{{ */
 
 		if (!is_object($approver) || (strcasecmp($type, "i") && strcasecmp($type, "g")) && !is_integer($status)){
 			return false;
@@ -2860,9 +3700,9 @@ class LetoDMS_Core_AddContentResultSet { /* {{{ */
 			$this->_grpApprovers[$status][] = $approver;
 		}
 		return true;
-	}
+	} /* }}} */
 
-	function setStatus($status) {
+	function setStatus($status) { /* {{{ */
 		if (!is_integer($status)) {
 			return false;
 		}
@@ -2871,13 +3711,17 @@ class LetoDMS_Core_AddContentResultSet { /* {{{ */
 		}
 		$this->_status = $status;
 		return true;
-	}
+	} /* }}} */
 
-	function getStatus() {
+	function getStatus() { /* {{{ */
 		return $this->_status;
-	}
+	} /* }}} */
 
-	function getReviewers($type) {
+	function getContent() { /* {{{ */
+		return $this->_content;
+	} /* }}} */
+
+	function getReviewers($type) { /* {{{ */
 		if (strcasecmp($type, "i") && strcasecmp($type, "g")) {
 			return false;
 		}
@@ -2887,9 +3731,9 @@ class LetoDMS_Core_AddContentResultSet { /* {{{ */
 		else {
 			return ($this->_grpReviewers == null ? array() : $this->_grpReviewers);
 		}
-	}
+	} /* }}} */
 
-	function getApprovers($type) {
+	function getApprovers($type) { /* {{{ */
 		if (strcasecmp($type, "i") && strcasecmp($type, "g")) {
 			return false;
 		}
@@ -2899,6 +3743,6 @@ class LetoDMS_Core_AddContentResultSet { /* {{{ */
 		else {
 			return ($this->_grpApprovers == null ? array() : $this->_grpApprovers);
 		}
-	}
+	} /* }}} */
 } /* }}} */
 ?>

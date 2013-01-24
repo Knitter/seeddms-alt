@@ -127,6 +127,47 @@ class LetoDMS_Core_DMS {
 	public $version;
 
 	/**
+	 * @var array $callbacks list of methods called when certain operations,
+	 * like removing a document, are executed. Set a callback with
+	 * {LetoDMS_Core_DMS::setCallback}.
+	 * The key of the array is the internal callback function name. Each
+	 * array element is an array with two elements: the function name
+	 * and the parameter passed to the function.
+	 *
+	 * Currently implemented callbacks are:
+	 *
+	 * onPreRemoveDocument($user_param, $document);
+	 *   called before deleting a document. If this function returns false
+	 *   the document will not be deleted.
+	 *
+	 * onPostRemoveDocument($user_param, $document_id);
+	 *   called after the successful deletion of a document.
+	 *
+	 * @access public
+	 */
+	public $callbacks;
+
+
+	/**
+	 * Checks if two objects are equal by comparing its ID
+	 *
+	 * The regular php check done by '==' compares all attributes of
+	 * two objects, which isn't required. The method will first check
+	 * if the objects are instances of the same class.
+	 *
+	 * @param object $object1
+	 * @param object $object2
+	 * @return boolean true if objects are equal, otherwise false
+	 */
+	static function checkIfEqual($object1, $object2) { /* {{{ */
+		if(get_class($object1) != get_class($object2))
+			return false;
+		if($object1->getID() != $object2->getID())
+			return false;
+		return true;
+	} /* }}} */
+
+	/**
 	 * Filter objects out which are not accessible in a given mode by a user.
 	 *
 	 * @param array $objArr list of objects (either documents or folders)
@@ -507,9 +548,11 @@ class LetoDMS_Core_DMS {
 	 *        0x1 = documents only
 	 *        0x2 = folders only
 	 *        0x3 = both
+	 * @param expirationstartdate array search for documents expiring after this date
+	 * @param expirationenddate array search for documents expiring before this date
 	 * @return array containing the elements total and docs
 	 */
-	function search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x3) { /* {{{ */
+	function search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x3, $expirationstartdate=array(), $expirationenddate=array()) { /* {{{ */
 		// Split the search string into constituent keywords.
 		$tkeys=array();
 		if (strlen($query)>0) {
@@ -742,6 +785,23 @@ class LetoDMS_Core_DMS {
 					$searchCreateDate .= "`tblDocumentContent`.`date` <= ".$stopdate;
 				}
 			}
+			$searchExpirationDate = '';
+			if ($expirationstartdate) {
+				$startdate = LetoDMS_Core_DMS::makeTimeStamp($expirationstartdate['hour'], $expirationstartdate['minute'], $expirationstartdate['second'], $expirationstartdate['year'], $expirationstartdate["month"], $expirationstartdate["day"]);
+				if ($startdate) {
+					if($searchExpirationDate)
+						$searchExpirationDate .= " AND ";
+					$searchExpirationDate .= "`tblDocuments`.`expires` >= ".$startdate;
+				}
+			}
+			if ($expirationenddate) {
+				$stopdate = LetoDMS_Core_DMS::makeTimeStamp($expirationenddate['hour'], $expirationenddate['minute'], $expirationenddate['second'], $expirationenddate["year"], $expirationenddate["month"], $expirationenddate["day"]);
+				if ($stopdate) {
+					if($searchExpirationDate)
+						$searchExpirationDate .= " AND ";
+					$searchExpirationDate .= "`tblDocuments`.`expires` <= ".$stopdate;
+				}
+			}
 
 			// ---------------------- Suche starten ----------------------------------
 
@@ -781,6 +841,9 @@ class LetoDMS_Core_DMS {
 			if (strlen($searchCreateDate)>0) {
 				$searchQuery .= " AND (".$searchCreateDate.")";
 			}
+			if (strlen($searchExpirationDate)>0) {
+				$searchQuery .= " AND (".$searchExpirationDate.")";
+			}
 			if ($searchAttributes) {
 				$searchQuery .= " AND (".implode(" AND ", $searchAttributes).")";
 			}
@@ -791,7 +854,7 @@ class LetoDMS_Core_DMS {
 			}
 
 			// Count the number of rows that the search will produce.
-			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery." GROUP BY `tblDocuments`.`id`");
+			$resArr = $this->db->getResultArray("SELECT COUNT(*) as num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
 			$totalDocs = 0;
 			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 				$totalDocs = (integer)$resArr[0]["num"];
@@ -808,19 +871,24 @@ class LetoDMS_Core_DMS {
 
 			// calculate the remaining entrїes of the current page
 			// If page is not full yet, get remaining entries
-			$remain = $limit - count($folderresult['folders']);
-			if($remain) {
-				if($remain == $limit)
-					$offset -= $totalFolders;
-				else
-					$offset = 0;
-				if($limit)
-					$searchQuery .= " LIMIT ".$offset.",".$remain;
+			if($limit) {
+				$remain = $limit - count($folderresult['folders']);
+				if($remain) {
+					if($remain == $limit)
+						$offset -= $totalFolders;
+					else
+						$offset = 0;
+					if($limit)
+						$searchQuery .= " LIMIT ".$offset.",".$remain;
 
+					// Send the complete search query to the database.
+					$resArr = $this->db->getResultArray($searchQuery);
+				} else {
+					$resArr = array();
+				}
+			} else {
 				// Send the complete search query to the database.
 				$resArr = $this->db->getResultArray($searchQuery);
-			} else {
-				$resArr = array();
 			}
 
 			// ------------------- Ausgabe der Ergebnisse ----------------------------
@@ -1000,7 +1068,7 @@ class LetoDMS_Core_DMS {
 		$users = array();
 
 		for ($i = 0; $i < count($resArr); $i++) {
-			$user = new LetoDMS_Core_User($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr["language"])?$resArr["language"]:NULL), (isset($resArr["theme"])?$resArr["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"], $resArr[$i]["disabled"], $resArr[$i]["pwdExpiration"], $resArr[$i]["loginfailures"], $resArr["quota"]);
+			$user = new LetoDMS_Core_User($resArr[$i]["id"], $resArr[$i]["login"], $resArr[$i]["pwd"], $resArr[$i]["fullName"], $resArr[$i]["email"], (isset($resArr["language"])?$resArr["language"]:NULL), (isset($resArr["theme"])?$resArr["theme"]:NULL), $resArr[$i]["comment"], $resArr[$i]["role"], $resArr[$i]["hidden"], $resArr[$i]["disabled"], $resArr[$i]["pwdExpiration"], $resArr[$i]["loginfailures"], $resArr[$i]["quota"]);
 			$user->setDMS($this);
 			$users[$i] = $user;
 		}
@@ -1484,6 +1552,252 @@ class LetoDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Return list of all workflows
+	 *
+	 * @return array of instances of LetoDMS_Core_Workflow or false
+	 */
+	function getAllWorkflows() { /* {{{ */
+		$queryStr = "SELECT * FROM tblWorkflows ORDER BY name";
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		$queryStr = "SELECT * FROM tblWorkflowStates ORDER BY name";
+		$ressArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($ressArr) && $ressArr == false)
+			return false;
+
+		for ($i = 0; $i < count($ressArr); $i++) {
+			$wkfstates[$ressArr[$i]["id"]] = new LetoDMS_Core_Workflow_State($ressArr[$i]["id"], $ressArr[$i]["name"], $ressArr[$i]["maxtime"], $ressArr[$i]["precondfunc"], $ressArr[$i]["documentstatus"]);
+		}
+
+		$workflows = array();
+		for ($i = 0; $i < count($resArr); $i++) {
+			$workflow = new LetoDMS_Core_Workflow($resArr[$i]["id"], $resArr[$i]["name"], $wkfstates[$resArr[$i]["initstate"]]);
+			$workflow->setDMS($this);
+			$workflows[$i] = $workflow;
+		}
+
+		return $workflows;
+	} /* }}} */
+
+	/**
+	 * Return workflow by its Id
+	 *
+	 * @return object of instances of LetoDMS_Core_Workflow or false
+	 */
+	function getWorkflow($id) { /* {{{ */
+		$queryStr = "SELECT * FROM tblWorkflows WHERE id=".intval($id);
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		if(!$resArr)
+			return false;
+
+		$initstate = $this->getWorkflowState($resArr[0]['initstate']);
+
+		$workflow = new LetoDMS_Core_Workflow($resArr[0]["id"], $resArr[0]["name"], $initstate);
+		$workflow->setDMS($this);
+
+		return $workflow;
+	} /* }}} */
+
+	/**
+	 * Return workflow by its name
+	 *
+	 * @return object of instances of LetoDMS_Core_Workflow or false
+	 */
+	function getWorkflowByName($name) { /* {{{ */
+		$queryStr = "SELECT * FROM tblWorkflows WHERE name=".$this->db->qstr($name);
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		if(!$resArr)
+			return false;
+
+		$initstate = $this->getWorkflowState($resArr[0]['initstate']);
+
+		$workflow = new LetoDMS_Core_Workflow($resArr[0]["id"], $resArr[0]["name"], $initstate);
+		$workflow->setDMS($this);
+
+		return $workflow;
+	} /* }}} */
+
+	function addWorkflow($name, $initstate) { /* {{{ */
+		$db = $this->db;
+		if (is_object($this->getWorkflowByName($name))) {
+			return false;
+		}
+		$queryStr = "INSERT INTO tblWorkflows (name, initstate) VALUES (".$db->qstr($name).", ".$initstate->getID().")";
+		$res = $db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		return $this->getWorkflow($db->getInsertID());
+	} /* }}} */
+
+	/**
+	 * Return a workflow state by its id
+	 *
+	 * This function retrieves a workflow state from the database by its id.
+	 *
+	 * @param integer $id internal id of workflow state
+	 * @return object instance of LetoDMS_Core_Workflow_State or false
+	 */
+	function getWorkflowState($id) { /* {{{ */
+		if (!is_numeric($id))
+			return false;
+
+		$queryStr = "SELECT * FROM tblWorkflowStates WHERE id = " . (int) $id;
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$state = new LetoDMS_Core_Workflow_State($resArr["id"], $resArr["name"], $resArr["maxtime"], $resArr["precondfunc"], $resArr["documentstatus"]);
+		$state->setDMS($this);
+		return $state;
+	} /* }}} */
+
+	/**
+	 * Return workflow state by its name
+	 *
+	 * @return object of instances of LetoDMS_Core_Workflow_State or false
+	 */
+	function getWorkflowStateByName($name) { /* {{{ */
+		$queryStr = "SELECT * FROM tblWorkflowStates WHERE name=".$this->db->qstr($name);
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		if(!$resArr)
+			return false;
+
+		$resArr = $resArr[0];
+
+		$state = new LetoDMS_Core_Workflow_State($resArr["id"], $resArr["name"], $resArr["maxtime"], $resArr["precondfunc"], $resArr["documentstatus"]);
+		$state->setDMS($this);
+
+		return $state;
+	} /* }}} */
+
+	/**
+	 * Return list of all workflow states
+	 *
+	 * @return array of instances of LetoDMS_Core_Workflow_State or false
+	 */
+	function getAllWorkflowStates() { /* {{{ */
+		$queryStr = "SELECT * FROM tblWorkflowStates ORDER BY name";
+		$ressArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($ressArr) && $ressArr == false)
+			return false;
+
+		$wkfstates = array();
+		for ($i = 0; $i < count($ressArr); $i++) {
+			$wkfstate = new LetoDMS_Core_Workflow_State($ressArr[$i]["id"], $ressArr[$i]["name"], $ressArr[$i]["maxtime"], $ressArr[$i]["precondfunc"], $ressArr[$i]["documentstatus"]);
+			$wkfstate->setDMS($this);
+			$wkfstates[$i] = $wkfstate;
+		}
+
+		return $wkfstates;
+	} /* }}} */
+
+	function addWorkflowState($name, $docstatus) { /* {{{ */
+		$db = $this->db;
+		if (is_object($this->getWorkflowStateByName($name))) {
+			return false;
+		}
+		$queryStr = "INSERT INTO tblWorkflowStates (name, documentstatus) VALUES (".$db->qstr($name).", ".(int) $docstatus.")";
+		$res = $db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		return $this->getWorkflowState($db->getInsertID());
+	} /* }}} */
+
+	/**
+	 * Return a workflow action by its id
+	 *
+	 * This function retrieves a workflow action from the database by its id.
+	 *
+	 * @param integer $id internal id of workflow state
+	 * @return object instance of LetoDMS_Core_Workflow_State or false
+	 */
+	function getWorkflowAction($id) { /* {{{ */
+		if (!is_numeric($id))
+			return false;
+
+		$queryStr = "SELECT * FROM tblWorkflowActions WHERE id = " . (int) $id;
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$action = new LetoDMS_Core_Workflow_Action($resArr["id"], $resArr["name"]);
+		$action->setDMS($this);
+		return $action;
+	} /* }}} */
+
+	/**
+	 * Return list of workflow action
+	 *
+	 * @return array list of instances of LetoDMS_Core_Workflow_Action or false
+	 */
+	function getAllWorkflowActions() { /* {{{ */
+		$queryStr = "SELECT * FROM tblWorkflowActions";
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		$wkfactions = array();
+		for ($i = 0; $i < count($resArr); $i++) {
+			$action = new LetoDMS_Core_Workflow_Action($resArr[$i]["id"], $resArr[$i]["name"]);
+			$action->setDMS($this);
+			$wkfactions[$i] = $action;
+		}
+
+		return $wkfactions;
+	} /* }}} */
+
+	/**
+	 * Return a workflow transition by its id
+	 *
+	 * This function retrieves a workflow transition from the database by its id.
+	 *
+	 * @param integer $id internal id of workflow transition
+	 * @return object instance of LetoDMS_Core_Workflow_Transition or false
+	 */
+	function getWorkflowTransition($id) { /* {{{ */
+		if (!is_numeric($id))
+			return false;
+
+		$queryStr = "SELECT * FROM tblWorkflowTransitions WHERE id = " . (int) $id;
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr == false) return false;
+		if (count($resArr) != 1) return false;
+
+		$resArr = $resArr[0];
+
+		$transition = new LetoDMS_Core_Workflow_Transition($resArr["id"], $this->getWorkflow($resArr["workflow"]), $this->getWorkflowState($resArr["state"]), $this->getWorkflowAction($resArr["action"]), $this->getWorkflowState($resArr["nextstate"]), $resArr["maxtime"]);
+		$transition->setDMS($this);
+		return $transition;
+	} /* }}} */
+
+	/**
 	 * Returns document content which is not linked to a document
 	 *
 	 * This method is for finding straying document content without
@@ -1532,5 +1846,19 @@ class LetoDMS_Core_DMS {
 		return $versions;
 		
 	} /* }}} */
+
+	/**
+	 * Set a callback function
+	 *
+	 * @param string $name internal name of callback
+	 * @param mixed $func function name as expected by {call_user_method}
+	 * @param mixed $params parameter passed as the first argument to the
+	 *        callback
+	 */
+	function setCallback($name, $func, $params=null) { /* {{{ */
+		if($name && $func)
+			$this->callbacks[$name] = array($func, $params);
+	} /* }}} */
+
 }
 ?>
