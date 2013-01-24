@@ -38,8 +38,14 @@ if (is_bool($groups)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("internal_error"));
 }
 
+if(isset($_GET['userid']) && $_GET['userid']) {
+	$seluser = $dms->getUser($_GET['userid']);
+} else {
+	$seluser = null;
+}
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allusers'=>$users, 'allgroups'=>$groups, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'seluser'=>$seluser, 'allusers'=>$users, 'allgroups'=>$groups, 'passwordstrength'=>$settings->_passwordStrength, 'passwordexpiration'=>$settings->_passwordExpiration, 'httproot'=>$settings->_httpRoot, 'enableuserimage'=>$settings->_enableUserImage, 'workflowmode'=>$settings->_workflowMode));
 if($view) {
 	$view->show();
 	exit;
