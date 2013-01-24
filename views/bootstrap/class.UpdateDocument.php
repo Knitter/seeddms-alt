@@ -39,6 +39,7 @@ class LetoDMS_View_UpdateDocument extends LetoDMS_Bootstrap_Style {
 		$strictformcheck = $this->params['strictformcheck'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
 		$dropfolderdir = $this->params['dropfolderdir'];
+		$workflowmode = $this->params['workflowmode'];
 		$documentid = $document->getId();
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
@@ -152,13 +153,14 @@ function checkForm()
 	if($attrdefs) {
 		foreach($attrdefs as $attrdef) {
 ?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-	<td><?php $this->printAttributeEditField($attrdef, '') ?></td>
-</tr>
+    <tr>
+	    <td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+	    <td><?php $this->printAttributeEditField($attrdef, '') ?></td>
+    </tr>
 <?php
 		}
 	}
+	if($workflowmode == 'traditional') {
 ?>
 		<tr>
 			<td colspan="2">
@@ -170,19 +172,6 @@ function checkForm()
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
       </td>
       <td>
-<?php
-/*
-				$res=$user->getMandatoryReviewers();
-				foreach ($docAccess["users"] as $usr) {
-					if ($usr->getID()==$user->getID()) continue; 
-					$mandatory=false;
-					foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
-
-					if ($mandatory) print "<label class=\"checkbox\"><input type='checkbox' checked='checked' disabled='disabled'>". htmlspecialchars($usr->getFullName())."</label>";
-					else print "<label class=\"checkbox\"><input id='revInd".$usr->getID()."' type='checkbox' name='indReviewers[]' value='". $usr->getID() ."'>". htmlspecialchars($usr->getFullName())."</label>";
-				}
-*/
-?>
         <select class="chzn-select span9" name="indReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>">
 <?php
 				$res=$user->getMandatoryReviewers();
@@ -264,6 +253,37 @@ function checkForm()
 		<tr>
 			<td colspan="2"><div class="alert"><?php printMLText("add_doc_reviewer_approver_warning")?></div></td>
 		</tr>
+<?php
+	} else {
+?>
+		<tr>	
+      <td>
+			<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
+      </td>
+      <td>
+        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+<?php
+				$mandatoryworkflow = $user->getMandatoryWorkflow();
+				$workflows=$dms->getAllWorkflows();
+				print "<option value=\"\">"."</option>";
+				foreach ($workflows as $workflow) {
+					print "<option value=\"".$workflow->getID()."\"";
+					if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
+						echo " selected=\"selected\"";
+					print ">". htmlspecialchars($workflow->getName())."</option>";
+				}
+?>
+        </select>
+      </td>
+    </tr>
+		<tr>	
+      <td colspan="2">
+			<?php $this->warningMsg(getMLText("add_doc_workflow_warning")); ?>
+      </td>
+		</tr>	
+<?php
+	}
+?>
 		<tr>
 			<td></td>
 			<td><input type="submit" class="btn" value="<?php printMLText("update_document")?>"></td>
