@@ -26,17 +26,17 @@ class LetoDMS_Core_Object { /* {{{ */
 	/**
 	 * @var integer unique id of object
 	 */
-	var $_id;
+	protected $_id;
 
 	/**
 	 * @var array list of attributes
 	 */
-	var $_attributes;
+	protected $_attributes;
 
 	/**
 	 * @var object back reference to document management system
 	 */
-	var $_dms;
+	public $_dms;
 
 	function LetoDMS_Core_Object($id) { /* {{{ */
 		$this->_id = $id;
