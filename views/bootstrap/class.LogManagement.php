@@ -53,11 +53,11 @@ class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
 			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
 			print "<td>";
 			
-			print "<a href=\"out.RemoveLog.php?logname=".$entry."\" class=\"btn btn-mini\">".getMLText("rm_file")."</a>";
+			print "<a href=\"out.RemoveLog.php?logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("rm_file")."</a>";
 			print "&nbsp;";
-			print "<a href=\"../op/op.Download.php?logname=".$entry."\" class=\"btn btn-mini\">".getMLText("download")."</a>";
+			print "<a href=\"../op/op.Download.php?logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText("download")."</a>";
 			print "&nbsp;";
-			print "<a data-target=\"#logViewer\" data-cache=\"false\" href=\"out.LogManagement.php?logname=".$entry."\" role=\"button\" class=\"btn btn-mini\" data-toggle=\"modal\">View …</a>";
+			print "<a data-target=\"#logViewer\" data-cache=\"false\" href=\"out.LogManagement.php?logname=".$entry."\" role=\"button\" class=\"btn btn-mini\" data-toggle=\"modal\"><i class=\"icon-eye-open\"></i> ".getMLText('view')." …</a>";
 			print "</td>\n";	
 			print "</tr>\n";
 		}
