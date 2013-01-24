@@ -26,46 +26,46 @@ class LetoDMS_Core_Notification { /* {{{ */
 	 *
 	 * @access protected
 	 */
-	var $_target;
+	protected $_target;
 
 	/**
 	 * @var integer document or folder
 	 *
 	 * @access protected
 	 */
-	var $_targettype;
+	protected $_targettype;
 
 	/**
 	 * @var integer id of user to notify
 	 *
 	 * @access protected
 	 */
-	var $_userid;
+	protected $_userid;
 
 	/**
 	 * @var integer id of group to notify
 	 *
 	 * @access protected
 	 */
-	var $_groupid;
+	protected $_groupid;
 
 	/**
 	 * @var object reference to the dms instance this user belongs to
 	 *
 	 * @access protected
 	 */
-	var $_dms;
+	protected $_dms;
 
-	function LetoDMS_Core_Notification($target, $targettype, $userid, $groupid) {
+	function LetoDMS_Core_Notification($target, $targettype, $userid, $groupid) { /* {{{ */
 		$this->_target = $target;
 		$this->_targettype = $targettype;
 		$this->_userid = $userid;
 		$this->_groupid = $groupid;
-	}
+	} /* }}} */
 
-	function setDMS($dms) {
+	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
-	}
+	} /* }}} */
 
 	function getTarget() { return $this->_target; }
 

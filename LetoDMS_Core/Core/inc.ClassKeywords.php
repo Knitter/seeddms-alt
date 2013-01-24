@@ -27,25 +27,25 @@ class LetoDMS_Core_KeywordCategory {
 	 * @var integer $_id id of keyword category
 	 * @access protected
 	 */
-	var $_id;
+	protected $_id;
 
 	/**
 	 * @var integer $_ownerID id of user who is the owner
 	 * @access protected
 	 */
-	var $_ownerID;
+	protected $_ownerID;
 
 	/**
 	 * @var string $_name name of category
 	 * @access protected
 	 */
-	var $_name;
+	protected $_name;
 
 	/**
 	 * @var object $_dms reference to dms this category belongs to
 	 * @access protected
 	 */
-	var $_dms;
+	protected $_dms;
 
 	function LetoDMS_Core_KeywordCategory($id, $ownerID, $name) {
 		$this->_id = $id;
