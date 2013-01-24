@@ -15,7 +15,7 @@
 /**
  * @uses LetoDMS_DatabaseAccess
  */
-//define('USE_PDO', 1);
+define('USE_PDO', 1);
 if(defined('USE_PDO'))
 	require_once('Core/inc.DBAccessPDO.php');
 else
@@ -76,6 +76,11 @@ require_once('Core/inc.ClassNotification.php');
  * @uses LetoDMS_GroupAccess
  */
 require_once('Core/inc.ClassAccess.php');
+
+/**
+ * @uses LetoDMS_Workflow
+ */
+require_once('Core/inc.ClassWorkflow.php');
 
 /**
  */
