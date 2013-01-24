@@ -95,7 +95,7 @@ function checkForm()
 			}
 ?>
 	</select>
-	<input type="submit" class="btn" value="<?php printMLText("save")?>">
+	<button type="submit" class="btn"><i class="icon-download-alt"></i> <?php printMLText("save")?></button>
 	</form>
 	<?php
 		}
@@ -147,7 +147,7 @@ function checkForm()
 	<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
 	<input type="Hidden" name="action" value="setdefault">
 	<?php $this->printAccessModeSelection($folder->getDefaultAccess()); ?>
-	<input type="submit" class="btn" value="<?php printMLText("save");?>">
+	<button type="submit" class="btn"><i class="icon-download-alt"></i> <?php printMLText("save")?></button>
 </form>
 
 <?php
@@ -172,7 +172,7 @@ function checkForm()
 				$this->printAccessModeSelection($userAccess->getMode());
 				print "</td>\n";
 				print "<td>\n";
-				print "<input type=\"submit\" class=\"btn btn-mini\" value=\"".getMLText("save")."\">";
+				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-download-alt\"></i> ".getMLText("save")."</button>";
 				print "</td>\n";
 				print "</form>\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
@@ -181,7 +181,7 @@ function checkForm()
 				print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
 				print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 				print "<td>\n";
-				print "<input type=\"submit\" class=\"btn btn-mini\" value=\"".getMLText("delete")."\">";
+				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
 				print "</td>\n";
 				print "</form>\n";
 				print "</tr>\n";
@@ -202,18 +202,18 @@ function checkForm()
 				$this->printAccessModeSelection($groupAccess->getMode());
 				print "</td>\n";
 				print "<td><span class=\"actions\">\n";
-				print "<input type=\"Image\" class=\"mimeicon\" src=\"images/save.gif\">".getMLText("save")." ";
+				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-download-alt\"></i> ".getMLText("save")."</button>";
 				print "</span></td>\n";
 				print "</form>";
-				print "<td><span class=\"actions\">\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
 				print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folder->getID()."\">\n";
 				print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
 				print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">\n";
-				print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
+				print "<td>";
+				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
+				print "</td>\n";
 				print "</form>";
-				print "</span></td>\n";
 				print "</tr>\n";
 			}
 			

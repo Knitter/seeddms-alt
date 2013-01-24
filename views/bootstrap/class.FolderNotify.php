@@ -88,7 +88,7 @@ function checkForm()
 					print "<input type=\"Hidden\" name=\"action\" value=\"delnotify\">\n";
 					print "<input type=\"Hidden\" name=\"userid\" value=\"".$userNotify->getID()."\">\n";
 					print "<td>";
-					print "<input type=\"submit\" class=\"btn btn-mini\" value=\"".getMLText("delete")."\"> ";
+					print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
 					print "</td>";
 					print "</form>\n";
 				}else print "<td></td>";
