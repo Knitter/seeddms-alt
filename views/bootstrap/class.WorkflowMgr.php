@@ -51,12 +51,7 @@ function checkForm(num)
 	msg = "";
 	eval("var formObj = document.form" + num + ";");
 
-	if (formObj.login.value == "") msg += "<?php printMLText("js_no_login");?>\n";
-	if ((num == '0') && (formObj.pwd.value == "")) msg += "<?php printMLText("js_no_pwd");?>\n";
-	if ((formObj.pwd.value != formObj.pwdconf.value)&&(formObj.pwd.value != "" )&&(formObj.pwd.value != "" )) msg += "<?php printMLText("js_pwd_not_conf");?>\n";
 	if (formObj.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
-	if (formObj.email.value == "") msg += "<?php printMLText("js_no_email");?>\n";
-	//if (formObj.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
 	if (msg != "")
 	{
 		alert(msg);
@@ -121,7 +116,9 @@ function showWorkflow(selectObj) {
 <table class="table-condensed">
 	<tr>
 	<td id="keywords0" style="display : none;">
-
+<?php
+	if($workflowstates) {
+?>
 	<form action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data" name="form0" onsubmit="return checkForm('0');">
   <?php echo createHiddenFieldWithKey('addworkflow'); ?>
 	<input type="Hidden" name="action" value="addworkflow">
@@ -147,6 +144,13 @@ function showWorkflow(selectObj) {
 		</tr>
 	</table>
 	</form>
+<?php
+	} else {
+?>
+	<p>You must first define workflow states, before adding a workflow.</p>
+<?php
+	}
+?>
 	</td>
 
 <?php
@@ -200,15 +204,23 @@ function showWorkflow(selectObj) {
 	</table>
 	</form>
 <?php
+		$actions = $dms->getAllWorkflowActions();
+		if($actions) {
 		$transitions = $currWorkflow->getTransitions();
+		echo "<table class=\"table table-condensed\">";
+		echo "<tr><th>State</th><th>Action</th><th>Next state</th><th>".getMLText('user')."/".getMLText('group')."</th></tr>";
 		if($transitions) {
-			echo "<table class=\"table table-condensed\">";
-			echo "<tr><th>State</th><th>Action</th><th>Next state</th><th>".getMLText('user')."/".getMLText('group')."</th><th>Document status</th></tr>";
 			foreach($transitions as $transition) {
 				$state = $transition->getState();
 				$nextstate = $transition->getNextState();
 				$action = $transition->getAction();
-				echo "<tr><td>".$state->getName()."</td><td>".$action->getName()."</td><td>".$nextstate->getName()."</td>";
+				echo "<tr><td>".$state->getName()."</td><td>".$action->getName()."</td>";
+				echo "<td>".$nextstate->getName();
+				$docstatus = $nextstate->getDocumentStatus();
+				if($docstatus == S_RELEASED || $docstatus == S_REJECTED) {
+					echo "<br /><i class=\"icon-arrow-right\"></i> ".getOverallStatusText($docstatus);
+				}
+				echo "</td>";
 				echo "<td>";
 				$transusers = $transition->getUsers();
 				foreach($transusers as $transuser) {
@@ -223,12 +235,6 @@ function showWorkflow(selectObj) {
 					echo "<br />";
 				}
 				echo "</td>";
-				$docstatus = $nextstate->getDocumentStatus();
-				if($docstatus == S_RELEASED || $docstatus == S_REJECTED) {
-					echo "<td>".getOverallStatusText($docstatus)."</td>";
-				} else {
-					echo "<td></td>";
-				}
 				echo "<td>";
 ?>
 <form class="form-inline" action="../op/op.RemoveTransitionFromWorkflow.php" method="post">
@@ -241,6 +247,7 @@ function showWorkflow(selectObj) {
 				echo "</td>";
 				echo "</tr>\n";
 			}
+		}
 ?>
 <form class="form-inline" action="../op/op.AddTransitionToWorkflow.php" method="post">
 <?php
@@ -255,7 +262,6 @@ function showWorkflow(selectObj) {
 			echo "</td>";
 			echo "<td>";
 			echo "<select name=\"action\">";
-			$actions = $dms->getAllWorkflowActions();
 			foreach($actions as $action) {
 				echo "<option value=\"".$action->getID()."\">".$action->getName()."</option>";
 			}
@@ -270,25 +276,18 @@ function showWorkflow(selectObj) {
 			echo "</select>";
 			echo "</td>";
 			echo "<td>";
-      echo "<select class=\"chzn-select\" name=\"users[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_ind_reviewers')."\">";
+      echo "<select class=\"chzn-select\" name=\"users[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_users')."\">";
 			$allusers = $dms->getAllUsers();
 			foreach($allusers as $usr) {
 				print "<option value=\"".$usr->getID()."\">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
 			}
 			echo "</select>";
 			echo "<br />";
-      echo "<select class=\"chzn-select\" name=\"groups[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_ind_reviewers')."\">";
+      echo "<select class=\"chzn-select\" name=\"groups[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_groups')."\">";
 			$allgroups = $dms->getAllGroups();
 			foreach($allgroups as $grp) {
 				print "<option value=\"".$grp->getID()."\">". htmlspecialchars($grp->getName())."</option>";
 			}
-			echo "</select>";
-			echo "</td>";
-			echo "<td>";
-			echo "<select name=\"documenstatus\">";
-			echo "<option value=\"\">"."</option>";
-			echo "<option value=\"".S_RELEASED."\">".getMLText('released')."</option>";
-			echo "<option value=\"".S_REJECTED."\">".getMLText('rejected')."</option>";
 			echo "</select>";
 			echo "</td>";
 			echo "<td>";
@@ -302,7 +301,7 @@ function showWorkflow(selectObj) {
 ?>
 </form>
 <?php
-			echo "</table>";
+		echo "</table>";
 		}
 ?>
 </td>
