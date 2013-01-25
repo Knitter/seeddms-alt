@@ -62,7 +62,9 @@ if ($action == "addworkflow") {
 	if (!$newWorkflow) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
-	
+
+	$workflowid = $newWorkflow->getID();
+
 	add_log_line(".php&action=addworkflow&name=".$name);
 }
 
@@ -128,7 +130,7 @@ else if ($action == "editworkflow") {
 	if ($editedWorkflow->getInitState()->getID() != $state->getID())
 		$editedWorkflow->setInitState($state);
 	
-	add_log_line(".php&action=editworkflow&workflowid=".$workflow);
+	add_log_line(".php&action=editworkflow&workflowid=".$workflowid);
 
 }
 else UI::exitError(getMLText("admin_tools"),getMLText("unknown_command"));
