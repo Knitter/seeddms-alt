@@ -23,6 +23,7 @@ include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
 
 /**
@@ -57,18 +58,6 @@ function getTime() {
 	}
 	return time();
 }
-
-function markQuery($str, $tag = "b") {
-
-	GLOBAL $query;
-	$querywords = preg_split("/ /", $query);
-	
-	foreach ($querywords as $queryword)
-		$str = str_ireplace("($queryword)", "<" . $tag . ">\\1</" . $tag . ">", $str);
-	
-	return $str;
-}
-
 
 //
 // Parse all of the parameters for the search
@@ -106,7 +95,7 @@ if (isset($_GET['searchin']) && is_array($_GET["searchin"])) {
 }
 
 // if none is checkd search all
-if (count($searchin)==0) $searchin=array( 0, 1, 2, 3, 4);
+if (count($searchin)==0) $searchin=array(1, 2, 3, 4);
 
 // Check to see if the search has been restricted to a particular sub-tree in
 // the folder hierarchy.
@@ -271,129 +260,21 @@ if($resArr['docs']) {
 }
 // -------------- Output results --------------------------------------------
 
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$startFolder, 'searchhits'=>$entries, 'totalpages'=>$resArr['totalPages'], 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'searchin'=>$searchin, 'cachedir'=>$settings->_cacheDir));
-if($view) {
-	$view->show();
-	exit;
-}
-
-// Now that the target folder has been identified, it is possible to create
-// the full navigation bar.
-UI::htmlStartPage(getMLText("search_results"));
-UI::globalNavigation($startFolder);
-UI::pageNavigation(getFolderPathHTML($startFolder, true), "", $startFolder);
-UI::contentHeading(getMLText("search_results"));
-
-UI::contentContainerStart();
-UI::pageList($pageNumber, $resArr['totalPages'], "../op/op.Search.php", $_GET);
-
-print "<table class=\"folderView\">";
-print "<thead>\n<tr>\n";
-print "<th></th>\n";
-print "<th>".getMLText("name")."</th>\n";
-print "<th>".getMLText("attributes")."</th>\n";
-print "<th>".getMLText("owner")."</th>\n";
-print "<th>".getMLText("status")."</th>\n";
-print "<th>".getMLText("version")."</th>\n";
-print "<th>".getMLText("comment")."</th>\n";
-//print "<th>".getMLText("reviewers")."</th>\n";
-//print "<th>".getMLText("approvers")."</th>\n";
-print "</tr>\n</thead>\n<tbody>\n";
-
-$resultsFilteredByAccess = false;
-$foldercount = $doccount = 0;
-foreach ($entries as $entry) {
+if(count($entries) == 1) {
+	$entry = $entries[0];
 	if(get_class($entry) == 'LetoDMS_Core_Document') {
-		$document = $entry;
-			$doccount++;
-			$lc = $document->getLatestContent();
-			print "<tr>";
-			//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
-			if (in_array(2, $searchin)) {
-				$docName = markQuery(htmlspecialchars($document->getName()), "i");
-			} else {
-				$docName = htmlspecialchars($document->getName());
-			}
-			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"../out/images/icons/".UI::getMimeIcon($lc->getFileType())."\" title=\"".$lc->getMimeType()."\"></a></td>";
-			print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
-			$folder = $document->getFolder();
-			$path = $folder->getPath();
-			for ($i = 1; $i  < count($path); $i++) {
-				print htmlspecialchars($path[$i]->getName())."/";
-			}
-			print $docName;
-			print "</a></td>";
-
-			$attributes = $lc->getAttributes();
-			print "<td>";
-			print "<ul class=\"documentDetail\">\n";
-			$attributes = $lc->getAttributes();
-			if($attributes) {
-				foreach($attributes as $attribute) {
-					$attrdef = $attribute->getAttributeDefinition();
-					print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
-				}
-			}
-			print "</ul>\n";
-			print "</td>";
-
-			$owner = $document->getOwner();
-			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			$display_status=$lc->getStatus();
-			print "<td>".getOverallStatusText($display_status["status"]). "</td>";
-
-			print "<td class=\"center\">".$lc->getVersion()."</td>";
-			
-			if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($document->getComment()));
-			else $comment = htmlspecialchars($document->getComment());
-			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
-			print "<td>".$comment."</td>";
-			print "</tr>\n";
+		header('Location: ../out/out.ViewDocument.php?documentid='.$entry->getID());
+		exit;
 	} elseif(get_class($entry) == 'LetoDMS_Core_Folder') {
-		$folder = $entry;
-			$foldercount++;
-			if (in_array(2, $searchin)) {
-				$folderName = markQuery(htmlspecialchars($folder->getName()), "i");
-			} else {
-				$folderName = htmlspecialchars($folder->getName());
-			}
-			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
-			print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
-			$path = $folder->getPath();
-			print "/";
-			for ($i = 1; $i  < count($path)-1; $i++) {
-				print htmlspecialchars($path[$i]->getName())."/";
-			}
-			print $folderName;
-			print "</a></td>";
-			print "<td></td>";
-			
-			$owner = $folder->getOwner();
-			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			print "<td></td>";
-			print "<td></td>";
-			if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($folder->getComment()));
-			else $comment = htmlspecialchars($folder->getComment());
-			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
-			print "<td>".$comment."</td>";
-			print "</tr>\n";
+		header('Location: ../out/out.ViewFolder.php?folderid='.$entry->getID());
+		exit;
+	}
+} else {
+	$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+	$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$startFolder, 'query'=>$query, 'searchhits'=>$entries, 'totalpages'=>$resArr['totalPages'], 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'searchin'=>$searchin, 'cachedir'=>$settings->_cacheDir));
+	if($view) {
+		$view->show();
+		exit;
 	}
 }
-if (0 && $resultsFilteredByAccess) {
-	print "<tr><td colspan=\"7\">". getMLText("search_results_access_filtered") . "</td></tr>";
-}
-
-print "</tbody></table>\n";
-$numResults = $doccount + $foldercount;
-if ($numResults == 0) {
-	print "<p>".getMLText("search_no_results")."</p>";
-} else {
-//	print "<p>".getMLText("search_report", array("doccount" => $doccount, "foldercount" => $foldercount, 'searchtime'=>$searchTime))."</p>";
-}
-
-UI::pageList($pageNumber, $resArr['totalPages'], "../op/op.Search.php", $_GET);
-
-UI::contentContainerEnd();
-UI::htmlEndPage();
 ?>
