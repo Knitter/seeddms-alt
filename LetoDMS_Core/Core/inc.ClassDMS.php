@@ -561,7 +561,7 @@ class LetoDMS_Core_DMS {
 
 		// if none is checkd search all
 		if (count($searchin)==0)
-			$searchin=array( 0, 1, 2, 3, 4);
+			$searchin=array(1, 2, 3, 4);
 
 		/*--------- Do it all over again for folders -------------*/
 		if($mode & 0x2) {
