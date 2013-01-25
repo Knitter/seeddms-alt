@@ -97,7 +97,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 			print "<th>".getMLText("owner")."</th>\n";
 			print "<th>".getMLText("status")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
-			print "<th>".getMLText("comment")."</th>\n";
+//			print "<th>".getMLText("comment")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 		}
 		else printMLText("empty_folder_list");
@@ -107,7 +107,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 
 			$owner = $subFolder->getOwner();
 			$comment = $subFolder->getComment();
-			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
+			if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 			$subsub = $subFolder->getSubFolders();
 			$subsub = LetoDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
 			$subdoc = $subFolder->getDocuments();
@@ -116,11 +116,15 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 			print "<tr class=\"folder\">";
 		//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
 			print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-			print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a></td>\n";
+			print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
+			if($comment) {
+				print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+			}
+			print "</td>\n";
 			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			print "<td colspan=\"1\"><small>".count($subsub)." ".getMLText("folders").", ".count($subdoc)." ".getMLText("documents")."</small></td>";
+			print "<td colspan=\"1\"><small>".count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents")."</small></td>";
 			print "<td></td>";
-			print "<td>".htmlspecialchars($comment)."</td>";
+//			print "<td>".htmlspecialchars($comment)."</td>";
 			print "</tr>\n";
 		}
 
@@ -129,7 +133,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 
 			$owner = $document->getOwner();
 			$comment = $document->getComment();
-			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
+			if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 			$docID = $document->getID();
 			if($latestContent = $document->getLatestContent()) {
 				$previewer->createPreview($latestContent);
@@ -149,7 +153,11 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 				} else
 					print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
 				
-				print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a></td>\n";
+				print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+				if($comment) {
+					print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+				}
+				print "</td>\n";
 				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 				print "<td>";
 				if ( $document->isLocked() ) {
@@ -157,7 +165,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 				}
 				print getOverallStatusText($status["status"])."</td>";
 				print "<td>".$version."</td>";
-				print "<td>".htmlspecialchars($comment)."</td>";
+//				print "<td>".htmlspecialchars($comment)."</td>";
 				print "</tr>\n";
 			}
 		}
