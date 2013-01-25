@@ -41,6 +41,7 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 		$searchTime = $this->params['searchtime'];
 		$urlparams = $this->params['urlparams'];
 		$searchin = $this->params['searchin'];
+		$cachedir = $this->params['cachedir'];
 
 		$this->htmlStartPage(getMLText("search_results"));
 		$this->globalNavigation($folder);
@@ -60,17 +61,25 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 			print "<th>".getMLText("owner")."</th>\n";
 			print "<th>".getMLText("status")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
-			print "<th>".getMLText("comment")."</th>\n";
+//			print "<th>".getMLText("comment")."</th>\n";
 			//print "<th>".getMLText("reviewers")."</th>\n";
 			//print "<th>".getMLText("approvers")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
+			$previewer = new LetoDMS_Preview_Previewer($cachedir, 40);
 			$foldercount = $doccount = 0;
 			foreach ($entries as $entry) {
 				if(get_class($entry) == 'LetoDMS_Core_Document') {
 					$document = $entry;
 						$doccount++;
 						$lc = $document->getLatestContent();
+						$previewer->createPreview($lc);
+
+						if (in_array(3, $searchin))
+							$comment = markQuery(htmlspecialchars($document->getComment()));
+						else
+							$comment = htmlspecialchars($document->getComment());
+						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 						print "<tr>";
 						//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
 						if (in_array(2, $searchin)) {
@@ -78,7 +87,13 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 						} else {
 							$docName = htmlspecialchars($document->getName());
 						}
-						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\"></a></td>";
+						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">";
+						if($previewer->hasPreview($lc)) {
+							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=40\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
+						}
+						print "</a></td>";
 						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 						$folder = $document->getFolder();
 						$path = $folder->getPath();
@@ -86,11 +101,15 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 							print htmlspecialchars($path[$i]->getName())."/";
 						}
 						print $docName;
-						print "</a></td>";
+						print "</a>";
+						if($comment) {
+							print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+						}
+						print "</td>";
 
 						$attributes = $lc->getAttributes();
 						print "<td>";
-						print "<ul class=\"documentDetail\">\n";
+						print "<ul class=\"unstyled\">\n";
 						$attributes = $lc->getAttributes();
 						if($attributes) {
 							foreach($attributes as $attribute) {
@@ -106,12 +125,8 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 						$display_status=$lc->getStatus();
 						print "<td>".getOverallStatusText($display_status["status"]). "</td>";
 
-						print "<td class=\"center\">".$lc->getVersion()."</td>";
-						
-						if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($document->getComment()));
-						else $comment = htmlspecialchars($document->getComment());
-						if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
-						print "<td>".$comment."</td>";
+						print "<td>".$lc->getVersion()."</td>";
+//						print "<td>".$comment."</td>";
 						print "</tr>\n";
 				} elseif(get_class($entry) == 'LetoDMS_Core_Folder') {
 					$folder = $entry;
