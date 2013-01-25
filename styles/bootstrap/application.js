@@ -38,9 +38,24 @@ $(document).ready( function() {
 					process(data);
 			});
 		},
+		/* updater is called when the item in the list is clicked. It is
+		 * actually provided to update the input field, but here we use
+		 * it to set the document location. */
 		updater: function (item) {
-			document.location = "../op/op.Search.php?query=" + encodeURIComponent(item);
+			document.location = "../op/op.Search.php?query=" + encodeURIComponent(item.substring(1));
 			return item;
+		},
+		/* Set a matcher that allows any returned value */
+		matcher : function (item) {
+			return true;
+		},
+		highlighter : function (item) {
+			if(item.charAt(0) == 'D')
+				return '<i class="icon-file"></i> ' + item.substring(1);
+			else if(item.charAt(0) == 'F')
+				return '<i class="icon-folder-close"></i> ' + item.substring(1);
+			else
+				return '<i class="icon-search"></i> ' + item.substring(1);
 		}
 	});
 });
