@@ -179,7 +179,7 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["si
 			}
 
 			// if user is not owner send notification to owner
-			if ($user->getID()!= $document->_ownerID)
+			if ($user->getID()!= $document->getOwner()->getID())
 				$notifier->toIndividual($user, $document->getOwner(), $subject, $message);
 		}
 

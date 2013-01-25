@@ -175,7 +175,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 				}
 
 				// if user is not owner send notification to owner
-				if ($user->getID()!= $document->_ownerID)
+				if ($user->getID()!= $document->getOwner()->getID())
 					$notifier->toIndividual($user, $document->getOwner(), $subject, $message);
 			}
 
