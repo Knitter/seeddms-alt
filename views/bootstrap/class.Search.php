@@ -31,10 +31,20 @@ require_once("class.Bootstrap.php");
  */
 class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 
+	function markQuery($str, $tag = "b") {
+		$querywords = preg_split("/ /", $this->query);
+		
+		foreach ($querywords as $queryword)
+			$str = str_ireplace("($queryword)", "<" . $tag . ">\\1</" . $tag . ">", $str);
+		
+		return $str;
+	}
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
+		$this->query = $this->params['query'];
 		$entries = $this->params['searchhits'];
 		$totalpages = $this->params['totalpages'];
 		$pageNumber = $this->params['pagenumber'];
@@ -76,14 +86,14 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 						$previewer->createPreview($lc);
 
 						if (in_array(3, $searchin))
-							$comment = markQuery(htmlspecialchars($document->getComment()));
+							$comment = $this->markQuery(htmlspecialchars($document->getComment()));
 						else
 							$comment = htmlspecialchars($document->getComment());
 						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 						print "<tr>";
 						//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
 						if (in_array(2, $searchin)) {
-							$docName = markQuery(htmlspecialchars($document->getName()), "i");
+							$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
 						} else {
 							$docName = htmlspecialchars($document->getName());
 						}
@@ -132,7 +142,7 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 					$folder = $entry;
 					$foldercount++;
 					if (in_array(2, $searchin)) {
-						$folderName = markQuery(htmlspecialchars($folder->getName()), "i");
+						$folderName = $this->markQuery(htmlspecialchars($folder->getName()), "i");
 					} else {
 						$folderName = htmlspecialchars($folder->getName());
 					}
@@ -151,7 +161,7 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 					print "<td></td>";
 					print "<td></td>";
-					if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($folder->getComment()));
+					if (in_array(3, $searchin)) $comment = $this->markQuery(htmlspecialchars($folder->getComment()));
 					else $comment = htmlspecialchars($folder->getComment());
 					if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 					print "<td>".$comment."</td>";
