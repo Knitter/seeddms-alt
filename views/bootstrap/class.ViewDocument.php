@@ -121,20 +121,20 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		?>
 		</td>
 		</tr>
-		<tr>
 		<?php
 		$attributes = $document->getAttributes();
 		if($attributes) {
 			foreach($attributes as $attribute) {
 				$attrdef = $attribute->getAttributeDefinition();
 ?>
+		    <tr>
 					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
 					<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
+		    </tr>
 <?php
 			}
 		}
 ?>
-		</tr>
 		</table>
 <?php
 		$this->contentContainerEnd();
@@ -223,7 +223,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		 * user if enableVersionDeletion is on
 		 */
 		if($accessop->mayRemoveVersion()) {
-			print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("rm_version")."</a></li>";
+			print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-remove\"></i> ".getMLText("rm_version")."</a></li>";
 		}
 		if($workflowmode == 'traditional') {
 			if($accessop->mayOverwriteStatus()) {
@@ -237,18 +237,18 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 			if($accessop->maySetWorkflow()) {
 				$workflow = $latestContent->getWorkflow();
 				if(!$workflow) {
-					print "<li><i class=\"icon-random\"></i> <a href='../out/out.SetWorkflow.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("set_workflow")."</a></li>";
+					print "<li><a href='../out/out.SetWorkflow.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-random\"></i> ".getMLText("set_workflow")."</a></li>";
 				}
 			}
 		}
 		if($accessop->maySetExpires()) {
-			print "<li><i class=\"icon-time\"></i> <a href='../out/out.SetExpires.php?documentid=".$documentid."'>".getMLText("set_expiry")."</a></li>";
+			print "<li><a href='../out/out.SetExpires.php?documentid=".$documentid."'><i class=\"icon-time\"></i> ".getMLText("set_expiry")."</a></li>";
 		}
 		if($accessop->mayEditComment()) {
-			print "<li><i class=\"icon-edit\"></i> <a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_comment")."</a></li>";
+			print "<li><a href=\"out.EditComment.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i> ".getMLText("edit_comment")."</a></li>";
 		}
 		if($accessop->mayEditAttributes()) {
-			print "<li><i class=\"icon-edit\"></i> <a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\">".getMLText("edit_attributes")."</a></li>";
+			print "<li><a href=\"out.EditAttributes.php?documentid=".$documentid."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i> ".getMLText("edit_attributes")."</a></li>";
 		}
 
 		print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&vfile=1\"><i class=\"icon-download\"></i> ".getMLText("versioning_info")."</a></li>";	
@@ -421,7 +421,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 <?php
 			$this->contentContainerStart();
 			if(LetoDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState())) {
-				print "<form action=\"../out/out.RemoveWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('removeworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('rm_workflow')."</button></form>";
+				print "<form action=\"../out/out.RemoveWorkflowFromDocument.php\" method=\"post\">".createHiddenFieldWithKey('removeworkflowfromdocument')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('rm_workflow')."</button></form>";
 			} else {
 				if($user->isAdmin())
 					print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-refresh\"></i> ".getMLText('rewind_workflow')."</button></form>";
@@ -660,9 +660,9 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 				 * user if enableVersionDeletion is on
 				 */
 				if($accessop->mayRemoveVersion()) {
-					print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\">".getMLText("rm_version")."</a></li>";
+					print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\"><i class=\"icon-remove\"></i> ".getMLText("rm_version")."</a></li>";
 				}
-				print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'>".getMLText("details")."</a></li>";
+				print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'><i class=\"icon-info-sign\"></i> ".getMLText("details")."</a></li>";
 				print "</ul>";
 				print "</td>\n</tr>\n";
 			}
