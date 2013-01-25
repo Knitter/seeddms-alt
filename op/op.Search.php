@@ -25,6 +25,11 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+/**
+ * Include class to preview documents
+ */
+require_once("LetoDMS/Preview.php");
+
 // Redirect to the search page if the navigation search button has been
 // selected without supplying any search terms.
 if (isset($_GET["navBar"])) {
@@ -267,7 +272,7 @@ if($resArr['docs']) {
 // -------------- Output results --------------------------------------------
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$startFolder, 'searchhits'=>$entries, 'totalpages'=>$resArr['totalPages'], 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'searchin'=>$searchin));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$startFolder, 'searchhits'=>$entries, 'totalpages'=>$resArr['totalPages'], 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'searchin'=>$searchin, 'cachedir'=>$settings->_cacheDir));
 if($view) {
 	$view->show();
 	exit;
