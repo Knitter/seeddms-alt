@@ -83,13 +83,6 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 	} /* }}} */
 
 	/*
-	 * Get the internal id of the folder.
-	 *
-	 * @return integer id of folder
-	 */
-	function getID() { return $this->_id; }
-
-	/*
 	 * Get the name of the folder.
 	 *
 	 * @return string name of folder

@@ -178,13 +178,6 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	} /* }}} */
 
 	/*
-	 * Return the internal id of the document
-	 *
-	 * @return integer id of document
-	 */
-	function getID() { return $this->_id; }
-
-	/*
 	 * Return the name of the document
 	 *
 	 * @return string name of document
