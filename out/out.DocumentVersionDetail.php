@@ -25,6 +25,11 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
+/**
+ * Include class to preview documents
+ */
+require_once("LetoDMS/Preview.php");
+
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
@@ -59,7 +64,7 @@ if ($latestContent->getVersion()==$version->getVersion()) {
 $folder = $document->getFolder();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'viewonlinefiletypes'=>$settings->_viewOnlineFileTypes, 'enableversionmodification'=>$settings->_enableVersionModification));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'viewonlinefiletypes'=>$settings->_viewOnlineFileTypes, 'enableversionmodification'=>$settings->_enableVersionModification, 'cachedir'=>$settings->_cacheDir));
 if($view) {
 	$view->show();
 	exit;
