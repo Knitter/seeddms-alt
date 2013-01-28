@@ -94,12 +94,11 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	} /* }}} */
 
 	function globalBanner() { /* {{{ */
-		global $settings;
 		echo "<div style=\"padding-top: 60px;\"></div>\n";
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
-		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$settings->_rootFolderID."\">".(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS")."</a>\n";
+		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "LetoDMS")."</a>\n";
 		echo "  </div>\n";
 		echo " </div>\n";
 		echo "</div>\n";
@@ -108,7 +107,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "<div class=\"globalTR\"></div>\n";
 		echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
 		echo "<div class=\"siteNameLogin\">".
-			(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").
+			(strlen($this->param['sitename'])>0 ? $this->params['sitename'] : "LetoDMS").
 			"</div>\n";
 		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
 			"</div>\n";
@@ -117,49 +116,49 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	} /* }}} */
 
 	function globalNavigation($folder=null) { /* {{{ */
-		global $settings, $user, $session;
-
 		echo "<div style=\"padding-top: 60px;\"></div>\n";
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
-		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$settings->_rootFolderID."\">".(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS")."</a>\n";
-		if($user) {
+		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "LetoDMS")."</a>\n";
+		if($this->params['user']) {
 		echo "   <div class=\"nav-collapse collapse\">\n";
 		echo "   <ul class=\"nav pull-right\">\n";
 		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("signed_in_as")." ".htmlspecialchars($user->getFullName())."<b class=\"caret\"></b></a>\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("signed_in_as")." ".htmlspecialchars($this->params['user']->getFullName())."<b class=\"caret\"></b></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		if (!$user->isGuest()) {
+		if (!$this->params['user']->isGuest()) {
 			echo "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
 			echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
 			echo "    <li class=\"divider\"></li>\n";
 		}
-		echo "    <li class=\"dropdown-submenu\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("language")."</a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		$languages = getLanguages();
-		foreach ($languages as $currLang) {
-			if($session->getLanguage() == $currLang)
-				echo "<li class=\"active\">";
-			else
-				echo "<li>";
-			echo "<a href=\"../op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
-			echo $currLang."</a></li>\n";
+		if($this->params['enablelanguageselector']) {
+			echo "    <li class=\"dropdown-submenu\">\n";
+			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("language")."</a>\n";
+			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+			$languages = getLanguages();
+			foreach ($languages as $currLang) {
+				if($this->params['session']->getLanguage() == $currLang)
+					echo "<li class=\"active\">";
+				else
+					echo "<li>";
+				echo "<a href=\"../op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
+				echo $currLang."</a></li>\n";
+			}
+			echo "     </ul>\n";
+			echo "    </li>\n";
+			echo "    <li class=\"divider\"></li>\n";
 		}
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "    <li class=\"divider\"></li>\n";
 		echo "    <li><a href=\"../op/op.Logout.php\">".getMLText("sign_out")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
 
 		echo "   <ul class=\"nav\">\n";
-//		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$settings->_rootFolderID."\">".getMLText("content")."</a></li>\n";
-//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$settings->_rootFolderID."\">".getMLText("search")."</a></li>\n";
-		if ($settings->_enableCalendar) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$settings->_calendarDefaultView."\">".getMLText("calendar")."</a></li>\n";
-		if ($user->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
+//		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
+//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
+		if ($this->params['enablecalendar']) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
+		if ($this->params['user']->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
 		echo "    <li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
 		echo "   </ul>\n";
 		echo "     <form action=\"../op/op.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
@@ -171,7 +170,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"2\" />";
 		echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
 		echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" size=\"20\" placeholder=\"".getMLText("search")."\"/>";
-		if($settings->_enableFullSearch) {
+		if($this->params['enablefullsearch']) {
 			echo "      <label class=\"checkbox\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
 		}
 //		echo "      <input type=\"submit\" value=\"".getMLText("search")."\" id=\"searchButton\" class=\"btn\"/>";
@@ -245,33 +244,30 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		return;
 	} /* }}} */
 
-	function folderNavigationBar($folder) { /* {{{ */
-	
-		global $user, $settings;
-
+	private function folderNavigationBar($folder) { /* {{{ */
 		if (!is_object($folder) || strcasecmp(get_class($folder), "LetoDMS_Core_Folder")) {
 			echo "<ul class=\"nav\">\n";
 			echo "</ul>\n";
 			return;
 		}
-		$accessMode = $folder->getAccessMode($user);
+		$accessMode = $folder->getAccessMode($this->params['user']);
 		$folderID = $folder->getID();
 		echo "<ul class=\"nav\">\n";
 		echo "<li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=". $folderID ."&showtree=".showtree()."\" class=\"brand\">".getMLText("folder")."</a></li>\n";
-		if ($accessMode == M_READ && !$user->isGuest()) {
+		if ($accessMode == M_READ && !$this->params['user']->isGuest()) {
 			echo "<li id=\"first\"><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_notify")."</a></li>\n";
 		}
 		else if ($accessMode >= M_READWRITE) {
 			echo "<li id=\"first\"><a href=\"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_subfolder")."</a></li>\n";
 			echo "<li><a href=\"../out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_document")."</a></li>\n";
-			if($settings->_enableLargeFileUpload)
+			if($this->params['enablelargefileupload'])
 				echo "<li><a href=\"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_multiple_documents")."</a></li>\n";
 			echo "<li><a href=\"../out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_props")."</a></li>\n";
-			if ($folderID != $settings->_rootFolderID && $folder->getParent())
+			if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
 				echo "<li><a href=\"../out/out.MoveFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("move_folder")."</a></li>\n";
 
 			if ($accessMode == M_ALL) {
-				if ($folderID != $settings->_rootFolderID && $folder->getParent())
+				if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
 					echo "<li><a href=\"../out/out.RemoveFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("rm_folder")."</a></li>\n";
 			}
 			if ($accessMode == M_ALL) {
@@ -283,11 +279,10 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		return;
 	} /* }}} */
 
-	function documentNavigationBar()	{ /* {{{ */
-	
-		global $user, $document;
+	private function documentNavigationBar()	{ /* {{{ */
+		global $document;
 
-		$accessMode = $document->getAccessMode($user);
+		$accessMode = $document->getAccessMode($this->params['user']);
 		$docid=".php?documentid=" . $document->getID();
 
 		echo "<ul class=\"nav\">\n";
@@ -301,7 +296,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 			}
 			else {
 				$lockingUser = $document->getLockingUser();
-				if (($lockingUser->getID() == $user->getID()) || ($document->getAccessMode($user) == M_ALL)) {
+				if (($lockingUser->getID() == $this->params['user']->getID()) || ($document->getAccessMode($this->params['user']) == M_ALL)) {
 					echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
 					echo "<li><a href=\"../op/op.UnlockDocument". $docid ."\">".getMLText("unlock_document")."</a></li>";
 					echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
@@ -314,26 +309,23 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 			echo "<li><a href=\"../out/out.RemoveDocument". $docid ."\">".getMLText("rm_document")."</a></li>";
 			echo "<li><a href=\"../out/out.DocumentAccess". $docid ."\">".getMLText("edit_document_access")."</a></li>";
 		}
-		if ($accessMode >= M_READ && !$user->isGuest()) {
+		if ($accessMode >= M_READ && !$this->params['user']->isGuest()) {
 			echo "<li><a href=\"../out/out.DocumentNotify". $docid ."\">".getMLText("edit_existing_notify")."</a></li>";
 		}
 		echo "</ul>\n";
 		return;
 	} /* }}} */
 
-	function accountNavigationBar() { /* {{{ */
-	
-		global $settings, $user;
-		
+	private function accountNavigationBar() { /* {{{ */
 		echo "<ul class=\"nav\">\n";
-		if (!$settings->_disableSelfEdit) echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
+		if (!$this->params['disableselfedit']) echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
 		
-		if (!$user->isAdmin()) 
+		if (!$this->params['user']->isAdmin()) 
 			echo "<li><a href=\"../out/out.UserDefaultKeywords.php\">".getMLText("edit_default_keywords")."</a></li>\n";
 
 		echo "<li><a href=\"../out/out.ManageNotify.php\">".getMLText("edit_existing_notify")."</a></li>\n";
 
-		if ($settings->_enableUsersView){
+		if ($this->params['enableusersview']){
 			echo "<li><a href=\"../out/out.UsrView.php\">".getMLText("users")."</a></li>\n";
 			echo "<li><a href=\"../out/out.GroupView.php\">".getMLText("groups")."</a></li>\n";
 		}		
@@ -341,7 +333,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		return;
 	} /* }}} */
 
-	function myDocumentsNavigationBar() { /* {{{ */
+	private function myDocumentsNavigationBar() { /* {{{ */
 
 		echo "<ul class=\"nav\">\n";
 		echo "<li id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
@@ -352,10 +344,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		return;
 	} /* }}} */
 
-	function adminToolsNavigationBar() { /* {{{ */
-	
-		global $settings;
-
+	private function adminToolsNavigationBar() { /* {{{ */
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")."<b class=\"caret\"></b></a>\n";
@@ -380,7 +369,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "    </li>\n";
 		echo "   </ul>\n";
 
-		if($settings->_enableFullSearch) {
+		if($this->params['enablefullsearch']) {
 			echo "   <ul class=\"nav\">\n";
 			echo "    <li class=\"dropdown\">\n";
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")."<b class=\"caret\"></b></a>\n";
@@ -398,7 +387,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")."<b class=\"caret\"></b></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
-		if ($settings->_logFileEnable)
+		if ($this->params['logfileenable'])
 			echo "      <li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
@@ -420,17 +409,14 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		return;
 	} /* }}} */
 	
-	function calendarNavigationBar($d){ /* {{{ */
-
-		global $user;
-
+	private function calendarNavigationBar($d){ /* {{{ */
 		$ds="&day=".$d[0]."&month=".$d[1]."&year=".$d[2];
 	
 		echo "<ul class=\"nav\">\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=w".$ds."\">".getMLText("week_view")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=m".$ds."\">".getMLText("month_view")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=y".$ds."\">".getMLText("year_view")."</a></li>\n";
-		if (!$user->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
+		if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
 		echo "</ul>\n";
 		return;
 	
@@ -660,20 +646,19 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	} /* }}} */
 	
 	function printDocumentChooser($formName) { /* {{{ */
-		global $settings;
-		?>
+?>
 		<script language="JavaScript">
 		var openDlg;
 		function chooseDoc<?php print $formName ?>() {
-			openDlg = open("../out/out.DocumentChooser.php?folderid=<?php echo $settings->_rootFolderID?>&form=<?php echo urlencode($formName)?>", "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
+			openDlg = open("../out/out.DocumentChooser.php?folderid=<?php echo $this->params['rootfolderid']?>&form=<?php echo urlencode($formName)?>", "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
 		}
 		</script>
 		<?php
-		print "<input type=\"hidden\" name=\"docid".$formName."\">";
+		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid".$formName."\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" disabled name=\"docname".$formName."\">";
+		print "<input type=\"text\" id=\"choosedocsearch\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 //		print "<button type=\"button\"  onclick=\"chooseDoc".$formName."();\">".getMLText("document")."...</button>";
-		print "<a data-target=\"#docChooser\" href=\"out.DocumentChooser.php?form=".$formName."&folderid=".$settings->_rootFolderID."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
+		print "<a data-target=\"#docChooser\" href=\"out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="docChooser" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
@@ -700,9 +685,9 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		}
 		</script>
 		<?php
-		print "<input type=\"hidden\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
+		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" disabled name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\">";
+		print "<input type=\"text\" id=\"choosefoldersearch\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 //		print "<button type=\"button\" class=\"btn\" onclick=\"chooseFolder".$formName."(); return false;\">".getMLText("folder")."...</button>";
 		print "<a data-target=\"#folderChooser\" href=\"out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
@@ -814,7 +799,6 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	} /* }}} */
 
 	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
-		global $settings;
 ?>
 		<script language="JavaScript">
 		var openDlg;
@@ -893,14 +877,12 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 
 	// navigation flag is used for items links (navigation or selection)
 	function printFoldersTree($accessMode, $exclude, $folderID, $currentFolderID=-1, $navigation=false) {	/* {{{ */
-		global $dms, $user, $form, $settings;
-		
-		if ($settings->_expandFolderTree==2){
+		if ($this->params['expandfoldertree']==2){
 		
 			// folder completely open
 			$is_open=true;
 			
-		}else if ($settings->_expandFolderTree==1 && $folderID==$settings->_rootFolderID ){
+		}else if ($this->params['expandfoldertree']==1 && $folderID==$this->params['rootfolderid'] ){
 		
 			$is_open=true;
 			
@@ -910,7 +892,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 			
 			if ($currentFolderID!=-1){
 				
-				$currentFolder=$dms->getFolder($currentFolderID);
+				$currentFolder=$this->params['dms']->getFolder($currentFolderID);
 				
 				if (is_object($currentFolder)){
 				
@@ -927,13 +909,13 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 			}
 		}
 		
-		$folder = $dms->getFolder($folderID);
+		$folder = $this->params['dms']->getFolder($folderID);
 		if (!is_object($folder)) return;
 		
 		$subFolders = $folder->getSubFolders();
-		$subFolders = LetoDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
+		$subFolders = LetoDMS_Core_DMS::filterAccess($subFolders, $this->params['user'], M_READ);
 		
-		if ($folderID == $settings->_rootFolderID) print "<ul style='list-style-type: none;' class='tree'>\n";
+		if ($folderID == $this->params['rootfolderid']) print "<ul style='list-style-type: none;' class='tree'>\n";
 
 		print "<li>\n";
 
@@ -949,7 +931,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 			print "\" border=0>\n";
 		}
 
-		if ($folder->getAccessMode($user) >= $accessMode) {
+		if ($folder->getAccessMode($this->params['user']) >= $accessMode) {
 
 			if ($folderID != $currentFolderID){
 			
@@ -979,11 +961,10 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 
 		print "</ul>\n";
 		
-		if ($folderID == $settings->_rootFolderID) print "</ul>\n";
+		if ($folderID == $this->params['rootfolderid']) print "</ul>\n";
 	} /* }}} */
 
 	function printTreeNavigation($folderid,$showtree){ /* {{{ */
-		global $settings;
 ?>
 		<script language="JavaScript">
 		function toggleTree(id){
@@ -1008,7 +989,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 
 			$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><img src=\"".$this->getImgPath("m.png")."\" border=0></a>", true);
 			$this->contentContainerStart();
-			$this->printFoldersTree(M_READ, -1, $settings->_rootFolderID, $folderid, true);
+			$this->printFoldersTree(M_READ, -1, $this->params['rootfolderid'], $folderid, true);
 			$this->contentContainerEnd();
 
 		}else{
@@ -1029,7 +1010,6 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	 * @param array $fields list of post fields
 	 */
 	function printUploadApplet($uploadurl, $attributes, $maxfiles=0, $fields=array()){ /* {{{ */
-		global $settings;
 ?>
 <applet id="jumpLoaderApplet" name="jumpLoaderApplet"
 code="jmaster.jumploader.app.JumpLoaderApplet.class"
@@ -1042,7 +1022,7 @@ mayscript>
   <param name="ac_fireUploaderSelectionChanged" value="true"/>
   <param name="ac_fireUploaderFileStatusChanged" value="true"/>
   <param name="ac_fireUploaderFileAdded" value="true"/>
-  <param name="uc_partitionLength" value="<?php echo $settings->_partitionSize ?>"/>
+  <param name="uc_partitionLength" value="<?php echo $this->params['partitionsize'] ?>"/>
 <?php
 	if($maxfiles) {
 ?>
