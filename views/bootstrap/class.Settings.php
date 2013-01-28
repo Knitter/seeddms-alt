@@ -160,6 +160,10 @@ if(!is_writeable($settings->_configFilePath)) {
             <OPTION VALUE="2" <?php if ($settings->_expandFolderTree==2) echo "SELECTED" ?> ><?php printMLText("settings_expandFolderTree_val2");?></OPTION>
           </SELECT>
       </tr>
+      <tr title="<?php printMLText("settings_enableLanguageSelector_desc");?>">
+        <td><?php printMLText("settings_enableLanguageSelector");?>:</td>
+        <td><input name="enableLanguageSelector" type="checkbox" <?php if ($settings->_enableLanguageSelector) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_sortUsersInList_desc");?>">
         <td><?php printMLText("settings_sortUsersInList");?>:</td>
         <td>
@@ -434,6 +438,10 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_enableVersionModification_desc");?>">
         <td><?php printMLText("settings_enableVersionModification");?>:</td>
         <td><input name="enableVersionModification" type="checkbox" <?php if ($settings->_enableVersionModification) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_enableDuplicateDocNames_desc");?>">
+        <td><?php printMLText("settings_enableDuplicateDocNames");?>:</td>
+        <td><input name="enableDuplicateDocNames" type="checkbox" <?php if ($settings->_enableDuplicateDocNames) echo "checked" ?> /></td>
       </tr>
 
       <!--

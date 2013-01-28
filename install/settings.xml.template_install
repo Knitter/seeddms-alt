@@ -21,6 +21,7 @@
        - enableEmail: enable/disable automatic email notification
        - enableUsersView: enable/disable group and user view for all users
        - enableFullSearch: false to don't use fulltext search
+       - enableLanguageSelector: false to don't show the language selector after login
        - enableFolderTree: false to don't show the folder tree
        - expandFolderTree: 0 to start with tree hidden
        -                   1 to start with tree shown and first level expanded
@@ -37,9 +38,9 @@
       enableFullSearch = "true"
       enableFolderTree = "true"
       expandFolderTree = "1"
+      enableLanguageSelector = "true"
       stopWordsFile = ""
       sortUsersInList = ""
-  
     >
     </edition> 
     <!-- enableCalendar: enable/disable calendar
@@ -192,10 +193,18 @@
     </authentication>
     <!-- enableAdminRevApp: false to don't list administrator as reviewer/approver
        - versioningFileName: the name of the versioning info file created by the backup tool
+       - workflowMode: 'traditional' or 'advanced'
+       - enableVersionDeletion: allow to delete versions after approval
+       - enableVersionModification: allow to modify versions after approval
+       - enableDuplicateDocNames: allow duplicate names in a folder
     --> 
     <edition
       enableAdminRevApp = "false"
       versioningFileName = "versioning_info.txt"
+      workflowMode = "advanced"
+      enableVersionDeletion = "true"
+      enableVersionModification = "true"
+      enableDuplicateDocNames = "true"
     >
     </edition>
 		<!-- enableNotificationAppRev: true to send notifation if a user is added as a reviewer or approver

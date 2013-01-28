@@ -113,6 +113,8 @@ class Settings { /* {{{ */
 	var $_enableVersionDeletion = false;
 	// enable/disable to overwrite the status of a version for regular users
 	var $_enableVersionModification = false;
+	// enable/disable duplicate names of a document in a folder
+	var $_enableDuplicateDocNames = true;
 	// enable/disable notification when added as a reviewer/approver
 	var $_enableNotificationAppRev = true;
 	// the name of the versioning info file created by the backup tool
@@ -137,6 +139,8 @@ class Settings { /* {{{ */
 	var $_firstDayOfWeek = 0;
 	// enable/disable display of the folder tree
 	var $_enableFolderTree = true;
+	// enable/disable language selection menu
+	var $_enableLanguageSelector = true;
 	// expandFolderTree
 	var $_expandFolderTree = 1;
 	// enable/disable editing of users own profile
@@ -293,6 +297,7 @@ class Settings { /* {{{ */
 		$this->_enableEmail = Settings::boolVal($tab["enableEmail"]);
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
+		$this->_enableLanguageSelector = Settings::boolVal($tab["enableLanguageSelector"]);
 		$this->_enableFullSearch = Settings::boolVal($tab["enableFullSearch"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
@@ -426,6 +431,7 @@ class Settings { /* {{{ */
 		$this->_workflowMode = strval($tab["workflowMode"]);
 		$this->_enableVersionDeletion = Settings::boolval($tab["enableVersionDeletion"]);
 		$this->_enableVersionModification = Settings::boolval($tab["enableVersionModification"]);
+		$this->_enableDuplicateDocNames = Settings::boolval($tab["enableDuplicateDocNames"]);
 
 		// XML Path: /configuration/advanced/notification
 		$node = $xml->xpath('/configuration/advanced/notification');
@@ -537,6 +543,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableEmail", $this->_enableEmail);
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
+    $this->setXMLAttributValue($node, "enableLanguageSelector", $this->_enableLanguageSelector);
     $this->setXMLAttributValue($node, "enableFullSearch", $this->_enableFullSearch);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
@@ -662,6 +669,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "workflowMode", $this->_workflowMode);
     $this->setXMLAttributValue($node, "enableVersionDeletion", $this->_enableVersionDeletion);
     $this->setXMLAttributValue($node, "enableVersionModification", $this->_enableVersionModification);
+    $this->setXMLAttributValue($node, "enableDuplicateDocNames", $this->_enableDuplicateDocNames);
 
     // XML Path: /configuration/advanced/notification
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'notification');

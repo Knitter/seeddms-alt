@@ -66,6 +66,7 @@ if ($action == "saveSettings")
   $settings->_enableUsersView = getBoolValue("enableUsersView");
   $settings->_enableFullSearch = getBoolValue("enableFullSearch");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
+  $settings->_enableLanguageSelector = getBoolValue("enableLanguageSelector");
   $settings->_expandFolderTree = intval($_POST["expandFolderTree"]);
 	$settings->_stopWordsFile = $_POST["stopWordsFile"];
 	$settings->_sortUsersInList = $_POST["sortUsersInList"];
@@ -133,6 +134,7 @@ if ($action == "saveSettings")
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
   $settings->_enableVersionDeletion = getBoolValue("enableVersionDeletion");
   $settings->_enableVersionModification = getBoolValue("enableVersionModification");
+  $settings->_enableDuplicateDocNames = getBoolValue("enableDuplicateDocNames");
 
   // SETTINGS - ADVANCED - NOTIFICATION
   $settings->_enableOwnerNotification = getBoolValue("enableOwnerNotification");
