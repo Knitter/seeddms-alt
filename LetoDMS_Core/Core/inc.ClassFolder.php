@@ -488,6 +488,25 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 	} /* }}} */
 
 	/**
+	 * Check if folder has document with given name
+	 *
+	 * @return boolean true if document exists, false if not or in case
+	 * of an error
+	 */
+	function hasDocumentByName($name) { /* {{{ */
+		$db = $this->_dms->getDB();
+		if (isset($this->_documents)) {
+			return count($this->documents);
+		}
+		$queryStr = "SELECT count(*) as c FROM tblDocuments WHERE folder = " . $this->_id . " AND `name` = ".$db->qstr($name);
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		return ($resArr[0]['c'] > 0);
+	} /* }}} */
+
+	/**
 	 * Get all documents of the folder
 	 * This function does not check for access rights. Use
 	 * {@link LetoDMS_Core_DMS::filterAccess} for checking each document against
@@ -907,10 +926,11 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 	 * This function returns all users and groups that have registerd a
 	 * notification for the folder
 	 *
+	 * @param integer $type type of notification (not yet used)
 	 * @return array array with a the elements 'users' and 'groups' which
 	 *        contain a list of users and groups.
 	 */
-	function getNotifyList() { /* {{{ */
+	function getNotifyList($type ) { /* {{{ */
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
 
@@ -1060,13 +1080,14 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 	 *
 	 * @param integer $userOrGroupID
 	 * @param boolean $isUser true if $userOrGroupID is a user id otherwise false
+	 * @param $type type of notification (0 will delete all) Not used yet!
 	 * @return integer error code
 	 *    -1: Invalid User/Group ID.
 	 *    -3: User is not subscribed.
 	 *    -4: Database / internal error.
 	 *     0: Update successful.
 	 */
-	function removeNotify($userOrGroupID, $isUser) { /* {{{ */
+	function removeNotify($userOrGroupID, $isUser, $type=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		/* Verify that user / group exists. */
@@ -1118,6 +1139,9 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 		}
 
 		$queryStr = "DELETE FROM tblNotify WHERE target = " . $this->_id . " AND targetType = " . T_FOLDER . " AND " . $userOrGroup . " = " .  (int) $userOrGroupID;
+		/* If type is given then delete only those notifications */
+		if($type)
+			$queryStr .= " AND `type` = ".(int) $type;
 		if (!$db->getResult($queryStr))
 			return -4;
 
