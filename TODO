@@ -1,3 +1,15 @@
+Allow to specify fine grained notification (e.g. deleting a document, folder)
+
+Have access rights depending on document status. This will allow to
+restrict access when a document is in a workflow or has been rejected.
+
+There are still global variable in class LetoDMS_Bootstrap_Style
+
+update tblWorkflowTransitionUsers and tblWorkflowTransitionGroups when
+user or group is delete.
+
+extend search by expiration date, add utitility to search for expiring documents
+
 Settings::searchConfigFilePath() and Settings::getConfigDir() use different
 approaches to get the configuration directory.
 
@@ -7,7 +19,7 @@ Add a Search Function to Related Documents. When attaching a related document th
 
 Export/Import content as xml (even for subfolders)
 
-Copy recursivly folders
+Copy folders recursivly
 
 Allow operations like  delete, move, approve, etc. on a list of documents
 
