@@ -189,6 +189,13 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		$name = $_POST["name"];
 	else $name = basename($userfilename);
 
+	/* Check if name already exists in the folder */
+	if(!$settings->_enableDuplicateDocNames) {
+		if($folder->hasDocumentByName($name)) {
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("document_duplicate_name"));
+		}
+	}
+
 	$cats = array();
 	if($categories) {
 		$catids = explode(',', $categories);
