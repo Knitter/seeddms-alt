@@ -45,12 +45,13 @@ class UI extends UI_Default {
 	 * @return object an object of a class implementing the view
 	 */
 	function factory($theme, $class, $params=array()) { /* {{{ */
-		global $settings;
+		global $settings, $session;
 		if(file_exists("../views/".$theme."/class.".$class.".php")) {
 			require("../views/".$theme."/class.".$class.".php");
 			$classname = "LetoDMS_View_".$class;
 			$view = new $classname($params, $theme);
 			/* Set some configuration parameters */
+			$view->setParam('session', $session);
 			$view->setParam('sitename', $settings->_siteName);
 			$view->setParam('rootfolderid', $settings->_rootFolderID);
 			$view->setParam('disableselfedit', $settings->_disableSelfEdit);
@@ -62,7 +63,8 @@ class UI extends UI_Default {
 			$view->setParam('printdisclaimer', $settings->_printDisclaimer);
 			$view->setParam('footnote', $settings->_footNote);
 			$view->setParam('logfileenable', $settings->_logFileEnable);
-			$view->setParam('expandfoldertree', $settings->_expandFolderTree);
+			$view->setParam('enablefoldertree', $settings->_enableFolderTree);
+			$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
 			$view->setParam('partionsize', $settings->_partitionSize);
 			return $view;
 		}
