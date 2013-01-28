@@ -115,12 +115,6 @@ function documentSelected(id, name) {
 </script>
 
 <?php
-/*
-		echo "<input type=\"text\" class=\"autocomplete\" />";
-		$this->contentContainerStart();
-		echo "<div id=\"resultautocomplete\"></div>";
-		$this->contentContainerEnd();
-*/
 		$this->contentContainerStart();
 		$this->printTree($folder->getPath());
 		$this->contentContainerEnd();
