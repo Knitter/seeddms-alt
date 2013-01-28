@@ -58,4 +58,62 @@ $(document).ready( function() {
 				return '<i class="icon-search"></i> ' + item.substring(1);
 		}
 	});
+
+	/* Document chooser */
+	$("#choosedocsearch").typeahead({
+		minLength: 3,
+		formname: 'form1',
+		source: function(query, process) {
+//		console.log(this.options);
+			$.get('../op/op.Ajax.php', { command: 'searchdocument', query: query, limit: 8 }, function(data) {
+					process(data);
+			});
+		},
+		/* updater is called when the item in the list is clicked. It is
+		 * actually provided to update the input field, but here we use
+		 * it to set the document location. */
+		updater: function (item) {
+			strarr = item.split("#");
+			//console.log(this.options.formname);
+			$('#docid' + this.options.formname).attr('value', strarr[0]);
+			return strarr[1];
+		},
+		/* Set a matcher that allows any returned value */
+		matcher : function (item) {
+			return true;
+		},
+		highlighter : function (item) {
+			strarr = item.split("#");
+			return '<i class="icon-file"></i> ' + strarr[1];
+		}
+	});
+
+	/* Folder chooser */
+	$("#choosefoldersearch").typeahead({
+		minLength: 3,
+		formname: 'form1',
+		source: function(query, process) {
+//		console.log(this.options);
+			$.get('../op/op.Ajax.php', { command: 'searchfolder', query: query, limit: 8 }, function(data) {
+					process(data);
+			});
+		},
+		/* updater is called when the item in the list is clicked. It is
+		 * actually provided to update the input field, but here we use
+		 * it to set the document location. */
+		updater: function (item) {
+			strarr = item.split("#");
+			//console.log(this.options.formname);
+			$('#targetid' + this.options.formname).attr('value', strarr[0]);
+			return strarr[1];
+		},
+		/* Set a matcher that allows any returned value */
+		matcher : function (item) {
+			return true;
+		},
+		highlighter : function (item) {
+			strarr = item.split("#");
+			return '<i class="icon-folder-close"></i> ' + strarr[1];
+		}
+	});
 });
