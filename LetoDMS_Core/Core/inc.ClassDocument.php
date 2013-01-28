@@ -512,6 +512,13 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	 * Check if the document has expired and set the status accordingly
 	 * It will also recalculate the status if the current status is
 	 * set to S_EXPIRED but the document isn't actually expired.
+	 * The method will update the document status log database table
+	 * if needed.
+	 * FIXME: Why does it not set a document to S_EXPIRED if it is
+	 * currently in state S_RELEASED
+	 * FIXME: some left over reviewers/approvers are in the way if
+	 * no workflow is set an traditional workflow mode is on. In that
+	 * case the status is set to S_DRAFT_REV or S_DRAFT_APP
 	 *
 	 * @return boolean true if status has changed
 	 */
@@ -521,10 +528,9 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			$st=$lc->getStatus();
 
 			if (($st["status"]==S_DRAFT_REV || $st["status"]==S_DRAFT_APP || $st["status"]==S_IN_WORKFLOW) && $this->hasExpired()){
-				$lc->setStatus(S_EXPIRED,"", $this->getOwner());
-				return true;
+				return $lc->setStatus(S_EXPIRED,"", $this->getOwner());
 			}
-			else if ($st["status"]==S_EXPIRED && !$this->hasExpired() ){
+			elseif ($st["status"]==S_EXPIRED && !$this->hasExpired() ){
 				$lc->verifyStatus(true, $this->getOwner());
 				return true;
 			}
@@ -859,9 +865,10 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	 * is an array itself countaining objects of class LetoDMS_Core_User and
 	 * LetoDMS_Core_Group.
 	 *
+	 * @param integer $type type of notification (not yet used)
 	 * @return array list of notifications
 	 */
-	function getNotifyList() { /* {{{ */
+	function getNotifyList($type) { /* {{{ */
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
 
@@ -1006,12 +1013,13 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	 * @param $userOrGroupID id of user or group
 	 * @param $isUser boolean true if a user is passed in $userOrGroupID, false
 	 *        if a group is passed in $userOrGroupID
+	 * @param $type type of notification (0 will delete all) Not used yet!
 	 * @return integer 0 if operation was succesful
 	 *                 -1 if the userid/groupid is invalid
 	 *                 -3 if the user/group is already subscribed
 	 *                 -4 in case of an internal database error
 	 */
-	function removeNotify($userOrGroupID, $isUser) { /* {{{ */
+	function removeNotify($userOrGroupID, $isUser, $type=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		/* Verify that user / group exists. */
@@ -1061,6 +1069,9 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		}
 
 		$queryStr = "DELETE FROM tblNotify WHERE target = " . $this->_id . " AND targetType = " . T_DOCUMENT . " AND " . $userOrGroup . " = " . (int) $userOrGroupID;
+		/* If type is given then delete only those notifications */
+		if($type)
+			$queryStr .= " AND `type` = ".(int) $type;
 		if (!$db->getResult($queryStr))
 			return -4;
 
@@ -1814,6 +1825,8 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 	 * Recalculate the status of a document
 	 * The methods checks the review and approval status and sets the
 	 * status of the document accordingly.
+	 * If status is S_RELEASED and version has workflow set status
+	 * to S_IN_WORKFLOW
 	 * If status is S_RELEASED and there are reviewers set status S_DRAFT_REV
 	 * If status is S_RELEASED or S_DRAFT_REV and there are approvers set
 	 * status S_DRAFT_APP
@@ -1857,9 +1870,10 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 			}
 		}
 
-		if ($pendingReview) $this->setStatus(S_DRAFT_REV,"",$user);
-		else if ($pendingApproval) $this->setStatus(S_DRAFT_APP,"",$user);
-		else if ($this->getWorkflow()) $this->setStatus(S_IN_WORKFLOW,"",$user);
+		unset($this->_workflow); // force to be reloaded from DB
+		if ($this->getWorkflow()) $this->setStatus(S_IN_WORKFLOW,"",$user);
+		elseif ($pendingReview) $this->setStatus(S_DRAFT_REV,"",$user);
+		elseif ($pendingApproval) $this->setStatus(S_DRAFT_APP,"",$user);
 		else $this->setStatus(S_RELEASED,"",$user);
 	} /* }}} */
 
@@ -1999,14 +2013,15 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 	/**
 	 * Get the latest status of the content
 	 *
-	 * The status of the content reflects its current review and approval
+	 * The status of the content reflects its current review, approval or workflow
 	 * state. A status can be a negative or positive number or 0. A negative
 	 * numbers indicate a missing approval, review or an obsolete content.
-	 * Positive numbers indicate some kind of approval but not necessarily
-	 * a release.
+	 * Positive numbers indicate some kind of approval or workflow being
+	 * active, but not necessarily a release.
 	 * S_DRAFT_REV, 0
 	 * S_DRAFT_APP, 1
 	 * S_RELEASED, 2
+	 * S_IN_WORKFLOW, 3
 	 * S_REJECTED, -1
 	 * S_OBSOLETE, -2
 	 * S_EXPIRED, -3
