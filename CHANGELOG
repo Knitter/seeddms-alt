@@ -7,7 +7,9 @@
 - added pdo database abstraction as an alternative to adodb
 - search by expiration date
 - completely new and much more powerful workflow engine
-- language can switched at any time
+- language can be switched at any time
+- check for duplicate document names in a folder
+- document/folder chooser allows to search
 
 --------------------------------------------------------------------------------
                      Changes in version 3.4.3
