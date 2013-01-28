@@ -68,5 +68,34 @@ switch($command) {
 		}
 		break;
 
+	case 'searchdocument':
+		$query = $_GET['query'];
+
+		$hits = $dms->search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x1, $expirationstartdate=array(), $expirationenddate=array());
+		if($hits) {
+			$result = array();
+			foreach($hits['docs'] as $hit) {
+				$result[] = $hit->getID().'#'.$hit->getName();
+			}
+			header('Content-Type: application/json');
+			echo json_encode($result);
+		}
+
+		break;
+
+	case 'searchfolder':
+		$query = $_GET['query'];
+
+		$hits = $dms->search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x2, $expirationstartdate=array(), $expirationenddate=array());
+		if($hits) {
+			$result = array();
+			foreach($hits['folders'] as $hit) {
+				$result[] = $hit->getID().'#'.$hit->getName();
+			}
+			header('Content-Type: application/json');
+			echo json_encode($result);
+		}
+
+		break;
 }
 ?>
