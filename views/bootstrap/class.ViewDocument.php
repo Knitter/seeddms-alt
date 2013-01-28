@@ -48,7 +48,6 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		$this->globalNavigation($folder);
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document");
-		$this->contentHeading(getMLText("document_infos"));
 
 		if ($document->isLocked()) {
 			$lockingUser = $document->getLockingUser();
@@ -60,8 +59,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		}
 ?>
     <ul class="nav nav-tabs" id="docinfotab">
-		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('document_infos'); ?></a></li>
-		  <li><a data-target="#current" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
+		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('document_infos'); ?> / <?php printMLText('current_version'); ?></a></li>
 			<?php if (count($versions)>1) { ?>
 		  <li><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
 <?php
@@ -84,10 +82,17 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		<div class="tab-content">
 		  <div class="tab-pane active" id="docinfo">
 
+<div class="row-fluid">
+<div class="span3">
 <?php
+		$this->contentHeading(getMLText("document_infos"));
 		$this->contentContainerStart();
 ?>
 		<table class="table-condensed">
+		<tr>
+		<td><?php printMLText("name");?>:</td>
+		<td><?php print htmlspecialchars($document->getName());?></td>
+		</tr>
 		<tr>
 		<td><?php printMLText("owner");?>:</td>
 		<td>
@@ -139,8 +144,8 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 <?php
 		$this->contentContainerEnd();
 ?>
-			</div>
-		  <div class="tab-pane" id="current">
+</div>
+<div class="span9">
 <?php
 		if(!$latestContent = $document->getLatestContent()) {
 			$this->contentContainerStart();
@@ -157,6 +162,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		// verify if file exists
 		$file_exists=file_exists($dms->contentDir . $latestContent->getPath());
 
+		$this->contentHeading(getMLText("current_version"));
 		$this->contentContainerStart();
 		print "<table class=\"table\">";
 		print "<thead>\n<tr>\n";
@@ -256,8 +262,11 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		print "</ul>";
 		echo "</td>";
 		print "</tr></tbody>\n</table>\n";
+		$this->contentContainerEnd();
 
 		if($user->isAdmin()) {
+			$this->contentHeading(getMLText("status"));
+			$this->contentContainerStart();
 			$status = $latestContent->getStatusLog();
 			echo "<table class=\"table table-condensed\"><thead>";
 			echo "<th>".getMLText('date')."</th><th>".getMLText('status')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>\n";
@@ -267,10 +276,12 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 				echo "<tr><td>".$entry['date']."</td><td>".getOverallStatusText($entry['status'])."</td><td>".$suser->getFullName()."</td><td>".$entry['comment']."</td></tr>\n";
 			}
 			print "</tbody>\n</table>\n";
+			$this->contentContainerEnd();
 		}
-		$this->contentContainerEnd();
 ?>
 		  </div>
+		</div>
+		</div>
 <?php
 		if($workflowmode == 'traditional') {
 ?>
@@ -662,7 +673,13 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 				if($accessop->mayRemoveVersion()) {
 					print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\"><i class=\"icon-remove\"></i> ".getMLText("rm_version")."</a></li>";
 				}
-				print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'><i class=\"icon-info-sign\"></i> ".getMLText("details")."</a></li>";
+				if($accessop->mayEditComment()) {
+					print "<li><a href=\"out.EditComment.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-edit\"></i> ".getMLText("edit_comment")."</a></li>";
+				}
+				if($accessop->mayEditAttributes()) {
+					print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i> ".getMLText("edit_attributes")."</a></li>";
+				}
+				//print "<li><a href='../out/out.DocumentVersionDetail.php?documentid=".$documentid."&version=".$version->getVersion()."'><i class=\"icon-info-sign\"></i> ".getMLText("details")."</a></li>";
 				print "</ul>";
 				print "</td>\n</tr>\n";
 			}
