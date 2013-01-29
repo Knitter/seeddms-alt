@@ -20,34 +20,34 @@ include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.DBInit.php");
 
-if (!isset($_COOKIE["mydms_session"])) {
-	exit;
-}
-
 require_once("../inc/inc.Utils.php");
 require_once("../inc/inc.ClassSession.php");
 include("../inc/inc.ClassPasswordStrength.php");
 include("../inc/inc.ClassPasswordHistoryManager.php");
 
 /* Load session */
-$dms_session = $_COOKIE["mydms_session"];
-$session = new LetoDMS_Session($db);
-if(!$resArr = $session->load($dms_session)) {
-	echo json_encode(array('error'=>1));
-	exit;
+if (isset($_COOKIE["mydms_session"])) {
+	$dms_session = $_COOKIE["mydms_session"];
+	$session = new LetoDMS_Session($db);
+	if(!$resArr = $session->load($dms_session)) {
+		echo json_encode(array('error'=>1));
+		exit;
+	}
+
+	/* Load user data */
+	$user = $dms->getUser($resArr["userID"]);
+	if (!is_object($user)) {
+		echo json_encode(array('error'=>1));
+		exit;
+	}
+	$dms->setUser($user);
+} else {
+	$user = null;
 }
 
-/* Load user data */
-$user = $dms->getUser($resArr["userID"]);
-if (!is_object($user)) {
-	echo json_encode(array('error'=>1));
-	exit;
-}
-$dms->setUser($user);
 include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
 
 $command = $_GET["command"];
-
 switch($command) {
 	case 'checkpwstrength':
 		$ps = new Password_Strength();
@@ -69,33 +69,35 @@ switch($command) {
 		break;
 
 	case 'searchdocument':
-		$query = $_GET['query'];
+		if($user) {
+			$query = $_GET['query'];
 
-		$hits = $dms->search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x1, $expirationstartdate=array(), $expirationenddate=array());
-		if($hits) {
-			$result = array();
-			foreach($hits['docs'] as $hit) {
-				$result[] = $hit->getID().'#'.$hit->getName();
+			$hits = $dms->search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x1, $expirationstartdate=array(), $expirationenddate=array());
+			if($hits) {
+				$result = array();
+				foreach($hits['docs'] as $hit) {
+					$result[] = $hit->getID().'#'.$hit->getName();
+				}
+				header('Content-Type: application/json');
+				echo json_encode($result);
 			}
-			header('Content-Type: application/json');
-			echo json_encode($result);
 		}
-
 		break;
 
 	case 'searchfolder':
-		$query = $_GET['query'];
+		if($user) {
+			$query = $_GET['query'];
 
-		$hits = $dms->search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x2, $expirationstartdate=array(), $expirationenddate=array());
-		if($hits) {
-			$result = array();
-			foreach($hits['folders'] as $hit) {
-				$result[] = $hit->getID().'#'.$hit->getName();
+			$hits = $dms->search($query, $limit=0, $offset=0, $logicalmode='AND', $searchin=array(), $startFolder=null, $owner=null, $status = array(), $creationstartdate=array(), $creationenddate=array(), $modificationstartdate=array(), $modificationenddate=array(), $categories=array(), $attributes=array(), $mode=0x2, $expirationstartdate=array(), $expirationenddate=array());
+			if($hits) {
+				$result = array();
+				foreach($hits['folders'] as $hit) {
+					$result[] = $hit->getID().'#'.$hit->getName();
+				}
+				header('Content-Type: application/json');
+				echo json_encode($result);
 			}
-			header('Content-Type: application/json');
-			echo json_encode($result);
 		}
-
 		break;
 }
 ?>
