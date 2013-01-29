@@ -93,7 +93,19 @@ function checkForm()
 		</tr>
 		<tr>
 			<td><?php printMLText("categories")?>:</td>
-			<td><?php $this->printCategoryChooser("form1", $document->getCategories());?></td>
+			<td>
+        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>">
+<?php
+			$categories = $dms->getDocumentCategories();
+			foreach($categories as $category) {
+				echo "<option value=\"".$category->getID()."\"";
+				if(in_array($category, $document->getCategories()))
+					echo " selected";
+				echo ">".$category->getName()."</option>";	
+			}
+?>
+				</select>
+      </td>
 		</tr>
 <?php
 		if ($folder->getAccessMode($user) > M_READ) {

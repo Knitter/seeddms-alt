@@ -78,7 +78,7 @@ function checkForm()
 			<td><?php //$this->printDateChooser($event["start"], "from");?>
     		<span class="input-append date" id="fromdate" data-date="<?php echo date('d-m-Y', $event["start"]); ?>" data-date-format="dd-mm-yyyy">
       		<input class="span6" size="16" name="from" type="text" value="<?php echo date('d-m-Y', $event["start"]); ?>">
-      		<span class="add-on"><i class="icon-th"></i></span>
+      		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>
 			</td>
 		</tr>
@@ -87,7 +87,7 @@ function checkForm()
 			<td><?php //$this->printDateChooser($event["stop"], "to");?>
     		<span class="input-append date" id="todate" data-date="<?php echo date('d-m-Y', $event["stop"]); ?>" data-date-format="dd-mm-yyyy">
       		<input class="span6" size="16" name="to" type="text" value="<?php echo date('d-m-Y', $event["stop"]); ?>">
-      		<span class="add-on"><i class="icon-th"></i></span>
+      		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>
 			</td>
 		</tr>
