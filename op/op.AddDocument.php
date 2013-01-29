@@ -53,7 +53,7 @@ $comment  = $_POST["comment"];
 $version_comment = $_POST["version_comment"];
 
 $keywords = $_POST["keywords"];
-$categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]);
+$categories = $_POST["categories"];
 if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
 else
@@ -198,8 +198,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 
 	$cats = array();
 	if($categories) {
-		$catids = explode(',', $categories);
-		foreach($catids as $catid) {
+		foreach($categories as $catid) {
 			$cats[] = $dms->getDocumentCategory($catid);
 		}
 	}
