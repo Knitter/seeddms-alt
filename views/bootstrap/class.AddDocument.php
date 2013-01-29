@@ -112,21 +112,21 @@ class LetoDMS_View_AddDocument extends LetoDMS_Bootstrap_Style {
 		</tr>
 		<tr>
 			<td><?php printMLText("keywords");?>:</td>
-			<td>
-			<textarea name="keywords" rows="1" cols="80"></textarea><br>
-			<a href="javascript:chooseKeywords('form1.keywords');"><?php printMLText("use_default_keywords");?></a>
-			<script language="JavaScript">
-			var openDlg;
-		
-			function chooseKeywords(target) {
-				openDlg = open("out.KeywordChooser.php?target="+target, "openDlg", "width=500,height=400,scrollbars=yes,resizable=yes");
-			}
-			</script>
-			</td>
+			<td><?php $this->printKeywordChooser("form1");?></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("categories")?>:</td>
-			<td><?php $this->printCategoryChooser("form1");?></td>
+			<td>
+        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>">
+<?php
+			$categories = $dms->getDocumentCategories();
+			foreach($categories as $category) {
+				echo "<option value=\"".$category->getID()."\"";
+				echo ">".$category->getName()."</option>";	
+			}
+?>
+				</select>
+      </td>
 		</tr>
 		<tr>
 			<td><?php printMLText("sequence");?>:</td>
@@ -150,7 +150,7 @@ class LetoDMS_View_AddDocument extends LetoDMS_Bootstrap_Style {
 			<td>
         <span class="input-append date" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
           <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('d-m-Y'); ?>">
-          <span class="add-on"><i class="icon-th"></i></span>
+          <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
         <label class="checkbox inline">
 				  <input type="checkbox" name="expires" value="false" checked><?php printMLText("does_not_expire");?><br>
