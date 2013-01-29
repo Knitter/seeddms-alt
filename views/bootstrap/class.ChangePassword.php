@@ -35,6 +35,7 @@ class LetoDMS_View_ChangePassword extends LetoDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$referuri = $this->params['referuri'];
 		$hash = $this->params['hash'];
+		$passwordstrength = $this->params['passwordstrength'];
 
 		$this->htmlStartPage(getMLText("change_password"), "login");
 		$this->globalBanner();
@@ -53,17 +54,23 @@ class LetoDMS_View_ChangePassword extends LetoDMS_Bootstrap_Style {
 ?>
 	<table class="table-condensed">
 		<tr>
-			<td><?php printMLText("password");?></td>
+			<td><?php printMLText("password");?>:</td>
 			<td><input class="pwd" type="password" rel="strengthbar" name="newpassword" id="password"></td>
 		</tr>
+<?php
+		if($passwordstrength > 0) {
+?>
 		<tr>
 			<td><?php printMLText("password_strength");?>:</td>
 			<td>
 				<div id="strengthbar" class="progress" style="width: 220px; height: 30px; margin-bottom: 8px;"><div class="bar bar-danger" style="width: 0%;"></div></div>
 			</td>
 		</tr>
+<?php
+		}
+?>
 		<tr>
-			<td><?php printMLText("password_repeat");?></td>
+			<td><?php printMLText("confirm_pwd");?>:</td>
 			<td><input type="password" name="newpasswordrepeat" id="passwordrepeat"></td>
 		</tr>
 		<tr>
