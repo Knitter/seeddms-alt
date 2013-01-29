@@ -758,11 +758,11 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 <?php
 	} /* }}} */
 
-	function printKeywordChooser($formName, $keywords) { /* {{{ */
+	function printKeywordChooser($formName, $keywords, $fieldname='keywords') { /* {{{ */
 ?>
 		    <div class="input-append">
-				<textarea name="keywords" rows="2" cols="80"><?php print htmlspecialchars($keywords);?></textarea><br>
-				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("use_default_keywords");?></a>
+				<input type="text" name="<?php echo $fieldname; ?>" value="<?php print htmlspecialchars($keywords);?>" />
+				<a data-target="#keywordChooser" role="button" class="btn" data-toggle="modal" href="out.KeywordChooser.php?target=<?php echo $formName; ?>"><?php printMLText("keywords");?>…</a>
 		    </div>
 <div class="modal hide" id="keywordChooser" tabindex="-1" role="dialog" aria-labelledby="keywordChooserLabel" aria-hidden="true">
   <div class="modal-header">
