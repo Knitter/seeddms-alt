@@ -22,6 +22,8 @@ include("../inc/inc.Settings.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 
+include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
+
 if (isset($_REQUEST["referuri"]) && strlen($_REQUEST["referuri"])>0) {
 	$referrer = $_REQUEST["referuri"];
 } else {
