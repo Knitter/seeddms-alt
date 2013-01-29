@@ -125,7 +125,7 @@ function showUser(selectObj) {
 		</tr>
 		<tr>
 			<td><?php printMLText("password");?>:</td>
-			<td><input class="pwd" name="pwd" rel="strengthbar" type="password"><td>
+			<td><input class="pwd" type="password" rel="strengthbar" name="pwd" id="password"></td>
 		</tr>
 <?php
 		if($passwordstrength > 0) {
@@ -141,7 +141,7 @@ function showUser(selectObj) {
 ?>
 		<tr>
 			<td><?php printMLText("confirm_pwd");?>:</td>
-			<td><input type="Password" name="pwdconf"></td>
+			<td><input type="password" name="pwdconf"></td>
 		</tr>
 <?php
 		if($passwordexpiration > 0) {
