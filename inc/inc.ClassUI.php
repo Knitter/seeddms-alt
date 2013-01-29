@@ -63,9 +63,10 @@ class UI extends UI_Default {
 			$view->setParam('printdisclaimer', $settings->_printDisclaimer);
 			$view->setParam('footnote', $settings->_footNote);
 			$view->setParam('logfileenable', $settings->_logFileEnable);
+			$view->setParam('expandfoldertree', $settings->_expandFolderTree);
 			$view->setParam('enablefoldertree', $settings->_enableFolderTree);
 			$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
-			$view->setParam('partionsize', $settings->_partitionSize);
+			$view->setParam('partitionsize', $settings->_partitionSize);
 			return $view;
 		}
 		return null;
