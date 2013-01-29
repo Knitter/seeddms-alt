@@ -43,7 +43,6 @@ class LetoDMS_View_KeywordChooser extends LetoDMS_Bootstrap_Style {
 var targetObj = document.<?php echo $form ?>.keywords;
 var myTA;
 
-
 function insertKeywords(keywords) {
 
 	if (navigator.appName == "Microsoft Internet Explorer") {
