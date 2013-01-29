@@ -86,6 +86,7 @@ function checkForm()
 <option value="1" selected><?php printMLText("search_mode_and");?>
 <option value="0"><?php printMLText("search_mode_or");?>
 </select>
+<!--
 <br />
 <a href="javascript:chooseKeywords('form1.query');"><?php printMLText("use_default_keywords");?></a>
 <script language="JavaScript">
@@ -95,6 +96,7 @@ function chooseKeywords(target) {
 	openDlg = open("out.KeywordChooser.php?target="+target, "openDlg", "width=500,height=400,scrollbars=yes,resizable=yes");
 }
 </script>
+-->
 </td>
 </tr>
 <tr>
@@ -173,12 +175,12 @@ function chooseKeywords(target) {
         </label>
         <span class="input-append date" id="createstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
           <input class="span3" size="16" name="createstart" type="text" value="<?php echo date('d-m-Y'); ?>">
-          <span class="add-on"><i class="icon-th"></i></span>
+          <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
 				<?php printMLText("and"); ?>
         <span class="input-append date" id="createenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
           <input class="span3" size="16" name="createend" type="text" value="<?php echo date('d-m-Y'); ?>">
-          <span class="add-on"><i class="icon-th"></i></span>
+          <span class="add-on"><i class="icon-calendar"></i></span>
         </span>
 </td>
 </tr>
@@ -190,12 +192,12 @@ function chooseKeywords(target) {
         </label>
         <span class="input-append date" id="expirationstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
           <input class="span3" size="16" name="expirationstart" type="text" value="<?php echo date('d-m-Y'); ?>">
-          <span class="add-on"><i class="icon-th"></i></span>
+          <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
 				<?php printMLText("and"); ?>
         <span class="input-append date" id="expirationenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
           <input class="span3" size="16" name="expirationend" type="text" value="<?php echo date('d-m-Y'); ?>">
-          <span class="add-on"><i class="icon-th"></i></span>
+          <span class="add-on"><i class="icon-calendar"></i></span>
         </span>
 </td>
 </tr>

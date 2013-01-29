@@ -141,7 +141,7 @@ function checkForm()
 			<td class="standardText">
         <span class="input-append date" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
           <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('d-m-Y'); ?>">
-          <span class="add-on"><i class="icon-th"></i></span>
+          <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
         <label class="checkbox inline">
 				  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
