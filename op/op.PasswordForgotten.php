@@ -27,6 +27,8 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassEmail.php");
 
+include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
+
 function _printMessage($heading, $message) {
 
 	UI::htmlStartPage($heading, "password");
@@ -45,21 +47,21 @@ if (isset($_POST["login"])) {
 }
 
 if (empty($email) || empty($login)) {
-	_printMessage(getMLText("email_error_title"),	"<p>".getMLText("email_not_given")."</p>\n".
-		"<p><a href='".$settings->_httpRoot."out/out.PasswordForgotten.php'>".getMLText("back")."</a></p>\n");
+	header('Location: ../out/out.PasswordForgotten.php');
 	exit;
 }
 
 $user = $dms->getUserByLogin($login, $email);
 if($user) {
-	$hash = $dms->createPasswordRequest($user);
-	$emailobj = new LetoDMS_Email();
-	$subject = "###SITENAME###: ".getMLText("password_forgotten_email_subject");
-	$message = str_replace('###HASH###', $hash, getMLText("password_forgotten_email_body"));
-	
-	$emailobj->sendPassword('', $user, $subject, $message);
+	if($hash = $dms->createPasswordRequest($user)) {
+		$emailobj = new LetoDMS_Email();
+		$subject = "###SITENAME###: ".getMLText("password_forgotten_email_subject");
+		$message = str_replace('###HASH###', $hash, getMLText("password_forgotten_email_body"));
+		
+		$emailobj->sendPassword('', $user, $subject, $message);
+	}
 }
 
-_printMessage(getMLText("password_forgotten_title"), "<p>".getMLText("password_forgotten_send_hash")."</p>");
+header('Location: ../out/out.Login.php');
 exit;
 ?>

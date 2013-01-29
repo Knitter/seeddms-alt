@@ -48,17 +48,18 @@ if (isset($_POST["newpasswordrepeat"])) {
 }
 
 if (empty($newpassword) || empty($newpasswordrepeat) || $newpassword != $newpasswordrepeat) {
-	_printMessage(getMLText("password_mismatch_error_title"),	"<p>".getMLText("password_mismatch_error")."</p>\n");
-	exit;
+	UI::exitError(getMLText("password_mismatch_error_title"),getMLText("password_mismatch_error"));
 }
 
 $user = $dms->checkPasswordRequest($hash);
 if($user) {
 	$user->setPwd(md5($newpassword));
 	$dms->deletePasswordRequest($hash);
+	header('Location: ../out/out.Login.php');
+	exit;
 }
 
-_printMessage(getMLText("change_password"), "<p>".getMLText("change_password_message")."</p>");
-exit;
+UI::exitError(getMLText("password_mismatch_error_title"),getMLText("password_mismatch_error"));
+
 ?>
 
