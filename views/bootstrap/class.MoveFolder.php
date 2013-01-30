@@ -35,6 +35,7 @@ class LetoDMS_View_MoveFolder extends LetoDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
+		$target = $this->params['target'];
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);
@@ -50,7 +51,7 @@ class LetoDMS_View_MoveFolder extends LetoDMS_Bootstrap_Style {
 	<table class="table-condensed">
 		<tr>
 			<td><?php printMLText("choose_target_folder");?>:</td>
-			<td><?php $this->printFolderChooser("form1", M_READWRITE, $folder->getID());?></td>
+			<td><?php $this->printFolderChooser("form1", M_READWRITE, $folder->getID(), $target);?></td>
 		</tr>
 		<tr>
 			<td></td>

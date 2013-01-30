@@ -36,6 +36,7 @@ class LetoDMS_View_MoveDocument extends LetoDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$document = $this->params['document'];
+		$target = $this->params['target'];
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
@@ -49,7 +50,7 @@ class LetoDMS_View_MoveDocument extends LetoDMS_Bootstrap_Style {
 	<table>
 		<tr>
 			<td><?php printMLText("choose_target_folder");?>:</td>
-			<td><?php $this->printFolderChooser("form1", M_READWRITE);?></td>
+			<td><?php $this->printFolderChooser("form1", M_READWRITE, -1, $target);?></td>
 		</tr>
 		<tr>
 			<td colspan="2"><br /><input type="submit" class="btn" value="<?php printMLText("move");?>"></td>
