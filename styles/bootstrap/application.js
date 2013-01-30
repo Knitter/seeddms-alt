@@ -120,6 +120,7 @@ $(document).ready( function() {
 
 function allowDrop(ev) {
 	ev.preventDefault();
+//	console.log(ev);
 }
 
 function onDragStartDocument(ev) {
@@ -150,4 +151,14 @@ function onDrop(ev) {
 	}
 //	console.log(attr_rel);
 //	console.log(ev.dataTransfer.getData("type") + ev.dataTransfer.getData("id"));
+}
+
+function onAddClipboard(ev) {
+	ev.preventDefault();
+	source_type = ev.dataTransfer.getData("type");
+	source_id = ev.dataTransfer.getData("id");
+	if(source_type == 'document' || source_type == 'folder') {
+		url = "../op/op.AddToClipboard.php?id="+source_id+"&type="+source_type;
+		document.location = url;
+	}
 }
