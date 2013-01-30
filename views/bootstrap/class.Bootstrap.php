@@ -189,7 +189,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		for ($i = 0; $i < count($path); $i++) {
 			$txtpath .= "<li>";
 			if ($i +1 < count($path)) {
-				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\">".
+				$txtpath .= "<a href=\"../out/out.ViewFolder.php?folderid=".$path[$i]->getID()."&showtree=".showtree()."\" rel=\"folder_".$path[$i]->getID()."\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">".
 					htmlspecialchars($path[$i]->getName())."</a>";
 			}
 			else {
@@ -935,8 +935,10 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 
 			if ($folderID != $currentFolderID){
 			
-				if ($navigation) print "<a href=\"../out/out.ViewFolder.php?folderid=" . $folderID . "&showtree=1\">";
-				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . str_replace("'", "\\'", htmlspecialchars($folder->getName())) . "')\">";
+				if ($navigation) print "<a href=\"../out/out.ViewFolder.php?folderid=" . $folderID . "&showtree=1\"";
+				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . str_replace("'", "\\'", htmlspecialchars($folder->getName())) . "')\"";
+				print " rel=\"folder_".$folder->getID()."\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\"";
+				print ">";
 
 			}else print "<span class=\"selectedfoldertree\">";
 			
