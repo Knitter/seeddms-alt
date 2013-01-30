@@ -117,3 +117,37 @@ $(document).ready( function() {
 		}
 	});
 });
+
+function allowDrop(ev) {
+	ev.preventDefault();
+}
+
+function onDragStartDocument(ev) {
+	attr_rel = $(ev.target).attr('rel');
+	ev.dataTransfer.setData("id", attr_rel.split("_")[1]);
+	ev.dataTransfer.setData("type","document");
+}
+
+function onDragStartFolder(ev) {
+	attr_rel = $(ev.target).attr('rel');
+	ev.dataTransfer.setData("id", attr_rel.split("_")[1]);
+	ev.dataTransfer.setData("type","folder");
+}
+
+function onDrop(ev) {
+	ev.preventDefault();
+	attr_rel = $(ev.currentTarget).attr('rel');
+	target_type = attr_rel.split("_")[0];
+	target_id = attr_rel.split("_")[1];
+	source_type = ev.dataTransfer.getData("type");
+	source_id = ev.dataTransfer.getData("id");
+	if(source_type == 'document') {
+		url = "../out/out.MoveDocument.php?documentid="+source_id+"&targetid="+target_id;
+		document.location = url;
+	} else if(source_type == 'folder') {
+		url = "../out/out.MoveFolder.php?folderid="+source_id+"&targetid="+target_id;
+		document.location = url;
+	}
+//	console.log(attr_rel);
+//	console.log(ev.dataTransfer.getData("type") + ev.dataTransfer.getData("id"));
+}
