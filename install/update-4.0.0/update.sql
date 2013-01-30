@@ -10,6 +10,8 @@ ALTER TABLE tblDocumentContent ADD COLUMN `fileSize` bigint;
 
 ALTER TABLE tblUsers ADD COLUMN `quota` bigint;
 
+ALTER TABLE tblSessions ADD COLUMN `clipboard` text DEFAULT '';
+
 CREATE TABLE tblWorkflowStates (
   `id` int(11) NOT NULL auto_increment,
   `name` text NOT NULL,
