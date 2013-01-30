@@ -226,7 +226,7 @@ class LetoDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '3.4.0';
+			$this->version = '4.0.0';
 	} /* }}} */
 
 	function getDB() { /* {{{ */
@@ -854,7 +854,7 @@ class LetoDMS_Core_DMS {
 			}
 
 			// Count the number of rows that the search will produce.
-			$resArr = $this->db->getResultArray("SELECT COUNT(*) as num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
+			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
 			$totalDocs = 0;
 			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 				$totalDocs = (integer)$resArr[0]["num"];
