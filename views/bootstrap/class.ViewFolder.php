@@ -37,6 +37,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 		$folder = $this->params['folder'];
 		$orderby = $this->params['orderby'];
 		$enableFolderTree = $this->params['enableFolderTree'];
+		$enableClipboard = $this->params['enableClipboard'];
 		$showtree = $this->params['showtree'];
 		$cachedir = $this->params['cachedir'];
 
@@ -49,10 +50,11 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 		$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
 
 		echo "<div class=\"row-fluid\">\n";
-		echo "<div class=\"span3\">\n";
+		echo "<div class=\"span4\">\n";
 		if ($enableFolderTree) $this->printTreeNavigation($folderid,$showtree);
+		if (1 || $enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
 		echo "</div>\n";
-		echo "<div class=\"span9\">\n";
+		echo "<div class=\"span8\">\n";
 
 		$this->contentHeading(getMLText("folder_infos"));
 
