@@ -99,7 +99,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 			print "<th>".getMLText("owner")."</th>\n";
 			print "<th>".getMLText("status")."</th>\n";
 			print "<th>".getMLText("version")."</th>\n";
-//			print "<th>".getMLText("comment")."</th>\n";
+			print "<th>".getMLText("action")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 		}
 		else printMLText("empty_folder_list");
@@ -126,7 +126,12 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 			print "<td colspan=\"1\"><small>".count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents")."</small></td>";
 			print "<td></td>";
-//			print "<td>".htmlspecialchars($comment)."</td>";
+			print "<td>";
+?>
+     <p><a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
+     <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a></p>
+<?php
+			print "</td>";
 			print "</tr>\n";
 		}
 
@@ -167,7 +172,12 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 				}
 				print getOverallStatusText($status["status"])."</td>";
 				print "<td>".$version."</td>";
-//				print "<td>".htmlspecialchars($comment)."</td>";
+				print "<td>";
+?>
+     <p><a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
+     <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a></p>
+<?php
+				print "</td>";
 				print "</tr>\n";
 			}
 		}
