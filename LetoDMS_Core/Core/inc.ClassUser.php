@@ -933,6 +933,41 @@ class LetoDMS_Core_User {
 	} /* }}} */
 
 	/**
+	 * Get a list of documents with a workflow
+	 *
+	 * @param int $documentID optional document id for which to retrieve the
+	 *        reviews
+	 * @param int $version optional version of the document
+	 * @return array list of all workflows
+	 */
+	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = 'select d.*, c.userid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionUsers c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow where d.document is not null and a.state=d.state and c.userid='.$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$result['u'] = array();
+		if (count($resArr)>0) {
+			foreach ($resArr as $res) {
+				$result['u'][] = $res;
+			}
+		}
+
+		$queryStr = 'select d.*, c.groupid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionGroups c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow left join tblGroupMembers e on c.groupid = e.groupID where d.document is not null and a.state=d.state and e.userID='.$this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$result['g'] = array();
+		if (count($resArr)>0) {
+			foreach ($resArr as $res) {
+				$result['g'][] = $res;
+			}
+		}
+		return $result;
+	} /* }}} */
+
+	/**
 	 * Get a list of mandatory reviewers
 	 * A user which isn't trusted completely may have assigned mandatory
 	 * reviewers (both users and groups).
