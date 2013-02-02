@@ -10,6 +10,7 @@
 - language can be switched at any time
 - check for duplicate document names in a folder
 - document/folder chooser allows to search
+- added clipboard and drag&drop for moving documents
 
 --------------------------------------------------------------------------------
                      Changes in version 3.4.3
