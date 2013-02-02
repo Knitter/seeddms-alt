@@ -1,7 +1,8 @@
 <?php
 //    MyDMS. Document Management System
-//    Copyright (C) 2002-2005  Markus Westphal
+//    Copyright (C) 2002-2005 Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2009-2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -58,7 +59,7 @@ if (!isset($_POST["overrideStatus"]) || !is_numeric($_POST["overrideStatus"]) ||
 $overallStatus = $content->getStatus();
 
 // status change control
-if ($overallStatus["status"] == S_REJECTED || $overallStatus["status"] == S_EXPIRED || $overallStatus["status"] == S_DRAFT_REV || $overallStatus["status"] == S_DRAFT_APP ) {
+if ($overallStatus["status"] == S_REJECTED || $overallStatus["status"] == S_EXPIRED || $overallStatus["status"] == S_DRAFT_REV || $overallStatus["status"] == S_DRAFT_APP || $overallStatus["status"] == S_IN_WORKFLOW) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("cannot_change_final_states"));
 }
 
