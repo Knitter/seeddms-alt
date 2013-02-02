@@ -2846,7 +2846,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		$this->getWorkflow();
 		if($workflow && is_object($workflow)) {
 			$initstate = $workflow->getInitState();
-			$queryStr = "INSERT INTO tblWorkflowDocumentContent (workflow, document, version, state) VALUES (". $workflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().")";
+			$queryStr = "INSERT INTO tblWorkflowDocumentContent (workflow, document, version, state, date) VALUES (". $workflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", CURRENT_TIMESTAMP)";
 			if (!$db->getResult($queryStr)) {
 				return false;
 			}
