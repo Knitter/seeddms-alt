@@ -338,8 +338,12 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "<ul class=\"nav\">\n";
 		echo "<li id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
 		echo "<li><a href=\"../out/out.MyDocuments.php\">".getMLText("all_documents")."</a></li>\n";
-		echo "<li><a href=\"../out/out.ReviewSummary.php\">".getMLText("review_summary")."</a></li>\n";
-		echo "<li><a href=\"../out/out.ApprovalSummary.php\">".getMLText("approval_summary")."</a></li>\n";
+		if($this->params['workflowmode'] == 'traditional') {
+			echo "<li><a href=\"../out/out.ReviewSummary.php\">".getMLText("review_summary")."</a></li>\n";
+			echo "<li><a href=\"../out/out.ApprovalSummary.php\">".getMLText("approval_summary")."</a></li>\n";
+		} else {
+			echo "<li><a href=\"../out/out.WorkflowSummary.php\">".getMLText("workflow_summary")."</a></li>\n";
+		}
 		echo "</ul>\n";
 		return;
 	} /* }}} */
@@ -1011,57 +1015,59 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		if($clipboard['folders']) {
 			//echo "<tr><th colspan=\"3\">Folders</th></tr>\n";
 			foreach($clipboard['folders'] as $folderid) {
-				$folder = $dms->getFolder($folderid);
-				$comment = $folder->getComment();
-				if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-				print "<tr rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
-			//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-				print "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".$showtree."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-				print "<td><a href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($folder->getName()) . "</a>";
-				if($comment) {
-					print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+				if($folder = $dms->getFolder($folderid)) {
+					$comment = $folder->getComment();
+					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
+					print "<tr rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
+				//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
+					print "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".$showtree."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+					print "<td><a href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($folder->getName()) . "</a>";
+					if($comment) {
+						print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+					}
+					print "</td>\n";
+					print "<td>\n";
+					print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$folderid."&type=folder\"><i class=\"icon-remove\"></i></a>";
+					print "</td>\n";
+					print "</tr>\n";
 				}
-				print "</td>\n";
-				print "<td>\n";
-				print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$folderid."&type=folder\"><i class=\"icon-remove\"></i></a>";
-				print "</td>\n";
-				print "</tr>\n";
 			}
 		}
 		$previewer = new LetoDMS_Preview_Previewer($this->params['cachedir'], 40);
 		if($clipboard['docs']) {
 			//echo "<tr><th colspan=\"3\">Documents</th></tr>\n";
 			foreach($clipboard['docs'] as $docid) {
-				$document = $dms->getDocument($docid);
-				$comment = $document->getComment();
-				if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-				if($latestContent = $document->getLatestContent()) {
-					$previewer->createPreview($latestContent);
-					$version = $latestContent->getVersion();
-					$status = $latestContent->getStatus();
-					
-					print "<tr>";
+				if($document = $dms->getDocument($docid)) {
+					$comment = $document->getComment();
+					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
+					if($latestContent = $document->getLatestContent()) {
+						$previewer->createPreview($latestContent);
+						$version = $latestContent->getVersion();
+						$status = $latestContent->getStatus();
+						
+						print "<tr>";
 
-					if (file_exists($dms->contentDir . $latestContent->getPath())) {
-						print "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
-						if($previewer->hasPreview($latestContent)) {
-							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-						} else {
-							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						if (file_exists($dms->contentDir . $latestContent->getPath())) {
+							print "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
+							if($previewer->hasPreview($latestContent)) {
+								print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+							} else {
+								print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+							}
+							print "</a></td>";
+						} else
+							print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
+						
+						print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+						if($comment) {
+							print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 						}
-						print "</a></td>";
-					} else
-						print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-					
-					print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
-					if($comment) {
-						print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+						print "</td>\n";
+						print "<td>\n";
+						print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\"><i class=\"icon-remove\"></i></a>";
+						print "</td>\n";
+						print "</tr>";
 					}
-					print "</td>\n";
-					print "<td>\n";
-					print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\"><i class=\"icon-remove\"></i></a>";
-					print "</td>\n";
-					print "</tr>";
 				}
 			}
 		}
