@@ -768,6 +768,7 @@ $text["workflow"] = "Workflow";
 $text["workflow_action_in_use"] = "This action is currently used by workflows.";
 $text["workflow_action_name"] = "Name";
 $text["workflow_editor"] = "Workflow Editor";
+$text["workflow_group_summary"] = "Group summary";
 $text["workflow_name"] = "Name";
 $text["workflow_in_use"] = "This workflow is currently used by documents.";
 $text["workflow_initstate"] = "Initial state";
@@ -777,6 +778,8 @@ $text["workflow_actions_management"] = "Workflow actions management";
 $text["workflow_state_docstatus"] = "Document status";
 $text["workflow_state_in_use"] = "This state is currently used by workflows.";
 $text["workflow_state_name"] = "Name";
+$text["workflow_summary"] = "Workflow summary";
+$text["workflow_user_summary"] = "User summary";
 $text["year_view"] = "Year View";
 $text["yes"] = "Yes";
 ?>
