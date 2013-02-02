@@ -47,7 +47,11 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 $name =     $_POST["name"];
 $comment =  $_POST["comment"];
 $keywords = $_POST["keywords"];
-$categories = $_POST["categories"];
+if(isset($_POST['categoryidform1'])) {
+	$categories = explode(',', preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]));
+} else {
+	$categories = $_POST["categories"];
+}
 $sequence = $_POST["sequence"];
 if (!is_numeric($sequence)) {
 	$sequence="keep";
