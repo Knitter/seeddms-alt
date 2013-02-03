@@ -26,6 +26,8 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassEmail.php");
 
+include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
+
 function _printMessage($heading, $message) {
 
 	UI::exitError($heading, $message);
@@ -44,8 +46,7 @@ if (isset($_REQUEST["login"])) {
 }
 
 if (!isset($login) || strlen($login)==0) {
-	_printMessage(getMLText("login_error_title"),	"<p>".getMLText("login_not_given")."</p>\n".
-		"<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
+	_printMessage(getMLText("login_error_title"),	getMLText("login_not_given")."\n");
 	exit;
 }
 
@@ -56,8 +57,7 @@ if (get_magic_quotes_gpc()) {
 
 $guestUser = $dms->getUser($settings->_guestID);
 if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin()))  {
-	_printMessage(getMLText("login_error_title"),	"<p>".getMLText("login_error_text")."</p>\n".
-		"<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
+	_printMessage(getMLText("login_error_title"),	getMLText("login_error_text")."\n");
 	exit;
 }
 
@@ -172,16 +172,14 @@ if (is_bool($user)) {
 	// Try to find user with given login.
 	$user = $dms->getUserByLogin($login);
 	if (!$user) {
-		_printMessage(getMLText("login_error_title"),	"<p>".getMLText("login_error_text")."</p>\n".
-									"<p><a href='".$settings->_httpRoot."op/op.Logout.php'>".getMLText("back")."</a></p>\n");
+		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
 		exit;
 	}
 
 	$userid = $user->getID();
 
 	if (($userid == $settings->_guestID) && (!$settings->_enableGuestLogin)) {
-		_printMessage(getMLText("login_error_title"),	"<p>".getMLText("guest_login_disabled").
-									"</p>\n<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
+		_printMessage(getMLText("login_error_title"),	getMLText("guest_login_disabled"));
 		exit;
 	}
 
@@ -189,8 +187,7 @@ if (is_bool($user)) {
 	// Assume that the password has been sent via HTTP POST. It would be careless
 	// (and dangerous) for passwords to be sent via GET.
 	if (($userid != $settings->_guestID) && (md5($pwd) != $user->getPwd())) {
-		_printMessage(getMLText("login_error_title"),	"<p>".getMLText("login_error_text").
-									"</p>\n<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
+		_printMessage(getMLText("login_error_title"),	getMLText("login_error_text"));
 		/* if counting of login failures is turned on, then increment its value */
 		if($settings->_loginFailure) {
 			$failures = $user->addLoginFailure();
@@ -202,16 +199,14 @@ if (is_bool($user)) {
 
 	// Check if account is disabled
 	if($user->isDisabled()) {
-		_printMessage(getMLText("login_disabled_title"),	"<p>".getMLText("login_disabled_text").
-									"</p>\n<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
+		_printMessage(getMLText("login_disabled_title"), getMLText("login_disabled_text"));
 		exit;
 	}
 	
 	// control admin IP address if required
 	// TODO: extend control to LDAP autentication
 	if ($user->isAdmin() && ($_SERVER['REMOTE_ADDR'] != $settings->_adminIP ) && ( $settings->_adminIP != "") ){
-		_printMessage(getMLText("login_error_title"),	"<p>".getMLText("invalid_user_id").
-									"</p>\n<p><a href='op.Logout.php'>".getMLText("back")."</a></p>\n");
+		_printMessage(getMLText("login_error_title"),	getMLText("invalid_user_id"));
 		exit;
 	}
 	
@@ -249,13 +244,13 @@ $session = new LetoDMS_Session($db);
 // Delete all sessions that are more than 24 hours old. Probably not the most
 // reliable place to put this check -- move to inc.Authentication.php?
 if(!$session->deleteByTime(86400)) {
-	_printMessage(getMLText("login_error_title"), "<p>".getMLText("error_occured").": ".$db->getErrorMsg()."</p>");
+	_printMessage(getMLText("login_error_title"), getMLText("error_occured").": ".$db->getErrorMsg());
 	exit;
 }
 
 // Create new session in database
 if(!$id = $session->create(array('userid'=>$userid, 'theme'=>$sesstheme, 'lang'=>$lang))) {
-	_printMessage(getMLText("login_error_title"), "<p>".getMLText("error_occured").": ".$db->getErrorMsg()."</p>");
+	_printMessage(getMLText("login_error_title"), getMLText("error_occured").": ".$db->getErrorMsg());
 	exit;
 }
 
