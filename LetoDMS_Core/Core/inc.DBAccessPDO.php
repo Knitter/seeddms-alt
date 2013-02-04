@@ -22,24 +22,71 @@
  * @version    Release: @package_version@
  */
 class LetoDMS_Core_DatabaseAccess {
-	var $_debug;
-	var $_driver;
-	var $_hostname;
-	var $_database;
-	var $_user;
-	var $_passw;
-	var $_conn;
-	var $_connected;
-	var $_ttreviewid;
-	var $_ttapproveid;
-	var $_ttstatid;
-	var $_ttcontentid;
-	var $_intransaction;
-	
-	/*
-	Backup functions
-	*/
+	/**
+	 * @var boolean set to true for debug mode
+	 */
+	public $_debug;
 
+	/**
+	 * @var string name of database driver (mysql or sqlite3)
+	 */
+	protected $_driver;
+
+	/**
+	 * @var string name of hostname
+	 */
+	protected $_hostname;
+
+	/**
+	 * @var string name of database
+	 */
+	protected $_database;
+
+	/**
+	 * @var string name of database user
+	 */
+	protected $_user;
+
+	/**
+	 * @var string password of database user
+	 */
+	protected $_passw;
+
+	/**
+	 * @var object internal database connection
+	 */
+	private $_conn;
+
+	/**
+	 * @var boolean set to true if connection to database is established
+	 */
+	private $_connected;
+
+	/**
+	 * @var boolean set to true if temp. table for tree view has been created
+	 */
+	private  $_ttreviewid;
+
+	/**
+	 * @var boolean set to true if temp. table for approvals has been created
+	 */
+	private $_ttapproveid;
+
+	/**
+	 * @var boolean set to true if temp. table for doc status has been created
+	 */
+	private $_ttstatid;
+
+	/**
+	 * @var boolean set to true if temp. table for doc content has been created
+	 */
+	private $_ttcontentid;
+
+	/**
+	 * @var boolean set to true if in a database transaction
+	 */
+	private $_intransaction;
+	
 	/**
 	 * Return list of all database tables
 	 *
@@ -47,7 +94,7 @@ class LetoDMS_Core_DatabaseAccess {
 	 *
 	 * @return array list of table names
 	 */
-	function TableList() {
+	function TableList() { /* {{{ */
 		switch($this->_driver) {
 			case 'mysql':
 				$sql = "select TABLE_NAME as name from information_schema.tables where TABLE_SCHEMA='letodms' and TABLE_TYPE='BASE TABLE'";
@@ -63,7 +110,7 @@ class LetoDMS_Core_DatabaseAccess {
 		foreach($arr as $tmp)
 			$res[] = $tmp['name'];
 		return $res;
-	}	
+	}	/* }}} */
 
 	/**
 	 * Constructor of LetoDMS_Core_DatabaseAccess
@@ -76,7 +123,7 @@ class LetoDMS_Core_DatabaseAccess {
 	 * @param string $passw password of user
 	 * @param string $database name of database
 	 */
-	function LetoDMS_Core_DatabaseAccess($driver, $hostname, $user, $passw, $database = false) {
+	function LetoDMS_Core_DatabaseAccess($driver, $hostname, $user, $passw, $database = false) { /* {{{ */
 		$this->_driver = $driver;
 		$this->_hostname = $hostname;
 		$this->_database = $database;
@@ -96,7 +143,7 @@ class LetoDMS_Core_DatabaseAccess {
 		$this->_ttstatid = false;
 		$this->_ttcontentid = false;
 		$this->_debug = false;
-	}
+	} /* }}} */
 
 	/**
 	 * Connect to database
@@ -149,7 +196,6 @@ class LetoDMS_Core_DatabaseAccess {
 	function qstr($text) { /* {{{ */
 		return $this->_conn->quote($text);
 	} /* }}} */
-
 
 	/**
 	 * Execute SQL query and return result
