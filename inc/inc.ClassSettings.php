@@ -152,8 +152,8 @@ class Settings { /* {{{ */
 	var $_adminIP = "";
 	// Max Execution Time
 	var $_maxExecutionTime = null;
-	// Path to adodb
-	var $_ADOdbPath = null;
+	// Extra Path to additional software, will be added to include path
+	var $_extraPath = null;
 	// DB-Driver used by adodb (see adodb-readme)
 	var $_dbDriver = "mysql";
 	// DB-Server
@@ -381,7 +381,6 @@ class Settings { /* {{{ */
 		// XML Path: /configuration/system/database
 		$node = $xml->xpath('/configuration/system/database');
 		$tab = $node[0]->attributes();
-		$this->_ADOdbPath = strval($tab["ADOdbPath"]);
 		$this->_dbDriver = strval($tab["dbDriver"]);
 		$this->_dbHostname = strval($tab["dbHostname"]);
 		$this->_dbDatabase = strval($tab["dbDatabase"]);
@@ -446,6 +445,7 @@ class Settings { /* {{{ */
 		$tab = $node[0]->attributes();
 		$this->_coreDir = strval($tab["coreDir"]);
 		$this->_luceneClassDir = strval($tab["luceneClassDir"]);
+		$this->_extraPath = strval($tab["extraPath"]);
 		$this->_contentOffsetDir = strval($tab["contentOffsetDir"]);
 		$this->_maxDirID = intval($tab["maxDirID"]);
 		$this->_updateNotifyTime = intval($tab["updateNotifyTime"]);
@@ -637,7 +637,6 @@ class Settings { /* {{{ */
 
     // XML Path: /configuration/system/database
     $node = $this->getXMLNode($xml, '/configuration/system', 'database');
-    $this->setXMLAttributValue($node, "ADOdbPath", $this->_ADOdbPath);
     $this->setXMLAttributValue($node, "dbDriver", $this->_dbDriver);
     $this->setXMLAttributValue($node, "dbHostname", $this->_dbHostname);
     $this->setXMLAttributValue($node, "dbDatabase", $this->_dbDatabase);
@@ -680,6 +679,7 @@ class Settings { /* {{{ */
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'server');
     $this->setXMLAttributValue($node, "coreDir", $this->_coreDir);
     $this->setXMLAttributValue($node, "luceneClassDir", $this->_luceneClassDir);
+    $this->setXMLAttributValue($node, "extraPath", $this->_extraPath);
     $this->setXMLAttributValue($node, "contentOffsetDir", $this->_contentOffsetDir);
     $this->setXMLAttributValue($node, "maxDirID", $this->_maxDirID);
     $this->setXMLAttributValue($node, "updateNotifyTime", $this->_updateNotifyTime);
@@ -931,8 +931,9 @@ class Settings { /* {{{ */
 			);
 		}
 
-		// $this->_ADOdbPath
 		$bCheckDB = true;
+		// $this->_ADOdbPath
+		/* not needed anymore after switch to PDO
 		if($this->_ADOdbPath) {
 			if (!file_exists($this->_ADOdbPath."/adodb/adodb.inc.php")) {
 				$bCheckDB = false;
@@ -964,72 +965,71 @@ class Settings { /* {{{ */
 					);
 			}
 		}
+		*/
 
 		// database
 		if ($bCheckDB) {
 			try {
-				include $this->_ADOdbPath."adodb/adodb.inc.php";
-
-				$connTmp = ADONewConnection($this->_dbDriver);
-				if (!$connTmp) {
-					$result["dbDriver"] = array(
-						"status" => "notfound",
-						"type" => "error",
-						"currentvalue" => $this->_dbDriver,
-						"suggestionvalue" => "mysql"
-					);
-				} else {
-					$connTmp->Connect($this->_dbHostname, $this->_dbUser, $this->_dbPass, $this->_dbDatabase);
-					if (!$connTmp->IsConnected())
-					{
-						$result["dbDatabase"] = array(
-							"status" => "error",
+				$dsn = "";
+				switch($this->_dbDriver) {
+					case 'mysql':
+					case 'mysqli':
+					case 'mysqlnd':
+						$dsn = $this->_dbDriver.":dbname=".$this->_dbDatabase.";host=".$this->_dbHostname;
+						break;
+					case 'sqlite':
+						$dsn = $this->_dbDriver.":".$this->_dbDatabase;
+						break;
+					default:
+						$result["dbDriver"] = array(
+							"status" => "notfound",
 							"type" => "error",
-							"currentvalue" => '[host, user, database] -> [' . $this->_dbHostname . ',' . $this->_dbUser . ',' . $this->_dbDatabase .']',
-							"systemerror" => $connTmp->ErrorMsg()
-							);
-					} else {
-						/* Check if there wasn't a previous error while searching for
-						 * LetoDMS_Core.
-						 */
-						if(!isset($result["coreDir"])) {
-							/* Instanciate LetoDMS_Core to check version */
-							if(!empty($this->_coreDir))
-								require_once($this->_coreDir.'/Core.php');
-							else
-								require_once('LetoDMS/Core.php');
-							$tmpcore = new LetoDMS_Core_DMS(null, $this->_contentDir);
-							$db = new LetoDMS_Core_DatabaseAccess($this->_dbDriver, $this->_dbHostname, $this->_dbUser, $this->_dbPass, $this->_dbDatabase);
-							if(!$db->connect()) {
-								$result["dbDatabase"] = array(
+							"currentvalue" => $this->_dbDriver,
+							"suggestionvalue" => "mysql|sqlite"
+						);
+				}
+				if($dsn) {
+					$connTmp = new PDO($dsn, $this->_dbUser, $this->_dbPass);
+					/* Check if there wasn't a previous error while searching for
+					 * LetoDMS_Core.
+					 */
+					if(!isset($result["coreDir"])) {
+						/* Instanciate LetoDMS_Core to check version */
+						if(!empty($this->_coreDir))
+							require_once($this->_coreDir.'/Core.php');
+						else
+							require_once('LetoDMS/Core.php');
+						$tmpcore = new LetoDMS_Core_DMS(null, $this->_contentDir);
+						$db = new LetoDMS_Core_DatabaseAccess($this->_dbDriver, $this->_dbHostname, $this->_dbUser, $this->_dbPass, $this->_dbDatabase);
+						if(!$db->connect()) {
+							$result["dbDatabase"] = array(
+								"status" => "error",
+								"type" => "error",
+								"currentvalue" => '[host, user, database] -> [' . $this->_dbHostname . ',' . $this->_dbUser . ',' . $this->_dbDatabase .']',
+								"systemerror" => $connTmp->ErrorMsg()
+								);
+						} else {
+						/*
+							$dms = new LetoDMS_Core_DMS($db, $this->_contentDir.$this->_contentOffsetDir);
+
+							if(!$dms->checkVersion()) {
+								$result["dbVersion"] = array(
 									"status" => "error",
 									"type" => "error",
-									"currentvalue" => '[host, user, database] -> [' . $this->_dbHostname . ',' . $this->_dbUser . ',' . $this->_dbDatabase .']',
-									"systemerror" => $connTmp->ErrorMsg()
+									"currentvalue" => $dms->version,
+									"suggestion" => 'updateDatabase'
 									);
-							} else {
-							/*
-								$dms = new LetoDMS_Core_DMS($db, $this->_contentDir.$this->_contentOffsetDir);
-
-								if(!$dms->checkVersion()) {
-									$result["dbVersion"] = array(
-										"status" => "error",
-										"type" => "error",
-										"currentvalue" => $dms->version,
-										"suggestion" => 'updateDatabase'
-										);
-								}
-							*/
 							}
+						*/
 						}
-						$connTmp->Disconnect();
+						$connTmp = null;
 					}
 				}
 			} catch(Exception $e) {
 				$result["dbDatabase"] = array(
 					"status" => "error",
 					"type" => "error",
-					"currentvalue" => '[host, user, database] -> [' . $settings->_dbHostname . ',' . $settings->_dbUser . ',' . $settings->_dbDatabase .']',
+					"currentvalue" => '[host, user, database] -> [' . $this->_dbHostname . ',' . $this->_dbUser . ',' . $this->_dbDatabase .']',
 					"systemerror" => $e->getMessage()
 				);
 			}
@@ -1081,11 +1081,11 @@ class Settings { /* {{{ */
 		}
 
 		// database
-		if (!in_array($this->_dbDriver, $loaded_extensions)) {
+		if (!in_array('pdo_'.$this->_dbDriver, $loaded_extensions)) {
 			$result["php_dbDriver"] = array(
 				"status" => "notfound",
 				"type" => "error",
-				"currentvalue" => $this->_dbDriver,
+				"currentvalue" => 'pdo_'.$this->_dbDriver,
 				"suggestion" => "activate_php_extension"
 			);
 		}
