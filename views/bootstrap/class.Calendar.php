@@ -55,7 +55,7 @@ class LetoDMS_View_Calendar extends LetoDMS_Bootstrap_Style {
 		
 		$this->dayNames = array();
 		foreach ( $this->dayNamesLong as $dn ){
-			 $this->dayNames[] = substr($dn,0,2);   
+			 $this->dayNames[] = substr($dn,0,3);   
 		}         
 	} /* }}} */
 
@@ -183,7 +183,7 @@ class LetoDMS_View_Calendar extends LetoDMS_Bootstrap_Style {
 		$year = $this->params['year'];
 		$month = $this->params['month'];
 		$day = $this->params['day'];
-		$firstdayofweek = $this->params['firstdayofweek'];
+		$this->firstdayofweek = $this->params['firstdayofweek'];
 
 		$this->adjustDate($day,$month,$year);
 
