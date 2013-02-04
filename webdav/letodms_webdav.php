@@ -398,7 +398,20 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		$subfolders = $folder->getSubFolders();
 		$subfolders = LetoDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
 		$documents = $folder->getDocuments();
-		$documents = LetoDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
+		$docs = LetoDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
+		if(!$this->user->isAdmin()) {
+			$documents = array();
+			foreach($docs as $document) {
+				$lc = $document->getLatestContent();
+				$status = $lc->getStatus();
+				if($status['status'] == S_RELEASED) {
+					$documents[] = $document;
+				}
+			}
+		} else {
+			$documents = $docs;
+		}
+
 		$objs = array_merge($subfolders, $documents);
 
 		echo "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><title>Index of ".htmlspecialchars($options['path'])."</title></head>\n";
