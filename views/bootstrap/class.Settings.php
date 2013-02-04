@@ -331,10 +331,6 @@ if(!is_writeable($settings->_configFilePath)) {
         -- SETTINGS - SYSTEM - DATABASE
       -->
       <tr ><td><b> <?php printMLText("settings_Database");?></b></td> </tr>
-      <tr title="<?php printMLText("settings_ADOdbPath_desc");?>">
-        <td><?php printMLText("settings_ADOdbPath");?>:</td>
-        <td><input type="text" name="ADOdbPath" value="<?php echo $settings->_ADOdbPath ?>" size="100" /></td>
-      </tr>
       <tr title="<?php printMLText("settings_dbDriver_desc");?>">
         <td><?php printMLText("settings_dbDriver");?>:</td>
         <td><input type="text" name="dbDriver" value="<?php echo $settings->_dbDriver ?>" /></td>
@@ -468,6 +464,10 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_luceneClassDir_desc");?>">
         <td><?php printMLText("settings_luceneClassDir");?>:</td>
         <td><input type="text" name="luceneClassDir" value="<?php echo $settings->_luceneClassDir ?>" size="100" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_extraPath_desc");?>">
+        <td><?php printMLText("settings_extraPath");?>:</td>
+        <td><input type="text" name="extraPath" value="<?php echo $settings->_extraPath ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_contentOffsetDir_desc");?>">
         <td><?php printMLText("settings_contentOffsetDir");?>:</td>
