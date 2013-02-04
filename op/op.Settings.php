@@ -83,6 +83,7 @@ if ($action == "saveSettings")
   $settings->_cacheDir = $_POST["cacheDir"];
   $settings->_stagingDir = $_POST["stagingDir"];
   $settings->_luceneDir = $_POST["luceneDir"];
+  $settings->_extraPath = $_POST["extraPath"];
   $settings->_dropFolderDir = $_POST["dropFolderDir"];
   $settings->_logFileEnable = getBoolValue("logFileEnable");
   $settings->_logFileRotation = $_POST["logFileRotation"];
@@ -107,7 +108,6 @@ if ($action == "saveSettings")
   // TODO Connectors
 
   // SETTINGS - SYSTEM - DATABASE
-  $settings->_ADOdbPath = $_POST["ADOdbPath"];
   $settings->_dbDriver = $_POST["dbDriver"];
   $settings->_dbHostname = $_POST["dbHostname"];
   $settings->_dbDatabase = $_POST["dbDatabase"];
