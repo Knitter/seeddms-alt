@@ -6,6 +6,7 @@ $rootDir = realpath ("..");
 $settings->_rootDir = $rootDir.'/';
 
 include("../inc/inc.Language.php");
+include "../languages/English/lang.inc";
 include("../inc/inc.ClassUI.php");
 
 UI::htmlStartPage("INSTALL");

@@ -40,18 +40,24 @@ UI::htmlStartPage('Database update');
 UI::contentHeading("letoDMS Installation for version ".$_GET['version']);
 UI::contentContainerStart();
 
-require_once($settings->_ADOdbPath."adodb/adodb.inc.php");
-$db = ADONewConnection($settings->_dbDriver);
-if ($db) {
-	$db->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-	if (!$db->IsConnected()) {
-		die;
-	}
+switch($settings->_dbDriver) {
+	case 'mysql':
+	case 'mysqli':
+	case 'mysqlnd':
+		$dsn = $settings->_dbDriver.":dbname=".$settings->_dbDatabase.";host=".$settings->_dbHostname;
+		break;
+	case 'sqlite':
+		$dsn = $settings->_dbDriver.":".$settings->_dbDatabase;
+		break;
+}
+$db = new PDO($dsn, $settings->_dbUser, $settings->_dbPass);
+if (!$db) {
+	die;
 }
 
 $errorMsg = '';
-$res = $db->Execute('select * from tblVersion');
-if($rec = $res->FetchRow()) {
+$res = $db->query('select * from tblVersion');
+if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 	if($_GET['version'] > $rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']) {
 
 		$queries = file_get_contents('update-'.$_GET['version'].'/update.sql');
@@ -64,7 +70,7 @@ if($rec = $res->FetchRow()) {
 				$query = trim($query);
 				if (!empty($query)) {
 					echo $query."<br />";
-					$db->Execute($query);
+					$db->exec($query);
 
 					if ($db->ErrorNo()<>0) {
 						$errorMsg .= $db->ErrorMsg() . "<br/>";
@@ -87,6 +93,7 @@ if($rec = $res->FetchRow()) {
 } else {
 	echo "<p>Could not determine database schema version.</p>";
 }
+$db = null;
 
 UI::contentContainerEnd();
 UI::htmlEndPage();

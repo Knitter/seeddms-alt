@@ -45,6 +45,21 @@ if (!file_exists("settings.xml.template_install")) {
 /**
  * Functions
  */
+function openDBConnection($settings) { /* {{{ */
+	switch($settings->_dbDriver) {
+		case 'mysql':
+		case 'mysqli':
+		case 'mysqlnd':
+			$dsn = $settings->_dbDriver.":dbname=".$settings->_dbDatabase.";host=".$settings->_dbHostname;
+			break;
+		case 'sqlite':
+			$dsn = $settings->_dbDriver.":".$settings->_dbDatabase;
+			break;
+	}
+	$connTmp = new PDO($dsn, $settings->_dbUser, $settings->_dbPass);
+	return $connTmp;
+} /* }}} */
+
 function printError($error) { /* {{{ */
 	print "<div class=\"install_error\">";
 	print "Error<br />";
@@ -82,6 +97,19 @@ function printCheckError($resCheck) { /* {{{ */
 	}
 
 	return $hasError;
+} /* }}} */
+
+function fileExistsInIncludePath($file) { /* {{{ */
+	$paths = explode(PATH_SEPARATOR, get_include_path());
+	$found = false;
+	foreach($paths as $p) {
+		$fullname = $p.DIRECTORY_SEPARATOR.$file;
+		if(is_file($fullname)) {
+			$found = $fullname;
+			break;
+		}
+	}
+	return $found;
 } /* }}} */
 
 /**
@@ -132,7 +160,6 @@ if(!$settings->_rootDir)
 	$settings->_rootDir = $rootDir;
 //$settings->_coreDir = $settings->_rootDir;
 //$settings->_luceneClassDir = $settings->_rootDir;
-//$settings->_ADOdbPath = $settings->_rootDir;
 if(!$settings->_contentDir) {
 	$settings->_contentDir = $settings->_rootDir . 'data/';
 	$settings->_luceneDir = $settings->_rootDir . 'data/lucene/';
@@ -140,13 +167,14 @@ if(!$settings->_contentDir) {
 }
 $settings->_httpRoot = $httpRoot;
 
-if(isset($settings->_ADOdbPath))
-	ini_set('include_path', $settings->_ADOdbPath. PATH_SEPARATOR .ini_get('include_path'));
+if(isset($settings->_extraPath))
+	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
 
 /**
  * Include GUI + Language
  */
 include("../inc/inc.Language.php");
+include "../languages/English/lang.inc";
 include("../inc/inc.ClassUI.php");
 
 
@@ -216,8 +244,6 @@ if (isset($_POST["action"])) $action=$_POST["action"];
 else if (isset($_GET["action"])) $action=$_GET["action"];
 else $action=NULL;
 
-//var_dump($settings);
-
 if ($action=="setSettings") {
 	/**
 	 * Get Parameters
@@ -227,7 +253,7 @@ if ($action=="setSettings") {
 	$settings->_contentDir = $_POST["contentDir"];
 	$settings->_luceneDir = $_POST["luceneDir"];
 	$settings->_stagingDir = $_POST["stagingDir"];
-	$settings->_ADOdbPath = $_POST["ADOdbPath"];
+	$settings->_extraPath = $_POST["extraPath"];
 	$settings->_dbDriver = $_POST["dbDriver"];
 	$settings->_dbHostname = $_POST["dbHostname"];
 	$settings->_dbDatabase = $_POST["dbDatabase"];
@@ -242,47 +268,46 @@ if ($action=="setSettings") {
 	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', LETODMS_VERSION), 0,2)));
 
 	if (!$hasError) {
+		if(isset($settings->_extraPath))
+			ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
+
 		// Create database
 		if (isset($_POST["createDatabase"])) {
 			$createOK = false;
 			$errorMsg = "";
 
-			require_once($settings->_ADOdbPath."adodb/adodb.inc.php");
-			$connTmp = ADONewConnection($settings->_dbDriver);
+			$connTmp =openDBConnection($settings);
 			if ($connTmp) {
-			 	$connTmp->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-				if ($connTmp->IsConnected()) {
-					// read SQL file
-					if ($settings->_dbDriver=="mysql")
-						$queries = file_get_contents("create_tables-innodb.sql");
-					else
-					  $queries = file_get_contents("create_tables.sql");
+				// read SQL file
+				if ($settings->_dbDriver=="mysql")
+					$queries = file_get_contents("create_tables-innodb.sql");
+				elseif($settings->_dbDriver=="sqlite")
+					$queries = file_get_contents("create_tables-sqlite3.sql");
+				else
+					die();
 
-					// generate SQL query
-					$queries = explode(";", $queries);
+				// generate SQL query
+				$queries = explode(";", $queries);
 
-					// execute queries
-					foreach($queries as $query) {
-					// var_dump($query);
-						$query = trim($query);
-						if (!empty($query)) {
-							$connTmp->Execute($query);
+				// execute queries
+				foreach($queries as $query) {
+				// var_dump($query);
+					$query = trim($query);
+					if (!empty($query)) {
+						$connTmp->exec($query);
 
-							if ($connTmp->ErrorNo()<>0) {
-								$errorMsg .= $connTmp->ErrorMsg() . "<br/>";
-							}
+						if ($connTmp->errorCode() != 0) {
+							$errorMsg .= $connTmp->errorInfo() . "<br/>";
+						}
 					}
 				}
-
-				// error ?
-				if (empty($errorMsg))
-					$createOK = true;
-
-				} else {
-					$errorMsg = $connTmp->ErrorMsg();
-				}
-				$connTmp->Disconnect();
 			}
+
+			// error ?
+			if (empty($errorMsg))
+				$createOK = true;
+
+			$connTmp = null;
 
 			// Show error
 			if (!$createOK) {
@@ -297,13 +322,11 @@ if ($action=="setSettings") {
 			$settings->save();
 
 			$needsupdate = false;
-			require_once($settings->_ADOdbPath."adodb/adodb.inc.php");
-			$connTmp = ADONewConnection($settings->_dbDriver);
+			$connTmp =openDBConnection($settings);
 			if ($connTmp) {
-				$connTmp->Connect($settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
-				if ($connTmp->IsConnected()) {
-					$res = $connTmp->Execute('select * from tblVersion');
-					if($rec = $res->FetchRow()) {
+				$res = $connTmp->query('select * from tblVersion');
+				if($res) {
+					if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 						$updatedirs = array();
 						$d = dir(".");
 						while (false !== ($entry = $d->read())) {
@@ -314,6 +337,7 @@ if ($action=="setSettings") {
 						$d->close();
 
 						echo "Your current database schema has version ".$rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']."<br /><br />";
+						$connTmp = null;
 
 						if($updatedirs) {
 							foreach($updatedirs as $updatedir) {
@@ -332,18 +356,19 @@ if ($action=="setSettings") {
 							print "<p>Your current database is up to date.</p>";
 						}
 					}
-				}
-			}
-			// Show Web page
-			if(!$needsupdate) {
-				echo getMLText("settings_install_success");
-				echo "<br/><br/>";
-				echo getMLText("settings_delete_install_folder");
-				echo "<br/><br/>";
-				echo '<a href="install.php?disableinstall=1">' . getMLText("settings_disable_install") . '</a>';
-				echo "<br/><br/>";
+					if(!$needsupdate) {
+						echo getMLText("settings_install_success");
+						echo "<br/><br/>";
+						echo getMLText("settings_delete_install_folder");
+						echo "<br/><br/>";
+						echo '<a href="install.php?disableinstall=1">' . getMLText("settings_disable_install") . '</a>';
+						echo "<br/><br/>";
 
-				echo '<a href="' . $httpRoot . '/out/out.Settings.php">' . getMLText("settings_more_settings") .'</a>';
+						echo '<a href="' . $httpRoot . '/out/out.Settings.php">' . getMLText("settings_more_settings") .'</a>';
+					}
+				} else {
+					print "<p>You does not seem to have a valid database. The table tblVersion is missing.</p>";
+				}
 			}
 		}
 	}
@@ -392,13 +417,13 @@ if ($action=="setSettings") {
 	        <td><?php printMLText("settings_luceneClassDir");?>:</td>
 	        <td><input name="luceneClassDir" value="<?php echo $settings->_luceneClassDir ?>" size="100" /></td>
 	      </tr>
+	      <tr title="<?php printMLText("settings_extraPath_desc");?>">
+	        <td><?php printMLText("settings_extraPath");?>:</td>
+	        <td><input name="extraPath" value="<?php echo $settings->_extraPath ?>" size="100" /></td>
+	      </tr>
 
 	 	    <!-- SETTINGS - SYSTEM - DATABASE -->
 	      <tr ><td><b> <?php printMLText("settings_Database");?></b></td> </tr>
-	      <tr title="<?php printMLText("settings_ADOdbPath_desc");?>">
-	        <td><?php printMLText("settings_ADOdbPath");?>:</td>
-	        <td><input name="ADOdbPath" value="<?php echo $settings->_ADOdbPath ?>" size="100" /></td>
-	      </tr>
 	      <tr title="<?php printMLText("settings_dbDriver_desc");?>">
 	        <td><?php printMLText("settings_dbDriver");?>:</td>
 	        <td><input name="dbDriver" value="<?php echo $settings->_dbDriver ?>" /></td>
