@@ -913,7 +913,7 @@ class LetoDMS_Core_Workflow_Transition_User { /* {{{ */
 /**
  * Class to represent a group allowed to trigger a workflow transition
  *
- * @cate
+ * @category   DMS
  * @package    LetoDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
@@ -998,7 +998,7 @@ class LetoDMS_Core_Workflow_Transition_Group { /* {{{ */
 /**
  * Class to represent a group allowed to trigger a workflow transition
  *
- * @cate
+ * @category   DMS
  * @package    LetoDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2012 Uwe Steinmann
