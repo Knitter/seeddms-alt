@@ -157,6 +157,17 @@ function showWorkflow(selectObj) {
 		foreach ($workflows as $currWorkflow) {
 
 			print "<td id=\"keywords".$currWorkflow->getID()."\" style=\"display : none;\">";
+			$transitions = $currWorkflow->getTransitions();
+			if($transitions) {
+				foreach($transitions as $transition) {
+					$transusers = $transition->getUsers();
+					$transgroups = $transition->getGroups();
+					if(!$transusers && !$transgroups) {
+						$this->errorMsg('One of the transitions has neither a user nor a group!');
+						break;
+					}
+				}
+			}
 ?>
 	<form action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data" name="form<?php print $currWorkflow->getID();?>" onsubmit="return checkForm('<?php print $currWorkflow->getID();?>');">
 	<?php echo createHiddenFieldWithKey('editworkflow'); ?>
@@ -167,15 +178,15 @@ function showWorkflow(selectObj) {
 			<td></td>
 			<td>
 <?php
-			if($currWorkflow->isUsed()) {
+				if($currWorkflow->isUsed()) {
 ?>
 				<p><?php echo getMLText('workflow_in_use') ?></p>
 <?php
-			} else {
+				} else {
 ?>
 			  <a class="standardText btn" href="../out/out.RemoveWorkflow.php?workflowid=<?php print $currWorkflow->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_workflow");?></a>
 <?php
-			}
+				}
 ?>
 			</td>
 		</tr>
@@ -187,12 +198,12 @@ function showWorkflow(selectObj) {
 			<td><?php printMLText("workflow_initstate");?>:</td>
 			<td><select name="initstate">
 <?php
-		foreach($workflowstates as $workflowstate) {
-			echo "<option value=\"".$workflowstate->getID()."\"";
-			if($currWorkflow->getInitState()->getID() == $workflowstate->getID())
-				echo " selected=\"selected\"";
-			echo ">".htmlspecialchars($workflowstate->getName())."</option>\n";
-		}
+			foreach($workflowstates as $workflowstate) {
+				echo "<option value=\"".$workflowstate->getID()."\"";
+				if($currWorkflow->getInitState()->getID() == $workflowstate->getID())
+					echo " selected=\"selected\"";
+				echo ">".htmlspecialchars($workflowstate->getName())."</option>\n";
+			}
 ?>
 			</select></td>
 		</tr>
@@ -208,27 +219,32 @@ function showWorkflow(selectObj) {
 		if($actions) {
 		$transitions = $currWorkflow->getTransitions();
 		echo "<table class=\"table table-condensed\">";
-		echo "<tr><th>State</th><th>Action</th><th>Next state</th><th>".getMLText('user')."/".getMLText('group')."</th></tr>";
+		echo "<tr><th>State/Next state</th><th>Action</th><th>".getMLText('user')."/".getMLText('group')."</th></tr>";
 		if($transitions) {
 			foreach($transitions as $transition) {
 				$state = $transition->getState();
 				$nextstate = $transition->getNextState();
 				$action = $transition->getAction();
-				echo "<tr><td>".$state->getName()."</td><td>".$action->getName()."</td>";
-				echo "<td>".$nextstate->getName();
+				$transusers = $transition->getUsers();
+				$transgroups = $transition->getGroups();
+				echo "<tr";
+				if(!$transusers && !$transgroups) {
+					echo " class=\"error\"";
+				}
+				echo "><td>".$state->getName()."<br />";
+				echo $nextstate->getName();
 				$docstatus = $nextstate->getDocumentStatus();
 				if($docstatus == S_RELEASED || $docstatus == S_REJECTED) {
 					echo "<br /><i class=\"icon-arrow-right\"></i> ".getOverallStatusText($docstatus);
 				}
 				echo "</td>";
+				echo "<td>".$action->getName()."</td>";
 				echo "<td>";
-				$transusers = $transition->getUsers();
 				foreach($transusers as $transuser) {
 					$u = $transuser->getUser();
 					echo "User ".$u->getFullName();
 					echo "<br />";
 				}
-				$transgroups = $transition->getGroups();
 				foreach($transgroups as $transgroup) {
 					$g = $transgroup->getGroup();
 					echo "At least ".$transgroup->getNumOfUsers()." users of ".$g->getName();
@@ -258,20 +274,18 @@ function showWorkflow(selectObj) {
 			foreach($states as $state) {
 				echo "<option value=\"".$state->getID()."\">".$state->getName()."</option>";
 			}
+			echo "</select><br />";
+			echo "<select name=\"nextstate\">";
+			$states = $dms->getAllWorkflowStates();
+			foreach($states as $state) {
+				echo "<option value=\"".$state->getID()."\">".$state->getName()."</option>";
+			}
 			echo "</select>";
 			echo "</td>";
 			echo "<td>";
 			echo "<select name=\"action\">";
 			foreach($actions as $action) {
 				echo "<option value=\"".$action->getID()."\">".$action->getName()."</option>";
-			}
-			echo "</select>";
-			echo "</td>";
-			echo "<td>";
-			echo "<select name=\"nextstate\">";
-			$states = $dms->getAllWorkflowStates();
-			foreach($states as $state) {
-				echo "<option value=\"".$state->getID()."\">".$state->getName()."</option>";
 			}
 			echo "</select>";
 			echo "</td>";
