@@ -2,7 +2,13 @@
               LetoDMS Installation Instructions
 -------------------------------------------------------------------
 
-IMPORTANT NOTE ABOUT TRANSLATIONS ==============================================
+NOTE FOR VERSION 4.0.0 ===================================================
+
+Since version 4.0.0 of LetoDMS installation has been simplified. 
+ADOdb is no longer needed because the database access is done by
+PDO.
+
+IMPORTANT NOTE ABOUT TRANSLATIONS ========================================
 
 as you can see letoDMS provides a lot of languages but we are not professional 
 translators and therefore rely on user contributions.
