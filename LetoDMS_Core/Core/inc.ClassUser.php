@@ -546,6 +546,12 @@ class LetoDMS_Core_User {
 			return false;
 		}
 
+		$queryStr = "DELETE FROM tblWorkflowTransitionUsers WHERE userid = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
+
 		// set administrator for deleted user's events
 		$queryStr = "UPDATE tblEvents SET userID = " . $assignTo . " WHERE userID = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
@@ -724,6 +730,62 @@ class LetoDMS_Core_User {
 
 		$this->_hasImage = true;
 		return true;
+	} /* }}} */
+
+	/**
+	 * Returns all documents of a given user
+	 *
+	 * @param object $user
+	 * @return array list of documents
+	 */
+	function getDocuments() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser` ".
+			"FROM `tblDocuments` ".
+			"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
+			"WHERE `tblDocuments`.`owner` = " . $this->_id . " ORDER BY `sequence`";
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$documents = array();
+		foreach ($resArr as $row) {
+			$document = new LetoDMS_Core_Document($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
+			$document->setDMS($this->_dms);
+			$documents[] = $document;
+		}
+		return $documents;
+	} /* }}} */
+
+	/**
+	 * Returns all documents locked by a given user
+	 * FIXME: Not full implemented. Do not use, because it still requires the
+	 * temporary tables!
+	 *
+	 * @param object $user
+	 * @return array list of documents
+	 */
+	function getDocumentsLocked() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT `tblDocuments`.* ".
+			"FROM `tblDocumentLocks` LEFT JOIN `tblDocuments` ON `tblDocuments`.`id` = `tblDocumentLocks`.`document` ".
+			"WHERE `tblDocumentLocks`.`userID` = '".$this->_id."' ".
+			"ORDER BY `id` DESC";
+
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$documents = array();
+		foreach ($resArr as $row) {
+			$document = new LetoDMS_Core_Document($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
+			$document->setDMS($this->_dms);
+			$documents[] = $document;
+		}
+		return $documents;
 	} /* }}} */
 
 	/**
@@ -943,7 +1005,12 @@ class LetoDMS_Core_User {
 	function getWorkflowStatus($documentID=null, $version=null) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		$queryStr = 'select d.*, c.userid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionUsers c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow where d.document is not null and a.state=d.state and c.userid='.$this->_id;
+		$queryStr = 'SELECT d.*, c.userid FROM tblWorkflowTransitions a LEFT JOIN tblWorkflows b ON a.workflow=b.id LEFT JOIN tblWorkflowTransitionUsers c ON a.id=c.transition LEFT JOIN tblWorkflowDocumentContent d ON b.id=d.workflow WHERE d.document IS NOT NULL AND a.state=d.state AND c.userid='.$this->_id;
+		if($documentID) {
+			$queryStr .= ' AND d.document='.(int) $documentID;
+			if($version)
+				$queryStr .= ' AND d.version='.(int) $version;
+		}
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
@@ -955,6 +1022,11 @@ class LetoDMS_Core_User {
 		}
 
 		$queryStr = 'select d.*, c.groupid from tblWorkflowTransitions a left join tblWorkflows b on a.workflow=b.id left join tblWorkflowTransitionGroups c on a.id=c.transition left join tblWorkflowDocumentContent d on b.id=d.workflow left join tblGroupMembers e on c.groupid = e.groupID where d.document is not null and a.state=d.state and e.userID='.$this->_id;
+		if($documentID) {
+			$queryStr .= ' AND d.document='.(int) $documentID;
+			if($version)
+				$queryStr .= ' AND d.version='.(int) $version;
+		}
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
 			return false;
