@@ -14,6 +14,13 @@
 /**
  * Class to represent an attribute in the document management system
  *
+ * Attributes are key/value pairs which can be attachted to documents,
+ * folders and document content. The number of attributes is unlimited.
+ * Each attribute has a value and is related to an attribute definition,
+ * which holds the name and other information about the attribute..
+ *
+ * @see LetoDMS_Core_AttributeDefinition
+ *
  * @category   DMS
  * @package    LetoDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
@@ -119,6 +126,22 @@ class LetoDMS_Core_Attribute {
 /**
  * Class to represent an attribute definition in the document management system
  *
+ * Attribute definitions specify the name, type, object type, minimum and
+ * maximum values and a value set. The object type determines the object
+ * an attribute may be attached to. If the object type is set to object_all
+ * the attribute can be used for documents, document content and folders.
+ *
+ * The type of an attribute specifies the skalar data type.
+ *
+ * Attributes for which multiple values are allowed must have the
+ * multiple flag set to true and specify a value set. A value set
+ * is a string consisting of n separated values. The separator is the
+ * first char of the value set. A possible value could be '|REV-A|REV-B'
+ * If multiple values are allowed, then minvalues and maxvalues may
+ * restrict the allowed number of values.
+ *
+ * @see LetoDMS_Core_Attribute
+ *
  * @category   DMS
  * @package    LetoDMS_Core
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
@@ -141,22 +164,84 @@ class LetoDMS_Core_AttributeDefinition {
 	protected $_name;
 
 	/**
+	 * @var string object type of attribute definition
+	 *
+	 * @access protected
+	 */
+	protected $_type;
+
+	/**
+	 * @var string type of attribute definition
+	 *
+	 * @access protected
+	 */
+	protected $_objtype;
+
+	/**
+	 * @var boolean whether an attribute can have multiple values
+	 *
+	 * @access protected
+	 */
+	protected $_multiple;
+
+	/**
+	 * @var integer minimum values of an attribute
+	 *
+	 * @access protected
+	 */
+	protected $_minvalues;
+
+	/**
+	 * @var integer maximum values of an attribute
+	 *
+	 * @access protected
+	 */
+	protected $_maxvalues;
+
+	/**
+	 * @var string list of possible values of an attribute
+	 *
+	 * @access protected
+	 */
+	protected $_valueset;
+
+	/**
 	 * @var object reference to the dms instance this attribute definition belongs to
 	 *
 	 * @access protected
 	 */
 	protected $_dms;
 
+	/*
+	 * Possible skalar data types of an attribute
+	 */
 	const type_int = '1';
 	const type_float = '2';
 	const type_string = '3';
 	const type_boolean = '4';
 
+	/*
+	 * The object type for which a attribute may be used
+	 */
 	const objtype_all = '0';
 	const objtype_folder = '1';
 	const objtype_document = '2';
 	const objtype_documentcontent = '3';
 
+	/**
+	 * Constructor
+	 *
+	 * @param integer $id internal id of attribute definition
+	 * @param string $name name of attribute
+	 * @param integer $objtype type of object for which this attribute definition
+	 *        may be used.
+	 * @param integer $type skalar type of attribute
+	 * @param boolean $multiple set to true if multiple values are allowed
+	 * @param integer $minvalues minimum number of values
+	 * @param integer $maxvalues maximum number of values
+	 * @param string $valueset separated list of allowed values, the first char
+	 *        is taken as the separator
+	 */
 	function LetoDMS_Core_AttributeDefinition($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;

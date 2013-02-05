@@ -41,12 +41,12 @@ require_once("inc.ClassAttribute.php");
  *
  * This class does not enforce any access rights on documents and folders
  * by design. It is up to the calling application to use the methods
- * {@link LetoDMS_Core_Folder::getAccessMode} and
- * {@link LetoDMS_Core_Document::getAccessMode} and interpret them as desired.
+ * {@link LetoDMS_Core_Folder::getAccessMode()} and
+ * {@link LetoDMS_Core_Document::getAccessMode()} and interpret them as desired.
  * Though, there are two convinient functions to filter a list of
  * documents/folders for which users have access rights for. See
- * {@link LetoDMS_Core_DMS::filterAccess}
- * and {@link LetoDMS_Core_DMS::filterUsersByAccess}
+ * {@link LetoDMS_Core_DMS::filterAccess()}
+ * and {@link LetoDMS_Core_DMS::filterUsersByAccess()}
  *
  * Though, this class has two methods to set the currently logged in user
  * ({@link setUser} and {@link login}), none of them need to be called, because
@@ -129,7 +129,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * @var array $callbacks list of methods called when certain operations,
 	 * like removing a document, are executed. Set a callback with
-	 * {LetoDMS_Core_DMS::setCallback}.
+	 * {@link LetoDMS_Core_DMS::setCallback()}.
 	 * The key of the array is the internal callback function name. Each
 	 * array element is an array with two elements: the function name
 	 * and the parameter passed to the function.
@@ -211,7 +211,7 @@ class LetoDMS_Core_DMS {
 	 * @param object $db object to access the underlying database
 	 * @param string $contentDir path in filesystem containing the data store
 	 *        all document contents is stored
-	 * @return object instance of LetoDMS_Core_DMS
+	 * @return object instance of {@link LetoDMS_Core_DMS}
 	 */
 	function __construct($db, $contentDir) { /* {{{ */
 		$this->db = $db;
@@ -281,7 +281,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * Set id of root folder
 	 * This function must be called right after creating an instance of
-	 * LetoDMS_Core_DMS
+	 * {@link LetoDMS_Core_DMS}
 	 *
 	 * @param interger $id id of root folder
 	 */
@@ -301,7 +301,7 @@ class LetoDMS_Core_DMS {
 	 * to 2*maxDirID-1 are stored in 2/<docid> and so on.
 	 *
 	 * This function must be called right after creating an instance of
-	 * LetoDMS_Core_DMS
+	 * {@link LetoDMS_Core_DMS}
 	 *
 	 * @param interger $id id of root folder
 	 */
@@ -346,7 +346,7 @@ class LetoDMS_Core_DMS {
 	 * @param string $username login name of user
 	 * @param string $password password of user
 	 *
-	 * @return object instance of class LetoDMS_Core_User or false
+	 * @return object instance of class {@link LetoDMS_Core_User} or false
 	 */
 	function login($username, $password) { /* {{{ */
 	} /* }}} */
@@ -370,7 +370,7 @@ class LetoDMS_Core_DMS {
 	 * This function retrieves a document from the database by its id.
 	 *
 	 * @param integer $id internal id of document
-	 * @return object instance of LetoDMS_Core_Document or false
+	 * @return object instance of {@link LetoDMS_Core_Document} or false
 	 */
 	function getDocument($id) { /* {{{ */
 		if (!is_numeric($id)) return false;
@@ -407,22 +407,7 @@ class LetoDMS_Core_DMS {
 	 * @return array list of documents
 	 */
 	function getDocumentsByUser($user) { /* {{{ */
-		$queryStr = "SELECT `tblDocuments`.*, `tblDocumentLocks`.`userID` as `lockUser` ".
-			"FROM `tblDocuments` ".
-			"LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id`=`tblDocumentLocks`.`document` ".
-			"WHERE `tblDocuments`.`owner` = " . $user->getID() . " ORDER BY `sequence`";
-
-		$resArr = $this->db->getResultArray($queryStr);
-		if (is_bool($resArr) && !$resArr)
-			return false;
-
-		$documents = array();
-		foreach ($resArr as $row) {
-			$document = new LetoDMS_Core_Document($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
-			$document->setDMS($this);
-			$documents[] = $document;
-		}
-		return $documents;
+		return $user->getDocuments();
 	} /* }}} */
 
 	/**
@@ -434,22 +419,7 @@ class LetoDMS_Core_DMS {
 	 * @return array list of documents
 	 */
 	function getDocumentsLockedByUser($user) { /* {{{ */
-		$queryStr = "SELECT `tblDocuments`.* ".
-			"FROM `tblDocuments` LEFT JOIN `tblDocumentLocks` ON `tblDocuments`.`id` = `tblDocumentLocks`.`document` ".
-			"WHERE `tblDocumentLocks`.`userID` = '".$user->getID()."' ".
-			"ORDER BY `id` DESC";
-
-		$resArr = $this->db->getResultArray($queryStr);
-		if (is_bool($resArr) && !$resArr)
-			return false;
-
-		$documents = array();
-		foreach ($resArr as $row) {
-			$document = new LetoDMS_Core_Document($row["id"], $row["name"], $row["comment"], $row["date"], $row["expires"], $row["owner"], $row["folder"], $row["inheritAccess"], $row["defaultAccess"], $row["lockUser"], $row["keywords"], $row["sequence"]);
-			$document->setDMS($this);
-			$documents[] = $document;
-		}
-		return $documents;
+		return $user->getDocumentsLocked();
 	} /* }}} */
 
 	/**
@@ -981,7 +951,7 @@ class LetoDMS_Core_DMS {
 	 * This function retrieves a user from the database by its id.
 	 *
 	 * @param integer $id internal id of user
-	 * @return object instance of LetoDMS_Core_User or false
+	 * @return object instance of {@link LetoDMS_Core_User} or false
 	 */
 	function getUser($id) { /* {{{ */
 		if (!is_numeric($id))
@@ -1009,7 +979,7 @@ class LetoDMS_Core_DMS {
 	 *
 	 * @param string $login internal login of user
 	 * @param string $email email of user
-	 * @return object instance of LetoDMS_Core_User or false
+	 * @return object instance of {@link LetoDMS_Core_User} or false
 	 */
 	function getUserByLogin($login, $email='') { /* {{{ */
 		$queryStr = "SELECT * FROM tblUsers WHERE login = ".$this->db->qstr($login);
@@ -1034,7 +1004,7 @@ class LetoDMS_Core_DMS {
 	 * It is needed when the user requests a new password.
 	 *
 	 * @param integer $email email address of user
-	 * @return object instance of LetoDMS_Core_User or false
+	 * @return object instance of {@link LetoDMS_Core_User} or false
 	 */
 	function getUserByEmail($email) { /* {{{ */
 		$queryStr = "SELECT * FROM tblUsers WHERE email = ".$this->db->qstr($email);
@@ -1053,7 +1023,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * Return list of all users
 	 *
-	 * @return array of instances of LetoDMS_Core_User or false
+	 * @return array of instances of {@link LetoDMS_Core_User} or false
 	 */
 	function getAllUsers($orderby = '') { /* {{{ */
 		if($orderby == 'fullname')
@@ -1088,7 +1058,7 @@ class LetoDMS_Core_DMS {
 	 * @param integer $isHidden hide user in all lists, if this is set login
 	 *        is still allowed
 	 * @param integer $isDisabled disable user and prevent login
-	 * @return object of LetoDMS_Core_User
+	 * @return object of {@link LetoDMS_Core_User}
 	 */
 	function addUser($login, $pwd, $fullName, $email, $language, $theme, $comment, $role='0', $isHidden=0, $isDisabled=0, $pwdexpiration='') { /* {{{ */
 		$db = $this->db;
@@ -1313,7 +1283,7 @@ class LetoDMS_Core_DMS {
 	 * The name of a category is by default unique.
 	 *
 	 * @param string $name human readable name of category
-	 * @return object instance of LetoDMS_Core_DocumentCategory
+	 * @return object instance of {@link LetoDMS_Core_DocumentCategory}
 	 */
 	function getDocumentCategoryByName($name) { /* {{{ */
 		$queryStr = "SELECT * FROM tblCategory where name=".$this->db->qstr($name);
@@ -1454,7 +1424,7 @@ class LetoDMS_Core_DMS {
 	 * its id.
 	 *
 	 * @param integer $id internal id of attribute defintion
-	 * @return object instance of LetoDMS_Core_AttributeDefinition or false
+	 * @return object instance of {@link LetoDMS_Core_AttributeDefinition} or false
 	 */
 	function getAttributeDefinition($id) { /* {{{ */
 		if (!is_numeric($id))
@@ -1479,7 +1449,7 @@ class LetoDMS_Core_DMS {
 	 * This function retrieves an attribute def. from the database by its name.
 	 *
 	 * @param string $name internal name of attribute def.
-	 * @return object instance of LetoDMS_Core_AttributeDefinition or false
+	 * @return object instance of {@link LetoDMS_Core_AttributeDefinition} or false
 	 */
 	function getAttributeDefinitionByName($name) { /* {{{ */
 		$queryStr = "SELECT * FROM tblAttributeDefinitions WHERE name = " . $this->db->qstr($name);
@@ -1499,7 +1469,7 @@ class LetoDMS_Core_DMS {
 	 * Return list of all attributes definitions
 	 *
 	 * @param integer $objtype select those attributes defined for an object type
-	 * @return array of instances of LetoDMS_Core_AttributeDefinition or false
+	 * @return array of instances of {@link LetoDMS_Core_AttributeDefinition} or false
 	 */
 	function getAllAttributeDefinitions($objtype=0) { /* {{{ */
 		$queryStr = "SELECT * FROM tblAttributeDefinitions";
@@ -1535,7 +1505,7 @@ class LetoDMS_Core_DMS {
 	 * @param integer $minvalues minimum number of values
 	 * @param integer $maxvalues maximum number of values if multiple is set
 	 * @param string $valueset list of allowed values (csv format)
-	 * @return object of LetoDMS_Core_User
+	 * @return object of {@link LetoDMS_Core_User}
 	 */
 	function addAttributeDefinition($name, $objtype, $type, $multiple=0, $minvalues=0, $maxvalues=1, $valueset='') { /* {{{ */
 		if (is_object($this->getAttributeDefinitionByName($name))) {
@@ -1554,7 +1524,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * Return list of all workflows
 	 *
-	 * @return array of instances of LetoDMS_Core_Workflow or false
+	 * @return array of instances of {@link LetoDMS_Core_Workflow} or false
 	 */
 	function getAllWorkflows() { /* {{{ */
 		$queryStr = "SELECT * FROM tblWorkflows ORDER BY name";
@@ -1586,7 +1556,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * Return workflow by its Id
 	 *
-	 * @return object of instances of LetoDMS_Core_Workflow or false
+	 * @return object of instances of {@link LetoDMS_Core_Workflow} or false
 	 */
 	function getWorkflow($id) { /* {{{ */
 		$queryStr = "SELECT * FROM tblWorkflows WHERE id=".intval($id);
@@ -1609,7 +1579,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * Return workflow by its name
 	 *
-	 * @return object of instances of LetoDMS_Core_Workflow or false
+	 * @return object of instances of {@link LetoDMS_Core_Workflow} or false
 	 */
 	function getWorkflowByName($name) { /* {{{ */
 		$queryStr = "SELECT * FROM tblWorkflows WHERE name=".$this->db->qstr($name);
@@ -1648,7 +1618,7 @@ class LetoDMS_Core_DMS {
 	 * This function retrieves a workflow state from the database by its id.
 	 *
 	 * @param integer $id internal id of workflow state
-	 * @return object instance of LetoDMS_Core_Workflow_State or false
+	 * @return object instance of {@link LetoDMS_Core_Workflow_State} or false
 	 */
 	function getWorkflowState($id) { /* {{{ */
 		if (!is_numeric($id))
@@ -1671,7 +1641,7 @@ class LetoDMS_Core_DMS {
 	 * Return workflow state by its name
 	 *
 	 * @param string $name name of workflow state
-	 * @return object of instances of LetoDMS_Core_Workflow_State or false
+	 * @return object of instances of {@link LetoDMS_Core_Workflow_State} or false
 	 */
 	function getWorkflowStateByName($name) { /* {{{ */
 		$queryStr = "SELECT * FROM tblWorkflowStates WHERE name=".$this->db->qstr($name);
@@ -1694,7 +1664,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * Return list of all workflow states
 	 *
-	 * @return array of instances of LetoDMS_Core_Workflow_State or false
+	 * @return array of instances of {@link LetoDMS_Core_Workflow_State} or false
 	 */
 	function getAllWorkflowStates() { /* {{{ */
 		$queryStr = "SELECT * FROM tblWorkflowStates ORDER BY name";
@@ -1739,7 +1709,7 @@ class LetoDMS_Core_DMS {
 	 * This function retrieves a workflow action from the database by its id.
 	 *
 	 * @param integer $id internal id of workflow action
-	 * @return object instance of LetoDMS_Core_Workflow_Action or false
+	 * @return object instance of {@link LetoDMS_Core_Workflow_Action} or false
 	 */
 	function getWorkflowAction($id) { /* {{{ */
 		if (!is_numeric($id))
@@ -1764,7 +1734,7 @@ class LetoDMS_Core_DMS {
 	 * This function retrieves a workflow action from the database by its name.
 	 *
 	 * @param string $name name of workflow action
-	 * @return object instance of LetoDMS_Core_Workflow_Action or false
+	 * @return object instance of {@link LetoDMS_Core_Workflow_Action} or false
 	 */
 	function getWorkflowActionByName($name) { /* {{{ */
 		if (!is_numeric($id))
@@ -1786,7 +1756,7 @@ class LetoDMS_Core_DMS {
 	/**
 	 * Return list of workflow action
 	 *
-	 * @return array list of instances of LetoDMS_Core_Workflow_Action or false
+	 * @return array list of instances of {@link LetoDMS_Core_Workflow_Action} or false
 	 */
 	function getAllWorkflowActions() { /* {{{ */
 		$queryStr = "SELECT * FROM tblWorkflowActions";
@@ -1830,7 +1800,7 @@ class LetoDMS_Core_DMS {
 	 * This function retrieves a workflow transition from the database by its id.
 	 *
 	 * @param integer $id internal id of workflow transition
-	 * @return object instance of LetoDMS_Core_Workflow_Transition or false
+	 * @return object instance of {@link LetoDMS_Core_Workflow_Transition} or false
 	 */
 	function getWorkflowTransition($id) { /* {{{ */
 		if (!is_numeric($id))
