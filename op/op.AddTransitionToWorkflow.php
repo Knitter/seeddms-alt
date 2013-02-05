@@ -58,6 +58,10 @@ if (!is_object($nextstate)) {
 	UI::exitError(getMLText("workflow_title"),getMLText("invalid_workflow_state_id"));
 }
 
+if($state->getID() == $nextstate->getID()) {
+	UI::exitError(getMLText("workflow_title"),getMLText("equal_transition_states"));
+}
+
 if (!isset($_POST["action"]) || !is_numeric($_POST["action"])) {
 	UI::exitError(getMLText("workflow_title"),getMLText("invalid_workflow_action_id"));
 }
@@ -78,6 +82,10 @@ if (isset($_POST["groups"]) && is_array($_POST["groups"])) {
 	foreach($_POST["groups"] as $groupid) {
 		$groups[] = $dms->getGroup($groupid);
 	}
+}
+
+if(!$users && !$groups) {
+	UI::exitError(getMLText("workflow_title"),getMLText("missing_transition_user_group"));
 }
 
 if($transition = $workflow->addTransition($state, $action, $nextstate, $users, $groups)) {
