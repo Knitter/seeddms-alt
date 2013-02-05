@@ -218,6 +218,11 @@ class LetoDMS_Core_Group {
 			$db->rollbackTransaction();
 			return false;
 		}
+		$queryStr = "DELETE FROM tblWorkflowTransitionGroups WHERE groupid = " . $this->_id;
+		if (!$db->getResult($queryStr)) {
+			$db->rollbackTransaction();
+			return false;
+		}
 		$queryStr = "DELETE FROM tblGroups WHERE id = " . $this->_id;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
