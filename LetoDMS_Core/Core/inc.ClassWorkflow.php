@@ -255,7 +255,6 @@ class LetoDMS_Core_Workflow { /* {{{ */
 		
 		$db->startTransaction();
 		$queryStr = "INSERT INTO tblWorkflowTransitions (workflow, state, action, nextstate) VALUES (".$this->_id.", ".$state->getID().", ".$action->getID().", ".$nextstate->getID().")";
-		echo $queryStr;
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
