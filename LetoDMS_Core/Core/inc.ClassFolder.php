@@ -930,7 +930,7 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 	 * @return array array with a the elements 'users' and 'groups' which
 	 *        contain a list of users and groups.
 	 */
-	function getNotifyList($type ) { /* {{{ */
+	function getNotifyList($type=0) { /* {{{ */
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
 
