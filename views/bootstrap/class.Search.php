@@ -58,7 +58,15 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("search_results"), "");
 
+		$foldercount = $doccount = 0;
 		if($entries) {
+			foreach ($entries as $entry) {
+				if(get_class($entry) == 'LetoDMS_Core_Document') {
+					$doccount++;
+				} elseif(get_class($entry) == 'LetoDMS_Core_Folder') {
+					$foldercount++;
+				}
+			}
 			print "<div class=\"alert\">".getMLText("search_report", array("doccount" => $doccount, "foldercount" => $foldercount, 'searchtime'=>$searchTime))."</div>";
 			$this->pageList($pageNumber, $totalpages, "../op/op.Search.php", $urlparams);
 			$this->contentContainerStart();
@@ -77,70 +85,67 @@ class LetoDMS_View_Search extends LetoDMS_Bootstrap_Style {
 			print "</tr>\n</thead>\n<tbody>\n";
 
 			$previewer = new LetoDMS_Preview_Previewer($cachedir, 40);
-			$foldercount = $doccount = 0;
 			foreach ($entries as $entry) {
 				if(get_class($entry) == 'LetoDMS_Core_Document') {
 					$document = $entry;
-						$doccount++;
-						$lc = $document->getLatestContent();
-						$previewer->createPreview($lc);
+					$lc = $document->getLatestContent();
+					$previewer->createPreview($lc);
 
-						if (in_array(3, $searchin))
-							$comment = $this->markQuery(htmlspecialchars($document->getComment()));
-						else
-							$comment = htmlspecialchars($document->getComment());
-						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-						print "<tr>";
-						//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
-						if (in_array(2, $searchin)) {
-							$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
-						} else {
-							$docName = htmlspecialchars($document->getName());
-						}
-						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">";
-						if($previewer->hasPreview($lc)) {
-							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=40\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
-						} else {
-							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
-						}
-						print "</a></td>";
-						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
-						$folder = $document->getFolder();
-						$path = $folder->getPath();
-						for ($i = 1; $i  < count($path); $i++) {
-							print htmlspecialchars($path[$i]->getName())."/";
-						}
-						print $docName;
-						print "</a>";
-						if($comment) {
-							print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
-						}
-						print "</td>";
+					if (in_array(3, $searchin))
+						$comment = $this->markQuery(htmlspecialchars($document->getComment()));
+					else
+						$comment = htmlspecialchars($document->getComment());
+					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
+					print "<tr>";
+					//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
+					if (in_array(2, $searchin)) {
+						$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
+					} else {
+						$docName = htmlspecialchars($document->getName());
+					}
+					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">";
+					if($previewer->hasPreview($lc)) {
+						print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=40\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
+					}
+					print "</a></td>";
+					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
+					$folder = $document->getFolder();
+					$path = $folder->getPath();
+					for ($i = 1; $i  < count($path); $i++) {
+						print htmlspecialchars($path[$i]->getName())."/";
+					}
+					print $docName;
+					print "</a>";
+					if($comment) {
+						print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+					}
+					print "</td>";
 
-						$attributes = $lc->getAttributes();
-						print "<td>";
-						print "<ul class=\"unstyled\">\n";
-						$attributes = $lc->getAttributes();
-						if($attributes) {
-							foreach($attributes as $attribute) {
-								$attrdef = $attribute->getAttributeDefinition();
-								print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
-							}
+					$attributes = $lc->getAttributes();
+					print "<td>";
+					print "<ul class=\"unstyled\">\n";
+					$attributes = $lc->getAttributes();
+					if($attributes) {
+						foreach($attributes as $attribute) {
+							$attrdef = $attribute->getAttributeDefinition();
+							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
 						}
-						print "</ul>\n";
-						print "</td>";
+					}
+					print "</ul>\n";
+					print "</td>";
 
-						$owner = $document->getOwner();
-						print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-						$display_status=$lc->getStatus();
-						print "<td>".getOverallStatusText($display_status["status"]). "</td>";
+					$owner = $document->getOwner();
+					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+					$display_status=$lc->getStatus();
+					print "<td>".getOverallStatusText($display_status["status"]). "</td>";
 
-						print "<td>".$lc->getVersion()."</td>";
+					print "<td>".$lc->getVersion()."</td>";
 //						print "<td>".$comment."</td>";
-						print "</tr>\n";
+					print "</tr>\n";
 				} elseif(get_class($entry) == 'LetoDMS_Core_Folder') {
 					$folder = $entry;
-					$foldercount++;
 					if (in_array(2, $searchin)) {
 						$folderName = $this->markQuery(htmlspecialchars($folder->getName()), "i");
 					} else {
