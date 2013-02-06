@@ -118,7 +118,7 @@ function checkGrpForm()
 	</td></tr><tr><td></td><td>
 	<input type='hidden' name='approvalType' value='ind'/>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId() ?>'/>
-	<input type='hidden' name='version' value='<?php echo $version ?>'/>
+	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion() ?>'/>
 	<input type='submit' name='indApproval' value='<?php printMLText("submit_approval")?>'/>
 	</td></tr></table>
 	</form>
