@@ -248,18 +248,36 @@ if(!$session->deleteByTime(86400)) {
 	exit;
 }
 
-// Create new session in database
-if(!$id = $session->create(array('userid'=>$userid, 'theme'=>$sesstheme, 'lang'=>$lang))) {
-	_printMessage(getMLText("login_error_title"), getMLText("error_occured").": ".$db->getErrorMsg());
-	exit;
-}
+if (isset($_COOKIE["mydms_session"])) {
+	/* This part will never be reached unless the session cookie is kept,
+	 * but op.Logout.php deletes it. Keeping a session could be a good idea
+	 * for retaining the clipboard data, but the user id in the session should
+	 * be set to 0 which is not possible due to foreign key constraints.
+	 * So for now op.Logout.php will delete the cookie as always
+	 */
+	/* Load session */
+	$dms_session = $_COOKIE["mydms_session"];
+	if(!$resArr = $session->load($dms_session)) {
+		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
+		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
+		exit;
+	} else {
+		$session->setUser($userid);
+	}
+} else {
+	// Create new session in database
+	if(!$id = $session->create(array('userid'=>$userid, 'theme'=>$sesstheme, 'lang'=>$lang))) {
+		_printMessage(getMLText("login_error_title"), getMLText("error_occured").": ".$db->getErrorMsg());
+		exit;
+	}
 
-// Set the session cookie.
-if($settings->_cookieLifetime)
-	$lifetime = time() + intval($settings->_cookieLifetime);
-else
-	$lifetime = 0;
-setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot);
+	// Set the session cookie.
+	if($settings->_cookieLifetime)
+		$lifetime = time() + intval($settings->_cookieLifetime);
+	else
+		$lifetime = 0;
+	setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot);
+}
 
 // TODO: by the PHP manual: The superglobals $_GET and $_REQUEST  are already decoded. 
 // Using urldecode() on an element in $_GET or $_REQUEST could have unexpected and dangerous results.
