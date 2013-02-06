@@ -42,7 +42,7 @@ $allCats = $dms->getDocumentCategories();
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'attrdefs'=>$attrdefs, 'allcategories'=>$allCats, 'allusers'=>$allUsers, 'enablefullsearch'=>$settings->_enableFullSearch, 'workflowmode'=>$settings->_workflowmode));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'attrdefs'=>$attrdefs, 'allcategories'=>$allCats, 'allusers'=>$allUsers, 'enablefullsearch'=>$settings->_enableFullSearch));
 if($view) {
 	$view->show();
 	exit;
