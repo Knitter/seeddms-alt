@@ -6,6 +6,10 @@ tblWorkflowTransionDocument[Users|Groups] which has an extra column
 for the document. If there is an entry in that table, use it instead
 of the default in tblWorkflowTransiton[Users|Groups]
 
+Drop foreign constraint in tblSession:userid to tblUser:id. This would allow
+to set the userid to 0 on logout, but keep the cookie and consequently
+the session data. See op.Login.php and op.Logout.php
+
 Allow to specify fine grained notification (e.g. deleting a document, folder)
 
 Have access rights depending on document status. This will allow to
