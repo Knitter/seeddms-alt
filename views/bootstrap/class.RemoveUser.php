@@ -68,7 +68,7 @@ class LetoDMS_View_RemoveUser extends LetoDMS_Bootstrap_Style {
 </select>
 </p>
 
-<p><input type="submit" class="btn" value="<?php printMLText("rm_user");?>"></p>
+<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_user");?></button></p>
 
 </form>
 <?php
