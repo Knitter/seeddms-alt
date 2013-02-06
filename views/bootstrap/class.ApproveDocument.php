@@ -105,7 +105,7 @@ function checkGrpForm()
 				print "</tr></tbody></table><br>\n";
 			}
 ?>
-	<form method="POST" action="../op/op.ApproveDocument.php" name="form1" onsubmit="return checkIndForm();">
+	<form method="post" action="../op/op.ApproveDocument.php" name="form1" onsubmit="return checkIndForm();">
 	<?php echo createHiddenFieldWithKey('approvedocument'); ?>
 	<table>
 	<tr><td><?php printMLText("comment")?>:</td>
@@ -120,7 +120,7 @@ function checkGrpForm()
 	</td></tr><tr><td></td><td>
 	<input type='hidden' name='approvalType' value='ind'/>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId() ?>'/>
-	<input type='hidden' name='version' value='<?php echo $version ?>'/>
+	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion() ?>'/>
 	<input type='submit' class="btn" name='indApproval' value='<?php printMLText("submit_approval")?>'/>
 	</td></tr></table>
 	</form>
