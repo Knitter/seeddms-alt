@@ -273,6 +273,7 @@ $text["include_documents"] = "Include documents";
 $text["include_subdirectories"] = "Include subdirectories";
 $text["index_converters"] = "Index document conversion";
 $text["individuals"] = "Individuals";
+$text["inherited"] = "inherited";
 $text["inherits_access_msg"] = "Access is being inherited.";
 $text["inherits_access_copy_msg"] = "Copy inherited access list";
 $text["inherits_access_empty_msg"] = "Start with empty access list";

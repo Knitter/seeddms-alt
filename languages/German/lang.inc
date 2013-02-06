@@ -264,6 +264,7 @@ $text["include_documents"] = "Dokumente miteinbeziehen";
 $text["include_subdirectories"] = "Unterverzeichnisse miteinbeziehen";
 $text["index_converters"] = "Index Dokumentenumwandlung";
 $text["individuals"] = "Einzelpersonen";
+$text["inherited"] = "geerbt";
 $text["inherits_access_msg"] = "Zur Zeit werden die Rechte geerbt";
 $text["inherits_access_copy_msg"] = "Berechtigungen kopieren";
 $text["inherits_access_empty_msg"] = "Leere Zugriffsliste";
