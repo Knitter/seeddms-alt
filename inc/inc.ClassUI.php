@@ -66,6 +66,7 @@ class UI extends UI_Default {
 			$view->setParam('expandfoldertree', $settings->_expandFolderTree);
 			$view->setParam('enablefoldertree', $settings->_enableFolderTree);
 			$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
+			$view->setParam('workflowmode', $settings->_workflowMode);
 			$view->setParam('partitionsize', $settings->_partitionSize);
 			return $view;
 		}
