@@ -148,6 +148,22 @@ class LetoDMS_Session {
 	} /* }}} */
 
 	/**
+	 * Set user of session
+	 *
+	 * @param integer $userid id of user
+	 */
+	function setUser($userid) { /* {{{ */
+		/* id is only set if load() was called before */
+		if($this->id) {
+			$queryStr = "UPDATE tblSessions SET userID = " . $this->db->qstr($userid) . " WHERE id = " . $this->db->qstr($this->id);
+			if (!$this->db->getResult($queryStr))
+				return false;
+			$this->data['userid'] = $userid;	
+		}
+		return true;
+	} /* }}} */
+
+	/**
 	 * Set language of session
 	 *
 	 * @param string $lang language
