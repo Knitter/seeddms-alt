@@ -99,20 +99,20 @@ function checkForm()
 			print "</div>";
 		}
 
-		// Retrieve a list of all users and groups that have review / approve
-		// privileges.
-		$docAccess = $document->getApproversList();
-?>
+		if($workflowmode != 'traditional') {
+			$latestContent = $document->getLatestContent();
+			if($status = $latestContent->getStatus()) {
+				if($status["status"] == S_IN_WORKFLOW) {
+					$this->warningMsg("The current version of this document is in a workflow. This will be interrupted and cannot be completed if you upload a new version.");
+				}
+			}
+		}
 
-<div class="alert alert-warning">
-<?php echo getMLText("max_upload_size").": ".ini_get( "upload_max_filesize"); ?>
-<?php
-	if($enablelargefileupload) {
-		printf(getMLText('link_alt_updatedocument'), "out.UpdateDocument2.php?documentid=".$document->getID());
-	}
-?>
-</div>
-<?php
+		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
+		if($enablelargefileupload) {
+			$msg .= "<p>".sprintf(getMLText('link_alt_updatedocument'), "out.AddMultiDocument.php?folderid=".$folder->getID()."&showtree=".showtree())."</p>";
+		}
+		$this->warningMsg($msg);
 		$this->contentContainerStart();
 ?>
 
@@ -161,6 +161,9 @@ function checkForm()
 		}
 	}
 	if($workflowmode == 'traditional') {
+		// Retrieve a list of all users and groups that have review / approve
+		// privileges.
+		$docAccess = $document->getApproversList();
 ?>
 		<tr>
 			<td colspan="2">
