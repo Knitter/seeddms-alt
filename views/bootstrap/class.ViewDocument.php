@@ -31,6 +31,46 @@ require_once("class.Bootstrap.php");
  */
 class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 
+	function getAccessModeText($defMode) { /* {{{ */
+		switch($defMode) {
+			case M_NONE:
+				return getMLText("access_mode_none");
+				break;
+			case M_READ:
+				return getMLText("access_mode_read");
+				break;
+			case M_READWRITE:
+				return getMLText("access_mode_readwrite");
+				break;
+			case M_ALL:
+				return getMLText("access_mode_all");
+				break;
+		}
+	} /* }}} */
+
+	function printAccessList($obj) { /* {{{ */
+		$accessList = $obj->getAccessList();
+		if (count($accessList["users"]) == 0 && count($accessList["groups"]) == 0)
+			return;
+
+		for ($i = 0; $i < count($accessList["groups"]); $i++)
+		{
+			$group = $accessList["groups"][$i]->getGroup();
+			$accesstext = $this->getAccessModeText($accessList["groups"][$i]->getMode());
+			print $accesstext.": ".htmlspecialchars($group->getName());
+			if ($i+1 < count($accessList["groups"]) || count($accessList["users"]) > 0)
+				print "<br />";
+		}
+		for ($i = 0; $i < count($accessList["users"]); $i++)
+		{
+			$user = $accessList["users"][$i]->getUser();
+			$accesstext = $this->getAccessModeText($accessList["users"][$i]->getMode());
+			print $accesstext.": ".htmlspecialchars($user->getFullName());
+			if ($i+1 < count($accessList["users"]))
+				print "<br />";
+		}
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -96,29 +136,65 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		<tr>
 		<td><?php printMLText("owner");?>:</td>
 		<td>
-		<?php
+<?php
 		$owner = $document->getOwner();
 		print "<a class=\"infos\" href=\"mailto:".$owner->getEmail()."\">".htmlspecialchars($owner->getFullName())."</a>";
-		?>
+?>
 		</td>
 		</tr>
+<?php
+		if($document->getComment()) {
+?>
 		<tr>
 		<td><?php printMLText("comment");?>:</td>
 		<td><?php print htmlspecialchars($document->getComment());?></td>
+		</tr>
+<?php
+		}
+		if($user->isAdmin()) {
+			if($document->inheritsAccess()) {
+				echo "<tr>";
+				echo "<td>".getMLText("access_mode").":</td>\n";
+				echo "<td>";
+				echo getMLText("inherited");
+				echo "</tr>";
+			} else {
+				echo "<tr>";
+				echo "<td>".getMLText('default_access')."</td>";
+				echo "<td>".$this->getAccessModeText($document->getDefaultAccess())."</td>";
+				echo "</tr>";
+				echo "<tr>";
+				echo "<td>".getMLText('access_mode')."</td>";
+				echo "<td>";
+				$this->printAccessList($document);
+				echo "</td>";
+				echo "</tr>";
+			}
+		}
+?>
+		<tr>
+		<td><?php printMLText("used_discspace");?>:</td>
+		<td><?php print LetoDMS_Core_File::format_filesize($document->getUsedDiskSpace());?></td>
 		</tr>
 		<tr>
 		<td><?php printMLText("creation_date");?>:</td>
 		<td><?php print getLongReadableDate($document->getDate()); ?></td>
 		</tr>
+<?php
+		if($document->getKeywords()) {
+?>
 		<tr>
 		<td><?php printMLText("keywords");?>:</td>
 		<td><?php print htmlspecialchars($document->getKeywords());?></td>
 		</tr>
+<?php
+		}
+		if($cats = $document->getCategories()) {
+?>
 		<tr>
 		<td><?php printMLText("categories");?>:</td>
 		<td>
 		<?php
-			$cats = $document->getCategories();
 			$ct = array();
 			foreach($cats as $cat)
 				$ct[] = htmlspecialchars($cat->getName());
@@ -126,6 +202,9 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		?>
 		</td>
 		</tr>
+<?php
+		}
+?>
 		<?php
 		$attributes = $document->getAttributes();
 		if($attributes) {
