@@ -354,6 +354,14 @@ class LetoDMS_Core_User {
 		return true;
 	} /* }}} */
 
+	/**
+	 * Calculate the disk space for all documents owned by the user
+	 * 
+	 * This is done by using the internal database field storing the
+	 * filesize of a document version.
+	 *
+	 * @return integer total disk space in Bytes
+	 */
 	function getUsedDiskSpace() { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -826,7 +834,7 @@ class LetoDMS_Core_User {
 			"AND `tblDocumentReviewers`.`required`='". $this->_id ."' ".
 			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC";
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
+		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr)>0) {
 			foreach ($resArr as $res) {
@@ -854,7 +862,7 @@ class LetoDMS_Core_User {
 			"AND `tblGroupMembers`.`userID`='". $this->_id ."' ".
 			"ORDER BY `tblDocumentReviewLog`.`reviewLogID` DESC";
 		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && $resArr == false)
+		if (is_bool($resArr) && $resArr === false)
 			return false;
 		if (count($resArr)>0) {
 			foreach ($resArr as $res) {
