@@ -92,7 +92,7 @@ function showWorkflow(selectObj) {
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-<select onchange="showWorkflow(this)" id="selector">
+<select onchange="showWorkflow(this)" id="selector" class="span9">
 <option value="-1"><?php echo getMLText("choose_workflow")?>
 <option value="0"><?php echo getMLText("add_workflow")?>
 <?php
@@ -158,16 +158,24 @@ function showWorkflow(selectObj) {
 
 			print "<td id=\"keywords".$currWorkflow->getID()."\" style=\"display : none;\">";
 			$transitions = $currWorkflow->getTransitions();
+			$initstate = $currWorkflow->getInitState();
+			$hasinitstate = false;
+			$missesug = false;
 			if($transitions) {
 				foreach($transitions as $transition) {
 					$transusers = $transition->getUsers();
 					$transgroups = $transition->getGroups();
 					if(!$transusers && !$transgroups) {
-						$this->errorMsg('One of the transitions has neither a user nor a group!');
-						break;
+						$missesug = true;
 					}
+					if($transition->getState()->getID() == $initstate->getID())
+						$hasinitstate = true;
 				}
 			}
+			if($missesug)
+				$this->errorMsg('One of the transitions has neither a user nor a group!');
+			if(!$hasinitstate)
+				$this->errorMsg('None of the transitions starts with the initial state of the workflow!');
 ?>
 	<form action="../op/op.WorkflowMgr.php" method="post" enctype="multipart/form-data" name="form<?php print $currWorkflow->getID();?>" onsubmit="return checkForm('<?php print $currWorkflow->getID();?>');">
 	<?php echo createHiddenFieldWithKey('editworkflow'); ?>
