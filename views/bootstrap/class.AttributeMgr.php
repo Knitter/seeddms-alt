@@ -64,7 +64,7 @@ function showAttributeDefinitions(selectObj) {
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-	<select onchange="showAttributeDefinitions(this)" id="selector">
+	<select onchange="showAttributeDefinitions(this)" id="selector" class="span9">
 		<option value="-1"><?php echo getMLText("choose_attrdef")?>
 		<option value="0"><?php echo getMLText("new_attrdef")?>
 <?php

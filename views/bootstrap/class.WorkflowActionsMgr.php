@@ -85,7 +85,7 @@ function showWorkflowAction(selectObj) {
 <div class="span4">
 <div class="well">
 <?php echo getMLText("selection")?>:
-<select onchange="showWorkflowAction(this)" id="selector">
+<select onchange="showWorkflowAction(this)" id="selector" class="span9">
 <option value="-1"><?php echo getMLText("choose_workflow_action")?>
 <option value="0"><?php echo getMLText("add_workflow_action")?>
 <?php
