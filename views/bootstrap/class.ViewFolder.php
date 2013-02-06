@@ -31,6 +31,46 @@ require_once("class.Bootstrap.php");
  */
 class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 
+	function getAccessModeText($defMode) { /* {{{ */
+		switch($defMode) {
+			case M_NONE:
+				return getMLText("access_mode_none");
+				break;
+			case M_READ:
+				return getMLText("access_mode_read");
+				break;
+			case M_READWRITE:
+				return getMLText("access_mode_readwrite");
+				break;
+			case M_ALL:
+				return getMLText("access_mode_all");
+				break;
+		}
+	} /* }}} */
+
+	function printAccessList($obj) { /* {{{ */
+		$accessList = $obj->getAccessList();
+		if (count($accessList["users"]) == 0 && count($accessList["groups"]) == 0)
+			return;
+
+		for ($i = 0; $i < count($accessList["groups"]); $i++)
+		{
+			$group = $accessList["groups"][$i]->getGroup();
+			$accesstext = $this->getAccessModeText($accessList["groups"][$i]->getMode());
+			print $accesstext.": ".htmlspecialchars($group->getName());
+			if ($i+1 < count($accessList["groups"]) || count($accessList["users"]) > 0)
+				print "<br />";
+		}
+		for ($i = 0; $i < count($accessList["users"]); $i++)
+		{
+			$user = $accessList["users"][$i]->getUser();
+			$accesstext = $this->getAccessModeText($accessList["users"][$i]->getMode());
+			print $accesstext.": ".htmlspecialchars($user->getFullName());
+			if ($i+1 < count($accessList["users"]))
+				print "<br />";
+		}
+	} /* }}} */
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
@@ -65,10 +105,33 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 		echo "<td>".getMLText("owner").":</td>\n";
 		echo "<td><a href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a></td>\n";
 		echo "</tr>";
-		echo "<tr>";
-		echo "<td>".getMLText("comment").":</td>\n";
-		echo "<td>".htmlspecialchars($folder->getComment())."</dtd\n";
-		echo "</tr>";
+		if($folder->getComment()) {
+			echo "<tr>";
+			echo "<td>".getMLText("comment").":</td>\n";
+			echo "<td>".htmlspecialchars($folder->getComment())."</td>\n";
+			echo "</tr>";
+		}
+
+		if($user->isAdmin()) {
+			if($folder->inheritsAccess()) {
+				echo "<tr>";
+				echo "<td>".getMLText("access_mode").":</td>\n";
+				echo "<td>";
+				echo getMLText("inherited");
+				echo "</tr>";
+			} else {
+				echo "<tr>";
+				echo "<td>".getMLText('default_access')."</td>";
+				echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
+				echo "</tr>";
+				echo "<tr>";
+				echo "<td>".getMLText('access_mode')."</td>";
+				echo "<td>";
+				$this->printAccessList($folder);
+				echo "</td>";
+				echo "</tr>";
+			}
+		}
 		$attributes = $folder->getAttributes();
 		if($attributes) {
 			foreach($attributes as $attribute) {
