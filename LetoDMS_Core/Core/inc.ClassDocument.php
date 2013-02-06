@@ -868,7 +868,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	 * @param integer $type type of notification (not yet used)
 	 * @return array list of notifications
 	 */
-	function getNotifyList($type) { /* {{{ */
+	function getNotifyList($type=0) { /* {{{ */
 		if (empty($this->_notifyList)) {
 			$db = $this->_dms->getDB();
 
@@ -1797,6 +1797,26 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		}
 		return true;
 	} /* }}} */
+
+	/**
+	 * Calculate the disk space including all versions of the document
+	 * 
+	 * This is done by using the internal database field storing the
+	 * filesize of a document version.
+	 *
+	 * @return integer total disk space in Bytes
+	 */
+	function getUsedDiskSpace() { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "SELECT SUM(filesize) sum FROM tblDocumentContent WHERE document = " . $this->_id;
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		return $resArr[0]['sum'];
+	} /* }}} */
+
 } /* }}} */
 
 
@@ -2105,7 +2125,8 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 	/**
 	 * Set the status of the content
 	 * Setting the status means to add another entry into the table
-	 * tblDocumentStatusLog
+	 * tblDocumentStatusLog. The method returns also false if the status
+	 * is already set on the value passed to the method.
 	 *
 	 * @param integer $status new status of content
 	 * @param string $comment comment for this status change
@@ -2292,13 +2313,17 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		if (is_bool($reviewStatus) && !$reviewStatus) {
 			return -1;
 		}
-		if (count($reviewStatus["indstatus"]) > 0 && $reviewStatus["indstatus"][0]["status"]!=-2) {
-			// User is already on the list of reviewers; return an error.
-			return -3;
+		$indstatus = false;
+		if (count($reviewStatus["indstatus"]) > 0) {
+			$indstatus = array_pop($reviewStatus["indstatus"]);
+			if($indstatus["status"]!=-2) {
+				// User is already on the list of reviewers; return an error.
+				return -3;
+			}
 		}
 
 		// Add the user into the review database.
-		if (! isset($reviewStatus["indstatus"][0]["status"])|| (isset($reviewStatus["indstatus"][0]["status"]) && $reviewStatus["indstatus"][0]["status"]!=-2)) {
+		if (!$indstatus || ($indstatus && $indstatus["status"]!=-2)) {
 			$queryStr = "INSERT INTO `tblDocumentReviewers` (`documentID`, `version`, `type`, `required`) ".
 				"VALUES ('". $this->_document->getID() ."', '". $this->_version ."', '0', '". $userID ."')";
 			$res = $db->getResult($queryStr);
@@ -2308,7 +2333,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 			$reviewID = $db->getInsertID();
 		}
 		else {
-			$reviewID = isset($reviewStatus["indstatus"][0]["reviewID"])?$reviewStatus["indstatus"][0]["reviewID"]:NULL;
+			$reviewID = isset($indstatus["reviewID"]) ? $ $indstatus["reviewID"] : NULL;
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
@@ -2395,17 +2420,18 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 			// Return an error.
 			return -3;
 		}
-		if ($reviewStatus["indstatus"][0]["status"]==-2) {
+		$indstatus = array_pop($reviewStatus["indstatus"]);
+		if ($indstatus["status"]==-2) {
 			// User has been deleted from reviewers
 			return -4;
 		}
 		// Check if the status is really different from the current status
-		if ($reviewStatus["indstatus"][0]["status"] == $status)
+		if ($indstatus["status"] == $status)
 			return 0;
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`,
   	  `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewStatus["indstatus"][0]["reviewID"] ."', '".
+			"VALUES ('". $indstatus["reviewID"] ."', '".
 			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
@@ -2479,12 +2505,16 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		if (is_bool($approvalStatus) && !$approvalStatus) {
 			return -1;
 		}
-		if (count($approvalStatus["indstatus"]) > 0 && $approvalStatus["indstatus"][0]["status"]!=-2) {
-			// User is already on the list of approvers; return an error.
-			return -3;
+		$indstatus = false;
+		if (count($approvalStatus["indstatus"]) > 0) {
+			$indstatus = array_pop($approvalStatus["indstatus"]);
+			if($indstatus["status"]!=-2) {
+				// User is already on the list of approverss; return an error.
+				return -3;
+			}
 		}
 
-		if ( !isset($approvalStatus["indstatus"][0]["status"]) || (isset($approvalStatus["indstatus"][0]["status"]) && $approvalStatus["indstatus"][0]["status"]!=-2)) {
+		if ( $indstatus || (isset($indstatus["status"]) && $indstatus["status"]!=-2)) {
 			// Add the user into the approvers database.
 			$queryStr = "INSERT INTO `tblDocumentApprovers` (`documentID`, `version`, `type`, `required`) ".
 				"VALUES ('". $this->_document->getID() ."', '". $this->_version ."', '0', '". $userID ."')";
@@ -2495,7 +2525,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 			$approveID = $db->getInsertID();
 		}
 		else {
-			$approveID = isset($approvalStatus["indstatus"][0]["approveID"]) ? $approvalStatus["indstatus"][0]["approveID"] : NULL;
+			$approveID = isset($indstatus["approveID"]) ? $indstatus["approveID"] : NULL;
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
@@ -2603,17 +2633,18 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 			// Return an error.
 			return -3;
 		}
-		if ($approvalStatus["indstatus"][0]["status"]==-2) {
+		$indstatus = array_pop($approvalStatus["indstatus"]);
+		if ($indstatus["status"]==-2) {
 			// User has been deleted from approvers
 			return -4;
 		}
 		// Check if the status is really different from the current status
-		if ($approvalStatus["indstatus"][0]["status"] == $status)
+		if ($indstatus["status"] == $status)
 			return 0;
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`,
   	  `comment`, `date`, `userID`) ".
-			"VALUES ('". $approvalStatus["indstatus"][0]["approveID"] ."', '".
+			"VALUES ('". $indstatus["approveID"] ."', '".
 			(int) $status ."', ".$db->qstr($comment).", CURRENT_TIMESTAMP, '".
 			$requestUser->getID() ."')";
 		$res=$db->getResult($queryStr);
@@ -2678,14 +2709,15 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 			// Return an error.
 			return -3;
 		}
-		if ($reviewStatus["indstatus"][0]["status"]!=0) {
+		$indstatus = array_pop($reviewStatus["indstatus"]);
+		if ($indstatus["status"]!=0) {
 			// User has already submitted a review or has already been deleted;
 			// return an error.
 			return -3;
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $reviewStatus["indstatus"][0]["reviewID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["reviewID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2740,14 +2772,15 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 			// Return an error.
 			return -3;
 		}
-		if ($approvalStatus["indstatus"][0]["status"]!=0) {
+		$indstatus = array_pop($approvalStatus["indstatus"]);
+		if ($indstatus["status"]!=0) {
 			// User has already submitted an approval or has already been deleted;
 			// return an error.
 			return -3;
 		}
 
 		$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-			"VALUES ('". $approvalStatus["indstatus"][0]["approveID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
+			"VALUES ('". $indstatus["approveID"] ."', '-2', '', CURRENT_TIMESTAMP, '". $requestUser->getID() ."')";
 		$res = $db->getResult($queryStr);
 		if (is_bool($res) && !$res) {
 			return -1;
@@ -2845,13 +2878,19 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 		$this->getWorkflow();
 		if($workflow && is_object($workflow)) {
+			$db->startTransaction();
 			$initstate = $workflow->getInitState();
 			$queryStr = "INSERT INTO tblWorkflowDocumentContent (workflow, document, version, state, date) VALUES (". $workflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", CURRENT_TIMESTAMP)";
 			if (!$db->getResult($queryStr)) {
+				$db->rollbackTransaction();
 				return false;
 			}
 			$this->_workflow = $workflow;	
-			$this->setStatus(S_IN_WORKFLOW, "Added workflow '".$workflow->getName()."'", $user);
+			if(!$this->setStatus(S_IN_WORKFLOW, "Added workflow '".$workflow->getName()."'", $user)) {
+				$db->rollbackTransaction();
+				return false;
+			}
+			$db->commitTransaction();
 			return true;
 		}
 		return true;
