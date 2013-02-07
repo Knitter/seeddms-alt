@@ -64,7 +64,7 @@ class LetoDMS_View_ObjectCheck extends LetoDMS_Bootstrap_Style {
 
 		$subfolders = $folder->getSubFolders();
 		foreach($subfolders as $subfolder) {
-			$this->tree($dms, $subfolder, $indent.'  ', $path.$folder->getId().':');
+			$this->tree($dms, $subfolder, $repair, $path.$folder->getId().':', $indent.'  ');
 		}
 		$path .= $folder->getId().':';
 		$documents = $folder->getDocuments();
