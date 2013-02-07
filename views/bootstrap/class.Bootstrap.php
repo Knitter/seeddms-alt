@@ -1038,7 +1038,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 						}
 						print "</td>\n";
 						print "<td>\n";
-						print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$folderid."&type=folder\"><i class=\"icon-remove\"></i></a>";
+						print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$folderid."&type=folder\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a>";
 						print "</td>\n";
 						print "</tr>\n";
 					}
@@ -1075,7 +1075,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 							}
 							print "</td>\n";
 							print "<td>\n";
-							print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\"><i class=\"icon-remove\"></i></a>";
+							print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a>";
 							print "</td>\n";
 							print "</tr>";
 						}
