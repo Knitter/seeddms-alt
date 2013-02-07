@@ -319,6 +319,7 @@ $text["js_select_user_or_group"] = "Select at least a user or a group";
 $text["js_select_user"] = "Please select an user";
 $text["july"] = "July";
 $text["june"] = "June";
+$text["keep_doc_status"] = "Keep document status";
 $text["keyword_exists"] = "Keyword already exists";
 $text["keywords"] = "Keywords";
 $text["language"] = "Language";
