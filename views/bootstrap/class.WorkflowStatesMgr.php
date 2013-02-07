@@ -118,7 +118,7 @@ function showWorkflowState(selectObj) {
 		<tr>
 			<td><?php printMLText("workflow_state_docstatus");?>:</td>
 			<td><select name="docstatus">
-				<option value=""></option>
+				<option value=""><?php printMLText('keep_doc_status'); ?></option>
 				<option value="<?php echo S_RELEASED; ?>"><?php printMLText('released'); ?></option>
 				<option value="<?php echo S_REJECTED; ?>"><?php printMLText('rejected'); ?></option>
 			</select></td>
@@ -150,7 +150,7 @@ function showWorkflowState(selectObj) {
 <form class="form-inline" action="../op/op.RemoveWorkflowState.php" method="post">
   <?php echo createHiddenFieldWithKey('removeworkflowstate'); ?>
 	<input type="hidden" name="workflowstateid" value="<?php print $currWorkflowState->getID();?>">
-	<input type="submit" class="btn" value="<?php printMLText("rm_workflow_state");?>">
+	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow_state");?></button>
 </form>
 <?php
 			}
@@ -168,7 +168,7 @@ function showWorkflowState(selectObj) {
 		<tr>
 			<td><?php printMLText("workflow_state_docstatus");?>:</td>
 			<td><select name="docstatus">
-				<option value=""></option>
+				<option value=""><?php printMLText('keep_doc_status'); ?></option>
 				<option value="<?php echo S_RELEASED; ?>" <?php if($currWorkflowState->getDocumentStatus() == S_RELEASED) echo "selected"; ?>><?php printMLText('released'); ?></option>
 				<option value="<?php echo S_REJECTED; ?>" <?php if($currWorkflowState->getDocumentStatus() == S_REJECTED) echo "selected"; ?>><?php printMLText('rejected'); ?></option>
 			</select></td>
