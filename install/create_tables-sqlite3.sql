@@ -576,7 +576,8 @@ CREATE TABLE tblWorkflowDocumentContent (
   `workflow` INTEGER DEFAULT NULL REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   `document` INTEGER DEFAULT NULL REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   `version` smallint DEFAULT NULL,
-  `state` INTEGER DEFAULT NULL REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE
+  `state` INTEGER DEFAULT NULL REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE,
+  `date` datetime NOT NULL default '0000-00-00 00:00:00'
 ) ;
 
 -- --------------------------------------------------------

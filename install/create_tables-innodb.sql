@@ -665,6 +665,7 @@ CREATE TABLE tblWorkflowDocumentContent (
   `document` int(11) DEFAULT NULL,
   `version` smallint(5) DEFAULT NULL,
   `state` int(11) DEFAULT NULL,
+  `date` datetime NOT NULL default '0000-00-00 00:00:00',
   CONSTRAINT `tblWorkflowDocument_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblWorkflowDocument_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblWorkflowDocument_state` FOREIGN KEY (`state`) REFERENCES `tblWorkflowStates` (`id`) ON DELETE CASCADE
