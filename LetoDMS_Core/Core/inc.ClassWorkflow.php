@@ -459,6 +459,18 @@ class LetoDMS_Core_Workflow_State { /* {{{ */
 	 */
 	function getDocumentStatus() { return $this->_documentstatus; }
 
+	function setDocumentStatus($docstatus) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "UPDATE tblWorkflowStates SET documentstatus = ".intval($docstatus)." WHERE id = " . $this->_id;
+		$res = $db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		$this->_documentstatus = $docstatus;
+		return true;
+	} /* }}} */
+
 	/**
 	 * Check if workflow state is currently used by any workflow transition
 	 *
