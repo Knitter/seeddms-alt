@@ -159,9 +159,10 @@ function showWorkflow(selectObj) {
 			print "<td id=\"keywords".$currWorkflow->getID()."\" style=\"display : none;\">";
 			$transitions = $currWorkflow->getTransitions();
 			$initstate = $currWorkflow->getInitState();
-			$hasinitstate = false;
+			$hasinitstate = true;
 			$missesug = false;
 			if($transitions) {
+				$hasinitstate = false;
 				foreach($transitions as $transition) {
 					$transusers = $transition->getUsers();
 					$transgroups = $transition->getGroups();
