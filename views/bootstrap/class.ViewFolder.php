@@ -101,6 +101,12 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 		$owner = $folder->getOwner();
 		$this->contentContainerStart();
 		echo "<table class=\"table-condensed\">\n";
+		if($user->isAdmin()) {
+			echo "<tr>";
+			echo "<td>".getMLText("id").":</td>\n";
+			echo "<td>".htmlspecialchars($folder->getID())."</td>\n";
+			echo "</tr>";
+		}
 		echo "<tr>";
 		echo "<td>".getMLText("owner").":</td>\n";
 		echo "<td><a href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a></td>\n";
@@ -193,6 +199,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 ?>
      <p><a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
      <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a></p>
+     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-bookmark"></i></a></p>
 <?php
 			print "</td>";
 			print "</tr>\n";
@@ -239,6 +246,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 ?>
      <p><a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
      <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a></p>
+     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-bookmark"></i></a></p>
 <?php
 				print "</td>";
 				print "</tr>\n";
