@@ -121,7 +121,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "LetoDMS")."</a>\n";
-		if($this->params['user']) {
+		if(isset($this->params['user']) && $this->params['user']) {
 		echo "   <div class=\"nav-collapse collapse\">\n";
 		echo "   <ul class=\"nav pull-right\">\n";
 		echo "    <li class=\"dropdown\">\n";
