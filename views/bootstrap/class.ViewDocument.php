@@ -129,6 +129,14 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 ?>
 		<table class="table-condensed">
+<?php
+		if($user->isAdmin()) {
+			echo "<tr>";
+			echo "<td>".getMLText("id").":</td>\n";
+			echo "<td>".htmlspecialchars($document->getID())."</td>\n";
+			echo "</tr>";
+		}
+?>
 		<tr>
 		<td><?php printMLText("name");?>:</td>
 		<td><?php print htmlspecialchars($document->getName());?></td>
