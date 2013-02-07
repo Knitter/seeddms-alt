@@ -279,8 +279,11 @@ function add_log_line($msg="") { /* {{{ */
 	global $logger, $user;
 
 	if(!$logger) return;
-	
-	$logger->log($user->getLogin()." (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg);
+
+	if($user)
+		$logger->log($user->getLogin()." (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg);
+	else
+		$logger->log("-- (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg);
 } /* }}} */
 
 function _add_log_line($msg="") { /* {{{ */
