@@ -48,12 +48,19 @@ if(isset($_GET['setfilesize']) && $_GET['setfilesize'] == 1) {
 	$setfilesize = 0;
 }
 
+if(isset($_GET['setchecksum']) && $_GET['setchecksum'] == 1) {
+	$setchecksum = 1;
+} else {
+	$setchecksum = 0;
+}
+
 $folder = $dms->getFolder($settings->_rootFolderID);
 $unlinkedversions = $dms->getUnlinkedDocumentContent();
 $nofilesizeversions = $dms->getNoFileSizeDocumentContent();
+$nochecksumversions = $dms->getNoChecksumDocumentContent();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'unlinkedcontent'=>$unlinkedversions, 'nofilesizeversions'=>$nofilesizeversions, 'unlink'=>$unlink, 'setfilesize'=>$setfilesize, 'repair'=>$repair));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'unlinkedcontent'=>$unlinkedversions, 'nofilesizeversions'=>$nofilesizeversions, 'nochecksumversions'=>$nochecksumversions, 'unlink'=>$unlink, 'setfilesize'=>$setfilesize, 'setchecksum'=>$setchecksum, 'repair'=>$repair));
 if($view) {
 	$view->show();
 	exit;
