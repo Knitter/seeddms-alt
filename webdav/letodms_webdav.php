@@ -517,13 +517,22 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 				if($lastDotIndex === false) $fileType = ".";
 				else $fileType = substr($name, $lastDotIndex);
 		}
+		/* First check whether there is already a file with the same name */
 		if($document = $this->dms->getDocumentByName($name, $folder)) {
 			if ($document->getAccessMode($this->user) < M_READWRITE) {
 				unlink($tmpFile);
 				return "403 Forbidden";
-			} elseif(!$document->addContent('', $this->user, $tmpFile, $name, $fileType, $mimetype, array(), array(), 0)) {
-				unlink($tmpFile);
-				return "409 Conflict";
+			} else{
+				/* Check if the new version iѕ identical to the current version.
+				 * In that case just update the modification date
+				 */
+				$lc = $document->getLatestContent();
+				if($lc->getChecksum() == LetoDMS_Core_File::checksum($tmpFile)) {
+					$lc->setDate();
+				} elseif(!$document->addContent('', $this->user, $tmpFile, $name, $fileType, $mimetype, array(), array(), 0)) {
+					unlink($tmpFile);
+					return "409 Conflict";
+				}
 			}
 
 		} else {
