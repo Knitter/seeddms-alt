@@ -220,6 +220,7 @@ CREATE TABLE `tblDocumentContent` (
   `fileType` varchar(10) NOT NULL default '',
   `mimeType` varchar(70) NOT NULL default '',
   `fileSize` INTEGER,
+  `checksum` char(32),
   UNIQUE (`document`,`version`)
 ) ;
 

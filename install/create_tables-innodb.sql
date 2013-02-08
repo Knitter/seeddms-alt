@@ -247,6 +247,7 @@ CREATE TABLE `tblDocumentContent` (
   `fileType` varchar(10) NOT NULL default '',
   `mimeType` varchar(100) NOT NULL default '',
   `fileSize` BIGINT,
+  `checksum` char(32),
   PRIMARY KEY  (`id`),
   UNIQUE (`document`, `version`),
   CONSTRAINT `tblDocumentContent_document` FOREIGN KEY (`document`) REFERENCES `tblDocuments` (`id`)

@@ -8,6 +8,8 @@ ALTER TABLE tblMandatoryApprovers ADD CONSTRAINT `tblMandatoryApprovers_user` FO
 
 ALTER TABLE tblDocumentContent ADD COLUMN `fileSize` bigint;
 
+ALTER TABLE tblDocumentContent ADD COLUMN `checksum` char(32);
+
 ALTER TABLE tblUsers ADD COLUMN `quota` bigint;
 
 ALTER TABLE tblSessions ADD COLUMN `clipboard` text DEFAULT '';
