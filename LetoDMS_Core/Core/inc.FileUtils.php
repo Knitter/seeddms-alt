@@ -52,7 +52,7 @@ class LetoDMS_Core_File {
 		return $filesize;
 	}
 
-	function format_filesize($size, $sizes = array('Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB')) {
+	function format_filesize($size, $sizes = array('Bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB')) {
     if ($size == 0) return('n/a');
 		    return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $sizes[$i]);
 	}
