@@ -18,6 +18,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+/* deprecated! use LetoDMS_Core_File::format_filesize() instead */
 function formatted_size($size_bytes) { /* {{{ */
 	if ($size_bytes>1000000000) return number_format($size_bytes/1000000000,1,".","")." GBytes";
 	else if ($size_bytes>1000000) return number_format($size_bytes/1000000,1,".","")." MBytes";
