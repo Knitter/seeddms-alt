@@ -47,7 +47,7 @@ class LetoDMS_View_RemoveLog extends LetoDMS_Bootstrap_Style {
   <?php echo createHiddenFieldWithKey('removelog'); ?>
 	<input type="hidden" name="logname" value="<?php echo $logname?>">
 	<p><?php printMLText("confirm_rm_log", array ("logname" => $logname));?></p>
-	<input type="submit" class="btn" value="<?php printMLText("rm_file");?>">
+	<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_file");?></button></p>
 </form>
 <?php
 		$this->contentContainerEnd();
