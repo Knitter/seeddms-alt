@@ -43,7 +43,7 @@ class LetoDMS_View_BackupTools extends LetoDMS_Bootstrap_Style {
 
 		$this->contentHeading(getMLText("backup_tools"));
 		$this->contentContainerStart();
-		print getMLText("space_used_on_data_folder")." : ".formatted_size(dskspace($contentdir));
+		print getMLText("space_used_on_data_folder")." : ".LetoDMS_Core_File::format_filesize(dskspace($contentdir));
 		$this->contentContainerEnd();
 
 		// versioning file creation ////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ class LetoDMS_View_BackupTools extends LetoDMS_Bootstrap_Style {
 			if (is_object($folder)) print "<td>".htmlspecialchars($folder->getName())."</td>\n";
 			else print "<td>".getMLText("unknown_id")."</td>\n";
 			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
+			print "<td>".LetoDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
 			print "<td>";
 			print "<a href=\"out.RemoveArchive.php?arkname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("backup_remove")."</a>";
 			print "</td>\n";	
@@ -165,7 +165,7 @@ class LetoDMS_View_BackupTools extends LetoDMS_Bootstrap_Style {
 			print "<tr>\n";
 			print "<td><a href=\"../op/op.Download.php?dumpname=".$entry."\">".$entry."</a></td>\n";
 			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
+			print "<td>".LetoDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
 			print "<td>";
 			print "<a href=\"out.RemoveDump.php?dumpname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("dump_remove")."</a>";
 			print "</td>\n";	
