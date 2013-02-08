@@ -14,6 +14,7 @@
 - show used disk space of a document and all files of a user
 - show access rights and id for folders and documents on info page (admin only)
 - added checksum to document versions
+- webdav: saving an identical document several times will not create new versions but just update the modification time
 
 --------------------------------------------------------------------------------
                      Changes in version 3.4.3
