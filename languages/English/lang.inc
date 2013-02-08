@@ -746,6 +746,7 @@ $text["update_reviewers"] = "Update List of Reviewers";
 $text["update"] = "Update";
 $text["uploaded_by"] = "Uploaded by";
 $text["uploading_failed"] = "Uploading one of your files failed. Please check your maximum upload file size.";
+$text["uploading_zerosize"] = "Uploading an empty file. Upload is canceled.";
 $text["use_default_categories"] = "Use predefined categories";
 $text["use_default_keywords"] = "Use predefined keywords";
 $text["used_discspace"] = "Used disk space";
