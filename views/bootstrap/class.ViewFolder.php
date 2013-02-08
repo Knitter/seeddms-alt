@@ -91,7 +91,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 
 		echo "<div class=\"row-fluid\">\n";
 		echo "<div class=\"span4\">\n";
-		if ($enableFolderTree) $this->printTreeNavigation($folderid,$showtree);
+		if ($enableFolderTree) $this->printTreeNavigation($folderid, $showtree);
 		if (1 || $enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
 		echo "</div>\n";
 		echo "<div class=\"span8\">\n";
