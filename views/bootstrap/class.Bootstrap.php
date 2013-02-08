@@ -1031,8 +1031,8 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 						print "<tr rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
 					//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-						print "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".$showtree."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-						print "<td><a href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($folder->getName()) . "</a>";
+						print "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+						print "<td><a href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
 						if($comment) {
 							print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 						}
@@ -1069,7 +1069,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 							} else
 								print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
 							
-							print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+							print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
 							if($comment) {
 								print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 							}
