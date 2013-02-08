@@ -148,9 +148,11 @@ class LetoDMS_View_ObjectCheck extends LetoDMS_Bootstrap_Style {
 		$folder = $this->params['folder'];
 		$unlinkedversions = $this->params['unlinkedcontent'];
 		$nofilesizeversions = $this->params['nofilesizeversions'];
+		$nochecksumversions = $this->params['nochecksumversions'];
 		$repair = $this->params['repair'];
 		$unlink = $this->params['unlink'];
 		$setfilesize = $this->params['setfilesize'];
+		$setchecksum = $this->params['setchecksum'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -233,6 +235,34 @@ class LetoDMS_View_ObjectCheck extends LetoDMS_Bootstrap_Style {
 			print "</tbody></table>\n";
 			if($setfilesize == 0) {
 				echo '<p><a href="out.ObjectCheck.php?setfilesize=1">'.getMLText('do_object_setfilesize').'</a></p>';
+			}
+		}
+
+		$this->contentContainerEnd();
+
+		$this->contentHeading(getMLText("missing_checksum"));
+		$this->contentContainerStart();
+
+		if($nochecksumversions) {
+			print "<table class=\"table-condensed\">";
+			print "<thead>\n<tr>\n";
+			print "<th>".getMLText("document")."</th>\n";
+			print "<th>".getMLText("version")."</th>\n";
+			print "<th>".getMLText("original_filename")."</th>\n";
+			print "<th>".getMLText("mimetype")."</th>\n";
+			print "<th></th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+			foreach($nochecksumversions as $version) {
+				$doc = $version->getDocument();
+				print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
+				if($setchecksum) {
+					$version->setChecksum();
+				}
+				print "</tr>\n";
+			}
+			print "</tbody></table>\n";
+			if($setchecksum == 0) {
+				echo '<p><a href="out.ObjectCheck.php?setchecksum=1">'.getMLText('do_object_setchecksum').'</a></p>';
 			}
 		}
 
