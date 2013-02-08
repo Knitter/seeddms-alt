@@ -12,10 +12,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-02-06</date>
+ <date>2013-02-08</date>
  <time>08:02:34</time>
  <version>
-  <release>4.0.0pre2</release>
+  <release>4.0.0pre3</release>
   <api>4.0.0</api>
  </version>
  <stability>
@@ -24,9 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- lots of bug fixes
-- replaced more of old var declaration
-- more code documentation
+- minor bug fixes
  </notes>
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
@@ -329,6 +327,24 @@ New release
 - added database transactions
 - new workflow
 - replaced old var declaration
+   </notes>
+  </release>
+  <release>
+   <date>2013-02-06</date>
+   <time>08:02:34</time>
+   <version>
+    <release>4.0.0pre2</release>
+    <api>4.0.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- lots of bug fixes
+- replaced more of old var declaration
+- more code documentation
    </notes>
   </release>
  </changelog>
