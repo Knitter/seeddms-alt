@@ -1838,7 +1838,7 @@ class LetoDMS_Core_DMS {
 		foreach($resArr as $row) {
 			$document = new LetoDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
-			$version = new LetoDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType']);
+			$version = new LetoDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
 			$versions[] = $version;
 		}
 		return $versions;
@@ -1849,11 +1849,11 @@ class LetoDMS_Core_DMS {
 	 * Returns document content which has no file size set
 	 *
 	 * This method is for finding document content without a file size
-	 * set in the database. The file size of document content was introduced
+	 * set in the database. The file size of a document content was introduced
 	 * in version 4.0.0 of letodms for implementation of user quotas.
 	 */
 	function getNoFileSizeDocumentContent() { /* {{{ */
-		$queryStr = "SELECT * FROM tblDocumentContent WHERE fileSize = 0 or fileSize is null";
+		$queryStr = "SELECT * FROM tblDocumentContent WHERE fileSize = 0 OR fileSize is null";
 		$resArr = $this->db->getResultArray($queryStr);
 		if (!$resArr)
 			return false;
@@ -1862,7 +1862,31 @@ class LetoDMS_Core_DMS {
 		foreach($resArr as $row) {
 			$document = new LetoDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
 			$document->setDMS($this);
-			$version = new LetoDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType']);
+			$version = new LetoDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum'], $row['fileSize'], $row['checksum']);
+			$versions[] = $version;
+		}
+		return $versions;
+		
+	} /* }}} */
+
+	/**
+	 * Returns document content which has no checksum set
+	 *
+	 * This method is for finding document content without a checksum
+	 * set in the database. The checksum of a document content was introduced
+	 * in version 4.0.0 of letodms for finding duplicates.
+	 */
+	function getNoChecksumDocumentContent() { /* {{{ */
+		$queryStr = "SELECT * FROM tblDocumentContent WHERE checksum = '' OR checksum is null";
+		$resArr = $this->db->getResultArray($queryStr);
+		if (!$resArr)
+			return false;
+
+		$versions = array();
+		foreach($resArr as $row) {
+			$document = new LetoDMS_Core_Document($row['document'], '', '', '', '', '', '', '', '', '', '', '');
+			$document->setDMS($this);
+			$version = new LetoDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
 			$versions[] = $version;
 		}
 		return $versions;
