@@ -25,39 +25,39 @@
  * @version    Release: @package_version@
  */
 class LetoDMS_Core_File {
-	function renameFile($old, $new) {
+	function renameFile($old, $new) { /* {{{ */
 		return @rename($old, $new);
-	}
+	} /* }}} */
 
-	function removeFile($file) {
+	function removeFile($file) { /* {{{ */
 		return @unlink($file);
-	}
+	} /* }}} */
 
-	function copyFile($source, $target) {
+	function copyFile($source, $target) { /* {{{ */
 		return @copy($source, $target);
-	}
+	} /* }}} */
 
-	function moveFile($source, $target) {
+	function moveFile($source, $target) { /* {{{ */
 		if (!@copyFile($source, $target))
 			return false;
 		return @removeFile($source);
-	}
+	} /* }}} */
 
-	function fileSize($file) {
+	function fileSize($file) { /* {{{ */
 		if(!$a = fopen($file, 'r'))
 			return false;
 		fseek($a, 0, SEEK_END);
 		$filesize = ftell($a);
 		fclose($a);
 		return $filesize;
-	}
+	} /* }}} */
 
-	function format_filesize($size, $sizes = array('Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB')) {
+	function format_filesize($size, $sizes = array('Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB')) { /* {{{ */
 		if ($size == 0) return('0 Bytes');
 		return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $sizes[$i]);
-	}
+	} /* }}} */
 
-	function parse_filesize($str) {
+	function parse_filesize($str) { /* {{{ */
 		preg_replace('/\s\s+/', ' ', $str);
 		if(strtoupper(substr($str, -1)) == 'B') {
 			$value = (int) substr($str, 0, -2);
@@ -81,13 +81,17 @@ class LetoDMS_Core_File {
 				break;
 		}
 		return false;
-	}
+	} /* }}} */
 
-	function renameDir($old, $new) {
+	function checksum($file) { /* {{{ */
+		return md5_file($file);
+	} /* }}} */
+
+	function renameDir($old, $new) { /* {{{ */
 		return @rename($old, $new);
-	}
+	} /* }}} */
 
-	function makeDir($path) {
+	function makeDir($path) { /* {{{ */
 		
 		if( !is_dir( $path ) ){
 			$res=@mkdir( $path , 0777, true);
@@ -140,9 +144,9 @@ class LetoDMS_Core_File {
 
 		return true;
 */
-	}
+	} /* }}} */
 
-	function removeDir($path) {
+	function removeDir($path) { /* {{{ */
 		$handle = @opendir($path);
 		while ($entry = @readdir($handle) )
 		{
@@ -161,9 +165,9 @@ class LetoDMS_Core_File {
 		}
 		@closedir($handle);
 		return @rmdir($path);
-	}
+	} /* }}} */
 
-	function copyDir($sourcePath, $targetPath) {
+	function copyDir($sourcePath, $targetPath) { /* {{{ */
 		if (mkdir($targetPath, 0777)) {
 			$handle = @opendir($sourcePath);
 			while ($entry = @readdir($handle) ) {
@@ -183,16 +187,16 @@ class LetoDMS_Core_File {
 			return false;
 
 		return true;
-	}
+	} /* }}} */
 
-	function moveDir($sourcePath, $targetPath) {
+	function moveDir($sourcePath, $targetPath) { /* {{{ */
 		if (!copyDir($sourcePath, $targetPath))
 			return false;
 		return removeDir($sourcePath);
-	}
+	} /* }}} */
 
 	// code by Kioob (php.net manual)
-	function gzcompressfile($source,$level=false) {
+	function gzcompressfile($source,$level=false) { /* {{{ */
 		$dest=$source.'.gz';
 		$mode='wb'.$level;
 		$error=false;
@@ -209,6 +213,6 @@ class LetoDMS_Core_File {
 
 		if($error) return false;
 		else return $dest;
-	}
+	} /* }}} */
 }
 ?>
