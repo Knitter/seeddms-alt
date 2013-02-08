@@ -50,7 +50,7 @@ class LetoDMS_View_RemoveVersion extends LetoDMS_Bootstrap_Style {
 	<input type="hidden" name="documentid" value="<?php echo $document->getID()?>">
 	<input type="hidden" name="version" value="<?php echo $version->getVersion()?>">
 	<p><?php printMLText("confirm_rm_version", array ("documentname" => htmlspecialchars($document->getName()), "version" => $version->getVersion()));?></p>
-	<input type="submit" class="btn" value="<?php printMLText("rm_version");?>">
+  <p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_version");?></button></p>
 </form>
 <?php
 		$this->contentContainerEnd();
