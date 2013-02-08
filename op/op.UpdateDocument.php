@@ -80,6 +80,12 @@ if ($_FILES['userfile']['error'] == 0) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("uploading_failed"));
 }
 
+/* Check if the uploaded file is identical to last version */
+	$lc = $document->getLatestContent();
+	if($lc->getChecksum() == LetoDMS_Core_File::checksum($userfiletmp)) {
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("identical_version"));
+	}
+
 	$lastDotIndex = strrpos(basename($userfilename), ".");
 	if (is_bool($lastDotIndex) && !$lastDotIndex)
 		$fileType = ".";
