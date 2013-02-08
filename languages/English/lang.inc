@@ -271,6 +271,7 @@ $text["hourly"] = "Hourly";
 $text["hours"] = "hours";
 $text["human_readable"] = "Human readable archive"; 
 $text["id"] = "ID";
+$text["identical_version"] = "New version is identical to current version.";
 $text["include_documents"] = "Include documents";
 $text["include_subdirectories"] = "Include subdirectories";
 $text["index_converters"] = "Index document conversion";
