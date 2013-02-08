@@ -51,7 +51,13 @@ if ($document->isLocked()) {
 
 $comment  = $_POST["comment"];
 
-if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0) {
+if ($_FILES['userfile']['error'] == 0) {
+	if(!is_uploaded_file($_FILES["userfile"]["tmp_name"]))
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+
+	if($_FILES["userfile"]["size"] == 0)
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("uploading_zerosize"));
+
 	$userfiletmp = $_FILES["userfile"]["tmp_name"];
 	$userfiletype = $_FILES["userfile"]["type"];
 	$userfilename = $_FILES["userfile"]["name"];
@@ -70,6 +76,8 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["si
 	} else {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}
+} else {
+	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("uploading_failed"));
 }
 
 	$lastDotIndex = strrpos(basename($userfilename), ".");
