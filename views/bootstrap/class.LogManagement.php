@@ -80,25 +80,27 @@ class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
 
 		$this->contentHeading(getMLText("log_management"));
 
-		$handle = opendir($this->contentdir);
 		$entries = array();
 		$wentries = array();
-		while ($e = readdir($handle)){
-			if (is_dir($this->contentdir.$e)) continue;
-			if (strpos($e,".log")==FALSE) continue;
-			if (strcmp($e,"current.log")==0) continue;
-			if(substr($e, 0, 6) ==  'webdav') {
-				$wentries[] = $e;
-			} else {
-				$entries[] = $e;
+		$handle = opendir($this->contentdir);
+		if($handle) {
+			while ($e = readdir($handle)){
+				if (is_dir($this->contentdir.$e)) continue;
+				if (strpos($e,".log")==FALSE) continue;
+				if (strcmp($e,"current.log")==0) continue;
+				if(substr($e, 0, 6) ==  'webdav') {
+					$wentries[] = $e;
+				} else {
+					$entries[] = $e;
+				}
 			}
-		}
-		closedir($handle);
+			closedir($handle);
 
-		sort($entries);
-		sort($wentries);
-		$entries = array_reverse($entries);
-		$wentries = array_reverse($wentries);
+			sort($entries);
+			sort($wentries);
+			$entries = array_reverse($entries);
+			$wentries = array_reverse($wentries);
+		}
 ?>
   <ul class="nav nav-tabs" id="logtab">
 	  <li class="active"><a data-target="#regular" data-toggle="tab">web</a></li>
