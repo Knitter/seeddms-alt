@@ -282,7 +282,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		print "<li>".$latestContent->getOriginalFileName() ."</li>\n";
 
 		if ($file_exists)
-			print "<li>". formatted_size($latestContent->getFileSize()) ." ".htmlspecialchars($latestContent->getMimeType())."</li>";
+			print "<li>". LetoDMS_Core_File::format_filesize($latestContent->getFileSize()) ." ".htmlspecialchars($latestContent->getMimeType())."</li>";
 		else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
 		$updatingUser = $latestContent->getUser();
@@ -736,7 +736,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 				print "<td>".$version->getVersion()."</td>\n";
 				print "<td><ul class=\"unstyled\">\n";
 				print "<li>".$version->getOriginalFileName()."</li>\n";
-				if ($file_exists) print "<li>". formatted_size($version->getFileSize()) ." ".htmlspecialchars($version->getMimeType())."</li>";
+				if ($file_exists) print "<li>". LetoDMS_Core_File::format_filesize($version->getFileSize()) ." ".htmlspecialchars($version->getMimeType())."</li>";
 				else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 				$updatingUser = $version->getUser();
 				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";
