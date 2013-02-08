@@ -26,8 +26,13 @@ include("../inc/inc.Authentication.php");
 
 $form = preg_replace('/[^A-Za-z0-9_]+/', '', $_GET["form"]);
 
+if(substr($settings->_dropFolderDir, -1, 1) == DIRECTORY_SEPARATOR)
+	$dropfolderdir = substr($settings->_dropFolderDir, 0, -1);
+else
+	$dropfolderdir = $settings->_dropFolderDir;
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dropfolderdir'=>$settings->_dropFolderDir, 'dropfolderfile'=>$_GET["dropfolderfile"], 'form'=>$form));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'dropfolderdir'=>$dropfolderdir, 'dropfolderfile'=>$_GET["dropfolderfile"], 'form'=>$form));
 if($view) {
 	$view->show();
 	exit;
