@@ -3,16 +3,17 @@
 --------------------------------------------------------------------------------
 - completely new user interface based on bootstrap
 - quota support on user basis
-- initial support for sqlite3
-- added pdo database abstraction as an alternative to adodb
+- support for sqlite3
+- added pdo database abstraction as an alternative to adodb, pdo is not the default
 - search by expiration date
 - completely new and much more powerful workflow engine
 - language can be switched at any time
 - check for duplicate document names in a folder
 - document/folder chooser allows to search
 - added clipboard and drag&drop for moving documents
-- show used disk space of a document
-- show access rights for folders and documents on info page (admin only)
+- show used disk space of a document and all files of a user
+- show access rights and id for folders and documents on info page (admin only)
+- added checksum to document versions
 
 --------------------------------------------------------------------------------
                      Changes in version 3.4.3
