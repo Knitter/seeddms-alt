@@ -49,8 +49,8 @@ class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
 			print "<tr>\n";
 			print "<td><a href=\"out.LogManagement.php?logname=".$entry."\">".$entry."</a></td>\n";
 			print "\n";
-			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
+			print "<td>".getLongReadableDate(filectime($this->contentdir.$entry))."</td>\n";
+			print "<td>".LetoDMS_Core_File::format_filesize(filesize($this->contentdir.$entry))."</td>\n";
 			print "<td>";
 			
 			print "<a href=\"out.RemoveLog.php?logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("rm_file")."</a>";
@@ -69,7 +69,7 @@ class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$contentdir = $this->params['contentdir'];
+		$this->contentdir = $this->params['contentdir'];
 		$logname = $this->params['logname'];
 
 		if(!$logname) {
@@ -80,11 +80,11 @@ class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
 
 		$this->contentHeading(getMLText("log_management"));
 
-		$handle = opendir($contentdir);
+		$handle = opendir($this->contentdir);
 		$entries = array();
 		$wentries = array();
 		while ($e = readdir($handle)){
-			if (is_dir($contentdir.$e)) continue;
+			if (is_dir($this->contentdir.$e)) continue;
 			if (strpos($e,".log")==FALSE) continue;
 			if (strcmp($e,"current.log")==0) continue;
 			if(substr($e, 0, 6) ==  'webdav') {
@@ -130,13 +130,13 @@ class LetoDMS_View_LogManagement extends LetoDMS_Bootstrap_Style {
   </div>
 <?php
 		$this->htmlEndPage();
-		} elseif(file_exists($contentdir.$logname)){
+		} elseif(file_exists($this->contentdir.$logname)){
 //			$this->htmlStartPage(getMLText("backup_tools"));
 
 //			$this->contentSubHeading(sanitizeString($logname));
 
 			echo $logname."<pre>\n";
-			readfile($contentdir.$logname);
+			readfile($this->contentdir.$logname);
 			echo "</pre>\n";
 
 //			echo "</body>\n</html>\n";
