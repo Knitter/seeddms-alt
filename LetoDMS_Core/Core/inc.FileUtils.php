@@ -52,9 +52,9 @@ class LetoDMS_Core_File {
 		return $filesize;
 	}
 
-	function format_filesize($size, $sizes = array('Bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB')) {
-    if ($size == 0) return('n/a');
-		    return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $sizes[$i]);
+	function format_filesize($size, $sizes = array('Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB')) {
+		if ($size == 0) return('0 Bytes');
+		return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $sizes[$i]);
 	}
 
 	function parse_filesize($str) {
