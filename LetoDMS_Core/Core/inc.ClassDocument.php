@@ -1120,10 +1120,11 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		}
 
 		$filesize = LetoDMS_Core_File::fileSize($tmpFile);
+		$checksum = LetoDMS_Core_File::checksum($tmpFile);
 
 		$db->startTransaction();
-		$queryStr = "INSERT INTO tblDocumentContent (document, version, comment, date, createdBy, dir, orgFileName, fileType, mimeType, fileSize) VALUES ".
-						"(".$this->_id.", ".(int)$version.",".$db->qstr($comment).", ".$date.", ".$user->getID().", ".$db->qstr($dir).", ".$db->qstr($orgFileName).", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$filesize.")";
+		$queryStr = "INSERT INTO tblDocumentContent (document, version, comment, date, createdBy, dir, orgFileName, fileType, mimeType, fileSize, checksum) VALUES ".
+						"(".$this->_id.", ".(int)$version.",".$db->qstr($comment).", ".$date.", ".$user->getID().", ".$db->qstr($dir).", ".$db->qstr($orgFileName).", ".$db->qstr($fileType).", ".$db->qstr($mimeType).", ".$filesize.", ".$db->qstr($checksum).")";
 		if (!$db->getResult($queryStr)) {
 			$db->rollbackTransaction();
 			return false;
@@ -1143,7 +1144,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 
 		unset($this->_content);
 		unset($this->_latestContent);
-		$content = new LetoDMS_Core_DocumentContent($contentID, $this, $version, $comment, $date, $user->getID(), $dir, $orgFileName, $fileType, $mimeType);
+		$content = new LetoDMS_Core_DocumentContent($contentID, $this, $version, $comment, $date, $user->getID(), $dir, $orgFileName, $fileType, $mimeType, $filesize, $checksum);
 		if($workflow)
 			$content->setWorkflow($workflow, $user);
 		$docResultSet = new LetoDMS_Core_AddContentResultSet($content);
@@ -1257,7 +1258,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 
 			$this->_content = array();
 			foreach ($resArr as $row)
-				array_push($this->_content, new LetoDMS_Core_DocumentContent($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"]));
+				array_push($this->_content, new LetoDMS_Core_DocumentContent($row["id"], $this, $row["version"], $row["comment"], $row["date"], $row["createdBy"], $row["dir"], $row["orgFileName"], $row["fileType"], $row["mimeType"], $row['fileSize'], $row['checksum']));
 		}
 
 		return $this->_content;
@@ -1289,7 +1290,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			return false;
 
 		$resArr = $resArr[0];
-		return new LetoDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"]);
+		return new LetoDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
 	} /* }}} */
 
 	function getLatestContent() { /* {{{ */
@@ -1303,7 +1304,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 				return false;
 
 			$resArr = $resArr[0];
-			$this->_latestContent = new LetoDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"]);
+			$this->_latestContent = new LetoDMS_Core_DocumentContent($resArr["id"], $this, $resArr["version"], $resArr["comment"], $resArr["date"], $resArr["createdBy"], $resArr["dir"], $resArr["orgFileName"], $resArr["fileType"], $resArr["mimeType"], $resArr['fileSize'], $resArr['checksum']);
 		}
 		return $this->_latestContent;
 	} /* }}} */
@@ -1897,7 +1898,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		else $this->setStatus(S_RELEASED,"",$user);
 	} /* }}} */
 
-	function LetoDMS_Core_DocumentContent($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType, $fileSize=0) { /* {{{ */
+	function LetoDMS_Core_DocumentContent($id, $document, $version, $comment, $date, $userID, $dir, $orgFileName, $fileType, $mimeType, $fileSize=0, $checksum='') { /* {{{ */
 		parent::__construct($id);
 		$this->_document = $document;
 		$this->_version = (int) $version;
@@ -1914,6 +1915,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		} else {
 			$this->_fileSize = $fileSize;
 		}
+		$this->_checksum = $checksum;
 		$this->_workflow = null;
 		$this->_workflowState = null;
 	} /* }}} */
@@ -1936,14 +1938,31 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 	function getPath() { return $this->_document->getDir() . $this->_version . $this->_fileType; }
 
-	function getFileSize() { /* {{{ */
-		return $this->_fileSize;
-//		return LetoDMS_Core_File::fileSize($this->_dms->contentDir . $this->_document->getDir() . $this->getFileName());
+	function setDate($date = false) { /* {{{ */
+		$db = $this->_document->_dms->getDB();
+
+		if(!$date)
+			$date = time();
+
+		$queryStr = "UPDATE tblDocumentContent SET date = ".(int) $date." WHERE `document` = " . $this->_document->getID() .	" AND `version` = " . $this->_version;
+		if (!$db->getResult($queryStr))
+			return false;
+
+		$this->_date = $date;
+
+		return true;
 	} /* }}} */
 
+	function getFileSize() { /* {{{ */
+		return $this->_fileSize;
+	} /* }}} */
+
+	/**
+	 * Set file size by reading the file
+	 */
 	function setFileSize() { /* {{{ */
 		$filesize = LetoDMS_Core_File::fileSize($this->_dms->contentDir . $this->_document->getDir() . $this->getFileName());
-		if($filesize === false);
+		if($filesize === false)
 			return false;
 
 		$db = $this->_document->_dms->getDB();
@@ -1951,6 +1970,27 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		if (!$db->getResult($queryStr))
 			return false;
 		$this->_fileSize = $filesize;
+
+		return true;
+	} /* }}} */
+
+	function getChecksum() { /* {{{ */
+		return $this->_checksum;
+	} /* }}} */
+
+	/**
+	 * Set checksum by reading the file
+	 */
+	function setChecksum() { /* {{{ */
+		$checksum = LetoDMS_Core_File::checksum($this->_dms->contentDir . $this->_document->getDir() . $this->getFileName());
+		if($checksum === false)
+			return false;
+
+		$db = $this->_document->_dms->getDB();
+		$queryStr = "UPDATE tblDocumentContent SET checksum = ".$db->qstr($checksum)." where `document` = " . $this->_document->getID() .  " AND `version` = " . $this->_version;
+		if (!$db->getResult($queryStr))
+			return false;
+		$this->_checksum = $checksum;
 
 		return true;
 	} /* }}} */
