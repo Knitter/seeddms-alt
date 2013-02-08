@@ -53,7 +53,7 @@ $comment  = $_POST["comment"];
 $version_comment = $_POST["version_comment"];
 
 $keywords = $_POST["keywords"];
-$categories = $_POST["categories"];
+$categories = isset($_POST["categories"]) ? $_POST["categories"] : null;
 if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
 else
@@ -155,6 +155,11 @@ if($settings->_dropFolderDir) {
 	if($_POST["dropfolderfileform1"]) {
 		$fullfile = $settings->_dropFolderDir.'/'.$user->getLogin().'/'.$_POST["dropfolderfileform1"];
 		if(file_exists($fullfile)) {
+			/* Check if a local file is uploaded as well */
+			if(isset($_FILES["userfile"]['error'][0])) {
+				if($_FILES["userfile"]['error'][0] != 0)
+					$_FILES["userfile"] = array();
+			}
 			$finfo = finfo_open(FILEINFO_MIME);
 			$mimetype = explode(';', finfo_file($finfo, $fullfile));
 			$_FILES["userfile"]['tmp_name'][] = $fullfile;
