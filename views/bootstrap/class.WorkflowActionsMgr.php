@@ -142,7 +142,7 @@ function showWorkflowAction(selectObj) {
 <form class="form-inline" action="../op/op.RemoveWorkflowAction.php" method="post">
   <?php echo createHiddenFieldWithKey('removeworkflowaction'); ?>
 	<input type="hidden" name="workflowactionid" value="<?php print $currWorkflowAction->getID();?>">
-	<input type="submit" class="btn" value="<?php printMLText("rm_workflow_action");?>">
+	<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_workflow_action");?></button>
 </form>
 <?php
 			}
