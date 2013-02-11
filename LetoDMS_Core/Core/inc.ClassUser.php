@@ -805,7 +805,8 @@ class LetoDMS_Core_User {
 	 * further.
 	 *
 	 * For a detaile description of the result array see
-	 * {link LetoDMS_Core_User::getApprovalStatus}
+	 * {link LetoDMS_Core_User::getApprovalStatus} which does the same for
+	 * approvals.
 	 *
 	 * @param int $documentID optional document id for which to retrieve the
 	 *        reviews
