@@ -113,14 +113,17 @@ function checkGrpForm()
 	</td></tr>
 	<tr><td><?php printMLText("approval_status")?>:</td>
 	<td><select name="approvalStatus">
-	<option value=''></option>
+<?php if($approvalStatus['status'] != 1) { ?>
 	<option value='1'><?php printMLText("status_approved")?></option>
+<?php } ?>
+<?php if($approvalStatus['status'] != -1) { ?>
 	<option value='-1'><?php printMLText("rejected")?></option>
+<?php } ?>
 	</select>
 	</td></tr><tr><td></td><td>
 	<input type='hidden' name='approvalType' value='ind'/>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId() ?>'/>
-	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion() ?>'/>
+	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='submit' class="btn" name='indApproval' value='<?php printMLText("submit_approval")?>'/>
 	</td></tr></table>
 	</form>
@@ -154,16 +157,19 @@ function checkGrpForm()
 	<tr><td><?php printMLText("approval_status")?>:</td>
 	<td>
 	<select name="approvalStatus">
-	<option value=''></option>
+<?php if($approvalStatus['status'] != 1) { ?>
 	<option value='1'><?php printMLText("status_approved")?></option>
+<?php } ?>
+<?php if($approvalStatus['status'] != -1) { ?>
 	<option value='-1'><?php printMLText("rejected")?></option>
+<?php } ?>
 	</select>
 	</td></tr>
 	<tr><td></td><td>
 	<input type='hidden' name='approvalGroup' value="<?php echo $approvalStatus['required']; ?>" />
 	<input type='hidden' name='approvalType' value='grp'/>
 	<input type='hidden' name='documentid' value='<?php echo $document->getId() ?>'/>
-	<input type='hidden' name='version' value='<?php echo $version ?>'/>
+	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='submit' class="btn" name='groupApproval' value='<?php printMLText("submit_approval")?>'/></td></tr>
 	</table>
 	</form>

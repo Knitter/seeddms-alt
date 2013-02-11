@@ -114,9 +114,12 @@ function checkGrpForm()
 			<td><?php printMLText("review_status")?></td>
 			<td>
 				<select name="reviewStatus">
-					<option value=''></option>
+<?php if($reviewStatus['status'] != 1) { ?>
 					<option value='1'><?php printMLText("status_reviewed")?></option>
+<?php } ?>
+<?php if($reviewStatus['status'] != -1) { ?>
 					<option value='-1'><?php printMLText("rejected")?></option>
+<?php } ?>
 				</select>
 			</td>
 		</tr>
@@ -161,9 +164,12 @@ function checkGrpForm()
 			<td><?php printMLText("review_status")?>:</td>
 			<td>
 				<select name="reviewStatus">
-					<option value=''></option>
+<?php if($reviewStatus['status'] != 1) { ?>
 					<option value='1'><?php printMLText("status_reviewed")?></option>
+<?php } ?>
+<?php if($reviewStatus['status'] != -1) { ?>
 					<option value='-1'><?php printMLText("rejected")?></option>
+<?php } ?>
 				</select>
 			</td>
 		</tr>
