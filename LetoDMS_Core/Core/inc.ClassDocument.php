@@ -2447,6 +2447,26 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		return 0;
 	} /* }}} */
 
+	/**
+	 * Add a review to the document content
+	 *
+	 * This method will add an entry to the table tblDocumentReviewLog.
+	 * It will first check if the user is ment to review the document version.
+	 * It not the return value is -3.
+	 * Next it will check if the users has been removed from the list of
+	 * reviewers. In that case -4 will be returned.
+	 * If the given review status has been set by the user before, it cannot
+	 * be set again and 0 will be returned. Іf the review could be succesfully
+	 * added the review log id will be returned.
+	 *
+	 * @see LetoDMS_Core_DocumentContent::setApprovalByInd()
+	 * @param object $user user doing the review
+	 * @param object $requestUser user asking for the review, this is mostly
+	 * the user currently logged in.
+	 * @param integer $status status of review
+	 * @param string $comment comment for review
+	 * @return integer new review log id
+	 */
 	function setReviewByInd($user, $requestUser, $status, $comment) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
@@ -2483,6 +2503,20 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 		}
  } /* }}} */
 
+	/**
+	 * Add a review to the document content
+	 *
+	 * This method is similar to
+	 * {@see LetoDMS_Core_DocumentContent::setReviewByInd()} but adds a review
+	 * for a group instead of a user.
+	 *
+	 * @param object $group group doing the review
+	 * @param object $requestUser user asking for the review, this is mostly
+	 * the user currently logged in.
+	 * @param integer $status status of review
+	 * @param string $comment comment for review
+	 * @return integer new review log id
+	 */
 	function setReviewByGrp($group, $requestUser, $status, $comment) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
@@ -2649,6 +2683,7 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 	 * Then it is check if the approval status is already -2. In both cases
 	 * the function returns with an error.
 	 *
+	 * @see LetoDMS_Core_DocumentContent::setReviewByInd()
 	 * @param object $user user in charge for doing the approval
 	 * @param object $requestUser user actually calling this function
 	 * @param integer $status the status of the approval, possible values are
