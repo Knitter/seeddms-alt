@@ -1286,8 +1286,9 @@ class LetoDMS_Core_DMS {
 	 * @return object instance of {@link LetoDMS_Core_DocumentCategory}
 	 */
 	function getDocumentCategoryByName($name) { /* {{{ */
-		$queryStr = "SELECT * FROM tblCategory where name=".$this->db->qstr($name);
+		if (!$name) return false;
 
+		$queryStr = "SELECT * FROM tblCategory where name=".$this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 		if (!$resArr)
 			return false;
@@ -1452,6 +1453,8 @@ class LetoDMS_Core_DMS {
 	 * @return object instance of {@link LetoDMS_Core_AttributeDefinition} or false
 	 */
 	function getAttributeDefinitionByName($name) { /* {{{ */
+		if (!$name) return false;
+
 		$queryStr = "SELECT * FROM tblAttributeDefinitions WHERE name = " . $this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
@@ -1582,6 +1585,8 @@ class LetoDMS_Core_DMS {
 	 * @return object of instances of {@link LetoDMS_Core_Workflow} or false
 	 */
 	function getWorkflowByName($name) { /* {{{ */
+		if (!$name) return false;
+
 		$queryStr = "SELECT * FROM tblWorkflows WHERE name=".$this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
@@ -1644,6 +1649,8 @@ class LetoDMS_Core_DMS {
 	 * @return object of instances of {@link LetoDMS_Core_Workflow_State} or false
 	 */
 	function getWorkflowStateByName($name) { /* {{{ */
+		if (!$name) return false;
+
 		$queryStr = "SELECT * FROM tblWorkflowStates WHERE name=".$this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
 
@@ -1737,8 +1744,7 @@ class LetoDMS_Core_DMS {
 	 * @return object instance of {@link LetoDMS_Core_Workflow_Action} or false
 	 */
 	function getWorkflowActionByName($name) { /* {{{ */
-		if (!is_numeric($id))
-			return false;
+		if (!$name) return false;
 
 		$queryStr = "SELECT * FROM tblWorkflowActions WHERE name = " . $this->db->qstr($name);
 		$resArr = $this->db->getResultArray($queryStr);
