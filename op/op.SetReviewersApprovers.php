@@ -61,7 +61,7 @@ if ($overallStatus["status"]==S_REJECTED || $overallStatus["status"]==S_OBSOLETE
 
 // Retrieve a list of all users and groups that have review / approve
 // privileges.
-$docAccess = $document->getApproversList();
+$docAccess = $document->getReadAccessList();
 $accessIndex = array("i"=>array(), "g"=>array());
 foreach ($docAccess["users"] as $i=>$da) {
 	$accessIndex["i"][$da->getID()] = $i;
