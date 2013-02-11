@@ -15,6 +15,7 @@
 - show access rights and id for folders and documents on info page (admin only)
 - added checksum to document versions
 - webdav: saving an identical document several times will not create new versions but just update the modification time
+- check and cancel upload if a new version of a document is identical to the last one
 
 --------------------------------------------------------------------------------
                      Changes in version 3.4.3
