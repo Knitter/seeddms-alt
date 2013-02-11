@@ -47,7 +47,7 @@ class LetoDMS_View_SetReviewersApprovers extends LetoDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("change_assignments"));
 
 		// Retrieve a list of all users and groups that have review / approve privileges.
-		$docAccess = $document->getApproversList();
+		$docAccess = $document->getReadAccessList();
 
 		// Retrieve list of currently assigned reviewers and approvers, along with
 		// their latest status.

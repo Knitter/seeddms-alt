@@ -127,7 +127,7 @@ if ($_FILES['userfile']['error'] == 0) {
 	}
 
 	// add mandatory reviewers/approvers
-	$docAccess = $folder->getApproversList();
+	$docAccess = $folder->getReadAccessList();
 	$res=$user->getMandatoryReviewers();
 	foreach ($res as $r){
 

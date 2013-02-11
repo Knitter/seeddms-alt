@@ -110,7 +110,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		}
 
 		// add mandatory reviewers/approvers
-		$docAccess = $folder->getApproversList();
+		$docAccess = $folder->getReadAccessList();
 		$res=$user->getMandatoryReviewers();
 		foreach ($res as $r){
 

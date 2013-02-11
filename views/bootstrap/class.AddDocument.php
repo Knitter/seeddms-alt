@@ -94,7 +94,7 @@ class LetoDMS_View_AddDocument extends LetoDMS_Bootstrap_Style {
 		
 		// Retrieve a list of all users and groups that have review / approve
 		// privileges.
-		$docAccess = $folder->getApproversList();
+		$docAccess = $folder->getReadAccessList();
 		$this->contentSubHeading(getMLText("document_infos"));
 ?>
 		<form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">

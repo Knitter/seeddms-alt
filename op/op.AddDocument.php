@@ -113,7 +113,7 @@ if (isset($_POST["grpApprovers"])) {
 }
 
 // add mandatory reviewers/approvers
-$docAccess = $folder->getApproversList();
+$docAccess = $folder->getReadAccessList();
 $res=$user->getMandatoryReviewers();
 foreach ($res as $r){
 

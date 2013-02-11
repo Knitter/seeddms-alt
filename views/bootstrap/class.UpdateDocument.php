@@ -163,7 +163,7 @@ function checkForm()
 	if($workflowmode == 'traditional') {
 		// Retrieve a list of all users and groups that have review / approve
 		// privileges.
-		$docAccess = $document->getApproversList();
+		$docAccess = $document->getReadAccessList();
 ?>
 		<tr>
 			<td colspan="2">
