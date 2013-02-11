@@ -1,3 +1,14 @@
+Update comment and date of a review/approval, if the same status is set
+again. Currently setting the same status is turned of, because it didn't
+have any effect, which is quite confusing if the user can do an operation
+which has not the expected result.
+
+Show number of documents that needs care (approval, review, any other action
+in a workflog) next to Login/Logout-Menu.
+
+Show message on doc info page if documents expects an action like review,
+approval, etc.
+
 Import and export of a workflow as xml.
 
 calculate checksum of document version and possible check for duplicated
