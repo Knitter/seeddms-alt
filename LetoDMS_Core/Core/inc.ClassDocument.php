@@ -123,6 +123,11 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 	/**
 	 * @var array list of notifications for users and groups
 	 */
+	protected $_readAccessList;
+
+	/**
+	 * @var array list of notifications for users and groups
+	 */
 	public $_notifyList;
 
 	/**
@@ -1647,11 +1652,21 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * Get List of users and groups which have read access on the document
+	 *
+	 * This function is deprecated. Use
+	 * {@see LetoDMS_Core_Document::getReadAccessList()} instead.
+	 */
 	function getApproversList() { /* {{{ */
+		return $this->getReadAccessList();
+	} /* }}} */
+
+	function getReadAccessList() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		if (!isset($this->_approversList)) {
-			$this->_approversList = array("groups" => array(), "users" => array());
+		if (!isset($this->_readAccessList)) {
+			$this->_readAccessList = array("groups" => array(), "users" => array());
 			$userIDs = "";
 			$groupIDs = "";
 			$defAccess  = $this->getDefaultAccess();
@@ -1666,13 +1681,14 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 				// to the document.
 				$tmpList = $this->getAccessList(M_NONE, O_LTEQ);
 			}
-			foreach ($tmpList["groups"] as $group) {
-				$groupIDs .= (strlen($groupIDs)==0 ? "" : ", ") . $group->getGroupID();
+			foreach ($tmpList["groups"] as $groupAccess) {
+				$groupIDs .= (strlen($groupIDs)==0 ? "" : ", ") . $groupAccess->getGroupID();
 			}
-			foreach ($tmpList["users"] as $c_user) {
-
-				if (!$this->_dms->enableAdminRevApp && $c_user->isAdmin()) continue;
-				$userIDs .= (strlen($userIDs)==0 ? "" : ", ") . $c_user->getUserID();
+			foreach ($tmpList["users"] as $userAccess) {
+				$user = $userAccess->getUser();
+				if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;
+				if ($user->isGuest()) continue;
+				$userIDs .= (strlen($userIDs)==0 ? "" : ", ") . $userAccess->getUserID();
 			}
 
 			// Construct a query against the users table to identify those users
@@ -1680,37 +1696,43 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 			// ACL entry, by virtue of ownership or by having administrative rights
 			// on the database.
 			$queryStr="";
+			/* If default access is less then read, $userIDs and $groupIDs contains
+			 * a list of user with read access
+			 */
 			if ($defAccess < M_READ) {
 				if (strlen($groupIDs)>0) {
-					$queryStr = "(SELECT `tblUsers`.* FROM `tblUsers` ".
+					$queryStr = "SELECT `tblUsers`.* FROM `tblUsers` ".
 						"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`userID`=`tblUsers`.`id` ".
 						"WHERE `tblGroupMembers`.`groupID` IN (". $groupIDs .") ".
-						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest.")";
+						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest." UNION ";
 				}
-				$queryStr .= (strlen($queryStr)==0 ? "" : " UNION ").
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
+				$queryStr .=
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE (`tblUsers`.`role` != ".LetoDMS_Core_User::role_guest.") ".
 					"AND ((`tblUsers`.`id` = ". $this->_ownerID . ") ".
 					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin.")".
 					(strlen($userIDs) == 0 ? "" : " OR (`tblUsers`.`id` IN (". $userIDs ."))").
-					")) ORDER BY `login`";
+					") ORDER BY `login`";
 			}
+			/* If default access is equal or greate then read, $userIDs and
+			 * $groupIDs contains a list of user without read access
+			 */
 			else {
 				if (strlen($groupIDs)>0) {
-					$queryStr = "(SELECT `tblUsers`.* FROM `tblUsers` ".
+					$queryStr = "SELECT `tblUsers`.* FROM `tblUsers` ".
 						"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`userID`=`tblUsers`.`id` ".
 						"WHERE `tblGroupMembers`.`groupID` NOT IN (". $groupIDs .")".
-						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest .
-						(strlen($userIDs) == 0 ? ")" : " AND (`tblUsers`.`id` NOT IN (". $userIDs .")))");
+						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest." ".
+						(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))")." UNION ";
 				}
-				$queryStr .= (strlen($queryStr)==0 ? "" : " UNION ").
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
+				$queryStr .=
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE (`tblUsers`.`id` = ". $this->_ownerID . ") ".
-					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin."))".
+					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin.") ".
 					"UNION ".
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
-					"WHERE `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest .
-					(strlen($userIDs) == 0 ? ")" : " AND (`tblUsers`.`id` NOT IN (". $userIDs .")))").
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
+					"WHERE `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest." ".
+					(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))").
 					" ORDER BY `login`";
 			}
 			$resArr = $db->getResultArray($queryStr);
@@ -1718,7 +1740,7 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 				foreach ($resArr as $row) {
 					$user = $this->_dms->getUser($row['id']);
 					if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;
-					$this->_approversList["users"][] = $user;
+					$this->_readAccessList["users"][] = $user;
 				}
 			}
 
@@ -1744,12 +1766,12 @@ class LetoDMS_Core_Document extends LetoDMS_Core_Object { /* {{{ */
 				if (!is_bool($resArr)) {
 					foreach ($resArr as $row) {
 						$group = $this->_dms->getGroup($row["id"]);
-						$this->_approversList["groups"][] = $group;
+						$this->_readAccessList["groups"][] = $group;
 					}
 				}
 			}
 		}
-		return $this->_approversList;
+		return $this->_readAccessList;
 	} /* }}} */
 
 	/**
@@ -2333,12 +2355,12 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 		$userID = $user->getID();
 
-		// Get the list of users and groups with write access to this document.
-		if (!isset($this->_approversList)) {
-			$this->_approversList = $this->_document->getApproversList();
+		// Get the list of users and groups with read access to this document.
+		if (!isset($this->_readAccessList)) {
+			$this->_readAccessList = $this->_document->getReadAccessList();
 		}
 		$approved = false;
-		foreach ($this->_approversList["users"] as $appUser) {
+		foreach ($this->_readAccessList["users"] as $appUser) {
 			if ($userID == $appUser->getID()) {
 				$approved = true;
 				break;
@@ -2394,13 +2416,13 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 		$groupID = $group->getID();
 
-		// Get the list of users and groups with write access to this document.
-		if (!isset($this->_approversList)) {
+		// Get the list of users and groups with read access to this document.
+		if (!isset($this->_readAccessList)) {
 			// TODO: error checking.
-			$this->_approversList = $this->_document->getApproversList();
+			$this->_readAccessList = $this->_document->getReadAccessList();
 		}
 		$approved = false;
-		foreach ($this->_approversList["groups"] as $appGroup) {
+		foreach ($this->_readAccessList["groups"] as $appGroup) {
 			if ($groupID == $appGroup->getID()) {
 				$approved = true;
 				break;
@@ -2558,13 +2580,13 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 		$userID = $user->getID();
 
-		// Get the list of users and groups with write access to this document.
-		if (!isset($this->_approversList)) {
+		// Get the list of users and groups with read access to this document.
+		if (!isset($this->_readAccessList)) {
 			// TODO: error checking.
-			$this->_approversList = $this->_document->getApproversList();
+			$this->_readAccessList = $this->_document->getReadAccessList();
 		}
 		$approved = false;
-		foreach ($this->_approversList["users"] as $appUser) {
+		foreach ($this->_readAccessList["users"] as $appUser) {
 			if ($userID == $appUser->getID()) {
 				$approved = true;
 				break;
@@ -2618,13 +2640,13 @@ class LetoDMS_Core_DocumentContent extends LetoDMS_Core_Object { /* {{{ */
 
 		$groupID = $group->getID();
 
-		// Get the list of users and groups with write access to this document.
-		if (!isset($this->_approversList)) {
+		// Get the list of users and groups with read access to this document.
+		if (!isset($this->_readAccessList)) {
 			// TODO: error checking.
-			$this->_approversList = $this->_document->getApproversList();
+			$this->_readAccessList = $this->_document->getReadAccessList();
 		}
 		$approved = false;
-		foreach ($this->_approversList["groups"] as $appGroup) {
+		foreach ($this->_readAccessList["groups"] as $appGroup) {
 			if ($groupID == $appGroup->getID()) {
 				$approved = true;
 				break;

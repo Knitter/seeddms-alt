@@ -61,6 +61,11 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 	/**
 	 * @var array list of notifications for users and groups
 	 */
+	protected $_readAccessList;
+
+	/**
+	 * @var array list of notifications for users and groups
+	 */
 	public $_notifyList;
 
 	/**
@@ -1149,22 +1154,45 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 		return 0;
 	} /* }}} */
 
+	/**
+	 * Get List of users and groups which have read access on the document
+	 *
+	 * This function is deprecated. Use
+	 * {@see LetoDMS_Core_Folder::getReadAccessList()} instead.
+	 */
 	function getApproversList() { /* {{{ */
+		return $this->getReadAccessList();
+	} /* }}} */
+
+	/**
+	 * Returns a list of groups and users with read access on the folder
+	 *
+	 * 
+	 *
+	 * @return array list of users and groups
+	 */
+	function getReadAccessList() { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		if (!isset($this->_approversList)) {
-			$this->_approversList = array("groups" => array(), "users" => array());
+		if (!isset($this->_readAccessList)) {
+			$this->_readAccessList = array("groups" => array(), "users" => array());
 			$userIDs = "";
 			$groupIDs = "";
 			$defAccess  = $this->getDefaultAccess();
 
+			/* Check if the default access is < read access or >= read access.
+			 * If default access is less than read access, then create a list
+			 * of users and groups with read access.
+			 * If default access is equal or greater then read access, then
+			 * create a list of users and groups without read access.
+			 */
 			if ($defAccess<M_READ) {
 				// Get the list of all users and groups that are listed in the ACL as
-				// having write access to the folder.
+				// having read access to the folder.
 				$tmpList = $this->getAccessList(M_READ, O_GTEQ);
 			}
 			else {
-				// Get the list of all users and groups that DO NOT have write access
+				// Get the list of all users and groups that DO NOT have read access
 				// to the folder.
 				$tmpList = $this->getAccessList(M_NONE, O_LTEQ);
 			}
@@ -1173,59 +1201,65 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 			}
 			foreach ($tmpList["users"] as $userAccess) {
 				$user = $userAccess->getUser();
-				if (!$user->isGuest()) {
-					$userIDs .= (strlen($userIDs)==0 ? "" : ", ") . $userAccess->getUserID();
-				}
+				if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;
+				if ($user->isGuest()) continue;
+				$userIDs .= (strlen($userIDs)==0 ? "" : ", ") . $userAccess->getUserID();
 			}
 
 			// Construct a query against the users table to identify those users
-			// that have write access to this folder, either directly through an
+			// that have read access to this folder, either directly through an
 			// ACL entry, by virtue of ownership or by having administrative rights
 			// on the database.
 			$queryStr="";
+			/* If default access is less then read, $userIDs and $groupIDs contains
+			 * a list of user with read access
+			 */
 			if ($defAccess < M_READ) {
 				if (strlen($groupIDs)>0) {
-					$queryStr = "(SELECT `tblUsers`.* FROM `tblUsers` ".
+					$queryStr = "SELECT `tblUsers`.* FROM `tblUsers` ".
 						"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`userID`=`tblUsers`.`id` ".
 						"WHERE `tblGroupMembers`.`groupID` IN (". $groupIDs .") ".
-						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest.")";
+						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest." UNION ";
 				}
-				$queryStr .= (strlen($queryStr)==0 ? "" : " UNION ").
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
+				$queryStr .=
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE (`tblUsers`.`role` != ".LetoDMS_Core_User::role_guest.") ".
 					"AND ((`tblUsers`.`id` = ". $this->_ownerID . ") ".
 					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin.")".
 					(strlen($userIDs) == 0 ? "" : " OR (`tblUsers`.`id` IN (". $userIDs ."))").
-					")) ORDER BY `login`";
+					") ORDER BY `login`";
 			}
+			/* If default access is equal or greate then read, $userIDs and
+			 * $groupIDs contains a list of user without read access
+			 */
 			else {
 				if (strlen($groupIDs)>0) {
-					$queryStr = "(SELECT `tblUsers`.* FROM `tblUsers` ".
+					$queryStr = "SELECT `tblUsers`.* FROM `tblUsers` ".
 						"LEFT JOIN `tblGroupMembers` ON `tblGroupMembers`.`userID`=`tblUsers`.`id` ".
 						"WHERE `tblGroupMembers`.`groupID` NOT IN (". $groupIDs .")".
 						"AND `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest." ".
-						(strlen($userIDs) == 0 ? ")" : " AND (`tblUsers`.`id` NOT IN (". $userIDs .")))");
+						(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))")." UNION ";
 				}
-				$queryStr .= (strlen($queryStr)==0 ? "" : " UNION ").
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
+				$queryStr .=
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE (`tblUsers`.`id` = ". $this->_ownerID . ") ".
-					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin."))".
+					"OR (`tblUsers`.`role` = ".LetoDMS_Core_User::role_admin.") ".
 					"UNION ".
-					"(SELECT `tblUsers`.* FROM `tblUsers` ".
+					"SELECT `tblUsers`.* FROM `tblUsers` ".
 					"WHERE `tblUsers`.`role` != ".LetoDMS_Core_User::role_guest." ".
-					(strlen($userIDs) == 0 ? ")" : " AND (`tblUsers`.`id` NOT IN (". $userIDs .")))").
+					(strlen($userIDs) == 0 ? "" : " AND (`tblUsers`.`id` NOT IN (". $userIDs ."))").
 					" ORDER BY `login`";
 			}
 			$resArr = $db->getResultArray($queryStr);
 			if (!is_bool($resArr)) {
 				foreach ($resArr as $row) {
 					$user = $this->_dms->getUser($row['id']);
-					if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;					
-					$this->_approversList["users"][] = $user;
+					if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;
+					$this->_readAccessList["users"][] = $user;
 				}
 			}
 
-			// Assemble the list of groups that have write access to the folder.
+			// Assemble the list of groups that have read access to the folder.
 			$queryStr="";
 			if ($defAccess < M_READ) {
 				if (strlen($groupIDs)>0) {
@@ -1247,12 +1281,12 @@ class LetoDMS_Core_Folder extends LetoDMS_Core_Object {
 				if (!is_bool($resArr)) {
 					foreach ($resArr as $row) {
 						$group = $this->_dms->getGroup($row["id"]);
-						$this->_approversList["groups"][] = $group;
+						$this->_readAccessList["groups"][] = $group;
 					}
 				}
 			}
 		}
-		return $this->_approversList;
+		return $this->_readAccessList;
 	} /* }}} */
 
 	/**
