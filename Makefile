@@ -1,4 +1,4 @@
-VERSION=4.0.0-pre3
+VERSION=4.0.0-pre4
 SRC=CHANGELOG inc conf utils index.php languages views op out README README.Notification drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install
 #restapi webapp
 

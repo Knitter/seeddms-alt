@@ -12,10 +12,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-02-08</date>
- <time>08:02:34</time>
+ <date>2013-02-11</date>
+ <time>15:04:08</time>
  <version>
-  <release>4.0.0pre3</release>
+  <release>4.0.0pre4</release>
   <api>4.0.0</api>
  </version>
  <stability>
@@ -24,7 +24,12 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- minor bug fixes
+- calculate checksum for document versions
+- some bug fixes
+- some more documentation
+- added new methods LetoDMS_Core_Document::getReadUserList() and
+  LetoDMS_Core_Folder::getReadUserList() which replaces getApproversList()
+- fixed sql statement in getReadUserList() for sqlite3
  </notes>
  <contents>
   <dir baseinstalldir="LetoDMS" name="/">
@@ -345,6 +350,22 @@ New release
 - lots of bug fixes
 - replaced more of old var declaration
 - more code documentation
+   </notes>
+  </release>
+  <release>
+   <date>2013-02-08</date>
+   <time>08:02:34</time>
+   <version>
+    <release>4.0.0pre3</release>
+    <api>4.0.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- minor bug fixes
    </notes>
   </release>
  </changelog>
