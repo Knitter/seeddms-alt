@@ -264,7 +264,6 @@ class LetoDMS_Core_Workflow { /* {{{ */
 
 		foreach($users as $user) {
 			$queryStr = "INSERT INTO tblWorkflowTransitionUsers (transition, userid) VALUES (".$transition->getID().", ".$user->getID().")";
-		echo $queryStr;
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;
@@ -273,7 +272,6 @@ class LetoDMS_Core_Workflow { /* {{{ */
 
 		foreach($groups as $group) {
 			$queryStr = "INSERT INTO tblWorkflowTransitionGroups (transition, groupid, minusers) VALUES (".$transition->getID().", ".$group->getID().", 1)";
-		echo $queryStr;
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;
