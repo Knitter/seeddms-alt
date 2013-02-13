@@ -1,14 +1,15 @@
--------------------------------------------------------------------
-              SeedDMS Installation Instructions
--------------------------------------------------------------------
+SeedDMS Installation Instructions
+==================================
 
-NOTE FOR VERSION 4.0.0 ===================================================
+NOTE FOR VERSION 4.0.0
+======================
 
 Since version 4.0.0 of SeedDMS installation has been simplified. 
 ADOdb is no longer needed because the database access is done by
 PDO.
 
-IMPORTANT NOTE ABOUT TRANSLATIONS ========================================
+IMPORTANT NOTE ABOUT TRANSLATIONS
+=================================
 
 as you can see SeedDMS provides a lot of languages but we are not professional 
 translators and therefore rely on user contributions.
@@ -35,7 +36,8 @@ If there is no help in your language:
 If you apply any changes to the language files please send them to the
 SeedDMS developers (www.seeddms.com).
 
-BEFORE YOU START =========================================================
+BEFORE YOU START
+================
 
 SeedDMS has changed its installation process with version 3.0.0. This gives
 you many more options in how to install SeedDMS. First of all, SeedDMS was
@@ -64,7 +66,8 @@ Installation for multiple instances shares the same source by many
 instances but requires to create links which is not in any case possible
 on your web server.
 
-0. Some preparation =======================================================
+0. Some preparation
+-------------------
 
 A common source of problems in the past have been the additional software
 packages needed by SeedDMS. Those are the PEAR packages Log and
@@ -89,7 +92,8 @@ For both the LetoDMS_Core and LetoDMS_Lucene package the path can be set
 in the configuration, but you can also install them like ADOdb and Log
 somewhere in the php include path.
 
-1. Using the installation tool ============================================
+1. Using the installation tool
+------------------------------
 
 Unpack LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tar.gz on
 your web server. For the full text search engine support, you will also
@@ -113,7 +117,8 @@ http://localhost/seeddms/
 * After saving your settings succesfully you are ready to log in as admin and
   continue customizing your installation with the 'Admin Tools'
 
-2. Detailed installation instructions (single instance) =====================
+2. Detailed installation instructions (single instance)
+-------------------------------------------------------
 
 You need a working web server with MySQL/PHP5 support and the files
 LetoDMS-<version>.tar.gz and LetoDMS_Core-<version>.tgz. For the 
@@ -179,7 +184,8 @@ The install tool will detect the version of your current SeedDMS installation
 and run the required database updates.
 
 
-3. Requirements ================================================================
+3. Requirements
+---------------
 
 SeedDMS is a web-based application written in PHP. It uses the MySQL RDBMS to
 manage the documents that were uploaded into the application.
@@ -199,7 +205,8 @@ If you plan to use the full text search engine you will have to install
 the zend framework, too.
 
 
-4. Email Notification ==========================================================
+4. Email Notification
+---------------------
 
 A notification system allows users to receive an email when a
 document or folder is changed. This is an event-based mechanism that
@@ -214,7 +221,8 @@ their notification subscriptions. This can be found in the "My Account"
 section under "Notification List".
 
 
-5. Auto-conversion to HTML =====================================================
+5. Auto-conversion to HTML
+--------------------------
 
 Version 1.3.0 introduces a new feature: Documents can automatically be
 converted to HTML when uploading.
@@ -242,7 +250,8 @@ IIS Users can download the IIS Rewrite Engine for example:
 http://www.qwerksoft.com/products/iisrewrite/
 
 
-6. Nearly finished =============================================================
+6. Nearly finished
+------------------
 
 Now point your browser to http://your.server.com/seedDMS-<version>/index.php
 and login with "admin" both as username and password.
@@ -250,7 +259,8 @@ After having logged in you should first choose "My Account" and
 change the Administrator's password and email-address.
 
 
-CONFIGURING MULTIPLE INSTANCES =================================================
+CONFIGURING MULTIPLE INSTANCES
+==============================
 
 Since version 3.0.0, SeedDMS can be set up to run several parallel instances
 sharing the same source but each instance has its own configuration. This is
@@ -263,14 +273,16 @@ instances are upgraded. A customer instance consists of
 2. a directory containing the document content files
 3. a database
 
-1. Unpack the SeedDMS distribution =============================================
+1. Unpack the SeedDMS distribution
+----------------------------------
 
 Actually there is no need to set up the database at this point but it won't
 hurt since you'll need one in the next step anyway. The sources of SeedDMS
 can be anywhere you like. The do not have to be in you www-root. If you just
 have access to your www-root directory, then put them there.
 
-2. Setup the instance ==========================================================
+2. Setup the instance
+---------------------
 
 Unpack the files as described in the quick installation.
 
@@ -305,14 +317,16 @@ Creating the links as above has the advantage that you can easily switch
 to a new version and go back if it is necessary. You could even run various
 instances of SeedDMS using different versions.
 
-3. Create a database and data store for each instance ==========================
+3. Create a database and data store for each instance
+-----------------------------------------------------
 
 Create a database and data store for each instance and adjust the database
 settings in conf/settings.xml or run the installation tool.
 
 Point your web browser towards the index.php file in your new instance.
 
-LICENSING ======================================================================
+LICENSING
+=========
 
 SeedDMS is licensed unter GPLv2
 
