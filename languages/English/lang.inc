@@ -192,6 +192,7 @@ $text["document_updated_email"] = "Document updated";
 $text["does_not_expire"] = "Does not expire";
 $text["does_not_inherit_access_msg"] = "Inherit access";
 $text["download"] = "Download";
+$text["drag_icon_here"] = "Drag icon of folder or document here!";
 $text["draft_pending_approval"] = "Draft - pending approval";
 $text["draft_pending_review"] = "Draft - pending review";
 $text["dropfolder_file"] = "File from drop folder";
