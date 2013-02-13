@@ -1020,7 +1020,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		$clipboard = $this->params['session']->getClipboard();
 //		print_r($clipboard);
 		if(!$clipboard['docs'] && !$clipboard['folders']) {
-			print "<div class=\"alert\">Drag icon of folder or document here!</div>";
+			print "<div class=\"alert\">".getMLText("drag_icon_here")."</div>";
 		} else {
 			print "<table class=\"table\">";
 			if($clipboard['folders']) {
