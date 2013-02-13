@@ -70,10 +70,9 @@ if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 				$query = trim($query);
 				if (!empty($query)) {
 					echo $query."<br />";
-					$db->exec($query);
-
-					if ($db->ErrorNo()<>0) {
-						$errorMsg .= $db->ErrorMsg() . "<br/>";
+					if(false === $db->exec($query)) {
+						$e = $db->ErrorInfo();
+						$errorMsg .= $e[2] . "<br/>";
 					}
 				}
 			}
