@@ -352,6 +352,7 @@ $text["max_upload_size"] = "Maximum upload size";
 $text["may"] = "May";
 $text["mimetype"] = "Mime type";
 $text["misc"] = "Misc";
+$text["missing_checksum"] = "Missing checksum";
 $text["missing_filesize"] = "Missing filesize";
 $text["missing_transition_user_group"] = "Missing user/group for transition";
 $text["minutes"] = "minutes";
