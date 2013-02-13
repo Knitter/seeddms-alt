@@ -49,8 +49,10 @@ $comment =  $_POST["comment"];
 $keywords = $_POST["keywords"];
 if(isset($_POST['categoryidform1'])) {
 	$categories = explode(',', preg_replace('/[^0-9,]+/', '', $_POST["categoryidform1"]));
-} else {
+} elseif(isset($_POST["categories"])) { 
 	$categories = $_POST["categories"];
+} else {
+	$categories = array();
 }
 $sequence = $_POST["sequence"];
 if (!is_numeric($sequence)) {
