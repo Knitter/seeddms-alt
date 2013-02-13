@@ -66,7 +66,7 @@ if (($oldname = $document->getName()) != $name) {
 		$document->getNotifyList();
 		if($notifier) {
 			$folder = $document->getFolder();
-			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_renamed_email");
+			$subject = "###SITENAME###: ".$oldname." - ".getMLText("document_renamed_email");
 			$message = getMLText("document_renamed_email")."\r\n";
 			$message .= 
 				getMLText("old").": ".$oldname."\r\n".
