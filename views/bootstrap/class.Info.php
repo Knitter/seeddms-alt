@@ -43,9 +43,9 @@ class LetoDMS_View_Info extends LetoDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 		echo $version->banner();
 		$this->contentContainerEnd();
-		$this->contentContainerStart();
-		phpinfo();
-		$this->contentContainerEnd();
+//		$this->contentContainerStart();
+//		phpinfo();
+//		$this->contentContainerEnd();
 		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
