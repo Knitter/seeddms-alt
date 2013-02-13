@@ -27,51 +27,45 @@ if ($user->isGuest()) {
 	UI::exitError(getMLText("edit_default_keywords"),getMLText("access_denied"));
 }
 
-if (isset($_POST["action"])) $action=$_POST["action"];
-else $action=NULL;
+$action = '';
+if (isset($_REQUEST["action"])) {
+	$action = $_REQUEST["action"];
+}
 
 /* Create new category ------------------------------------------------ */
 if ($action == "addcategory") {
 
-	/* Check if the form data comes for a trusted request */
-	if(!checkFormKey('addcategory')) {
-		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	if (isset($_REQUEST["name"]) && $_REQUEST["name"]) {
+		$name = $_REQUEST["name"];
+	
+		$newCategory = $dms->addKeywordCategory($user->getID(), $name);
+		if (!$newCategory) {
+			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
+		}
+		$categoryid=$newCategory->getID();
+	} else {
+		UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 	}
-
-	$name = $_POST["name"];
-	if (is_object($dms->getKeywordCategoryByName($name, $user->getID()))) {
-		UI::exitError(getMLText("admin_tools"),getMLText("keyword_exists"));
-	}
-	$newCategory = $dms->addKeywordCategory($user->getID(), $name);
-	if (!$newCategory) {
-		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
-	}
-	$categoryid=$newCategory->getID();
 }
 
 
 /* Delete category ---------------------------------------------------- */
 else if ($action == "removecategory") {
 
-	/* Check if the form data comes for a trusted request */
-	if(!checkFormKey('removecategory')) {
-		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
+		$categoryid = intval($_REQUEST["categoryid"]);
 	}
-
-	if (!isset($_POST["categoryid"]) || !is_numeric($_POST["categoryid"]) || intval($_POST["categoryid"])<1) {
-		UI::exitError(getMLText("admin_tools"),getMLText("unknown_keyword_category"));
-	}
-	$categoryid = $_POST["categoryid"];
 	$category = $dms->getKeywordCategory($categoryid);
-	if (!is_object($category)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("unknown_keyword_category"));
-	}
-
-	$owner = $category->getOwner();
-	if ($owner->getID() != $user->getID()) {
-		UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
-	}
-	if (!$category->remove()) {
+	if (is_object($category)) {
+		$owner    = $category->getOwner();
+		if ($owner->getID() != $user->getID()) {
+			UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
+		}
+		if (!$category->remove()) {
+			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
+		}
+	} else {
 		UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 	}
 	$categoryid=-1;
@@ -80,40 +74,36 @@ else if ($action == "removecategory") {
 /* Edit category: new name -------------------------------------------- */
 else if ($action == "editcategory") {
 
-	/* Check if the form data comes for a trusted request */
-	if(!checkFormKey('editcategory')) {
-		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
+		$categoryid = intval($_REQUEST["categoryid"]);
 	}
-
-	if (!isset($_POST["categoryid"]) || !is_numeric($_POST["categoryid"]) || intval($_POST["categoryid"])<1) {
-		UI::exitError(getMLText("admin_tools"),getMLText("unknown_keyword_category"));
-	}
-	$categoryid = $_POST["categoryid"];
 	$category = $dms->getKeywordCategory($categoryid);
-	if (!is_object($category)) {
-		UI::exitError(getMLText("admin_tools"),getMLText("unknown_keyword_category"));
-	}
+	if (is_object($category)) {
+		$owner = $category->getOwner();
+		if ($owner->getID() != $user->getID()) {
+			UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
+		}
+		if (isset($_REQUEST["name"]) && $_REQUEST["name"]) {
+			$name = $_REQUEST["name"];
 
-	$owner = $category->getOwner();
-	if ($owner->getID() != $user->getID()) {
-		UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
+			if (!$category->setName($name)) {
+				UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
+			}
+		} else {
+			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
+		}
 	}
-
-	$name = $_POST["name"];
-	if (!$category->setName($name)) {
-		UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
-	}
+	else UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 }
 
 /* Edit category: new keyword list ----------------------------------- */
 else if ($action == "newkeywords") {
 
-	/* Check if the form data comes for a trusted request */
-	if(!checkFormKey('newkeywords')) {
-		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
+		$categoryid = intval($_REQUEST["categoryid"]);
 	}
-
-	$categoryid = (int) $_POST["categoryid"];
 	$category = $dms->getKeywordCategory($categoryid);
 	if (is_object($category)) {
 		$owner    = $category->getOwner();
@@ -121,13 +111,9 @@ else if ($action == "newkeywords") {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
 		}
 
-		if (isset($_POST["keywords"])) {
-			$keywords = $_POST["keywords"];
-		}
-		if(trim($keywords)) {
-			if (!$category->addKeywordList($keywords)) {
-				UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
-			}
+		$keywords = $_REQUEST["keywords"];
+		if (!$category->addKeywordList($keywords)) {
+			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 		}
 	}
 	else UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
@@ -136,11 +122,11 @@ else if ($action == "newkeywords") {
 /* Edit category: edit keyword list ----------------------------------*/
 else if ($action == "editkeywords") {
 
-	if (!isset($_POST["categoryid"]) || !is_numeric($_POST["categoryid"]) || intval($_POST["categoryid"])<1) {
-		UI::exitError(getMLText("admin_tools"),getMLText("unknown_keyword_category"));
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
+		$categoryid = intval($_REQUEST["categoryid"]);
 	}
 	
-	$categoryid = $_POST["categoryid"];
 	$category = $dms->getKeywordCategory($categoryid);
 	if (is_object($category)) {
 		$owner = $category->getOwner();
@@ -148,17 +134,12 @@ else if ($action == "editkeywords") {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
 		}
 
-		if (isset($_POST["keywordsid"])) {
-			$keywordsid = intval($_POST["keywordsid"]);
-		}
-		else {
-			$keywordsid = intval($_GET["keywordsid"]);
-		}
+		$keywordsid = intval($_REQUEST["keywordsid"]);
 		if (!is_numeric($keywordsid)) {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("unknown_keyword_category"));
 		}
 		
-		if (!$category->editKeywordList($keywordsid, $_POST["keywords"])) {
+		if (!$category->editKeywordList($keywordsid, $_REQUEST["keywords"])) {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("error_occured"));
 		}
 	}
@@ -168,27 +149,17 @@ else if ($action == "editkeywords") {
 /* Edit category: delete keyword list -------------------------------- */
 else if ($action == "removekeywords") {
 
-	/* Check if the form data comes for a trusted request */
-	if(!checkFormKey('removekeywords')) {
-		UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
+	$categoryid = 0;
+	if (isset($_REQUEST["categoryid"]) && $_REQUEST["categoryid"]) {
+		$categoryid = intval($_REQUEST["categoryid"]);
 	}
-
-	if (!isset($_POST["categoryid"]) || !is_numeric($_POST["categoryid"]) || intval($_POST["categoryid"])<1) {
-		UI::exitError(getMLText("admin_tools"),getMLText("unknown_keyword_category"));
-	}
-	$categoryid = $_POST["categoryid"];
 	$category = $dms->getKeywordCategory($categoryid);
 	if (is_object($category)) {
 		$owner    = $category->getOwner();
 		if ($owner->getID() != $user->getID()) {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("access_denied"));
 		}
-		if (isset($_POST["keywordsid"])) {
-			$keywordsid = intval($_POST["keywordsid"]);
-		}
-		else {
-			$keywordsid = intval($_GET["keywordsid"]);
-		}
+		$keywordsid = intval($_REQUEST["keywordsid"]);
 		if (!is_numeric($keywordsid)) {
 			UI::exitError(getMLText("personal_default_keywords"),getMLText("unknown_keyword_category"));
 		}
