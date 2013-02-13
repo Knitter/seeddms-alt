@@ -1,3 +1,5 @@
+START TRANSACTION;
+
 ALTER TABLE tblDocumentLinks ADD CONSTRAINT `tblDocumentLinks_target` FOREIGN KEY (`target`) REFERENCES `tblDocuments` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE tblDocumentReviewLog ADD CONSTRAINT `tblDocumentReviewLog_review` FOREIGN KEY (`reviewID`) REFERENCES `tblDocumentReviewers` (`reviewID`) ON DELETE CASCADE;
@@ -105,3 +107,8 @@ CREATE TABLE tblWorkflowMandatoryWorkflow (
   CONSTRAINT `tblWorkflowMandatoryWorkflow_workflow` FOREIGN KEY (`workflow`) REFERENCES `tblWorkflows` (`id`) ON DELETE CASCADE,
   CONSTRAINT `tblWorkflowMandatoryWorkflow_userid` FOREIGN KEY (`userid`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+UPDATE tblVersion set date=NOW(), major=4, minor=0, subminor=0;
+
+COMMIT;
+
