@@ -17,17 +17,17 @@
  * Attributes are key/value pairs which can be attachted to documents,
  * folders and document content. The number of attributes is unlimited.
  * Each attribute has a value and is related to an attribute definition,
- * which holds the name and other information about the attribute..
+ * which holds the name and other information about the attribute.
  *
  * @see LetoDMS_Core_AttributeDefinition
  *
  * @category   DMS
  * @package    LetoDMS_Core
- * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
- * @copyright  Copyright (C) 2012 Uwe Steinmann
+ * @author     Uwe Steinmann <uwe@steinmann.cx>
+ * @copyright  Copyright (C) 2012-2013 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_Core_Attribute {
+class LetoDMS_Core_Attribute { /* {{{ */
 	/**
 	 * @var integer id of attribute
 	 *
@@ -36,14 +36,15 @@ class LetoDMS_Core_Attribute {
 	protected $_id;
 
 	/**
-	 * @var object folder or document this attribute belongs to
+	 * @var object LetoDMS_Core_Object folder, document or document content
+	 * this attribute belongs to
 	 *
 	 * @access protected
 	 */
 	protected $_obj;
 
 	/**
-	 * @var object definition of this attribute
+	 * @var object LetoDMS_Core_AttributeDefinition definition of this attribute
 	 *
 	 * @access protected
 	 */
@@ -57,12 +58,20 @@ class LetoDMS_Core_Attribute {
 	protected $_value;
 
 	/**
-	 * @var object reference to the dms instance this attribute belongs to
+	 * @var object LetoDMS_Core_DMS reference to the dms instance this attribute belongs to
 	 *
 	 * @access protected
 	 */
 	protected $_dms;
 
+	/**
+	 * Constructor
+	 *
+	 * @param integer $id internal id of attribute
+	 * @param LetoDMS_Core_Object $obj object this attribute is attached to
+	 * @param LetoDMS_Core_AttributeDefinition $attrdef reference to the attribute definition
+	 * @param string $value value of the attribute
+	 */
 	function LetoDMS_Core_Attribute($id, $obj, $attrdef, $value) { /* {{{ */
 		$this->_id = $id;
 		$this->_obj = $obj;
@@ -71,6 +80,11 @@ class LetoDMS_Core_Attribute {
 		$this->_dms = null;
 	} /* }}} */
 
+	/**
+	 * Set reference to dms
+	 *
+	 * @param LetoDMS_Core_DMS $dms
+	 */
 	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
@@ -121,7 +135,7 @@ class LetoDMS_Core_Attribute {
 
 	function getAttributeDefinition() { return $this->_attrdef; }
 
-}
+} /* }}} */
 
 /**
  * Class to represent an attribute definition in the document management system
@@ -148,7 +162,7 @@ class LetoDMS_Core_Attribute {
  * @copyright  Copyright (C) 2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_Core_AttributeDefinition {
+class LetoDMS_Core_AttributeDefinition { /* {{{ */
 	/**
 	 * @var integer id of attribute definition
 	 *
@@ -164,14 +178,16 @@ class LetoDMS_Core_AttributeDefinition {
 	protected $_name;
 
 	/**
-	 * @var string object type of attribute definition
+	 * @var string object type of attribute definition. This can be one of
+	 * type_int, type_float, type_string, or type_boolean.
 	 *
 	 * @access protected
 	 */
 	protected $_type;
 
 	/**
-	 * @var string type of attribute definition
+	 * @var string type of attribute definition. This can be one of objtype_all,
+	 * objtype_folder, objtype_document, or objtype_documentcontent.
 	 *
 	 * @access protected
 	 */
@@ -206,7 +222,7 @@ class LetoDMS_Core_AttributeDefinition {
 	protected $_valueset;
 
 	/**
-	 * @var object reference to the dms instance this attribute definition belongs to
+	 * @var object LetoDMS_Core_DMS reference to the dms instance this attribute definition belongs to
 	 *
 	 * @access protected
 	 */
@@ -255,6 +271,11 @@ class LetoDMS_Core_AttributeDefinition {
 		$this->_dms = null;
 	} /* }}} */
 
+	/**
+	 * Set reference to dms
+	 *
+	 * @param LetoDMS_Core_DMS $dms
+	 */
 	function setDMS($dms) { /* {{{ */
 		$this->_dms = $dms;
 	} /* }}} */
@@ -463,5 +484,5 @@ class LetoDMS_Core_AttributeDefinition {
 
 		return true;
 	} /* }}} */
-}
+} /* }}} */
 ?>
