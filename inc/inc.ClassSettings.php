@@ -98,7 +98,7 @@ class Settings { /* {{{ */
 	// enable/disable converting of files
 	var $_enableConverting = false;
 	// default style
-	var $_theme = "clean";
+	var $_theme = "bootstrap";
 	// Workaround for page titles that go over more than 2 lines.
 	var $_titleDisplayHack = true;
 	// enable/disable automatic email notification
