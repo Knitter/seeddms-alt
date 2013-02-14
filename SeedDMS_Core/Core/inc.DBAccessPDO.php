@@ -97,7 +97,7 @@ class SeedDMS_Core_DatabaseAccess {
 	function TableList() { /* {{{ */
 		switch($this->_driver) {
 			case 'mysql':
-				$sql = "select TABLE_NAME as name from information_schema.tables where TABLE_SCHEMA='seeddms' and TABLE_TYPE='BASE TABLE'";
+				$sql = "select TABLE_NAME as name from information_schema.tables where TABLE_SCHEMA='".$this->_database."' and TABLE_TYPE='BASE TABLE'";
 				break;
 			case 'sqlite':
 				$sql = "select tbl_name as name from sqlite_master where type='table'";
