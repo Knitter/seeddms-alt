@@ -3,7 +3,7 @@
  * Implementation of DocumentChooser view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,21 +22,21 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for DocumentChooser view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_DocumentChooser extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 	var $user;
 	var $form;
 
 	function printTree($path, $level = 0) { /* {{{ */
 		$folder = $path[$level];
-		$subFolders = LetoDMS_Core_DMS::filterAccess($folder->getSubFolders(), $this->user, M_READ);
-		$documents  = LetoDMS_Core_DMS::filterAccess($folder->getDocuments(), $this->user, M_READ);
+		$subFolders = SeedDMS_Core_DMS::filterAccess($folder->getSubFolders(), $this->user, M_READ);
+		$documents  = SeedDMS_Core_DMS::filterAccess($folder->getDocuments(), $this->user, M_READ);
 		
 		if ($level+1 < count($path))
 			$nextFolderID = $path[$level+1]->getID();
@@ -66,8 +66,8 @@ class LetoDMS_View_DocumentChooser extends LetoDMS_Bootstrap_Style {
 				$this->printTree($path, $level+1);
 			else {
 				print "<li>\n";
-				$subFolders_ = LetoDMS_Core_DMS::filterAccess($subFolders[$i]->getSubFolders(), $this->user, M_READ);
-				$documents_  = LetoDMS_Core_DMS::filterAccess($subFolders[$i]->getDocuments(), $this->user, M_READ);
+				$subFolders_ = SeedDMS_Core_DMS::filterAccess($subFolders[$i]->getSubFolders(), $this->user, M_READ);
+				$documents_  = SeedDMS_Core_DMS::filterAccess($subFolders[$i]->getDocuments(), $this->user, M_READ);
 				
 				if (count($subFolders_) + count($documents_) > 0)
 					print "<a href=\"out.DocumentChooser.php?form=".$this->form."&folderid=".$subFolders[$i]->getID()."\"><img class='treeicon' src=\"".$this->getImgPath("plus.png")."\" border=0></a>";

@@ -218,8 +218,8 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 	} else {
 		$document = $res[0];
-		if(isset($GLOBALS['LETODMS_HOOKS']['postAddDocument'])) {
-			foreach($GLOBALS['LETODMS_HOOKS']['postAddDocument'] as $hookObj) {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'] as $hookObj) {
 				if (method_exists($hookObj, 'postAddDocument')) {
 					$hookObj->postAddDocument($document);
 				}
@@ -229,12 +229,12 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			if(!empty($settings->_luceneClassDir))
 				require_once($settings->_luceneClassDir.'/Lucene.php');
 			else
-				require_once('LetoDMS/Lucene.php');
+				require_once('SeedDMS/Lucene.php');
 
-			$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+			$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
 			if($index) {
-				LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
-				$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_convcmd) ? $settings->_convcmd : null, true));
+				SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+				$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_convcmd) ? $settings->_convcmd : null, true));
 			}
 		}
 

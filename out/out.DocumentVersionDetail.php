@@ -28,7 +28,7 @@ include("../inc/inc.Authentication.php");
 /**
  * Include class to preview documents
  */
-require_once("LetoDMS/Preview.php");
+require_once("SeedDMS/Preview.php");
 
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));

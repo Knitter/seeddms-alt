@@ -52,7 +52,7 @@ if(isset($options['config'])) {
 if(isset($settings->_extraPath))
 	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
 
-require_once("LetoDMS/Core.php");
+require_once("SeedDMS/Core.php");
 
 if(isset($options['folder'])) {
 	$folderid = intval($options['folder']);
@@ -295,10 +295,10 @@ function tree($folder, $parent=null, $indent='') { /* {{{ */
 	}
 } /* }}} */
 
-$db = new LetoDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
 
-$dms = new LetoDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 $dms->setRootFolderID($settings->_rootFolderID);
 
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
@@ -389,16 +389,16 @@ if($attrdefs) {
 	foreach ($attrdefs as $attrdef) {
 		echo " <attributedefinition id=\"".$attrdef->getID()."\" objtype=\"";
 		switch($attrdef->getObjType()) {
-			case LetoDMS_Core_AttributeDefinition::objtype_all:
+			case SeedDMS_Core_AttributeDefinition::objtype_all:
 				echo "all";
 				break;
-			case LetoDMS_Core_AttributeDefinition::objtype_folder:
+			case SeedDMS_Core_AttributeDefinition::objtype_folder:
 				echo "folder";
 				break;
-			case LetoDMS_Core_AttributeDefinition::objtype_document:
+			case SeedDMS_Core_AttributeDefinition::objtype_document:
 				echo "document";
 				break;
-			case LetoDMS_Core_AttributeDefinition::objtype_documentcontent:
+			case SeedDMS_Core_AttributeDefinition::objtype_documentcontent:
 				echo "documentcontent";
 				break;
 		}

@@ -1,12 +1,12 @@
-Workflows in LetoDMS
+Workflows in SeedDMS
 ====================
 
-LetoDMS supports approval and review of documents for a long time.
+SeedDMS supports approval and review of documents for a long time.
 In many cases this is sufficient for a simple workflow management.
 Nevertheless there was growing demand for a more powerful document
-workflow. Since version 4.0.0 LetoDMS allows to define arbitrary
+workflow. Since version 4.0.0 SeedDMS allows to define arbitrary
 workflows for each document content. In order to understand how
-workflows in LetoDMS work, one has to understand how a workflow is modelled.
+workflows in SeedDMS work, one has to understand how a workflow is modelled.
 Let's start with a definition of some terms.
 
 workflow: a list of document states and transitions. A workflow starts

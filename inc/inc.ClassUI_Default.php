@@ -58,7 +58,7 @@ class UI_Default {
 			echo "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"../styles/print.css\" media=\"print\"/>\n";
 			echo "<link rel='shortcut icon' href='../styles/".$theme."/favicon.ico' type='image/x-icon'/>\n";
 			echo "<script type='text/javascript' src='../js/jquery.min.js'></script>\n";
-			echo "<title>".(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
+			echo "<title>".(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 			echo "</head>\n";
 			echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		}
@@ -102,7 +102,7 @@ class UI_Default {
 		echo "<div class=\"globalTR\"></div>\n";
 		echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
 		echo "<div class=\"siteNameLogin\">".
-			(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").
+			(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS").
 			"</div>\n";
 		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
 			"</div>\n";
@@ -125,7 +125,7 @@ class UI_Default {
 		echo "<li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
 		echo "<li id=\"search\">\n";
 		echo "<form action=\"../op/op.Search.php\">";
-		if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "LetoDMS_Core_Folder")) {
+		if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
 			echo "<input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 		}
 		echo "<input type=\"hidden\" name=\"navBar\" value=\"1\" />";
@@ -140,7 +140,7 @@ class UI_Default {
 		echo "</li>\n</ul>\n";
 		echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
 		echo "<div class=\"siteName\">".
-			(strlen($settings->_siteName)>0 ? $settings->_siteName : "LetoDMS").
+			(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS").
 			"</div>\n";
 		echo "<span class=\"absSpacerNorm\"></span>\n";
 		echo "<div id=\"signatory\">".getMLText("signed_in_as")." ".htmlspecialchars($user->getFullName()).
@@ -192,7 +192,7 @@ class UI_Default {
 	
 		global $user, $settings, $theme;
 
-		if (!is_object($folder) || strcasecmp(get_class($folder), "LetoDMS_Core_Folder")) {
+		if (!is_object($folder) || strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
 			echo "<ul class=\"localNav\">\n";
 			echo "</ul>\n";
 			return;
@@ -693,7 +693,7 @@ class UI_Default {
 		if (!is_object($folder)) return;
 		
 		$subFolders = $folder->getSubFolders();
-		$subFolders = LetoDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
+		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
 		
 		if ($folderID == $settings->_rootFolderID) print "<ul style='list-style-type: none;' class='tree'>\n";
 

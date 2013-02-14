@@ -29,7 +29,7 @@ include("../inc/inc.Authentication.php");
 /**
  * Include class to preview documents
  */
-require_once("LetoDMS/Preview.php");
+require_once("SeedDMS/Preview.php");
 
 // Redirect to the search page if the navigation search button has been
 // selected without supplying any search terms.
@@ -262,10 +262,10 @@ if($resArr['docs']) {
 
 if(count($entries) == 1) {
 	$entry = $entries[0];
-	if(get_class($entry) == 'LetoDMS_Core_Document') {
+	if(get_class($entry) == 'SeedDMS_Core_Document') {
 		header('Location: ../out/out.ViewDocument.php?documentid='.$entry->getID());
 		exit;
-	} elseif(get_class($entry) == 'LetoDMS_Core_Folder') {
+	} elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
 		header('Location: ../out/out.ViewFolder.php?folderid='.$entry->getID());
 		exit;
 	}

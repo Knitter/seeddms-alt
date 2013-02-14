@@ -38,23 +38,23 @@ if(!$settings->_enableFullSearch) {
 if(!empty($settings->_luceneClassDir))
 	require_once($settings->_luceneClassDir.'/Lucene.php');
 else
-	require_once('LetoDMS/Lucene.php');
+	require_once('SeedDMS/Lucene.php');
 
 if(isset($_GET['create']) && $_GET['create'] == 1) {
 	if(isset($_GET['confirm']) && $_GET['confirm'] == 1) {
-		$index = LetoDMS_Lucene_Indexer::create($settings->_luceneDir);
-		LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+		$index = SeedDMS_Lucene_Indexer::create($settings->_luceneDir);
+		SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
 	} else {
 		header('Location: out.CreateIndex.php');
 		exit;
 	}
 } else {
-	$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+	$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
 	if(!$index) {
 		UI::exitError(getMLText("admin_tools"),getMLText("no_fulltextindex"));
 	}
 	echo "<p>Updating index</p>";
-	LetoDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+	SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
 }
 
 $folder = $dms->getFolder($settings->_rootFolderID);

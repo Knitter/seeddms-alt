@@ -2,12 +2,12 @@
 /**
  * Implementation of a simple session management.
  *
- * LetoDMS uses its own simple session management, storing sessions
+ * SeedDMS uses its own simple session management, storing sessions
  * into the database. A session holds the currently logged in user,
  * the theme and the language.
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -24,15 +24,15 @@
  * table.
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  2011 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_Session {
+class SeedDMS_Session {
 	/**
 	 * @var object $db reference to database object. This must be an instance
-	 *      of {@link LetoDMS_Core_DatabaseAccess}.
+	 *      of {@link SeedDMS_Core_DatabaseAccess}.
 	 * @access protected
 	 */
 	protected $db;
@@ -53,7 +53,7 @@ class LetoDMS_Session {
 	 * Create a new instance of the session handler
 	 *
 	 * @param object $db object to access the underlying database
-	 * @return object instance of LetoDMS_Session
+	 * @return object instance of SeedDMS_Session
 	 */
 	function __construct($db) { /* {{{ */
 		$this->db = $db;
@@ -221,10 +221,10 @@ class LetoDMS_Session {
 	function addToClipboard($object) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			if(get_class($object) == 'LetoDMS_Core_Document') {
+			if(get_class($object) == 'SeedDMS_Core_Document') {
 				if(!in_array($object->getID(), $this->data['clipboard']['docs']))
 					array_push($this->data['clipboard']['docs'], $object->getID());
-			} elseif(get_class($object) == 'LetoDMS_Core_Folder') {
+			} elseif(get_class($object) == 'SeedDMS_Core_Folder') {
 				if(!in_array($object->getID(), $this->data['clipboard']['folders']))
 					array_push($this->data['clipboard']['folders'], $object->getID());
 			}
@@ -243,11 +243,11 @@ class LetoDMS_Session {
 	function removeFromClipboard($object) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			if(get_class($object) == 'LetoDMS_Core_Document') {
+			if(get_class($object) == 'SeedDMS_Core_Document') {
 				$key = array_search($object->getID(), $this->data['clipboard']['docs']);
 				if($key !== false)
 					unset($this->data['clipboard']['docs'][$key]);
-			} elseif(get_class($object) == 'LetoDMS_Core_Folder') {
+			} elseif(get_class($object) == 'SeedDMS_Core_Folder') {
 				$key = array_search($object->getID(), $this->data['clipboard']['folders']);
 				if($key !== false)
 					unset($this->data['clipboard']['folders'][$key]);

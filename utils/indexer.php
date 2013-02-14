@@ -6,7 +6,7 @@ function usage() { /* {{{ */
 	echo "  seeddms-indexer [-h] [-v] [--config <file>]\n";
 	echo "\n";
 	echo "Description:\n";
-	echo "  This program recreates the full text index of LetoDMS.\n";
+	echo "  This program recreates the full text index of SeedDMS.\n";
 	echo "\n";
 	echo "Options:\n";
 	echo "  -h, --help: print usage information and exit.\n";
@@ -44,8 +44,8 @@ if(isset($options['config'])) {
 if(isset($settings->_extraPath))
 	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
 
-require_once("LetoDMS/Core.php");
-require_once("LetoDMS/Lucene.php");
+require_once("SeedDMS/Core.php");
+require_once("SeedDMS/Lucene.php");
 
 function tree($folder, $indent='') {
 	global $index, $dms;
@@ -58,7 +58,7 @@ function tree($folder, $indent='') {
 	foreach($documents as $document) {
 		echo $indent."  ".$document->getId().":".$document->getName()."\n";
 		if(!($hits = $index->find('document_id:'.$document->getId()))) {
-			$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document));
+			$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document));
 		} else {
 			$hit = $hits[0];
 			$created = (int) $hit->getDocument()->getFieldValue('created');
@@ -66,17 +66,17 @@ function tree($folder, $indent='') {
 				echo $indent."    Document unchanged\n";
 			} else {
 				if($index->delete($hit->id)) {
-					$index->addDocument(new LetoDMS_Lucene_IndexedDocument($dms, $document));
+					$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document));
 				}
 			}
 		}
 	}
 }
 
-$db = new LetoDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
 
-$dms = new LetoDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 $dms->setRootFolderID($settings->_rootFolderID);
 
 $index = Zend_Search_Lucene::create($settings->_luceneDir);

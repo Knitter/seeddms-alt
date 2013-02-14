@@ -54,7 +54,7 @@ if (empty($email) || empty($login)) {
 $user = $dms->getUserByLogin($login, $email);
 if($user) {
 	if($hash = $dms->createPasswordRequest($user)) {
-		$emailobj = new LetoDMS_Email();
+		$emailobj = new SeedDMS_Email();
 		$subject = "###SITENAME###: ".getMLText("password_forgotten_email_subject");
 		$message = str_replace('###HASH###', $hash, getMLText("password_forgotten_email_body"));
 		

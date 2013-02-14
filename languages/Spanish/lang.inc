@@ -20,7 +20,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 //    Translation updated by Francisco Manuel Garcia Claramonte
-//    <francisco@debian.org> for LetoDMS-3.0.   2-feb-2011
+//    <francisco@debian.org> for SeedDMS-3.0.   2-feb-2011
 //    Reviewed : 15-sept-2011.  Francisco M. Garcia Claramonte
 //    Reviewed (for 3.2.0) : 22-sept-2011.   Francisco M. Garcia Claramonte
 //    Reviewed (for 3.3.0) : 3-mar-2012.   Francisco M. Garcia Claramonte
@@ -372,10 +372,10 @@ $text["password"] = "Contraseña";
 $text["password_already_used"] = "La contraseña ya está en uso";
 $text["password_repeat"] = "Repetir contraseña";
 $text["password_expiration"] = "Caducidad de la contraseña";
-$text["password_expiration_text"] = "Su contraseña ha caducado. Por favor seleccione una nueva para seguir usando LetoDMS.";
+$text["password_expiration_text"] = "Su contraseña ha caducado. Por favor seleccione una nueva para seguir usando SeedDMS.";
 $text["password_forgotten"] = "Recordar contraseña";
 $text["password_forgotten_email_subject"] = "Recordatorio de contraseña";
-$text["password_forgotten_email_body"] = "Estimado usuario de LetoDMS,\n\nhemos recibido una petición para cambiar su contraseña.\n\nPuede modificarla haciendo click en el siguiente enlace:\n\n###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###\n\nSi continua teniendo problemas de acceso, por favor contacte con el administrador del sistema."; 
+$text["password_forgotten_email_body"] = "Estimado usuario de SeedDMS,\n\nhemos recibido una petición para cambiar su contraseña.\n\nPuede modificarla haciendo click en el siguiente enlace:\n\n###URL_PREFIX###out/out.ChangePassword.php?hash=###HASH###\n\nSi continua teniendo problemas de acceso, por favor contacte con el administrador del sistema."; 
 $text["password_forgotten_send_hash"] = "Las instrucciones para proceder al cambio se han enviado a la dirección de correo de usuario";
 $text["password_forgotten_text"] = "Rellene el siguiente formulario y siga las instrucciones del correo que se le enviará.";
 $text["password_forgotten_title"] = "Envío de contraseña";
@@ -440,8 +440,8 @@ $text["set_expiry"] = "Establecer caducidad";
 $text["set_owner_error"] = "Error estableciendo propietario";
 $text["set_owner"] = "Establecer propietario";
 $text["set_password"] = "Establecer contraseña";
-$text["settings_install_welcome_title"] = "Bienvenido a la instalación de letoDMS";
-$text["settings_install_welcome_text"] = "<p>Antes de instalar letoDMS asegúrese de haber creado un archivo «ENABLE_INSTALL_TOOL» en su directorio de instalación, en otro caso la instalación no funcionará. En sistemas Unix puede hacerse fácilmente con «touch conf/ENABLE_INSTALL_TOOL». Después de terminar la instalación elimine el archivo.</p><p>letoDMS tiene unos requisitos mínimos. Necesitará una base de datos y un servidor web con soporte para php. Para la búsqueda de texto completo lucene, necesitará tener instalado también el framework Zend donde pueda ser utilizado por php. Desde la versión 3.2.0 de letoDMS ADObd ya no forma parte de la distribución. Consiga una copia de él desde <a href=\"http://adodb.sourceforge.net/\">http://adodb.sourceforge.net</a> e instálelo. La ruta hacia él podrá ser establecida durante la instalación.</p><p> Si prefiere crear la base de datos antes de comenzar la instalación, simplemente créela manualmente con su herramienta preferida, opcionalmente cree un usuario de base de datos con acceso a esta base de datos e importe uno de los volcados del directorio de configuración. El script de instalación puede hacer esto también, pero necesitará acceso con privilegios suficientes para crear bases de datos.</p>";
+$text["settings_install_welcome_title"] = "Bienvenido a la instalación de SeedDMS";
+$text["settings_install_welcome_text"] = "<p>Antes de instalar SeedDMS asegúrese de haber creado un archivo «ENABLE_INSTALL_TOOL» en su directorio de instalación, en otro caso la instalación no funcionará. En sistemas Unix puede hacerse fácilmente con «touch conf/ENABLE_INSTALL_TOOL». Después de terminar la instalación elimine el archivo.</p><p>SeedDMS tiene unos requisitos mínimos. Necesitará una base de datos y un servidor web con soporte para php. Para la búsqueda de texto completo lucene, necesitará tener instalado también el framework Zend donde pueda ser utilizado por php. Desde la versión 3.2.0 de SeedDMS ADObd ya no forma parte de la distribución. Consiga una copia de él desde <a href=\"http://adodb.sourceforge.net/\">http://adodb.sourceforge.net</a> e instálelo. La ruta hacia él podrá ser establecida durante la instalación.</p><p> Si prefiere crear la base de datos antes de comenzar la instalación, simplemente créela manualmente con su herramienta preferida, opcionalmente cree un usuario de base de datos con acceso a esta base de datos e importe uno de los volcados del directorio de configuración. El script de instalación puede hacer esto también, pero necesitará acceso con privilegios suficientes para crear bases de datos.</p>";
 $text["settings_start_install"] = "Comenzar instalación";
 $text["settings_sortUsersInList"] = "Ordenar los usuarios en la lista";
 $text["settings_sortUsersInList_desc"] = "Establecer si los menús de selección de usuarios se ordenan por nombre de acceso o por nombre completo";
@@ -465,16 +465,16 @@ $text["settings_contentDir"] = "Directorio de contenidos";
 $text["settings_contentDir_desc"] = "Donde se almacenan los archivos subidos (es preferible seleccionar un directorio que no sea accesible a través del servidor web)";
 $text["settings_contentOffsetDir"] = "Directorio de contenidos de desplazamiento";
 $text["settings_contentOffsetDir_desc"] = "Para tratar las limitaciones del sistema de ficheros subyacente, se ha ideado una estructura de directorios dentro del directorio de contenido. Esto requiere un directorio base desde el que comenzar. Normalmente puede dejar este valor por omisión, 1048576, pero puede ser cualquier número o cadena que no exista ya dentro él (directorio de contenido).";
-$text["settings_coreDir"] = "Directorio de letoDMS Core";
-$text["settings_coreDir_desc"] = "Ruta hacia LetoDMS_Core (opcional)";
+$text["settings_coreDir"] = "Directorio de SeedDMS Core";
+$text["settings_coreDir_desc"] = "Ruta hacia SeedDMS_Core (opcional)";
 $text["settings_loginFailure_desc"] = "Deshabilitar cuenta después de n intentos de acceso.";
 $text["settings_loginFailure"] = "Fallo de acceso";
-$text["settings_luceneClassDir"] = "Directorio de LetoDMS Lucene";
-$text["settings_luceneClassDir_desc"] = "Ruta hacia LetoDMS_Lucene (opcional)";
+$text["settings_luceneClassDir"] = "Directorio de SeedDMS Lucene";
+$text["settings_luceneClassDir_desc"] = "Ruta hacia SeedDMS_Lucene (opcional)";
 $text["settings_luceneDir"] = "Directorio índice de Lucene";
 $text["settings_luceneDir_desc"] = "Ruta hacia el índice Lucene";
 $text["settings_cannot_disable"] = "No es posible eliminar el archivo ENABLE_INSTALL_TOOL";
-$text["settings_install_disabled"] = "El archivo ENABLE_INSTALL_TOOL ha sido eliminado. Ahora puede conectarse a LetoDMS y seguir con la configuración.";
+$text["settings_install_disabled"] = "El archivo ENABLE_INSTALL_TOOL ha sido eliminado. Ahora puede conectarse a SeedDMS y seguir con la configuración.";
 $text["settings_createdatabase"] = "Crear tablas de base de datos";
 $text["settings_createdirectory"] = "Crear directorio";
 $text["settings_currentvalue"] = "Valor actual";
@@ -490,7 +490,7 @@ $text["settings_dbPass"] = "Contraseña";
 $text["settings_dbUser_desc"] = "Nombre de usuario de acceso a su base de datos introducido durante el proceso de instalación. No edite este campo a menos que sea necesario, por ejemplo si la base de datos se transfiere a un nuevo servidor.";
 $text["settings_dbUser"] = "Nombre de usuario";
 $text["settings_dbVersion"] = "Esquema de base de datos demasiado antiguo";
-$text["settings_delete_install_folder"] = "Para utilizar LetoDMS, debe eliminar el archivo ENABLE_INSTALL_TOOL del directorio de configuración";
+$text["settings_delete_install_folder"] = "Para utilizar SeedDMS, debe eliminar el archivo ENABLE_INSTALL_TOOL del directorio de configuración";
 $text["settings_disable_install"] = "Eliminar el archivo ENABLE_INSTALL_TOOL se es posible";
 $text["settings_disableSelfEdit_desc"] = "Si está seleccionado el usuario no podrá editar su propio perfil";
 $text["settings_disableSelfEdit"] = "Deshabilitar autoedición";
@@ -540,7 +540,7 @@ $text["settings_footNote_desc"] = "Mensaje para mostrar en la parte inferior de 
 $text["settings_footNote"] = "Nota del pie";
 $text["settings_guestID_desc"] = "ID del usuario invitado cuando se conecta como invitado (mayormente no necesita cambiarlo)";
 $text["settings_guestID"] = "ID de invitado";
-$text["settings_httpRoot_desc"] = "La ruta relativa de la URL, después de la parte del servidor. No incluir el prefijo http:// o el nombre del servidor. Por ejemplo, si la URL completa es http://www.example.com/letodms/, configure «/letodms/». Si la URL completa es http://www.example.com/, configure «/»";
+$text["settings_httpRoot_desc"] = "La ruta relativa de la URL, después de la parte del servidor. No incluir el prefijo http:// o el nombre del servidor. Por ejemplo, si la URL completa es http://www.example.com/seeddms/, configure «/seeddms/». Si la URL completa es http://www.example.com/, configure «/»";
 $text["settings_httpRoot"] = "Raíz Http";
 $text["settings_installADOdb"] = "Instalar ADOdb";
 $text["settings_install_success"] = "La instalación ha terminado con éxito";
@@ -585,7 +585,7 @@ $text["settings_printDisclaimer_desc"] = "Si es Verdadero el mensaje de renuncia
 $text["settings_printDisclaimer"] = "Mostrar renuncia";
 $text["settings_restricted_desc"] = "Solo permitir conectar a usuarios si tienen alguna entrada en la base de datos local (independientemente de la autenticación correcta con LDAP)";
 $text["settings_restricted"] = "Acceso restringido";
-$text["settings_rootDir_desc"] = "Ruta hacía la ubicación de letoDMS";
+$text["settings_rootDir_desc"] = "Ruta hacía la ubicación de SeedDMS";
 $text["settings_rootDir"] = "Directorio raíz";
 $text["settings_rootFolderID_desc"] = "ID de la carpeta raíz (normalmente no es necesario cambiar)";
 $text["settings_rootFolderID"] = "ID de la carpeta raíz";
@@ -594,7 +594,7 @@ $text["settings_Server"] = "Configuración del servidor";
 $text["settings"] = "Configuración";
 $text["settings_siteDefaultPage_desc"] = "Página por omisión al conectar. Si está vacío se dirige a out/out.ViewFolder.php";
 $text["settings_siteDefaultPage"] = "Página por omisión del sitio";
-$text["settings_siteName_desc"] = "Nombre del sitio usado en los títulos de página. Por omisión: letoDMS";
+$text["settings_siteName_desc"] = "Nombre del sitio usado en los títulos de página. Por omisión: SeedDMS";
 $text["settings_siteName"] = "Nombre del sitio";
 $text["settings_Site"] = "Sitio";
 $text["settings_smtpPort_desc"] = "Puerto del servidor SMTP, por omisión 25";

@@ -239,7 +239,7 @@ else {
 	}
 }
 
-$session = new LetoDMS_Session($db);
+$session = new SeedDMS_Session($db);
 
 // Delete all sessions that are more than 24 hours old. Probably not the most
 // reliable place to put this check -- move to inc.Authentication.php?

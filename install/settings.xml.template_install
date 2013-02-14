@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
   <site>
-    <!-- siteName: Name of site used in the page titles. Default: letoDMS
+    <!-- siteName: Name of site used in the page titles. Default: SeedDMS
        - footNote: Message to display at the bottom of every page
        - printDisclaimer: if true the disclaimer message the lang.inc files will be print on the bottom of the page
        - language: default language (name of a subfolder in folder "languages")
        - theme: default style (name of a subfolder in folder "styles")
     -->
     <display
-      siteName = "letoDMS"
-      footNote = "letoDMS free document management system - www.letodms.org"
+      siteName = "SeedDMS"
+      footNote = "SeedDMS free document management system - www.seeddms.org"
       printDisclaimer="true"
       language = "English"
       theme = "clean"
@@ -56,10 +56,10 @@
   </site>
   
   <system>
-    <!-- rootDir: Path to where letoDMS is located
+    <!-- rootDir: Path to where SeedDMS is located
        - httpRoot: The relative path in the URL, after the domain part. Do not include the
        -           http:// prefix or the web host name. e.g. If the full URL is
-	     -           http://www.example.com/letodms/, set $_httpRoot = "/letodms/".
+	     -           http://www.example.com/seeddms/, set $_httpRoot = "/seeddms/".
 	     -           If the URL is http://www.example.com/, set $_httpRoot = "/".
        - contentDir: Where the uploaded files are stored (best to choose a directory that
        -             is not accessible through your web-server)
@@ -70,7 +70,7 @@
     -->
     <server
       rootDir = ""
-      httpRoot = "/letodms/"
+      httpRoot = "/seeddms/"
       contentDir = ""
       stagingDir = ""
       luceneDir = ""
@@ -145,16 +145,16 @@
     <!--
        - dbDriver: DB-Driver used by adodb (see adodb-readme)
        - dbHostname: DB-Server
-       - dbDatabase: database where the tables for letodms are stored (optional - see adodb-readme)
+       - dbDatabase: database where the tables for seeddms are stored (optional - see adodb-readme)
        - dbUser: username for database-access
        - dbPass: password for database-access
     -->    
     <database
       dbDriver = "mysql"
       dbHostname = "localhost"
-      dbDatabase = "letodms"
-      dbUser = "letodms"
-      dbPass = "letodms"
+      dbDatabase = "seeddms"
+      dbUser = "seeddms"
+      dbPass = "seeddms"
     >
     </database>
     <!-- smtpServer: SMTP Server hostname
@@ -164,7 +164,7 @@
     <smtp 
       smtpServer = "localhost" 
       smtpPort = "25" 
-      smtpSendFrom = "letodms@localhost"
+      smtpSendFrom = "seeddms@localhost"
     />    
   </system>
  
@@ -212,8 +212,8 @@
       enableNotificationAppRev = "true"
     >
     </notification>
-    <!-- coreDir: Path to LetoDMS_Core (optional)
-       - luceneClassDir: Path to LetoDMS_Lucene (optional)
+    <!-- coreDir: Path to SeedDMS_Core (optional)
+       - luceneClassDir: Path to SeedDMS_Lucene (optional)
        - contentOffsetDir: To work around limitations in the underlying file system, a new 
        -                   directory structure has been devised that exists within the content 
        -                   directory ($_contentDir). This requires a base directory from which 

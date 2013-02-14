@@ -3,7 +3,7 @@
  * Implementation of WorkflowSummary view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for WorkflowSummary view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_WorkflowSummary extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -47,7 +47,7 @@ class LetoDMS_View_WorkflowSummary extends LetoDMS_Bootstrap_Style {
 		// Get document list for the current user.
 		$workflowStatus = $user->getWorkflowStatus();
 
-		$previewer = new LetoDMS_Preview_Previewer($cachedir, 40);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
 
 		$printheader=true;
 		$iRev = array();

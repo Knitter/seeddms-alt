@@ -3,7 +3,7 @@
  * Do authentication of users and session management
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
@@ -27,7 +27,7 @@ require_once("inc.ClassSession.php");
 
 /* Load session */
 $dms_session = $_COOKIE["mydms_session"];
-$session = new LetoDMS_Session($db);
+$session = new SeedDMS_Session($db);
 if(!$resArr = $session->load($dms_session)) {
 	setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
 	header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
@@ -43,7 +43,7 @@ if (!is_object($user)) {
 }
 
 $dms->setUser($user);
-$notifier = new LetoDMS_Email();
+$notifier = new SeedDMS_Email();
 $notifier->setSender($user);
 
 /* Include the language file as specified in the session. If that is not

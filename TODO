@@ -37,7 +37,7 @@ Allow to specify fine grained notification (e.g. deleting a document, folder)
 Have access rights depending on document status. This will allow to
 restrict access when a document is in a workflow or has been rejected.
 
-There are still global variable in class LetoDMS_Bootstrap_Style
+There are still global variable in class SeedetoDMS_Bootstrap_Style
 
 extend search by expiration date, add utitility to search for expiring documents
 

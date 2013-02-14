@@ -48,7 +48,7 @@ class UI extends UI_Default {
 		global $settings, $session;
 		if(file_exists("../views/".$theme."/class.".$class.".php")) {
 			require("../views/".$theme."/class.".$class.".php");
-			$classname = "LetoDMS_View_".$class;
+			$classname = "SeedDMS_View_".$class;
 			$view = new $classname($params, $theme);
 			/* Set some configuration parameters */
 			$view->setParam('session', $session);

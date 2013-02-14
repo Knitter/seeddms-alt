@@ -7,7 +7,7 @@
  * new passwords and not reusing old ones.
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -23,15 +23,15 @@
  * once used by users.
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_PasswordHistoryManager {
+class SeedDMS_PasswordHistoryManager {
 	/**
 	 * @var object $db reference to database object. This must be an instance
-	 *      of {@link LetoDMS_Core_DatabaseAccess}.
+	 *      of {@link SeedDMS_Core_DatabaseAccess}.
 	 * @access protected
 	 */
 	protected $db;
@@ -40,7 +40,7 @@ class LetoDMS_PasswordHistoryManager {
 	 * Create a new instance of the password history manager
 	 *
 	 * @param object $db object to access the underlying database
-	 * @return object instance of LetoDMS_PasswordHistory
+	 * @return object instance of SeedDMS_PasswordHistory
 	 */
 	function __construct($db) { /* {{{ */
 		$this->db = $db;

@@ -1,5 +1,5 @@
 <?php
-define("LETODMS_INSTALL", "on");
+define("SEEDDMS_INSTALL", "on");
 include("../inc/inc.Settings.php");
 $settings = new Settings();
 $rootDir = realpath ("..");
@@ -10,7 +10,7 @@ include "../languages/English/lang.inc";
 include("../inc/inc.ClassUI.php");
 
 UI::htmlStartPage("INSTALL");
-UI::contentHeading("letoDMS Installation...");
+UI::contentHeading("SeedDMS Installation...");
 UI::contentContainerStart();
 echo "<h2>".getMLText('settings_install_welcome_title')."</h2>";
 echo "<div style=\"width: 600px;\">".getMLText('settings_install_welcome_text')."</div>";

@@ -3,7 +3,7 @@
  * Implementation of ViewDocument view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for ViewDocument view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 	function getAccessModeText($defMode) { /* {{{ */
 		switch($defMode) {
@@ -182,7 +182,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 ?>
 		<tr>
 		<td><?php printMLText("used_discspace");?>:</td>
-		<td><?php print LetoDMS_Core_File::format_filesize($document->getUsedDiskSpace());?></td>
+		<td><?php print SeedDMS_Core_File::format_filesize($document->getUsedDiskSpace());?></td>
 		</tr>
 		<tr>
 		<td><?php printMLText("creation_date");?>:</td>
@@ -270,7 +270,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		}else print "<li><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></li>";
 
 		print "</ul>";
-		$previewer = new LetoDMS_Preview_Previewer($cachedir, 100);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, 100);
 		$previewer->createPreview($latestContent);
 		if($previewer->hasPreview($latestContent)) {
 			print("<img class=\"mimeicon\" width=\"100\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=100\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">");
@@ -282,7 +282,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 		print "<li>".$latestContent->getOriginalFileName() ."</li>\n";
 
 		if ($file_exists)
-			print "<li>". LetoDMS_Core_File::format_filesize($latestContent->getFileSize()) ." ".htmlspecialchars($latestContent->getMimeType())."</li>";
+			print "<li>". SeedDMS_Core_File::format_filesize($latestContent->getFileSize()) ." ".htmlspecialchars($latestContent->getMimeType())."</li>";
 		else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 
 		$updatingUser = $latestContent->getUser();
@@ -519,7 +519,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 <?php
 			$this->contentContainerStart();
 			if($user->isAdmin()) {
-				if(LetoDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState())) {
+				if(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState())) {
 					print "<form action=\"../out/out.RemoveWorkflowFromDocument.php\" method=\"post\">".createHiddenFieldWithKey('removeworkflowfromdocument')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('rm_workflow')."</button></form>";
 				} else {
 					print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-refresh\"></i> ".getMLText('rewind_workflow')."</button></form>";
@@ -736,7 +736,7 @@ class LetoDMS_View_ViewDocument extends LetoDMS_Bootstrap_Style {
 				print "<td>".$version->getVersion()."</td>\n";
 				print "<td><ul class=\"unstyled\">\n";
 				print "<li>".$version->getOriginalFileName()."</li>\n";
-				if ($file_exists) print "<li>". LetoDMS_Core_File::format_filesize($version->getFileSize()) ." ".htmlspecialchars($version->getMimeType())."</li>";
+				if ($file_exists) print "<li>". SeedDMS_Core_File::format_filesize($version->getFileSize()) ." ".htmlspecialchars($version->getMimeType())."</li>";
 				else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
 				$updatingUser = $version->getUser();
 				print "<li>".getMLText("uploaded_by")." <a href=\"mailto:".$updatingUser->getEmail()."\">".htmlspecialchars($updatingUser->getFullName())."</a></li>";

@@ -3,7 +3,7 @@
  * Implementation of RunSubWorkflow view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for RunSubWorkflow view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_RunSubWorkflow extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_RunSubWorkflow extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];

@@ -3,7 +3,7 @@
  * Implementation of UpdateDocument view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for UpdateDocument view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_UpdateDocument extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_UpdateDocument extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -149,7 +149,7 @@ function checkForm()
 			</td>
 		</tr>
 <?php
-	$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_documentcontent, LetoDMS_Core_AttributeDefinition::objtype_all));
+	$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
 	if($attrdefs) {
 		foreach($attrdefs as $attrdef) {
 ?>

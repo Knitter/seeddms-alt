@@ -40,7 +40,7 @@ if (@readlink($settings->_contentDir."current.log")==$settings->_contentDir.$_PO
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-if (!LetoDMS_Core_File::removeFile($settings->_contentDir.$_POST["logname"])) {
+if (!SeedDMS_Core_File::removeFile($settings->_contentDir.$_POST["logname"])) {
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 }
 

@@ -3,7 +3,7 @@
  * Implementation of MyAccount view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for MyAccount view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_MyAccount extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_MyAccount extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -44,7 +44,7 @@ class LetoDMS_View_MyAccount extends LetoDMS_Bootstrap_Style {
 		$this->pageNavigation(getMLText("my_account"), "my_account");
 
 		if(($remain = checkQuota()) < 0) {
-			$this->warningMsg(getMLText('quota_warning', array('bytes'=>LetoDMS_Core_File::format_filesize(abs($remain)))));
+			$this->warningMsg(getMLText('quota_warning', array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain)))));
 		}
 		$this->contentHeading(getMLText("user_info"));
 		$this->contentContainerStart();
@@ -82,11 +82,11 @@ class LetoDMS_View_MyAccount extends LetoDMS_Bootstrap_Style {
 		}
 		print "<tr>\n";
 		print "<td>".getMLText("quota")." : </td>\n";
-		print "<td>".LetoDMS_Core_File::format_filesize($user->getQuota())."</td>\n";
+		print "<td>".SeedDMS_Core_File::format_filesize($user->getQuota())."</td>\n";
 		print "</tr>\n";
 		print "<tr>\n";
 		print "<td>".getMLText("used_discspace")." : </td>\n";
-		print "<td>".LetoDMS_Core_File::format_filesize($user->getUsedDiskSpace())."</td>\n";
+		print "<td>".SeedDMS_Core_File::format_filesize($user->getUsedDiskSpace())."</td>\n";
 		print "</tr>\n";
 		print "</table>\n";
 		print "</div>\n";

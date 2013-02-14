@@ -3,7 +3,7 @@
  * Implementation of ViewFolder view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.BlueStyle.php");
  * Class which outputs the html page for ViewFolder view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_ViewFolder extends LetoDMS_Blue_Style {
+class SeedDMS_View_ViewFolder extends SeedDMS_Blue_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -78,9 +78,9 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Blue_Style {
 		$this->contentContainerStart();
 
 		$subFolders = $folder->getSubFolders($orderby);
-		$subFolders = LetoDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
+		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
 		$documents = $folder->getDocuments($orderby);
-		$documents = LetoDMS_Core_DMS::filterAccess($documents, $user, M_READ);
+		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
 			print "<table class=\"folderView\">";
@@ -102,9 +102,9 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Blue_Style {
 			$comment = $subFolder->getComment();
 			if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 			$subsub = $subFolder->getSubFolders();
-			$subsub = LetoDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
+			$subsub = SeedDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
 			$subdoc = $subFolder->getDocuments();
-			$subdoc = LetoDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
+			$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 			
 			print "<tr class=\"folder\">";
 		//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";

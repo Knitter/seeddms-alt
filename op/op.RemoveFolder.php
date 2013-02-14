@@ -57,9 +57,9 @@ if($settings->_enableFullSearch) {
 	if(!empty($settings->_luceneClassDir))
 		require_once($settings->_luceneClassDir.'/Lucene.php');
 	else
-		require_once('LetoDMS/Lucene.php');
+		require_once('SeedDMS/Lucene.php');
 
-	$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+	$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
 	function removeFromIndex($index, $document) {
 		if($hits = $index->find('document_id:'.$document->getId())) {
 			$hit = $hits[0];

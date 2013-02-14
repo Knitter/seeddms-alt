@@ -57,9 +57,9 @@ if (!$document->remove()) {
 		if(!empty($settings->_luceneClassDir))
 			require_once($settings->_luceneClassDir.'/Lucene.php');
 		else
-			require_once('LetoDMS/Lucene.php');
+			require_once('SeedDMS/Lucene.php');
 
-		$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+		$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
 		if($index && $hits = $index->find('document_id:'.$documentid)) {
 			$hit = $hits[0];
 			$index->delete($hit->id);

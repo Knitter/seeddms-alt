@@ -30,7 +30,7 @@ include("../inc/inc.Authentication.php");
 /**
  * Include class to preview documents
  */
-require_once("LetoDMS/Preview.php");
+require_once("SeedDMS/Preview.php");
 
 $documentid = $_GET["documentid"];
 if (!isset($documentid) || !is_numeric($documentid) || intval($documentid)<1) {
@@ -56,7 +56,7 @@ if (!is_object($content)) {
 	exit;
 }
 
-$previewer = new LetoDMS_Preview_Previewer($settings->_cacheDir, $_GET["width"]);
+$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $_GET["width"]);
 header('Content-Type: image/png');
 $previewer->getPreview($content);
 

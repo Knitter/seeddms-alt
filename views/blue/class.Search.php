@@ -3,7 +3,7 @@
  * Implementation of Search result view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.BlueStyle.php");
  * Class which outputs the html page for Search result view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_Search extends LetoDMS_Blue_Style {
+class SeedDMS_View_Search extends SeedDMS_Blue_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -64,7 +64,7 @@ class LetoDMS_View_Search extends LetoDMS_Blue_Style {
 		$resultsFilteredByAccess = false;
 		$foldercount = $doccount = 0;
 		foreach ($entries as $entry) {
-			if(get_class($entry) == 'LetoDMS_Core_Document') {
+			if(get_class($entry) == 'SeedDMS_Core_Document') {
 				$document = $entry;
 					$doccount++;
 					$lc = $document->getLatestContent();
@@ -110,7 +110,7 @@ class LetoDMS_View_Search extends LetoDMS_Blue_Style {
 					if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 					print "<td>".$comment."</td>";
 					print "</tr>\n";
-			} elseif(get_class($entry) == 'LetoDMS_Core_Folder') {
+			} elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
 				$folder = $entry;
 					$foldercount++;
 					if (in_array(2, $searchin)) {

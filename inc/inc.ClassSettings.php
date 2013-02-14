@@ -3,7 +3,7 @@
  * Reading and writing the configuration from and to an xml file
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -15,7 +15,7 @@
  * Class for reading and writing the configuration file
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2011 Uwe Steinmann
  * @version    Release: @package_version@
@@ -25,9 +25,9 @@ class Settings { /* {{{ */
 	var $_configFilePath = null;
 
 	// Name of site
-	var $_siteName = "letoDMS";
+	var $_siteName = "SeedDMS";
 	// Message to display at the bottom of every page.
-	var $_footNote = "letoDMS free document management \"system - www.letodms.com";
+	var $_footNote = "SeedDMS free document management \"system - www.seeddms.org";
 	// if true the disclaimer message the lang.inc files will be print on the bottom of the page
 	var $_printDisclaimer = true;
 	// Default page on login
@@ -62,14 +62,14 @@ class Settings { /* {{{ */
 	var $_cookieLifetime = '';
 	// Strict form checking
 	var $_strictFormCheck = false;
-	// Path to where letoDMS is located
+	// Path to where SeedDMS is located
 	var $_rootDir = null;
-	// Path to LetoDMS_Core
+	// Path to SeedDMS_Core
 	var $_coreDir = null;
-	// Path to LetoDMS_Lucene
+	// Path to SeedDMS_Lucene
 	var $_luceneClassDir = null;
 	// The relative path in the URL, after the domain part.
-	var $_httpRoot = "/letodms/";
+	var $_httpRoot = "/seeddms/";
 	// Where the uploaded files are stored (best to choose a directory that
 	// is not accessible through your web-server)
 	var $_contentDir = null;
@@ -194,7 +194,7 @@ class Settings { /* {{{ */
 		}
 
 		// Load config file
-		if (!defined("LETODMS_INSTALL")) {
+		if (!defined("SEEDDMS_INSTALL")) {
 			if(!file_exists($configFilePath)) {
 				echo "You does not seem to have a valid configuration. Run the <a href=\"install/install.php\">install tool</a> first.";
 				exit;
@@ -735,7 +735,7 @@ class Settings { /* {{{ */
 	 * This function checks three directories for a configuration directory
 	 * 1. The directory where the current script is located adding '/conf'
 	 * 2. The parent directory of the current script adding '/conf'
-	 * 3. The directory /etc/letodms
+	 * 3. The directory /etc/seeddms
 	 * @return NULL|string config directory
 	 */
 	function getConfigDir() { /* {{{ */
@@ -749,8 +749,8 @@ class Settings { /* {{{ */
 			if(file_exists(implode('/', $_arr)."/conf/")) {
 				$configDir = implode('/', $_arr)."/conf/";
 			} else {
-				if(file_exists('/etc/letodms'))
-					$configDir = '/etc/letodms';
+				if(file_exists('/etc/seeddms'))
+					$configDir = '/etc/seeddms';
 			}
 		}
 
@@ -841,7 +841,7 @@ class Settings { /* {{{ */
 					);
 			}
 		} else {
-			$found = Settings::findInIncPath('LetoDMS/Core.php');
+			$found = Settings::findInIncPath('SeedDMS/Core.php');
 			if(!$found) {
 				$result["coreDir"] = array(
 					"status" => "notfound",
@@ -991,16 +991,16 @@ class Settings { /* {{{ */
 				if($dsn) {
 					$connTmp = new PDO($dsn, $this->_dbUser, $this->_dbPass);
 					/* Check if there wasn't a previous error while searching for
-					 * LetoDMS_Core.
+					 * SeedDMS_Core.
 					 */
 					if(!isset($result["coreDir"])) {
-						/* Instanciate LetoDMS_Core to check version */
+						/* Instanciate SeedDMS_Core to check version */
 						if(!empty($this->_coreDir))
 							require_once($this->_coreDir.'/Core.php');
 						else
-							require_once('LetoDMS/Core.php');
-						$tmpcore = new LetoDMS_Core_DMS(null, $this->_contentDir);
-						$db = new LetoDMS_Core_DatabaseAccess($this->_dbDriver, $this->_dbHostname, $this->_dbUser, $this->_dbPass, $this->_dbDatabase);
+							require_once('SeedDMS/Core.php');
+						$tmpcore = new SeedDMS_Core_DMS(null, $this->_contentDir);
+						$db = new SeedDMS_Core_DatabaseAccess($this->_dbDriver, $this->_dbHostname, $this->_dbUser, $this->_dbPass, $this->_dbDatabase);
 						if(!$db->connect()) {
 							$result["dbDatabase"] = array(
 								"status" => "error",
@@ -1010,7 +1010,7 @@ class Settings { /* {{{ */
 								);
 						} else {
 						/*
-							$dms = new LetoDMS_Core_DMS($db, $this->_contentDir.$this->_contentOffsetDir);
+							$dms = new SeedDMS_Core_DMS($db, $this->_contentDir.$this->_contentOffsetDir);
 
 							if(!$dms->checkVersion()) {
 								$result["dbVersion"] = array(

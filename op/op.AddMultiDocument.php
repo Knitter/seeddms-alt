@@ -185,8 +185,8 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 			echo getMLText("error_occured");
 		} else {
 			$document = $res[0];
-			if(isset($GLOBALS['LETODMS_HOOKS']['postAddDocument'])) {
-				foreach($GLOBALS['LETODMS_HOOKS']['postAddDocument'] as $hookObj) {
+			if(isset($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'])) {
+				foreach($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'] as $hookObj) {
 					if (method_exists($hookObj, 'postAddDocument')) {
 						$hookObj->postAddDocument($document);
 					}

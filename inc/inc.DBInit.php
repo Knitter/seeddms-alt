@@ -21,12 +21,12 @@
 if(!empty($settings->_coreDir))
 	require_once($settings->_coreDir.'/Core.php');
 else
-	require_once('LetoDMS/Core.php');
+	require_once('SeedDMS/Core.php');
 
-$db = new LetoDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
 
-$dms = new LetoDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 
 if(!$dms->checkVersion()) {
 	echo "Database update needed.";

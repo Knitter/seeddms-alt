@@ -20,7 +20,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
+class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	var $imgpath;
 	var $extraheader;
 
@@ -47,7 +47,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
 
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
-		echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "LetoDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
+		echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 	} /* }}} */
@@ -98,7 +98,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
-		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "LetoDMS")."</a>\n";
+		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		echo "  </div>\n";
 		echo " </div>\n";
 		echo "</div>\n";
@@ -107,7 +107,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "<div class=\"globalTR\"></div>\n";
 		echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
 		echo "<div class=\"siteNameLogin\">".
-			(strlen($this->param['sitename'])>0 ? $this->params['sitename'] : "LetoDMS").
+			(strlen($this->param['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").
 			"</div>\n";
 		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
 			"</div>\n";
@@ -120,7 +120,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
-		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "LetoDMS")."</a>\n";
+		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
 		echo "   <div class=\"nav-collapse collapse\">\n";
 		echo "   <ul class=\"nav pull-right\">\n";
@@ -162,7 +162,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		echo "    <li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
 		echo "   </ul>\n";
 		echo "     <form action=\"../op/op.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
-		if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "LetoDMS_Core_Folder")) {
+		if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
 			echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
 		}
 		echo "      <input type=\"hidden\" name=\"navBar\" value=\"1\" />";
@@ -245,7 +245,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 	} /* }}} */
 
 	private function folderNavigationBar($folder) { /* {{{ */
-		if (!is_object($folder) || strcasecmp(get_class($folder), "LetoDMS_Core_Folder")) {
+		if (!is_object($folder) || strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
 			echo "<ul class=\"nav\">\n";
 			echo "</ul>\n";
 			return;
@@ -925,7 +925,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 		if (!is_object($folder)) return;
 		
 		$subFolders = $folder->getSubFolders();
-		$subFolders = LetoDMS_Core_DMS::filterAccess($subFolders, $this->params['user'], M_READ);
+		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $this->params['user'], M_READ);
 		
 		if ($folderID == $this->params['rootfolderid']) print "<ul style='list-style-type: none;' class='tree'>\n";
 
@@ -1044,7 +1044,7 @@ class LetoDMS_Bootstrap_Style extends LetoDMS_View_Common {
 					}
 				}
 			}
-			$previewer = new LetoDMS_Preview_Previewer($this->params['cachedir'], 40);
+			$previewer = new SeedDMS_Preview_Previewer($this->params['cachedir'], 40);
 			if($clipboard['docs']) {
 				//echo "<tr><th colspan=\"3\">Documents</th></tr>\n";
 				foreach($clipboard['docs'] as $docid) {

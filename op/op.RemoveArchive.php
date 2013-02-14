@@ -36,7 +36,7 @@ if (!isset($_POST["arkname"]) || !file_exists($settings->_contentDir.$_POST["ark
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 }
 
-if (!LetoDMS_Core_File::removeFile($settings->_contentDir.$_POST["arkname"])) {
+if (!SeedDMS_Core_File::removeFile($settings->_contentDir.$_POST["arkname"])) {
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 }
 

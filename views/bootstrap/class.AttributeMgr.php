@@ -3,7 +3,7 @@
  * Implementation of AttributeMgr view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for AttributeMgr view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_AttributeMgr extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_AttributeMgr extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -75,16 +75,16 @@ function showAttributeDefinitions(selectObj) {
 			
 				if (isset($_GET["attrdefid"]) && $attrdef->getID()==$_GET["attrdefid"]) $selected=$count;				
 				switch($attrdef->getObjType()) {
-					case LetoDMS_Core_AttributeDefinition::objtype_all:
+					case SeedDMS_Core_AttributeDefinition::objtype_all:
 						$ot = getMLText("all");
 						break;
-					case LetoDMS_Core_AttributeDefinition::objtype_folder:
+					case SeedDMS_Core_AttributeDefinition::objtype_folder:
 						$ot = getMLText("folder");
 						break;
-					case LetoDMS_Core_AttributeDefinition::objtype_document:
+					case SeedDMS_Core_AttributeDefinition::objtype_document:
 						$ot = getMLText("document");
 						break;
-					case LetoDMS_Core_AttributeDefinition::objtype_documentcontent:
+					case SeedDMS_Core_AttributeDefinition::objtype_documentcontent:
 						$ot = getMLText("version");
 						break;
 				}
@@ -109,10 +109,10 @@ function showAttributeDefinitions(selectObj) {
 					<td><?php printMLText("attrdef_name");?>:</td><td><input type="text" name="name"></td>
 				</tr>
 				<tr>
-					<td><?php printMLText("attrdef_objtype");?>:</td><td><select name="objtype"><option value="<?php echo LetoDMS_Core_AttributeDefinition::objtype_all ?>">All</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::objtype_folder ?>">Folder</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::objtype_document ?>"><?php printMLText("document"); ?></option><option value="<?php echo LetoDMS_Core_AttributeDefinition::objtype_documentcontent ?>"><?php printMLText("version"); ?></option></select>
+					<td><?php printMLText("attrdef_objtype");?>:</td><td><select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>">All</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>">Folder</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>"><?php printMLText("document"); ?></option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>"><?php printMLText("version"); ?></option></select>
 				</tr>
 				<tr>
-					<td><?php printMLText("attrdef_type");?>:</td><td><select name="type"><option value="<?php echo LetoDMS_Core_AttributeDefinition::type_int ?>">Integer</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::type_float ?>">Float</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::type_string ?>">String</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::type_boolean ?>">Boolean</option></select></td>
+					<td><?php printMLText("attrdef_type");?>:</td><td><select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>">Integer</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>">Float</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>">String</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>">Boolean</option></select></td>
 				</tr>
 				<tr>
 					<td><?php printMLText("attrdef_multiple");?>:</td><td><input type="checkbox" value="1" name="multiple" /></td>
@@ -179,7 +179,7 @@ function showAttributeDefinitions(selectObj) {
 							<?php printMLText("attrdef_type");?>:
 						</td>
 						<td>
-							<select name="type"><option value="<?php echo LetoDMS_Core_AttributeDefinition::type_int ?>" <?php if($attrdef->getType() == LetoDMS_Core_AttributeDefinition::type_int) echo "selected"; ?>>Integer</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::type_float ?>" <?php if($attrdef->getType() == LetoDMS_Core_AttributeDefinition::type_float) echo "selected"; ?>>Float</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::type_string ?>" <?php if($attrdef->getType() == LetoDMS_Core_AttributeDefinition::type_string) echo "selected"; ?>>String</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::type_boolean ?>" <?php if($attrdef->getType() == LetoDMS_Core_AttributeDefinition::type_boolean) echo "selected"; ?>>Boolean</option></select>
+							<select name="type"><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_int ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_int) echo "selected"; ?>>Integer</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_float ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_float) echo "selected"; ?>>Float</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_string ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_string) echo "selected"; ?>>String</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::type_boolean ?>" <?php if($attrdef->getType() == SeedDMS_Core_AttributeDefinition::type_boolean) echo "selected"; ?>>Boolean</option></select>
 						</td>
 					</tr>
 					<tr>
@@ -187,7 +187,7 @@ function showAttributeDefinitions(selectObj) {
 							<?php printMLText("attrdef_objtype");?>:
 						</td>
 						<td>
-							<select name="objtype"><option value="<?php echo LetoDMS_Core_AttributeDefinition::objtype_all ?>">All</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef->getObjType() == LetoDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>>Folder</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef->getObjType() == LetoDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>>Document</option><option value="<?php echo LetoDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef->getObjType() == LetoDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>>Document content</option></select>
+							<select name="objtype"><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_all ?>">All</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_folder ?>" <?php if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) echo "selected"; ?>>Folder</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_document ?>" <?php if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) echo "selected"; ?>>Document</option><option value="<?php echo SeedDMS_Core_AttributeDefinition::objtype_documentcontent ?>" <?php if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) echo "selected"; ?>>Document content</option></select>
 						</td>
 					</tr>
 					<tr>

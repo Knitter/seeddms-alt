@@ -1,25 +1,25 @@
-VERSION=4.0.0-pre4
-SRC=CHANGELOG inc conf utils index.php languages views op out README README.Notification drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install
+VERSION=4.0.0-pre5
+SRC=CHANGELOG inc conf utils index.php languages views op out README.md README.Notification drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install
 #restapi webapp
 
 dist:
-	mkdir -p tmp/letoDMS-$(VERSION)
-	cp -a $(SRC) tmp/letoDMS-$(VERSION)
-	(cd tmp; tar --exclude=.svn -czvf ../LetoDMS-$(VERSION).tar.gz letoDMS-$(VERSION))
+	mkdir -p tmp/seeddms-$(VERSION)
+	cp -a $(SRC) tmp/seeddms-$(VERSION)
+	(cd tmp; tar --exclude=.svn -czvf ../seeddms-$(VERSION).tar.gz seeddms-$(VERSION))
 	rm -rf tmp
 
 pear:
-	(cd LetoDMS_Core/; pear package)
-	(cd LetoDMS_Lucene/; pear package)
-	(cd LetoDMS_Preview/; pear package)
+	(cd SeedDMS_Core/; pear package)
+	(cd SeedDMS_Lucene/; pear package)
+	(cd SeedDMS_Preview/; pear package)
 
 webdav:
-	mkdir -p tmp/letoDMS-webdav-$(VERSION)
-	cp webdav/* tmp/letoDMS-webdav-$(VERSION)
-	(cd tmp; tar --exclude=.svn -czvf ../LetoDMS-webdav-$(VERSION).tar.gz letoDMS-webdav-$(VERSION))
+	mkdir -p tmp/seeddms-webdav-$(VERSION)
+	cp webdav/* tmp/seeddms-webdav-$(VERSION)
+	(cd tmp; tar --exclude=.svn -czvf ../seeddms-webdav-$(VERSION).tar.gz seeddms-webdav-$(VERSION))
 	rm -rf tmp
 
 doc:
-	phpdoc -d LetoDMS_Core --ignore 'getusers.php,getfoldertree.php,config.php,reverselookup.php' -t html
+	phpdoc -d SeedDMS_Core --ignore 'getusers.php,getfoldertree.php,config.php,reverselookup.php' -t html
 
 .PHONY: webdav

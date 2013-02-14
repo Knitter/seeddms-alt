@@ -37,7 +37,7 @@ if (!is_object($folder)) {
 	UI::exitError(getMLText("search"),getMLText("invalid_folder_id"));
 }
 
-$attrdefs = $dms->getAllAttributeDefinitions(array(LetoDMS_Core_AttributeDefinition::objtype_document, LetoDMS_Core_AttributeDefinition::objtype_documentcontent/*, LetoDMS_Core_AttributeDefinition::objtype_all*/));
+$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_documentcontent/*, SeedDMS_Core_AttributeDefinition::objtype_all*/));
 $allCats = $dms->getDocumentCategories();
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 

@@ -4,16 +4,16 @@ require_once "HTTP/WebDAV/Server.php";
 if(!empty($settings->_coreDir))
 	require_once($settings->_coreDir.'/Core.php');
 else
-	require_once('LetoDMS/Core.php');
+	require_once('SeedDMS/Core.php');
 
 /**
- * LetoDMS access using WebDAV
+ * SeedDMS access using WebDAV
  *
  * @access  public
  * @author  Uwe Steinmann <steinm@php.net>
  * @version @package-version@
  */
-class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
+class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 {
 	/**
 	 * A reference of the DMS itself
@@ -227,10 +227,10 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		$files["files"][] = $this->fileinfo($obj);
 
 		// information for contained resources requested?
-		if (get_class($obj) == 'LetoDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
 
 			$subfolders = $obj->getSubFolders();
-			$subfolders = LetoDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
+			$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
 			if ($subfolders) {
 				// ok, now get all its contents
 				foreach($subfolders as $subfolder) {
@@ -239,7 +239,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 				// TODO recursion needed if "Depth: infinite"
 			}
 			$documents = $obj->getDocuments();
-			$documents = LetoDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
+			$documents = SeedDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
 			if ($documents) {
 				// ok, now get all its contents
 				foreach($documents as $document) {
@@ -268,7 +268,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		$info["props"][] = $this->mkprop("getlastmodified", time());
 
 		// type and size (caller already made sure that path exists)
-		if (get_class($obj) == 'LetoDMS_Core_Folder') {
+		if (get_class($obj) == 'SeedDMS_Core_Folder') {
 			/* folders do not have a modification time */
 			$info["props"][] = $this->mkprop("creationdate",	time());
 
@@ -312,18 +312,18 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			}			   
 			$info["props"][] = $this->mkprop("getcontentlength", filesize($this->dms->contentDir.'/'.$fspath));
 			if($keywords = $obj->getKeywords())
-				$info["props"][] = $this->mkprop("LetoDMS:", "keywords", $keywords);
-			$info["props"][] = $this->mkprop("LetoDMS:", "version", $content->getVersion());
+				$info["props"][] = $this->mkprop("SeedDMS:", "keywords", $keywords);
+			$info["props"][] = $this->mkprop("SeedDMS:", "version", $content->getVersion());
 			$status = $content->getStatus();
-			$info["props"][] = $this->mkprop("LetoDMS:", "status", $status['status']);
-			$info["props"][] = $this->mkprop("LetoDMS:", "status-comment", $status['comment']);
-			$info["props"][] = $this->mkprop("LetoDMS:", "status-date", $status['date']);
+			$info["props"][] = $this->mkprop("SeedDMS:", "status", $status['status']);
+			$info["props"][] = $this->mkprop("SeedDMS:", "status-comment", $status['comment']);
+			$info["props"][] = $this->mkprop("SeedDMS:", "status-date", $status['date']);
 			if($obj->getExpires())
-				$info["props"][] = $this->mkprop("LetoDMS:", "expires", date('c', $obj->getExpires()));
+				$info["props"][] = $this->mkprop("SeedDMS:", "expires", date('c', $obj->getExpires()));
 		}
 		if($comment = $obj->getComment())
-			$info["props"][] = $this->mkprop("LetoDMS:", "comment", $comment);
-		$info["props"][] = $this->mkprop("LetoDMS:", "owner", $obj->getOwner()->getLogin());
+			$info["props"][] = $this->mkprop("SeedDMS:", "comment", $comment);
+		$info["props"][] = $this->mkprop("SeedDMS:", "owner", $obj->getOwner()->getLogin());
 
 		// get additional properties from database
 				/*
@@ -356,7 +356,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		if (!$obj) return false;
 
 		// is this a collection?
-		if (get_class($obj) == 'LetoDMS_Core_Folder') {
+		if (get_class($obj) == 'SeedDMS_Core_Folder') {
 			return $this->GetDir($obj, $options);
 		}
 
@@ -396,9 +396,9 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		$format = "%15s  %-19s  %-s\n";
 
 		$subfolders = $folder->getSubFolders();
-		$subfolders = LetoDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
+		$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $this->user, M_READ);
 		$documents = $folder->getDocuments();
-		$docs = LetoDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
+		$docs = SeedDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
 		if(!$this->user->isAdmin()) {
 			$documents = array();
 			foreach($docs as $document) {
@@ -437,7 +437,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		foreach ($objs as $obj) {
 			$filename = $obj->getName();
 			$fullpath = $_fullpath.$filename;
-			if(get_class($obj) == 'LetoDMS_Core_Folder') {
+			if(get_class($obj) == 'SeedDMS_Core_Folder') {
 				$fullpath .= '/';
 				$filename .= '/';
 				$filesize = 0;
@@ -486,7 +486,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			$parent = '';
 		$folder = $this->reverseLookup($parent.'/');
 
-		if (!$folder || get_class($folder) != "LetoDMS_Core_Folder") {
+		if (!$folder || get_class($folder) != "SeedDMS_Core_Folder") {
 			return "409 Conflict";
 		}
 
@@ -527,7 +527,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 				 * In that case just update the modification date
 				 */
 				$lc = $document->getLatestContent();
-				if($lc->getChecksum() == LetoDMS_Core_File::checksum($tmpFile)) {
+				if($lc->getChecksum() == SeedDMS_Core_File::checksum($tmpFile)) {
 					$lc->setDate();
 				} elseif(!$document->addContent('', $this->user, $tmpFile, $name, $fileType, $mimetype, array(), array(), 0)) {
 					unlink($tmpFile);
@@ -575,7 +575,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		}
 
 		/* Check if parent of new folder is a folder */
-		if (get_class($folder) != 'LetoDMS_Core_Folder') {
+		if (get_class($folder) != 'SeedDMS_Core_Folder') {
 			return "403 Forbidden";
 		}
 
@@ -629,7 +629,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			return "403 Forbidden";				 
 		}
 
-		if (get_class($obj) == 'LetoDMS_Core_Folder') {
+		if (get_class($obj) == 'SeedDMS_Core_Folder') {
 			if($obj->hasDocuments() || $obj->hasSubFolders()) {
 				return "409 Conflict";
 			}
@@ -697,12 +697,12 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			return "403 Forbidden";				 
 		}
 
-		if(get_class($objdest) == 'LetoDMS_Core_Document') {
+		if(get_class($objdest) == 'SeedDMS_Core_Document') {
 			/* If destination object is a document it must be overwritten */
 			if (!$options["overwrite"]) {
 				return "412 precondition failed";
 			}
-			if(get_class($objsource) == 'LetoDMS_Core_Folder') {
+			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
 				return "400 Bad request";
 			}
 
@@ -723,11 +723,11 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			$objsource->remove();
 
 			return "204 No Content";
-		} elseif(get_class($objdest) == 'LetoDMS_Core_Folder') {
+		} elseif(get_class($objdest) == 'SeedDMS_Core_Folder') {
 			/* Set the new Folder of the source object */
-			if(get_class($objsource) == 'LetoDMS_Core_Document')
+			if(get_class($objsource) == 'SeedDMS_Core_Document')
 				$objsource->setFolder($objdest);
-			elseif(get_class($objsource) == 'LetoDMS_Core_Folder')
+			elseif(get_class($objsource) == 'SeedDMS_Core_Folder')
 				$objsource->setParent($objdest);
 			else
 				return "500 Internal server error";
@@ -767,7 +767,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		if (!$objsource)
 			return "404 Not found";
 
-		if (get_class($objsource) == 'LetoDMS_Core_Folder' && ($options["depth"] != "infinity")) {
+		if (get_class($objsource) == 'SeedDMS_Core_Folder' && ($options["depth"] != "infinity")) {
 			// RFC 2518 Section 9.2, last paragraph
 			return "400 Bad request";
 		}
@@ -795,12 +795,12 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		}
 
 		/* If destination object is a document it must be overwritten */
-		if(get_class($objdest) == 'LetoDMS_Core_Document') {
+		if(get_class($objdest) == 'SeedDMS_Core_Document') {
 			if (!$options["overwrite"]) {
 				return "412 precondition failed";
 			}
 			/* Copying a folder into a document makes no sense */
-			if(get_class($objsource) == 'LetoDMS_Core_Folder') {
+			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
 				return "400 Bad request";
 			}
 
@@ -817,12 +817,12 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			$objdest->setName($objsource->getName());
 
 			return "204 No Content";
-		} elseif(get_class($objdest) == 'LetoDMS_Core_Folder') {
+		} elseif(get_class($objdest) == 'SeedDMS_Core_Folder') {
 			if($this->logger)
 				$this->logger->log('COPY: copy \''.$objdest->getName().'\' to folder '.$objdest->getName().'', PEAR_LOG_INFO);
 
 			/* Currently no support for copying folders */
-			if(get_class($objsource) == 'LetoDMS_Core_Folder') {
+			if(get_class($objsource) == 'SeedDMS_Core_Folder') {
 				if($this->logger)
 					$this->logger->log('COPY: source is a folder '.$objsource->getName().'', PEAR_LOG_INFO);
 
@@ -874,7 +874,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 				$options["props"][$key]['status'] = "403 Forbidden";
 			} else {
 			$this->logger->log('PROPPATCH: set '.$prop["ns"].''.$prop["val"].' to '.$prop["val"], PEAR_LOG_INFO);
-				if($prop["ns"] == "LetoDMS:") {
+				if($prop["ns"] == "SeedDMS:") {
 					if (isset($prop["val"]))
 						$val = $prop["val"];
 					else
@@ -909,7 +909,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			return "200 OK";
 
 		// TODO recursive locks on directories not supported yet
-		if (get_class($obj) == 'LetoDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
 			return "409 Conflict";
 		}
 
@@ -947,7 +947,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 			return "204 No Content";
 
 		// TODO recursive locks on directories not supported yet
-		if (get_class($obj) == 'LetoDMS_Core_Folder' && !empty($options["depth"])) {
+		if (get_class($obj) == 'SeedDMS_Core_Folder' && !empty($options["depth"])) {
 			return "409 Conflict";
 		}
 
@@ -984,7 +984,7 @@ class HTTP_WebDAV_Server_LetoDMS extends HTTP_WebDAV_Server
 		}
 
 		// Folders cannot be locked
-		if(get_class($obj) == 'LetoDMS_Core_Folder') {
+		if(get_class($obj) == 'SeedDMS_Core_Folder') {
 			if($this->logger)
 				$this->logger->log('checkLock: object is a folder', PEAR_LOG_INFO);
 			return false;

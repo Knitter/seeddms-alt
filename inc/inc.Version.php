@@ -18,12 +18,12 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-class LetoDMS_Version {
+class SeedDMS_Version {
 
 	var $_number = "4.0.0";
-	var $_string = "LetoDMS";
+	var $_string = "SeedDMS";
 
-	function LetoDMS_Version() {
+	function SeedDMS_Version() {
 		return;
 	}
 

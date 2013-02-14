@@ -71,7 +71,7 @@ $resArr = $db->getResultArray($searchQuery);
 if (!is_bool($resArr) && count($resArr)>0) {
 	echo "<ol>";
 	foreach($resArr as $docArr) {
-		$doc = new LetoDMS_Core_Document($docArr["id"],
+		$doc = new SeedDMS_Core_Document($docArr["id"],
 												$docArr["name"],
 												$docArr["comment"],
 												$docArr["date"],

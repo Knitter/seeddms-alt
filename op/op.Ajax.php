@@ -28,7 +28,7 @@ include("../inc/inc.ClassPasswordHistoryManager.php");
 /* Load session */
 if (isset($_COOKIE["mydms_session"])) {
 	$dms_session = $_COOKIE["mydms_session"];
-	$session = new LetoDMS_Session($db);
+	$session = new SeedDMS_Session($db);
 	if(!$resArr = $session->load($dms_session)) {
 		echo json_encode(array('error'=>1));
 		exit;

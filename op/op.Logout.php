@@ -27,7 +27,7 @@ include("../inc/inc.DBInit.php");
 
 $dms_session = $_COOKIE["mydms_session"];
 
-$session = new LetoDMS_Session($db);
+$session = new SeedDMS_Session($db);
 $session->load($dms_session);
 
 // If setting the user id to 0 worked, it would be a way to logout a

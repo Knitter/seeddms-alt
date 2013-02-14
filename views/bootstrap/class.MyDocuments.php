@@ -3,7 +3,7 @@
  * Implementation of MyDocuments view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for MyDocuments view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -40,7 +40,7 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 		$workflowmode = $this->params['workflowmode'];
 
 		$db = $dms->getDB();
-		$previewer = new LetoDMS_Preview_Previewer($cachedir, 40);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
 
 		$this->htmlStartPage(getMLText("my_documents"));
 		$this->globalNavigation();
@@ -530,7 +530,7 @@ class LetoDMS_View_MyDocuments extends LetoDMS_Bootstrap_Style {
 				print "<th><a href=\"../out/out.MyDocuments.php?orderby=e\">".getMLText("expires")."</a></th>\n";
 				print "</tr>\n</thead>\n<tbody>\n";
 
-				$previewer = new LetoDMS_Preview_Previewer($cachedir, 40);
+				$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
 				foreach ($resArr as $res) {
 					$document = $dms->getDocument($res["documentID"]);
 				

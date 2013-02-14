@@ -36,7 +36,7 @@ if (!isset($_POST["dumpname"]) || !file_exists($settings->_contentDir.$_POST["du
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 }
 
-if (!LetoDMS_Core_File::removeFile($settings->_contentDir.$_POST["dumpname"])) {
+if (!SeedDMS_Core_File::removeFile($settings->_contentDir.$_POST["dumpname"])) {
 	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 }
 

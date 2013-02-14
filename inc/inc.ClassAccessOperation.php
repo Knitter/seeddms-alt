@@ -3,7 +3,7 @@
  * Implementation of access restricitions
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -15,12 +15,12 @@
  * Class to check certain access restrictions
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_AccessOperation {
+class SeedDMS_AccessOperation {
 	/**
 	 * @var object $obj object being accessed
 	 * @access protected
@@ -34,7 +34,7 @@ class LetoDMS_AccessOperation {
 	private $user;
 
 	/**
-	 * @var object $settings LetoDMS Settings
+	 * @var object $settings SeedDMS Settings
 	 * @access protected
 	 */
 	private $settings;
@@ -55,7 +55,7 @@ class LetoDMS_AccessOperation {
 	 * even if is disallowed in the settings.
 	 */
 	function mayRemoveVersion() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$versions = $this->obj->getContent();
 			if ((($this->settings->_enableVersionDeletion && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin() ) && (count($versions) > 1)) {
 				return true;
@@ -75,7 +75,7 @@ class LetoDMS_AccessOperation {
 	 * even if is disallowed in the settings.
 	 */
 	function mayOverwriteStatus() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_RELEASED || $status["status"]==S_OBSOLETE )) {
@@ -95,7 +95,7 @@ class LetoDMS_AccessOperation {
 	 * settings.
 	 */
 	function maySetReviewersApprovers() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]==S_DRAFT_REV)) {
@@ -115,7 +115,7 @@ class LetoDMS_AccessOperation {
 	 * settings.
 	 */
 	function maySetWorkflow() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$workflow = $latestContent->getWorkflow();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && (!$workflow || ($workflow->getInitState()->getID() == $latestContent->getWorkflowState()->getID()))) {
@@ -135,7 +135,7 @@ class LetoDMS_AccessOperation {
 	 * disallowed in the settings.
 	 */
 	function maySetExpires() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
@@ -155,7 +155,7 @@ class LetoDMS_AccessOperation {
 	 * disallowed in the settings.
 	 */
 	function mayEditComment() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
@@ -175,7 +175,7 @@ class LetoDMS_AccessOperation {
 	 * disallowed in the settings.
 	 */
 	function mayEditAttributes() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			$workflow = $latestContent->getWorkflow();
@@ -194,7 +194,7 @@ class LetoDMS_AccessOperation {
 	 * account here.
 	 */
 	function mayReview() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ($status["status"]!=S_OBSOLETE) {
@@ -212,7 +212,7 @@ class LetoDMS_AccessOperation {
 	 * account here.
 	 */
 	function mayApprove() { /* {{{ */
-		if(get_class($this->obj) == 'LetoDMS_Core_Document') {
+		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ($status["status"]!=S_OBSOLETE) {

@@ -112,12 +112,12 @@ if($settings->_enableFullSearch) {
 	if(!empty($settings->_luceneClassDir))
 		require_once($settings->_luceneClassDir.'/Lucene.php');
 	else
-		require_once('LetoDMS/Lucene.php');
+		require_once('SeedDMS/Lucene.php');
 }
 
 Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
 $index = Zend_Search_Lucene::open($settings->_luceneDir);
-$lucenesearch = new LetoDMS_Lucene_Search($index);
+$lucenesearch = new SeedDMS_Lucene_Search($index);
 $hits = $lucenesearch->search($query, $owner ? $owner->getLogin() : '', '', $categories);
 $totalDocs = count($hits);
 $limit = 20;

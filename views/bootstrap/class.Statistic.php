@@ -3,7 +3,7 @@
  * Implementation of Statistic view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for Statistic view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_Statistic extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_Statistic extends SeedDMS_Bootstrap_Style {
 		var $dms;
 		var $folder_count;
 		var $document_count;
@@ -77,7 +77,7 @@ class LetoDMS_View_Statistic extends LetoDMS_Bootstrap_Style {
 
 		print "</ul>";
 
-		print "<small>".LetoDMS_Core_File::format_filesize($folder_size).", ".$doc_count." ".getMLText("documents")."</small>\n";
+		print "<small>".SeedDMS_Core_File::format_filesize($folder_size).", ".$doc_count." ".getMLText("documents")."</small>\n";
 
 		print "</li>";
 
@@ -114,7 +114,7 @@ class LetoDMS_View_Statistic extends LetoDMS_Bootstrap_Style {
 
 		if (! $document->inheritsAccess()) $this->printAccessList($document);
 
-		print "<small>".LetoDMS_Core_File::format_filesize($folder_size).", ".$local_file_count." ".getMLText("files")."</small>\n";
+		print "<small>".SeedDMS_Core_File::format_filesize($folder_size).", ".$local_file_count." ".getMLText("files")."</small>\n";
 
 		print "</li>";
 
@@ -224,7 +224,7 @@ print "<ul class=\"unstyled\">\n";
 print "<li>".getMLText("folders").": ".$this->folder_count."</li>\n";
 print "<li>".getMLText("documents").": ".$this->document_count."</li>\n";
 print "<li>".getMLText("files").": ".$this->file_count."</li>\n";
-print "<li>".getMLText("storage_size").": ".LetoDMS_Core_File::format_filesize($this->storage_size)."</li>\n";
+print "<li>".getMLText("storage_size").": ".SeedDMS_Core_File::format_filesize($this->storage_size)."</li>\n";
 
 print "</ul>\n";
 

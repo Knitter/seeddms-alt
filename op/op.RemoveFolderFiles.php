@@ -38,7 +38,7 @@ function removeFolderFiles($folder) {
 
 	$documents = $folder->getDocuments();
 	foreach ($documents as $document)
-		LetoDMS_Core_File::removeDir($dms->contentDir . $document->getDir());
+		SeedDMS_Core_File::removeDir($dms->contentDir . $document->getDir());
 
 	$subFolders = $folder->getSubFolders();
 

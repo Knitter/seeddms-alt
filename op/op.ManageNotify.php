@@ -37,7 +37,7 @@ function add_folder_notify($folder,$userid,$recursefolder,$recursedoc) {
 		// include all folder's document
 		
 		$documents = $folder->getDocuments();
-		$documents = LetoDMS_Core_DMS::filterAccess($documents, $dms->getUser($userid), M_READ);
+		$documents = SeedDMS_Core_DMS::filterAccess($documents, $dms->getUser($userid), M_READ);
 
 		foreach($documents as $document)
 			$document->addNotify($userid, true);
@@ -48,7 +48,7 @@ function add_folder_notify($folder,$userid,$recursefolder,$recursedoc) {
 		// recurse all folder's folders
 		
 		$subFolders = $folder->getSubFolders();
-		$subFolders = LetoDMS_Core_DMS::filterAccess($subFolders, $dms->getUser($userid), M_READ);
+		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $dms->getUser($userid), M_READ);
 
 		foreach($subFolders as $subFolder)
 			add_folder_notify($subFolder,$userid,$recursefolder,$recursedoc);

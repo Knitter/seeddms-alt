@@ -67,16 +67,16 @@ BEFORE YOU START
 
 SeedDMS has changed its installation process with version 3.0.0. This gives
 you many more options in how to install SeedDMS. First of all, SeedDMS was
-split into a core package (`LetoDMS_Core-<version>.tar.gz`) and the web
+split into a core package (`SeedDMS_Core-<version>.tar.gz`) and the web
 application itself (`seeddms-<version>.tar.gz`). The core is a pear package
 which could be installed as one. It is responsible for all the database
 operations. The web application contains the ui not knowing anything about
 the database layout. Second, one SeedDMS installation can be used for
 various customer instances by sharing a common source. Starting with
 version 3.2.0 a full text search engine has been added. This requires
-the zend framework and another pear package `LetoDMS_Lucene-<version>.tar.gz`
+the zend framework and another pear package `SeedDMS_Lucene-<version>.tar.gz`
 which can be downloaded from the SeedDMS web page. Version 4.0.0 show
-preview images of documents which requires `LetoDMS_Preview-<version>.tar.gz`.
+preview images of documents which requires `SeedDMS_Preview-<version>.tar.gz`.
 Finally, SeedDMS has
 got a web based installation, which takes care of most of the installation
 process.
@@ -113,7 +113,7 @@ php.ini or adding a line like
 to your apache configuration or setting the `extraPath` configuration
 variable of SeedDMS.
 
-For historical reasons the path to the LetoDMS_Core and LetoDMS_Lucene package
+For historical reasons the path to the SeedDMS_Core and SeedDMS_Lucene package
 can still be set
 in the configuration, which is not recommend anymore. Just leave those
 parameters empty.
@@ -123,11 +123,11 @@ parameters empty.
 
 Unpack seeddms-<version>.tar.gz below the document root of
 your web server.
-Install `LetoDMS_Preview-<version>.tar.gz` and
-`LetoDMS_Core-<version>.tar.gz` either as a regular pear package or
+Install `SeedDMS_Preview-<version>.tar.gz` and
+`SeedDMS_Core-<version>.tar.gz` either as a regular pear package or
 set up a file system structure like pear did somewhere on you server.
 For the full text search engine support, you will also
-need to install `LetoDMS_Lucene-<version>.tar.gz`.
+need to install `SeedDMS_Lucene-<version>.tar.gz`.
 
 For the following instructions we will assume a structure like above
 and seeddms-<version> being accessible through
@@ -154,29 +154,29 @@ http://localhost/seeddms/
 -------------------------------------------------------
 
 You need a working web server with MySQL/PHP5 support and the files
-`SeedDMS-<version>.tar.gz`, `LetoDMS_Preview-<version>.tar.gz` and
-`LetoDMS_Core-<version>.tgz`. For the 
+`SeedDMS-<version>.tar.gz`, `SeedDMS_Preview-<version>.tar.gz` and
+`SeedDMS_Core-<version>.tgz`. For the 
 full text search engine support, you will also need to unpack
-`LetoDMS_Lucene-<version>.tgz`.
+`SeedDMS_Lucene-<version>.tgz`.
 
 * Unpack all the files in a public web server folder. If you're working on
   a host machine your provider will tell you where to upload the files.
-  If possible, do not unpack the pear packages `LetoDMS_Core-<version>.tgz`,
-	`LetoDMS_Preview-<version>.tgz` and
-  `LetoDMS_Lucene-<version>.tgz` below the document root of your web server.
+  If possible, do not unpack the pear packages `SeedDMS_Core-<version>.tgz`,
+	`SeedDMS_Preview-<version>.tgz` and
+  `SeedDMS_Lucene-<version>.tgz` below the document root of your web server.
 	Choose a temporary folder, as the files will be moved in a second.
 
   Create a directory e.g. `pear` in the same directory where you unpacked
-  seeddms and create a sub directory LetoDMS. Move the content except for the
-  `tests` directory of all LetoDMS pear
-  packages into that directory. Please note that `pear/LetoDMS` may not 
+  seeddms and create a sub directory SeedDMS. Move the content except for the
+  `tests` directory of all SeedDMS pear
+  packages into that directory. Please note that `pear/SeedDMS` may not 
   (and for security reasons should not) be below your document root.
   
   You will end up with a directory structure like the following
 
   > seeddms-<version>
   > pear
-  >   LetoDMS
+  >   SeedDMS
   >     Core.php
   >     Core
   >     Lucene.php
@@ -186,9 +186,9 @@ full text search engine support, you will also need to unpack
 
   Since they are pear packages they can also be installed with
 
-	> pear install LetoDMS_Core-<version>.tgz
-	> pear install LetoDMS_Lucene-<version>.tgz
-	> pear install LetoDMS_Preview-<version>.tgz
+	> pear install SeedDMS_Core-<version>.tgz
+	> pear install SeedDMS_Lucene-<version>.tgz
+	> pear install SeedDMS_Preview-<version>.tgz
 
 * The PEAR package Log is also needed. It can be downloaded from
   http://pear.php.net/package/Log. Either install it as a pear package
@@ -232,10 +232,10 @@ If you install SeedDMS for the first time continue with the database setup.
   your browser at http://hostname/seeddms/install
 
 
-NOTE: UPDATING FROM A PREVIOUS VERSION OR LETODMS
+NOTE: UPDATING FROM A PREVIOUS VERSION OR SEEDDMS
 
-As SeedDMS is a smooth continuation of LetoDMS there is no difference
-in updating from LetoDMS or SeedDMS
+As SeedDMS is a smooth continuation of SeedDMS there is no difference
+in updating from SeedDMS or SeedDMS
 
 - make a backup archive of your installation folder
 - make a backup archive of your data folder

@@ -3,7 +3,7 @@
  * Implementation of ViewFolder view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for ViewFolder view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 	function getAccessModeText($defMode) { /* {{{ */
 		switch($defMode) {
@@ -156,9 +156,9 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("folder_contents"));
 
 		$subFolders = $folder->getSubFolders($orderby);
-		$subFolders = LetoDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
+		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
 		$documents = $folder->getDocuments($orderby);
-		$documents = LetoDMS_Core_DMS::filterAccess($documents, $user, M_READ);
+		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
 			print "<table class=\"table\">";
@@ -180,9 +180,9 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 			$comment = $subFolder->getComment();
 			if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 			$subsub = $subFolder->getSubFolders();
-			$subsub = LetoDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
+			$subsub = SeedDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
 			$subdoc = $subFolder->getDocuments();
-			$subdoc = LetoDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
+			$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 			
 			print "<tr rel=\"folder_".$subFolder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
 		//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
@@ -205,7 +205,7 @@ class LetoDMS_View_ViewFolder extends LetoDMS_Bootstrap_Style {
 			print "</tr>\n";
 		}
 
-		$previewer = new LetoDMS_Preview_Previewer($cachedir, 40);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
 		foreach($documents as $document) {
 
 			$owner = $document->getOwner();

@@ -6,7 +6,7 @@ function usage() { /* {{{ */
 	echo "  seeddms-createfolder [--config <file>] [-c <comment>] [-n <name>] [-s <sequence>] [-h] [-v] -F <parent id>\n";
 	echo "\n";
 	echo "Description:\n";
-	echo "  This program creates a new folder in LetoDMS.\n";
+	echo "  This program creates a new folder in SeedDMS.\n";
 	echo "\n";
 	echo "Options:\n";
 	echo "  -h, --help: print usage information and exit.\n";
@@ -48,7 +48,7 @@ if(isset($options['config'])) {
 if(isset($settings->_extraPath))
 	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
 
-require_once("LetoDMS/Core.php");
+require_once("SeedDMS/Core.php");
 
 if(isset($options['F'])) {
 	$folderid = (int) $options['F'];
@@ -73,12 +73,12 @@ if(isset($options['n'])) {
 	$name = $options['n'];
 }
 
-$db = new LetoDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
+$db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostname, $settings->_dbUser, $settings->_dbPass, $settings->_dbDatabase);
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
 $db->_conn->debug = 1;
 
 
-$dms = new LetoDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+$dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
 $dms->setRootFolderID($settings->_rootFolderID);
 $dms->setGuestID($settings->_guestID);
 $dms->setEnableGuestLogin($settings->_enableGuestLogin);

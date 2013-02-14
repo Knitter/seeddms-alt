@@ -21,7 +21,7 @@
  * Check Update file
  */
 if (file_exists("../inc/inc.Settings.old.php")) {
-  echo "You can't install letoDMS, unless you delete " . realpath("../inc/inc.Settings.old.php") . ".";
+  echo "You can't install SeedDMS, unless you delete " . realpath("../inc/inc.Settings.old.php") . ".";
   exit;
 }
 
@@ -30,15 +30,15 @@ if (file_exists("../inc/inc.Settings.old.php")) {
  * Check file for installation
  */
 if (!file_exists("create_tables-innodb.sql")) {
-  echo "Can't install letoDMS, 'create_tables-innodb.sql' missing";
+  echo "Can't install SeedDMS, 'create_tables-innodb.sql' missing";
   exit;
 }
 if (!file_exists("create_tables.sql")) {
-  echo "Can't install letoDMS, 'create_tables.sql' missing";
+  echo "Can't install SeedDMS, 'create_tables.sql' missing";
   exit;
 }
 if (!file_exists("settings.xml.template_install")) {
-  echo "Can't install letoDMS, 'settings.xml.template_install' missing";
+  echo "Can't install SeedDMS, 'settings.xml.template_install' missing";
   exit;
 }
 
@@ -115,8 +115,8 @@ function fileExistsInIncludePath($file) { /* {{{ */
 /**
  * Load default settings + set
  */
-define("LETODMS_INSTALL", "on");
-define("LETODMS_VERSION", "4.0.0");
+define("SEEDDMS_INSTALL", "on");
+define("SEEDDMS_VERSION", "4.0.0");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -131,7 +131,7 @@ if (!$configDir) {
 }
 
 if (!file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
-	echo "For installation of LetoDMS, you must create the file conf/ENABLE_INSTALL_TOOL";
+	echo "For installation of SeedDMS, you must create the file conf/ENABLE_INSTALL_TOOL";
 	exit;
 }
 
@@ -179,7 +179,7 @@ include("../inc/inc.ClassUI.php");
 
 
 UI::htmlStartPage("INSTALL");
-UI::contentHeading("letoDMS Installation for version ".LETODMS_VERSION);
+UI::contentHeading("SeedDMS Installation for version ".SEEDDMS_VERSION);
 UI::contentContainerStart();
 
 
@@ -265,7 +265,7 @@ if ($action=="setSettings") {
 	/**
 	 * Check Parameters, require version 3.3.x
 	 */
-	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', LETODMS_VERSION), 0,2)));
+	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', SEEDDMS_VERSION), 0,2)));
 
 	if (!$hasError) {
 		if(isset($settings->_extraPath))

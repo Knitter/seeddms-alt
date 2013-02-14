@@ -82,7 +82,7 @@ if ($_FILES['userfile']['error'] == 0) {
 
 /* Check if the uploaded file is identical to last version */
 	$lc = $document->getLatestContent();
-	if($lc->getChecksum() == LetoDMS_Core_File::checksum($userfiletmp)) {
+	if($lc->getChecksum() == SeedDMS_Core_File::checksum($userfiletmp)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("identical_version"));
 	}
 

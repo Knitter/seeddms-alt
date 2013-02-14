@@ -3,7 +3,7 @@
  * Implementation of DocumentVersionDetail view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @license    GPL 2
  * @version    @version@
  * @author     Uwe Steinmann <uwe@steinmann.cx>
@@ -22,14 +22,14 @@ require_once("class.Bootstrap.php");
  * Class which outputs the html page for DocumentVersionDetail view
  *
  * @category   DMS
- * @package    LetoDMS
+ * @package    SeedDMS
  * @author     Markus Westphal, Malcolm Cowe, Uwe Steinmann <uwe@steinmann.cx>
  * @copyright  Copyright (C) 2002-2005 Markus Westphal,
  *             2006-2008 Malcolm Cowe, 2010 Matteo Lucarelli,
  *             2010-2012 Uwe Steinmann
  * @version    Release: @package_version@
  */
-class LetoDMS_View_DocumentVersionDetail extends LetoDMS_Bootstrap_Style {
+class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -116,7 +116,7 @@ class LetoDMS_View_DocumentVersionDetail extends LetoDMS_Bootstrap_Style {
 		}else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\"> ";
 
 		print "</ul>";
-		$previewer = new LetoDMS_Preview_Previewer($cachedir, 100);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, 100);
 		$previewer->createPreview($version);
 		if($previewer->hasPreview($version)) {
 			print("<img class=\"mimeicon\" width=\"100\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=100\" title=\"".htmlspecialchars($version->getMimeType())."\">");

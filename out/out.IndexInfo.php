@@ -37,9 +37,9 @@ if(!$settings->_enableFullSearch) {
 if(!empty($settings->_luceneClassDir))
 	require_once($settings->_luceneClassDir.'/Lucene.php');
 else
-	require_once('LetoDMS/Lucene.php');
+	require_once('SeedDMS/Lucene.php');
 
-$index = LetoDMS_Lucene_Indexer::open($settings->_luceneDir);
+$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
 if(!$index) {
 	UI::exitError(getMLText("admin_tools"),getMLText("no_fulltextindex"));
 }

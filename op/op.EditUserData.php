@@ -54,7 +54,7 @@ if (isset($_POST["pwd"]) && ($_POST["pwd"] != "")) {
 		$score = $ps->get_score();
 		if($score > $settings->_passwordStrength) {
 			if($settings->_passwordHistory > 0) {
-				$phm = new LetoDMS_PasswordHistoryManager($db);
+				$phm = new SeedDMS_PasswordHistoryManager($db);
 				$oldpwd = $phm->search($user, md5($_POST["pwd"]));
 				if($oldpwd) {
 					UI::exitError(getMLText("set_password"),getMLText("password_already_used"));
@@ -69,7 +69,7 @@ if (isset($_POST["pwd"]) && ($_POST["pwd"] != "")) {
 		}
 	} else {
 		if($settings->_passwordHistory > 0) {
-			$phm = new LetoDMS_PasswordHistoryManager($db);
+			$phm = new SeedDMS_PasswordHistoryManager($db);
 			$oldpwd = $phm->search($user, md5($_POST["pwd"]));
 			if($oldpwd) {
 				UI::exitError(getMLText("set_password"),getMLText("password_already_used"));

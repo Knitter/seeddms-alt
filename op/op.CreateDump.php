@@ -62,7 +62,7 @@ foreach ($tables as $table){
 
 fclose($h);
 
-if (LetoDMS_Core_File::gzcompressfile($dump_name,9)) unlink($dump_name);
+if (SeedDMS_Core_File::gzcompressfile($dump_name,9)) unlink($dump_name);
 else UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 
 add_log_line();
