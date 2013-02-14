@@ -262,15 +262,15 @@ if ($action=="setSettings") {
 	$settings->_coreDir = $_POST["coreDir"];
 	$settings->_luceneClassDir = $_POST["luceneClassDir"];
 
+	if(isset($settings->_extraPath))
+		ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
+
 	/**
 	 * Check Parameters, require version 3.3.x
 	 */
 	$hasError = printCheckError( $settings->check(substr(str_replace('.', '', SEEDDMS_VERSION), 0,2)));
 
 	if (!$hasError) {
-		if(isset($settings->_extraPath))
-			ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
-
 		// Create database
 		if (isset($_POST["createDatabase"])) {
 			$createOK = false;
