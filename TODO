@@ -1,3 +1,9 @@
+Show workflow steps after document has been released (keep workflow tab)
+
+Show documents in calendar when they where uploaded.
+
+Add attribute type 'date'
+
 Update comment and date of a review/approval, if the same status is set
 again. Currently setting the same status is turned of, because it didn't
 have any effect, which is quite confusing if the user can do an operation
