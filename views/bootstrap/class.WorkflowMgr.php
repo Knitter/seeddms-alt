@@ -147,7 +147,7 @@ function showWorkflow(selectObj) {
 <?php
 	} else {
 ?>
-	<p>You must first define workflow states, before adding a workflow.</p>
+	<p><?php printMLText("workflow_no_states"); ?></p>
 <?php
 	}
 ?>
