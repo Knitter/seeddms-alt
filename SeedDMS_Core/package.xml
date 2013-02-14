@@ -12,10 +12,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-02-11</date>
- <time>15:04:08</time>
+ <date>2013-02-14</date>
+ <time>17:36:08</time>
  <version>
-  <release>4.0.0pre4</release>
+  <release>4.0.0pre5</release>
   <api>4.0.0</api>
  </version>
  <stability>
@@ -24,12 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- calculate checksum for document versions
-- some bug fixes
-- some more documentation
-- added new methods SeedDMS_Core_Document::getReadUserList() and
-  SeedDMS_Core_Folder::getReadUserList() which replaces getApproversList()
-- fixed sql statement in getReadUserList() for sqlite3
+- changed name from letodms to seeddms
+- fixed SeedDMS_Database::TableList()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -366,6 +362,27 @@ New release
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - minor bug fixes
+   </notes>
+  </release>
+  <release>
+   <date>2013-02-11</date>
+   <time>15:04:08</time>
+   <version>
+    <release>4.0.0pre4</release>
+    <api>4.0.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- calculate checksum for document versions
+- some bug fixes
+- some more documentation
+- added new methods SeedDMS_Core_Document::getReadUserList() and
+  SeedDMS_Core_Folder::getReadUserList() which replaces getApproversList()
+- fixed sql statement in getReadUserList() for sqlite3
    </notes>
   </release>
  </changelog>
