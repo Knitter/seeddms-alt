@@ -785,6 +785,7 @@ $text["workflow_name"] = "Name";
 $text["workflow_in_use"] = "This workflow is currently used by documents.";
 $text["workflow_initstate"] = "Initial state";
 $text["workflow_management"] = "Workflow management";
+$text["workflow_no_states"] = "You must first define workflow states, before adding a workflow.";
 $text["workflow_states_management"] = "Workflow states management";
 $text["workflow_actions_management"] = "Workflow actions management";
 $text["workflow_state_docstatus"] = "Document status";
