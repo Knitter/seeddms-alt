@@ -56,7 +56,10 @@ if (!is_numeric($sequence)) {
 
 $name = $_POST["name"];
 $comment = $_POST["comment"];
-$attributes = $_POST["attributes"];
+if(isset($_POST["attributes"]))
+	$attributes = $_POST["attributes"];
+else
+	$attributes = array();
 $subFolder = $folder->addSubFolder($name, $comment, $user, $sequence, $attributes);
 
 if (is_object($subFolder)) {
