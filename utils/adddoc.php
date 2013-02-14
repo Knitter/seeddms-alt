@@ -1,12 +1,9 @@
 <?php
-ini_set('include_path', '.:/usr/share/php:/usr/share/letodms/www');
-
-include("inc/inc.ClassSettings.php");
-include("LetoDMS/Core.php");
+include("../inc/inc.ClassSettings.php");
 
 function usage() { /* {{{ */
 	echo "Usage:\n";
-	echo "  letodms-adddoc [--config <file>] [-c <comment>] [-k <keywords>] [-s <number>] [-n <name>] [-V <version>] [-s <sequence>] [-t <mimetype>] [-h] [-v] -F <folder id> -f <filename>\n";
+	echo "  seeddms-adddoc [--config <file>] [-c <comment>] [-k <keywords>] [-s <number>] [-n <name>] [-V <version>] [-s <sequence>] [-t <mimetype>] [-h] [-v] -F <folder id> -f <filename>\n";
 	echo "\n";
 	echo "Description:\n";
 	echo "  This program uploads a file into a folder of LetoDMS.\n";
@@ -55,6 +52,11 @@ if(isset($options['config'])) {
 } else {
 	$settings = new Settings();
 }
+
+if(isset($settings->_extraPath))
+	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
+
+require_once("LetoDMS/Core.php");
 
 if(isset($options['F'])) {
 	$folderid = (int) $options['F'];

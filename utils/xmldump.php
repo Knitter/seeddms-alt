@@ -1,13 +1,9 @@
 <?php
-ini_set('include_path', '.:/usr/share/php:/usr/share/letodms');
-
-require_once("inc/inc.ClassSettings.php");
-//require_once("LetoDMS/Core.php");
-require_once("LetoDMS_Core/Core.php");
+require_once("../inc/inc.ClassSettings.php");
 
 function usage() { /* {{{ */
 	echo "Usage:\n";
-	echo "  letodms-xmldump [-h] [-v] [--config <file>]\n";
+	echo "  seeddms-xmldump [-h] [-v] [--config <file>]\n";
 	echo "\n";
 	echo "Description:\n";
 	echo "  This program creates an xml dump of the whole or parts of the dms.\n";
@@ -52,6 +48,11 @@ if(isset($options['config'])) {
 } else {
 	$settings = new Settings();
 }
+
+if(isset($settings->_extraPath))
+	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
+
+require_once("LetoDMS/Core.php");
 
 if(isset($options['folder'])) {
 	$folderid = intval($options['folder']);

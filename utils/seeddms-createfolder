@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/bin/php -f /usr/share/letodms/utils/createfolder.php -- $*
+/usr/bin/php -f /usr/share/seeddms/utils/createfolder.php -- $*
