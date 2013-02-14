@@ -167,6 +167,7 @@ $text["details_version"] = "Details for version: [version]";
 $text["disclaimer"] = "This is a classified area. Access is permitted only to authorized personnel. Any violation will be prosecuted according to the national and international laws.";
 $text["do_object_repair"] = "Repair all folders and documents.";
 $text["do_object_setfilesize"] = "Set file size";
+$text["do_object_setchecksum"] = "Set checksum";
 $text["document_already_locked"] = "This document is aleady locked";
 $text["document_deleted"] = "Document deleted"; 
 $text["document_deleted_email"] = "Document deleted";
