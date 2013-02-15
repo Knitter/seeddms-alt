@@ -43,13 +43,16 @@ class SeedDMS_Email extends SeedDMS_Notify {
 			return -1;
 		}
 
-		$header = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">\r\n" .
-			"Reply-To: ". $sender->getFullName() ." <". $sender->getEmail() .">\r\n";
-			
+		$headers   = array();
+		$headers[] = "MIME-Version: 1.0";
+		$headers[] = "Content-type: text/plain; charset=utf-8";
+		$headers[] = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">";
+		$headers[] = "Reply-To: ". $sender->getFullName() ." <". $sender->getEmail() .">";
+
 		$message = getMLText("email_header")."\r\n\r\n".$message;
 		$message .= "\r\n\r\n".getMLText("email_footer");
 
-		return (mail($recipient->getEmail(), $this->replaceMarker($subject), $this->replaceMarker($message), $header) ? 0 : -1);
+		return (mail($recipient->getEmail(), $this->replaceMarker($subject), $this->replaceMarker($message), implode("\r\n", $headers)) ? 0 : -1);
 	} /* }}} */
 
 	function toGroup($sender, $groupRecipient, $subject, $message) { /* {{{ */
