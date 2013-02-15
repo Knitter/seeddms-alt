@@ -17,9 +17,6 @@ approval, etc.
 
 Import and export of a workflow as xml.
 
-calculate checksum of document version and possible check for duplicated
-files or check if new version has not changed.
-
 Find a way to make the workflows adjustable when used for a document.
 e.g. a workflow shall be used for a number of document but the users of
 a transtion has to be altered for each document. This is basically reusing
@@ -39,14 +36,10 @@ restrict access when a document is in a workflow or has been rejected.
 
 There are still global variable in class SeedetoDMS_Bootstrap_Style
 
-extend search by expiration date, add utitility to search for expiring documents
-
 Settings::searchConfigFilePath() and Settings::getConfigDir() use different
 approaches to get the configuration directory.
 
 Show expiration status of documents in document list
-
-Add a Search Function to Related Documents. When attaching a related document their should be a search function to easily find the document you would like to relate.
 
 Export/Import content as xml (even for subfolders)
 
