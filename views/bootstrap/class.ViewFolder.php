@@ -127,11 +127,11 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				echo "</tr>";
 			} else {
 				echo "<tr>";
-				echo "<td>".getMLText('default_access')."</td>";
+				echo "<td>".getMLText('default_access').":</td>";
 				echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
 				echo "</tr>";
 				echo "<tr>";
-				echo "<td>".getMLText('access_mode')."</td>";
+				echo "<td>".getMLText('access_mode').":</td>";
 				echo "<td>";
 				$this->printAccessList($folder);
 				echo "</td>";
