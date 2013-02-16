@@ -100,7 +100,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		if (!$printheader) {
 			echo "</tbody>\n</table>";
 		} else {
-			printMLText("no_docs_to_review");
+			printMLText("no_docs_to_look_at");
 		}
 
 		$this->contentContainerEnd();
@@ -155,7 +155,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		if (!$printheader) {
 			echo "</tbody>\n</table>";
 		}else{
-			printMLText("empty_notify_list");
+			printMLText("no_docs_to_look_at");
 		}
 
 
