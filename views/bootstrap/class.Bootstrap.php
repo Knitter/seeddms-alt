@@ -94,7 +94,6 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function globalBanner() { /* {{{ */
-		echo "<div style=\"padding-top: 60px;\"></div>\n";
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
@@ -102,21 +101,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "  </div>\n";
 		echo " </div>\n";
 		echo "</div>\n";
-/*
-		echo "<div class=\"globalBox\" id=\"noNav\">\n";
-		echo "<div class=\"globalTR\"></div>\n";
-		echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
-		echo "<div class=\"siteNameLogin\">".
-			(strlen($this->param['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").
-			"</div>\n";
-		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
-			"</div>\n";
-		return;
-*/
 	} /* }}} */
 
 	function globalNavigation($folder=null) { /* {{{ */
-		echo "<div style=\"padding-top: 60px;\"></div>\n";
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
