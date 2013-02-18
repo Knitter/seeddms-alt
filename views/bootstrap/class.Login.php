@@ -70,24 +70,27 @@ function guestLogin()
 
 </script>
 <?php $this->contentContainerStart(); ?>
-<form action="../op/op.Login.php" method="post" name="form1" onsubmit="return checkForm();">
+<form class="form-horizontal" action="../op/op.Login.php" method="post" name="form1" onsubmit="return checkForm();">
 <?php
 		if ($refer) {
 			echo "<input type='hidden' name='referuri' value='".sanitizeString($refer)."'/>";
 		}
 ?>
-	<table border="0">
-		<tr>
-			<td><?php printMLText("user_login");?>:</td>
-			<td><input type="text" name="login" id="login"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("password");?>:</td>
-			<td><input name="pwd" type="Password"></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("language");?>:</td>
-			<td>
+	<div class="control-group">
+		<label class="control-label" for="login"><?php printMLText("user_login");?>:</label>
+		<div class="controls">
+			<input type="text" id="login" name="login" placeholder="login">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="pwd"><?php printMLText("password");?>:</label>
+		<div class="controls">
+			<input type="Password" id="pwd" name="pwd">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="pwd"><?php printMLText("language");?>:</label>
+		<div class="controls">
 <?php
 			print "<select name=\"lang\">";
 			print "<option value=\"\">-";
@@ -97,11 +100,12 @@ function guestLogin()
 			}
 			print "</select>";
 ?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("theme");?>:</td>
-		<td>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="pwd"><?php printMLText("theme");?>:</label>
+		<div class="controls">
+			
 <?php
 			print "<select name=\"sesstheme\">";
 			print "<option value=\"\">-";
@@ -110,13 +114,14 @@ function guestLogin()
 			}
 			print "</select>";
 ?>
-		</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><input class="btn" type="submit" value="<?php printMLText("submit_login") ?>"></td>
-		</tr>
-	</table>
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+		<button type="submit" class="btn"><?php printMLText("submit_login") ?></button>
+		</div>
+	</div>
+		
 </form>
 <?php
 		$this->contentContainerEnd();
