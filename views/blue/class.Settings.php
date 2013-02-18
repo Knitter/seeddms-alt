@@ -242,6 +242,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_stagingDir");?>:</td>
         <td><input type="text" name="stagingDir" value="<?php echo $settings->_stagingDir ?>" size="100" /></td>
       </tr>
+      <tr title="<?php printMLText("settings_cacheDir_desc");?>">
+        <td><?php printMLText("settings_cacheDir");?>:</td>
+        <td><input type="text" name="cacheDir" value="<?php echo $settings->_cacheDir ?>" size="100" /></td>
+      </tr>
       <tr title="<?php printMLText("settings_luceneDir_desc");?>">
         <td><?php printMLText("settings_luceneDir");?>:</td>
         <td><input type="text" name="luceneDir" value="<?php echo $settings->_luceneDir ?>" size="100" /></td>
