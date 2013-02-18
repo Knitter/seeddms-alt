@@ -315,7 +315,7 @@ function showUser(selectObj) {
 		</tr>
 		<tr>
 			<td><?php printMLText("password");?>:</td>
-			<td><input type="Password" class="pwd" rel="strengthbar<?php echo $currUser->getID(); ?>" name="pwd"></td>
+			<td><input type="password" class="pwd" rel="strengthbar<?php echo $currUser->getID(); ?>" name="pwd"></td>
 		</tr>
 <?php
 		if($passwordstrength > 0) {

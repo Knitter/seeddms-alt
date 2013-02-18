@@ -53,7 +53,7 @@ class SeedDMS_View_MoveDocument extends SeedDMS_Bootstrap_Style {
 			<td><?php $this->printFolderChooser("form1", M_READWRITE, -1, $target);?></td>
 		</tr>
 		<tr>
-			<td colspan="2"><br /><input type="submit" class="btn" value="<?php printMLText("move");?>"></td>
+			<td colspan="2"><input type="submit" class="btn" value="<?php printMLText("move");?>"></td>
 		</tr>
 	</table>
 </form>

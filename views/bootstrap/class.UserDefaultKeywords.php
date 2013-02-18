@@ -96,7 +96,6 @@ function showKeywords(selectObj) {
 		</td>
 <?php
 		foreach ($categories as $category) {
-
 			$owner = $category->getOwner();
 			if ($owner->getID() != $user->getID()) continue;
 
@@ -159,8 +158,8 @@ function showKeywords(selectObj) {
 					<td>
 						<form class="form-inline" action="../op/op.UserDefaultKeywords.php" method="post" name="<?php echo $category->getID().".add"?>">
   				  <?php echo createHiddenFieldWithKey('newkeywords'); ?>
-						<input type="Hidden" name="action" value="newkeywords">
-						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
+						<input type="hidden" name="action" value="newkeywords">
+						<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
 						<input type="text" name="keywords">
 						<input type="submit" class="btn" value="<?php printMLText("new_default_keywords");?>">
 						</form>
