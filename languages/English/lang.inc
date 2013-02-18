@@ -483,6 +483,7 @@ $text["search"] = "Search";
 $text["search_time"] = "Elapsed time: [time] sec.";
 $text["seconds"] = "seconds";
 $text["selection"] = "Selection";
+$text["select_category"] = "Click to select category";
 $text["select_groups"] = "Click to select groups";
 $text["select_ind_reviewers"] = "Click to select individual reviewer";
 $text["select_ind_approvers"] = "Click to select individual approver";
