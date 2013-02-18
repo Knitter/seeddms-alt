@@ -226,7 +226,7 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_contentDir");?>:</td>
         <td><input type="text" name="contentDir" value="<?php echo $settings->_contentDir ?>" size="100" /></td>
       </tr>
-      <tr title="<?php printMLText("settings_cachetDir_desc");?>">
+      <tr title="<?php printMLText("settings_cacheDir_desc");?>">
         <td><?php printMLText("settings_cacheDir");?>:</td>
         <td><input type="text" name="cacheDir" value="<?php echo $settings->_cacheDir ?>" size="100" /></td>
       </tr>
