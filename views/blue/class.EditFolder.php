@@ -76,7 +76,7 @@ function checkForm()
 <table>
 <tr>
 <td><?php printMLText("name");?>:</td>
-<td><input name="name" value="<?php print htmlspecialchars($folder->getName());?>" size="60"></td>
+<td><input type="text" name="name" value="<?php print htmlspecialchars($folder->getName());?>" size="60"></td>
 </tr>
 <tr>
 <td><?php printMLText("comment");?>:</td>
@@ -104,7 +104,7 @@ function checkForm()
 		}
 ?>
 <tr>
-<td colspan="2"><input type="Submit" value="<?php printMLText("save"); ?>"></td>
+<td colspan="2"><input type="submit" value="<?php printMLText("save"); ?>"></td>
 </tr>
 </table>
 </form>

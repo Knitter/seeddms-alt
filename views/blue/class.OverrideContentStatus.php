@@ -72,10 +72,10 @@ function checkForm()
 ?>
 <form method="post" action="../op/op.OverrideContentStatus.php" name="form1" onsubmit="return checkForm();">
 <table>
-<tr><td><?php echo(printMLText("comment")); ?></td>
+<tr><td><?php echo(printMLText("comment")); ?>:</td>
 <td><textarea name="comment" cols="40" rows="4"></textarea>
 </td></tr>
-<tr><td><?php echo(printMLText("status")); ?></td>
+<tr><td><?php echo(printMLText("status")); ?>:</td>
 <td><select name="overrideStatus">
 <option value=''></option>
 <?php

@@ -88,7 +88,7 @@ function checkForm()
 </tr>
 <tr>
 	<td><?php printMLText("name");?>:</td>
-	<td><input name="name" size="60"></td>
+	<td><input type="text" name="name" size="60"></td>
 </tr>
 <tr>
 	<td><?php printMLText("comment");?>:</td>

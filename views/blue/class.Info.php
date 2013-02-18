@@ -39,9 +39,6 @@ class SeedDMS_View_Info extends SeedDMS_Blue_Style {
 		$this->htmlStartPage($version->banner());
 		$this->globalNavigation();
 		$this->pageNavigation($version->banner());
-		$this->contentContainerStart();
-		phpinfo();
-		$this->contentContainerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }

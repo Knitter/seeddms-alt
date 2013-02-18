@@ -103,29 +103,11 @@ class SeedDMS_View_DocumentChooser extends SeedDMS_Blue_Style {
 ?>
 
 <script language="JavaScript">
-function decodeString(s) {
-	s = new String(s);
-	s = s.replace(/&amp;/, "&");
-	s = s.replace(/&#0037;/, "%"); // percent
-	s = s.replace(/&quot;/, "\""); // double quote
-	s = s.replace(/&#0047;&#0042;/, "/*"); // start of comment
-	s = s.replace(/&#0042;&#0047;/, "*/"); // end of comment
-	s = s.replace(/&lt;/, "<");
-	s = s.replace(/&gt;/, ">");
-	s = s.replace(/&#0061;/, "=");
-	s = s.replace(/&#0041;/, ")");
-	s = s.replace(/&#0040;/, "(");
-	s = s.replace(/&#0039;/, "'");
-	s = s.replace(/&#0043;/, "+");
-
-	return s;
-}
-
 var targetName;
 var targetID;
 
 function documentSelected(id, name) {
-	targetName.value = name; //decodeString(name);
+	targetName.value = name;
 	targetID.value = id;
 	window.close();
 	return true;

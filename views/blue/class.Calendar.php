@@ -55,7 +55,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Blue_Style {
 		
 		$this->dayNames = array();
 		foreach ( $this->dayNamesLong as $dn ){
-			 $this->dayNames[] = substr($dn,0,2);   
+			 $this->dayNames[] = substr($dn,0,3);   
 		}         
 	} /* }}} */
 

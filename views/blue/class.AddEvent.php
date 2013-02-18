@@ -81,7 +81,7 @@ function checkForm()
 			<td><textarea name="comment" rows="4" cols="80"></textarea></td>
 		</tr>
 		<tr>
-			<td colspan="2"><br><input type="Submit" value="<?php printMLText("add_event");?>"></td>
+			<td colspan="2"><br><input type="submit" value="<?php printMLText("add_event");?>"></td>
 		</tr>
 	</table>
 </form>

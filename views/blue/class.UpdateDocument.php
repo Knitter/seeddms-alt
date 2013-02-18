@@ -122,7 +122,7 @@ function checkForm()
 
 
 <form action="../op/op.UpdateDocument.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
-	<input type="Hidden" name="documentid" value="<?php print $document->getID(); ?>">
+	<input type="hidden" name="documentid" value="<?php print $document->getID(); ?>">
 	<table>
 	
 		<tr>
@@ -144,7 +144,7 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("expires");?>:</td>
 			<td class="standardText">
-				<input type="Radio" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
+				<input type="radio" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
 				<input type="radio" name="expires" value="true"<?php if ($document->expires()) print " checked";?>><?php $this->printDateChooser(-1, "exp");?>
 			</td>
 		</tr>
@@ -153,17 +153,16 @@ function checkForm()
 	if($attrdefs) {
 		foreach($attrdefs as $attrdef) {
 ?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-	<td><?php $this->printAttributeEditField($attrdef, '') ?></td>
-</tr>
+    <tr>
+	    <td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+	    <td><?php $this->printAttributeEditField($attrdef, '') ?></td>
+    </tr>
 <?php
 		}
 	}
 ?>
 		<tr>
 			<td colspan=2>
-			
 				<?php $this->contentSubHeading(getMLText("assign_reviewers")); ?>
 
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
@@ -171,11 +170,8 @@ function checkForm()
 				<ul class="cbSelectList">
 <?php
 				$res=$user->getMandatoryReviewers();
-
 				foreach ($docAccess["users"] as $usr) {
-
-					if ($usr->getID()==$user->getID()) continue; 
-
+					if ($usr->getID()==$user->getID()) continue;
 					$mandatory=false;
 					foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 
@@ -208,9 +204,7 @@ function checkForm()
 				<ul class="cbSelectList">
 <?php
 				$res=$user->getMandatoryApprovers();
-
 				foreach ($docAccess["users"] as $usr) {
-				
 					if ($usr->getID()==$user->getID()) continue; 
 
 					$mandatory=false;

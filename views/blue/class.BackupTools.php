@@ -42,7 +42,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Blue_Style {
 
 		$this->contentHeading(getMLText("backup_tools"));
 		$this->contentContainerStart();
-		print getMLText("space_used_on_data_folder")." : ".formatted_size(dskspace($contentdir));
+		print getMLText("space_used_on_data_folder")." : ".SeedDMS_Core_File::format_filesize(dskspace($contentdir));
 		$this->contentContainerEnd();
 
 		// versioning file creation ////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Blue_Style {
 			if (is_object($folder)) print "<td>".htmlspecialchars($folder->getName())."</td>\n";
 			else print "<td>".getMLText("unknown_id")."</td>\n";
 			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
+			print "<td>".SeedDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
 			print "<td><ul class=\"actions\">";
 			print "<li><a href=\"out.RemoveArchive.php?arkname=".$entry."\">".getMLText("backup_remove")."</a></li>";
 			print "</ul></td>\n";	
@@ -164,7 +164,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Blue_Style {
 			print "<tr>\n";
 			print "<td><a href=\"../op/op.Download.php?dumpname=".$entry."\">".$entry."</a></td>\n";
 			print "<td>".getLongReadableDate(filectime($contentdir.$entry))."</td>\n";
-			print "<td>".formatted_size(filesize($contentdir.$entry))."</td>\n";
+			print "<td>".SeedDMS_Core_File::format_filesize(filesize($contentdir.$entry))."</td>\n";
 			print "<td><ul class=\"actions\">";
 			print "<li><a href=\"out.RemoveDump.php?dumpname=".$entry."\">".getMLText("dump_remove")."</a></li>";
 			print "</ul></td>\n";	

@@ -50,7 +50,7 @@ class SeedDMS_View_RemoveDocument extends SeedDMS_Blue_Style {
 <p>
 <?php printMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName())));?>
 </p>
-<p><input type="Submit" value="<?php printMLText("rm_document");?>"></p>
+<p><input type="submit" value="<?php printMLText("rm_document");?>"></p>
 </form>
 <?php
 		$this->contentContainerEnd();

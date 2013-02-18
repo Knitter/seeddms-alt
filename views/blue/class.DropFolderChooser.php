@@ -50,17 +50,22 @@ var targetName = opener.document.<?php echo $form?>.dropfolderfile<?php print $f
 		$this->contentContainerStart();
 
 		$dir = $dropfolderdir.'/'.$user->getLogin();
-		if(is_dir($dir)) {
-			$d = dir($dir);
-			echo "<table>\n";
-			while (false !== ($entry = $d->read())) {
-				if($entry != '..' && $entry != '.') {
-					if(!is_dir($entry)) {
-						echo "<tr><td><span style=\"cursor: pointer;\" onClick=\"targetName.value = '".$entry."'; window.close();\">".$entry."</span></td><td>".filesize($dir.'/'.$entry)."</td></tr>\n";
+		/* Check if we are still looking in the configured directory and
+		 * not somewhere else, e.g. if the login was '../test'
+		 */
+		if(dirname($dir) == $dropfolderdir) {
+			if(is_dir($dir)) {
+				$d = dir($dir);
+				echo "<table>\n";
+				while (false !== ($entry = $d->read())) {
+					if($entry != '..' && $entry != '.') {
+						if(!is_dir($entry)) {
+							echo "<tr><td><span style=\"cursor: pointer;\" onClick=\"targetName.value = '".$entry."'; window.close();\">".$entry."</span></td><td align=\"right\">".SeedDMS_Core_File::format_filesize(filesize($dir.'/'.$entry))."</td></tr>\n";
+						}
 					}
 				}
+				echo "</table>\n";
 			}
-			echo "</table>\n";
 		}
 
 		$this->contentContainerEnd();

@@ -64,7 +64,7 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Blue_Style {
 			}
 ?>
 		<tr>
-			<td colspan="2"><br><input type="Submit" value="<?php printMLText("save") ?>"></td>
+			<td colspan="2"><br><input type="submit" value="<?php printMLText("save") ?>"></td>
 		</tr>
 	</table>
 </form>

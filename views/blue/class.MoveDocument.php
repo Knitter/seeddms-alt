@@ -44,14 +44,14 @@ class SeedDMS_View_MoveDocument extends SeedDMS_Blue_Style {
 		$this->contentContainerStart();
 ?>
 <form action="../op/op.MoveDocument.php" name="form1">
-	<input type="Hidden" name="documentid" value="<?php print $document->getID();?>">
+	<input type="hidden" name="documentid" value="<?php print $document->getID();?>">
 	<table>
 		<tr>
 			<td><?php printMLText("choose_target_folder");?>:</td>
 			<td><?php $this->printFolderChooser("form1", M_READWRITE);?></td>
 		</tr>
 		<tr>
-			<td colspan="2"><br><input type="Submit" value="<?php printMLText("move");?>"></td>
+			<td colspan="2"><br><input type="submit" value="<?php printMLText("move");?>"></td>
 		</tr>
 	</table>
 </form>

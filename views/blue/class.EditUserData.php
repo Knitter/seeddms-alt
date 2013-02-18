@@ -71,11 +71,11 @@ function checkForm()
 <table>
 	<tr>
 		<td><?php printMLText("current_password");?>:</td>
-		<td><input id="currentpwd" type="Password" name="currentpwd" size="30"></td>
+		<td><input id="currentpwd" type="password" name="currentpwd" size="30"></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("new_password");?>:</td>
-		<td><input class="pwd" rel="outerstrength" type="Password" name="pwd" size="30"> <div id="outerstrength" style="min-width: 100px; height: 14px; display: inline-block; border: 1px solid black; padding: 1px;"><div id="innerstrength" style="width: 0px; height: 14px; display: inline-block; border: 0px; padding: 0px; background-color: red;">&nbsp;</div> <div id="strength" style="display: inline-block;"></div></div></td>
+		<td><input class="pwd" rel="outerstrength" type="password" name="pwd" size="30"> <div id="outerstrength" style="min-width: 100px; height: 14px; display: inline-block; border: 1px solid black; padding: 1px;"><div id="innerstrength" style="width: 0px; height: 14px; display: inline-block; border: 0px; padding: 0px; background-color: red;">&nbsp;</div> <div id="strength" style="display: inline-block;"></div></div></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("confirm_pwd");?>:</td>
@@ -83,11 +83,11 @@ function checkForm()
 	</tr>
 	<tr>
 		<td><?php printMLText("name");?>:</td>
-		<td><input name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30"></td>
+		<td><input type="text" name="fullname" value="<?php print htmlspecialchars($user->getFullName());?>" size="30"></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("email");?>:</td>
-		<td><input name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30"></td>
+		<td><input type="text" name="email" value="<?php print htmlspecialchars($user->getEmail());?>" size="30"></td>
 	</tr>
 	<tr>
 		<td><?php printMLText("comment");?>:</td>
@@ -111,10 +111,37 @@ function checkForm()
 		<td><?php printMLText("new_user_image");?>:</td>
 		<td><input type="file" name="userfile" accept="image/jpeg" size="30"></td>
 	</tr>
+	<tr>
+		<td><?php printMLText("language");?>:</td>
+		<td>
+			<select name="language">
+<?php
+			$languages = getLanguages();
+			foreach ($languages as $currLang) {
+				print "<option value=\"".$currLang."\" ".(($user->getLanguage()==$currLang) ? "selected" : "").">".$currLang."</option>";
+			}
+?>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><?php printMLText("theme");?>:</td>
+		<td>
+			<select name="theme">
+<?php
+			$languages = getLanguages();
+			$themes = UI::getStyles();
+			foreach ($themes as $currTheme) {
+				print "<option value=\"".$currTheme."\" ".(($user->getTheme()==$currTheme) ? "selected" : "").">".$currTheme."</option>";
+			}
+?>
+			</select>
+		</td>
+	</tr>
 <?php	} ?>
 
 	<tr>
-		<td colspan="2"><input type="Submit" value="<?php printMLText("submit_userinfo") ?>"></td>
+		<td colspan="2"><input type="submit" value="<?php printMLText("submit_userinfo") ?>"></td>
 	</tr>
 </table>
 </form>

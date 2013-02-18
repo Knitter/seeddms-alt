@@ -101,8 +101,8 @@ function checkForm()
 <br>
 
 <form action="../op/op.DocumentNotify.php" name="form1" onsubmit="return checkForm();">
-<input type="Hidden" name="documentid" value="<?php print $document->getID()?>">
-<input type="Hidden" name="action" value="addnotify">
+<input type="hidden" name="documentid" value="<?php print $document->getID()?>">
+<input type="hidden" name="action" value="addnotify">
 <table>
 	<tr>
 		<td><?php printMLText("user");?>:</td>

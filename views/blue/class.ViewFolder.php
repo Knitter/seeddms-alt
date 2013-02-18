@@ -71,7 +71,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Blue_Style {
 		<?php
 			}
 		}
-		print "</table>\n";
+		echo "</table>\n";
 		$this->contentContainerEnd();
 
 		$this->contentHeading(getMLText("folder_contents"));

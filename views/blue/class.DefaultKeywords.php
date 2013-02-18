@@ -35,24 +35,23 @@ class SeedDMS_View_DefaultKeywords extends SeedDMS_Blue_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$categories = $this->params['categories'];
-		$selcategory = $this->params['selcategory'];
+		$selcategoryid = $this->params['selcategoryid'];
 
 $this->htmlStartPage(getMLText("admin_tools"));
 $this->globalNavigation();
 $this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 
 ?>
-
 <script language="JavaScript">
 obj = -1;
 function showKeywords(selectObj) {
 	if (obj != -1)
 		obj.style.display = "none";
-	
+
 	id = selectObj.options[selectObj.selectedIndex].value;
 	if (id == -1)
 		return;
-	
+
 	obj = document.getElementById("keywords" + id);
 	obj.style.display = "";
 }
@@ -78,8 +77,8 @@ function showKeywords(selectObj) {
 		
 			$owner = $category->getOwner();
 			if ((!$user->isAdmin()) && ($owner->getID() != $user->getID())) continue;
-			
-			if ($categoryid && $category->getID()==$selcategoryid) $selected=$count;				
+
+			if ($selcategoryid && $category->getID()==$selcategoryid) $selected=$count;				
 			print "<option value=\"".$category->getID()."\">" . htmlspecialchars($category->getName());
 			$count++;
 		}
@@ -92,18 +91,16 @@ function showKeywords(selectObj) {
 			<form action="../op/op.DefaultKeywords.php" method="post">
   		<?php echo createHiddenFieldWithKey('addcategory'); ?>
 			<input type="Hidden" name="action" value="addcategory">
-			<?php printMLText("name");?> : <input name="name">
-			<input type="Submit" value="<?php printMLText("new_default_keyword_category"); ?>">
+			<?php printMLText("name");?>: <input type="text" name="name">
+			<input type="submit" value="<?php printMLText("new_default_keyword_category"); ?>">
 			</form>
 		</td>
-	
-<?php	
-	
+<?php
 		foreach ($categories as $category) {
-		
+
 			$owner = $category->getOwner();
 			if ((!$user->isAdmin()) && ($owner->getID() != $user->getID())) continue;
-			
+
 			print "<td id=\"keywords".$category->getID()."\" style=\"display : none;\">";	
 ?>
 			<table>
@@ -127,10 +124,10 @@ function showKeywords(selectObj) {
 					<td>
 						<form action="../op/op.DefaultKeywords.php" method="post">
   						<?php echo createHiddenFieldWithKey('editcategory'); ?>
-							<input type="Hidden" name="action" value="editcategory">
-							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input name="name" value="<?php echo htmlspecialchars($category->getName()) ?>">&nbsp;
-							<input type="Submit" value="<?php printMLText("save");?>">
+							<input type="hidden" name="action" value="editcategory">
+							<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+							<input name="name" type="text" value="<?php echo htmlspecialchars($category->getName()) ?>">&nbsp;
+							<input type="submit" value="<?php printMLText("save");?>">
 						</form>
 					</td>
 				</tr>
@@ -149,27 +146,27 @@ function showKeywords(selectObj) {
 								print getMLText("no_default_keywords");
 							else
 								foreach ($lists as $list) {
-						?>
+?>
 									<form style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" >
   								<?php echo createHiddenFieldWithKey('editkeywords'); ?>
 									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="editkeywords">
-									<input name="keywords" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
+									<input name="keywords" type="text" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
 									<input name="action" value="editkeywords" type="Image" src="images/save.gif" title="<?php echo getMLText("save")?>" style="border: 0px;">
 									<!--	 <input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"> &nbsp; -->
 									</form>
 									<form style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" >
   								<?php echo createHiddenFieldWithKey('removekeywords'); ?>
-									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
-									<input type="Hidden" name="action" value="removekeywords">
+									<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+									<input type="hidden" name="keywordsid" value="<?php echo $list["id"]?>">
+									<input type="hidden" name="action" value="removekeywords">
 									<input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" style="border: 0px;">
 									</form>
 									<br>
 						<?php }  ?>
 					</td>
-				</tr>			
+				</tr>
 				<tr>
 					<form action="../op/op.DefaultKeywords.php" method="post">
   				<?php echo createHiddenFieldWithKey('newkeywords'); ?>
@@ -177,16 +174,16 @@ function showKeywords(selectObj) {
 					<td>
 						<input type="Hidden" name="action" value="newkeywords">
 						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-						<input name="keywords">
+						<input type="text" name="keywords">
 					</td>
 					</form>
 				</tr>
-				
+
 			</table>
 		</td>
 <?php } ?>
 	</tr></table>
-	
+
 <script language="JavaScript">
 
 sel = document.getElementById("selector");
@@ -195,7 +192,6 @@ showKeywords(sel);
 
 </script>
 
-	
 <?php
 		$this->contentContainerEnd();
 		$this->htmlEndPage();

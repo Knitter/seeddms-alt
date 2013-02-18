@@ -46,7 +46,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Blue_Style {
 		$this->contentHeading(getMLText("change_assignments"));
 
 		// Retrieve a list of all users and groups that have review / approve privileges.
-		$docAccess = $document->getApproversList();
+		$docAccess = $document->getReadAccessList();
 
 		// Retrieve list of currently assigned reviewers and approvers, along with
 		// their latest status.
@@ -88,9 +88,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Blue_Style {
 <?php
 
 		$res=$user->getMandatoryReviewers();
-
 		foreach ($docAccess["users"] as $usr) {
-
 			$mandatory=false;
 			foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 			

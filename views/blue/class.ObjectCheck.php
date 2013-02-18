@@ -64,7 +64,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Blue_Style {
 
 		$subfolders = $folder->getSubFolders();
 		foreach($subfolders as $subfolder) {
-			$this->tree($dms, $subfolder, $indent.'  ', $path.$folder->getId().':');
+			$this->tree($dms, $subfolder, $repair, $path.$folder->getId().':', $indent.'  ');
 		}
 		$path .= $folder->getId().':';
 		$documents = $folder->getDocuments();
@@ -146,9 +146,13 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Blue_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
-		$versions = $this->params['unlinkedcontent'];
+		$unlinkedversions = $this->params['unlinkedcontent'];
+		$nofilesizeversions = $this->params['nofilesizeversions'];
+		$nochecksumversions = $this->params['nochecksumversions'];
 		$repair = $this->params['repair'];
 		$unlink = $this->params['unlink'];
+		$setfilesize = $this->params['setfilesize'];
+		$setchecksum = $this->params['setchecksum'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -167,11 +171,11 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Blue_Style {
 		print "<th>".getMLText("error")."</th>\n";
 		print "<th></th>\n";
 		print "</tr>\n</thead>\n<tbody>\n";
-		$needsrepair = false;
-		$this->tree($folder, $repair);
+		$this->needsrepair = false;
+		$this->tree($dms, $folder, $repair);
 		print "</tbody></table>\n";
 
-		if($needsrepair && $repair == 0) {
+		if($this->needsrepair && $repair == 0) {
 			echo '<p><a href="out.ObjectCheck.php?repair=1">'.getMLText('do_object_repair').'</a></p>';
 		}
 		$this->contentContainerEnd();
@@ -182,7 +186,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Blue_Style {
 			echo "<p>".getMLText('unlinking_objects')."</p>";
 		}
 
-		if($versions) {
+		if($unlinkedversions) {
 			print "<table class=\"folderView\">";
 			print "<thead>\n<tr>\n";
 			print "<th>".getMLText("document")."</th>\n";
@@ -191,7 +195,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Blue_Style {
 			print "<th>".getMLText("mimetype")."</th>\n";
 			print "<th></th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
-			foreach($versions as $version) {
+			foreach($unlinkedversions as $version) {
 				$doc = $version->getDocument();
 				print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
 				if($unlink) {

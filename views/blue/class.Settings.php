@@ -66,7 +66,7 @@ function ShowHide(strId)
 </script>
 
   <form action="../op/op.Settings.php" method="post" enctype="multipart/form-data" name="form0" >
-  <input type="Hidden" name="action" value="saveSettings" />
+  <input type="hidden" name="action" value="saveSettings" />
 <?php
 if(!is_writeable($settings->_configFilePath)) {
 	echo "<p>".getMLText("settings_notwritable")."</p>";
@@ -87,11 +87,11 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr ><td><b> <?php printMLText("settings_Display");?></b></td> </tr>
       <tr title="<?php printMLText("settings_siteName_desc");?>">
         <td><?php printMLText("settings_siteName");?>:</td>
-        <td><input name="siteName" value="<?php echo $settings->_siteName ?>"/></td>
+        <td><input type="text" name="siteName" value="<?php echo $settings->_siteName ?>"/></td>
       </tr>
       <tr title="<?php printMLText("settings_footNote_desc");?>">
         <td><?php printMLText("settings_footNote");?>:</td>
-        <td><input name="footNote" value="<?php echo $settings->_footNote ?>" size="100"/></td>
+        <td><input type="text" name="footNote" value="<?php echo $settings->_footNote ?>" size="100"/></td>
       </tr>
       <tr title="<?php printMLText("settings_printDisclaimer_desc");?>">
         <td><?php printMLText("settings_printDisclaimer");?>:</td>
@@ -142,7 +142,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_viewOnlineFileTypes_desc");?>">
         <td><?php printMLText("settings_viewOnlineFileTypes");?>:</td>
-        <td><input name="viewOnlineFileTypes" value="<?php echo $settings->getViewOnlineFileTypesToString() ?>" size="100" /></td>
+        <td><input type="text" name="viewOnlineFileTypes" value="<?php echo $settings->getViewOnlineFileTypesToString() ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_enableConverting_desc");?>">
         <td><?php printMLText("settings_enableConverting");?>:</td>
@@ -162,7 +162,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_stopWordsFile_desc");?>">
         <td><?php printMLText("settings_stopWordsFile");?>:</td>
-        <td><input name="stopWordsFile" value="<?php echo $settings->_stopWordsFile; ?>" size="100" /></td>
+        <td><input type="text" name="stopWordsFile" value="<?php echo $settings->_stopWordsFile; ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_enableFolderTree_desc");?>">
         <td><?php printMLText("settings_enableFolderTree");?>:</td>
@@ -228,27 +228,27 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr ><td><b> <?php printMLText("settings_Server");?></b></td> </tr>
       <tr title="<?php printMLText("settings_rootDir_desc");?>">
         <td><?php printMLText("settings_rootDir");?>:</td>
-        <td><input name="rootDir" value="<?php echo $settings->_rootDir ?>" size="100" /></td>
+        <td><input type="text" name="rootDir" value="<?php echo $settings->_rootDir ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_httpRoot_desc");?>">
         <td><?php printMLText("settings_httpRoot");?>:</td>
-        <td><input name="httpRoot" value="<?php echo $settings->_httpRoot ?>" size="100" /></td>
+        <td><input type="text" name="httpRoot" value="<?php echo $settings->_httpRoot ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_contentDir_desc");?>">
         <td><?php printMLText("settings_contentDir");?>:</td>
-        <td><input name="contentDir" value="<?php echo $settings->_contentDir ?>" size="100" /></td>
+        <td><input type="text" name="contentDir" value="<?php echo $settings->_contentDir ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_stagingDir_desc");?>">
         <td><?php printMLText("settings_stagingDir");?>:</td>
-        <td><input name="stagingDir" value="<?php echo $settings->_stagingDir ?>" size="100" /></td>
+        <td><input type="text" name="stagingDir" value="<?php echo $settings->_stagingDir ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_luceneDir_desc");?>">
         <td><?php printMLText("settings_luceneDir");?>:</td>
-        <td><input name="luceneDir" value="<?php echo $settings->_luceneDir ?>" size="100" /></td>
+        <td><input type="text" name="luceneDir" value="<?php echo $settings->_luceneDir ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_dropFolderDir_desc");?>">
         <td><?php printMLText("settings_dropFolderDir");?>:</td>
-        <td><input name="dropFolderDir" value="<?php echo $settings->_dropFolderDir ?>" size="100" /></td>
+        <td><input type="text" name="dropFolderDir" value="<?php echo $settings->_dropFolderDir ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_logFileEnable_desc");?>">
         <td><?php printMLText("settings_logFileEnable");?>:</td>
@@ -269,7 +269,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_partitionSize_desc");?>">
         <td><?php printMLText("settings_partitionSize");?>:</td>
-        <td><input name="partitionSize" value="<?php echo $settings->_partitionSize ?>" size="100" /></td>
+        <td><input type="text" name="partitionSize" value="<?php echo $settings->_partitionSize ?>" size="100" /></td>
       </tr>
       <!--
         -- SETTINGS - SYSTEM - AUTHENTICATION
@@ -297,7 +297,7 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_passwordЅtrength_desc");?>">
         <td><?php printMLText("settings_passwordStrength");?>:</td>
-        <td><input name="passwordStrength" value="<?php echo $settings->_passwordStrength; ?>" size="2" /></td>
+        <td><input type="text" name="passwordStrength" value="<?php echo $settings->_passwordStrength; ?>" size="2" /></td>
       </tr>
       <tr title="<?php printMLText("settings_passwordStrengthAlgorithm_desc");?>">
         <td><?php printMLText("settings_passwordStrengthAlgorithm");?>:</td>
@@ -326,7 +326,11 @@ if(!is_writeable($settings->_configFilePath)) {
       </tr>
       <tr title="<?php printMLText("settings_encryptionKey_desc");?>">
         <td><?php printMLText("settings_encryptionKey");?>:</td>
-        <td><input name="encryptionKey" value="<?php echo $settings->_encryptionKey; ?>" size="32" /></td>
+        <td><input type="text" name="encryptionKey" value="<?php echo $settings->_encryptionKey; ?>" size="32" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_cookieLifetime_desc");?>">
+        <td><?php printMLText("settings_cookieLifetime");?>:</td>
+        <td><input type="text" name="cookieLifetime" value="<?php echo $settings->_cookieLifetime; ?>" size="32" /></td>
       </tr>
 
       <!-- TODO Connectors -->
@@ -335,29 +339,25 @@ if(!is_writeable($settings->_configFilePath)) {
         -- SETTINGS - SYSTEM - DATABASE
       -->
       <tr ><td><b> <?php printMLText("settings_Database");?></b></td> </tr>
-      <tr title="<?php printMLText("settings_ADOdbPath_desc");?>">
-        <td><?php printMLText("settings_ADOdbPath");?>:</td>
-        <td><input name="ADOdbPath" value="<?php echo $settings->_ADOdbPath ?>" size="100" /></td>
-      </tr>
       <tr title="<?php printMLText("settings_dbDriver_desc");?>">
         <td><?php printMLText("settings_dbDriver");?>:</td>
-        <td><input name="dbDriver" value="<?php echo $settings->_dbDriver ?>" /></td>
+        <td><input type="text" name="dbDriver" value="<?php echo $settings->_dbDriver ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_dbHostname_desc");?>">
         <td><?php printMLText("settings_dbHostname");?>:</td>
-        <td><input name="dbHostname" value="<?php echo $settings->_dbHostname ?>" /></td>
+        <td><input type="text" name="dbHostname" value="<?php echo $settings->_dbHostname ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_dbDatabase_desc");?>">
         <td><?php printMLText("settings_dbDatabase");?>:</td>
-        <td><input name="dbDatabase" value="<?php echo $settings->_dbDatabase ?>" /></td>
+        <td><input type="text" name="dbDatabase" value="<?php echo $settings->_dbDatabase ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_dbUser_desc");?>">
         <td><?php printMLText("settings_dbUser");?>:</td>
-        <td><input name="dbUser" value="<?php echo $settings->_dbUser ?>" /></td>
+        <td><input type="text" name="dbUser" value="<?php echo $settings->_dbUser ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_dbPass_desc");?>">
         <td><?php printMLText("settings_dbPass");?>:</td>
-        <td><input name="dbPass" value="<?php echo $settings->_dbPass ?>" type="password" /></td>
+        <td><input type="text" name="dbPass" value="<?php echo $settings->_dbPass ?>" type="password" /></td>
       </tr>
 
      <!--
@@ -366,15 +366,15 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr ><td><b> <?php printMLText("settings_SMTP");?></b></td> </tr>
       <tr title="<?php printMLText("settings_smtpServer_desc");?>">
         <td><?php printMLText("settings_smtpServer");?>:</td>
-        <td><input name="smtpServer" value="<?php echo $settings->_smtpServer ?>" /></td>
+        <td><input type="text" name="smtpServer" value="<?php echo $settings->_smtpServer ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_smtpPort_desc");?>">
         <td><?php printMLText("settings_smtpPort");?>:</td>
-        <td><input name="smtpPort" value="<?php echo $settings->_smtpPort ?>" /></td>
+        <td><input type="text" name="smtpPort" value="<?php echo $settings->_smtpPort ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_smtpSendFrom_desc");?>">
         <td><?php printMLText("settings_smtpSendFrom");?>:</td>
-        <td><input name="smtpSendFrom" value="<?php echo $settings->_smtpSendFrom ?>" /></td>
+        <td><input type="text" name="smtpSendFrom" value="<?php echo $settings->_smtpSendFrom ?>" /></td>
       </tr>
 
     </table>
@@ -390,11 +390,11 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr ><td><b> <?php printMLText("settings_Display");?></b></td> </tr>
       <tr title="<?php printMLText("settings_siteDefaultPage_desc");?>">
         <td><?php printMLText("settings_siteDefaultPage");?>:</td>
-        <td><input name="siteDefaultPage" value="<?php echo $settings->_siteDefaultPage ?>" size="100" /></td>
+        <td><input type="text" name="siteDefaultPage" value="<?php echo $settings->_siteDefaultPage ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_rootFolderID_desc");?>">
         <td><?php printMLText("settings_rootFolderID");?>:</td>
-        <td><input name="rootFolderID" value="<?php echo $settings->_rootFolderID ?>" /></td>
+        <td><input type="text" name="rootFolderID" value="<?php echo $settings->_rootFolderID ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_titleDisplayHack_desc");?>">
         <td><?php printMLText("settings_titleDisplayHack");?>:</td>
@@ -407,20 +407,29 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr ><td><b> <?php printMLText("settings_Authentication");?></b></td> </tr>
       <tr title="<?php printMLText("settings_guestID_desc");?>">
         <td><?php printMLText("settings_guestID");?>:</td>
-        <td><input name="guestID" value="<?php echo $settings->_guestID ?>" /></td>
+        <td><input type="text" name="guestID" value="<?php echo $settings->_guestID ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_adminIP_desc");?>">
         <td><?php printMLText("settings_adminIP");?>:</td>
-        <td><input name="adminIP" value="<?php echo $settings->_adminIP ?>" /></td>
+        <td><input type="text" name="adminIP" value="<?php echo $settings->_adminIP ?>" /></td>
       </tr>
 
       <!--
         -- SETTINGS - ADVANCED - EDITION
       -->
       <tr ><td><b> <?php printMLText("settings_Edition");?></b></td> </tr>
+      <tr title="<?php printMLText("settings_workflowMode_desc");?>">
+        <td><?php printMLText("settings_workflowMode");?>:</td>
+        <td>
+				  <select name="workflowMode">
+					  <option value="traditional" <?php if ($settings->_workflowMode=='traditional') echo "selected" ?>><?php printMLText("settings_workflowMode_valtraditional");?></option>
+						<option value="advanced" <?php if ($settings->_workflowMode=='advanced') echo "selected" ?>><?php printMLText("settings_workflowMode_valadvanced");?></option>
+					</select>
+				</td>
+      </tr>
       <tr title="<?php printMLText("settings_versioningFileName_desc");?>">
         <td><?php printMLText("settings_versioningFileName");?>:</td>
-        <td><input name="versioningFileName" value="<?php echo $settings->_versioningFileName ?>" /></td>
+        <td><input type="text" name="versioningFileName" value="<?php echo $settings->_versioningFileName ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_enableAdminRevApp_desc");?>">
         <td><?php printMLText("settings_enableAdminRevApp");?>:</td>
@@ -433,6 +442,10 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_enableVersionModification_desc");?>">
         <td><?php printMLText("settings_enableVersionModification");?>:</td>
         <td><input name="enableVersionModification" type="checkbox" <?php if ($settings->_enableVersionModification) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_enableDuplicateDocNames_desc");?>">
+        <td><?php printMLText("settings_enableDuplicateDocNames");?>:</td>
+        <td><input name="enableDuplicateDocNames" type="checkbox" <?php if ($settings->_enableDuplicateDocNames) echo "checked" ?> /></td>
       </tr>
 
       <!--
@@ -454,27 +467,31 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr ><td><b> <?php printMLText("settings_Server");?></b></td> </tr>
       <tr title="<?php printMLText("settings_coreDir_desc");?>">
         <td><?php printMLText("settings_coreDir");?>:</td>
-        <td><input name="coreDir" value="<?php echo $settings->_coreDir ?>" size="100" /></td>
+        <td><input type="text" name="coreDir" value="<?php echo $settings->_coreDir ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_luceneClassDir_desc");?>">
         <td><?php printMLText("settings_luceneClassDir");?>:</td>
-        <td><input name="luceneClassDir" value="<?php echo $settings->_luceneClassDir ?>" size="100" /></td>
+        <td><input type="text" name="luceneClassDir" value="<?php echo $settings->_luceneClassDir ?>" size="100" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_extraPath_desc");?>">
+        <td><?php printMLText("settings_extraPath");?>:</td>
+        <td><input type="text" name="extraPath" value="<?php echo $settings->_extraPath ?>" size="100" /></td>
       </tr>
       <tr title="<?php printMLText("settings_contentOffsetDir_desc");?>">
         <td><?php printMLText("settings_contentOffsetDir");?>:</td>
-        <td><input name="contentOffsetDir" value="<?php echo $settings->_contentOffsetDir ?>" /></td>
+        <td><input type="text" name="contentOffsetDir" value="<?php echo $settings->_contentOffsetDir ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_maxDirID_desc");?>">
         <td><?php printMLText("settings_maxDirID");?>:</td>
-        <td><input name="maxDirID" value="<?php echo $settings->_maxDirID ?>" /></td>
+        <td><input type="text" name="maxDirID" value="<?php echo $settings->_maxDirID ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_updateNotifyTime_desc");?>">
         <td><?php printMLText("settings_updateNotifyTime");?>:</td>
-        <td><input name="updateNotifyTime" value="<?php echo $settings->_updateNotifyTime ?>" /></td>
+        <td><input type="text" name="updateNotifyTime" value="<?php echo $settings->_updateNotifyTime ?>" /></td>
       </tr>
       <tr title="<?php printMLText("settings_maxExecutionTime_desc");?>">
         <td><?php printMLText("settings_maxExecutionTime");?>:</td>
-        <td><input name="maxExecutionTime" value="<?php echo $settings->_maxExecutionTime ?>" /></td>
+        <td><input type="text" name="maxExecutionTime" value="<?php echo $settings->_maxExecutionTime ?>" /></td>
       </tr>
 
       <tr ><td><b> <?php printMLText("index_converters");?></b></td> </tr>
@@ -483,7 +500,7 @@ if(!is_writeable($settings->_configFilePath)) {
 ?>
       <tr title="<?php echo $mimetype;?>">
         <td><?php echo $mimetype;?>:</td>
-        <td><input name="converters[<?php echo $mimetype;?>]" value="<?php echo $cmd ?>" size="100" /></td>
+        <td><input type="text" name="converters[<?php echo $mimetype;?>]" value="<?php echo $cmd ?>" size="100" /></td>
       </tr>
 <?php
 	}

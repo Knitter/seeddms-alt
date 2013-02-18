@@ -44,13 +44,13 @@ class SeedDMS_View_RemoveFolder extends SeedDMS_Blue_Style {
 		$this->contentContainerStart();
 ?>
 <form action="../op/op.RemoveFolder.php" method="post" name="form1">
-	<input type="Hidden" name="folderid" value="<?php print $folderid;?>">
+	<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
 	<input type="Hidden" name="showtree" value="<?php echo showtree();?>">
   <?php echo createHiddenFieldWithKey('removefolder'); ?>
 	<p>
 	<?php printMLText("confirm_rm_folder", array ("foldername" => htmlspecialchars($folder->getName())));?>
 	</p>
-	<p><input type="Submit" value="<?php printMLText("rm_folder");?>"></p>
+	<p><input type="submit" value="<?php printMLText("rm_folder");?>"></p>
 </form>
 <?php
 		$this->contentContainerEnd();

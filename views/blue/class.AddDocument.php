@@ -87,7 +87,7 @@ class SeedDMS_View_AddDocument extends SeedDMS_Blue_Style {
 		
 		// Retrieve a list of all users and groups that have review / approve
 		// privileges.
-		$docAccess = $folder->getApproversList();
+		$docAccess = $folder->getReadAccessList();
 		?>
 		<table>
 		<tr>
@@ -112,7 +112,7 @@ class SeedDMS_View_AddDocument extends SeedDMS_Blue_Style {
 		<table>
 		<tr>
 			<td><?php printMLText("name");?>:</td>
-			<td><input name="name" size="60"></td>
+			<td><input type="text" name="name" size="60"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("comment");?>:</td>
@@ -167,14 +167,14 @@ class SeedDMS_View_AddDocument extends SeedDMS_Blue_Style {
 		<table>
 		<tr>
 			<td><?php printMLText("version");?>:</td>
-			<td><input name="reqversion" value="1"></td>
+			<td><input type="text" name="reqversion" value="1"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("local_file");?>:</td>
 			<td>
 			<a href="javascript:addFiles()"><?php printMLtext("add_multiple_files") ?></a>
 			<ol id="files">
-			<li><input type="File" name="userfile[]" size="60"></li>
+			<li><input type="file" name="userfile[]" size="60"></li>
 			</ol>
 			</td>
 		</tr>

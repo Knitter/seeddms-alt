@@ -72,7 +72,7 @@ function checkForm()
 	<table>
 		<tr>
 			<td class="inputDescription"><?php printMLText("name");?>:</td>
-			<td><input name="name" size="60"></td>
+			<td><input type="text" name="name" size="60"></td>
 		</tr>
 		<tr>
 			<td valign="top" class="inputDescription"><?php printMLText("comment");?>:</td>
@@ -88,7 +88,7 @@ function checkForm()
 		foreach($attrdefs as $attrdef) {
 ?>
 <tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
 	<td><?php $this->printAttributeEditField($attrdef, '') ?></td>
 </tr>
 <?php

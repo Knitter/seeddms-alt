@@ -57,7 +57,7 @@ function chooseCategory(form, cats) {
 
 	// Retrieve a list of all users and groups that have review / approve
 	// privileges.
-	$docAccess = $folder->getApproversList();
+	$docAccess = $folder->getReadAccessList();
 
 	$this->printUploadApplet('../op/op.AddMultiDocument.php', array('folderid'=>$folder->getId()));
 

@@ -43,7 +43,6 @@ class SeedDMS_View_KeywordChooser extends SeedDMS_Blue_Style {
 var targetObj = opener.document.<?php echo $target ?>;
 var myTA;
 
-
 function insertKeywords(keywords) {
 
 	if (navigator.appName == "Microsoft Internet Explorer") {

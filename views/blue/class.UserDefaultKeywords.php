@@ -85,11 +85,11 @@ function showKeywords(selectObj) {
 
 		<td id="keywords0" style="display : none;">
 			<form action="../op/op.UserDefaultKeywords.php" method="post" name="addcategory">
-			<input type="Hidden" name="action" value="addcategory">
-			<?php printMLText("name");?> : <input name="name">
+			<input type="hidden" name="action" value="addcategory">
+			<?php printMLText("name");?> : <input type="text" name="name">
 			<input type="Submit" value="<?php printMLText("new_default_keyword_category"); ?>">
 			</form>
-		<td>
+		</td>
 <?php
 		foreach ($categories as $category) {
 			$owner = $category->getOwner();
@@ -112,10 +112,10 @@ function showKeywords(selectObj) {
 					<td><?php echo getMLText("name")?>:</td>
 					<td>
 						<form action="../op/op.UserDefaultKeywords.php" method="post" name="<?php echo "category".$category->getID()?>">
-							<input type="Hidden" name="action" value="editcategory">
-							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
+							<input type="hidden" name="action" value="editcategory">
+							<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
 							<input name="name" value="<?php echo htmlspecialchars($category->getName())?>">
-							<input type="Submit" value="<?php printMLText("save");?>">
+							<input type="submit" value="<?php printMLText("save");?>">
 						</form>
 					</td>
 				</tr>
@@ -133,12 +133,12 @@ function showKeywords(selectObj) {
 								print getMLText("no_default_keywords");
 							else
 								foreach ($lists as $list) {
-						?>
+?>
 									<form action="../op/op.UserDefaultKeywords.php" method="post" name="<?php echo "cat".$category->getID().".".$list["id"]?>">
 									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="editkeywords">
-									<input name="keywords" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
+									<input type="text" name="keywords" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
 									<input name="action" value="editkeywords" type="Image" src="images/save.gif" title="<?php echo getMLText("save")?>" border="0">
 									<!--	 <input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"> &nbsp; -->
 									<a href="../op/op.UserDefaultKeywords.php?categoryid=<?php echo $category->getID()?>&keywordsid=<?php echo $list["id"]?>&action=removekeywords"><img src="images/del.gif" title="<?php echo getMLText("delete")?>" border=0></a>
@@ -151,15 +151,14 @@ function showKeywords(selectObj) {
 					<form action="../op/op.UserDefaultKeywords.php" method="post" name="<?php echo $category->getID().".add"?>">
 					<td><input type="Submit" value="<?php printMLText("new_default_keywords");?>"></td>
 					<td>
-						<input type="Hidden" name="action" value="newkeywords">
-						<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-						<input name="keywords">
+						<input type="hidden" name="action" value="newkeywords">
+						<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+						<input type="text" name="keywords">
 					</td>
 					</form>
 				</tr>
 			</table>
 		</td>
-
 <?php } ?>
 	</tr></table>
 

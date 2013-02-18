@@ -31,14 +31,14 @@ require_once("class.BlueStyle.php");
  */
 class SeedDMS_View_DocumentAccess extends SeedDMS_Blue_Style {
 
-	function printAccessModeSelection($defMode) {
+	function printAccessModeSelection($defMode) { /* {{{ */
 		print "<select name=\"mode\">\n";
 		print "\t<option value=\"".M_NONE."\"" . (($defMode == M_NONE) ? " selected" : "") . ">" . getMLText("access_mode_none") . "</option>\n";
 		print "\t<option value=\"".M_READ."\"" . (($defMode == M_READ) ? " selected" : "") . ">" . getMLText("access_mode_read") . "</option>\n";
 		print "\t<option value=\"".M_READWRITE."\"" . (($defMode == M_READWRITE) ? " selected" : "") . ">" . getMLText("access_mode_readwrite") . "</option>\n";
 		print "\t<option value=\"".M_ALL."\"" . (($defMode == M_ALL) ? " selected" : "") . ">" . getMLText("access_mode_all") . "</option>\n";
 		print "</select>\n";
-	}
+	} /* }}} */
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -98,7 +98,7 @@ function checkForm()
 	}
 	?>
 	</select>
-	<input type="Submit" value="<?php printMLText("save")?>">
+	<input type="submit" value="<?php printMLText("save")?>">
 	</form>
 <?php
 
@@ -172,8 +172,8 @@ function checkForm()
 				print "<td><span class=\"actions\">\n";
 				echo createHiddenFieldWithKey('documentaccess')."\n";
 				print "<input type=\"Hidden\" name=\"documentid\" value=\"".$document->getId()."\">\n";
-				print "<input type=\"Hidden\" name=\"action\" value=\"editaccess\">\n";
-				print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
+				print "<input type=\"hidden\" name=\"action\" value=\"editaccess\">\n";
+				print "<input type=\"hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 				print "<input type=\"Image\" class=\"mimeicon\" src=\"images/save.gif\">".getMLText("save")." ";
 				print "</span></td>\n";
 				print "</form>\n";
@@ -181,8 +181,8 @@ function checkForm()
 				print "<form action=\"../op/op.DocumentAccess.php\">\n";
 				echo createHiddenFieldWithKey('documentaccess')."\n";
 				print "<input type=\"Hidden\" name=\"documentid\" value=\"".$document->getId()."\">\n";
-				print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
-				print "<input type=\"Hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
+				print "<input type=\"hidden\" name=\"action\" value=\"delaccess\">\n";
+				print "<input type=\"hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 				print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
 				print "</form>\n";
 				print "<span></td>\n";
@@ -270,7 +270,7 @@ function checkForm()
 </td>
 </tr>
 <tr>
-<td colspan="2"><input type="Submit" value="<?php printMLText("add");?>"></td>
+<td colspan="2"><input type="submit" value="<?php printMLText("add");?>"></td>
 </tr>
 </table>
 </form>

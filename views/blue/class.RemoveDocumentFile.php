@@ -50,7 +50,7 @@ class SeedDMS_View_RemoveDocumentFile extends SeedDMS_Blue_Style {
 	<input type="Hidden" name="documentid" value="<?php echo $document->getID()?>">
 	<input type="Hidden" name="fileid" value="<?php echo $file->getID()?>">
 	<p><?php printMLText("confirm_rm_file", array ("documentname" => htmlspecialchars($document->getName()), "name" => htmlspecialchars($file->getName())));?></p>
-	<input type="Submit" value="<?php printMLText("rm_file");?>">
+	<input type="submit" value="<?php printMLText("rm_file");?>">
 </form>
 <?php
 		$this->contentContainerEnd();

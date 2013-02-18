@@ -100,10 +100,10 @@ function chooseKeywords(target) {
 <tr>
 <td><?php printMLText("search_in");?>:</td>
 <td><ul class="actions">
-<li class="first"><input type="Checkbox" id="keywords" name="searchin[]" value="1"><label for="keywords"><?php printMLText("keywords");?></label> (<?php printMLText('documents_only'); ?>)</li>
-<li><input type="Checkbox" name="searchin[]" id="searchName" value="2"><label for="searchName"><?php printMLText("name");?></label></li>
-<li><input type="Checkbox" name="searchin[]" id="comment" value="3"><label for="comment"><?php printMLText("comment");?></label></li>
-<li><input type="Checkbox" name="searchin[]" id="attributes" value="4"><label for="attributes"><?php printMLText("attributes");?></label></li>
+<li class="first"><input type="checkbox" id="keywords" name="searchin[]" value="1"><label for="keywords"><?php printMLText("keywords");?></label> (<?php printMLText('documents_only'); ?>)</li>
+<li><input type="checkbox" name="searchin[]" id="searchName" value="2"><label for="searchName"><?php printMLText("name");?></label></li>
+<li><input type="checkbox" name="searchin[]" id="comment" value="3"><label for="comment"><?php printMLText("comment");?></label></li>
+<li><input type="checkbox" name="searchin[]" id="attributes" value="4"><label for="attributes"><?php printMLText("attributes");?></label></li>
 </ul>
 </td>
 </tr>
@@ -252,7 +252,7 @@ echo "</td>\n</tr>\n";
 </td>
 </tr>
 <tr>
-<td colspan="2"><input type="Submit" value="<?php printMLText("search"); ?>"></td>
+<td colspan="2"><input type="submit" value="<?php printMLText("search"); ?>"></td>
 </tr>
 </table>
 

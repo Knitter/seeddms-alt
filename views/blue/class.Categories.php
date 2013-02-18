@@ -87,7 +87,7 @@ function showCategories(selectObj) {
   		<?php echo createHiddenFieldWithKey('addcategory'); ?>
 			<input type="Hidden" name="action" value="addcategory">
 			<?php printMLText("name");?> : <input name="name">
-			<input type="Submit" value="<?php printMLText("new_document_category"); ?>">
+			<input type="submit" value="<?php printMLText("new_document_category"); ?>">
 			</form>
 		</td>
 	
@@ -128,8 +128,8 @@ function showCategories(selectObj) {
   		        <?php echo createHiddenFieldWithKey('editcategory'); ?>
 							<input type="Hidden" name="action" value="editcategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input name="name" value="<?php echo htmlspecialchars($category->getName()) ?>">&nbsp;
-							<input type="Submit" value="<?php printMLText("save");?>">
+							<input name="name" type="text" value="<?php echo htmlspecialchars($category->getName()) ?>">&nbsp;
+							<input type="submit" value="<?php printMLText("save");?>">
 						</form>
 					</td>
 				</tr>

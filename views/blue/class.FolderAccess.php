@@ -30,14 +30,14 @@ require_once("class.BlueStyle.php");
  * @version    Release: @package_version@
  */
 class SeedDMS_View_FolderAccess extends SeedDMS_Blue_Style {
-	function printAccessModeSelection($defMode) {
+	function printAccessModeSelection($defMode) { /* {{{ */
 		print "<select name=\"mode\">\n";
 		print "\t<option value=\"".M_NONE."\"" . (($defMode == M_NONE) ? " selected" : "") . ">" . getMLText("access_mode_none") . "\n";
 		print "\t<option value=\"".M_READ."\"" . (($defMode == M_READ) ? " selected" : "") . ">" . getMLText("access_mode_read") . "\n";
 		print "\t<option value=\"".M_READWRITE."\"" . (($defMode == M_READWRITE) ? " selected" : "") . ">" . getMLText("access_mode_readwrite") . "\n";
 		print "\t<option value=\"".M_ALL."\"" . (($defMode == M_ALL) ? " selected" : "") . ">" . getMLText("access_mode_all") . "\n";
 		print "</select>\n";
-	}
+	} /* }}} */
 
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
@@ -94,7 +94,7 @@ function checkForm()
 			}
 ?>
 	</select>
-	<input type="Submit" value="<?php printMLText("save")?>">
+	<input type="submit" value="<?php printMLText("save")?>">
 	</form>
 	<?php
 		}
@@ -146,7 +146,7 @@ function checkForm()
 	<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
 	<input type="Hidden" name="action" value="setdefault">
 	<?php $this->printAccessModeSelection($folder->getDefaultAccess()); ?>
-	<input type="Submit" value="<?php printMLText("save");?>">
+	<input type="submit" value="<?php printMLText("save");?>">
 </form>
 
 <?php
@@ -262,7 +262,7 @@ function checkForm()
 </td>
 </tr>
 <tr>
-<td colspan="2"><input type="Submit" value="<?php printMLText("add");?>"></td>
+<td colspan="2"><input type="submit" value="<?php printMLText("add");?>"></td>
 </tr>
 </table>
 </form>

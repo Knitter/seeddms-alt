@@ -32,6 +32,8 @@ require_once("class.BlueStyle.php");
 class SeedDMS_View_ReviewSummary extends SeedDMS_Blue_Style {
 
 	function show() { /* {{{ */
+		$dms = $this->params['dms'];
+		$user = $this->params['user'];
 
 		if (!$db->createTemporaryTable("ttstatid")) {
 			UI::exitError(getMLText("review_summary"),getMLText("internal_error_exit"));

@@ -77,7 +77,7 @@ class SeedDMS_View_Statistic extends SeedDMS_Blue_Style {
 
 		print "</ul>";
 
-		print "<small>".formatted_size($folder_size).", ".$doc_count." ".getMLText("documents")."</small>\n";
+		print "<small>".SeedDMS_Core_File::format_filesize($folder_size).", ".$doc_count." ".getMLText("documents")."</small>\n";
 
 		print "</li>";
 
@@ -114,7 +114,7 @@ class SeedDMS_View_Statistic extends SeedDMS_Blue_Style {
 
 		if (! $document->inheritsAccess()) $this->printAccessList($document);
 
-		print "<small>".formatted_size($folder_size).", ".$local_file_count." ".getMLText("files")."</small>\n";
+		print "<small>".SeedDMS_Core_File::format_filesize($folder_size).", ".$local_file_count." ".getMLText("files")."</small>\n";
 
 		print "</li>";
 

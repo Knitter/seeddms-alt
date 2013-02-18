@@ -49,15 +49,15 @@ class SeedDMS_View_PasswordForgotten extends SeedDMS_Blue_Style {
   <p><?php printMLText("password_forgotten_text"); ?></p>
 	<table border="0">
 		<tr>
-			<td><?php printMLText("login");?></td>
-			<td><input name="login" id="login"></td>
+			<td><?php printMLText("login");?>:</td>
+			<td><input type="text" name="login" id="login"></td>
 		</tr>
 		<tr>
-			<td><?php printMLText("email");?></td>
-			<td><input name="email" id="email"></td>
+			<td><?php printMLText("email");?>:</td>
+			<td><input type="text" name="email" id="email"></td>
 		</tr>
 		<tr>
-			<td colspan="2"><input type="Submit" value="<?php printMLText("submit_password_forgotten") ?>"></td>
+			<td colspan="2"><input type="submit" value="<?php printMLText("submit_password_forgotten") ?>"></td>
 		</tr>
 	</table>
 </form>
