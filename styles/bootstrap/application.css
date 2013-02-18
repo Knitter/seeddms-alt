@@ -1,2 +1,5 @@
+body { /* Add top padding for full-width layout */
+	padding-top: 60px;
+}
 img.mimeicon {
 }
