@@ -680,6 +680,7 @@ $text["settings_smtpServer_desc"] = "SMTP Server hostname";
 $text["settings_smtpServer"] = "SMTP Server hostname";
 $text["settings_SMTP"] = "SMTP Server settings";
 $text["settings_stagingDir"] = "Directory for partial uploads";
+$text["settings_stagingDir_desc"] = "The directory where jumploader places the parts of a file upload before it is put back together.";
 $text["settings_strictFormCheck_desc"] = "Strict form checking. If set to true, then all fields in the form will be checked for a value. If set to false, then (most) comments and keyword fields become optional. Comments are always required when submitting a review or overriding document status";
 $text["settings_strictFormCheck"] = "Strict Form Check";
 $text["settings_suggestionvalue"] = "Suggestion value";
