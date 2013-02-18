@@ -109,7 +109,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "  <div class=\"container\">\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
-		echo "   <div class=\"nav-collapse collapse\">\n";
+		echo "   <div class=\"nav-collapse\">\n";
 		echo "   <ul class=\"nav pull-right\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("signed_in_as")." ".htmlspecialchars($this->params['user']->getFullName())."<b class=\"caret\"></b></a>\n";
