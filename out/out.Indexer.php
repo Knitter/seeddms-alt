@@ -53,7 +53,6 @@ if(isset($_GET['create']) && $_GET['create'] == 1) {
 	if(!$index) {
 		UI::exitError(getMLText("admin_tools"),getMLText("no_fulltextindex"));
 	}
-	echo "<p>Updating index</p>";
 	SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
 }
 
