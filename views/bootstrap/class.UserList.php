@@ -43,62 +43,44 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation("", "admin_tools");
 		$this->contentHeading(getMLText("user_list"));
 		$this->contentContainerStart();
-
-		foreach ($allUsers as $currUser) {
-			if ($currUser->isGuest())
-				continue;
-
-			$this->contentSubHeading(getMLText("user") . ": \"" . $currUser->getFullName() . "\"");
 ?>
-	<table class="table-condensed">
-		<tr>
-			<td><?php printMLText("user_login");?>:</td>
-			<td><?php print $currUser->getLogin();?></td>
-		</tr>
-	<tr>
-			<td><?php printMLText("user_name");?>:</td>
-			<td><?php print $currUser->getFullName();?></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("email");?>:</td>
-			<td><a href="mailto:<?php print $currUser->getEmail();?>"><?php print $currUser->getEmail();?></a></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("comment");?>:</td>
-			<td><?php print $currUser->getComment();?></td>
-		</tr>
-		<tr>
-			<td><?php printMLText("groups");?>:</td>
-			<td>
-				<?php
-					$groups = $currUser->getGroups();
-					if (count($groups) == 0) {
-						printMLText("no_groups");
-					}
-					else {
-						for ($j = 0; $j < count($groups); $j++)	{
-							print $groups[$j]->getName();
-							if ($j +1 < count($groups))
-								print ", ";
-						}
-					}
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td><?php printMLText("user_image");?>:</td>
-			<td>
-				<?php
-					if ($currUser->hasImage())
-						print "<img src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
-					else
-						printMLText("no_user_image");
-				?>
-			</td>
-		</tr>
-	</table>
+
+	<table class="table table-condensed">
+	  <tr><th></th><th><?php printMLText('name'); ?></th><th><?php printMLText('groups'); ?></th><th></th><th></th></tr>
 <?php
+		foreach ($allUsers as $currUser) {
+			echo "<tr>";
+			echo "<td>";
+			if ($currUser->hasImage())
+				print "<img width=\"50\" src=\"".$httproot . "out/out.UserImage.php?userid=".$currUser->getId()."\">";
+			echo "</td>";
+			echo "<td>";
+			echo $currUser->getFullName()." (".$currUser->getLogin().")<br />";
+			echo "<a href=\"mailto:".$currUser->getEmail()."\">".$currUser->getEmail()."</a><br />";
+			echo "<small>".$currUser->getComment()."</small>";
+			echo "</td>";
+			echo "<td>";
+			$groups = $currUser->getGroups();
+			if (count($groups) != 0) {
+				for ($j = 0; $j < count($groups); $j++)	{
+					print $groups[$j]->getName();
+					if ($j +1 < count($groups))
+						print ", ";
+				}
+			}
+			echo "</td>";
+			echo "<td>";
+			if($currUser->getQuota() != 0)
+				echo SeedDMS_Core_File::format_filesize($currUser->getQuota())."<br />";
+			echo SeedDMS_Core_File::format_filesize($currUser->getUsedDiskSpace())."<br />";
+			echo "</td>";
+			echo "<td>";
+     	echo "<a href=\"../out/out.UsrMgr.php?userid=".$currUser->getID()."\"><i class=\"icon-edit\"></i></a> ";
+     	echo "<a href=\"../out/out.RemoveUser.php?userid=".$currUser->getID()."\"><i class=\"icon-remove\"></i></a>";
+			echo "</td>";
+			echo "</tr>";
 		}
+		echo "</table>";
 
 		$this->contentContainerEnd();
 		$this->htmlEndPage();
