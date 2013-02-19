@@ -52,11 +52,17 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 													 getMLText("thursday"),
 													 getMLText("friday"), 
 													 getMLText("saturday") );
-		
-		$this->dayNames = array();
-		foreach ( $this->dayNamesLong as $dn ){
-			 $this->dayNames[] = substr($dn,0,3);   
-		}         
+		/* Set abbreviated weekday names. If no translation is availabe, use
+		 * the first three chars from the long name
+		 */
+		$this->dayNames = array( getMLText("sunday_abbr", array(), substr($this->dayNamesLong[0], 0, 3)),
+													 getMLText("monday_abbr", array(), substr($this->dayNamesLong[1], 0, 3)),
+													 getMLText("tuesday_abbr", array(), substr($this->dayNamesLong[2], 0, 3)),
+													 getMLText("wednesday_abbr", array(), substr($this->dayNamesLong[3], 0, 3)), 
+													 getMLText("thursday_abbr", array(), substr($this->dayNamesLong[4], 0, 3)),
+													 getMLText("friday_abbr", array(), substr($this->dayNamesLong[5], 0, 3)), 
+													 getMLText("saturday_abbr", array(), substr($this->dayNamesLong[6], 0, 3)) );
+	
 	} /* }}} */
 
 	// Calculate the number of days in a month, taking into account leap years.
