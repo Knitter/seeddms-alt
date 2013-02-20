@@ -46,12 +46,12 @@ function check($doupdate=0) { /* {{{ */
 			$queryStr = "SELECT ".$schema['key'].", `".implode('`,`', $schema['fields'])."` FROM ".$tblname;
 		elseif(isset($schema['keys']))
 			$queryStr = "SELECT ".implode(',', $schema['keys']).", `".implode('`,`', $schema['fields'])."` FROM ".$tblname;
-		$res = $db->Execute($queryStr);
-		$recs = $res->GetArray();
+		$res = $db->query($queryStr);
+		$recs = $res->fetchAll(PDO::FETCH_ASSOC);
 		foreach($recs as $rec) {
 			foreach($schema['fields'] as $field) {
 				if($rec[$field] !== mydmsDecodeString($rec[$field])) {
-					$updateSql = "UPDATE ".$tblname." SET `".$field."`=".$db->qstr(mydmsDecodeString($rec[$field]))." where ";
+					$updateSql = "UPDATE ".$tblname." SET `".$field."`=".$db->quote(mydmsDecodeString($rec[$field]))." where ";
 					if(isset($schema['key']))
 						$updateSql .= $schema['key']."=".$rec[$schema['key']];
 					elseif(isset($schema['keys'])) {
@@ -64,7 +64,7 @@ function check($doupdate=0) { /* {{{ */
 					$allupdates[] = $updateSql;
 					echo "<tr><td>".$tblname."</td><td>".$field."</td><td>".htmlspecialchars($rec[$field])."</td><td>".htmlspecialchars(mydmsDecodeString($rec[$field]))."</td><td><pre>".htmlspecialchars($updateSql)."</pre></td></tr>\n";
 					if($doupdate) {
-						$res = $db->Execute($updateSql);
+						$res = $db->exec($updateSql);
 						if(!$res) {
 							$errormsg = 'Could not execute update statement';
 							echo "<tr><td colspan=\"5\"><span style=\"color: red;\">".$errormsg."</span></td></tr>\n";

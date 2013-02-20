@@ -6,6 +6,7 @@ DROP PROCEDURE IF EXISTS DROPFK;
 
 -- uncomment the following if run in mysql client
 -- DELIMITER $$ ;
+
 CREATE PROCEDURE DROPFK (
 IN parm_table_name VARCHAR(100),
 IN parm_key_name VARCHAR(100)
@@ -21,6 +22,7 @@ BEGIN
 		DEALLOCATE PREPARE stmt;
 	END IF;
 END
+
 -- place a $$ after the last END if run the file in mysql client
 -- uncomment the following if run in mysql client
 -- DELIMITER ; $$
