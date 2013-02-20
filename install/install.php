@@ -338,7 +338,7 @@ if ($action=="setSettings") {
 						}
 						$d->close();
 
-						echo "Your current database schema has version ".$rec['major'].'.'.$rec['minor'].'.'.$rec['subminor'].". Please run all<br />of the update scripts below in the listed order.<br /><br />";
+						echo "Your current database schema has version ".$rec['major'].'.'.$rec['minor'].'.'.$rec['subminor'].". Please run all (if any)<br />of the update scripts below in the listed order.<br /><br />";
 						$connTmp = null;
 
 						if($updatedirs) {
