@@ -322,7 +322,7 @@ directory of your initial SeedDMS intallation).
 > install -> src/install
 > index.php -> src/index.php
 
-> ln -s ../seeddms-<version>
+> ln -s ../seeddms-<version> src
 > ln -s src/inc inc
 > ln -s src/op op
 > ln -s src/out out
