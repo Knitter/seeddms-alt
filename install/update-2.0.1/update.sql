@@ -1,11 +1,4 @@
--- mysql -uyouruser -pyourpassword yourdb < update.sql
--- this script must be executed when updating form a version < 2.0
-
--- --------------------------------------------------------
-
--- 
--- Table structure for events (calendar)
--- 
+START TRANSACTION;
 
 CREATE TABLE `tblEvents` (
   `id` int(11) NOT NULL auto_increment,
@@ -16,4 +9,6 @@ CREATE TABLE `tblEvents` (
   `date` int(12) default NULL,
   `userID` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+COMMIT;
