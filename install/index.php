@@ -5,6 +5,7 @@ $settings = new Settings();
 $rootDir = realpath ("..");
 $settings->_rootDir = $rootDir.'/';
 
+$theme = "blue";
 include("../inc/inc.Language.php");
 include "../languages/English/lang.inc";
 include("../inc/inc.ClassUI.php");
