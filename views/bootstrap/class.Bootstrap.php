@@ -663,7 +663,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     <p>Please wait, until document tree is loaded …</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
 <?php
@@ -694,7 +694,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     <p>Please wait, until document tree is loaded …</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
 <?php
@@ -744,8 +744,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     <p>Please wait, until category list is loaded …</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();">Save</button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><?php printMLText("save") ?></button>
   </div>
 </div>
 <?php
@@ -766,8 +766,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     <p>Please wait, until keyword list is loaded …</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptKeywords();">Save</button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptKeywords();"><?php printMLText("save") ?></button>
   </div>
 </div>
 <?php
@@ -819,8 +819,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     <p>Please wait, until file list is loaded …</p>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();">Save</button>
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><?php printMLText("save") ?></button>
   </div>
 </div>
 <?php
