@@ -173,6 +173,7 @@ if(isset($settings->_extraPath))
 /**
  * Include GUI + Language
  */
+$theme = "blue";
 include("../inc/inc.Language.php");
 include "../languages/English/lang.inc";
 include("../inc/inc.ClassUI.php");
@@ -244,6 +245,7 @@ if (isset($_POST["action"])) $action=$_POST["action"];
 else if (isset($_GET["action"])) $action=$_GET["action"];
 else $action=NULL;
 
+$showform = true;
 if ($action=="setSettings") {
 	/**
 	 * Get Parameters
@@ -336,10 +338,11 @@ if ($action=="setSettings") {
 						}
 						$d->close();
 
-						echo "Your current database schema has version ".$rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']."<br /><br />";
+						echo "Your current database schema has version ".$rec['major'].'.'.$rec['minor'].'.'.$rec['subminor'].". Please run all<br />of the update scripts below in the listed order.<br /><br />";
 						$connTmp = null;
 
 						if($updatedirs) {
+							asort($updatedirs);
 							foreach($updatedirs as $updatedir) {
 								if($updatedir > $rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']) {
 									$needsupdate = true;
@@ -347,9 +350,7 @@ if ($action=="setSettings") {
 									if(file_exists('update-'.$updatedir.'/update.txt')) {
 										print "<p>Please read the comments on updating this version. <a href=\"update-".$updatedir."/update.txt\" target=\"_blank\">Read now</a></p>";
 									}
-									if(file_exists('update-'.$updatedir.'/update.php')) {
-										print "<p>Afterwards run the <a href=\"update.php?version=".$updatedir."\">update script</a>.</p>";
-									}
+									print "<p>Run the <a href=\"update.php?version=".$updatedir."\">update script</a>.</p>";
 								}
 							}
 						} else {
@@ -365,6 +366,7 @@ if ($action=="setSettings") {
 						echo "<br/><br/>";
 
 						echo '<a href="' . $httpRoot . '/out/out.Settings.php">' . getMLText("settings_more_settings") .'</a>';
+						$showform = false;
 					}
 				} else {
 					print "<p>You does not seem to have a valid database. The table tblVersion is missing.</p>";
@@ -376,9 +378,11 @@ if ($action=="setSettings") {
 	// Back link
 	echo '<br/>';
 	echo '<br/>';
-	echo '<a href="' . $httpRoot . '/install/install.php">' . getMLText("back") . '</a>';
+//	echo '<a href="' . $httpRoot . '/install/install.php">' . getMLText("back") . '</a>';
 
-} else {
+}
+
+if($showform) {
 
 	/**
 	 * Set parameters
