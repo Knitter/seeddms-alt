@@ -33,6 +33,7 @@ if (!file_exists($configDir."/ENABLE_INSTALL_TOOL")) {
 	exit;
 }
 
+$theme = "blue";
 require_once("../inc/inc.Language.php");
 require_once("../inc/inc.ClassUI.php");
 
@@ -83,12 +84,14 @@ if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 
 
 	if(!$errorMsg) {
-		echo "<h3>Running update script</h3>";
-		include('update-'.$_GET['version'].'/update.php');
+		if(file_exists('update-'.$_GET['version'].'/update.php')) {
+			echo "<h3>Running update script</h3>";
+			include('update-'.$_GET['version'].'/update.php');
+		}
 	} else {
 		echo $errorMsg;
 	}
-	echo "<p><a href=\"install.php\">Go back to installation.</a></p>";
+	echo "<p><a href=\"install.php\">Go back to installation and recheck.</a></p>";
 } else {
 	echo "<p>Could not determine database schema version.</p>";
 }
