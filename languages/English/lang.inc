@@ -168,6 +168,7 @@ $text["disclaimer"] = "This is a classified area. Access is permitted only to au
 $text["do_object_repair"] = "Repair all folders and documents.";
 $text["do_object_setfilesize"] = "Set file size";
 $text["do_object_setchecksum"] = "Set checksum";
+$text["do_object_unlink"] = "Delete document version";
 $text["document_already_locked"] = "This document is aleady locked";
 $text["document_deleted"] = "Document deleted"; 
 $text["document_deleted_email"] = "Document deleted";

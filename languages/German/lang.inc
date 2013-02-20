@@ -168,6 +168,7 @@ $text["disclaimer"] = "Dies ist ein geschützter Bereich. Nur authorisiertes Per
 $text["do_object_repair"] = "Repariere alle Ordner und Dokumente.";
 $text["do_object_setfilesize"] = "Setze Dateigröße";
 $text["do_object_setchecksum"] = "Setze Check-Summe";
+$text["do_object_unlink"] = "Lösche Dokumentenversion";
 $text["document_already_locked"] = "Dieses Dokument ist bereits gesperrt";
 $text["document_deleted"] = "Dokument gelöscht"; 
 $text["document_deleted_email"] = "Dokument gelöscht";
