@@ -228,7 +228,8 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				$doc = $version->getDocument();
 				print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
 				if($setfilesize) {
-					$version->setFileSize();
+					if($version->setFileSize())
+						echo "<td>Repaired</td>";
 				}
 				print "</tr>\n";
 			}
@@ -256,7 +257,8 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				$doc = $version->getDocument();
 				print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
 				if($setchecksum) {
-					$version->setChecksum();
+					if($version->setChecksum())
+						echo "<td>Repaired</td>";
 				}
 				print "</tr>\n";
 			}
