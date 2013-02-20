@@ -1,5 +1,5 @@
-VERSION=4.0.0-pre5
-SRC=CHANGELOG inc conf utils index.php languages views op out README.md README.Notification drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install
+VERSION=4.0.0-RC1
+SRC=CHANGELOG inc conf utils index.php languages views op out README.md README.Notification README.Ubuntu drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install
 #restapi webapp
 
 dist:
