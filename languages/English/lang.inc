@@ -130,6 +130,7 @@ $text["choose_user"] = "Choose user";
 $text["choose_workflow"] = "Choose workflow";
 $text["choose_workflow_state"] = "Choose workflow state";
 $text["choose_workflow_action"] = "Choose workflow action";
+$text["close"] = "Close";
 $text["comment_changed_email"] = "Comment changed";
 $text["comment"] = "Comment";
 $text["comment_for_current_version"] = "Version comment";
