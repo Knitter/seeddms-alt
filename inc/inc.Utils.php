@@ -108,7 +108,9 @@ function sanitizeString($string) { /* {{{ */
 	return trim($string);
 } /* }}} */
 
-/* Deprecated, do not use anymore */
+/* Deprecated, do not use anymore, but keep it for upgrading
+ * older versions
+ */
 function mydmsDecodeString($string) { /* {{{ */
 
 	$string = (string)$string;
