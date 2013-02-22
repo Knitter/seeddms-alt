@@ -206,19 +206,15 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 					$this->documentNavigationBar();
 					break;
 				case "my_documents":
-					echo "<a class=\"brand\" href=\"#\">".$pageTitle."</a>"; //echo $pageTitle."\n";
 					$this->myDocumentsNavigationBar();
 					break;
 				case "my_account":
-					echo "<a class=\"brand\" href=\"#\">".$pageTitle."</a>"; //echo $pageTitle."\n";
 					$this->accountNavigationBar();
 					break;
 				case "admin_tools":
-					echo "<a class=\"brand\" href=\"../out/out.AdminTools.php\">".$pageTitle."</a>"; //echo $pageTitle."\n";
 					$this->adminToolsNavigationBar();
 					break;
 				case "calendar";
-					echo "<a class=\"brand\" href=\"#\">".$pageTitle."</a>"; //echo $pageTitle."\n";
 					$this->calendarNavigationBar($extra);
 					break;
 			}
@@ -305,6 +301,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	private function accountNavigationBar() { /* {{{ */
 		echo "<ul class=\"nav\">\n";
+		echo "<li id=\"first\"><a href=\"../out/out.MyAccount.php\" class=\"brand\">".getMLText("my_account")."</a></li>\n";
 		if (!$this->params['disableselfedit']) echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
 		
 		if (!$this->params['user']->isAdmin()) 
@@ -323,7 +320,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	private function myDocumentsNavigationBar() { /* {{{ */
 
 		echo "<ul class=\"nav\">\n";
-		echo "<li id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
+		echo "<li id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\" class=\"brand\">".getMLText("my_documents")."</a></li>\n";
+		echo "<li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
 		echo "<li><a href=\"../out/out.MyDocuments.php\">".getMLText("all_documents")."</a></li>\n";
 		if($this->params['workflowmode'] == 'traditional') {
 			echo "<li><a href=\"../out/out.ReviewSummary.php\">".getMLText("review_summary")."</a></li>\n";
@@ -337,6 +335,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	private function adminToolsNavigationBar() { /* {{{ */
 		echo "   <ul class=\"nav\">\n";
+		echo "    <li id=\"first\"><a href=\"../out/out.AdminTools.php\" class=\"brand\">".getMLText("admin_tools")."</a></li>\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")."<b class=\"caret\"></b></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
@@ -406,6 +405,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$ds="&day=".$d[0]."&month=".$d[1]."&year=".$d[2];
 	
 		echo "<ul class=\"nav\">\n";
+		echo "<li id=\"first\"><a href=\"../out/out.Calendar.php?mode=y\" class=\"brand\">".getMLText("calendar")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=w".$ds."\">".getMLText("week_view")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=m".$ds."\">".getMLText("month_view")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=y".$ds."\">".getMLText("year_view")."</a></li>\n";
