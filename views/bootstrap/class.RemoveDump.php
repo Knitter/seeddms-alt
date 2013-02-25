@@ -47,7 +47,7 @@ class SeedDMS_View_RemoveDump extends SeedDMS_Bootstrap_Style {
 	<input type="Hidden" name="dumpname" value="<?php echo htmlspecialchars($dumpname); ?>">
   <?php echo createHiddenFieldWithKey('removedump'); ?>
 	<p><?php printMLText("confirm_rm_dump", array ("dumpname" => htmlspecialchars($dumpname)));?></p>
-	<input type="submit" class="btn" value="<?php printMLText("dump_remove");?>">
+	<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("dump_remove");?></button></p>
 </form>
 <?php
 		$this->contentContainerEnd();
