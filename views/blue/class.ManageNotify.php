@@ -173,20 +173,20 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Blue_Style {
 		$this->contentContainerStart();
 		$this->contentSubHeading(getMLText("user"));
 		$ret=$this->getNotificationList(false,true);
-		printFolderNotificationList($ret);
+		$this->printFolderNotificationList($ret);
 		$this->contentSubHeading(getMLText("group"));
 		$ret=$this->getNotificationList(true,true);
-		printFolderNotificationList($ret,false);
+		$this->printFolderNotificationList($ret,false);
 		$this->contentContainerEnd();
 
 		$this->contentHeading(getMLText("edit_document_notify"));
 		$this->contentContainerStart();
 		$this->contentSubHeading(getMLText("user"));
 		$ret=$this->getNotificationList(false,false);
-		printDocumentNotificationList($ret);
+		$this->printDocumentNotificationList($ret);
 		$this->contentSubHeading(getMLText("group"));
 		$ret=$this->getNotificationList(true,false);
-		printDocumentNotificationList($ret,false);
+		$this->printDocumentNotificationList($ret,false);
 		$this->contentContainerEnd();
 
 		$this->htmlEndPage();
