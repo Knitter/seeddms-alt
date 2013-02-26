@@ -204,15 +204,15 @@ function checkForm()
 				print "<input type=\"Image\" class=\"mimeicon\" src=\"images/save.gif\">".getMLText("save")." ";
 				print "</span></td>\n";
 				print "</form>";
-				print "<td><span class=\"actions\">\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
+				print "<td><span class=\"actions\">\n";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
 				print "<input type=\"Hidden\" name=\"folderid\" value=\"".$folder->getID()."\">\n";
 				print "<input type=\"Hidden\" name=\"action\" value=\"delaccess\">\n";
 				print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">\n";
 				print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
-				print "</form>";
 				print "</span></td>\n";
+				print "</form>";
 				print "</tr>\n";
 			}
 			
