@@ -12,10 +12,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-02-20</date>
- <time>17:36:08</time>
+ <date>2013-02-26</date>
+ <time>15:04:08</time>
  <version>
-  <release>4.0.0RC1</release>
+  <release>4.0.0</release>
   <api>4.0.0</api>
  </version>
  <stability>
@@ -399,6 +399,22 @@ New release
    <notes>
 - changed name from letodms to seeddms
 - fixed SeedDMS_Database::TableList()
+   </notes>
+  </release>
+  <release>
+   <date>2013-02-20</date>
+   <time>17:36:08</time>
+   <version>
+    <release>4.0.0RC1</release>
+    <api>4.0.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- minor bugfixes
    </notes>
   </release>
  </changelog>
