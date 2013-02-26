@@ -102,7 +102,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Blue_Style {
 		$date = getdate(mktime(12, 0, 0, $month, 1, $year));
 
 		$first = $date["wday"];
-		$monthName = $monthNames[$month - 1];
+		$monthName = $this->monthNames[$month - 1];
 
 		$s  = "<table border=0>\n";
 		
@@ -205,17 +205,17 @@ class SeedDMS_View_Calendar extends SeedDMS_Blue_Style {
 
 		}else if ($mode=="m"){
 
-			if (!isset($dayNamesLong)) generateCalendarArrays();
-			if (!isset($monthNames)) generateCalendarArrays();
+			if (!isset($this->dayNamesLong)) $this->generateCalendarArrays();
+			if (!isset($this->monthNames)) $this->generateCalendarArrays();
 			
-			$this->contentHeading(getMLText("month_view")." : ".$monthNames[$month-1]. " ".$year);
+			$this->contentHeading(getMLText("month_view")." : ".$this->monthNames[$month-1]. " ".$year);
 			$this->contentContainerStart();
 			
 			print "<a href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month-1)."\"><img src=\"".$this->getImgPath("m.png")."\" border=0></a>&nbsp;";
 			print "<a href=\"../out/out.Calendar.php?mode=m\"><img src=\"".$this->getImgPath("c.png")."\" border=0></a>&nbsp;";
 			print "<a href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month+1)."\"><img src=\"".$this->getImgPath("p.png")."\" border=0></a>&nbsp;";
 			
-			$days=getDaysInMonth($month, $year);
+			$days = $this->getDaysInMonth($month, $year);
 			$today = getdate(time());
 			
 			$events = getEventsInInterval(mktime(0,0,0, $month, 1, $year), mktime(23,59,59, $month, $days, $year));
@@ -234,7 +234,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Blue_Style {
 				
 				echo "<tr>";
 				echo "<td class='".$class."'><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".$i."</a></td>";
-				echo "<td class='".$class."'><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".$dayNamesLong[$date["wday"]]."</a></td>";
+				echo "<td class='".$class."'><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".$this->dayNamesLong[$date["wday"]]."</a></td>";
 				
 				if ($class=="todayHeader") $class="today";
 				else $class="";
@@ -258,8 +258,8 @@ class SeedDMS_View_Calendar extends SeedDMS_Blue_Style {
 			
 		}else{
 
-			if (!isset($dayNamesLong)) generateCalendarArrays();
-			if (!isset($monthNames)) generateCalendarArrays();
+			if (!isset($this->dayNamesLong)) $this->generateCalendarArrays();
+			if (!isset($this->monthNames)) $this->generateCalendarArrays();
 			
 			// get the week interval - TODO: $GET
 			$datestart=getdate(mktime(0,0,0,$month,$day,$year));
@@ -306,7 +306,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Blue_Style {
 				
 				echo "<tr>";
 				echo "<td class='".$class."'>".getReadableDate($i)."</td>";
-				echo "<td class='".$class."'>".$dayNamesLong[$date["wday"]]."</td>";
+				echo "<td class='".$class."'>".$this->dayNamesLong[$date["wday"]]."</td>";
 				
 				if ($class=="todayHeader") $class="today";
 				else $class="";
