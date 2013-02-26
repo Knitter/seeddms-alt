@@ -120,7 +120,7 @@ $(document).ready( function() {
 
 function allowDrop(ev) {
 	ev.preventDefault();
-//	console.log(ev);
+	return false;
 }
 
 function onDragStartDocument(ev) {
@@ -137,6 +137,7 @@ function onDragStartFolder(ev) {
 
 function onDrop(ev) {
 	ev.preventDefault();
+	ev.stopPropagation();
 	attr_rel = $(ev.currentTarget).attr('rel');
 	target_type = attr_rel.split("_")[0];
 	target_id = attr_rel.split("_")[1];
