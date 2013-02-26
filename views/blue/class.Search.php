@@ -31,13 +31,24 @@ require_once("class.BlueStyle.php");
  */
 class SeedDMS_View_Search extends SeedDMS_Blue_Style {
 
+	function markQuery($str, $tag = "b") {
+		$querywords = preg_split("/ /", $this->query);
+		
+		foreach ($querywords as $queryword)
+			$str = str_ireplace("($queryword)", "<" . $tag . ">\\1</" . $tag . ">", $str);
+		
+		return $str;
+	}
+
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
+		$this->query = $this->params['query'];
 		$entries = $this->params['searchhits'];
 		$totalpages = $this->params['totalpages'];
 		$pageNumber = $this->params['pagenumber'];
+		$searchTime = $this->params['searchtime'];
 		$urlparams = $this->params['urlparams'];
 		$searchin = $this->params['searchin'];
 
@@ -71,7 +82,7 @@ class SeedDMS_View_Search extends SeedDMS_Blue_Style {
 					print "<tr>";
 					//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
 					if (in_array(2, $searchin)) {
-						$docName = markQuery(htmlspecialchars($document->getName()), "i");
+						$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
 					} else {
 						$docName = htmlspecialchars($document->getName());
 					}
@@ -105,7 +116,7 @@ class SeedDMS_View_Search extends SeedDMS_Blue_Style {
 
 					print "<td class=\"center\">".$lc->getVersion()."</td>";
 					
-					if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($document->getComment()));
+					if (in_array(3, $searchin)) $comment = $this->markQuery(htmlspecialchars($document->getComment()));
 					else $comment = htmlspecialchars($document->getComment());
 					if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 					print "<td>".$comment."</td>";
@@ -114,7 +125,7 @@ class SeedDMS_View_Search extends SeedDMS_Blue_Style {
 				$folder = $entry;
 					$foldercount++;
 					if (in_array(2, $searchin)) {
-						$folderName = markQuery(htmlspecialchars($folder->getName()), "i");
+						$folderName = $this->markQuery(htmlspecialchars($folder->getName()), "i");
 					} else {
 						$folderName = htmlspecialchars($folder->getName());
 					}
@@ -133,7 +144,7 @@ class SeedDMS_View_Search extends SeedDMS_Blue_Style {
 					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 					print "<td></td>";
 					print "<td></td>";
-					if (in_array(3, $searchin)) $comment = markQuery(htmlspecialchars($folder->getComment()));
+					if (in_array(3, $searchin)) $comment = $this->markQuery(htmlspecialchars($folder->getComment()));
 					else $comment = htmlspecialchars($folder->getComment());
 					if (strlen($comment) > 50) $comment = substr($comment, 0, 47) . "...";
 					print "<td>".$comment."</td>";
