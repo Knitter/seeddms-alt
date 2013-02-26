@@ -40,6 +40,10 @@ function _printMessage($heading, $message) {
 	return;
 }
 
+if (isset($_REQUEST["sesstheme"]) && strlen($_REQUEST["sesstheme"])>0 && is_numeric(array_search($_REQUEST["sesstheme"],UI::getStyles())) ) {
+	$theme = $_REQUEST["sesstheme"];
+}
+
 if (isset($_REQUEST["login"])) {
 	$login = $_REQUEST["login"];
 	$login = str_replace("*", "", $login);
