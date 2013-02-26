@@ -35,7 +35,6 @@ class SeedDMS_View_RemoveFolder extends SeedDMS_Blue_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
-		$document = $this->params['document'];
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);
