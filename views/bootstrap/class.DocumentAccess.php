@@ -187,8 +187,8 @@ function checkForm()
 				print "<input type=\"hidden\" name=\"action\" value=\"delaccess\">\n";
 				print "<input type=\"hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
-				print "</form>\n";
 				print "<span></td>\n";
+				print "</form>\n";
 				print "</tr>\n";
 			}
 
