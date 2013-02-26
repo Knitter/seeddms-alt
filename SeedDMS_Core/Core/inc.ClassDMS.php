@@ -604,10 +604,10 @@ class SeedDMS_Core_DMS {
 			/* Do not search for folders if not at least a search for a key,
 			 * an owner, or creation date is requested.
 			 */
+			$totalFolders = 0;
 			if($searchKey || $searchOwner || $searchCreateDate) {
 				// Count the number of rows that the search will produce.
 				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
-				$totalFolders = 0;
 				if ($resArr && isset($resArr[0]) && is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 					$totalFolders = (integer)$resArr[0]["num"];
 				}
