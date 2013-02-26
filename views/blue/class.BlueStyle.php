@@ -27,7 +27,6 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	}
 
 	protected function htmlStartPage($title="", $bodyClass="") { /* {{{ */
-		global $settings;
 
 		if(file_exists("../themes/".$this->theme."/HTMLHead.html")) {
 			include("../themes/".$this->theme."/HTMLHead.html");
@@ -42,7 +41,7 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 			echo "<script type='text/javascript' src='../js/jquery.min.js'></script>\n";
 			echo "<script type='text/javascript' src='../js/jquery.passwordstrength.js'></script>\n";
 			echo '<script type="text/javascript" src="../styles/'.$this->theme.'/application.js"></script>'."\n";
-			echo "<title>".(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
+			echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 			echo "</head>\n";
 			echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		}
@@ -59,14 +58,12 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function footNote() { /* {{{ */
-		global $settings;
-		
-		if ($settings->_printDisclaimer){
+		if ($this->params['printdisclaimer']){
 			echo "<div class=\"disclaimer\">".getMLText("disclaimer")."</div>";
 		}
 
-		if (isset($settings->_footNote) && strlen((string)$settings->_footNote)>0) {
-			echo "<div class=\"footNote\">".(string)$settings->_footNote."</div>";
+		if (isset($this->params['footnote']) && strlen((string)$this->params['footnote'])>0) {
+			echo "<div class=\"footNote\">".(string)$this->params['footnote']."</div>";
 		}
 	
 		return;
@@ -79,13 +76,11 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function globalBanner() { /* {{{ */
-		global $settings;
-
 		echo "<div class=\"globalBox\" id=\"noNav\">\n";
 		echo "<div class=\"globalTR\"></div>\n";
 		echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
 		echo "<div class=\"siteNameLogin\">".
-			(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS").
+			(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").
 			"</div>\n";
 		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
 			"</div>\n";
@@ -93,48 +88,47 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function globalNavigation($folder=null) { /* {{{ */
-	
-		global $settings, $user;
-
 		echo "<div class=\"globalBox\">\n";
 		echo "<div class=\"globalTR\"></div>\n";
+		if(isset($this->params['user']) && $this->params['user']) {
 		echo "<ul class=\"globalNav\">\n";
-		echo "<li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$settings->_rootFolderID."\">".getMLText("content")."</a></li>\n";
-		echo "<li><a href=\"../out/out.SearchForm.php?folderid=".$settings->_rootFolderID."\">".getMLText("search")."</a></li>\n";
-		if ($settings->_enableCalendar) echo "<li><a href=\"../out/out.Calendar.php?mode=".$settings->_calendarDefaultView."\">".getMLText("calendar")."</a></li>\n";
-		if (!$user->isGuest()) echo "<li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
-		if (!$user->isGuest()) echo "<li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
-		if ($user->isAdmin()) echo "<li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
-		echo "<li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
-		echo "<li id=\"search\">\n";
-		echo "<form action=\"../op/op.Search.php\">";
-		if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
-			echo "<input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
+			echo "<li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
+			echo "<li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
+			if ($this->params['enablecalendar']) echo "<li><a href=\"../out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
+			if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
+			if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
+			if ($this->params['user']->isAdmin()) echo "<li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
+			echo "<li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
+			echo "<li id=\"search\">\n";
+			echo "<form action=\"../op/op.Search.php\">";
+			if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
+				echo "<input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
+			}
+			echo "<input type=\"hidden\" name=\"navBar\" value=\"1\" />";
+			echo "<input type=\"hidden\" name=\"searchin[]\" value=\"1\" />";
+			echo "<input type=\"hidden\" name=\"searchin[]\" value=\"2\" />";
+			echo "<input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
+			echo "<input name=\"query\" type=\"text\" size=\"20\" />";
+			if($this->params['enablefullsearch']) {
+				echo "<input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch_hint')."";
+			}
+			echo "<input type=\"submit\" value=\"".getMLText("search")."\" id=\"searchButton\"/></form>\n";
+			echo "</li>\n</ul>\n";
+			echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
+			echo "<div class=\"siteName\">".
+				(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").
+				"</div>\n";
+			echo "<span class=\"absSpacerNorm\"></span>\n";
+			echo "<div id=\"signatory\">".getMLText("signed_in_as")." ".htmlspecialchars($this->params['user']->getFullName()).
+				" (<a href=\"../op/op.Logout.php\">".getMLText("sign_out")."</a>).</div>\n";
 		}
-		echo "<input type=\"hidden\" name=\"navBar\" value=\"1\" />";
-		echo "<input type=\"hidden\" name=\"searchin[]\" value=\"1\" />";
-		echo "<input type=\"hidden\" name=\"searchin[]\" value=\"2\" />";
-		echo "<input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
-		echo "<input name=\"query\" type=\"text\" size=\"20\" />";
-		if($settings->_enableFullSearch) {
-			echo "<input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch_hint')."";
-		}
-		echo "<input type=\"submit\" value=\"".getMLText("search")."\" id=\"searchButton\"/></form>\n";
-		echo "</li>\n</ul>\n";
-		echo "<div id=\"logo\"><img src='../styles/logo.png'></div>\n";
-		echo "<div class=\"siteName\">".
-			(strlen($settings->_siteName)>0 ? $settings->_siteName : "SeedDMS").
-			"</div>\n";
-		echo "<span class=\"absSpacerNorm\"></span>\n";
-		echo "<div id=\"signatory\">".getMLText("signed_in_as")." ".htmlspecialchars($user->getFullName()).
-			" (<a href=\"../op/op.Logout.php\">".getMLText("sign_out")."</a>).</div>\n";
 		echo "<div style=\"clear: both; height: 0px; font-size:0;\">&nbsp;</div>\n".
 			"</div>\n";
 		return;
 	} /* }}} */
 
 	function pageNavigation($pageTitle, $pageType=null, $extra=null) { /* {{{ */
-		global $settings, $user;
+		global $settings;
 
 		echo "<div class=\"headingContainer\">\n";
 		// This spacer span is an awful hack, but it is the only way I know to
@@ -172,32 +166,29 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function folderNavigationBar($folder) { /* {{{ */
-	
-		global $user, $settings;
-
 		if (!is_object($folder) || strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
 			echo "<ul class=\"localNav\">\n";
 			echo "</ul>\n";
 			return;
 		}
-		$accessMode = $folder->getAccessMode($user);
+		$accessMode = $folder->getAccessMode($this->params['user']);
 		$folderID = $folder->getID();
 		echo "<ul class=\"localNav\">\n";
-		if ($accessMode == M_READ && !$user->isGuest()) {
+		if ($accessMode == M_READ && !$this->params['user']->isGuest()) {
 			echo "<li id=\"first\"><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_notify")."</a></li>\n";
 		}
 		else if ($accessMode >= M_READWRITE) {
 			echo "<li id=\"first\"><a href=\"../out/out.AddSubFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_subfolder")."</a></li>\n";
 			echo "<li><a href=\"../out/out.AddDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_document")."</a></li>\n";
-			if($settings->_enableLargeFileUpload)
+			if($this->params['enablelargefileupload'])
 				echo "<li><a href=\"../out/out.AddMultiDocument.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("add_multiple_documents")."</a></li>\n";
 			echo "<li><a href=\"../out/out.EditFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_props")."</a></li>\n";
 			echo "<li><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_existing_notify")."</a></li>\n";
-			if ($folderID != $settings->_rootFolderID && $folder->getParent())
+			if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
 				echo "<li><a href=\"../out/out.MoveFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("move_folder")."</a></li>\n";
 		}
 		if ($accessMode == M_ALL) {
-			if ($folderID != $settings->_rootFolderID && $folder->getParent())
+			if ($folderID != $this->params['rootfolderid'] && $folder->getParent())
 				echo "<li><a href=\"../out/out.RemoveFolder.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("rm_folder")."</a></li>\n";
 			echo "<li><a href=\"../out/out.FolderAccess.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_access")."</a></li>\n";
 		}
@@ -206,10 +197,9 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function documentNavigationBar()	{ /* {{{ */
-	
-		global $user, $settings, $document;
+		global $document;
 
-		$accessMode = $document->getAccessMode($user);
+		$accessMode = $document->getAccessMode($this->params['user']);
 		$docid=".php?documentid=" . $document->getID();
 
 		echo "<ul class=\"localNav\">\n";
@@ -222,7 +212,7 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 			}
 			else {
 				$lockingUser = $document->getLockingUser();
-				if (($lockingUser->getID() == $user->getID()) || ($document->getAccessMode($user) == M_ALL)) {
+				if (($lockingUser->getID() == $this->params['user']->getID()) || ($document->getAccessMode($this->params['user']) == M_ALL)) {
 					echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
 					echo "<li><a href=\"../op/op.UnlockDocument". $docid ."\">".getMLText("unlock_document")."</a></li>";
 					echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
@@ -235,7 +225,7 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 			echo "<li><a href=\"../out/out.RemoveDocument". $docid ."\">".getMLText("rm_document")."</a></li>";
 			echo "<li><a href=\"../out/out.DocumentAccess". $docid ."\">".getMLText("edit_document_access")."</a></li>";
 		}
-		if ($accessMode >= M_READ && !$user->isGuest()) {
+		if ($accessMode >= M_READ && !$this->params['user']->isGuest()) {
 			echo "<li><a href=\"../out/out.DocumentNotify". $docid ."\">".getMLText("edit_existing_notify")."</a></li>";
 		}
 		echo "</ul>\n";
@@ -243,18 +233,15 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function accountNavigationBar() { /* {{{ */
-	
-		global $settings,$user;
-		
 		echo "<ul class=\"localNav\">\n";
-		if (!$settings->_disableSelfEdit) echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
+		if (!$this->params['disableselfedit']) echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
 		
-		if (!$user->isAdmin()) 
+		if (!$this->params['user']->isAdmin()) 
 			echo "<li><a href=\"../out/out.UserDefaultKeywords.php\">".getMLText("edit_default_keywords")."</a></li>\n";
 
 		echo "<li><a href=\"../out/out.ManageNotify.php\">".getMLText("edit_existing_notify")."</a></li>\n";
 
-		if ($settings->_enableUsersView){
+		if ($this->params['enableusersview']){
 			echo "<li><a href=\"../out/out.UsrView.php\">".getMLText("users")."</a></li>\n";
 			echo "<li><a href=\"../out/out.GroupView.php\">".getMLText("groups")."</a></li>\n";
 		}		
@@ -274,13 +261,10 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function adminToolsNavigationBar() { /* {{{ */
-	
-		global $settings;
-
 		echo "<ul class=\"localNav\">\n";
 		echo "<li id=\"first\"><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
 		echo "<li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
-		if ($settings->_logFileEnable) echo "<li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
+		if ($this->params['logfileenable']) echo "<li><a href=\"../out/out.LogManagement.php\">".getMLText("log_management")."</a></li>\n";
 		echo "<li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
 		echo "<li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
 		echo "<li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
@@ -289,16 +273,13 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 	
 	function calendarNavigationBar($d){ /* {{{ */
-
-		global $settings,$user;
-
 		$ds="&day=".$d[0]."&month=".$d[1]."&year=".$d[2];
 	
 		echo "<ul class=\"localNav\">\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=w".$ds."\">".getMLText("week_view")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=m".$ds."\">".getMLText("month_view")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=y".$ds."\">".getMLText("year_view")."</a></li>\n";
-		if (!$user->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
+		if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
 		echo "</ul>\n";
 		return;
 	
@@ -529,37 +510,34 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 	
 	function printDocumentChooser($formName) { /* {{{ */
-		global $settings;
-		?>
+?>
 		<script language="JavaScript">
 		var openDlg;
 		function chooseDoc<?php print $formName ?>() {
-			openDlg = open("../out/out.DocumentChooser.php?folderid=<?php echo $settings->_rootFolderID?>&form=<?php echo urlencode($formName)?>", "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
+			openDlg = open("../out/out.DocumentChooser.php?folderid=<?php echo $this->params['rootfolderid']?>&form=<?php echo urlencode($formName)?>", "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
 		}
 		</script>
-		<?php
+<?php
 		print "<input type=\"Hidden\" name=\"docid".$formName."\">";
 		print "<input disabled name=\"docname".$formName."\">";
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("document")."...\" onclick=\"chooseDoc".$formName."();\">";
 	} /* }}} */
 
 	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
-		global $settings;
-		?>
+?>
 		<script language="JavaScript">
 		var openDlg;
 		function chooseFolder<?php print $formName ?>() {
 			openDlg = open("out.FolderChooser.php?form=<?php echo $formName?>&mode=<?php echo $accessMode?>&exclude=<?php echo $exclude?>", "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
 		}
 		</script>
-		<?php
+<?php
 		print "<input type=\"Hidden\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<input disabled name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\">";
 		print "&nbsp;&nbsp;<input type=\"Button\" value=\"".getMLText("folder")."...\" onclick=\"chooseFolder".$formName."();\">";
 	} /* }}} */
 
 	function printCategoryChooser($formName, $categories=array()) { /* {{{ */
-		global $settings;
 ?>
 		<script language="JavaScript">
 		var openDlg;
@@ -587,7 +565,6 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
-		global $settings;
 ?>
 		<script language="JavaScript">
 		var openDlg;
@@ -656,14 +633,12 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 
 	// navigation flag is used for items links (navigation or selection)
 	function printFoldersTree($accessMode, $exclude, $folderID, $currentFolderID=-1, $navigation=false) {	/* {{{ */
-		global $dms, $user, $form, $settings;
-		
-		if ($settings->_expandFolderTree==2){
+		if ($this->params['expandfoldertree']==2){
 		
 			// folder completely open
 			$is_open=true;
 			
-		}else if ($settings->_expandFolderTree==1 && $folderID==$settings->_rootFolderID ){
+		}else if ($this->params['expandfoldertree']==1 && $folderID==$this->params['rootfolderid'] ){
 		
 			$is_open=true;
 			
@@ -673,7 +648,7 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 			
 			if ($currentFolderID!=-1){
 				
-				$currentFolder=$dms->getFolder($currentFolderID);
+				$currentFolder=$this->params['dms']->getFolder($currentFolderID);
 				
 				if (is_object($currentFolder)){
 				
@@ -690,13 +665,13 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 			}
 		}
 		
-		$folder = $dms->getFolder($folderID);
+		$folder = $this->params['dms']->getFolder($folderID);
 		if (!is_object($folder)) return;
 		
 		$subFolders = $folder->getSubFolders();
-		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $user, M_READ);
+		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $this->params['user'], M_READ);
 		
-		if ($folderID == $settings->_rootFolderID) print "<ul style='list-style-type: none;' class='tree'>\n";
+		if ($folderID == $this->params['rootfolderid']) print "<ul style='list-style-type: none;' class='tree'>\n";
 
 		print "<li>\n";
 
@@ -712,7 +687,7 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 			print "\" border=0>\n";
 		}
 
-		if ($folder->getAccessMode($user) >= $accessMode) {
+		if ($folder->getAccessMode($this->params['user']) >= $accessMode) {
 
 			if ($folderID != $currentFolderID){
 			
@@ -742,12 +717,10 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 
 		print "</ul>\n";
 		
-		if ($folderID == $settings->_rootFolderID) print "</ul>\n";
+		if ($folderID == $this->params['rootfolderid']) print "</ul>\n";
 	} /* }}} */
 
 	function printTreeNavigation($folderid,$showtree){ /* {{{ */
-		global $settings;
-		
 ?>
 		<script language="JavaScript">
 		function toggleTree(id){
@@ -776,7 +749,7 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 
 			$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><img src=\"".UI::getImgPath("m.png")."\" border=0></a>", true);
 			$this->contentContainerStart();
-			$this->printFoldersTree(M_READ, -1, $settings->_rootFolderID, $folderid, true);
+			$this->printFoldersTree(M_READ, -1, $this->params['rootfolderid'], $folderid, true);
 			$this->contentContainerEnd();
 
 		}else{
@@ -800,7 +773,6 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 	 * @param array $fields list of post fields
 	 */
 	function printUploadApplet($uploadurl, $attributes, $maxfiles=0, $fields=array()){ /* {{{ */
-		global $settings;
 ?>
 <applet id="jumpLoaderApplet" name="jumpLoaderApplet"
 code="jmaster.jumploader.app.JumpLoaderApplet.class"
@@ -813,7 +785,7 @@ mayscript>
   <param name="ac_fireUploaderSelectionChanged" value="true"/>
   <param name="ac_fireUploaderFileStatusChanged" value="true"/>
   <param name="ac_fireUploaderFileAdded" value="true"/>
-  <param name="uc_partitionLength" value="<?php echo $settings->_partitionSize ?>"/>
+  <param name="uc_partitionLength" value="<?php echo $this->params['partitionsize'] ?>"/>
 <?php
 	if($maxfiles) {
 ?>
