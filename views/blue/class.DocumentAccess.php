@@ -153,20 +153,22 @@ function checkForm()
 
 		$this->contentSubHeading(getMLText("edit_existing_access"));
 
+		/* memorїze users with access rights */
+		$memusers = array();
+		/* memorize groups with access rights */
+		$memgroups = array();
 		if (count($accessList["users"]) != 0 || count($accessList["groups"]) != 0) {
 
 			print "<table class=\"defaultView\">";
 
-			/* memorїze users with access rights */
-			$memusers = array();
 			foreach ($accessList["users"] as $userAccess) {
 				$userObj = $userAccess->getUser();
 				$memusers[] = $userObj->getID();
 				print "<tr>\n";
 				print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>\n";
 				print "<td>". htmlspecialchars($userObj->getFullName()) . "</td>\n";
-				print "<td>\n";
 				print "<form action=\"../op/op.DocumentAccess.php\">\n";
+				print "<td>\n";
 				$this->printAccessModeSelection($userAccess->getMode());
 				print "</td>\n";
 				print "<td><span class=\"actions\">\n";
@@ -177,20 +179,18 @@ function checkForm()
 				print "<input type=\"Image\" class=\"mimeicon\" src=\"images/save.gif\">".getMLText("save")." ";
 				print "</span></td>\n";
 				print "</form>\n";
-				print "<td><span class=\"actions\">\n";
 				print "<form action=\"../op/op.DocumentAccess.php\">\n";
+				print "<td><span class=\"actions\">\n";
 				echo createHiddenFieldWithKey('documentaccess')."\n";
 				print "<input type=\"Hidden\" name=\"documentid\" value=\"".$document->getId()."\">\n";
 				print "<input type=\"hidden\" name=\"action\" value=\"delaccess\">\n";
 				print "<input type=\"hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
 				print "<input type=\"Image\" class=\"mimeicon\" src=\"images/del.gif\">".getMLText("delete")." ";
-				print "</form>\n";
 				print "<span></td>\n";
+				print "</form>\n";
 				print "</tr>\n";
 			}
 
-			/* memorize groups with access rights */
-			$memgroups = array();
 			foreach ($accessList["groups"] as $groupAccess) {
 				$groupObj = $groupAccess->getGroup();
 				$memgroups[] = $groupObj->getID();
