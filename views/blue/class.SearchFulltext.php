@@ -40,7 +40,6 @@ class SeedDMS_View_SearchFulltext extends SeedDMS_Blue_Style {
 		$totaldocs = $this->params['totaldocs'];
 		$pageNumber = $this->params['pagenumber'];
 		$urlparams = $this->params['urlparams'];
-		$searchin = $this->params['searchin'];
 		$searchTime = $this->params['searchtime'];
 
 		$this->htmlStartPage(getMLText("search_results"));
