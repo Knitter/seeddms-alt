@@ -108,7 +108,7 @@ if(!is_writeable($settings->_configFilePath)) {
                 echo '<option value="' . $language . '" ';
                  if ($settings->_language==$language)
                    echo "selected";
-                echo '>' . $language . '</option>';
+                echo '>' . getMLText($language) . '</option>';
              }
             ?>
           </SELECT>

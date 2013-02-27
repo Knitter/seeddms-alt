@@ -96,7 +96,7 @@ function guestLogin()
 			print "<option value=\"\">-";
 			$languages = getLanguages();
 			foreach ($languages as $currLang) {
-				print "<option value=\"".$currLang."\">".$currLang;
+				print "<option value=\"".$currLang."\">".getMLText($currLang)."</option>";
 			}
 			print "</select>";
 ?>

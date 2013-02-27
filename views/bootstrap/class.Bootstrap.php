@@ -135,7 +135,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 				else
 					echo "<li>";
 				echo "<a href=\"../op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
-				echo $currLang."</a></li>\n";
+				echo getMLText($currLang)."</a></li>\n";
 			}
 			echo "     </ul>\n";
 			echo "    </li>\n";
