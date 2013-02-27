@@ -107,6 +107,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
+		echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".nav-collapse\">\n";
+		echo "     <span class=\"icon-bar\"></span>\n";
+		echo "     <span class=\"icon-bar\"></span>\n";
+		echo "     <span class=\"icon-bar\"></span>\n";
+		echo "   </a>\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
 		echo "   <div class=\"nav-collapse\">\n";
