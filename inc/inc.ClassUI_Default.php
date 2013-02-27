@@ -27,7 +27,7 @@ class UI_Default {
 		$this->theme = $theme;
 	}
 
-	function getStyles() { /* {{{ */
+	static function getStyles() { /* {{{ */
 		global $settings;
 
 		$themes = array();
@@ -637,7 +637,7 @@ class UI_Default {
 		print UI::getImgPath($img);
 	} /* }}} */
 
-	function exitError($pagetitle,$error) { /* {{{ */
+	static function exitError($pagetitle,$error) { /* {{{ */
 	
 		UI::htmlStartPage($pagetitle);
 		UI::globalNavigation();
