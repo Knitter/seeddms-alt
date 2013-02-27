@@ -56,7 +56,7 @@ if ($overallStatus["status"]==S_REJECTED || $overallStatus["status"]==S_OBSOLETE
 $folder = $document->getFolder();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$content));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$content, 'enableadminrevapp'=>$settings->_enableAdminRevApp, 'enableownerrevapp'=>$settings->_enableOwnerRevApp, 'enableselfrevapp'=>$settings->_enableSelfRevApp));
 if($view) {
 	$view->show();
 	exit;
