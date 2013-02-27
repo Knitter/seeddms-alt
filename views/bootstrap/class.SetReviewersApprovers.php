@@ -37,6 +37,9 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 		$folder = $this->params['folder'];
 		$document = $this->params['document'];
 		$content = $this->params['version'];
+		$enableadminrevapp = $this->params['enableadminrevapp'];
+		$enableownerrevapp = $this->params['enableownerrevapp'];
+		$enableselfrevapp = $this->params['enableselfrevapp'];
 
 		$overallStatus = $content->getStatus();
 
@@ -47,7 +50,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 		$this->contentHeading(getMLText("change_assignments"));
 
 		// Retrieve a list of all users and groups that have review / approve privileges.
-		$docAccess = $document->getReadAccessList();
+		$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 
 		// Retrieve list of currently assigned reviewers and approvers, along with
 		// their latest status.
@@ -59,8 +62,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 		foreach ($reviewStatus as $i=>$rs) {
 			if ($rs["type"]==0) {
 				$reviewIndex["i"][$rs["required"]] = array("status"=>$rs["status"], "idx"=>$i);
-			}
-			else if ($rs["type"]==1) {
+			} elseif ($rs["type"]==1) {
 				$reviewIndex["g"][$rs["required"]] = array("status"=>$rs["status"], "idx"=>$i);
 			}
 		}
@@ -70,8 +72,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 		foreach ($approvalStatus as $i=>$rs) {
 			if ($rs["type"]==0) {
 				$approvalIndex["i"][$rs["required"]] = array("status"=>$rs["status"], "idx"=>$i);
-			}
-			else if ($rs["type"]==1) {
+			} elseif ($rs["type"]==1) {
 				$approvalIndex["g"][$rs["required"]] = array("status"=>$rs["status"], "idx"=>$i);
 			}
 		}
@@ -97,7 +98,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 				print "<option value=\"".$usr->getID()."\" disabled=\"disabled\">". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())." &lt;".$usr->getEmail()."&gt;</option>";
 				print "<input id='revInd".$usr->getID()."' type='hidden' name='indReviewers[]' value='". $usr->getID() ."'>";
 
-			}else if (isset($reviewIndex["i"][$usr->getID()])) {
+			} elseif (isset($reviewIndex["i"][$usr->getID()])) {
 
 				switch ($reviewIndex["i"][$usr->getID()]["status"]) {
 					case 0:
@@ -110,8 +111,8 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 						print "<option value='". $usr->getID() ."' disabled='disabled'>".htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())."</option>";
 						break;
 				}
-			}
-			else {
+			} else {
+				if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 				print "<option value='". $usr->getID() ."'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())."</option>";
 			}
 		}
@@ -131,7 +132,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 				print "<option value=\"".$group->getID()."\" disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
 				print "<input id='revGrp".$group->getID()."' type='hidden' name='grpReviewers[]' value='". $group->getID() ."' />";
 
-			}else if (isset($reviewIndex["g"][$group->getID()])) {
+			} elseif (isset($reviewIndex["g"][$group->getID()])) {
 
 				switch ($reviewIndex["g"][$group->getID()]["status"]) {
 					case 0:
@@ -144,8 +145,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 						print "<option id='revGrp".$group->getID()."' type='checkbox' name='grpReviewers[]' value='". $group->getID() ."' disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
 						break;
 				}
-			}
-			else {
+			} else {
 				print "<option value='". $group->getID() ."'>".htmlspecialchars($group->getName())."</option>";
 			}
 		}
@@ -170,7 +170,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 				print "<option value='". $usr->getID() ."' disabled='disabled'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())." &lt;".$usr->getEmail()."&gt;</option>";
 				print "<input id='appInd".$usr->getID()."' type='hidden' name='indApprovers[]' value='". $usr->getID() ."'>";
 
-			}else if (isset($approvalIndex["i"][$usr->getID()])) {
+			} elseif (isset($approvalIndex["i"][$usr->getID()])) {
 			
 				switch ($approvalIndex["i"][$usr->getID()]["status"]) {
 					case 0:
@@ -185,6 +185,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 				}
 			}
 			else {
+				if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 				print "<option value='". $usr->getID() ."'>". htmlspecialchars($usr->getLogin() . " - ". $usr->getFullName())."</option>";
 			}
 		}
@@ -204,7 +205,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 				print "<option type='checkbox' checked='checked' disabled='disabled'>".htmlspecialchars($group->getName())."</option>";
 				print "<input id='appGrp".$group->getID()."' type='hidden' name='grpApprovers[]' value='". $group->getID() ."'>";
 
-			}else if (isset($approvalIndex["g"][$group->getID()])) {
+			} elseif (isset($approvalIndex["g"][$group->getID()])) {
 
 				switch ($approvalIndex["g"][$group->getID()]["status"]) {
 					case 0:
