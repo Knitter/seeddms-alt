@@ -36,6 +36,9 @@ If there is no help in your language:
 If you apply any changes to the language files please send them to the
 SeedDMS developers <info@seeddms.org>.
 
+http://www.iana.org/assignments/language-subtag-registry has a list of
+all language and country codes.
+
 REQUIREMENTS
 ============
 
