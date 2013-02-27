@@ -11,7 +11,7 @@
       siteName = "SeedDMS"
       footNote = "SeedDMS free document management system - www.seeddms.org"
       printDisclaimer="true"
-      language = "English"
+      language = "en_GB"
       theme = "clean"
     >  
     </display>
