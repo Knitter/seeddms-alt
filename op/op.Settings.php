@@ -132,6 +132,8 @@ if ($action == "saveSettings")
   $settings->_versioningFileName = $_POST["versioningFileName"];
   $settings->_workflowMode = $_POST["workflowMode"];
   $settings->_enableAdminRevApp = getBoolValue("enableAdminRevApp");
+  $settings->_enableOwnerRevApp = getBoolValue("enableOwnerRevApp");
+  $settings->_enableSelfRevApp = getBoolValue("enableSelfRevApp");
   $settings->_enableVersionDeletion = getBoolValue("enableVersionDeletion");
   $settings->_enableVersionModification = getBoolValue("enableVersionModification");
   $settings->_enableDuplicateDocNames = getBoolValue("enableDuplicateDocNames");

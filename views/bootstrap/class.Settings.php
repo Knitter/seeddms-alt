@@ -427,6 +427,14 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableAdminRevApp");?>:</td>
         <td><input name="enableAdminRevApp" type="checkbox" <?php if ($settings->_enableAdminRevApp) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_enableOwnerRevApp_desc");?>">
+        <td><?php printMLText("settings_enableOwnerRevApp");?>:</td>
+        <td><input name="enableOwnerRevApp" type="checkbox" <?php if ($settings->_enableOwnerRevApp) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_enableSelfRevApp_desc");?>">
+        <td><?php printMLText("settings_enableSelfRevApp");?>:</td>
+        <td><input name="enableSelfRevApp" type="checkbox" <?php if ($settings->_enableSelfRevApp) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableVersionDeletion_desc");?>">
         <td><?php printMLText("settings_enableVersionDeletion");?>:</td>
         <td><input name="enableVersionDeletion" type="checkbox" <?php if ($settings->_enableVersionDeletion) echo "checked" ?> /></td>
