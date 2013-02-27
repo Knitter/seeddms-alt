@@ -38,6 +38,9 @@ class SeedDMS_View_UpdateDocument extends SeedDMS_Bootstrap_Style {
 		$document = $this->params['document'];
 		$strictformcheck = $this->params['strictformcheck'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$enableadminrevapp = $this->params['enableadminrevapp'];
+		$enableownerrevapp = $this->params['enableownerrevapp'];
+		$enableselfrevapp = $this->params['enableselfrevapp'];
 		$dropfolderdir = $this->params['dropfolderdir'];
 		$workflowmode = $this->params['workflowmode'];
 		$documentid = $document->getId();
@@ -163,7 +166,7 @@ function checkForm()
 	if($workflowmode == 'traditional') {
 		// Retrieve a list of all users and groups that have review / approve
 		// privileges.
-		$docAccess = $document->getReadAccessList();
+		$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 ?>
 		<tr>
 			<td colspan="2">
@@ -179,7 +182,7 @@ function checkForm()
 <?php
 				$res=$user->getMandatoryReviewers();
 				foreach ($docAccess["users"] as $usr) {
-					if ($usr->getID()==$user->getID()) continue; 
+					if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 					$mandatory=false;
 					foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 
@@ -222,7 +225,7 @@ function checkForm()
 <?php
 				$res=$user->getMandatoryApprovers();
 				foreach ($docAccess["users"] as $usr) {
-					if ($usr->getID()==$user->getID()) continue; 
+					if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 
 					$mandatory=false;
 					foreach ($res as $r) if ($r['approverUserID']==$usr->getID()) $mandatory=true;
