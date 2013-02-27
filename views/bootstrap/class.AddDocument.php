@@ -36,6 +36,9 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$enableadminrevapp = $this->params['enableadminrevapp'];
+		$enableownerrevapp = $this->params['enableownerrevapp'];
+		$enableselfrevapp = $this->params['enableselfrevapp'];
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
 		$workflowmode = $this->params['workflowmode'];
@@ -94,7 +97,7 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		
 		// Retrieve a list of all users and groups that have review / approve
 		// privileges.
-		$docAccess = $folder->getReadAccessList();
+		$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 		$this->contentSubHeading(getMLText("document_infos"));
 ?>
 		<form action="../op/op.AddDocument.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
@@ -242,7 +245,7 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 <?php
 				$res=$user->getMandatoryReviewers();
 				foreach ($docAccess["users"] as $usr) {
-					if ($usr->getID()==$user->getID()) continue; 
+					if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 					$mandatory=false;
 					foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 
@@ -288,7 +291,7 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 <?php
 			$res=$user->getMandatoryApprovers();
 			foreach ($docAccess["users"] as $usr) {
-				if ($usr->getID()==$user->getID()) continue; 
+				if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 
 				$mandatory=false;
 				foreach ($res as $r) if ($r['approverUserID']==$usr->getID()) $mandatory=true;
