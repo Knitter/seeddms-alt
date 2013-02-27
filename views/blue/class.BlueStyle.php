@@ -626,7 +626,7 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 		
 		$this->htmlEndPage();
 		
-		add_log_line(" $this->exitError error=".$error." pagetitle=".$pagetitle);
+		add_log_line(" UI:exitError error=".$error." pagetitle=".$pagetitle);
 		
 		exit;	
 	} /* }}} */
