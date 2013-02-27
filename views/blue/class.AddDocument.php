@@ -36,6 +36,9 @@ class SeedDMS_View_AddDocument extends SeedDMS_Blue_Style {
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$enablelargefileupload = $this->params['enablelargefileupload'];
+		$enableadminrevapp = $this->params['enableadminrevapp'];
+		$enableownerrevapp = $this->params['enableownerrevapp'];
+		$enableselfrevapp = $this->params['enableselfrevapp'];
 		$strictformcheck = $this->params['strictformcheck'];
 		$dropfolderdir = $this->params['dropfolderdir'];
 		$folderid = $folder->getId();
@@ -87,7 +90,7 @@ class SeedDMS_View_AddDocument extends SeedDMS_Blue_Style {
 		
 		// Retrieve a list of all users and groups that have review / approve
 		// privileges.
-		$docAccess = $folder->getReadAccessList();
+		$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 		?>
 		<table>
 		<tr>
@@ -209,13 +212,9 @@ class SeedDMS_View_AddDocument extends SeedDMS_Blue_Style {
 			<div class="cbSelectContainer">
 			<ul class="cbSelectList">
 <?php
-
 			$res=$user->getMandatoryReviewers();
-		
 			foreach ($docAccess["users"] as $usr) {
-			
-				if ($usr->getID()==$user->getID()) continue; 
-
+				if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 				$mandatory=false;
 				foreach ($res as $r) if ($r['reviewerUserID']==$usr->getID()) $mandatory=true;
 		
@@ -248,11 +247,8 @@ class SeedDMS_View_AddDocument extends SeedDMS_Blue_Style {
 			<ul class="cbSelectList">
 <?php
 			$res=$user->getMandatoryApprovers();
-		
 			foreach ($docAccess["users"] as $usr) {
-			
-				if ($usr->getID()==$user->getID()) continue; 
-
+				if (!$enableselfrevapp && $usr->getID()==$user->getID()) continue; 
 				$mandatory=false;
 				foreach ($res as $r) if ($r['approverUserID']==$usr->getID()) $mandatory=true;
 				
