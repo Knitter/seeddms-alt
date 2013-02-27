@@ -810,4 +810,20 @@ $text["workflow_summary"] = "Workflow summary";
 $text["workflow_user_summary"] = "User summary";
 $text["year_view"] = "Year View";
 $text["yes"] = "Yes";
+
+$text["ca_ES"] = "Catalan";
+$text["cs_CZ"] = "Czech";
+$text["de_DE"] = "German";
+$text["en_GB"] = "English (GB)";
+$text["es_ES"] = "Spanish";
+$text["fr_FR"] = "French";
+$text["hu_HU"] = "Hungarian";
+$text["it_IT"] = "Italian";
+$text["nl_NL"] = "Dutch";
+$text["pt_BR"] = "Portugese (BR)";
+$text["ru_RU"] = "Russian";
+$text["sk_SK"] = "Slovak";
+$text["sv_SE"] = "Swedish";
+$text["zh_CN"] = "Chinese (CN)";
+$text["zh_TW"] = "Chinese (TW)";
 ?>

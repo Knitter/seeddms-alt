@@ -806,4 +806,20 @@ $text["workflow_summary"] = "Übersicht Workflows";
 $text["workflow_user_summary"] = "Übersicht Benutzer";
 $text["year_view"] = "Jahresansicht";
 $text["yes"] = "Ja";
+
+$text["ca_ES"] = "Katalanisch";
+$text["cs_CZ"] = "Tschechisch";
+$text["de_DE"] = "Deutsch";
+$text["en_GB"] = "Englishh (GB)";
+$text["es_ES"] = "Spanisch";
+$text["fr_FR"] = "Französisch";
+$text["hu_HU"] = "Ungarisch";
+$text["it_IT"] = "Italienisch";
+$text["nl_NL"] = "Hollandisch";
+$text["pt_BR"] = "Portugiesisch (BR)";
+$text["ru_RU"] = "Russisch";
+$text["sk_SK"] = "Slovakisch";
+$text["sv_SE"] = "Schwedisch";
+$text["zh_CN"] = "Chinesisch (CN)";
+$text["zh_TW"] = "Chinesisch (TW)";
 ?>
