@@ -221,7 +221,6 @@ class SeedDMS_Core_DMS {
 			$this->contentDir = $contentDir.'/';
 		$this->rootFolderID = 1;
 		$this->maxDirID = 0; //31998;
-		$this->enableAdminRevApp = false;
 		$this->enableConverting = false;
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
@@ -318,10 +317,6 @@ class SeedDMS_Core_DMS {
 	function getRootFolder() { /* {{{ */
 		if(!$this->rootFolderID) return false;
 		return $this->getFolder($this->rootFolderID);
-	} /* }}} */
-
-	function setEnableAdminRevApp($enable) { /* {{{ */
-		$this->enableAdminRevApp = $enable;
 	} /* }}} */
 
 	function setEnableConverting($enable) { /* {{{ */
