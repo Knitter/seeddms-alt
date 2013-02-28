@@ -106,7 +106,7 @@ if (isset($_GET["groupid"])) {
 	}
 }
 
-//Ändern des Besitzers ----------------------------------------------------------------------------
+// Change owner -----------------------------------------------------------
 if ($action == "setowner") {
 
 	if (!$user->isAdmin()) {
@@ -134,9 +134,6 @@ if ($action == "setowner") {
 				getMLText("comment").": ".$folder->getComment()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
@@ -147,7 +144,7 @@ if ($action == "setowner") {
 	}
 }
 
-//Änderung auf nicht erben ------------------------------------------------------------------------
+// Set Permission to no inherit -------------------------------------------
 else if ($action == "notinherit") {
 
 	$defAccess = $folder->getDefaultAccess();
@@ -162,9 +159,6 @@ else if ($action == "notinherit") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
@@ -182,9 +176,6 @@ else if ($action == "notinherit") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
@@ -201,7 +192,7 @@ else if ($action == "notinherit") {
 	}
 }
 
-//Änderung auf erben ------------------------------------------------------------------------------
+// Set permission to inherit ----------------------------------------------
 else if ($action == "inherit") {
 
 	if ($folderid == $settings->_rootFolderID || !$folder->getParent()) return;
@@ -229,7 +220,7 @@ else if ($action == "inherit") {
 	}
 }
 
-//Standardberechtigung setzen----------------------------------------------------------------------
+// Set default permission -------------------------------------------------
 else if ($action == "setdefault") {
 	if($folder->setDefaultAccess($mode)) {
 		if($notifier) {
@@ -253,7 +244,7 @@ else if ($action == "setdefault") {
 	}
 }
 
-//Bestehende Berechtigung änndern -----------------------------------------------------------------
+// Modify permission ------------------------------------------------------
 else if ($action == "editaccess") {
 	if (isset($userid)) {
 		$folder->changeAccess($mode, $userid, true);
@@ -263,7 +254,7 @@ else if ($action == "editaccess") {
 	}
 }
 
-//Berechtigung löschen ----------------------------------------------------------------------------
+// Delete Permission ------------------------------------------------------
 else if ($action == "delaccess") {
 
 	if (isset($userid)) {
@@ -274,7 +265,7 @@ else if ($action == "delaccess") {
 	}
 }
 
-//Neue Berechtigung hinzufügen --------------------------------------------------------------------
+// Add new permission -----------------------------------------------------
 else if ($action == "addaccess") {
 
 	if (isset($userid) && $userid != -1) {
