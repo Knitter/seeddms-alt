@@ -123,9 +123,9 @@ if ($action == "setowner") {
 	}
 	$oldOwner = $document->getOwner();
 	if($document->setOwner($newOwner)) {
-		$document->getNotifyList();
 		// Send notification to subscribers.
 		if($notifier) {
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("ownership_changed_email");
 			$message = getMLText("ownership_changed_email")."\r\n";
@@ -137,9 +137,6 @@ if ($action == "setowner") {
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
@@ -150,13 +147,13 @@ if ($action == "setowner") {
 	}
 }
 
-//Änderung auf nicht erben ------------------------------------------------------------------------
+// Change to not inherit ---------------------------------------------------
 else if ($action == "notinherit") {
 
 	$defAccess = $document->getDefaultAccess();
 	if($document->setInheritAccess(false)) {
-		$document->getNotifyList();
 		if($notifier) {
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
 			// Send notification to subscribers.
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
@@ -166,9 +163,6 @@ else if ($action == "notinherit") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
@@ -176,8 +170,8 @@ else if ($action == "notinherit") {
 		}
 	}
 	if($document->setDefaultAccess($defAccess)) {
-		$document->getNotifyList();
 		if($notifier) {
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
 			// Send notification to subscribers.
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
@@ -207,17 +201,17 @@ else if ($action == "notinherit") {
 	}
 }
 
-//Änderung auf erben ------------------------------------------------------------------------------
+// Change to inherit-----------------------------------------------------
 else if ($action == "inherit") {
 	$document->clearAccessList();
 	$document->setInheritAccess(true);
 }
 
-//Standardberechtigung setzen----------------------------------------------------------------------
+// Set default permissions ----------------------------------------------
 else if ($action == "setdefault") {
 	if($document->setDefaultAccess($mode)) {
-		$document->getNotifyList();
 		if($notifier) {
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
 			// Send notification to subscribers.
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
@@ -227,9 +221,6 @@ else if ($action == "setdefault") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
