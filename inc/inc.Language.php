@@ -1,7 +1,8 @@
 <?php
 //    MyDMS. Document Management System
-//    Copyright (C) 2002-2005  Markus Westphal
+//    Copyright (C) 2002-2005 Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010-2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,6 +17,14 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+foreach(getLanguages() as $_lang) {
+	if(file_exists($settings->_rootDir . "languages/" . $_lang . "/lang.inc")) {
+		include $settings->_rootDir . "languages/" . $_lang . "/lang.inc";
+		$LANG[$_lang] = $text;
+	}
+}
+unset($text);
 
 function getLanguages()
 {
@@ -39,10 +48,39 @@ function getLanguages()
 	return $languages;
 }
 
-function getMLText($key, $replace = array(), $defaulttext = "")
-{
-	GLOBAL $settings, $text;
-	
+/**
+ * Get translation
+ *
+ * Returns the translation for a given key. It will replace markers
+ * in the form [xxx] with those elements from the array $replace.
+ * A default text can be gіven for the case, that there is no translation
+ * available. The fourth parameter can override the currently set language
+ * in the session or the default language from the configuration.
+ *
+ * @param string $key key of translation text
+ * @param array $replace list of values that replace markers in the text
+ * @param string $defaulttext text used if no translation can be found
+ * @param string $lang use this language instead of the currently set lang
+ */
+function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {{{ */
+	GLOBAL $settings, $LANG, $session;
+
+	if(!$lang) {
+		if($session)
+			$lang = $session->getLanguage();
+		else
+			$lang = $settings->_language;
+	}
+
+	if(!isset($LANG[$lang][$key])) {
+		if (!$defaulttext)
+			return "Error getting Text: " . $key . " (" . $lang . ")";
+		else
+			$tmpText = $defaulttext;
+	} else
+		$tmpText = $LANG[$lang][$key];
+
+/*
 	if (!isset($text[$key])) {
 		if (!$defaulttext)
 			return "Error getting Text: " . $key . " (" . $settings->_language . ")";
@@ -50,7 +88,7 @@ function getMLText($key, $replace = array(), $defaulttext = "")
 			$tmpText = $defaulttext;
 	} else
 		$tmpText = $text[$key];
-	
+*/	
 	if (count($replace) == 0)
 		return $tmpText;
 	
@@ -59,14 +97,15 @@ function getMLText($key, $replace = array(), $defaulttext = "")
 		$tmpText = str_replace("[".$key."]", $replace[$key], $tmpText);
 	
 	return $tmpText;
-}
+} /* }}} */
 
-function printMLText($key, $replace = array(), $defaulttext = "")
+function printMLText($key, $replace = array(), $defaulttext = "", $lang="") /* {{{ */
 {
-	print getMLText($key, $replace, $defaulttext);
+	print getMLText($key, $replace, $defaulttext, $lang);
 }
+/* }}} */
 
-function printReviewStatusText($status, $date=0) {
+function printReviewStatusText($status, $date=0) { /* {{{ */
 	if (is_null($status)) {
 		print getMLText("status_unknown");
 	}
@@ -89,9 +128,9 @@ function printReviewStatusText($status, $date=0) {
 				break;
 		}
 	}
-}
+} /* }}} */
 
-function getReviewStatusText($status, $date=0) {
+function getReviewStatusText($status, $date=0) { /* {{{ */
 	if (is_null($status)) {
 		return getMLText("status_unknown");
 	}
@@ -114,9 +153,9 @@ function getReviewStatusText($status, $date=0) {
 				break;
 		}
 	}
-}
+} /* }}} */
 
-function printApprovalStatusText($status, $date=0) {
+function printApprovalStatusText($status, $date=0) { /* {{{ */
 	if (is_null($status)) {
 		print getMLText("status_unknown");
 	}
@@ -139,9 +178,9 @@ function printApprovalStatusText($status, $date=0) {
 				break;
 		}
 	}
-}
+} /* }}} */
 
-function getApprovalStatusText($status, $date=0) {
+function getApprovalStatusText($status, $date=0) { /* {{{ */
 	if (is_null($status)) {
 		return getMLText("status_unknown");
 	}
@@ -164,13 +203,13 @@ function getApprovalStatusText($status, $date=0) {
 				break;
 		}
 	}
-}
+} /* }}} */
 
-function printOverallStatusText($status) {
+function printOverallStatusText($status) { /* {{{ */
 	print getOverallStatusText($status);
-}
+} /* }}} */
 
-function getOverallStatusText($status) {
+function getOverallStatusText($status) { /* {{{ */
 	if (is_null($status)) {
 		return getMLText("assumed_released");
 	}
@@ -202,5 +241,6 @@ function getOverallStatusText($status) {
 				break;
 		}
 	}
-}
+} /* }}} */
+
 ?>
