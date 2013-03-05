@@ -70,9 +70,6 @@ if (!$document->removeDocumentFile($fileid)) {
 			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".	
 			"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//		$subject=mydmsDecodeString($subject);
-//		$message=mydmsDecodeString($message);
-		
 		$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 		foreach ($document->_notifyList["groups"] as $grp) {
 			$notifier->toGroup($user, $grp, $subject, $message);
