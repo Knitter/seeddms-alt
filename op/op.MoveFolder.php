@@ -66,9 +66,6 @@ if ($folder->setParent($targetFolder)) {
 			getMLText("comment").": ".$folder->getComment()."\r\n".
 			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
-//		$subject=mydmsDecodeString($subject);
-//		$message=mydmsDecodeString($message);
-		
 		$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 		foreach ($folder->_notifyList["groups"] as $grp) {
 			$notifier->toGroup($user, $grp, $subject, $message);
