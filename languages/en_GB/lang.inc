@@ -478,6 +478,7 @@ $text = array(
 'removed_file_email_subject' => "[sitename]: [document] - Removed attachment",
 'removed_file_email_body' => "Removed attachment\r\nDocument: [document]\r\nUser: [username]\r\nURL: [url]",
 'removed_reviewer' => "has been removed from the list of reviewers.",
+'repaired' => 'repaired',
 'repairing_objects' => "Reparing documents and folders.",
 'results_page' => "Results Page",
 'review_deletion_email' => "Review request deleted",

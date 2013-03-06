@@ -478,6 +478,7 @@ $text = array(
 'removed_file_email_subject' => "[sitename]: [document] - Anhang gelöscht",
 'removed_file_email_body' => "Anhang gelöscht\r\nDokument: [document]\r\nBenutzer: [username]\r\nURL: [url]",
 'removed_reviewer' => "ist von der Prüfer-Liste entfernt worden.",
+'repaired' => 'repariert',
 'repairing_objects' => "Repariere Dokumente und Ordner.",
 'results_page' => "Ergebnis-Seite",
 'review_deletion_email' => "Prüfungsaufforderung gelöscht",
