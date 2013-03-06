@@ -164,7 +164,9 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 
 		print "<form method=\"post\" action=\"../op/op.ManageNotify.php?type=document&action=add\" name=\"form2\">";
 		$this->contentSubHeading(getMLText("choose_target_document"));
-		$this->printDocumentChooser("form2");
+		/* 'form1' must be passed to printDocumentChooser() because the typeahead
+		 * function is currently hardcoded on this value */
+		$this->printDocumentChooser("form1");
 		print "<input type=\"submit\" class=\"btn\" value=\"".getMLText("add")."\">";
 		print "</form>";
 
