@@ -397,14 +397,18 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		// If any of the notification subscribers no longer have read access,
 		// remove their subscription.
-		foreach ($this->_notifyList["users"] as $u) {
-			if ($this->getAccessMode($u) < M_READ) {
-				$this->removeNotify($u->getID(), true);
+		if(isset($this->_notifyList["users"])) {
+			foreach ($this->_notifyList["users"] as $u) {
+				if ($this->getAccessMode($u) < M_READ) {
+					$this->removeNotify($u->getID(), true);
+				}
 			}
 		}
-		foreach ($this->_notifyList["groups"] as $g) {
-			if ($this->getGroupAccessMode($g) < M_READ) {
-				$this->removeNotify($g->getID(), false);
+		if(isset($this->_notifyList["groups"])) {
+			foreach ($this->_notifyList["groups"] as $g) {
+				if ($this->getGroupAccessMode($g) < M_READ) {
+					$this->removeNotify($g->getID(), false);
+				}
 			}
 		}
 
