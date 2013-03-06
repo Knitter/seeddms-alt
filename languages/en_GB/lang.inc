@@ -795,6 +795,7 @@ $text = array(
 'unknown_owner' => "Unknown owner id",
 'unknown_user' => "Unknown user id",
 'unlinked_content' => "Unlinked content",
+'unlinking_objects' => "Unlinking content",
 'unlock_cause_access_mode_all' => "You can still update it because you have access-mode \"all\". Locking will automatically be removed.",
 'unlock_cause_locking_user' => "You can still update it because you are also the one that locked it. Locking will automatically be removed.",
 'unlock_document' => "Unlock",

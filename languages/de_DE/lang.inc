@@ -795,6 +795,7 @@ $text = array(
 'unknown_owner' => "unbekannte Besitzeridentifikation",
 'unknown_user' => "unbekannte Benutzeridentifikation",
 'unlinked_content' => "Dokumenteninhalt ohne Dokument",
+'unlinking_objects' => "Lösche verwaiste Objekte",
 'unlock_cause_access_mode_all' => "Sie verfügen jedoch über unbeschränken Zugriff auf dieses Dokument.<br>Daher wird die Sperrung beim Update automatisch aufgehoben",
 'unlock_cause_locking_user' => "Sie sind im Moment mit demselben Benutzer angemeldet.<br>Daher wird die Sperrung beim Update automatisch aufgehoben",
 'unlock_document' => "Sperrung aufheben",
