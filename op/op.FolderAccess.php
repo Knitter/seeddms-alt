@@ -123,7 +123,8 @@ if ($action == "setowner") {
 	if($folder->setOwner($newOwner)) {
 		if($notifier) {
 			// Send notification to subscribers.
-			$folder->getNotifyList();
+			$notifyList = $folder->getNotifyList();
+/*
 			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("ownership_changed_email");
 			$message = getMLText("ownership_changed_email")."\r\n";
 			$message .= 
@@ -138,6 +139,25 @@ if ($action == "setowner") {
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+
+			$subject = "ownership_changed_email_subject";
+			$message = "ownership_changed_email_body";
+			$params = array();
+			$params['name'] = $folder->getName();
+			$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['old_owner'] = $oldOwner->getFullName();
+			$params['new_owner'] = $newOwner->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+			$notifier->toIndividual($user, $oldOwner, $subject, $message, $params);
+
 		}
 	} else {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("set_owner_error"));
@@ -151,7 +171,8 @@ else if ($action == "notinherit") {
 	if($folder->setInheritAccess(false)) {
 		if($notifier) {
 			// Send notification to subscribers.
-			$folder->getNotifyList();
+			$notifyList = $folder->getNotifyList();
+/*
 			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
@@ -163,12 +184,28 @@ else if ($action == "notinherit") {
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $folder->getName();
+			$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 	if($folder->setDefaultAccess($defAccess)) {
 		if($notifier) {
 			// Send notification to subscribers.
-			$folder->getNotifyList();
+			$notifyList = $folder->getNotifyList();
+/*
 			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
@@ -180,6 +217,21 @@ else if ($action == "notinherit") {
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $folder->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 	if ($mode == "copy") {
@@ -201,7 +253,9 @@ else if ($action == "inherit") {
 	if($folder->setInheritAccess(true)) {
 		if($notifier) {
 			// Send notification to subscribers.
-			$folder->getNotifyList();
+			$notifyList = $folder->getNotifyList();
+
+/*
 			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
@@ -209,13 +263,26 @@ else if ($action == "inherit") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $folder->getName();
+			$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 }
@@ -225,7 +292,8 @@ else if ($action == "setdefault") {
 	if($folder->setDefaultAccess($mode)) {
 		if($notifier) {
 			// Send notification to subscribers.
-			$folder->getNotifyList();
+			$notifyList = $folder->getNotifyList();
+/*
 			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
 			$message .= 
@@ -233,13 +301,26 @@ else if ($action == "setdefault") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $folder->getName();
+			$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 }

@@ -72,14 +72,11 @@ if ($document->getAccessMode($user) < M_READ) {
 // delete notification
 if ($action == "delnotify"){
 	if (isset($userid)) {
-		if($res = $document->removeNotify($userid, true)) {
-			$obj = $dms->getUser($userid);
-		}
-	}
-	else if (isset($groupid)) {
-		if($res = $document->removeNotify($groupid, false)) {
-			$obj = $dms->getGroup($groupid);
-		}
+		$obj = $dms->getUser($userid);
+		$res = $document->removeNotify($userid, true);
+	} elseif (isset($groupid)) {
+		$obj = $dms->getGroup($groupid);
+		$res = $document->removeNotify($groupid, false);
 	}
 	switch ($res) {
 		case -1:
@@ -97,14 +94,7 @@ if ($action == "delnotify"){
 		case 0:
 			// Email user / group, informing them of subscription change.
 			if($notifier) {
-				$path="";
-				$folder = $document->getFolder();
-				$folderPath = $folder->getPath();
-				for ($i = 0; $i  < count($folderPath); $i++) {
-					$path .= $folderPath[$i]->getName();
-					if ($i +1 < count($folderPath))
-						$path .= " / ";
-				}
+/*
 				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("notify_deleted_email");
 				$message = getMLText("notify_deleted_email")."\r\n";
 				$message .= 
@@ -113,16 +103,28 @@ if ($action == "delnotify"){
 					getMLText("comment").": ".$document->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//				$subject=mydmsDecodeString($subject);
-//				$message=mydmsDecodeString($message);
-		
 				if (isset($userid)) {
-					$obj = $dms->getUser($userid);
 					$notifier->toIndividual($user, $obj, $subject, $message);
 				}
 				else if (isset($groupid)) {
-					$obj = $dms->getGroup($groupid);
 					$notifier->toGroup($user, $obj, $subject, $message);
+				}
+*/
+				$subject = "notify_deleted_email_subject";
+				$message = "notify_deleted_email_body";
+				$params = array();
+				$params['name'] = $document->getName();
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['username'] = $user->getFullName();
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+
+				if ($userid > 0) {
+					$notifier->toIndividual($user, $obj, $subject, $message, $params);
+				}
+				else {
+					$notifier->toGroup($user, $obj, $subject, $message, $params);
 				}
 			}
 			break;
@@ -150,6 +152,8 @@ else if ($action == "addnotify") {
 			case 0:
 				// Email user / group, informing them of subscription.
 				if ($notifier){
+					$obj = $dms->getUser($userid);
+/*
 					$path="";
 					$folder = $document->getFolder();
 					$folderPath = $folder->getPath();
@@ -158,7 +162,6 @@ else if ($action == "addnotify") {
 						if ($i +1 < count($folderPath))
 							$path .= " / ";
 					}
-					$obj = $dms->getUser($userid);
 					$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("notify_added_email");
 					$message = getMLText("notify_added_email")."\r\n";
 					$message .= 
@@ -167,10 +170,19 @@ else if ($action == "addnotify") {
 						getMLText("comment").": ".$document->getComment()."\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//					$subject=mydmsDecodeString($subject);
-//					$message=mydmsDecodeString($message);
-					
 					$notifier->toIndividual($user, $obj, $subject, $message);
+*/
+					$subject = "notify_added_email_subject";
+					$message = "notify_added_email_body";
+					$params = array();
+					$params['name'] = $document->getName();
+					$params['folder_path'] = $folder->getFolderPathPlain();
+					$params['username'] = $user->getFullName();
+					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+					$params['sitename'] = $settings->_siteName;
+					$params['http_root'] = $settings->_httpRoot;
+
+					$notifier->toIndividual($user, $obj, $subject, $message, $params);
 				}
 
 				break;
@@ -193,6 +205,8 @@ else if ($action == "addnotify") {
 				break;
 			case 0:
 				if ($notifier){
+					$obj = $dms->getGroup($groupid);
+/*
 					$path="";
 					$folder = $document->getFolder();
 					$folderPath = $folder->getPath();
@@ -201,7 +215,6 @@ else if ($action == "addnotify") {
 						if ($i +1 < count($folderPath))
 							$path .= " / ";
 					}
-					$obj = $dms->getGroup($groupid);
 					$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("notify_added_email");
 					$message = getMLText("notify_added_email")."\r\n";
 					$message .= 
@@ -210,10 +223,19 @@ else if ($action == "addnotify") {
 						getMLText("comment").": ".$document->getComment()."\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//					$subject=mydmsDecodeString($subject);
-//					$message=mydmsDecodeString($message);
-					
 					$notifier->toGroup($user, $obj, $subject, $message);
+*/
+					$subject = "notify_added_email_subject";
+					$message = "notify_added_email_body";
+					$params = array();
+					$params['name'] = $document->getName();
+					$params['folder_path'] = $folder->getFolderPathPlain();
+					$params['username'] = $user->getFullName();
+					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+					$params['sitename'] = $settings->_siteName;
+					$params['http_root'] = $settings->_httpRoot;
+
+					$notifier->toGroup($user, $obj, $subject, $message, $params);
 				}
 				break;
 		}

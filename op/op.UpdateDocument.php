@@ -173,9 +173,10 @@ if ($_FILES['userfile']['error'] == 0) {
 	}
 	else {
 		// Send notification to subscribers.
-		$document->getNotifyList();
 		if ($notifier){
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
+/*
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_updated_email");
 			$message = getMLText("document_updated_email")."\r\n";
 			$message .= 
@@ -184,8 +185,6 @@ if ($_FILES['userfile']['error'] == 0) {
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
 
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
@@ -195,6 +194,24 @@ if ($_FILES['userfile']['error'] == 0) {
 			// if user is not owner send notification to owner
 			if ($user->getID()!= $document->getOwner()->getID())
 				$notifier->toIndividual($user, $document->getOwner(), $subject, $message);
+*/
+			$subject = "document_updated_email_subject";
+			$message = "document_updated_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+			// if user is not owner send notification to owner
+			if ($user->getID() != $document->getOwner()->getID()) 
+				$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+
 		}
 
 		$expires = false;
@@ -209,10 +226,11 @@ if ($_FILES['userfile']['error'] == 0) {
 
 		if ($expires) {
 			if($document->setExpires($expires)) {
-				$document->getNotifyList();
 				if($notifier) {
+					$notifyList = $document->getNotifyList();
 					$folder = $document->getFolder();
 					// Send notification to subscribers.
+/*
 					$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("expiry_changed_email");
 					$message = getMLText("expiry_changed_email")."\r\n";
 					$message .= 
@@ -221,12 +239,23 @@ if ($_FILES['userfile']['error'] == 0) {
 						getMLText("comment").": ".$document->getComment()."\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-	//				$subject=mydmsDecodeString($subject);
-	//				$message=mydmsDecodeString($message);
-
 					$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 					foreach ($document->_notifyList["groups"] as $grp) {
 						$notifier->toGroup($user, $grp, $subject, $message);
+					}
+*/
+					$subject = "expiry_changed_email_subject";
+					$message = "expiry_changed_email_body";
+					$params = array();
+					$params['name'] = $document->getName();
+					$params['folder_path'] = $folder->getFolderPathPlain();
+					$params['username'] = $user->getFullName();
+					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+					$params['sitename'] = $settings->_siteName;
+					$params['http_root'] = $settings->_httpRoot;
+					$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+					foreach ($notifyList["groups"] as $grp) {
+						$notifier->toGroup($user, $grp, $subject, $message, $params);
 					}
 				}
 			} else {

@@ -63,8 +63,8 @@ $userid=$user->getID();
 if ($_GET["type"]=="document"){
 
 	if ($_GET["action"]=="add"){
-		if (!isset($_POST["docidform2"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
-		$documentid = $_POST["docidform2"];
+		if (!isset($_POST["docidform1"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
+		$documentid = $_POST["docidform1"];
 	}else if ($_GET["action"]=="del"){
 		if (!isset($_GET["id"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
 		$documentid = $_GET["id"];
@@ -107,10 +107,11 @@ if ($_GET["type"]=="document"){
 		add_folder_notify($folder,$userid,$recursefolder,$recursedoc);
 		
 	} elseif ($_GET["action"]=="del") {
-		if($folder->removeNotify($userid, true)) {
-			$obj = $dms->getUser($userid);
+		if(0 == $folder->removeNotify($userid, true)) {
 			if($notifier) {
+				$obj = $dms->getUser($userid);
 				// Email user / group, informing them of subscription.
+/*
 				$path="";
 				$folderPath = $folder->getPath();
 				for ($i = 0; $i  < count($folderPath); $i++) {
@@ -128,6 +129,18 @@ if ($_GET["type"]=="document"){
 					"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 				$notifier->toIndividual($user, $obj, $subject, $message);
+*/
+				$subject = "notify_deleted_email_subject";
+				$message = "notify_deleted_email_body";
+				$params = array();
+				$params['name'] = $folder->getName();
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['username'] = $user->getFullName();
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+
+				$notifier->toIndividual($user, $obj, $subject, $message, $params);
 			}
 		}
 	}

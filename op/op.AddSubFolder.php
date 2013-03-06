@@ -65,7 +65,9 @@ $subFolder = $folder->addSubFolder($name, $comment, $user, $sequence, $attribute
 if (is_object($subFolder)) {
 	// Send notification to subscribers.
 	if($notifier) {
-		$folder->getNotifyList();
+		$notifyList = $folder->getNotifyList();
+
+/*
 		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("new_subfolder_email");
 		$message = getMLText("new_subfolder_email")."\r\n";
 		$message .= 
@@ -75,12 +77,25 @@ if (is_object($subFolder)) {
 			getMLText("user").": ".$user->getFullName()."\r\n".
 			"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$subFolder->getID()."\r\n";
 
-//		$subject=mydmsDecodeString($subject);
-//		$message=mydmsDecodeString($message);
-		
 		$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 		foreach ($folder->_notifyList["groups"] as $grp) {
 			$notifier->toGroup($user, $grp, $subject, $message);
+		}
+*/
+
+		$subject = "new_subfolder_email_subject";
+		$message = "new_subfolder_email_body";
+		$params = array();
+		$params['name'] = $subFolder->getName();
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['username'] = $user->getFullName();
+		$params['comment'] = $comment;
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$subFolder->getID();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+		foreach ($notifyList["groups"] as $grp) {
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
 

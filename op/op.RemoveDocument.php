@@ -48,6 +48,7 @@ $folder = $document->getFolder();
 
 /* Get the notify list before removing the document */
 $nl =	$document->getNotifyList();
+$docname = $document->getName();
 if (!$document->remove()) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
 } else {
@@ -68,6 +69,7 @@ if (!$document->remove()) {
 	}
 
 	if ($notifier){
+/*
 		$path = "";
 		$folderPath = $folder->getPath();
 		for ($i = 0; $i  < count($folderPath); $i++) {
@@ -88,6 +90,19 @@ if (!$document->remove()) {
 		$notifier->toList($user, $nl["users"], $subject, $message);
 		foreach ($nl["groups"] as $grp) {
 			$notifier->toGroup($user, $grp, $subject, $message);
+		}
+*/
+		$subject = "document_deleted_email_subject";
+		$message = "document_deleted_email_body";
+		$params = array();
+		$params['name'] = $docname;
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['username'] = $user->getFullName();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
+		foreach ($nl["groups"] as $grp) {
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
 }

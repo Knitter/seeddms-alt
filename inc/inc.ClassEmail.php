@@ -31,9 +31,9 @@ require_once("inc.ClassNotify.php");
  */
 class SeedDMS_Email extends SeedDMS_Notify {
 
-	function toIndividual($sender, $recipient, $subject, $message) { /* {{{ */
-	
+	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
 		global $settings;
+
 		if ($settings->_enableEmail==FALSE) return 0;
 		
 		if ($recipient->getEmail()=="") return 0;
@@ -49,13 +49,16 @@ class SeedDMS_Email extends SeedDMS_Notify {
 		$headers[] = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">";
 		$headers[] = "Reply-To: ". $sender->getFullName() ." <". $sender->getEmail() .">";
 
-		$message = getMLText("email_header")."\r\n\r\n".$message;
-		$message .= "\r\n\r\n".getMLText("email_footer");
+		$lang = $recipient->getLanguage();
+		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
+		$message .= "\r\n\r\n".getMLText("email_footer", array(), "", $lang);
 
-		return (mail($recipient->getEmail(), $this->replaceMarker($subject), $this->replaceMarker($message), implode("\r\n", $headers)) ? 0 : -1);
+		mail($recipient->getEmail(), getMLText($subject, $params, "", $lang), $message, implode("\r\n", $headers));
+
+		return true;
 	} /* }}} */
 
-	function toGroup($sender, $groupRecipient, $subject, $message) { /* {{{ */
+	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
 	
 		global $settings;
 		if (!$settings->_enableEmail) return 0;
@@ -65,29 +68,16 @@ class SeedDMS_Email extends SeedDMS_Notify {
 			return -1;
 		}
 
-		$header = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">\r\n" .
-			"Reply-To: ". $sender->getFullName() ." <". $sender->getEmail() .">\r\n";
-
-		$toList = "";
 		foreach ($groupRecipient->getUsers() as $recipient) {
-		
-			if ($recipient->getEmail()!="")
-				$toList .= (strlen($toList)==0 ? "" : ", ") . $recipient->getEmail();
+			$this->toIndividual($sender, $recipient, $subject, $message, $params);
 		}
 
-		if (strlen($toList)==0) {
-			return -1;
-		}
-		
-		$message = getMLText("email_header")."\r\n\r\n".$message;
-		$message .= "\r\n\r\n".getMLText("email_footer");
-
-		return (mail($toList, parent::replaceMarker($subject), parent::replaceMarker($message), $header) ? 0 : -1);
+		return true;
 	} /* }}} */
 
-	function toList($sender, $recipients, $subject, $message) { /* {{{ */
-	
+	function toList($sender, $recipients, $subject, $message, $params) { /* {{{ */
 		global $settings;
+	
 		if (!$settings->_enableEmail) return 0;
 
 		if ((!is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) ||
@@ -95,35 +85,23 @@ class SeedDMS_Email extends SeedDMS_Notify {
 			return -1;
 		}
 
-		$header = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">\r\n" .
-			"Reply-To: ". $sender->getFullName() ." <". $sender->getEmail() .">\r\n";
-
-		$toList = "";
 		foreach ($recipients as $recipient) {
-			if (is_object($recipient) && !strcasecmp(get_class($recipient), "SeedDMS_Core_User")) {
-			
-				if ($recipient->getEmail()!="")
-					$toList .= (strlen($toList)==0 ? "" : ", ") . $recipient->getEmail();
-			}
+			$this->toIndividual($sender, $recipient, $subject, $message, $params);
 		}
 
-		if (strlen($toList)==0) {
-			return -1;
-		}
-
-		$message = getMLText("email_header")."\r\n\r\n".$message;
-		$message .= "\r\n\r\n".getMLText("email_footer");
-
-		return (mail($toList, $this->replaceMarker($subject), $this->replaceMarker($message), $header) ? 0 : -1);
+		return true;
 	} /* }}} */
 
-	function sendPassword($sender, $recipient, $subject, $message) {
+	function sendPassword($sender, $recipient, $subject, $message) { /* {{{ */
 		global $settings;
 
-		$header = "From: " . $settings->_smtpSendFrom . "\r\n" .
-"Reply-To: " . $settings->_smtpSendFrom . "\r\n";
+		$headers   = array();
+		$headers[] = "MIME-Version: 1.0";
+		$headers[] = "Content-type: text/plain; charset=utf-8";
+		$headers[] = "From: ". $settings->_smtpSendFrom();
+		$headers[] = "Reply-To: ". $settings->_smtpSendFrom();
 
-		return (mail($recipient->getEmail(), $this->replaceMarker($subject), $this->replaceMarker($message), $header) ? 0 : -1);
-	}
+		return (mail($recipient->getEmail(), $this->replaceMarker($subject), $this->replaceMarker($message), implode("\r\n", $header)) ? 0 : -1);
+	} /* }}} */
 }
 ?>

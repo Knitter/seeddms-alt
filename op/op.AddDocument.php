@@ -260,6 +260,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 					$notifyList['groups'][] = $dms->getGroup($approvergrpid);
 				}
 			}
+/*
 			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("new_document_email");
 			$message = getMLText("new_document_email")."\r\n";
 			$message .= 
@@ -274,6 +275,25 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 			foreach ($notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+
+			$subject = "new_document_email_subject";
+			$message = "new_document_email_body";
+			$params = array();
+			$params['name'] = $name;
+			$params['folder_name'] = $folder->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['comment'] = $comment;
+			$params['version_comment'] = $version_comment;
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 	

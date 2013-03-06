@@ -31,9 +31,9 @@ abstract class SeedDMS_Notify {
 	 */
 	protected $sender;
 
-	abstract function toIndividual($sender, $recipient, $subject, $message);
-	abstract function toGroup($sender, $groupRecipient, $subject, $message);
-	abstract function toList($sender, $recipients, $subject, $message);
+	abstract function toIndividual($sender, $recipient, $subject, $message, $params);
+	abstract function toGroup($sender, $groupRecipient, $subject, $message, $params);
+	abstract function toList($sender, $recipients, $subject, $message, $params);
 
 	function replaceMarker($text) {
 		global $settings;

@@ -48,12 +48,12 @@ $action = $_POST["action"];
 if (isset($_POST["userid"]) && (!is_numeric($_POST["userid"]) || $_POST["userid"]<-1)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("unknown_user"));
 }
-$userid = $_POST["userid"];
+$userid = isset($_POST["userid"]) ? $_POST["userid"] : -1;
 
 if (isset($_POST["groupid"]) && (!is_numeric($_POST["groupid"]) || $_POST["groupid"]<-1)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("unknown_group"));
 }
-$groupid = $_POST["groupid"];
+$groupid = isset($_POST["groupid"]) ? $_POST["groupid"] : -1;
 
 if (isset($_POST["groupid"])&&$_POST["groupid"]!=-1){
 	$group=$dms->getGroup($groupid);
@@ -94,14 +94,7 @@ if ($action == "delnotify") {
 		case 0:
 			if($notifier) {
 				// Email user / group, informing them of subscription.
-				$path="";
-				$folderPath = $folder->getPath();
-				for ($i = 0; $i  < count($folderPath); $i++) {
-					$path .= $folderPath[$i]->getName();
-					if ($i +1 < count($folderPath))
-						$path .= " / ";
-				}
-
+/*
 				$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("notify_deleted_email");
 				$message = getMLText("notify_deleted_email")."\r\n";
 				$message .= 
@@ -115,6 +108,23 @@ if ($action == "delnotify") {
 				}
 				else {
 					$notifier->toGroup($user, $obj, $subject, $message);
+				}
+*/
+				$subject = "notify_deleted_email_subject";
+				$message = "notify_deleted_email_body";
+				$params = array();
+				$params['name'] = $folder->getName();
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['username'] = $user->getFullName();
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+
+				if ($userid > 0) {
+					$notifier->toIndividual($user, $obj, $subject, $message, $params);
+				}
+				else {
+					$notifier->toGroup($user, $obj, $subject, $message, $params);
 				}
 			}
 			break;
@@ -140,16 +150,17 @@ else if ($action == "addnotify") {
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("internal_error"));
 				break;
 			case 0:
-				$obj = $dms->getUser($userid);
-				// Email user / group, informing them of subscription.
-				$path="";
-				$folderPath = $folder->getPath();
-				for ($i = 0; $i  < count($folderPath); $i++) {
-					$path .= $folderPath[$i]->getName();
-					if ($i +1 < count($folderPath))
-						$path .= " / ";
-				}
 				if($notifier) {
+					$obj = $dms->getUser($userid);
+					// Email user / group, informing them of subscription.
+/*
+					$path="";
+					$folderPath = $folder->getPath();
+					for ($i = 0; $i  < count($folderPath); $i++) {
+						$path .= $folderPath[$i]->getName();
+						if ($i +1 < count($folderPath))
+							$path .= " / ";
+					}
 					$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("notify_added_email");
 					$message = getMLText("notify_added_email")."\r\n";
 					$message .= 
@@ -159,6 +170,18 @@ else if ($action == "addnotify") {
 						"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 					$notifier->toIndividual($user, $obj, $subject, $message);
+*/
+					$subject = "notify_added_email_subject";
+					$message = "notify_added_email_body";
+					$params = array();
+					$params['name'] = $folder->getName();
+					$params['folder_path'] = $folder->getFolderPathPlain();
+					$params['username'] = $user->getFullName();
+					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+					$params['sitename'] = $settings->_siteName;
+					$params['http_root'] = $settings->_httpRoot;
+
+					$notifier->toIndividual($user, $obj, $subject, $message, $params);
 				}
 
 				break;
@@ -180,16 +203,17 @@ else if ($action == "addnotify") {
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("internal_error"));
 				break;
 			case 0:
-				$obj = $dms->getGroup($groupid);
-				// Email user / group, informing them of subscription.
-				$path="";
-				$folderPath = $folder->getPath();
-				for ($i = 0; $i  < count($folderPath); $i++) {
-					$path .= $folderPath[$i]->getName();
-					if ($i +1 < count($folderPath))
-						$path .= " / ";
-				}
 				if($notifier) {
+					$obj = $dms->getGroup($groupid);
+					// Email user / group, informing them of subscription.
+/*
+					$path="";
+					$folderPath = $folder->getPath();
+					for ($i = 0; $i  < count($folderPath); $i++) {
+						$path .= $folderPath[$i]->getName();
+						if ($i +1 < count($folderPath))
+							$path .= " / ";
+					}
 					$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("notify_added_email");
 					$message = getMLText("notify_added_email")."\r\n";
 					$message .= 
@@ -199,6 +223,18 @@ else if ($action == "addnotify") {
 						"URL: ###URL_PREFIX###out/out.ViewFolder.php?folderid=".$folder->getID()."\r\n";
 
 					$notifier->toGroup($user, $obj, $subject, $message);
+*/
+					$subject = "notify_added_email_subject";
+					$message = "notify_added_email_body";
+					$params = array();
+					$params['name'] = $folder->getName();
+					$params['folder_path'] = $folder->getFolderPathPlain();
+					$params['username'] = $user->getFullName();
+					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+					$params['sitename'] = $settings->_siteName;
+					$params['http_root'] = $settings->_httpRoot;
+
+					$notifier->toGroup($user, $obj, $subject, $message, $params);
 				}
 				break;
 		}

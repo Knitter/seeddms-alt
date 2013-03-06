@@ -60,8 +60,9 @@ if (!$document->removeDocumentFile($fileid)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 } else {
 	// Send notification to subscribers.
-	$document->getNotifyList();
 	if($notifier) {
+		$notifyList = $document->getNotifyList();
+/*
 		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("removed_file_email");
 		$message = getMLText("removed_file_email")."\r\n";
 		$message .= 
@@ -73,6 +74,19 @@ if (!$document->removeDocumentFile($fileid)) {
 		$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 		foreach ($document->_notifyList["groups"] as $grp) {
 			$notifier->toGroup($user, $grp, $subject, $message);
+		}
+*/
+		$subject = "removed_file_email_subject";
+		$message = "removed_file_email_body";
+		$params = array();
+		$params['document'] = $document->getName();
+		$params['username'] = $user->getFullName();
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+		foreach ($notifyList["groups"] as $grp) {
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
 }
