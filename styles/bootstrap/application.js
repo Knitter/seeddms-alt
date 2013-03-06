@@ -70,8 +70,8 @@ $(document).ready( function() {
 			});
 		},
 		/* updater is called when the item in the list is clicked. It is
-		 * actually provided to update the input field, but here we use
-		 * it to set the document location. */
+		 * actually provided to update the input field where you type, but here
+		 * we use it to update a second input field with the doc id. */
 		updater: function (item) {
 			strarr = item.split("#");
 			//console.log(this.options.formname);
