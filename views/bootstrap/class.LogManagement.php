@@ -73,7 +73,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		$logname = $this->params['logname'];
 
 		if(!$logname) {
-		$this->htmlStartPage(getMLText("backup_tools"));
+		$this->htmlStartPage(getMLText("log_management"));
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
