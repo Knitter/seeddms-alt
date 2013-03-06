@@ -237,8 +237,8 @@ If you install SeedDMS for the first time continue with the database setup.
 
 NOTE: UPDATING FROM A PREVIOUS VERSION OR SEEDDMS
 
-As SeedDMS is a smooth continuation of SeedDMS there is no difference
-in updating from SeedDMS or SeedDMS
+As SeedDMS is a smooth continuation of LetoDMS there is no difference
+in updating from LetoDMS or SeedDMS
 
 - make a backup archive of your installation folder
 - make a backup archive of your data folder
