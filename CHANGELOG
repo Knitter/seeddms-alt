@@ -1,12 +1,14 @@
 --------------------------------------------------------------------------------
-                     Changes in version 4.0.1
+                     Changes in version 4.1.0
 --------------------------------------------------------------------------------
 - minor fixeѕ in german help file (Bug #27)
 - fixed various php warnings and errors due to strict error checking
 - database update from 3.4.x to 4.0.x doesn't issue an error anymore (Bug #26)
 - new configuration variables to enable owner and logged in user to
   review and approve documents
-- global menu will be turned in a drop down menu if screen with decreases
+- global menu will be turned in a drop down menu if screen width decreases
+- reworked notification system: notification will be send in the language
+  of the receiver.
 
 --------------------------------------------------------------------------------
                      Changes in version 4.0.0
