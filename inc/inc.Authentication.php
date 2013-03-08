@@ -43,8 +43,12 @@ if (!is_object($user)) {
 }
 
 $dms->setUser($user);
-$notifier = new SeedDMS_Email();
-$notifier->setSender($user);
+if($settings->_enableEmail) {
+	$notifier = new SeedDMS_Email();
+	$notifier->setSender($user);
+} else {
+	$notifier = null;
+}
 
 /* Include the language file as specified in the session. If that is not
  * available use the language from the settings

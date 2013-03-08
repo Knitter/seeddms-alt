@@ -32,10 +32,6 @@ require_once("inc.ClassNotify.php");
 class SeedDMS_Email extends SeedDMS_Notify {
 
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
-		global $settings;
-
-		if ($settings->_enableEmail==FALSE) return 0;
-		
 		if ($recipient->getEmail()=="") return 0;
 
 		if ((!is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) ||
@@ -59,10 +55,6 @@ class SeedDMS_Email extends SeedDMS_Notify {
 	} /* }}} */
 
 	function toGroup($sender, $groupRecipient, $subject, $message, $params=array()) { /* {{{ */
-	
-		global $settings;
-		if (!$settings->_enableEmail) return 0;
-
 		if ((!is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) ||
 				(!is_object($groupRecipient) && strcasecmp(get_class($groupRecipient), "SeedDMS_Core_Group"))) {
 			return -1;
@@ -76,10 +68,6 @@ class SeedDMS_Email extends SeedDMS_Notify {
 	} /* }}} */
 
 	function toList($sender, $recipients, $subject, $message, $params) { /* {{{ */
-		global $settings;
-	
-		if (!$settings->_enableEmail) return 0;
-
 		if ((!is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) ||
 				(!is_array($recipients) && count($recipients)==0)) {
 			return -1;
