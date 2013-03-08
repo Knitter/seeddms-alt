@@ -41,7 +41,7 @@ class SeedDMS_View_RemoveDocumentFile extends SeedDMS_Bootstrap_Style {
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
 		$this->contentStart();
-		$this->pageNavigation(getFolderPathHTML($folder, true, $document), "view_document");
+		$this->pageNavigation(getFolderPathHTML($folder, true, $document), "view_document", $document);
 		$this->contentHeading(getMLText("rm_file"));
 		$this->contentContainerStart();
 

@@ -46,7 +46,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document");
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 		$this->contentHeading(getMLText("change_assignments"));
 
 		// Retrieve a list of all users and groups that have review / approve privileges.

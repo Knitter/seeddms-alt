@@ -43,7 +43,7 @@ class SeedDMS_View_DocumentNotify extends SeedDMS_Bootstrap_Style {
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document");
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 
 ?>
 <script language="JavaScript">

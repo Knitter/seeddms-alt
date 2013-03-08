@@ -208,7 +208,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 					$this->folderNavigationBar($extra);
 					break;
 				case "view_document":
-					$this->documentNavigationBar();
+					$this->documentNavigationBar($extra);
 					break;
 				case "my_documents":
 					$this->myDocumentsNavigationBar();
@@ -267,9 +267,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		return;
 	} /* }}} */
 
-	private function documentNavigationBar()	{ /* {{{ */
-		global $document;
-
+	private function documentNavigationBar($document)	{ /* {{{ */
 		$accessMode = $document->getAccessMode($this->params['user']);
 		$docid=".php?documentid=" . $document->getID();
 
