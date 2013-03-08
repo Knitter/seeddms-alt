@@ -3535,14 +3535,15 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	function getWorkflowLog($transition = null) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
+/*
 		if(!$this->_workflow)
 			$this->getWorkflow();
 
 		if(!$this->_workflow)
 			return false;
-
+*/
 		$queryStr=
-			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID();
+			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."'"; // AND `workflow` = ". $this->_workflow->getID();
 		if($transition)
 			$queryStr .= " AND `transition` = ".$transition->getID();
 		$queryStr .= " ORDER BY `date`";
@@ -3552,7 +3553,8 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		$workflowlogs = array();
 		for ($i = 0; $i < count($resArr); $i++) {
-			$workflowlog = new SeedDMS_Core_Workflow_Log($resArr[$i]["id"], $this->_document->_dms->getDocument($resArr[$i]["document"]), $resArr[$i]["version"], $this->_workflow, $this->_document->_dms->getUser($resArr[$i]["userid"]), $this->_workflow->getTransition($resArr[$i]["transition"]), $resArr[$i]["date"], $resArr[$i]["comment"]);
+			$workflow = $this->_document->_dms->getWorkflow($resArr[$i]["workflow"]);
+			$workflowlog = new SeedDMS_Core_Workflow_Log($resArr[$i]["id"], $this->_document->_dms->getDocument($resArr[$i]["document"]), $resArr[$i]["version"], $workflow, $this->_document->_dms->getUser($resArr[$i]["userid"]), $workflow->getTransition($resArr[$i]["transition"]), $resArr[$i]["date"], $resArr[$i]["comment"]);
 			$workflowlog->setDMS($this);
 			$workflowlogs[$i] = $workflowlog;
 		}
