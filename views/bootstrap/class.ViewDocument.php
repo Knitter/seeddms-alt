@@ -364,6 +364,26 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 			print "</tbody>\n</table>\n";
 			$this->contentContainerEnd();
+
+			$wkflogs = $latestContent->getWorkflowLog();
+			if($wkflogs) {
+				$this->contentHeading(getMLText("workflow_summary"));
+				$this->contentContainerStart();
+				echo "<table class=\"table table-condensed\"><thead>";
+				echo "<th>".getMLText('date')."</th><th>".getMLText('action')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>\n";
+				echo "</thead><tbody>";
+				foreach($wkflogs as $wkflog) {
+					echo "<tr>";
+					echo "<td>".$wkflog->getDate()."</td>";
+					echo "<td>".$wkflog->getTransition()->getAction()->getName()."</td>";
+					$loguser = $wkflog->getUser();
+					echo "<td>".$loguser->getFullName()."</td>";
+					echo "<td>".$wkflog->getComment()."</td>";
+					echo "</tr>";
+				}
+				print "</tbody>\n</table>\n";
+				$this->contentContainerEnd();
+			}
 		}
 ?>
 		  </div>
