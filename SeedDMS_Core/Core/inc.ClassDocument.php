@@ -2333,7 +2333,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (!isset($this->_approvalStatus)) {
 			/* First get a list of all approvals for this document content */
 			$queryStr=
-				"SELECT approveId FROM tblDocumentApprovers WHERE `version`='".$this->_version
+				"SELECT approveID FROM tblDocumentApprovers WHERE `version`='".$this->_version
 				."' AND `documentID` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
@@ -2349,7 +2349,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 						"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
 						"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentApprovers`.`required` ".
 						"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentApprovers`.`required`".
-						"WHERE `tblDocumentApprovers`.`approveId` = '". $rec['approveId'] ."' ".
+						"WHERE `tblDocumentApprovers`.`approveID` = '". $rec['approveID'] ."' ".
 						"ORDER BY `tblDocumentApproveLog`.`approveLogId` DESC LIMIT ".(int) $limit;
 
 					$res = $db->getResultArray($queryStr);
