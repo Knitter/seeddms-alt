@@ -88,6 +88,10 @@ op/op.ReviewDocument.php
 * document was reviewed
   subscribers of the document
 
+op/op.TriggerWorkflow.php
+* Workflow transition was triggered
+  subscribers of the document
+
 op/op.UpdateDocument2.php
 op/op.UpdateDocument.php
 * document was updated
