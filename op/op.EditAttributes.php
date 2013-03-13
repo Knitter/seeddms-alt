@@ -66,8 +66,9 @@ if($attributes) {
 			if(!$version->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute)) {
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 			} else {
-				$document->getNotifyList();
 				if($notifier) {
+					$notifyList = $document->getNotifyList();
+/*
 					$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("attribute_changed_email");
 					$message = getMLText("attribute_changed_email")."\r\n";
 					$message .= 
@@ -77,9 +78,6 @@ if($attributes) {
 						getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
 						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->_version."\r\n";
 
-		//			$subject=mydmsDecodeString($subject);
-		//			$message=mydmsDecodeString($message);
-
 					if(isset($document->_notifyList["users"])) {
 						$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 					}
@@ -88,6 +86,27 @@ if($attributes) {
 							$notifier->toGroup($user, $grp, $subject, $message);
 						}
 					}
+*/
+					$subject = "attribute_changed_email_subject";
+					$message = "attribute_changed_email_body";
+					$params = array();
+					$params['name'] = $document->getName();
+					$params['version'] = $version->getVersion();
+					$params['attribute'] = $attribute;
+					$params['folder_path'] = $folder->getFolderPathPlain();
+					$params['username'] = $user->getFullName();
+					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->getVersion();
+					$params['sitename'] = $settings->_siteName;
+					$params['http_root'] = $settings->_httpRoot;
+
+					$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+					foreach ($notifyList["groups"] as $grp) {
+						$notifier->toGroup($user, $grp, $subject, $message, $params);
+					}
+					// if user is not owner send notification to owner
+					if ($user->getID() != $document->getOwner()->getID()) 
+						$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+
 				}
 			}
 		}
