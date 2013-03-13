@@ -531,6 +531,7 @@ class SeedDMS_Core_DMS {
 		/*--------- Do it all over again for folders -------------*/
 		if($mode & 0x2) {
 			$searchKey = "";
+			$searchFields = array();
 			if (in_array(2, $searchin)) {
 				$searchFields[] = "`tblFolders`.`name`";
 			}
