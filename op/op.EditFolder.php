@@ -90,7 +90,7 @@ if(($oldname = $folder->getName()) != $name) {
 			$params['old_name'] = $oldname;
 			$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
-			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;
 			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
