@@ -84,6 +84,10 @@ op/op.RemoveVersion.php
 * version of document was removed
   subscribers of the document
 
+op/op.RemoveWorkflowFromDocument.php
+* Workflow has been removed from document version
+  subscribers of the document
+
 op/op.ReviewDocument.php
 * document was reviewed
   subscribers of the document

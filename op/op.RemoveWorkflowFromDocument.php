@@ -62,6 +62,7 @@ if($version->removeWorkflow($user)) {
 	if ($notifier) {
 		$nl =	$document->getNotifyList();
 
+/*
 		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("remove_workflow_email");
 		$message = getMLText("remove_workflow_email")."\r\n";
 		$message .= 
@@ -69,10 +70,22 @@ if($version->removeWorkflow($user)) {
 			getMLText("workflow").": ".$workflow->getName()."\r\n".
 			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
 
+*/
+		$subject = "removed_workflow_email_subject";
+		$message = "removed_workflow_email_body";
+		$params = array();
+		$params['name'] = $document->getName();
+		$params['version'] = $version->getVersion();
+		$params['workflow'] = $workflow->getName();
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['username'] = $user->getFullName();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 		// Send notification to subscribers.
-		$notifier->toList($user, $nl["users"], $subject, $message);
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
 		foreach ($nl["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
 }
