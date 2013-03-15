@@ -61,18 +61,31 @@ if (!is_object($workflow)) {
 if($version->rewindWorkflow()) {
 	if ($notifier) {
 		$nl =	$document->getNotifyList();
+		$folder = $document->getFolder();
 
+/*
 		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("rewind_workflow_email");
 		$message = getMLText("rewind_workflow_email")."\r\n";
 		$message .= 
 			getMLText("document").": ".$document->getName()."\r\n".
 			getMLText("workflow").": ".$workflow->getName()."\r\n".
 			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
-
+*/
+		$subject = "rewind_workflow_email_subject";
+		$message = "rewind_workflow_email_body";
+		$params = array();
+		$params['name'] = $document->getName();
+		$params['version'] = $version->getVersion();
+		$params['workflow'] = $workflow->getName();
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['username'] = $user->getFullName();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 		// Send notification to subscribers.
-		$notifier->toList($user, $nl["users"], $subject, $message);
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
 		foreach ($nl["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
 }
