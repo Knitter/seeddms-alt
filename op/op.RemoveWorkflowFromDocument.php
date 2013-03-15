@@ -61,6 +61,7 @@ if (!is_object($workflow)) {
 if($version->removeWorkflow($user)) {
 	if ($notifier) {
 		$nl =	$document->getNotifyList();
+		$folder = $document->getFolder();
 
 /*
 		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("remove_workflow_email");
