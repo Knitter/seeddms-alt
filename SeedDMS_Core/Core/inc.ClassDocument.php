@@ -3010,7 +3010,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Get workflow assigned to the document content
 	 *
-	 * The method returns the last sub workflow if one was assigned.
+	 * The method returns the last workflow if one was assigned.
+	 * If a the document version is in a sub workflow, it will have
+	 * a never date and therefore will be found first.
 	 *
 	 * @return object/boolean an object of class SeedDMS_Core_Workflow
 	 *         or false in case of error, e.g. the version has not a workflow
@@ -3022,7 +3024,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$queryStr=
 				"SELECT b.* FROM tblWorkflowDocumentContent a LEFT JOIN tblWorkflows b ON a.workflow = b.id WHERE a.`version`='".$this->_version
 				."' AND a.`document` = '". $this->_document->getID() ."' "
-				." LIMIT 1";
+				." ORDER BY date DESC LIMIT 1";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
 				return false;
@@ -3170,7 +3172,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		if($subworkflow) {
 			$initstate = $subworkflow->getInitState();
-			$queryStr = "INSERT INTO tblWorkflowDocumentContent (parentworkflow, workflow, document, version, state) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().")";
+			$queryStr = "INSERT INTO tblWorkflowDocumentContent (parentworkflow, workflow, document, version, state, date) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", CURRENT_TIMESTAMP)";
 			if (!$db->getResult($queryStr)) {
 				return false;
 			}
