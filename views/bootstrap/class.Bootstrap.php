@@ -923,17 +923,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		print "<li>\n";
 
 		if (count($subFolders) > 0){
-			print "<a href=\"javascript:toggleTree(".$folderID.")\"><img class='treeicon' name=\"treedot".$folderID."\" src=\"";	
-			if ($is_open) $this->printImgPath("minus.png");
-			else $this->printImgPath("plus.png");
-			print "\" border=0></a>\n";
+			print "<a href=\"javascript:toggleTree(".$folderID.")\"><i name=\"treedot".$folderID."\" class=\"";	
+			if ($is_open) print "icon-minus-sign";
+			else print "icon-plus-sign";
+			print "\" ></i></a>\n";
 		}
 		else{
-			print "<img class='treeicon' src=\"";	
-			$this->printImgPath("blank.png");
-			print "\" border=0>\n";
+			print "<i class=\"icon-stop\"></i>\n";
 		}
-
 		if ($folder->getAccessMode($this->params['user']) >= $accessMode) {
 
 			if ($folderID != $currentFolderID){
@@ -945,14 +942,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 			}else print "<span class=\"selectedfoldertree\">";
 			
-			if ($is_open) print "<img src=\"".$this->getImgPath("folder_opened.gif")."\" border=0 name=\"treeimg".$folderID."\">".htmlspecialchars($folder->getName());
-			else print "<img src=\"".$this->getImgPath("folder_closed.gif")."\" border=0 name=\"treeimg".$folderID."\">".htmlspecialchars($folder->getName());
+			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >".htmlspecialchars($folder->getName());
+			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >".htmlspecialchars($folder->getName());
 
 			if ($folderID != $currentFolderID) print "</a>\n";
 			else print "</span>";
 
 		}
-		else print "<img src=\"".$this->getImgPath("folder_closed.gif")."\" width=18 height=18 border=0>".htmlspecialchars($folder->getName())."\n";
+		else print "<i class=\"icon-folder-close\"></i>".htmlspecialchars($folder->getName())."\n";
 
 		if ($is_open) print "<ul style='list-style-type: none;' id=\"tree".$folderID."\" >\n";
 		else print "<ul style='list-style-type: none; display: none;' id=\"tree".$folderID."\" >\n";
@@ -978,12 +975,16 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			
 			if ( obj.style.display == "none" ){
 				obj.style.display = "";
-				document["treeimg" + id].src = "<?php $this->printImgPath("folder_opened.gif"); ?>";
-				document["treedot" + id].src = "<?php $this->printImgPath("minus.png"); ?>";
+				$("i[name='treeimg" +id+ "']").removeClass("icon-folder-close");
+				$("i[name='treeimg" +id+ "']").addClass("icon-folder-open");
+				$("i[name='treedot" +id+ "']").removeClass("icon-plus-sign");
+				$("i[name='treedot" +id+ "']").addClass("icon-minus-sign");		
 			}else{
 				obj.style.display = "none";
-				document["treeimg" + id].src = "<?php $this->printImgPath("folder_closed.gif"); ?>";
-				document["treedot" + id].src = "<?php $this->printImgPath("plus.png"); ?>";
+				$("i[name='treeimg" +id+ "']").removeClass("icon-folder-open");
+				$("i[name='treeimg" +id+ "']").addClass("icon-folder-close");
+				$("i[name='treedot" +id+ "']").removeClass("icon-minus-sign");
+				$("i[name='treedot" +id+ "']").addClass("icon-plus-sign");
 			}
 
 		}
