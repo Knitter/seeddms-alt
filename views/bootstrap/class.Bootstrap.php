@@ -107,14 +107,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
 		echo "  <div class=\"container\">\n";
-		echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".nav-collapse\">\n";
+		echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".nav-col1\">\n";
 		echo "     <span class=\"icon-bar\"></span>\n";
 		echo "     <span class=\"icon-bar\"></span>\n";
 		echo "     <span class=\"icon-bar\"></span>\n";
 		echo "   </a>\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
-		echo "   <div class=\"nav-collapse\">\n";
+		echo "   <div class=\"nav-collapse nav-col1\">\n";
 		echo "   <ul class=\"nav pull-right\">\n";
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("signed_in_as")." ".htmlspecialchars($this->params['user']->getFullName())."<b class=\"caret\"></b></a>\n";
