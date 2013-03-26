@@ -7,8 +7,11 @@
 - new configuration variables to enable owner and logged in user to
   review and approve documents
 - global menu will be turned in a drop down menu if screen width decreases
+- overall better support for mobile devices with small screens
 - reworked notification system: notification will be send in the language
   of the receiver.
+- fixed multiple file upload (Bug #40)
+- use bootstrap icons in folder tree
 
 --------------------------------------------------------------------------------
                      Changes in version 4.0.0
