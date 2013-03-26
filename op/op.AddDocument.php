@@ -152,7 +152,7 @@ foreach ($res as $r){
 }
 
 if($settings->_dropFolderDir) {
-	if($_POST["dropfolderfileform1"]) {
+	if(isset($_POST["dropfolderfileform1"]) && $_POST["dropfolderfileform1"]) {
 		$fullfile = $settings->_dropFolderDir.'/'.$user->getLogin().'/'.$_POST["dropfolderfileform1"];
 		if(file_exists($fullfile)) {
 			/* Check if a local file is uploaded as well */
