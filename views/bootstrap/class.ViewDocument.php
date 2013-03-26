@@ -359,8 +359,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo "<th>".getMLText('date')."</th><th>".getMLText('status')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>\n";
 			echo "</thead><tbody>";
 			foreach($status as $entry) {
-				$suser = $dms->getUser($entry['userID']);
-				echo "<tr><td>".$entry['date']."</td><td>".getOverallStatusText($entry['status'])."</td><td>".$suser->getFullName()."</td><td>".$entry['comment']."</td></tr>\n";
+				if($suser = $dms->getUser($entry['userID']))
+					$fullname = $suser->getFullName();
+				else
+					$fullname = "--";
+				echo "<tr><td>".$entry['date']."</td><td>".getOverallStatusText($entry['status'])."</td><td>".$fullname."</td><td>".$entry['comment']."</td></tr>\n";
 			}
 			print "</tbody>\n</table>\n";
 			$this->contentContainerEnd();
