@@ -41,13 +41,12 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		}
 		fclose($fpnew);
 
-		if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
+		if (!isset($_REQUEST["folderid"]) || !is_numeric($_REQUEST["folderid"]) || intval($_REQUEST["folderid"])<1) {
 			echo getMLText("invalid_folder_id");
 		}
 
-		$folderid = $_POST["folderid"];
+		$folderid = $_REQUEST["folderid"];
 		$folder = $dms->getFolder($folderid);
-
 		if (!is_object($folder)) {
 			echo getMLText("invalid_folder_id");
 		}
