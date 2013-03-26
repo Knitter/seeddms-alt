@@ -203,6 +203,11 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 				echo $pageTitle."\n";
 			echo "<div class=\"navbar\">\n";
 			echo " <div class=\"navbar-inner\">\n";
+			echo "  <div class=\"container\">\n";
+			echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".col2\">\n";
+			echo " 		<span class=\"icon-bar\"></span>\n";
+			echo " 		<span class=\"icon-bar\"></span>\n";
+			echo " 		<span class=\"icon-bar\"></span></a>\n";
 			switch ($pageType) {
 				case "view_folder":
 					$this->folderNavigationBar($extra);
@@ -223,6 +228,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 					$this->calendarNavigationBar($extra);
 					break;
 			}
+			echo " 	</div>\n";
 			echo " </div>\n";
 			echo "</div>\n";
 		} else {
@@ -240,8 +246,10 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		}
 		$accessMode = $folder->getAccessMode($this->params['user']);
 		$folderID = $folder->getID();
+		echo "<id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=". $folderID ."&showtree=".showtree()."\" class=\"brand\">".getMLText("folder")."</a>\n";
+		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
-		echo "<li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=". $folderID ."&showtree=".showtree()."\" class=\"brand\">".getMLText("folder")."</a></li>\n";
+
 		if ($accessMode == M_READ && !$this->params['user']->isGuest()) {
 			echo "<li id=\"first\"><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_folder_notify")."</a></li>\n";
 		}
@@ -264,15 +272,17 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			echo "<li><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_existing_notify")."</a></li>\n";
 		}
 		echo "</ul>\n";
+		echo "</div>\n";
 		return;
 	} /* }}} */
 
 	private function documentNavigationBar($document)	{ /* {{{ */
 		$accessMode = $document->getAccessMode($this->params['user']);
 		$docid=".php?documentid=" . $document->getID();
-
+		echo "<id=\"first\"><a href=\"../out/out.ViewDocument". $docid ."\" class=\"brand\">".getMLText("document")."</a>\n";
+		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
-		echo "<li id=\"first\"><a href=\"../out/out.ViewDocument". $docid ."\" class=\"brand\">".getMLText("document")."</a></li>\n";
+
 		if ($accessMode >= M_READWRITE) {
 			if (!$document->isLocked()) {
 				echo "<li id=\"first\"><a href=\"../out/out.UpdateDocument". $docid ."\">".getMLText("update_document")."</a></li>";
@@ -299,12 +309,15 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			echo "<li><a href=\"../out/out.DocumentNotify". $docid ."\">".getMLText("edit_existing_notify")."</a></li>";
 		}
 		echo "</ul>\n";
+		echo "</div>\n";
 		return;
 	} /* }}} */
 
 	private function accountNavigationBar() { /* {{{ */
+		echo "<id=\"first\"><a href=\"../out/out.MyAccount.php\" class=\"brand\">".getMLText("my_account")."</a>\n";
+		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
-		echo "<li id=\"first\"><a href=\"../out/out.MyAccount.php\" class=\"brand\">".getMLText("my_account")."</a></li>\n";
+
 		if (!$this->params['disableselfedit']) echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
 		
 		if (!$this->params['user']->isAdmin()) 
@@ -317,13 +330,16 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			echo "<li><a href=\"../out/out.GroupView.php\">".getMLText("groups")."</a></li>\n";
 		}		
 		echo "</ul>\n";
+		echo "</div>\n";
 		return;
 	} /* }}} */
 
 	private function myDocumentsNavigationBar() { /* {{{ */
 
+		echo "<id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\" class=\"brand\">".getMLText("my_documents")."</a>\n";
+		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
-		echo "<li id=\"first\"><a href=\"../out/out.MyDocuments.php?inProcess=1\" class=\"brand\">".getMLText("my_documents")."</a></li>\n";
+
 		echo "<li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("documents_in_process")."</a></li>\n";
 		echo "<li><a href=\"../out/out.MyDocuments.php\">".getMLText("all_documents")."</a></li>\n";
 		if($this->params['workflowmode'] == 'traditional') {
@@ -333,12 +349,15 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			echo "<li><a href=\"../out/out.WorkflowSummary.php\">".getMLText("workflow_summary")."</a></li>\n";
 		}
 		echo "</ul>\n";
+		echo "</div>\n";
 		return;
 	} /* }}} */
 
 	private function adminToolsNavigationBar() { /* {{{ */
+		echo "    <id=\"first\"><a href=\"../out/out.AdminTools.php\" class=\"brand\">".getMLText("admin_tools")."</a>\n";
+		echo "<div class=\"nav-collapse col2\">\n";
 		echo "   <ul class=\"nav\">\n";
-		echo "    <li id=\"first\"><a href=\"../out/out.AdminTools.php\" class=\"brand\">".getMLText("admin_tools")."</a></li>\n";
+
 		echo "    <li class=\"dropdown\">\n";
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")."<b class=\"caret\"></b></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
@@ -401,19 +420,22 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 		echo "<ul class=\"nav\">\n";
 		echo "</ul>\n";
+		echo "</div>\n";
 		return;
 	} /* }}} */
 	
 	private function calendarNavigationBar($d){ /* {{{ */
 		$ds="&day=".$d[0]."&month=".$d[1]."&year=".$d[2];
-	
+		echo "<id=\"first\"><a href=\"../out/out.Calendar.php?mode=y\" class=\"brand\">".getMLText("calendar")."</a>\n";
+		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
-		echo "<li id=\"first\"><a href=\"../out/out.Calendar.php?mode=y\" class=\"brand\">".getMLText("calendar")."</a></li>\n";
+
 		echo "<li><a href=\"../out/out.Calendar.php?mode=w".$ds."\">".getMLText("week_view")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=m".$ds."\">".getMLText("month_view")."</a></li>\n";
 		echo "<li><a href=\"../out/out.Calendar.php?mode=y".$ds."\">".getMLText("year_view")."</a></li>\n";
 		if (!$this->params['user']->isGuest()) echo "<li><a href=\"../out/out.AddEvent.php\">".getMLText("add_event")."</a></li>\n";
 		echo "</ul>\n";
+		echo "</div>\n";
 		return;
 	
 	} /* }}} */
@@ -1023,7 +1045,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 						print "<tr rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
 					//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-						print "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+						print "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><i class=\"icon-folder-close\"></i></a></td>\n";
 						print "<td><a href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
 						if($comment) {
 							print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
@@ -1095,7 +1117,7 @@ archive="jl_core_z.jar"
 width="715"
 height="400"
 mayscript>
-  <param name="uc_uploadUrl" value="<?php echo $uploadurl ?>"/>
+  <param name="uc_uploadUrl" value="<?php echo $uploadurl."?folderid=".$attributes['folderid']; unset($attributes['folderid']); ?>"/>
   <param name="ac_fireAppletInitialized" value="true"/>
   <param name="ac_fireUploaderSelectionChanged" value="true"/>
   <param name="ac_fireUploaderFileStatusChanged" value="true"/>
