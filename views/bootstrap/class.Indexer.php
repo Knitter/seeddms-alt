@@ -42,7 +42,7 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 			echo $indent."  ".$document->getId().":".htmlspecialchars($document->getName())." ";
 			/* If the document wasn't indexed before then just add it */
 			if(!($hits = $index->find('document_id:'.$document->getId()))) {
-				$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, $settings->_convcmd ? $settings->_convcmd : null));
+				$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, $this->convcmd ? $this->convcmd : null));
 				echo "(document added)";
 			} else {
 				$hit = $hits[0];
@@ -61,7 +61,7 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 					echo $indent."(document unchanged)";
 				} else {
 					if($index->delete($hit->id)) {
-						$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, $settings->_convcmd ? $settings->_convcmd : null));
+						$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, $this->convcmd ? $this->convcmd : null));
 					}
 					echo $indent."(document updated)";
 				}
@@ -76,6 +76,7 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 		$index = $this->params['index'];
 		$recreate = $this->params['recreate'];
 		$folder = $this->params['folder'];
+		$this->convcmd = $this->params['convcmd'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
