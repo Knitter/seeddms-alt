@@ -49,7 +49,10 @@ if ($document->isLocked()) {
 	else $document->setLocked(false);
 }
 
-$comment  = $_POST["comment"];
+if(isset($_POST["comment"]))
+	$comment  = $_POST["comment"];
+else
+	$comment = "";
 
 if ($_FILES['userfile']['error'] == 0) {
 	if(!is_uploaded_file($_FILES["userfile"]["tmp_name"]))
