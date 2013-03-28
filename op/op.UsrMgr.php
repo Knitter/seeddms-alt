@@ -85,7 +85,7 @@ if ($action == "adduser") {
 	if(isset($_POST["workflow"])) {
 		$workflow = $dms->getWorkflow($_POST["workflow"]);
 		if($workflow)
-			$newUser->setWorkflow($workflow);
+			$newUser->setMandatoryWorkflow($workflow);
 	}
 
 	if (isset($_POST["usrReviewers"])){
