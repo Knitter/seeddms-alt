@@ -97,6 +97,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		</div>
 <?php
 		}
+
+		/* Retrieve attacheѕ files */
+		$files = $document->getDocumentFiles();
+
+		/* Retrieve linked documents */
+		$links = $document->getDocumentLinks();
+		$links = filterDocumentLinks($user, $links);
+
 ?>
     <ul class="nav nav-tabs" id="docinfotab">
 		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('document_infos'); ?> / <?php printMLText('current_version'); ?></a></li>
@@ -116,8 +124,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 			}
 ?>
-		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); ?></a></li>
-		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); ?></a></li>
+		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
+		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
 		</ul>
 		<div class="tab-content">
 		  <div class="tab-pane active" id="docinfo">
@@ -436,9 +444,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+							if($required->isMember($user) && ($user->getId() != $owner->getId()))
+								$is_reviewer = true;
 						}
-						if($required->isMember($user) && ($user->getId() != $owner->getId()))
-							$is_reviewer = true;
 						break;
 				}
 				print "<tr>\n";
@@ -806,8 +814,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		$this->contentContainerStart();
 
-		$files = $document->getDocumentFiles();
-
 		if (count($files) > 0) {
 
 			print "<table class=\"table\">";
@@ -865,9 +871,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		  <div class="tab-pane" id="links">
 <?php
 		$this->contentContainerStart();
-		$links = $document->getDocumentLinks();
-		$links = filterDocumentLinks($user, $links);
-
 		if (count($links) > 0) {
 
 			print "<table class=\"table table-condensed\">";
