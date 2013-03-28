@@ -250,9 +250,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Blue_Style {
 						}
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+							if($required->isMember($user) && ($user->getId() != $owner->getId()))
+								$is_reviewer = true;
 						}
-						if($required->isMember($user) && ($user->getId() != $owner->getId()))
-							$is_reviewer = true;
 						break;
 				}
 				print "<tr>\n";
