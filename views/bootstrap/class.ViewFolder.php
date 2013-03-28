@@ -217,6 +217,13 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				$version = $latestContent->getVersion();
 				$status = $latestContent->getStatus();
 				
+				/* Retrieve attacheѕ files */
+				$files = $document->getDocumentFiles();
+
+				/* Retrieve linked documents */
+				$links = $document->getDocumentLinks();
+				$links = filterDocumentLinks($user, $links);
+
 				print "<tr>";
 
 				if (file_exists($dms->contentDir . $latestContent->getPath())) {
@@ -240,7 +247,12 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				if ( $document->isLocked() ) {
 					print "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
 				}
-				print getOverallStatusText($status["status"])."</td>";
+				print "<small>";
+				if(count($files))
+					print count($files)." ".getMLText("linked_files")."<br />";
+				if(count($links))
+					print count($links)." ".getMLText("linked_documents")."<br />";
+				print getOverallStatusText($status["status"])."</small></td>";
 				print "<td>".$version."</td>";
 				print "<td>";
 ?>
