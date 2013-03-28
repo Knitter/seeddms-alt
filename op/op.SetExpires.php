@@ -43,7 +43,7 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 
 $expires = false;
 if (!isset($_POST["expires"]) || $_POST["expires"] != "false") {
-	if($_POST["expdate"]) {
+	if(isset($_POST["expdate"]) && $_POST["expdate"]) {
 		$tmp = explode('-', $_POST["expdate"]);
 		$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
 	} else {

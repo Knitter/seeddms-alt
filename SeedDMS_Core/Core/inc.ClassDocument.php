@@ -397,14 +397,18 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 		// If any of the notification subscribers no longer have read access,
 		// remove their subscription.
-		foreach ($this->_notifyList["users"] as $u) {
-			if ($this->getAccessMode($u) < M_READ) {
-				$this->removeNotify($u->getID(), true);
+		if(isset($this->_notifyList["users"])) {
+			foreach ($this->_notifyList["users"] as $u) {
+				if ($this->getAccessMode($u) < M_READ) {
+					$this->removeNotify($u->getID(), true);
+				}
 			}
 		}
-		foreach ($this->_notifyList["groups"] as $g) {
-			if ($this->getGroupAccessMode($g) < M_READ) {
-				$this->removeNotify($g->getID(), false);
+		if(isset($this->_notifyList["groups"])) {
+			foreach ($this->_notifyList["groups"] as $g) {
+				if ($this->getGroupAccessMode($g) < M_READ) {
+					$this->removeNotify($g->getID(), false);
+				}
 			}
 		}
 
@@ -1659,10 +1663,18 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * {@see SeedDMS_Core_Document::getReadAccessList()} instead.
 	 */
 	function getApproversList() { /* {{{ */
-		return $this->getReadAccessList();
+		return $this->getReadAccessList(0, 0);
 	} /* }}} */
 
-	function getReadAccessList() { /* {{{ */
+	/**
+	 * Returns a list of groups and users with read access on the document
+	 *
+	 * @param boolean $listadmin if set to true any admin will be listed too
+	 * @param boolean $listowner if set to true the owner will be listed too
+	 *
+	 * @return array list of users and groups
+	 */
+	function getReadAccessList($listadmin=0, $listowner=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_readAccessList)) {
@@ -1686,7 +1698,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			}
 			foreach ($tmpList["users"] as $userAccess) {
 				$user = $userAccess->getUser();
-				if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;
+				if (!$listadmin && $user->isAdmin()) continue;
+				if (!$listowner && $user->getID() == $this->_ownerID) continue;
 				if ($user->isGuest()) continue;
 				$userIDs .= (strlen($userIDs)==0 ? "" : ", ") . $userAccess->getUserID();
 			}
@@ -1739,7 +1752,8 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			if (!is_bool($resArr)) {
 				foreach ($resArr as $row) {
 					$user = $this->_dms->getUser($row['id']);
-					if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;
+					if (!$listadmin && $user->isAdmin()) continue;
+					if (!$listowner && $user->getID() == $this->_ownerID) continue;
 					$this->_readAccessList["users"][] = $user;
 				}
 			}
@@ -2319,7 +2333,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (!isset($this->_approvalStatus)) {
 			/* First get a list of all approvals for this document content */
 			$queryStr=
-				"SELECT approveId FROM tblDocumentApprovers WHERE `version`='".$this->_version
+				"SELECT approveID FROM tblDocumentApprovers WHERE `version`='".$this->_version
 				."' AND `documentID` = '". $this->_document->getID() ."' ";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
@@ -2335,7 +2349,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 						"LEFT JOIN `tblDocumentApproveLog` USING (`approveID`) ".
 						"LEFT JOIN `tblUsers` on `tblUsers`.`id` = `tblDocumentApprovers`.`required` ".
 						"LEFT JOIN `tblGroups` on `tblGroups`.`id` = `tblDocumentApprovers`.`required`".
-						"WHERE `tblDocumentApprovers`.`approveId` = '". $rec['approveId'] ."' ".
+						"WHERE `tblDocumentApprovers`.`approveID` = '". $rec['approveID'] ."' ".
 						"ORDER BY `tblDocumentApproveLog`.`approveLogId` DESC LIMIT ".(int) $limit;
 
 					$res = $db->getResultArray($queryStr);
@@ -2996,7 +3010,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Get workflow assigned to the document content
 	 *
-	 * The method returns the last sub workflow if one was assigned.
+	 * The method returns the last workflow if one was assigned.
+	 * If a the document version is in a sub workflow, it will have
+	 * a never date and therefore will be found first.
 	 *
 	 * @return object/boolean an object of class SeedDMS_Core_Workflow
 	 *         or false in case of error, e.g. the version has not a workflow
@@ -3008,7 +3024,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			$queryStr=
 				"SELECT b.* FROM tblWorkflowDocumentContent a LEFT JOIN tblWorkflows b ON a.workflow = b.id WHERE a.`version`='".$this->_version
 				."' AND a.`document` = '". $this->_document->getID() ."' "
-				." LIMIT 1";
+				." ORDER BY date DESC LIMIT 1";
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs)
 				return false;
@@ -3156,7 +3172,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		if($subworkflow) {
 			$initstate = $subworkflow->getInitState();
-			$queryStr = "INSERT INTO tblWorkflowDocumentContent (parentworkflow, workflow, document, version, state) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().")";
+			$queryStr = "INSERT INTO tblWorkflowDocumentContent (parentworkflow, workflow, document, version, state, date) VALUES (". $this->_workflow->getID(). ", ". $subworkflow->getID(). ", ". $this->_document->getID() .", ". $this->_version .", ".$initstate->getID().", CURRENT_TIMESTAMP)";
 			if (!$db->getResult($queryStr)) {
 				return false;
 			}
@@ -3521,14 +3537,15 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	function getWorkflowLog($transition = null) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
+/*
 		if(!$this->_workflow)
 			$this->getWorkflow();
 
 		if(!$this->_workflow)
 			return false;
-
+*/
 		$queryStr=
-			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."' AND `workflow` = ". $this->_workflow->getID();
+			"SELECT * FROM tblWorkflowLog WHERE `version`='".$this->_version ."' AND `document` = '". $this->_document->getID() ."'"; // AND `workflow` = ". $this->_workflow->getID();
 		if($transition)
 			$queryStr .= " AND `transition` = ".$transition->getID();
 		$queryStr .= " ORDER BY `date`";
@@ -3538,7 +3555,8 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		$workflowlogs = array();
 		for ($i = 0; $i < count($resArr); $i++) {
-			$workflowlog = new SeedDMS_Core_Workflow_Log($resArr[$i]["id"], $this->_document->_dms->getDocument($resArr[$i]["document"]), $resArr[$i]["version"], $this->_workflow, $this->_document->_dms->getUser($resArr[$i]["userid"]), $this->_workflow->getTransition($resArr[$i]["transition"]), $resArr[$i]["date"], $resArr[$i]["comment"]);
+			$workflow = $this->_document->_dms->getWorkflow($resArr[$i]["workflow"]);
+			$workflowlog = new SeedDMS_Core_Workflow_Log($resArr[$i]["id"], $this->_document->_dms->getDocument($resArr[$i]["document"]), $resArr[$i]["version"], $workflow, $this->_document->_dms->getUser($resArr[$i]["userid"]), $workflow->getTransition($resArr[$i]["transition"]), $resArr[$i]["date"], $resArr[$i]["comment"]);
 			$workflowlog->setDMS($this);
 			$workflowlogs[$i] = $workflowlog;
 		}

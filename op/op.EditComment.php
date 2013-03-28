@@ -61,19 +61,18 @@ $comment =  $_POST["comment"];
 
 if (($oldcomment = $version->getComment()) != $comment) {
 	if($version->setComment($comment)) {
-		$document->getNotifyList();
 		if($notifier) {
-			$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("comment_changed_email");
-			$message = getMLText("comment_changed_email")."\r\n";
+			$notifyList = $document->getNotifyList();
+
+/*
+			$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("document_comment_changed_email");
+			$message = getMLText("document_comment_changed_email")."\r\n";
 			$message .= 
 				getMLText("document").": ".$document->getName()."\r\n".
 				getMLText("version").": ".$version->_version."\r\n".
 				getMLText("comment").": ".$comment."\r\n".
 				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->_version."\r\n";
-
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
 
 			if(isset($document->_notifyList["users"])) {
 				$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
@@ -83,6 +82,25 @@ if (($oldcomment = $version->getComment()) != $comment) {
 					$notifier->toGroup($user, $grp, $subject, $message);
 				}
 			}
+*/
+
+			$subject = "document_comment_changed_email_subject";
+			$message = "document_comment_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['version'] = $version->getVersion();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['new_comment'] = $comment;
+			$params['old_comment'] = $oldcomment;
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->getVersion();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 	else {

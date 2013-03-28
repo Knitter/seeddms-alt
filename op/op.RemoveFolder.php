@@ -72,10 +72,12 @@ if($settings->_enableFullSearch) {
 	$dms->setCallback('onPreRemoveDocument', 'removeFromIndex', $index);
 }
 
+$nl =	$folder->getNotifyList();
+$foldername = $folder->getName();
 if ($folder->remove()) {
 	// Send notification to subscribers.
 	if ($notifier) {
-		$folder->getNotifyList();
+/*
 		$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_deleted_email");
 		$message = getMLText("folder_deleted_email")."\r\n";
 		$message .= 
@@ -87,6 +89,19 @@ if ($folder->remove()) {
 		$notifier->toList($user, $folder->_notifyList["users"], $subject, $message);
 		foreach ($folder->_notifyList["groups"] as $grp) {
 			$notifier->toGroup($user, $grp, $subject, $message);
+		}
+*/
+		$subject = "folder_deleted_email_subject";
+		$message = "folder_deleted_email_body";
+		$params = array();
+		$params['name'] = $foldername;
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['username'] = $user->getFullName();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
+		foreach ($nl["groups"] as $grp) {
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
 } else {

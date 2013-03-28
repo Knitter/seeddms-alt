@@ -107,7 +107,7 @@ if (isset($_GET["groupid"])) {
 	}
 }
 
-//Ändern des Besitzers ----------------------------------------------------------------------------
+// Change owner -----------------------------------------------------------
 if ($action == "setowner") {
 	if (!$user->isAdmin()) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
@@ -123,10 +123,12 @@ if ($action == "setowner") {
 	}
 	$oldOwner = $document->getOwner();
 	if($document->setOwner($newOwner)) {
-		$document->getNotifyList();
 		// Send notification to subscribers.
 		if($notifier) {
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
+
+/*
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("ownership_changed_email");
 			$message = getMLText("ownership_changed_email")."\r\n";
 			$message .= 
@@ -137,27 +139,45 @@ if ($action == "setowner") {
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
 			// Send notification to previous owner.
 			$notifier->toIndividual($user, $oldOwner, $subject, $message);
+*/
+
+			$subject = "ownership_changed_email_subject";
+			$message = "ownership_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['old_owner'] = $oldOwner->getFullName();
+			$params['new_owner'] = $newOwner->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+			$notifier->toIndividual($user, $oldOwner, $subject, $message, $params);
+
 		}
 	}
 }
 
-//Änderung auf nicht erben ------------------------------------------------------------------------
+// Change to not inherit ---------------------------------------------------
 else if ($action == "notinherit") {
 
 	$defAccess = $document->getDefaultAccess();
 	if($document->setInheritAccess(false)) {
-		$document->getNotifyList();
 		if($notifier) {
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
+
+/*
 			// Send notification to subscribers.
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
@@ -166,19 +186,33 @@ else if ($action == "notinherit") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 	if($document->setDefaultAccess($defAccess)) {
-		$document->getNotifyList();
 		if($notifier) {
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
+
+/*
 			// Send notification to subscribers.
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
@@ -194,6 +228,21 @@ else if ($action == "notinherit") {
 			foreach ($document->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 
@@ -207,18 +256,20 @@ else if ($action == "notinherit") {
 	}
 }
 
-//Änderung auf erben ------------------------------------------------------------------------------
+// Change to inherit-----------------------------------------------------
 else if ($action == "inherit") {
 	$document->clearAccessList();
 	$document->setInheritAccess(true);
 }
 
-//Standardberechtigung setzen----------------------------------------------------------------------
+// Set default permissions ----------------------------------------------
 else if ($action == "setdefault") {
 	if($document->setDefaultAccess($mode)) {
-		$document->getNotifyList();
 		if($notifier) {
+			$notifyList = $document->getNotifyList();
 			$folder = $document->getFolder();
+
+/*
 			// Send notification to subscribers.
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("access_permission_changed_email");
 			$message = getMLText("access_permission_changed_email")."\r\n";
@@ -227,18 +278,30 @@ else if ($action == "setdefault") {
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+			$subject = "access_permission_changed_email_subject";
+			$message = "access_permission_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+
 		}
 	}
 }
 
-// Bestehende Berechtigung ändern --------------------------------------------
+// Modify permission ------------------------------------------------------
 else if ($action == "editaccess") {
 	if (isset($userid)) {
 		$document->changeAccess($mode, $userid, true);
@@ -248,7 +311,7 @@ else if ($action == "editaccess") {
 	}
 }
 
-//Berechtigung löschen ----------------------------------------------------------------------------
+// Delete permission-------------------------------------------------------
 else if ($action == "delaccess") {
 	if (isset($userid)) {
 		$document->removeAccess($userid, true);
@@ -258,7 +321,7 @@ else if ($action == "delaccess") {
 	}
 }
 
-	//Neue Berechtigung hinzufügen --------------------------------------------------------------------
+// Add new permission -----------------------------------------------------
 else if ($action == "addaccess") {
 	if (isset($userid) && $userid != -1) {
 		$document->addAccess($mode, $userid, true);

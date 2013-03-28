@@ -51,7 +51,7 @@ class SeedDMS_View_RemoveGroup extends SeedDMS_Bootstrap_Style {
 <p>
 <?php printMLText("confirm_rm_group", array ("groupname" => htmlspecialchars($group->getName())));?>
 </p>
-<p><input type="submit" class="btn" value="<?php printMLText("rm_group");?>"></p>
+<p><button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("rm_group");?></button></p>
 </form>
 <?php
 		$this->contentContainerEnd();

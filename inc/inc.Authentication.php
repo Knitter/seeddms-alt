@@ -43,16 +43,25 @@ if (!is_object($user)) {
 }
 
 $dms->setUser($user);
-$notifier = new SeedDMS_Email();
-$notifier->setSender($user);
+if($settings->_enableEmail) {
+	$notifier = new SeedDMS_Email();
+	$notifier->setSender($user);
+} else {
+	$notifier = null;
+}
 
 /* Include the language file as specified in the session. If that is not
  * available use the language from the settings
  */
-if(file_exists($settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc"))
+/*
+if(file_exists($settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc")) {
 	include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
-else
+	$session->setLanguage($resArr["language"]);
+} else {
 	include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
+	$session->setLanguage($settings->_language);
+}
+*/
 
 $theme = $resArr["theme"];
 if(file_exists($settings->_rootDir . "view/".$theme."/languages/" . $resArr["language"] . "/lang.inc")) {

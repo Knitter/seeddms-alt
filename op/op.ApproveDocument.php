@@ -86,6 +86,7 @@ if ($_POST["approvalType"] == "ind") {
 	else {
 		// Send an email notification to the document updater.
 		if($notifier) {
+/*
 			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_submit_email");
 			$message = getMLText("approval_submit_email")."\r\n";
 			$message .= 
@@ -95,17 +96,28 @@ if ($_POST["approvalType"] == "ind") {
 				getMLText("status").": ".getApprovalStatusText($_POST["approvalStatus"])."\r\n".
 				getMLText("comment").": ".$comment."\r\n".
 				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
+*/
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
+			$subject = "approval_submit_email_subject";
+			$message = "approval_submit_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['version'] = $version;
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['status'] = getApprovalStatusText($_POST["approvalStatus"]);
+			$params['comment'] = $comment;
+			$params['username'] = $user->getFullName();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+
+			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 
 			// Send notification to subscribers.
 			$nl=$document->getNotifyList();
-			$notifier->toList($user, $nl["users"], $subject, $message);
+			$notifier->toList($user, $nl["users"], $subject, $message, $params);
 			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
 	}
@@ -119,6 +131,7 @@ else if ($_POST["approvalType"] == "grp") {
 	else {
 		// Send an email notification to the document updater.
 		if($notifier) {
+/*
 			$subject = $settings->_siteName.": ".$document->getName().", v.".$version." - ".getMLText("approval_submit_email");
 			$message = getMLText("approval_submit_email")."\r\n";
 			$message .= 
@@ -128,17 +141,28 @@ else if ($_POST["approvalType"] == "grp") {
 				getMLText("status").": ".getApprovalStatusText($_POST["approvalStatus"])."\r\n".
 				getMLText("comment").": ".$comment."\r\n".
 				"URL: http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$documentid."\r\n";
+*/
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
-			$notifier->toIndividual($user, $content->getUser(), $subject, $message);
+			$subject = "approval_submit_email_subject";
+			$message = "approval_submit_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['version'] = $version;
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['status'] = getApprovalStatusText($_POST["approvalStatus"]);
+			$params['comment'] = $comment;
+			$params['username'] = $user->getFullName();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+
+			$notifier->toIndividual($user, $content->getUser(), $subject, $message, $params);
 
 			// Send notification to subscribers.
 			$nl=$document->getNotifyList();
-			$notifier->toList($user, $nl["users"], $subject, $message);
+			$notifier->toList($user, $nl["users"], $subject, $message, $params);
 			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
 	}
@@ -151,10 +175,11 @@ else if ($_POST["approvalType"] == "grp") {
 
 if ($_POST["approvalStatus"]==-1){
 	if($content->setStatus(S_REJECTED,$comment,$user)) {
-		$nl=$document->getNotifyList();
 		// Send notification to subscribers.
 		if($notifier) {
+			$nl=$document->getNotifyList();
 			$folder = $document->getFolder();
+/*
 			$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
 			$message = getMLText("document_status_changed_email")."\r\n";
 			$message .= 
@@ -163,13 +188,23 @@ if ($_POST["approvalStatus"]==-1){
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
+*/
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
-			$notifier->toList($user, $nl["users"], $subject, $message);
+			$subject = "document_status_changed_email_subject";
+			$message = "document_status_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['status'] = getOverallStatusText($status);
+			$params['comment'] = $document->getComment();
+			$params['username'] = $user->getFullName();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+
+			$notifier->toList($user, $nl["users"], $subject, $message, $params);
 			foreach ($nl["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
 		
@@ -198,10 +233,11 @@ if ($_POST["approvalStatus"]==-1){
 		// Change the status to released.
 		$newStatus=2;
 		if($content->setStatus($newStatus, getMLText("automatic_status_update"), $user)) {
-			$nl=$document->getNotifyList();
 			// Send notification to subscribers.
 			if($notifier) {
+				$nl=$document->getNotifyList();
 				$folder = $document->getFolder();
+/*
 				$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_status_changed_email");
 				$message = getMLText("document_status_changed_email")."\r\n";
 				$message .= 
@@ -211,12 +247,22 @@ if ($_POST["approvalStatus"]==-1){
 					getMLText("comment").": ".$document->getComment()."\r\n".
 					"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$content->_version."\r\n";
 
-//				$subject=mydmsDecodeString($subject);
-//				$message=mydmsDecodeString($message);
-				
-				$notifier->toList($user, $nl["users"], $subject, $message);
+*/
+				$subject = "document_status_changed_email_subject";
+				$message = "document_status_changed_email_body";
+				$params = array();
+				$params['name'] = $document->getName();
+				$params['folder_path'] = $folder->getFolderPathPlain();
+				$params['status'] = getOverallStatusText($newStatus);
+				$params['comment'] = $document->getComment();
+				$params['username'] = $user->getFullName();
+				$params['sitename'] = $settings->_siteName;
+				$params['http_root'] = $settings->_httpRoot;
+				$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+
+				$notifier->toList($user, $nl["users"], $subject, $message, $params);
 				foreach ($nl["groups"] as $grp) {
-					$notifier->toGroup($user, $grp, $subject, $message);
+					$notifier->toGroup($user, $grp, $subject, $message, $params);
 				}
 			}
 			

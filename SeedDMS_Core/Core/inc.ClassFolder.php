@@ -1161,17 +1161,18 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * {@see SeedDMS_Core_Folder::getReadAccessList()} instead.
 	 */
 	function getApproversList() { /* {{{ */
-		return $this->getReadAccessList();
+		return $this->getReadAccessList(0, 0);
 	} /* }}} */
 
 	/**
 	 * Returns a list of groups and users with read access on the folder
 	 *
-	 * 
+	 * @param boolean $listadmin if set to true any admin will be listed too
+	 * @param boolean $listowner if set to true the owner will be listed too
 	 *
 	 * @return array list of users and groups
 	 */
-	function getReadAccessList() { /* {{{ */
+	function getReadAccessList($listadmin=0, $listowner=0) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_readAccessList)) {
@@ -1201,7 +1202,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			}
 			foreach ($tmpList["users"] as $userAccess) {
 				$user = $userAccess->getUser();
-				if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;
+				if (!$listadmin && $user->isAdmin()) continue;
+				if (!$listowner && $user->getID() == $this->_ownerID) continue;
 				if ($user->isGuest()) continue;
 				$userIDs .= (strlen($userIDs)==0 ? "" : ", ") . $userAccess->getUserID();
 			}
@@ -1254,7 +1256,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			if (!is_bool($resArr)) {
 				foreach ($resArr as $row) {
 					$user = $this->_dms->getUser($row['id']);
-					if (!$this->_dms->enableAdminRevApp && $user->isAdmin()) continue;
+					if (!$listadmin && $user->isAdmin()) continue;
+					if (!$listowner && $user->getID() == $this->_ownerID) continue;
 					$this->_readAccessList["users"][] = $user;
 				}
 			}

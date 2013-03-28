@@ -221,12 +221,11 @@ class SeedDMS_Core_DMS {
 			$this->contentDir = $contentDir.'/';
 		$this->rootFolderID = 1;
 		$this->maxDirID = 0; //31998;
-		$this->enableAdminRevApp = false;
 		$this->enableConverting = false;
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.0.0';
+			$this->version = '4.1.0';
 	} /* }}} */
 
 	function getDB() { /* {{{ */
@@ -318,10 +317,6 @@ class SeedDMS_Core_DMS {
 	function getRootFolder() { /* {{{ */
 		if(!$this->rootFolderID) return false;
 		return $this->getFolder($this->rootFolderID);
-	} /* }}} */
-
-	function setEnableAdminRevApp($enable) { /* {{{ */
-		$this->enableAdminRevApp = $enable;
 	} /* }}} */
 
 	function setEnableConverting($enable) { /* {{{ */
@@ -536,6 +531,7 @@ class SeedDMS_Core_DMS {
 		/*--------- Do it all over again for folders -------------*/
 		if($mode & 0x2) {
 			$searchKey = "";
+			$searchFields = array();
 			if (in_array(2, $searchin)) {
 				$searchFields[] = "`tblFolders`.`name`";
 			}

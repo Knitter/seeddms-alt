@@ -37,6 +37,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET['type'])) {
 	}
 }
 
+/* FIXME: this does not work because the folder id is not passed */
 $folderid = $_GET['folderid'];
 header("Location:../out/out.ViewFolder.php?folderid=".$folderid);
 

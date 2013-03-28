@@ -63,7 +63,8 @@ if(($oldname = $folder->getName()) != $name) {
 	if($folder->setName($name)) {
 		// Send notification to subscribers.
 		if($notifier) {
-			$folder->getNotifyList();
+			$notifyList = $folder->getNotifyList();
+/*
 			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("folder_renamed_email");
 			$message = getMLText("folder_renamed_email")."\r\n";
 			$message .= 
@@ -80,6 +81,25 @@ if(($oldname = $folder->getName()) != $name) {
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+
+			$subject = "folder_renamed_email_subject";
+			$message = "folder_renamed_email_body";
+			$params = array();
+			$params['name'] = $folder->getName();
+			$params['old_name'] = $oldname;
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+			// if user is not owner send notification to owner
+			if ($user->getID() != $folder->getOwner()->getID()) 
+				$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
 		}
 	} else {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));	
@@ -89,9 +109,10 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 	if($folder->setComment($comment)) {
 		// Send notification to subscribers.
 		if($notifier) {
-			$folder->getNotifyList();
+			$notifyList = $folder->getNotifyList();
+/*
 			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("comment_changed_email");
-			$message = getMLText("comment_changed_email")."\r\n";
+			$message = getMLText("folder_comment_changed_email")."\r\n";
 			$message .= 
 				getMLText("name").": ".$folder->getName()."\r\n".
 				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
@@ -105,6 +126,27 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 			foreach ($folder->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
 			}
+*/
+
+			$subject = "folder_comment_changed_email_subject";
+			$message = "folder_comment_changed_email_body";
+			$params = array();
+			$params['name'] = $folder->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['old_comment'] = $oldcomment;
+			$params['comment'] = $dcomment;
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+			// if user is not owner send notification to owner
+			if ($user->getID() != $folder->getOwner()->getID()) 
+				$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
+
 		}
 	} else {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));	

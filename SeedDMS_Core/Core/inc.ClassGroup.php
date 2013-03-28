@@ -235,7 +235,7 @@ class SeedDMS_Core_Group {
 		$reviewStatus = $this->getReviewStatus();
 		foreach ($reviewStatus as $r) {
 			$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $r["reviewID"] ."', '-2', 'Review group removed from process', NOW(), '". $user->getID() ."')";
+				"VALUES ('". $r["reviewID"] ."', '-2', 'Review group removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();
@@ -246,7 +246,7 @@ class SeedDMS_Core_Group {
 		$approvalStatus = $this->getApprovalStatus();
 		foreach ($approvalStatus as $a) {
 			$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $a["approveID"] ."', '-2', 'Approval group removed from process', NOW(), '". $user->getID() ."')";
+				"VALUES ('". $a["approveID"] ."', '-2', 'Approval group removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();

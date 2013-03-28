@@ -64,7 +64,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Blue_Style {
 			if ($print_header){
 				print "<table class=\"folderView\">\n";
 				print "<thead>\n<tr>\n";
-				print "<th></th>\n";
+				print "<th>".getMLText("name")."</th>\n";
 				print "<th>".getMLText("creation_date")."</th>\n";
 				print "<th>".getMLText("file_size")."</th>\n";
 				print "<th></th>\n";

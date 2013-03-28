@@ -87,7 +87,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document");
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document", $document);
 
 		if ($document->isLocked()) {
 			$lockingUser = $document->getLockingUser();
@@ -97,6 +97,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		</div>
 <?php
 		}
+
+		/* Retrieve attacheѕ files */
+		$files = $document->getDocumentFiles();
+
+		/* Retrieve linked documents */
+		$links = $document->getDocumentLinks();
+		$links = filterDocumentLinks($user, $links);
+
 ?>
     <ul class="nav nav-tabs" id="docinfotab">
 		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('document_infos'); ?> / <?php printMLText('current_version'); ?></a></li>
@@ -116,8 +124,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 			}
 ?>
-		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); ?></a></li>
-		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); ?></a></li>
+		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
+		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
 		</ul>
 		<div class="tab-content">
 		  <div class="tab-pane active" id="docinfo">
@@ -359,11 +367,34 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo "<th>".getMLText('date')."</th><th>".getMLText('status')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>\n";
 			echo "</thead><tbody>";
 			foreach($status as $entry) {
-				$suser = $dms->getUser($entry['userID']);
-				echo "<tr><td>".$entry['date']."</td><td>".getOverallStatusText($entry['status'])."</td><td>".$suser->getFullName()."</td><td>".$entry['comment']."</td></tr>\n";
+				if($suser = $dms->getUser($entry['userID']))
+					$fullname = $suser->getFullName();
+				else
+					$fullname = "--";
+				echo "<tr><td>".$entry['date']."</td><td>".getOverallStatusText($entry['status'])."</td><td>".$fullname."</td><td>".$entry['comment']."</td></tr>\n";
 			}
 			print "</tbody>\n</table>\n";
 			$this->contentContainerEnd();
+
+			$wkflogs = $latestContent->getWorkflowLog();
+			if($wkflogs) {
+				$this->contentHeading(getMLText("workflow_summary"));
+				$this->contentContainerStart();
+				echo "<table class=\"table table-condensed\"><thead>";
+				echo "<th>".getMLText('date')."</th><th>".getMLText('action')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>\n";
+				echo "</thead><tbody>";
+				foreach($wkflogs as $wkflog) {
+					echo "<tr>";
+					echo "<td>".$wkflog->getDate()."</td>";
+					echo "<td>".$wkflog->getTransition()->getAction()->getName()."</td>";
+					$loguser = $wkflog->getUser();
+					echo "<td>".$loguser->getFullName()."</td>";
+					echo "<td>".$wkflog->getComment()."</td>";
+					echo "</tr>";
+				}
+				print "</tbody>\n</table>\n";
+				$this->contentContainerEnd();
+			}
 		}
 ?>
 		  </div>
@@ -413,9 +444,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+							if($required->isMember($user) && ($user->getId() != $owner->getId()))
+								$is_reviewer = true;
 						}
-						if($required->isMember($user) && ($user->getId() != $owner->getId()))
-							$is_reviewer = true;
 						break;
 				}
 				print "<tr>\n";
@@ -783,8 +814,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		$this->contentContainerStart();
 
-		$files = $document->getDocumentFiles();
-
 		if (count($files) > 0) {
 
 			print "<table class=\"table\">";
@@ -842,9 +871,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		  <div class="tab-pane" id="links">
 <?php
 		$this->contentContainerStart();
-		$links = $document->getDocumentLinks();
-		$links = filterDocumentLinks($user, $links);
-
 		if (count($links) > 0) {
 
 			print "<table class=\"table table-condensed\">";

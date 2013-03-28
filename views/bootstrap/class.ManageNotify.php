@@ -89,7 +89,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 					print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$ID."\">" . htmlspecialchars($fld->getName()) . "</a></td>\n";
 					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 					print "<td>";
-					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$ID."&type=folder&action=del' class=\"btn btn-mini\">".getMLText("delete")."</a>";
+					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$ID."&type=folder&action=del' class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a>";
 					else print "<a href='../out/out.FolderNotify.php?folderid=".$ID."' class=\"btn btn-mini\">".getMLText("edit")."</a>";
 					print "</td></tr>";
 				}
@@ -126,7 +126,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 					print "<td>".getOverallStatusText($status["status"])."</td>";
 					print "<td class=\"center\">".$latest->getVersion()."</td>";
 					print "<td>";
-					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$ID."&type=document&action=del' class=\"btn btn-mini\">".getMLText("delete")."</a>";
+					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$ID."&type=document&action=del' class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a>";
 					else print "<a href='../out/out.DocumentNotify.php?documentid=".$ID."' class=\"btn btn-mini\">".getMLText("edit")."</a>";
 					print "</td></tr>\n";
 				}
@@ -164,7 +164,9 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 
 		print "<form method=\"post\" action=\"../op/op.ManageNotify.php?type=document&action=add\" name=\"form2\">";
 		$this->contentSubHeading(getMLText("choose_target_document"));
-		$this->printDocumentChooser("form2");
+		/* 'form1' must be passed to printDocumentChooser() because the typeahead
+		 * function is currently hardcoded on this value */
+		$this->printDocumentChooser("form1");
 		print "<input type=\"submit\" class=\"btn\" value=\"".getMLText("add")."\">";
 		print "</form>";
 

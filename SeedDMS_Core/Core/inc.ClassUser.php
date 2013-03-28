@@ -582,7 +582,7 @@ class SeedDMS_Core_User {
 		$reviewStatus = $this->getReviewStatus();
 		foreach ($reviewStatus["indstatus"] as $ri) {
 			$queryStr = "INSERT INTO `tblDocumentReviewLog` (`reviewID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ri["reviewID"] ."', '-2', 'Reviewer removed from process', NOW(), '". $user->getID() ."')";
+				"VALUES ('". $ri["reviewID"] ."', '-2', 'Reviewer removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();
@@ -593,7 +593,7 @@ class SeedDMS_Core_User {
 		$approvalStatus = $this->getApprovalStatus();
 		foreach ($approvalStatus["indstatus"] as $ai) {
 			$queryStr = "INSERT INTO `tblDocumentApproveLog` (`approveID`, `status`, `comment`, `date`, `userID`) ".
-				"VALUES ('". $ai["approveID"] ."', '-2', 'Approver removed from process', NOW(), '". $user->getID() ."')";
+				"VALUES ('". $ai["approveID"] ."', '-2', 'Approver removed from process', CURRENT_TIMESTAMP, '". $user->getID() ."')";
 			$res=$db->getResult($queryStr);
 			if(!$res) {
 				$db->rollbackTransaction();

@@ -71,6 +71,6 @@ if (is_bool($res) && !$res) {
 
 add_log_line("?name=".$name."&from=".$from."&to=".$to);
 
-header("Location:../out/out.Calendar.php?mode=w&day=".$_POST["fromday"]."&year=".$_POST["fromyear"]."&month=".$_POST["frommonth"]);
+header("Location:../out/out.Calendar.php?mode=w&day=".date('d', $from)."&year=".date('Y', $from)."&month=".date('m', $from));
 
 ?>

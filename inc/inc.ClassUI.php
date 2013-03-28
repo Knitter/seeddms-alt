@@ -44,7 +44,7 @@ class UI extends UI_Default {
 	 * @param array $params parameter passed to constructor of view class
 	 * @return object an object of a class implementing the view
 	 */
-	function factory($theme, $class, $params=array()) { /* {{{ */
+	static function factory($theme, $class, $params=array()) { /* {{{ */
 		global $settings, $session;
 		if(file_exists("../views/".$theme."/class.".$class.".php")) {
 			require("../views/".$theme."/class.".$class.".php");
@@ -73,7 +73,7 @@ class UI extends UI_Default {
 		return null;
 	} /* }}} */
 
-	function getStyles() { /* {{{ */
+	static function getStyles() { /* {{{ */
 		global $settings;
 
 		$themes = array();
@@ -90,7 +90,7 @@ class UI extends UI_Default {
 		return $themes;
 	} /* }}} */
 
-	function exitError($pagetitle, $error) {
+	static function exitError($pagetitle, $error) {
 		global $theme;
 		$tmp = 'ErrorDlg';
 		$view = UI::factory($theme, $tmp);

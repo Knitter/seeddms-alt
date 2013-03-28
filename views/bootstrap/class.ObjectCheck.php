@@ -46,7 +46,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				for ($i = 1; $i  < count($tmppath); $i++) {
 					print "/".htmlspecialchars($tmppath[$i]->getName());
 				}
-				print $foldername;
+				print $folder->getName();
 				print "</a></td>";
 				
 				$owner = $folder->getOwner();
@@ -54,7 +54,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				print "<td>Folderlist is '".$folderList."', should be '".$path."'</td>";
 				if($repair) {
 					$folder->repair();
-					print "<td><span class=\"success\">Repaired</span></td>\n";
+					print "<td><span class=\"success\">".getMLText('repaired')."</span></td>\n";
 				} else {
 					print "<td></td>\n";
 				}
@@ -89,7 +89,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				print "<td>Folderlist is '".$folderList."', should be '".$path."'</td>";
 				if($repair) {
 					$document->repair();
-					print "<td><span class=\"success\">Repaired</span></td>\n";
+					print "<td><span class=\"success\">".getMLText('repaired')."</span></td>\n";
 				} else {
 					print "<td></td>\n";
 				}
@@ -229,7 +229,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
 				if($setfilesize) {
 					if($version->setFileSize())
-						echo "<td>Repaired</td>";
+						echo "<td>".getMLText('repaired')."</td>";
 				}
 				print "</tr>\n";
 			}
@@ -258,7 +258,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				print "<tr><td>".$doc->getId()."</td><td>".$version->getVersion()."</td><td>".$version->getOriginalFileName()."</td><td>".$version->getMimeType()."</td>";
 				if($setchecksum) {
 					if($version->setChecksum())
-						echo "<td>Repaired</td>";
+						echo "<td>".getMLText('repaired')."</td>";
 				}
 				print "</tr>\n";
 			}

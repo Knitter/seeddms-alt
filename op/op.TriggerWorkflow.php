@@ -69,7 +69,9 @@ $workflow = $transition->getWorkflow();
 if($version->triggerWorkflowTransition($user, $transition, $_POST["comment"])) {
 	if ($notifier) {
 		$nl =	$document->getNotifyList();
+		$folder = $document->getFolder();
 
+/*
 		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("transition_triggered_email");
 		$message = getMLText("transition_triggered_email")."\r\n";
 		$message .= 
@@ -80,11 +82,27 @@ if($version->triggerWorkflowTransition($user, $transition, $_POST["comment"])) {
 			getMLText("previous_state").": ".$transition->getState()->getName()."\r\n".
 			getMLText("current_state").": ".$transition->getNextState()->getName()."\r\n".
 			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
+*/
+		$subject = "transition_triggered_email_subject";
+		$message = "transition_triggered_email_body";
+		$params = array();
+		$params['name'] = $document->getName();
+		$params['version'] = $version->getVersion();
+		$params['workflow'] = $workflow->getName();
+		$params['action'] = $transition->getAction()->getName();
+		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['comment'] = $_POST["comment"];
+		$params['previous_state'] = $transition->getState()->getName();
+		$params['current_state'] = $transition->getNextState()->getName();
+		$params['username'] = $user->getFullName();
+		$params['sitename'] = $settings->_siteName;
+		$params['http_root'] = $settings->_httpRoot;
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 
 		// Send notification to subscribers.
-		$notifier->toList($user, $nl["users"], $subject, $message);
+		$notifier->toList($user, $nl["users"], $subject, $message, $params);
 		foreach ($nl["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
+			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
 }

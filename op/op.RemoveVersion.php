@@ -60,11 +60,13 @@ if (!is_object($version)) {
 }
 
 if (count($document->getContent())==1) {
+	$nl = $document->getNotifyList();
+	$docname = $document->getName();
 	if (!$document->remove()) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	} else {
-		$document->getNotifyList();
 		if ($notifier){
+/*
 			$path = "";
 			$folder = $document->getFolder();
 			$folderPath = $folder->getPath();
@@ -82,13 +84,23 @@ if (count($document->getContent())==1) {
 				getMLText("comment").": ".$document->getComment()."\r\n".
 				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			// Send notification to subscribers.
 			$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
 			foreach ($document->_notifyList["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
+			}
+*/
+			$subject = "document_deleted_email_subject";
+			$message = "document_deleted_email_body";
+			$params = array();
+			$params['name'] = $docname;
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $nl["users"], $subject, $message, $params);
+			foreach ($nl["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
 	}
@@ -117,12 +129,13 @@ else {
 	} else {
 		// Notify affected users.
 		if ($notifier){
-		
+			$nl=$document->getNotifyList();
 			$recipients = array();
 			foreach ($emailList as $eID) {
 				$eU = $version->_document->_dms->getUser($eID);
 				$recipients[] = $eU;
 			}
+/*
 			$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("version_deleted_email");
 			$message = getMLText("version_deleted_email")."\r\n";
 			$message .= 
@@ -131,16 +144,28 @@ else {
 				getMLText("comment").": ".$version->getComment()."\r\n".
 				getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
 
-//			$subject=mydmsDecodeString($subject);
-//			$message=mydmsDecodeString($message);
-			
 			$notifier->toList($user, $recipients, $subject, $message);
 			
 			// Send notification to subscribers.
-			$nl=$document->getNotifyList();
 			$notifier->toList($user, $nl["users"], $subject, $message);
 			foreach ($nl["groups"] as $grp) {
 				$notifier->toGroup($user, $grp, $subject, $message);
+			}
+*/
+
+			$subject = "version_deleted_email_subject";
+			$message = "version_deleted_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['version'] = $version->getVersion();
+			$params['folder_path'] = $document->getFolder()->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $recipients, $subject, $message, $params);
+			$notifier->toList($user, $nl["users"], $subject, $message, $params);
+			foreach ($nl["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
 			}
 		}
 	}

@@ -91,7 +91,7 @@ class SeedDMS_View_SearchFulltext extends SeedDMS_Bootstrap_Style {
 			else {
 				$lc = $document->getLatestContent();
 				print "<tr>";
-				print "<td><a href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\"><img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\"></a></td>";
+				print "<td><a href=\"../op/op.Download.php?documentid=".$document->getID()."&version=".$lc->getVersion()."\"><img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\"></a></td>";
 				$docName = htmlspecialchars($document->getName());
 				print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
 				$folder = $document->getFolder();

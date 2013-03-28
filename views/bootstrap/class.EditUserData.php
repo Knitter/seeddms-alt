@@ -131,7 +131,7 @@ function checkForm()
 <?php
 			$languages = getLanguages();
 			foreach ($languages as $currLang) {
-				print "<option value=\"".$currLang."\" ".(($user->getLanguage()==$currLang) ? "selected" : "").">".$currLang."</option>";
+				print "<option value=\"".$currLang."\" ".(($user->getLanguage()==$currLang) ? "selected" : "").">".getMLText($currLang)."</option>";
 			}
 ?>
 			</select>
@@ -142,7 +142,6 @@ function checkForm()
 		<td>
 			<select name="theme">
 <?php
-			$languages = getLanguages();
 			$themes = UI::getStyles();
 			foreach ($themes as $currTheme) {
 				print "<option value=\"".$currTheme."\" ".(($user->getTheme()==$currTheme) ? "selected" : "").">".$currTheme."</option>";

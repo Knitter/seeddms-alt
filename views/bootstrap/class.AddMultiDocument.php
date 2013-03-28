@@ -35,6 +35,9 @@ class SeedDMS_View_AddMultiDocument extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
+		$enableadminrevapp = $this->params['enableadminrevapp'];
+		$enableownerrevapp = $this->params['enableownerrevapp'];
+		$enableselfrevapp = $this->params['enableselfrevapp'];
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);
@@ -58,7 +61,7 @@ function chooseCategory(form, cats) {
 
 	// Retrieve a list of all users and groups that have review / approve
 	// privileges.
-	$docAccess = $folder->getReadAccessList();
+	$docAccess = $folder->getReadAccessList($enableadminrevapp, $enableownerrevapp);
 
 	$this->printUploadApplet('../op/op.AddMultiDocument.php', array('folderid'=>$folder->getId()));
 
