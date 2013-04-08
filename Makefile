@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 VERSION=4.2.0
-=======
-VERSION=4.1.1
->>>>>>> seeddms-4.1.1
 SRC=CHANGELOG inc conf utils index.php languages views op out README.md README.Notification README.Ubuntu drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install
 #restapi webapp
 

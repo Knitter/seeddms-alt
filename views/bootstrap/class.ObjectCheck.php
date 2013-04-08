@@ -46,7 +46,6 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				for ($i = 1; $i  < count($tmppath); $i++) {
 					print "/".htmlspecialchars($tmppath[$i]->getName());
 				}
-				print $folder->getName();
 				print "</a></td>";
 				
 				$owner = $folder->getOwner();
