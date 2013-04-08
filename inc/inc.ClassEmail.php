@@ -67,7 +67,7 @@ class SeedDMS_Email extends SeedDMS_Notify {
 		return true;
 	} /* }}} */
 
-	function toList($sender, $recipients, $subject, $message, $params) { /* {{{ */
+	function toList($sender, $recipients, $subject, $message, $params=array()) { /* {{{ */
 		if ((!is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) ||
 				(!is_array($recipients) && count($recipients)==0)) {
 			return -1;
