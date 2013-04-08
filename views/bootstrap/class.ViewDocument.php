@@ -493,7 +493,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					case 0: // Approver is an individual.
 						$required = $dms->getUser($a["required"]);
 						if (!is_object($required)) {
-							$reqName = getMLText("unknown_user")." '".$r["required"]."'";
+							$reqName = getMLText("unknown_user")." '".$a["required"]."'";
 						}
 						else {
 							$reqName = htmlspecialchars($required->getFullName());
@@ -504,7 +504,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					case 1: // Approver is a group.
 						$required = $dms->getGroup($a["required"]);
 						if (!is_object($required)) {
-							$reqName = getMLText("unknown_group")." '".$r["required"]."'";
+							$reqName = getMLText("unknown_group")." '".$a["required"]."'";
 						}
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
