@@ -134,7 +134,7 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 			$params['name'] = $folder->getName();
 			$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['old_comment'] = $oldcomment;
-			$params['comment'] = $dcomment;
+			$params['comment'] = $comment;
 			$params['username'] = $user->getFullName();
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
 			$params['sitename'] = $settings->_siteName;
