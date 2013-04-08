@@ -15,16 +15,16 @@
  <date>2013-04-05</date>
  <time>16:08:38</time>
  <version>
-  <release>4.1.1</release>
-  <api>4.1.1</api>
+  <release>4.1.2</release>
+  <api>4.1.0</api>
  </version>
  <stability>
-  <release>beta</release>
+  <release>stable</release>
   <api>stable</api>
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- stay in sync with seeddms application
+- set propper folderList of sub folders after moving a folder
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -447,6 +447,22 @@ New release
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - minor bugfixes
+   </notes>
+  </release>
+  <release>
+   <date>2013-04-05</date>
+   <time>16:08:38</time>
+   <version>
+    <release>4.1.1</release>
+    <api>4.1.1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- stay in sync with seeddms application
    </notes>
   </release>
  </changelog>

@@ -178,6 +178,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$res = $db->getResult($queryStr);
 		if (!$res)
 			return false;
+
 		$this->_parentID = $newParent->getID();
 		$this->_parent = $newParent;
 
@@ -192,6 +193,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$pathPrefix .= ":";
 		}
 
+		/* Update path in folderList for all documents */
 		$queryStr = "SELECT `tblDocuments`.`id`, `tblDocuments`.`folderList` FROM `tblDocuments` WHERE `folderList` LIKE '%:".$this->_id.":%'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && $resArr == false)
@@ -200,6 +202,18 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		foreach ($resArr as $row) {
 			$newPath = preg_replace("/^.*:".$this->_id.":(.*$)/", $pathPrefix."\\1", $row["folderList"]);
 			$queryStr="UPDATE `tblDocuments` SET `folderList` = '".$newPath."' WHERE `tblDocuments`.`id` = '".$row["id"]."'";
+			$res = $db->getResult($queryStr);
+		}
+
+		/* Update path in folderList for all documents */
+		$queryStr = "SELECT `tblFolders`.`id`, `tblFolders`.`folderList` FROM `tblFolders` WHERE `folderList` LIKE '%:".$this->_id.":%'";
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+
+		foreach ($resArr as $row) {
+			$newPath = preg_replace("/^.*:".$this->_id.":(.*$)/", $pathPrefix."\\1", $row["folderList"]);
+			$queryStr="UPDATE `tblFolders` SET `folderList` = '".$newPath."' WHERE `tblFolders`.`id` = '".$row["id"]."'";
 			$res = $db->getResult($queryStr);
 		}
 
