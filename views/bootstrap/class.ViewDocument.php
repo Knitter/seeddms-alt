@@ -103,7 +103,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		/* Retrieve linked documents */
 		$links = $document->getDocumentLinks();
-		$links = filterDocumentLinks($user, $links);
+		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
 ?>
     <ul class="nav nav-tabs" id="docinfotab">

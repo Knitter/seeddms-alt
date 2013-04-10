@@ -478,7 +478,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Blue_Style {
 		$this->contentHeading(getMLText("linked_documents"));
 		$this->contentContainerStart();
 		$links = $document->getDocumentLinks();
-		$links = filterDocumentLinks($user, $links);
+		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
 		if (count($links) > 0) {
 
