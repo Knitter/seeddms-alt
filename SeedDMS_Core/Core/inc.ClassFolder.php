@@ -561,19 +561,24 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * This function also counts documents and folders of subfolders, so
 	 * basically it works like recursively counting children.
 	 *
-	 * This function does not check for access rights. Use
-	 * {@link SeedDMS_Core_DMS::filterAccess} for checking each document against
-	 * the currently logged in user and the access rights.
-	 *
-	 * FIXME: This function isn't complete! The idea is to return the documents
-	 * and folders if a maximum number isn't exceeded.
+	 * This function checks for access rights up the given limit. If more
+	 * documents or folders are found, the returned value will be the number
+	 * of objects available and the precise flag in the return array will be
+	 * set to false. This number should not be revelead to the
+	 * user, because it allows to gain information about the existens of
+	 * objects without access right.
+	 * Setting the parameter $limit to 0 will turn off access right checking
+	 * which is reasonable if the $user is an administrator.
 	 *
 	 * @param string $orderby if set to 'n' the list is ordered by name, otherwise
 	 *        it will be ordered by sequence
-	 * @return array array with two elements 'documents' and 'folders' holding
-	 * the counted number.
+	 * @param integer $limit maximum number of folders and documents that will
+	 *        be precisly counted by taken the access rights into account
+	 * @return array array with four elements 'document_count', 'folder_count'
+	 *        'document_precise', 'folder_precise' holding
+	 *        the counted number and a flag if the number is precise.
 	 */
-	function countChildren() { /* {{{ */
+	function countChildren($user, $limit=10000) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		$pathPrefix="";
@@ -585,41 +590,57 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 			$pathPrefix .= ":";
 		}
 
-		$queryStr = "SELECT count(id) as c FROM tblDocuments WHERE folderList like '".$pathPrefix. "%'";
+		$queryStr = "SELECT id FROM tblFolders WHERE folderList like '".$pathPrefix. "%'";
 		$resArr = $db->getResultArray($queryStr);
 		if (is_bool($resArr) && !$resArr)
 			return false;
 
-		$cdocs = $resArr[0]['c'];
-		if($cdocs < 100) {
-			$queryStr = "SELECT id FROM tblDocuments WHERE folderList like '".$pathPrefix. "%'";
+		$result = array();
+
+		$folders = array();
+		$folderids = array($this->_id);
+		$cfolders = count($resArr);
+		if($cfolders < $limit) {
+			foreach ($resArr as $row) {
+				$folder = $this->_dms->getFolder($row["id"]);
+				if ($folder->getAccessMode($user) >= M_READ) {
+					array_push($folders, $folder);
+					array_push($folderids, $row['id']);
+				}
+			}
+			$result['folder_count'] = count($folders);
+			$result['folder_precise'] = true;
+		} else {
+			foreach ($resArr as $row) {
+				array_push($folderids, $row['id']);
+			}
+			$result['folder_count'] = $cfolders;
+			$result['folder_precise'] = false;
+		}
+
+		$documents = array();
+		if($folderids) {
+			$queryStr = "SELECT id FROM tblDocuments WHERE folder in (".implode(',', $folderids). ")";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
 				return false;
-			$documents = array();
-			foreach ($resArr as $row) {
-				array_push($documents, $this->_dms->getDocument($row["id"]));
+
+			$cdocs = count($resArr);
+			if($cdocs < $limit) {
+				foreach ($resArr as $row) {
+					$document = $this->_dms->getDocument($row["id"]);
+					if ($document->getAccessMode($user) >= M_READ)
+						array_push($documents, $document);
+				}
+				$result['document_count'] = count($documents);
+				$result['document_precise'] = true;
+			} else {
+				$result['document_count'] = $cdocs;
+				$result['document_precise'] = false;
 			}
 		}
 
-		$queryStr = "SELECT count(id) as c FROM tblFolders WHERE folderList like '".$pathPrefix. "%'";
-		$resArr = $db->getResultArray($queryStr);
-		if (is_bool($resArr) && !$resArr)
-			return false;
-
-		$cfolders = $resArr[0]['c'];
-		if($cfolders < 100) {
-			$queryStr = "SELECT id FROM tblFolders WHERE folderList like '".$pathPrefix. "%'";
-			$resArr = $db->getResultArray($queryStr);
-			if (is_bool($resArr) && !$resArr)
-				return false;
-			$folders = array();
-			foreach ($resArr as $row) {
-				array_push($folders, $this->_dms->getFolder($row["id"]));
-			}
-		}
-
-		return array('document_count'=>$cdocs, 'folder_count'=>$cfolders);
+		return $result;
 	} /* }}} */
 
 	// $comment will be used for both document and version leaving empty the version_comment 
