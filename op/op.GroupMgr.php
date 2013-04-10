@@ -33,7 +33,7 @@ if (!$user->isAdmin()) {
 if (isset($_POST["action"])) $action = $_POST["action"];
 else $action = null;
 
-//Neue Gruppe anlegen -----------------------------------------------------------------------------
+// Create new group --------------------------------------------------------
 if ($action == "addgroup") {
 
 	/* Check if the form data comes for a trusted request */
@@ -58,7 +58,7 @@ if ($action == "addgroup") {
 	add_log_line();
 }
 
-//Gruppe löschen ----------------------------------------------------------------------------------
+// Delete group -------------------------------------------------------------
 else if ($action == "removegroup") {
 	
 	/* Check if the form data comes for a trusted request */
@@ -83,7 +83,7 @@ else if ($action == "removegroup") {
 	add_log_line(".php?groupid=".$_POST["groupid"]."&action=removegroup");
 }
 
-//Gruppe bearbeiten -------------------------------------------------------------------------------
+// Modifiy group ------------------------------------------------------------
 else if ($action == "editgroup") {
 
 	/* Check if the form data comes for a trusted request */
@@ -113,7 +113,7 @@ else if ($action == "editgroup") {
 	add_log_line();
 }
 
-//Benutzer zu Gruppe hinzufügen -------------------------------------------------------------------
+// Add user to group --------------------------------------------------------
 else if ($action == "addmember") {
 
 	/* Check if the form data comes for a trusted request */
@@ -149,7 +149,7 @@ else if ($action == "addmember") {
 	add_log_line(".php?groupid=".$groupid."&userid=".$_POST["userid"]."&action=addmember");
 }
 
-//Benutzer aus Gruppe entfernen -------------------------------------------------------------------
+// Remove user from group --------------------------------------------------
 else if ($action == "rmmember") {
 
 	/* Check if the form data comes for a trusted request */
