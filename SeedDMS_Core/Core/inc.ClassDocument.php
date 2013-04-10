@@ -1409,6 +1409,13 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * Return a certain document link
+	 *
+	 * @param integer $linkID id of link
+	 * @return object instance of SeedDMS_Core_DocumentLink or false in case of
+	 *         an error.
+	 */
 	function getDocumentLink($linkID) { /* {{{ */
 		$db = $this->_dms->getDB();
 
@@ -1425,6 +1432,15 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		return new SeedDMS_Core_DocumentLink($resArr["id"], $document, $target, $resArr["userID"], $resArr["public"]);
 	} /* }}} */
 
+	/**
+	 * Return all document links
+	 *
+	 * The list contains all links to other documents, even those which
+	 * may not be visible certain users. The application should call
+	 * SeedDMS_Core_DMS::filterDocumentLinks() afterwards.
+	 *
+	 * @return array list of objects of class SeedDMS_Core_DocumentLink
+	 */
 	function getDocumentLinks() { /* {{{ */
 		if (!isset($this->_documentLinks)) {
 			$db = $this->_dms->getDB();
