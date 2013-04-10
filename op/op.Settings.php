@@ -66,6 +66,8 @@ if ($action == "saveSettings")
   $settings->_enableUsersView = getBoolValue("enableUsersView");
   $settings->_enableFullSearch = getBoolValue("enableFullSearch");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
+  $settings->_enableRecursiveCount = getBoolValue("enableRecursiveCount");
+  $settings->_maxRecursiveCount = intval($_POST["maxRecursiveCount"]);
   $settings->_enableLanguageSelector = getBoolValue("enableLanguageSelector");
   $settings->_expandFolderTree = intval($_POST["expandFolderTree"]);
 	$settings->_stopWordsFile = $_POST["stopWordsFile"];
