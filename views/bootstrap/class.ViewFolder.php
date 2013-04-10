@@ -80,6 +80,8 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$enableClipboard = $this->params['enableClipboard'];
 		$showtree = $this->params['showtree'];
 		$cachedir = $this->params['cachedir'];
+		$enableRecursiveCount = $this->params['enableRecursiveCount'];
+		$maxRecursiveCount = $this->params['maxRecursiveCount'];
 
 		$folderid = $folder->getId();
 
@@ -193,7 +195,26 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			}
 			print "</td>\n";
 			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			print "<td colspan=\"1\"><small>".count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents")."</small></td>";
+			print "<td colspan=\"1\"><small>";
+			if($enableRecursiveCount) {
+				if($user->isAdmin()) {
+					/* No need to check for access rights in countChildren() for
+					 * admin. So pass 0 as the limit.
+					 */
+					$cc = $subFolder->countChildren($user, 0);
+					print $cc['folder_count']." ".getMLText("folders")."<br />".$cc['document_count']." ".getMLText("documents");
+				} else {
+					$cc = $subFolder->countChildren($user, $maxRecursiveCount);
+					if($maxRecursiveCount > 5000)
+						$rr = 100.0;
+					else
+						$rr = 10.0;
+					print (!$cc['folder_precise'] ? '~'.(round($cc['folder_count']/$rr)*$rr) : $cc['folder_count'])." ".getMLText("folders")."<br />".(!$cc['document_precise'] ? '~'.(round($cc['document_count']/$rr)*$rr) : $cc['document_count'])." ".getMLText("documents");
+				}
+			} else {
+				print count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents");
+			}
+			print "</small></td>";
 			print "<td></td>";
 			print "<td>";
 ?>
@@ -222,7 +243,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 				/* Retrieve linked documents */
 				$links = $document->getDocumentLinks();
-				$links = filterDocumentLinks($user, $links);
+				$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
 				print "<tr>";
 
