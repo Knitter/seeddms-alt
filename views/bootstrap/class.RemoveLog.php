@@ -35,6 +35,7 @@ class SeedDMS_View_RemoveLog extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$lognames = $this->params['lognames'];
+		$mode = $this->params['mode'];
 
 		$this->htmlStartPage(getMLText("backup_tools"));
 		$this->globalNavigation();
@@ -45,6 +46,7 @@ class SeedDMS_View_RemoveLog extends SeedDMS_Bootstrap_Style {
 ?>
 <form action="../op/op.RemoveLog.php" name="form1" method="post">
   <?php echo createHiddenFieldWithKey('removelog'); ?>
+	<input type="hidden" name="mode" value="<?php echo $mode; ?>" />
 <?php
 		foreach($lognames as $logname) {
 			echo "<input type=\"hidden\" name=\"lognames[]\" value=\"".$logname."\">\n";

@@ -31,7 +31,7 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 
-	function filelist($entries) { /* {{{ */
+	function filelist($entries, $mode) { /* {{{ */
 		$print_header = true;
 		foreach ($entries as $entry){
 			
@@ -56,7 +56,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 			print "<td>".SeedDMS_Core_File::format_filesize(filesize($this->contentdir.$entry))."</td>\n";
 			print "<td>";
 			
-			print "<a href=\"out.RemoveLog.php?logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("rm_file")."</a>";
+			print "<a href=\"out.RemoveLog.php?mode=".$mode."&logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("rm_file")."</a>";
 			print "&nbsp;";
 			print "<a href=\"../op/op.Download.php?logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText("download")."</a>";
 			print "&nbsp;";
@@ -74,6 +74,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$this->contentdir = $this->params['contentdir'];
 		$logname = $this->params['logname'];
+		$mode = $this->params['mode'];
 
 		if(!$logname) {
 		$this->htmlStartPage(getMLText("log_management"));
@@ -106,21 +107,21 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		}
 ?>
   <ul class="nav nav-tabs" id="logtab">
-	  <li class="active"><a data-target="#regular" data-toggle="tab">web</a></li>
-	  <li><a data-target="#webdav" data-toggle="tab">webdav</a></li>
+	  <li <?php echo ($mode == 'web') ? 'class="active"' : ''; ?>><a data-target="#web" data-toggle="tab">web</a></li>
+	  <li <?php echo ($mode == 'webdav') ? 'class="active"' : ''; ?>><a data-target="#webdav" data-toggle="tab">webdav</a></li>
 	</ul>
 	<div class="tab-content">
-	  <div class="tab-pane active" id="regular">
+	  <div class="tab-pane <?php echo ($mode == 'web') ? 'active' : ''; ?>" id="web">
 <?php
 		$this->contentContainerStart();
-		$this->filelist($entries);
+		$this->filelist($entries, 'web');
 		$this->contentContainerEnd();
 ?>
 		</div>
-	  <div class="tab-pane" id="webdav">
+	  <div class="tab-pane <?php echo ($mode == 'webdav') ? 'active' : ''; ?>" id="webdav">
 <?php
 		$this->contentContainerStart();
-		$this->filelist($wentries);
+		$this->filelist($wentries, 'webdav');
 		$this->contentContainerEnd();
 ?>
 		</div>

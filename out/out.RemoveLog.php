@@ -30,6 +30,11 @@ if (!isset($_GET["logname"])) {
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 }
 
+if(isset($_GET["mode"]))
+	$mode = $_GET["mode"];
+else
+	$mode = 'web';
+
 /* $_GET["logname"] can be a single file name or an array of file names */
 if(!is_array($_GET["logname"]))
 	$lognames = array($_GET["logname"]);
@@ -42,7 +47,7 @@ foreach($lognames as $file) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'lognames'=>$lognames));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'lognames'=>$lognames, 'mode'=>$mode));
 if($view) {
 	$view->show();
 	exit;

@@ -30,8 +30,11 @@ if (!$user->isAdmin()) {
 if (isset($_GET["logname"])) $logname=$_GET["logname"];
 else $logname=NULL;
 
+if (isset($_GET["mode"])) $mode=$_GET["mode"];
+else $mode='web';
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'logname'=>$logname, 'contentdir'=>$settings->_contentDir));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'logname'=>$logname, 'mode'=>$mode, 'contentdir'=>$settings->_contentDir));
 if($view) {
 	$view->show();
 	exit;

@@ -51,9 +51,15 @@ foreach($lognames as $file) {
 	}
 }
 
+if(isset($_POST["mode"])) {
+	$mode = $_POST["mode"];
+} else {
+	$mode = 'web';
+}
+
 
 add_log_line("?logname=".implode(",", $_POST["lognames"]));
 
-header("Location:../out/out.LogManagement.php");
+header("Location:../out/out.LogManagement.php?mode=".$mode);
 
 ?>
