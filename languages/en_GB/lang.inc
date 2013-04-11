@@ -475,6 +475,7 @@ $text = array(
 'refresh' => "Refresh",
 'rejected' => "Rejected",
 'released' => "Released",
+'remove_marked_files' => "Remove marked files",
 'removed_workflow_email_subject' => "[sitename]: [name] - Removed workflow from document version",
 'removed_workflow_email_body' => "Removed workflow from document version\r\nDocument: [name]\r\nVersion: [version]\r\nWorkflow: [workflow]\r\nParent folder: [folder_path]\r\nUser: [username]\r\nURL: [url]",
 'removed_approver' => "has been removed from the list of approvers.",
