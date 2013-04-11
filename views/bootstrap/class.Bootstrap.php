@@ -60,6 +60,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->footNote();
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
+		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
+			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		echo "</body>\n</html>\n";
