@@ -151,7 +151,7 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	if (!isset($_GET["logname"]) || !file_exists($settings->_contentDir.$_GET["arkname"]) ) {
+	if (!isset($_GET["logname"]) || !file_exists($settings->_contentDir.$_GET["logname"]) ) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 	}
 
