@@ -36,8 +36,10 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		foreach ($entries as $entry){
 			
 			if ($print_header){
+				print "<form action=\"out.RemoveLog.php\" method=\"get\">\n";
 				print "<table class=\"table-condensed\">\n";
 				print "<thead>\n<tr>\n";
+				print "<th></th>\n";
 				print "<th>".getMLText("name")."</th>\n";
 				print "<th>".getMLText("creation_date")."</th>\n";
 				print "<th>".getMLText("file_size")."</th>\n";
@@ -47,6 +49,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 			}
 					
 			print "<tr>\n";
+			print "<td><input type=\"checkbox\" name=\"logname[]\" value=\"".$entry."\"/></td>\n";
 			print "<td><a href=\"out.LogManagement.php?logname=".$entry."\">".$entry."</a></td>\n";
 			print "\n";
 			print "<td>".getLongReadableDate(filectime($this->contentdir.$entry))."</td>\n";
@@ -63,7 +66,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		}
 
 		if ($print_header) printMLText("empty_notify_list");
-		else print "</table>\n";
+		else print "<tr><td><i class=\"icon-arrow-up\"></i></td><td colspan=\"2\"><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('remove_marked_files')."</button></td></tr></table></form>\n";
 	} /* }}} */
 
 	function show() { /* {{{ */

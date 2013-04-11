@@ -34,7 +34,7 @@ class SeedDMS_View_RemoveLog extends SeedDMS_Blue_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$logname = $this->params['logname'];
+		$lognames = $this->params['lognames'];
 
 		$this->htmlStartPage(getMLText("backup_tools"));
 		$this->globalNavigation();
@@ -44,8 +44,13 @@ class SeedDMS_View_RemoveLog extends SeedDMS_Blue_Style {
 ?>
 <form action="../op/op.RemoveLog.php" name="form1" method="post">
   <?php echo createHiddenFieldWithKey('removelog'); ?>
-	<input type="hidden" name="logname" value="<?php echo $logname?>">
-	<p><?php printMLText("confirm_rm_log", array ("logname" => $logname));?></p>
+<?php
+		foreach($lognames as $logname) {
+			echo "<input type=\"hidden\" name=\"lognames[]\" value=\"".$logname."\">\n";
+
+		}
+?>
+	<p><?php printMLText("confirm_rm_log", array ("logname" => implode(', ', $lognames)));?></p>
 	<input type="submit" value="<?php printMLText("rm_file");?>">
 </form>
 <?php
