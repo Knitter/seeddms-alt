@@ -179,7 +179,7 @@ if(isset($settings->_extraPath))
  */
 $theme = "blue";
 include("../inc/inc.Language.php");
-include "../languages/English/lang.inc";
+include "../languages/en_GB/lang.inc";
 include("../inc/inc.ClassUI.php");
 
 
