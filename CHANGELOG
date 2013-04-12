@@ -5,6 +5,7 @@
 - remove multiple log files at once (Bug #35)
 - return to same tab on LogManagement page as before removing a log
   file (Bug #30)
+- new bootstrap datepicker with localization (Bug #36) 
 
 --------------------------------------------------------------------------------
                      Changes in version 4.1.3
