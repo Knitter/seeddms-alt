@@ -1,4 +1,12 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.2.0
+--------------------------------------------------------------------------------
+- count documents/folders recursively for output in folder list (Bug #43)
+- remove multiple log files at once (Bug #35)
+- return to same tab on LogManagement page as before removing a log
+  file (Bug #30)
+
+--------------------------------------------------------------------------------
                      Changes in version 4.1.3
 --------------------------------------------------------------------------------
 - fixed setting document link (no more PHP fatal error)
