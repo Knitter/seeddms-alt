@@ -5,6 +5,7 @@
 - fixed typo in variable name which cause a PHP warning when sending the
   notification mail after updating a folder comment
 - fixed code to determine required approver and reviewer
+- fixed wrong language setting in installer (Bug #45)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.1.2

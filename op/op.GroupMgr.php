@@ -79,7 +79,8 @@ else if ($action == "removegroup") {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
 	
-	add_log_line(".php?groupid=".$groupid."&action=removegroup");
+	$groupid = '';
+	add_log_line(".php?groupid=".$_POST["groupid"]."&action=removegroup");
 }
 
 //Gruppe bearbeiten -------------------------------------------------------------------------------
