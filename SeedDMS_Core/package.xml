@@ -15,8 +15,8 @@
  <date>2013-04-08</date>
  <time>16:45:06</time>
  <version>
-  <release>4.1.3</release>
-  <api>4.1.0</api>
+  <release>4.2.0</release>
+  <api>4.2.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,7 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- stay in sync with seeddms application
+- added method SeedDMS_Core_DMS::filterDocumentLinks()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -479,6 +479,22 @@ New release
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - set propper folderList of sub folders after moving a folder
+   </notes>
+  </release>
+  <release>
+   <date>2013-04-08</date>
+   <time>16:45:06</time>
+   <version>
+    <release>4.1.3</release>
+    <api>4.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- stay in sync with seeddms application
    </notes>
   </release>
  </changelog>
