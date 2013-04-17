@@ -170,6 +170,16 @@ function showUser(selectObj) {
 			<td><select name="role"><option value="<?php echo SeedDMS_Core_User::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_User::role_admin ?>"><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_User::role_guest ?>"><?php printMLText("role_guest"); ?></option></select></td>
 		</tr>
 		<tr>
+			<td><?php printMLText("groups");?>:</td>
+			<td><select class="chzn-select" multiple="multiple" name="groups[]" data-placeholder="<?php printMLText('select_groups'); ?>">
+<?php
+		foreach($groups as $group) {
+			echo '<option value="'.$group->getID().'">'.$group->getName().'</option>';
+		}
+?>
+			</select></td>
+		</tr>
+		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
 			<td><input type="checkbox" name="ishidden" value="1"></td>
 		</tr>
@@ -198,7 +208,7 @@ function showUser(selectObj) {
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="usrReviewers[]" multiple="multiple">
+        <select class="chzn-select" name="usrReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
 <?php
 				foreach ($users as $usr) {
 
@@ -360,6 +370,16 @@ function showUser(selectObj) {
 			<td><select name="role"><option value="<?php echo SeedDMS_Core_User::role_user ?>"><?php printMLText("role_user"); ?></option><option value="<?php echo SeedDMS_Core_User::role_admin ?>" <?php if($currUser->getRole() == SeedDMS_Core_User::role_admin) echo "selected"; ?>><?php printMLText("role_admin"); ?></option><option value="<?php echo SeedDMS_Core_User::role_guest ?>" <?php if($currUser->getRole() == SeedDMS_Core_User::role_guest) echo "selected"; ?>><?php printMLText("role_guest"); ?></option></select></td>
 		</tr>
 		<tr>
+			<td><?php printMLText("groups");?>:</td>
+			<td><select class="chzn-select" multiple="multiple" name="groups[]" data-placeholder="<?php printMLText('select_groups'); ?>">
+<?php
+		foreach($groups as $group) {
+			echo '<option value="'.$group->getID().'"'.($group->isMember($currUser) ? ' selected' : '').'>'.$group->getName().'</option>';
+		}
+?>
+			</select></td>
+		</tr>
+		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
 			<td><input type="checkbox" name="ishidden" value="1"<?php print ($currUser->isHidden() ? " checked='checked'" : "");?>></td>
 		</tr>
@@ -423,7 +443,7 @@ function showUser(selectObj) {
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="grpReviewers[]" multiple="multiple">
+        <select class="chzn-select" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_groups'); ?>">
 <?php
 				foreach ($groups as $grp) {
 
@@ -445,7 +465,7 @@ function showUser(selectObj) {
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="usrApprovers[]" multiple="multiple">
+        <select class="chzn-select" name="usrApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_users'); ?>">
 <?php
 				$res=$currUser->getMandatoryApprovers();
 				foreach ($users as $usr) {
@@ -466,7 +486,7 @@ function showUser(selectObj) {
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
 			</td>
 			<td>
-        <select class="chzn-select" name="grpApprovers[]" multiple="multiple">
+        <select class="chzn-select" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_groups'); ?>">
 <?php
 				foreach ($groups as $grp) {
 
