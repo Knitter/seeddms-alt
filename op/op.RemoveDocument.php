@@ -49,6 +49,14 @@ $folder = $document->getFolder();
 /* Get the notify list before removing the document */
 $nl =	$document->getNotifyList();
 $docname = $document->getName();
+
+if (is_array($GLOBALS['SEEDDMS_HOOKS']['RemoveDocument'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['RemoveDocument'] as $_classRef) {
+		$_procObj = & new $_classRef;
+		$ret = $_procObj->postRemoveDocument($dms, $document);
+	}
+}
+
 if (!$document->remove()) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
 } else {
