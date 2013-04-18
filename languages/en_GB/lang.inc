@@ -399,6 +399,7 @@ $text = array(
 'my_account' => "My Account",
 'my_documents' => "My Documents",
 'name' => "Name",
+'needs_workflow_action' => "This document requires your attention. Please check the workflow tab.",
 'new_attrdef' => "Add attribute defintion",
 'new_default_keyword_category' => "Add category",
 'new_default_keywords' => "Add keywords",
