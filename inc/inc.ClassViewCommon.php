@@ -51,7 +51,6 @@ class SeedDMS_View_Common {
 */
 
 	function show() {
-
 	}
 }
 ?>
