@@ -105,6 +105,22 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$links = $document->getDocumentLinks();
 		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
+		/* Retrieve latest content */
+		$latestContent = $document->getLatestContent();
+		$needwkflaction = false;
+		if($workflowmode == 'traditional') {
+		} else {
+			$workflow = $latestContent->getWorkflow();
+			if($workflow) {
+				$workflowstate = $latestContent->getWorkflowState();
+				$transitions = $workflow->getNextTransitions($workflowstate);
+				$needwkflaction = $latestContent->needsWorkflowAction($user);
+			}
+		}
+
+		if($needwkflaction) {
+			$this->infoMsg(getMLText('needs_workflow_action'));
+		}
 ?>
     <ul class="nav nav-tabs" id="docinfotab">
 		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('document_infos'); ?> / <?php printMLText('current_version'); ?></a></li>
@@ -117,7 +133,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		  <li><a data-target="#revapp" data-toggle="tab"><?php echo getMLText('reviewers')."/".getMLText('approvers'); ?></a></li>
 <?php
 			} else {
-				if($document->getLatestContent()->getWorkflow()) {
+				if($workflow) {
 ?>
 		  <li><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
 <?php
@@ -242,7 +258,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 </div>
 <div class="span9">
 <?php
-		if(!$latestContent = $document->getLatestContent()) {
+		if(!$latestContent) {
 			$this->contentContainerStart();
 			print getMLText('document_content_missing');
 			$this->contentContainerEnd();
@@ -336,7 +352,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 		} else {
 			if($accessop->maySetWorkflow()) {
-				$workflow = $latestContent->getWorkflow();
 				if(!$workflow) {
 					print "<li><a href='../out/out.SetWorkflow.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-random\"></i> ".getMLText("set_workflow")."</a></li>";
 				}
@@ -543,7 +558,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		  </div>
 <?php
 		} else {
-			$workflow = $latestContent->getWorkflow();
 			if($workflow) {
 ?>
 		  <div class="tab-pane" id="workflow">
@@ -557,8 +571,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				}
 			}
 
-			$workflowstate = $latestContent->getWorkflowState();
-			$transitions = $workflow->getNextTransitions($workflowstate);
 			echo "<h4>".$workflow->getName()."</h4>";
 			if($parentworkflow = $latestContent->getParentWorkflow()) {
 				echo "<p>Sub workflow of '".$parentworkflow->getName()."'</p>";
