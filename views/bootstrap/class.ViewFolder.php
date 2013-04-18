@@ -80,6 +80,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$enableClipboard = $this->params['enableClipboard'];
 		$showtree = $this->params['showtree'];
 		$cachedir = $this->params['cachedir'];
+		$workflowmode = $this->params['workflowmode'];
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
 
@@ -237,6 +238,13 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				$previewer->createPreview($latestContent);
 				$version = $latestContent->getVersion();
 				$status = $latestContent->getStatus();
+				$needwkflaction = false;
+				if($workflowmode == 'advanced') {
+					$workflow = $latestContent->getWorkflow();
+					if($workflow) {
+						$needwkflaction = $latestContent->needsWorkflowAction($user);
+					}
+				}
 				
 				/* Retrieve attacheѕ files */
 				$files = $document->getDocumentFiles();
@@ -265,9 +273,15 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print "</td>\n";
 				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 				print "<td>";
+				$attentionstr = '';
 				if ( $document->isLocked() ) {
-					print "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
+					$attentionstr .= "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
 				}
+				if ( $needwkflaction ) {
+					$attentionstr .= "<img src=\"".$this->getImgPath("attention.gif")."\" title=\"". getMLText("workflow").": "."\"> ";
+				}
+				if($attentionstr)
+					print $attentionstr."<br />";
 				print "<small>";
 				if(count($files))
 					print count($files)." ".getMLText("linked_files")."<br />";
