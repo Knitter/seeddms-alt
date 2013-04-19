@@ -4,6 +4,12 @@ body { /* Add top padding for full-width layout */
 img.mimeicon {
 }
 
+.list-action a {
+	text-decoration: none;
+	color: #333;
+	padding: 2px;
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;
