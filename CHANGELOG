@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.2.0
 --------------------------------------------------------------------------------
+- use awesome font for icons
 - currently logged in user can be changed temporarily if being admin
 - count documents/folders recursively for output in folder list (Bug #43)
 - remove multiple log files at once (Bug #35)
