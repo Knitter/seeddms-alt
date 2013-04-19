@@ -1,0 +1,6 @@
+Directory for language files
+============================
+
+This version uses different names for the directories containing the
+language files. Users should explicitly set the language the next time
+they log in in order to update their user preferences.
