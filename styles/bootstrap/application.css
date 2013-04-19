@@ -10,6 +10,12 @@ img.mimeicon {
 	padding: 2px;
 }
 
+#admin-tools i {
+	font-size: 300%;
+	line-height: 110%;
+	min-height: 100px;
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;
