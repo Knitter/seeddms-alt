@@ -779,7 +779,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><?php printMLText("save") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
 <?php
@@ -801,7 +801,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptKeywords();"><?php printMLText("save") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptKeywords();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
 <?php
@@ -854,7 +854,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><?php printMLText("save") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
 <?php

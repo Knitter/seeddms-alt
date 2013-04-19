@@ -101,7 +101,7 @@ function checkForm()
 		</tr>
 		<tr>
 			<td></td>
-			<td><input class="btn" type="Submit" value="<?php printMLText("save");?>"></td>
+			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
 		</tr>
 	</table>
 </form>

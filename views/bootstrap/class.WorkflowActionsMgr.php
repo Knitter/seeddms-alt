@@ -159,7 +159,7 @@ function showWorkflowAction(selectObj) {
 		</tr>
 		<tr>
 			<td></td>
-			<td><input type="submit" class="btn" value="<?php printMLText("save");?>"></td>
+			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
 		</tr>
 	</form>
 	</table>

@@ -68,7 +68,7 @@ class SeedDMS_View_SetExpires extends SeedDMS_Bootstrap_Style {
 </tr>
 <tr>
 	<td></td>
-	<td><input type="submit" class="btn" value="<?php printMLText("save");?>"></td>
+	<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button></td>
 </tr>
 </table>
 </form>

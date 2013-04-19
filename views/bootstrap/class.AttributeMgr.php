@@ -225,7 +225,7 @@ function showAttributeDefinitions(selectObj) {
 					<tr>
 						<td></td>
 						<td>
-							<input type="submit" class="btn" value="<?php printMLText("save");?>">
+							<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save");?></button>
 						</td>
 					</tr>
 					</form>

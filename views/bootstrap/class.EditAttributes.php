@@ -65,7 +65,7 @@ class SeedDMS_View_EditAttributes extends SeedDMS_Bootstrap_Style {
 			}
 ?>
 		<tr>
-			<td colspan="2"><input type="submit" class="btn" value="<?php printMLText("save") ?>"></td>
+			<td colspan="2"><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button></td>
 		</tr>
 	</table>
 </form>

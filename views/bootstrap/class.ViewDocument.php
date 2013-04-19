@@ -943,7 +943,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 			<tr>
 			<td></td>
-			<td><input type="Submit" class="btn" value="<?php printMLText("save");?>"></td>
+			<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button></td>
 			</tr>
 			</table>
 			</form>
