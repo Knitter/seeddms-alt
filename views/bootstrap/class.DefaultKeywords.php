@@ -146,7 +146,7 @@ function showKeywords(selectObj) {
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="editkeywords">
 									<input name="keywords" type="text" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
-									<button class="btn" title="<?php echo getMLText("save")?>"><i class="icon-download-alt"></i> <?php echo getMLText("save")?></button>
+									<button class="btn" title="<?php echo getMLText("save")?>"><i class="icon-save"></i> <?php echo getMLText("save")?></button>
 									<!--	 <input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"> &nbsp; -->
 									</form>
 									<form style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" >
