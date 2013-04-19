@@ -68,7 +68,7 @@ class SeedDMS_View_SubstituteUser extends SeedDMS_Bootstrap_Style {
 			echo "</td>";
 			echo "<td>";
 			if($currUser->getID() != $user->getID()) {
-				echo "<a class=\"btn\" href=\"../op/op.SubstituteUser.php?userid=".$currUser->getID()."\"><i class=\"icon-random\"></i> ".getMLText('substitute_user')."</a> ";
+				echo "<a class=\"btn\" href=\"../op/op.SubstituteUser.php?userid=".$currUser->getID()."\"><i class=\"icon-exchange\"></i> ".getMLText('substitute_user')."</a> ";
 			}
 			echo "</td>";
 			echo "</tr>";
