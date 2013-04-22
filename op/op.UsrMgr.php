@@ -63,20 +63,26 @@ if ($action == "adduser") {
 	$newUser = $dms->addUser($login, md5($pwd), $name, $email, $settings->_language, $settings->_theme, $comment, $role, $isHidden, $isDisabled, $pwdexpiration);
 	if ($newUser) {
 
+		/* Set user image if uploaded */
 		if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 		{
 			$userfiletype = $_FILES["userfile"]["type"];
 			$userfilename = $_FILES["userfile"]["name"];
 			$lastDotIndex = strrpos(basename($userfilename), ".");
 			$fileType = substr($userfilename, $lastDotIndex);
-			if ($fileType != ".jpg" && $filetype != ".jpeg")
-			{
+			if ($fileType != ".jpg" && $filetype != ".jpeg") {
 				UI::exitError(getMLText("admin_tools"),getMLText("only_jpg_user_images"));
-			}
-			else
-			{
+			} else {
 				resizeImage($_FILES["userfile"]["tmp_name"]);
 				$newUser->setImage($_FILES["userfile"]["tmp_name"], $userfiletype);
+			}
+		}
+
+		/* Set groups if set */
+		if(isset($_POST["groups"]) && $_POST["groups"]) {
+			foreach($_POST["groups"] as $groupid) {
+				$group = $dms->getGroup($groupid);
+				$group->addUser($newUser);
 			}
 		}
 	}
@@ -259,6 +265,26 @@ else if ($action == "edituser") {
 	if (isset($_POST["grpApprovers"])) foreach ($_POST["grpApprovers"] as $appID) 
 		$editedUser->setMandatoryApprover($appID,true);
 	
+	/* Updates groups */
+	if(isset($_POST["groups"]))
+		$newgroups = $_POST["groups"];
+	else
+		$newgroups = array();
+	$oldgroups = array();
+	foreach($editedUser->getGroups() as $k)
+		$oldgroups[] = $k->getID();
+
+	$addgroups = array_diff($newgroups, $oldgroups);
+	foreach($addgroups as $groupid) {
+		$group = $dms->getGroup($groupid);
+		$group->addUser($editedUser);
+	}
+	$delgroups = array_diff($oldgroups, $newgroups);
+	foreach($delgroups as $groupid) {
+		$group = $dms->getGroup($groupid);
+		$group->removeUser($editedUser);
+	}
+
 	add_log_line(".php&action=edituser&userid=".$userid);
 
 }
@@ -271,19 +297,19 @@ function resizeImage($imageFile) {
 	// and the output quality is low. Now uses the function imagecreatetruecolor(),
 	// though, so at least the pictures are in colour.
 	
-	// Originalbild einlesen
+	// read original image
 	$origImg = imagecreatefromjpeg($imageFile);
 	$width = imagesx($origImg);
 	$height = imagesy($origImg);
-	// Thumbnail im Speicher erzeugen
+	// Create thumbnail in memory
 	$newHeight = 150;
 	$newWidth = ($width/$height) * $newHeight;
 	$newImg = imagecreatetruecolor($newWidth, $newHeight);
-	// Verkleinern
+	// resize
 	imagecopyresized($newImg, $origImg, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-	// In File speichern 
+	// save to file
 	imagejpeg($newImg, $imageFile);
-	// Aufräumen
+	// Clean up
 	imagedestroy($origImg);
 	imagedestroy($newImg);
 	

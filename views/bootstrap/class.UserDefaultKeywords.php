@@ -120,7 +120,7 @@ function showKeywords(selectObj) {
 							<input type="hidden" name="action" value="editcategory">
 							<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
 							<input name="name" type="text" value="<?php echo htmlspecialchars($category->getName())?>">
-							<input type="submit" class="btn" value="<?php printMLText("save");?>">
+  						<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 						</form>
 					</td>
 				</tr>

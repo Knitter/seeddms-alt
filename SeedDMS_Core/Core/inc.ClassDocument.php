@@ -3610,6 +3610,31 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return $workflowlog;
 	} /* }}} */
 
+	/**
+	 * Check if the document content needs an action by a user
+	 *
+	 * This method will return true if document content is in a transition
+	 * which can be triggered by the given user.
+	 *
+	 * @param SeedDMS_Core_User $user
+	 * @return boolean true is action is needed
+	 */
+	function needsWorkflowAction($user) { /* {{{ */
+		$needwkflaction = false;
+		if($this->_workflow) {
+			if (!$this->_workflowState)
+				$this->getWorkflowState();
+			$workflowstate = $this->_workflowState;
+			$transitions = $this->_workflow->getNextTransitions($workflowstate);
+			foreach($transitions as $transition) {
+				if($this->triggerWorkflowTransitionIsAllowed($user, $transition)) {
+					$needwkflaction = true;
+				}
+			}
+		}
+		return $needwkflaction;
+	} /* }}} */
+
 } /* }}} */
 
 

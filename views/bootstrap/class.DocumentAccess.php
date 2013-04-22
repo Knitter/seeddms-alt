@@ -99,7 +99,7 @@ function checkForm()
 	}
 	?>
 	</select>
-	<button type="submit" class="btn"><i class="icon-download-alt"></i> <?php printMLText("save")?></button>
+	<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 	</form>
 <?php
 
@@ -147,7 +147,7 @@ function checkForm()
 	<input type="Hidden" name="documentid" value="<?php print $document->getId();?>">
 	<input type="Hidden" name="action" value="setdefault">
 	<?php $this->printAccessModeSelection($document->getDefaultAccess()); ?>
-	<button type="submit" class="btn"><i class="icon-download-alt"></i> <?php printMLText("save")?></button>
+	<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 </form>
 
 <?php
@@ -177,7 +177,7 @@ function checkForm()
 				print "<input type=\"Hidden\" name=\"documentid\" value=\"".$document->getId()."\">\n";
 				print "<input type=\"hidden\" name=\"action\" value=\"editaccess\">\n";
 				print "<input type=\"hidden\" name=\"userid\" value=\"".$userObj->getID()."\">\n";
-				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-download-alt\"></i> ".getMLText("save")."</button>";
+				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-save\"></i> ".getMLText("save")."</button>";
 				print "</td>\n";
 				print "</form>\n";
 				print "<form action=\"../op/op.DocumentAccess.php\">\n";
@@ -208,7 +208,7 @@ function checkForm()
 				print "<input type=\"hidden\" name=\"documentid\" value=\"".$document->getId()."\">";
 				print "<input type=\"hidden\" name=\"action\" value=\"editaccess\">";
 				print "<input type=\"hidden\" name=\"groupid\" value=\"".$groupObj->getID()."\">";
-				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-download-alt\"></i> ".getMLText("save")."</button>";
+				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-save\"></i> ".getMLText("save")."</button>";
 				print "</span></td>\n";
 				print "</form>";
 				print "<form action=\"../op/op.DocumentAccess.php\">\n";

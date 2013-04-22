@@ -1,8 +1,6 @@
 <?php
 //    MyDMS. Document Management System
-//    Copyright (C) 2002-2005 Markus Westphal
-//    Copyright (C) 2006-2008 Malcolm Cowe
-//    Copyright (C) 2010-2013 Uwe Steinmann
+//    Copyright (C) 2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -18,17 +16,28 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-class SeedDMS_Version {
+include("../inc/inc.Settings.php");
+include("../inc/inc.Utils.php");
+include("../inc/inc.DBInit.php");
+include("../inc/inc.Language.php");
+include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassAccessOperation.php");
+include("../inc/inc.Authentication.php");
 
-	var $_number = "4.2.0";
-	var $_string = "SeedDMS";
-
-	function SeedDMS_Version() {
-		return;
-	}
-
-	function banner() {
-		return $this->_string .", ". $this->_number;
-	}
+if (!$user->isAdmin()) {
+	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
+
+$allUsers = $dms->getAllUsers($settings->_sortUsersInList);
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$view = UI::factory($theme, $tmp[1]);
+if($view) {
+	$view->setParam('dms', $dms);
+	$view->setParam('user', $user);
+	$view->setParam('allusers', $allUsers);
+	$view->show();
+	exit;
+}
+
 ?>

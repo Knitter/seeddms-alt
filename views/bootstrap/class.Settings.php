@@ -520,7 +520,7 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php
 if(is_writeable($settings->_configFilePath)) {
 ?>
-  <input type="Submit" class="btn" value="<?php printMLText("save");?>" />
+  <button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 <?php
 }
 ?>

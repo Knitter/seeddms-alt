@@ -36,6 +36,11 @@ if(!$resArr = $session->load($dms_session)) {
 
 /* Load user data */
 $user = $dms->getUser($resArr["userID"]);
+if($user->isAdmin()) {
+	if($resArr["su"]) {
+		$user = $dms->getUser($resArr["su"]);
+	}
+}
 if (!is_object($user)) {
 	setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
 	header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);

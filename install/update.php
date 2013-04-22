@@ -41,6 +41,7 @@ UI::htmlStartPage('Database update');
 UI::contentHeading("SeedDMS Installation for version ".$_GET['version']);
 UI::contentContainerStart();
 
+$sqlfile = "update.sql";
 switch($settings->_dbDriver) {
 	case 'mysql':
 	case 'mysqli':
@@ -49,6 +50,8 @@ switch($settings->_dbDriver) {
 		break;
 	case 'sqlite':
 		$dsn = $settings->_dbDriver.":".$settings->_dbDatabase;
+		if(file_exists('update-'.$_GET['version'].'/update-sqlite3.sql'))
+			$sqlfile = "update-sqlite3.sql";
 		break;
 }
 $db = new PDO($dsn, $settings->_dbUser, $settings->_dbPass);
@@ -61,22 +64,26 @@ $res = $db->query('select * from tblVersion');
 if($rec = $res->fetch(PDO::FETCH_ASSOC)) {
 	if($_GET['version'] > $rec['major'].'.'.$rec['minor'].'.'.$rec['subminor']) {
 
-		$queries = file_get_contents('update-'.$_GET['version'].'/update.sql');
-		$queries = explode(";", $queries);
+		if(file_exists('update-'.$_GET['version'].'/'.$sqlfile)) {
+			$queries = file_get_contents('update-'.$_GET['version'].'/'.$sqlfile);
+			$queries = explode(";", $queries);
 
-		// execute queries
-		if($queries) {
-			echo "<h3>Updating database schema</h3>";
-			foreach($queries as $query) {
-				$query = trim($query);
-				if (!empty($query)) {
-					echo $query."<br />";
-					if(false === $db->exec($query)) {
-						$e = $db->ErrorInfo();
-						$errorMsg .= $e[2] . "<br/>";
+			// execute queries
+			if($queries) {
+				echo "<h3>Updating database schema</h3>";
+				foreach($queries as $query) {
+					$query = trim($query);
+					if (!empty($query)) {
+						echo $query."<br />";
+						if(false === $db->exec($query)) {
+							$e = $db->ErrorInfo();
+							$errorMsg .= $e[2] . "<br/>";
+						}
 					}
 				}
 			}
+		} else {
+			echo "<p>SQL file for update missing!</p>";
 		}
 	} else {
 		echo "<p>Database schema already up to date.</p>";
