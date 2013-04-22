@@ -136,6 +136,7 @@ $text = array(
 'choose_workflow' => "Choose workflow",
 'choose_workflow_state' => "Choose workflow state",
 'choose_workflow_action' => "Choose workflow action",
+'clipboard' => "Clipboard",
 'close' => "Close",
 'comment' => "Comment",
 'comment_for_current_version' => "Version comment",
