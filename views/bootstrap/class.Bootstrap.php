@@ -1042,7 +1042,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	function printClipboard($clipboard){ /* {{{ */
 		$dms = $this->params['dms'];
-		$this->contentHeading("Clipboard", true);
+		$this->contentHeading(getMLText("clipboard"), true);
 		echo "<div class=\"well\" ondragover=\"allowDrop(event)\" ondrop=\"onAddClipboard(event)\">\n";
 		$clipboard = $this->params['session']->getClipboard();
 //		print_r($clipboard);
