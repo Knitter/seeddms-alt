@@ -323,14 +323,6 @@ function _add_log_line($msg="") { /* {{{ */
 		return $txtpath;
 	} /* }}} */
 	
-function filterDocumentLinks($user, $links) { /* {{{ */
-	$tmp = array();
-	foreach ($links as $link)
-		if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin())
-			array_push($tmp, $link);
-	return $tmp;
-} /* }}} */
-
 function showtree() { /* {{{ */
 	global $settings;
 	

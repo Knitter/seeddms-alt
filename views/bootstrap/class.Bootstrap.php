@@ -39,6 +39,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		if($this->extraheader)
@@ -60,6 +61,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->footNote();
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
+		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
+			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		echo "</body>\n</html>\n";
@@ -114,60 +117,66 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "   </a>\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
-		echo "   <div class=\"nav-collapse nav-col1\">\n";
-		echo "   <ul class=\"nav pull-right\">\n";
-		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("signed_in_as")." ".htmlspecialchars($this->params['user']->getFullName())."<b class=\"caret\"></b></a>\n";
-		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-		if (!$this->params['user']->isGuest()) {
-			echo "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
-			echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
-			echo "    <li class=\"divider\"></li>\n";
-		}
-		if($this->params['enablelanguageselector']) {
-			echo "    <li class=\"dropdown-submenu\">\n";
-			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("language")."</a>\n";
+			echo "   <div class=\"nav-collapse nav-col1\">\n";
+			echo "   <ul class=\"nav pull-right\">\n";
+			echo "    <li class=\"dropdown\">\n";
+			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".($this->params['session']->getSu() ? getMLText("switched_to") : getMLText("signed_in_as"))." '".htmlspecialchars($this->params['user']->getFullName())."' <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-			$languages = getLanguages();
-			foreach ($languages as $currLang) {
-				if($this->params['session']->getLanguage() == $currLang)
-					echo "<li class=\"active\">";
-				else
-					echo "<li>";
-				echo "<a href=\"../op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
-				echo getMLText($currLang)."</a></li>\n";
+			if (!$this->params['user']->isGuest()) {
+				echo "    <li><a href=\"../out/out.MyDocuments.php?inProcess=1\">".getMLText("my_documents")."</a></li>\n";
+				echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
+				echo "    <li class=\"divider\"></li>\n";
+			}
+			if($this->params['enablelanguageselector']) {
+				echo "    <li class=\"dropdown-submenu\">\n";
+				echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("language")."</a>\n";
+				echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+				$languages = getLanguages();
+				foreach ($languages as $currLang) {
+					if($this->params['session']->getLanguage() == $currLang)
+						echo "<li class=\"active\">";
+					else
+						echo "<li>";
+					echo "<a href=\"../op/op.SetLanguage.php?lang=".$currLang."&referer=".$_SERVER["REQUEST_URI"]."\">";
+					echo getMLText($currLang)."</a></li>\n";
+				}
+				echo "     </ul>\n";
+				echo "    </li>\n";
+				if($this->params['user']->isAdmin())
+					echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
+				echo "    <li class=\"divider\"></li>\n";
+			}
+			if($this->params['session']->getSu()) {
+				echo "    <li><a href=\"../op/op.ResetSu.php\">".getMLText("sign_out_user")."</a></li>\n";
+			} else {
+				echo "    <li><a href=\"../op/op.Logout.php\">".getMLText("sign_out")."</a></li>\n";
 			}
 			echo "     </ul>\n";
 			echo "    </li>\n";
-			echo "    <li class=\"divider\"></li>\n";
-		}
-		echo "    <li><a href=\"../op/op.Logout.php\">".getMLText("sign_out")."</a></li>\n";
-		echo "     </ul>\n";
-		echo "    </li>\n";
-		echo "   </ul>\n";
+			echo "   </ul>\n";
 
-		echo "   <ul class=\"nav\">\n";
-//		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
-//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
-		if ($this->params['enablecalendar']) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
-		if ($this->params['user']->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
-		echo "    <li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
-		echo "   </ul>\n";
-		echo "     <form action=\"../op/op.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
-		if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
-			echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
-		}
-		echo "      <input type=\"hidden\" name=\"navBar\" value=\"1\" />";
-		echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"1\" />";
-		echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"2\" />";
-		echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
-		echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
-		if($this->params['enablefullsearch']) {
-			echo "      <label class=\"checkbox\" style=\"color: #999999;\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
-		}
-//		echo "      <input type=\"submit\" value=\"".getMLText("search")."\" id=\"searchButton\" class=\"btn\"/>";
-		echo "</form>\n";
-		echo "    </div>\n";
+			echo "   <ul class=\"nav\">\n";
+	//		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
+	//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
+			if ($this->params['enablecalendar']) echo "    <li><a href=\"../out/out.Calendar.php?mode=".$this->params['calendardefaultview']."\">".getMLText("calendar")."</a></li>\n";
+			if ($this->params['user']->isAdmin()) echo "    <li><a href=\"../out/out.AdminTools.php\">".getMLText("admin_tools")."</a></li>\n";
+			echo "    <li><a href=\"../out/out.Help.php\">".getMLText("help")."</a></li>\n";
+			echo "   </ul>\n";
+			echo "     <form action=\"../op/op.Search.php\" class=\"form-inline navbar-search pull-left\" autocomplete=\"off\">";
+			if ($folder!=null && is_object($folder) && !strcasecmp(get_class($folder), "SeedDMS_Core_Folder")) {
+				echo "      <input type=\"hidden\" name=\"folderid\" value=\"".$folder->getID()."\" />";
+			}
+			echo "      <input type=\"hidden\" name=\"navBar\" value=\"1\" />";
+			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"1\" />";
+			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"2\" />";
+			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
+			echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
+			if($this->params['enablefullsearch']) {
+				echo "      <label class=\"checkbox\" style=\"color: #999999;\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
+			}
+	//		echo "      <input type=\"submit\" value=\"".getMLText("search")."\" id=\"searchButton\" class=\"btn\"/>";
+			echo "</form>\n";
+			echo "    </div>\n";
 		}
 		echo "  </div>\n";
 		echo " </div>\n";
@@ -359,7 +368,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "   <ul class=\"nav\">\n";
 
 		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")."<b class=\"caret\"></b></a>\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("user_group_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
@@ -369,7 +378,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("definitions")."<b class=\"caret\"></b></a>\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("definitions")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li><a href=\"../out/out.DefaultKeywords.php\">".getMLText("global_default_keywords")."</a></li>\n";
 		echo "     <li><a href=\"../out/out.Categories.php\">".getMLText("global_document_categories")."</a></li>\n";
@@ -386,7 +395,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		if($this->params['enablefullsearch']) {
 			echo "   <ul class=\"nav\">\n";
 			echo "    <li class=\"dropdown\">\n";
-			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")."<b class=\"caret\"></b></a>\n";
+			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("fullsearch")." <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 			echo "      <li><a href=\"../out/out.Indexer.php\">".getMLText("update_fulltext_index")."</a></li>\n";
 			echo "      <li><a href=\"../out/out.CreateIndex.php\">".getMLText("create_fulltext_index")."</a></li>\n";
@@ -398,7 +407,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")."<b class=\"caret\"></b></a>\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("backup_log_management")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li><a href=\"../out/out.BackupTools.php\">".getMLText("backup_tools")."</a></li>\n";
 		if ($this->params['logfileenable'])
@@ -409,7 +418,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 		echo "   <ul class=\"nav\">\n";
 		echo "    <li class=\"dropdown\">\n";
-		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")."<b class=\"caret\"></b></a>\n";
+		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li id=\"first\"><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
@@ -568,14 +577,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$icons["mpg"]  = "video.png";
 		$icons["avi"]  = "video.png";
 		$icons["tex"]  = "tex.png";
-		$icons["ods"]  = "ooo_spreadsheet.png";
-		$icons["ots"]  = "ooo_spreadsheet.png";
-		$icons["sxc"]  = "ooo_spreadsheet.png";
-		$icons["stc"]  = "ooo_spreadsheet.png";
-		$icons["odt"]  = "ooo_textdocument.png";
-		$icons["ott"]  = "ooo_textdocument.png";
-		$icons["sxw"]  = "ooo_textdocument.png";
-		$icons["stw"]  = "ooo_textdocument.png";
+		$icons["ods"]  = "x-office-spreadsheet.png";
+		$icons["ots"]  = "x-office-spreadsheet.png";
+		$icons["sxc"]  = "x-office-spreadsheet.png";
+		$icons["stc"]  = "x-office-spreadsheet.png";
+		$icons["odt"]  = "x-office-document.png";
+		$icons["ott"]  = "x-office-document.png";
+		$icons["sxw"]  = "x-office-document.png";
+		$icons["stw"]  = "x-office-document.png";
 		$icons["odp"]  = "ooo_presentation.png";
 		$icons["otp"]  = "ooo_presentation.png";
 		$icons["sxi"]  = "ooo_presentation.png";
@@ -770,7 +779,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><?php printMLText("save") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
 <?php
@@ -792,7 +801,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptKeywords();"><?php printMLText("save") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptKeywords();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
 <?php
@@ -845,7 +854,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><?php printMLText("save") ?></button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
   </div>
 </div>
 <?php
@@ -945,15 +954,20 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		print "<li>\n";
 
 		if (count($subFolders) > 0){
-			print "<a href=\"javascript:toggleTree(".$folderID.")\"><i name=\"treedot".$folderID."\" class=\"";	
+			print "<a href=\"javascript:toggleTree(".$folderID.")\">";
+			print "<i name=\"treedot".$folderID."\" class=\"";	
 			if ($is_open) print "icon-minus-sign";
 			else print "icon-plus-sign";
-			print "\" ></i></a>\n";
+			print "\" ></i>";
+			print "</a>\n";
 		}
 		else{
-			print "<i class=\"icon-stop\"></i>\n";
+			print "<i class=\"icon-\"></i>\n";
 		}
 		if ($folder->getAccessMode($this->params['user']) >= $accessMode) {
+
+			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >";
+			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >";
 
 			if ($folderID != $currentFolderID){
 			
@@ -962,10 +976,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 				print " rel=\"folder_".$folder->getID()."\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\"";
 				print ">";
 
-			}else print "<span class=\"selectedfoldertree\">";
+			} else print "<span class=\"selectedfoldertree\">";
 			
-			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >".htmlspecialchars($folder->getName());
-			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >".htmlspecialchars($folder->getName());
+			print htmlspecialchars($folder->getName());
 
 			if ($folderID != $currentFolderID) print "</a>\n";
 			else print "</span>";
@@ -1045,14 +1058,14 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
 						print "<tr rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
 					//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-						print "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><i class=\"icon-folder-close\"></i></a></td>\n";
+						print "<td><a rel=\"folder_".$folder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
 						print "<td><a href=\"out.ViewFolder.php?folderid=".$folder->getID()."&showtree=".showtree()."\">" . htmlspecialchars($folder->getName()) . "</a>";
 						if($comment) {
 							print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 						}
 						print "</td>\n";
 						print "<td>\n";
-						print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$folderid."&type=folder\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a>";
+						print "<div class=\"list-action\"><a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$folderid."&type=folder\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
 						print "</td>\n";
 						print "</tr>\n";
 					}

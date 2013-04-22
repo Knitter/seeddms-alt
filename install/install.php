@@ -116,7 +116,7 @@ function fileExistsInIncludePath($file) { /* {{{ */
  * Load default settings + set
  */
 define("SEEDDMS_INSTALL", "on");
-define("SEEDDMS_VERSION", "4.1.2");
+define("SEEDDMS_VERSION", "4.2.0");
 
 require_once('../inc/inc.ClassSettings.php');
 
@@ -175,7 +175,7 @@ if(isset($settings->_extraPath))
  */
 $theme = "blue";
 include("../inc/inc.Language.php");
-include "../languages/English/lang.inc";
+include "../languages/en_GB/lang.inc";
 include("../inc/inc.ClassUI.php");
 
 

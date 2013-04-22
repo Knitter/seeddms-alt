@@ -77,7 +77,7 @@ class SeedDMS_Session {
 		if (!$this->db->getResult($queryStr))
 			return false;
 		$this->id = $id;
-		$this->data = array('userid'=>$resArr[0]['userID'], 'theme'=>$resArr[0]['theme'], 'lang'=>$resArr[0]['language'], 'id'=>$resArr[0]['id'], 'lastaccess'=>$resArr[0]['lastAccess'], 'flashmsg'=>'');
+		$this->data = array('userid'=>$resArr[0]['userID'], 'theme'=>$resArr[0]['theme'], 'lang'=>$resArr[0]['language'], 'id'=>$resArr[0]['id'], 'lastaccess'=>$resArr[0]['lastAccess'], 'flashmsg'=>'', 'su'=>$resArr[0]['su']);
 		if($resArr[0]['clipboard'])
 			$this->data['clipboard'] = json_decode($resArr[0]['clipboard'], true);
 		else
@@ -89,15 +89,15 @@ class SeedDMS_Session {
 	 * Create a new session and saving the given data into the database
 	 *
 	 * @param array $data data saved in session (the only fields supported
-	 *        are userid, theme, language)
+	 *        are userid, theme, language, su)
 	 * @return string/boolean id of session of false in case of an error
 	 */
 	function create($data) { /* {{{ */
 		$id = "" . rand() . time() . rand() . "";
 		$id = md5($id);
 		$lastaccess = time();
-		$queryStr = "INSERT INTO tblSessions (id, userID, lastAccess, theme, language) ".
-		  "VALUES ('".$id."', ".$data['userid'].", ".$lastaccess.", '".$data['theme']."', '".$data['lang']."')";
+		$queryStr = "INSERT INTO tblSessions (id, userID, lastAccess, theme, language, su) ".
+		  "VALUES ('".$id."', ".$data['userid'].", ".$lastaccess.", '".$data['theme']."', '".$data['lang']."', 0)";
 		if (!$this->db->getResult($queryStr)) {
 			return false;
 		}
@@ -105,6 +105,7 @@ class SeedDMS_Session {
 		$this->data = $data;
 		$this->data['id'] = $id;
 		$this->data['lastaccess'] = $lastaccess;
+		$this->data['su'] = $su;
 		$this->data['clipboard'] = array('docs'=>array(), 'folders'=>array());
 		return $id;
 	} /* }}} */
@@ -186,6 +187,47 @@ class SeedDMS_Session {
 	 */
 	function getLanguage() { /* {{{ */
 		return $this->data['lang'];
+	} /* }}} */
+
+	/**
+	 * Substitute user of session
+	 *
+	 * @param integer $su user id
+	 */
+	function setSu($su) { /* {{{ */
+		/* id is only set if load() was called before */
+		if($this->id) {
+			$queryStr = "UPDATE tblSessions SET su = " . (int) $su . " WHERE id = " . $this->db->qstr($this->id);
+			if (!$this->db->getResult($queryStr))
+				return false;
+			$this->data['su'] = (int) $su;	
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Reset substitute user of session
+	 *
+	 * @param integer $su user id
+	 */
+	function resetSu() { /* {{{ */
+		/* id is only set if load() was called before */
+		if($this->id) {
+			$queryStr = "UPDATE tblSessions SET su = 0 WHERE id = " . $this->db->qstr($this->id);
+			if (!$this->db->getResult($queryStr))
+				return false;
+			$this->data['su'] = 0;	
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Get substituted user id of session
+	 *
+	 * @return integer substituted user id
+	 */
+	function getSu() { /* {{{ */
+		return $this->data['su'];
 	} /* }}} */
 
 	/**

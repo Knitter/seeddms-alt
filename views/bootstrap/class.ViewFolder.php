@@ -80,6 +80,9 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$enableClipboard = $this->params['enableClipboard'];
 		$showtree = $this->params['showtree'];
 		$cachedir = $this->params['cachedir'];
+		$workflowmode = $this->params['workflowmode'];
+		$enableRecursiveCount = $this->params['enableRecursiveCount'];
+		$maxRecursiveCount = $this->params['maxRecursiveCount'];
 
 		$folderid = $folder->getId();
 
@@ -193,13 +196,32 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			}
 			print "</td>\n";
 			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			print "<td colspan=\"1\"><small>".count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents")."</small></td>";
+			print "<td colspan=\"1\"><small>";
+			if($enableRecursiveCount) {
+				if($user->isAdmin()) {
+					/* No need to check for access rights in countChildren() for
+					 * admin. So pass 0 as the limit.
+					 */
+					$cc = $subFolder->countChildren($user, 0);
+					print $cc['folder_count']." ".getMLText("folders")."<br />".$cc['document_count']." ".getMLText("documents");
+				} else {
+					$cc = $subFolder->countChildren($user, $maxRecursiveCount);
+					if($maxRecursiveCount > 5000)
+						$rr = 100.0;
+					else
+						$rr = 10.0;
+					print (!$cc['folder_precise'] ? '~'.(round($cc['folder_count']/$rr)*$rr) : $cc['folder_count'])." ".getMLText("folders")."<br />".(!$cc['document_precise'] ? '~'.(round($cc['document_count']/$rr)*$rr) : $cc['document_count'])." ".getMLText("documents");
+				}
+			} else {
+				print count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents");
+			}
+			print "</small></td>";
 			print "<td></td>";
 			print "<td>";
 ?>
-     <p><a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
-     <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a></p>
-     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-bookmark"></i></a></p>
+     <div class="list-action"><a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
+     <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a>
+     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a></div>
 <?php
 			print "</td>";
 			print "</tr>\n";
@@ -216,13 +238,20 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				$previewer->createPreview($latestContent);
 				$version = $latestContent->getVersion();
 				$status = $latestContent->getStatus();
+				$needwkflaction = false;
+				if($workflowmode == 'advanced') {
+					$workflow = $latestContent->getWorkflow();
+					if($workflow) {
+						$needwkflaction = $latestContent->needsWorkflowAction($user);
+					}
+				}
 				
 				/* Retrieve attacheѕ files */
 				$files = $document->getDocumentFiles();
 
 				/* Retrieve linked documents */
 				$links = $document->getDocumentLinks();
-				$links = filterDocumentLinks($user, $links);
+				$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
 				print "<tr>";
 
@@ -244,9 +273,15 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print "</td>\n";
 				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 				print "<td>";
+				$attentionstr = '';
 				if ( $document->isLocked() ) {
-					print "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
+					$attentionstr .= "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
 				}
+				if ( $needwkflaction ) {
+					$attentionstr .= "<img src=\"".$this->getImgPath("attention.gif")."\" title=\"". getMLText("workflow").": "."\"> ";
+				}
+				if($attentionstr)
+					print $attentionstr."<br />";
 				print "<small>";
 				if(count($files))
 					print count($files)." ".getMLText("linked_files")."<br />";
@@ -256,9 +291,9 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print "<td>".$version."</td>";
 				print "<td>";
 ?>
-     <p><a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
-     <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a></p>
-     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-bookmark"></i></a></p>
+     <div class="list-action"><a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
+     <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
+     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a></div>
 <?php
 				print "</td>";
 				print "</tr>\n";

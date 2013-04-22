@@ -12,7 +12,7 @@
       footNote = "SeedDMS free document management system - www.seeddms.org"
       printDisclaimer="true"
       language = "en_GB"
-      theme = "clean"
+      theme = "bootstrap"
     >  
     </display>
     <!-- strictFormCheck: Strict form checking. If set to true, then all fields in the form will be checked for a value. If set to false, then (most) comments and keyword fields become optional. Comments are always required when submitting a review or overriding document status.

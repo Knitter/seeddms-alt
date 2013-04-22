@@ -173,12 +173,12 @@ function chooseKeywords(target) {
         <label class="checkbox inline">
 				  <input type="checkbox" name="creationdate" value="true" /><?php printMLText("between");?><br>
         </label>
-        <span class="input-append date" id="createstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+        <span class="input-append date" id="createstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span3" size="16" name="createstart" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
 				<?php printMLText("and"); ?>
-        <span class="input-append date" id="createenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+        <span class="input-append date" id="createenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span3" size="16" name="createend" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>
@@ -190,12 +190,12 @@ function chooseKeywords(target) {
         <label class="checkbox inline">
 				  <input type="checkbox" name="expirationdate" value="true" /><?php printMLText("between");?><br>
         </label>
-        <span class="input-append date" id="expirationstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+        <span class="input-append date" id="expirationstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span3" size="16" name="expirationstart" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
 				<?php printMLText("and"); ?>
-        <span class="input-append date" id="expirationenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+        <span class="input-append date" id="expirationenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span3" size="16" name="expirationend" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>

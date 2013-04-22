@@ -143,6 +143,10 @@ class Settings { /* {{{ */
 	var $_firstDayOfWeek = 0;
 	// enable/disable display of the folder tree
 	var $_enableFolderTree = true;
+	// count documents and folders for folderview recursively
+	var $_enableRecursiveCount = false;
+	// maximum number of documents or folders when counted recursively
+	var $_maxRecursiveCount = 10000;
 	// enable/disable language selection menu
 	var $_enableLanguageSelector = true;
 	// expandFolderTree
@@ -301,6 +305,8 @@ class Settings { /* {{{ */
 		$this->_enableEmail = Settings::boolVal($tab["enableEmail"]);
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
+		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
+		$this->_maxRecursiveCount = intval($tab["maxRecursiveCount"]);
 		$this->_enableLanguageSelector = Settings::boolVal($tab["enableLanguageSelector"]);
 		$this->_enableFullSearch = Settings::boolVal($tab["enableFullSearch"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
@@ -549,6 +555,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableEmail", $this->_enableEmail);
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
+    $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);
+    $this->setXMLAttributValue($node, "maxRecursiveCount", $this->_maxRecursiveCount);
     $this->setXMLAttributValue($node, "enableLanguageSelector", $this->_enableLanguageSelector);
     $this->setXMLAttributValue($node, "enableFullSearch", $this->_enableFullSearch);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);

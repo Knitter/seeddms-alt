@@ -62,6 +62,9 @@ if($view) {
 	$view->setParam('enableClipboard', false /*$settings->_enableClipboard */);
 	$view->setParam('showtree', showtree());
 	$view->setParam('cachedir', $settings->_cacheDir);
+	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('enableRecursiveCount', $settings->_enableRecursiveCount);
+	$view->setParam('maxRecursiveCount', $settings->_maxRecursiveCount);
 	$view->show();
 	exit;
 }

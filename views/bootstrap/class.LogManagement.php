@@ -31,13 +31,15 @@ require_once("class.Bootstrap.php");
  */
 class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 
-	function filelist($entries) { /* {{{ */
+	function filelist($entries, $mode) { /* {{{ */
 		$print_header = true;
 		foreach ($entries as $entry){
 			
 			if ($print_header){
+				print "<form action=\"out.RemoveLog.php\" method=\"get\">\n";
 				print "<table class=\"table-condensed\">\n";
 				print "<thead>\n<tr>\n";
+				print "<th></th>\n";
 				print "<th>".getMLText("name")."</th>\n";
 				print "<th>".getMLText("creation_date")."</th>\n";
 				print "<th>".getMLText("file_size")."</th>\n";
@@ -47,13 +49,14 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 			}
 					
 			print "<tr>\n";
+			print "<td><input type=\"checkbox\" name=\"logname[]\" value=\"".$entry."\"/></td>\n";
 			print "<td><a href=\"out.LogManagement.php?logname=".$entry."\">".$entry."</a></td>\n";
 			print "\n";
 			print "<td>".getLongReadableDate(filectime($this->contentdir.$entry))."</td>\n";
 			print "<td>".SeedDMS_Core_File::format_filesize(filesize($this->contentdir.$entry))."</td>\n";
 			print "<td>";
 			
-			print "<a href=\"out.RemoveLog.php?logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("rm_file")."</a>";
+			print "<a href=\"out.RemoveLog.php?mode=".$mode."&logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("rm_file")."</a>";
 			print "&nbsp;";
 			print "<a href=\"../op/op.Download.php?logname=".$entry."\" class=\"btn btn-mini\"><i class=\"icon-download\"></i> ".getMLText("download")."</a>";
 			print "&nbsp;";
@@ -63,7 +66,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		}
 
 		if ($print_header) printMLText("empty_notify_list");
-		else print "</table>\n";
+		else print "<tr><td><i class=\"icon-arrow-up\"></i></td><td colspan=\"2\"><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('remove_marked_files')."</button></td></tr></table></form>\n";
 	} /* }}} */
 
 	function show() { /* {{{ */
@@ -71,6 +74,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$this->contentdir = $this->params['contentdir'];
 		$logname = $this->params['logname'];
+		$mode = $this->params['mode'];
 
 		if(!$logname) {
 		$this->htmlStartPage(getMLText("log_management"));
@@ -103,21 +107,21 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 		}
 ?>
   <ul class="nav nav-tabs" id="logtab">
-	  <li class="active"><a data-target="#regular" data-toggle="tab">web</a></li>
-	  <li><a data-target="#webdav" data-toggle="tab">webdav</a></li>
+	  <li <?php echo ($mode == 'web') ? 'class="active"' : ''; ?>><a data-target="#web" data-toggle="tab">web</a></li>
+	  <li <?php echo ($mode == 'webdav') ? 'class="active"' : ''; ?>><a data-target="#webdav" data-toggle="tab">webdav</a></li>
 	</ul>
 	<div class="tab-content">
-	  <div class="tab-pane active" id="regular">
+	  <div class="tab-pane <?php echo ($mode == 'web') ? 'active' : ''; ?>" id="web">
 <?php
 		$this->contentContainerStart();
-		$this->filelist($entries);
+		$this->filelist($entries, 'web');
 		$this->contentContainerEnd();
 ?>
 		</div>
-	  <div class="tab-pane" id="webdav">
+	  <div class="tab-pane <?php echo ($mode == 'webdav') ? 'active' : ''; ?>" id="webdav">
 <?php
 		$this->contentContainerStart();
-		$this->filelist($wentries);
+		$this->filelist($wentries, 'webdav');
 		$this->contentContainerEnd();
 ?>
 		</div>

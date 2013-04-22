@@ -1,10 +1,17 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.2.0
 --------------------------------------------------------------------------------
+- sqlite3 database can be updated
+- use awesome font for icons
+- currently logged in user can be changed temporarily if being admin
 - count documents/folders recursively for output in folder list (Bug #43)
 - remove multiple log files at once (Bug #35)
 - return to same tab on LogManagement page as before removing a log
   file (Bug #30)
+- new bootstrap datepicker with localization (Bug #36) 
+- users can be assigned to a group when edited or added (Bug #39)
+- place a message on ViewDocument page if the document needs an action
+  in the workflow (Bug #4)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.1.3
@@ -13,6 +20,7 @@
 - fixed typo in variable name which cause a PHP warning when sending the
   notification mail after updating a folder comment
 - fixed code to determine required approver and reviewer
+- fixed wrong language setting in installer (Bug #45)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.1.2

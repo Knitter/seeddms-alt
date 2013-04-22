@@ -555,6 +555,94 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		return $this->_documents;
 	} /* }}} */
 
+	/**
+	 * Count all documents and subfolders of the folder
+	 *
+	 * This function also counts documents and folders of subfolders, so
+	 * basically it works like recursively counting children.
+	 *
+	 * This function checks for access rights up the given limit. If more
+	 * documents or folders are found, the returned value will be the number
+	 * of objects available and the precise flag in the return array will be
+	 * set to false. This number should not be revelead to the
+	 * user, because it allows to gain information about the existens of
+	 * objects without access right.
+	 * Setting the parameter $limit to 0 will turn off access right checking
+	 * which is reasonable if the $user is an administrator.
+	 *
+	 * @param string $orderby if set to 'n' the list is ordered by name, otherwise
+	 *        it will be ordered by sequence
+	 * @param integer $limit maximum number of folders and documents that will
+	 *        be precisly counted by taken the access rights into account
+	 * @return array array with four elements 'document_count', 'folder_count'
+	 *        'document_precise', 'folder_precise' holding
+	 *        the counted number and a flag if the number is precise.
+	 */
+	function countChildren($user, $limit=10000) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$pathPrefix="";
+		$path = $this->getPath();
+		foreach ($path as $f) {
+			$pathPrefix .= ":".$f->getID();
+		}
+		if (strlen($pathPrefix)>1) {
+			$pathPrefix .= ":";
+		}
+
+		$queryStr = "SELECT id FROM tblFolders WHERE folderList like '".$pathPrefix. "%'";
+		$resArr = $db->getResultArray($queryStr);
+		if (is_bool($resArr) && !$resArr)
+			return false;
+
+		$result = array();
+
+		$folders = array();
+		$folderids = array($this->_id);
+		$cfolders = count($resArr);
+		if($cfolders < $limit) {
+			foreach ($resArr as $row) {
+				$folder = $this->_dms->getFolder($row["id"]);
+				if ($folder->getAccessMode($user) >= M_READ) {
+					array_push($folders, $folder);
+					array_push($folderids, $row['id']);
+				}
+			}
+			$result['folder_count'] = count($folders);
+			$result['folder_precise'] = true;
+		} else {
+			foreach ($resArr as $row) {
+				array_push($folderids, $row['id']);
+			}
+			$result['folder_count'] = $cfolders;
+			$result['folder_precise'] = false;
+		}
+
+		$documents = array();
+		if($folderids) {
+			$queryStr = "SELECT id FROM tblDocuments WHERE folder in (".implode(',', $folderids). ")";
+			$resArr = $db->getResultArray($queryStr);
+			if (is_bool($resArr) && !$resArr)
+				return false;
+
+			$cdocs = count($resArr);
+			if($cdocs < $limit) {
+				foreach ($resArr as $row) {
+					$document = $this->_dms->getDocument($row["id"]);
+					if ($document->getAccessMode($user) >= M_READ)
+						array_push($documents, $document);
+				}
+				$result['document_count'] = count($documents);
+				$result['document_precise'] = true;
+			} else {
+				$result['document_count'] = $cdocs;
+				$result['document_precise'] = false;
+			}
+		}
+
+		return $result;
+	} /* }}} */
+
 	// $comment will be used for both document and version leaving empty the version_comment 
 	/**
 	 * Add a new document to the folder

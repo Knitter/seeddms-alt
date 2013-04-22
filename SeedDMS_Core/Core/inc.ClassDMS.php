@@ -206,6 +206,24 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Filter document links
+	 *
+	 * Returns a filtered list of links which are accessible by the
+	 * given user.
+	 *
+	 * @param array $links list of objects of type SeedDMS_Core_DocumentLink
+	 * @param object $user user for which access is being checked
+	 * @return filtered list of links
+	 */
+	static function filterDocumentLinks($user, $links) { /* {{{ */
+		$tmp = array();
+		foreach ($links as $link)
+			if ($link->isPublic() || ($link->getUser()->getID() == $user->getID()) || $user->isAdmin())
+				array_push($tmp, $link);
+		return $tmp;
+	} /* }}} */
+
+	/**
 	 * Create a new instance of the dms
 	 *
 	 * @param object $db object to access the underlying database
@@ -225,7 +243,7 @@ class SeedDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.1.3';
+			$this->version = '4.2.0';
 	} /* }}} */
 
 	function getDB() { /* {{{ */

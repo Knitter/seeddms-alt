@@ -95,7 +95,7 @@ function checkForm()
 			}
 ?>
 	</select>
-	<button type="submit" class="btn"><i class="icon-download-alt"></i> <?php printMLText("save")?></button>
+	<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 	</form>
 	<?php
 		}
@@ -147,7 +147,7 @@ function checkForm()
 	<input type="Hidden" name="folderid" value="<?php print $folder->getID();?>">
 	<input type="Hidden" name="action" value="setdefault">
 	<?php $this->printAccessModeSelection($folder->getDefaultAccess()); ?>
-	<button type="submit" class="btn"><i class="icon-download-alt"></i> <?php printMLText("save")?></button>
+	<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 </form>
 
 <?php
@@ -172,7 +172,7 @@ function checkForm()
 				$this->printAccessModeSelection($userAccess->getMode());
 				print "</td>\n";
 				print "<td>\n";
-				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-download-alt\"></i> ".getMLText("save")."</button>";
+				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-save\"></i> ".getMLText("save")."</button>";
 				print "</td>\n";
 				print "</form>\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
@@ -202,7 +202,7 @@ function checkForm()
 				$this->printAccessModeSelection($groupAccess->getMode());
 				print "</td>\n";
 				print "<td><span class=\"actions\">\n";
-				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-download-alt\"></i> ".getMLText("save")."</button>";
+				print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-save\"></i> ".getMLText("save")."</button>";
 				print "</span></td>\n";
 				print "</form>";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";

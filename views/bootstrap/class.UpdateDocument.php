@@ -142,7 +142,7 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("expires");?>:</td>
 			<td class="standardText">
-        <span class="input-append date" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy">
+        <span class="input-append date" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;

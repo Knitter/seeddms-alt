@@ -32,20 +32,34 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-if (!isset($_POST["logname"]) || !file_exists($settings->_contentDir.$_POST["logname"]) ) {
+if (!isset($_POST["lognames"]) || !is_array($_POST["lognames"])) {
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 }
 
-if (@readlink($settings->_contentDir."current.log")==$settings->_contentDir.$_POST["logname"]){
-	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+$lognames = $_POST["lognames"];
+foreach($lognames as $file) {
+	if(!file_exists($settings->_contentDir.$file)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
+	}
+
+	if (@readlink($settings->_contentDir."current.log")==$settings->_contentDir.$file){
+		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
+	}
+
+	if (!SeedDMS_Core_File::removeFile($settings->_contentDir.$file)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
 }
 
-if (!SeedDMS_Core_File::removeFile($settings->_contentDir.$_POST["logname"])) {
-	UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+if(isset($_POST["mode"])) {
+	$mode = $_POST["mode"];
+} else {
+	$mode = 'web';
 }
 
-add_log_line("?logname=".$_POST["logname"]);
 
-header("Location:../out/out.LogManagement.php");
+add_log_line("?logname=".implode(",", $_POST["lognames"]));
+
+header("Location:../out/out.LogManagement.php?mode=".$mode);
 
 ?>

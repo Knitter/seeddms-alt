@@ -160,6 +160,14 @@ if(!is_writeable($settings->_configFilePath)) {
             <OPTION VALUE="2" <?php if ($settings->_expandFolderTree==2) echo "SELECTED" ?> ><?php printMLText("settings_expandFolderTree_val2");?></OPTION>
           </SELECT>
       </tr>
+      <tr title="<?php printMLText("settings_enableRecursiveCount_desc");?>">
+        <td><?php printMLText("settings_enableRecursiveCount");?>:</td>
+        <td><input name="enableRecursiveCount" type="checkbox" <?php if ($settings->_enableRecursiveCount) echo "checked" ?> /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_maxRecursiveCount_desc");?>">
+        <td><?php printMLText("settings_maxRecursiveCount");?>:</td>
+        <td><input type="text" name="maxRecursiveCount" value="<?php echo $settings->_maxRecursiveCount ?>" /></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableLanguageSelector_desc");?>">
         <td><?php printMLText("settings_enableLanguageSelector");?>:</td>
         <td><input name="enableLanguageSelector" type="checkbox" <?php if ($settings->_enableLanguageSelector) echo "checked" ?> /></td>
@@ -512,7 +520,7 @@ if(!is_writeable($settings->_configFilePath)) {
 <?php
 if(is_writeable($settings->_configFilePath)) {
 ?>
-  <input type="Submit" class="btn" value="<?php printMLText("save");?>" />
+  <button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 <?php
 }
 ?>

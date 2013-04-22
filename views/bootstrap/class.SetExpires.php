@@ -57,7 +57,7 @@ class SeedDMS_View_SetExpires extends SeedDMS_Bootstrap_Style {
 <tr>
 	<td><?php printMLText("expires");?>:</td>
 	<td>
-    <span class="input-append date" id="expirationdate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
+    <span class="input-append date" id="expirationdate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
       <input class="span4" size="16" name="expdate" type="text" value="<?php echo $expdate; ?>">
       <span class="add-on"><i class="icon-calendar"></i></span>
     </span>&nbsp;
@@ -68,7 +68,7 @@ class SeedDMS_View_SetExpires extends SeedDMS_Bootstrap_Style {
 </tr>
 <tr>
 	<td></td>
-	<td><input type="submit" class="btn" value="<?php printMLText("save");?>"></td>
+	<td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save") ?></button></td>
 </tr>
 </table>
 </form>
