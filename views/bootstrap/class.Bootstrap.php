@@ -1042,7 +1042,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 
 	function printClipboard($clipboard){ /* {{{ */
 		$dms = $this->params['dms'];
-		$this->contentHeading("Clipboard", true);
+		$this->contentHeading(getMLText("clipboard"), true);
 		echo "<div class=\"well\" ondragover=\"allowDrop(event)\" ondrop=\"onAddClipboard(event)\">\n";
 		$clipboard = $this->params['session']->getClipboard();
 //		print_r($clipboard);
@@ -1130,7 +1130,7 @@ archive="jl_core_z.jar"
 width="715"
 height="400"
 mayscript>
-  <param name="uc_uploadUrl" value="<?php echo $uploadurl."?folderid=".$attributes['folderid']; unset($attributes['folderid']); ?>"/>
+  <param name="uc_uploadUrl" value="<?php echo $uploadurl; ?>"/>
   <param name="ac_fireAppletInitialized" value="true"/>
   <param name="ac_fireUploaderSelectionChanged" value="true"/>
   <param name="ac_fireUploaderFileStatusChanged" value="true"/>
@@ -1152,7 +1152,7 @@ mayscript>
     /**
      * applet initialized notification
      */
-    function uploaderInitialized(  ) {
+    function appletInitialized(  ) {
         var uploader = document.jumpLoaderApplet.getUploader();
         var attrSet = uploader.getAttributeSet();
         var attr;

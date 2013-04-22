@@ -60,8 +60,9 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		$userfiletype = $_FILES[ $file_param_name ]["type"];
 		$userfilename = $_FILES[ $file_param_name ]["name"];
 
-		$name     = $_POST["name"];
-		if(!$name)
+		if(isset($_POST["name"]) && $_POST["name"])
+			$name = $_POST["name"];
+		else
 			$name = $userfilename;
 		$comment  = $_POST["comment"];
 
