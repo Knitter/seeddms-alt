@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.2.0
 --------------------------------------------------------------------------------
+- sqlite3 database can be updated
 - use awesome font for icons
 - currently logged in user can be changed temporarily if being admin
 - count documents/folders recursively for output in folder list (Bug #43)
