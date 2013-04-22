@@ -97,7 +97,7 @@ class SeedDMS_Session {
 		$id = md5($id);
 		$lastaccess = time();
 		$queryStr = "INSERT INTO tblSessions (id, userID, lastAccess, theme, language, su) ".
-		  "VALUES ('".$id."', ".$data['userid'].", ".$lastaccess.", '".$data['theme']."', '".$data['lang']."')";
+		  "VALUES ('".$id."', ".$data['userid'].", ".$lastaccess.", '".$data['theme']."', '".$data['lang']."', 0)";
 		if (!$this->db->getResult($queryStr)) {
 			return false;
 		}
