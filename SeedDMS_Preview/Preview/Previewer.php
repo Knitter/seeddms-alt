@@ -50,27 +50,50 @@ class SeedDMS_Preview_Previewer {
 		$this->width = intval($width);
 	}
 
-	function createPreview($documentcontent, $width=0) { /* {{{ */
+	/**
+	 * Retrieve the physical filename of the preview image on disk
+	 *
+	 * @param object $object document content or document file
+	 * @param integer $width width of preview image
+	 * @return string file name of preview image
+	 */
+	protected function getFileName($object, $width) { /* }}} */
+		$document = $object->getDocument();
+		$dir = $this->previewDir.'/'.$document->getDir();
+		switch(get_class($object)) {
+			case "SeedDMS_Core_DocumentContent":
+				$target = $dir.'p'.$object->getVersion().'-'.$width.'.png';
+				break;
+			case "SeedDMS_Core_DocumentFile":
+				$target = $dir.'f'.$object->getID().'-'.$width.'.png';
+				break;
+			default:
+				return false;
+		}
+		return $target;
+	} /* }}} */
+
+	public function createPreview($object, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
 		else
 			$width = intval($width);
 		if(!$this->previewDir)
 			return false;
-		$document = $documentcontent->getDocument();
+		$document = $object->getDocument();
 		$dir = $this->previewDir.'/'.$document->getDir();
 		if(!is_dir($dir)) {
 			if (!SeedDMS_Core_File::makeDir($dir)) {
 				return false;
 			}
 		}
-		$file = $document->_dms->contentDir.$documentcontent->getPath();
+		$file = $document->_dms->contentDir.$object->getPath();
 		if(!file_exists($file))
 			return false;
-		$target = $dir.'p'.$documentcontent->getVersion().'-'.$width.'.png';
-		if(!file_exists($target)) {
+		$target = $this->getFileName($object, $width);
+		if($target !== false && !file_exists($target)) {
 			$cmd = '';
-			switch($documentcontent->getMimeType()) {
+			switch($object->getMimeType()) {
 				case "image/png":
 				case "image/gif":
 				case "image/jpeg":
@@ -89,46 +112,43 @@ class SeedDMS_Preview_Previewer {
 			
 	} /* }}} */
 
-	function hasPreview($documentcontent, $width=0) { /* {{{ */
+	public function hasPreview($object, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
 		else
 			$width = intval($width);
 		if(!$this->previewDir)
 			return false;
-		$document = $documentcontent->getDocument();
-		$dir = $this->previewDir.'/'.$document->getDir();
-		$target = $dir.'p'.$documentcontent->getVersion().'-'.$width.'.png';
-		if(file_exists($target)) {
+		$target = $this->getFileName($object, $width);
+		if($target && file_exists($target)) {
 			return true;
 		}
 		return false;
 	} /* }}} */
 
-	function getPreview($documentcontent, $width=0) { /* {{{ */
+	public function getPreview($object, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
 		else
 			$width = intval($width);
 		if(!$this->previewDir)
 			return false;
-		$document = $documentcontent->getDocument();
-		$dir = $this->previewDir.'/'.$document->getDir();
-		$target = $dir.'p'.$documentcontent->getVersion().'-'.$width.'.png';
-		if(file_exists($target)) {
+
+		$target = $this->getFileName($object, $width);
+		if($target && file_exists($target)) {
 			readfile($target);
 		}
 	} /* }}} */
 
-	function deletePreview($document, $documentcontent) { /* {{{ */
+	public function deletePreview($document, $object, $width=0) { /* {{{ */
 		if($width == 0)
 			$width = $this->width;
 		else
 			$width = intval($width);
 		if(!$this->previewDir)
 			return false;
-		$dir = $this->previewDir.'/'.$document->getDir();
-		$target = $dir.'p'.$documentcontent->getVersion().'-'.$width.'.png';
+
+		$target = $this->getFileName($object, $width);
 	} /* }}} */
 }
 ?>
