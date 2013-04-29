@@ -11,11 +11,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2012-11-20</date>
- <time>08:05:38</time>
+ <date>2013-04-29</date>
+ <time>19:34:07</time>
  <version>
-  <release>1.0.0</release>
-  <api>1.0.0</api>
+  <release>1.1.0</release>
+  <api>1.1.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-initial version
+preview image can also be created from a document file (SeedDMS_Core_DocumentFile)
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -52,6 +52,20 @@ initial version
  <phprelease />
  <changelog>
   <release>
+   <date>2012-11-20</date>
+   <time>08:05:38</time>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+ initial version
+   </notes>
   </release>
  </changelog>
 </package>
