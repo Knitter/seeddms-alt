@@ -1,4 +1,10 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.0
+--------------------------------------------------------------------------------
+- lots of clean in user interface
+- create preview images for attachted document files
+
+--------------------------------------------------------------------------------
                      Changes in version 4.2.1
 --------------------------------------------------------------------------------
 - fixing jumploader upload, added missing file for uploading attachments
