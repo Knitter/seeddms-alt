@@ -16,6 +16,17 @@ img.mimeicon {
 	min-height: 100px;
 }
 
+ul.actions li a:hover > i {
+	text-decoration: none;
+}
+ul.actions li a > i {
+	color: #000;
+	margin-right: 5px;
+}
+ul.actions li a.btn > i {
+	font-size: 200%;
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;
