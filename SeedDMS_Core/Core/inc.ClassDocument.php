@@ -526,7 +526,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * FIXME: Why does it not set a document to S_EXPIRED if it is
 	 * currently in state S_RELEASED
 	 * FIXME: some left over reviewers/approvers are in the way if
-	 * no workflow is set an traditional workflow mode is on. In that
+	 * no workflow is set and traditional workflow mode is on. In that
 	 * case the status is set to S_DRAFT_REV or S_DRAFT_APP
 	 *
 	 * @return boolean true if status has changed
