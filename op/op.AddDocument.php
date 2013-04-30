@@ -77,7 +77,7 @@ if (!is_numeric($sequence)) {
 }
 
 $expires = false;
-if ($_POST["expires"] != "false") {
+if (!isset($_POST['expires']) || $_POST["expires"] != "false") {
 	if($_POST["expdate"]) {
 		$tmp = explode('-', $_POST["expdate"]);
 		$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
