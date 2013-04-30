@@ -2640,7 +2640,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			}
 		}
 
-		if ( $indstatus || (isset($indstatus["status"]) && $indstatus["status"]!=-2)) {
+		if ( !$indstatus || (isset($indstatus["status"]) && $indstatus["status"]!=-2)) {
 			// Add the user into the approvers database.
 			$queryStr = "INSERT INTO `tblDocumentApprovers` (`documentID`, `version`, `type`, `required`) ".
 				"VALUES ('". $this->_document->getID() ."', '". $this->_version ."', '0', '". $userID ."')";
