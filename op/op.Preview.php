@@ -46,18 +46,26 @@ if ($document->getAccessMode($user) < M_READ) {
 	exit;
 }
 
-$version = $_GET["version"];
-if (!isset($version) || !is_numeric($version) || intval($version)<1) {
+if(isset($_GET['version'])) {
+	$version = $_GET["version"];
+	if (!is_numeric($version) || intval($version)<1)
+		exit;
+	$object = $document->getContentByVersion($version);
+} elseif(isset($_GET['file'])) {
+	$file = $_GET['file'];
+	if (!is_numeric($file) || intval($file)<1)
+		exit;
+	$object = $document->getDocumentFile($file);
+} else {
 	exit;
 }
 
-$content = $document->getContentByVersion($version);
-if (!is_object($content)) {
+if (!is_object($object)) {
 	exit;
 }
 
 $previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $_GET["width"]);
 header('Content-Type: image/png');
-$previewer->getPreview($content);
+$previewer->getPreview($object);
 
 ?>

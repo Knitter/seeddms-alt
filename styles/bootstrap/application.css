@@ -2,6 +2,14 @@ body { /* Add top padding for full-width layout */
 	padding-top: 60px;
 }
 img.mimeicon {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #CCCCCC #AAAAAA #999999 #CCCCCC;
+  border-style: solid;
+  border-width: 1px 2px 2px 1px;
 }
 
 .list-action a {
@@ -14,6 +22,17 @@ img.mimeicon {
 	font-size: 300%;
 	line-height: 110%;
 	min-height: 100px;
+}
+
+ul.actions li a:hover > i {
+	text-decoration: none;
+}
+ul.actions li a > i {
+	color: #000;
+	margin-right: 5px;
+}
+ul.actions li a.btn > i {
+	font-size: 200%;
 }
 
 @media (max-width: 480px) { 

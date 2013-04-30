@@ -71,6 +71,11 @@ function checkForm()
 <?php
 		$this->contentHeading(getMLText("edit_document_props"));
 		$this->contentContainerStart();
+
+		if($document->expires())
+			$expdate = date('d-m-Y', $document->getExpires());
+		else
+			$expdate = '';
 ?>
 <form action="../op/op.EditDocument.php" name="form1" onsubmit="return checkForm();" method="post">
 	<input type="hidden" name="documentid" value="<?php echo $document->getID() ?>">
@@ -94,7 +99,7 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("categories")?>:</td>
 			<td>
-        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>">
+        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>">
 <?php
 			$categories = $dms->getDocumentCategories();
 			foreach($categories as $category) {
@@ -106,6 +111,18 @@ function checkForm()
 ?>
 				</select>
       </td>
+		</tr>
+		<tr>
+			<td><?php printMLText("expires");?>:</td>
+			<td>
+        <span class="input-append date" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+          <input class="span3" size="16" name="expdate" type="text" value="<?php echo $expdate; ?>">
+          <span class="add-on"><i class="icon-calendar"></i></span>
+        </span>&nbsp;
+        <label class="checkbox inline">
+				  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
+        </label>
+			</td>
 		</tr>
 <?php
 		if ($folder->getAccessMode($user) > M_READ) {

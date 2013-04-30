@@ -161,6 +161,41 @@ if (($oldcomment = $document->getComment()) != $comment) {
 	}
 }
 
+$expires = false;
+if ($_POST["expires"] != "false") {
+	if($_POST["expdate"]) {
+		$tmp = explode('-', $_POST["expdate"]);
+		$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
+	} else {
+		$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
+	}
+}
+
+if ($expires) {
+	if($document->setExpires($expires)) {
+		if($notifier) {
+			$notifyList = $document->getNotifyList();
+			$folder = $document->getFolder();
+			// Send notification to subscribers.
+			$subject = "expiry_changed_email_subject";
+			$message = "expiry_changed_email_body";
+			$params = array();
+			$params['name'] = $document->getName();
+			$params['folder_path'] = $folder->getFolderPathPlain();
+			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+			$params['sitename'] = $settings->_siteName;
+			$params['http_root'] = $settings->_httpRoot;
+			$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+			foreach ($notifyList["groups"] as $grp) {
+				$notifier->toGroup($user, $grp, $subject, $message, $params);
+			}
+		}
+	} else {
+		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+	}
+}
+
 if (($oldkeywords = $document->getKeywords()) != $keywords) {
 	if($document->setKeywords($keywords)) {
 	}

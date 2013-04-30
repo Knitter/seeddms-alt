@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-04-22</date>
- <time>09:18:47</time>
+ <date>2013-04-30</date>
+ <time>07:43:29</time>
  <version>
-  <release>4.2.0</release>
-  <api>4.2.0</api>
+  <release>4.2.1</release>
+  <api>4.2.1</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,7 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- added method SeedDMS_Core_DMS::filterDocumentLinks()
+- fixed bug in SeedDMS_Core_DocumentContent::addIndApp()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -495,6 +495,22 @@ New release
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 - stay in sync with seeddms application
+   </notes>
+  </release>
+  <release>
+   <date>2013-04-22</date>
+   <time>09:18:47</time>
+   <version>
+    <release>4.2.0</release>
+    <api>4.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- fixed bug in SeedDMS_Core_DocumentContent::addIndApp()
    </notes>
   </release>
  </changelog>
