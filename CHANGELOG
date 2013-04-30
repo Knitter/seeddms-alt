@@ -2,6 +2,9 @@
                      Changes in version 4.3.0
 --------------------------------------------------------------------------------
 - create preview images for attachted document files
+- expiration date cannot be set for the version as indicated by the gui.
+  I was always set for the document, but this was not clear from the
+	gui.
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.1
