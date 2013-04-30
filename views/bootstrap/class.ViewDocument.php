@@ -127,32 +127,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$approvalStatus = $latestContent->getApprovalStatus();
 
 ?>
-    <ul class="nav nav-tabs" id="docinfotab">
-		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('document_infos'); ?> / <?php printMLText('current_version'); ?></a></li>
-			<?php if (count($versions)>1) { ?>
-		  <li><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
-<?php
-			}
-			if($workflowmode == 'traditional') {
-				if((is_array($reviewStatus) && count($reviewStatus)>0) ||
-					(is_array($approvalStatus) && count($approvalStatus)>0)) {
-?>
-		  <li><a data-target="#revapp" data-toggle="tab"><?php echo getMLText('reviewers')."/".getMLText('approvers'); ?></a></li>
-<?php
-				}
-			} else {
-				if($workflow) {
-?>
-		  <li><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
-<?php
-				}
-			}
-?>
-		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
-		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
-		</ul>
-		<div class="tab-content">
-		  <div class="tab-pane active" id="docinfo">
 
 <div class="row-fluid">
 <div class="span3">
@@ -273,6 +247,32 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 </div>
 <div class="span9">
+    <ul class="nav nav-tabs" id="docinfotab">
+		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
+			<?php if (count($versions)>1) { ?>
+		  <li><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
+<?php
+			}
+			if($workflowmode == 'traditional') {
+				if((is_array($reviewStatus) && count($reviewStatus)>0) ||
+					(is_array($approvalStatus) && count($approvalStatus)>0)) {
+?>
+		  <li><a data-target="#revapp" data-toggle="tab"><?php echo getMLText('reviewers')."/".getMLText('approvers'); ?></a></li>
+<?php
+				}
+			} else {
+				if($workflow) {
+?>
+		  <li><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
+<?php
+				}
+			}
+?>
+		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
+		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
+		</ul>
+		<div class="tab-content">
+		  <div class="tab-pane active" id="docinfo">
 <?php
 		if(!$latestContent) {
 			$this->contentContainerStart();
@@ -285,7 +285,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		// verify if file exists
 		$file_exists=file_exists($dms->contentDir . $latestContent->getPath());
 
-		$this->contentHeading(getMLText("current_version"));
 		$this->contentContainerStart();
 		print "<table class=\"table\">";
 		print "<thead>\n<tr>\n";
@@ -442,8 +441,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 		}
 ?>
-		  </div>
-		</div>
 		</div>
 <?php
 		if($workflowmode == 'traditional') {
@@ -1014,6 +1011,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		$this->contentContainerEnd();
 ?>
+		  </div>
+		</div>
 		  </div>
 		</div>
 <?php
