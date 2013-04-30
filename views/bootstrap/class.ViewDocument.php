@@ -121,6 +121,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($needwkflaction) {
 			$this->infoMsg(getMLText('needs_workflow_action'));
 		}
+
+		$status = $latestContent->getStatus();
+		$reviewStatus = $latestContent->getReviewStatus();
+		$approvalStatus = $latestContent->getApprovalStatus();
+
 ?>
     <ul class="nav nav-tabs" id="docinfotab">
 		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('document_infos'); ?> / <?php printMLText('current_version'); ?></a></li>
@@ -129,9 +134,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 			}
 			if($workflowmode == 'traditional') {
+				if((is_array($reviewStatus) && count($reviewStatus)>0) ||
+					(is_array($approvalStatus) && count($approvalStatus)>0)) {
 ?>
 		  <li><a data-target="#revapp" data-toggle="tab"><?php echo getMLText('reviewers')."/".getMLText('approvers'); ?></a></li>
 <?php
+				}
 			} else {
 				if($workflow) {
 ?>
@@ -273,10 +281,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->htmlEndPage();
 			exit;
 		}
-
-		$status = $latestContent->getStatus();
-		$reviewStatus = $latestContent->getReviewStatus();
-		$approvalStatus = $latestContent->getApprovalStatus();
 
 		// verify if file exists
 		$file_exists=file_exists($dms->contentDir . $latestContent->getPath());
@@ -443,6 +447,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		</div>
 <?php
 		if($workflowmode == 'traditional') {
+			if((is_array($reviewStatus) && count($reviewStatus)>0) ||
+				(is_array($approvalStatus) && count($approvalStatus)>0)) {
 ?>
 		  <div class="tab-pane" id="revapp">
 <?php
@@ -583,6 +589,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		  </div>
 <?php
+		}
 		} else {
 			if($workflow) {
 ?>
