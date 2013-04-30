@@ -94,7 +94,7 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("categories")?>:</td>
 			<td>
-        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>">
+        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>">
 <?php
 			$categories = $dms->getDocumentCategories();
 			foreach($categories as $category) {
