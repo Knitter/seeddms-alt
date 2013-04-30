@@ -523,8 +523,6 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	 * set to S_EXPIRED but the document isn't actually expired.
 	 * The method will update the document status log database table
 	 * if needed.
-	 * FIXME: Why does it not set a document to S_EXPIRED if it is
-	 * currently in state S_RELEASED
 	 * FIXME: some left over reviewers/approvers are in the way if
 	 * no workflow is set and traditional workflow mode is on. In that
 	 * case the status is set to S_DRAFT_REV or S_DRAFT_APP
@@ -536,7 +534,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 		if($lc) {
 			$st=$lc->getStatus();
 
-			if (($st["status"]==S_DRAFT_REV || $st["status"]==S_DRAFT_APP || $st["status"]==S_IN_WORKFLOW) && $this->hasExpired()){
+			if (($st["status"]==S_DRAFT_REV || $st["status"]==S_DRAFT_APP || $st["status"]==S_IN_WORKFLOW || $st["status"]==S_RELEASED) && $this->hasExpired()){
 				return $lc->setStatus(S_EXPIRED,"", $this->getOwner());
 			}
 			elseif ($st["status"]==S_EXPIRED && !$this->hasExpired() ){
