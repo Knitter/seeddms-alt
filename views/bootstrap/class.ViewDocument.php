@@ -213,6 +213,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		<td><?php print getLongReadableDate($document->getDate()); ?></td>
 		</tr>
 <?php
+		if($document->expires()) {
+?>
+		<tr>
+		<td><?php printMLText("expires");?>:</td>
+		<td><?php print getReadableDate($document->getExpires()); ?></td>
+		</tr>
+<?php
+		}
 		if($document->getKeywords()) {
 ?>
 		<tr>
@@ -364,7 +372,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($workflowmode == 'traditional') {
 			// Allow changing reviewers/approvals only if not reviewed
 			if($accessop->maySetReviewersApprovers()) {
-				print "<li><a href='../out/out.SetReviewersApprovers.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'>".getMLText("change_assignments")."</a></li>";
+				print "<li><a href='../out/out.SetReviewersApprovers.php?documentid=".$documentid."&version=".$latestContent->getVersion()."'><i class=\"icon-edit\"></i>".getMLText("change_assignments")."</a></li>";
 			}
 		} else {
 			if($accessop->maySetWorkflow()) {
@@ -463,7 +471,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 							$reqName = getMLText("unknown_user")." '".$r["required"]."'";
 						}
 						else {
-							$reqName = htmlspecialchars($required->getFullName());
+							$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
 						}
 						if($r["required"] == $user->getId())
 							$is_reviewer = true;
@@ -485,7 +493,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td><ul class=\"unstyled\"><li>".$r["date"]."</li>";
 				/* $updateUser is the user who has done the review */
 				$updateUser = $dms->getUser($r["userID"]);
-				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()) : "unknown user id '".$r["userID"]."'")."</li></ul></td>";
+				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$r["userID"]."'")."</li></ul></td>";
 				print "<td>".htmlspecialchars($r["comment"])."</td>\n";
 				print "<td>".getReviewStatusText($r["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";
@@ -527,7 +535,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 							$reqName = getMLText("unknown_user")." '".$a["required"]."'";
 						}
 						else {
-							$reqName = htmlspecialchars($required->getFullName());
+							$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
 						}
 						if($a["required"] == $user->getId())
 							$is_approver = true;
@@ -549,7 +557,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td><ul class=\"unstyled\"><li>".$a["date"]."</li>";
 				/* $updateUser is the user who has done the approval */
 				$updateUser = $dms->getUser($a["userID"]);
-				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()) : "unknown user id '".$a["userID"]."'")."</li></ul></td>";	
+				print "<li>".(is_object($updateUser) ? htmlspecialchars($updateUser->getFullName()." (".$updateUser->getLogin().")") : "unknown user id '".$a["userID"]."'")."</li></ul></td>";	
 				print "<td>".htmlspecialchars($a["comment"])."</td>\n";
 				print "<td>".getApprovalStatusText($a["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";

@@ -8,6 +8,7 @@
 --------------------------------------------------------------------------------
 - fixing jumploader upload, added missing file for uploading attachments
 - various improvements of user interface
+- fixed bug when adding individual approver (Core)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.0
