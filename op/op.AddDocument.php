@@ -216,6 +216,14 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		}
 	}
 
+	if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
+		foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
+			if (method_exists($hookObj, 'pretAddDocument')) {
+				$hookObj->preAddDocument(array('name'=>&$name, 'comment'=>&$comment));
+			}
+		}
+	}
+
 	$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
 															$cats, $userfiletmp, basename($userfilename),
 	                            $fileType, $userfiletype, $sequence,
@@ -226,8 +234,8 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 	} else {
 		$document = $res[0];
-		if(isset($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'])) {
-			foreach($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'] as $hookObj) {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['addDocument'])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['addDocument'] as $hookObj) {
 				if (method_exists($hookObj, 'postAddDocument')) {
 					$hookObj->postAddDocument($document);
 				}
