@@ -107,6 +107,18 @@ function checkForm()
 				</select>
       </td>
 		</tr>
+		<tr>
+			<td><?php printMLText("expires");?>:</td>
+			<td>
+        <span class="input-append date" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+          <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('d-m-Y'); ?>">
+          <span class="add-on"><i class="icon-calendar"></i></span>
+        </span>&nbsp;
+        <label class="checkbox inline">
+				  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
+        </label>
+			</td>
+		</tr>
 <?php
 		if ($folder->getAccessMode($user) > M_READ) {
 			print "<tr>";
