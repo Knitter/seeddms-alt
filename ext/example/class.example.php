@@ -37,9 +37,25 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 	 * Initialization
 	 */
 	function init() { /* {{{ */
+		$GLOBALS['SEEDDMS_HOOKS']['addDocument'][] = new SeedDMS_ExtExample_AddDocument;
 	} /* }}} */
 
 	function main() { /* {{{ */
+	} /* }}} */
+}
+
+class SeedDMS_ExtExample_AddDocument {
+
+	/**
+	 * Hook before adding a new document
+	 */
+	function preAddDocument($params) { /* {{{ */
+	} /* }}} */
+
+	/**
+	 * Hook after successfully adding a new document
+	 */
+	function postAddDocument($document) { /* {{{ */
 	} /* }}} */
 }
 
