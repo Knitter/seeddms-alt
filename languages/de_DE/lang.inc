@@ -827,7 +827,7 @@ $text = array(
 'update_info' => "Informationen zur Aktualisierung",
 'update_locked_msg' => "Dieses Dokument wurde gesperrt<p>Die Sperrung wurde von <a href=\"mailto:[email]\">[username]</a> eingerichtet.<br>",
 'update_reviewers' => "Liste der Prüfer aktualisieren",
-'update' => "aktualisieren",
+'update' => "Aktualisieren",
 'uploaded_by' => "Hochgeladen durch",
 'uploading_failed' => "Das Hochladen einer Datei ist fehlgeschlagen. Bitte überprüfen Sie die maximale Dateigröße für Uploads.",
 'uploading_zerosize' => "Versuch eine leere Datei hochzuladen. Vorgang wird abgebrochen.",
