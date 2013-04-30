@@ -76,7 +76,15 @@ if (!is_numeric($sequence)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_sequence"));
 }
 
-$expires = (isset($_POST["expires"]) && $_POST["expires"] == "true") ? mktime(0,0,0, intval($_POST["expmonth"]), intval($_POST["expday"]), intval($_POST["expyear"])) : false;
+$expires = false;
+if ($_POST["expires"] != "false") {
+	if($_POST["expdate"]) {
+		$tmp = explode('-', $_POST["expdate"]);
+		$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
+	} else {
+		$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
+	}
+}
 
 // Get the list of reviewers and approvers for this document.
 $reviewers = array();
