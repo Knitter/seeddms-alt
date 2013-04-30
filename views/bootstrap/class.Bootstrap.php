@@ -1102,7 +1102,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 							}
 							print "</td>\n";
 							print "<td>\n";
-							print "<a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a>";
+							print "<div class=\"list-action\"><a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
 							print "</td>\n";
 							print "</tr>";
 						}
