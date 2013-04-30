@@ -220,7 +220,7 @@ if ($_FILES['userfile']['error'] == 0) {
 		$expires = false;
 		if ($_POST["expires"] != "false") {
 			if($_POST["expdate"]) {
-				$tmp = explode('/', $_POST["expdate"]);
+				$tmp = explode('-', $_POST["expdate"]);
 				$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
 			} else {
 				$expires = mktime(0,0,0, $_POST["expmonth"], $_POST["expday"], $_POST["expyear"]);
