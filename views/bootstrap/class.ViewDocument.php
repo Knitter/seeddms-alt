@@ -961,6 +961,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$targetDoc = $link->getTarget();
 				$targetlc = $targetDoc->getLatestContent();
 
+				$previewer->createPreview($targetlc);
 				print "<tr>";
 				print "<td><a href=\"../op/op.Download.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."\">";
 				if($previewer->hasPreview($targetlc)) {
