@@ -51,7 +51,6 @@ class SeedDMS_Extension_Mgr {
 
 	function createExtensionConf() { /* {{{ */
 		$extensions = self::getExtensions();
-		print_r($extensions);
 		if($extensions) {
 			$fp = fopen($this->cachedir."/extensions.php", "w");
 			foreach($extensions as $_ext) {
