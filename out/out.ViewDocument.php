@@ -26,6 +26,7 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.ClassAccessOperation.php");
 include("../inc/inc.Authentication.php");
+include("../inc/inc.Extension.php");
 
 /**
  * Include class to preview documents
