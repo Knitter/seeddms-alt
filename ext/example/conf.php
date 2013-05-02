@@ -1,7 +1,7 @@
 <?php
 $EXT_CONF['example'] = array(
 	'title' => 'Example Extension',
-	'description' => 'Example Extension',
+	'description' => 'This sample extension demonstrate the use of various hooks',
 	'version' => '1.0.0',
 	'author' => array('name'=>'Uwe Steinmann', 'email'=>'uwe@steinmann.cx', 'company'=>'MMK GmbH'),
 	'constraints' => array(
