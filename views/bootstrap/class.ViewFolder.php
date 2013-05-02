@@ -92,6 +92,8 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
 
+		echo $this->callHook('preContent');
+
 		echo "<div class=\"row-fluid\">\n";
 		echo "<div class=\"span4\">\n";
 		if ($enableFolderTree) $this->printTreeNavigation($folderid, $showtree);
@@ -306,6 +308,8 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		echo "</div>\n";
 
 		$this->contentEnd();
+
+		echo $this->callHook('postContent');
 
 		$this->htmlEndPage();
 	} /* }}} */
