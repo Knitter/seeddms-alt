@@ -34,6 +34,8 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 
 	/**
 	 * Initialization
+	 *
+	 * Use this method to do some initialization like setting up the hooks
 	 */
 	function init() { /* {{{ */
 		$GLOBALS['SEEDDMS_HOOKS']['addDocument'][] = new SeedDMS_ExtExample_AddDocument;
@@ -44,6 +46,13 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 	} /* }}} */
 }
 
+/**
+ * Class containing methods for hooks when a document is added
+ *
+ * @author  Uwe Steinmann <uwe@steinmann.cx>
+ * @package SeedDMS
+ * @subpackage  example
+ */
 class SeedDMS_ExtExample_AddDocument {
 
 	/**
@@ -59,6 +68,13 @@ class SeedDMS_ExtExample_AddDocument {
 	} /* }}} */
 }
 
+/**
+ * Class containing methods for hooks when a folder view is ѕhown
+ *
+ * @author  Uwe Steinmann <uwe@steinmann.cx>
+ * @package SeedDMS
+ * @subpackage  example
+ */
 class SeedDMS_ExtExample_ViewFolder {
 
 	/**
