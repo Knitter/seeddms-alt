@@ -1416,5 +1416,9 @@ mayscript>
 <p id="fileList"></p>
 <?php
 	} /* }}} */
+
+	function show(){ /* {{{ */
+		parent::show();
+	} /* }}} */
 }
 ?>
