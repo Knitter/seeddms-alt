@@ -105,7 +105,7 @@ class SeedDMS_Session {
 		$this->data = $data;
 		$this->data['id'] = $id;
 		$this->data['lastaccess'] = $lastaccess;
-		$this->data['su'] = $su;
+		$this->data['su'] = 0;
 		$this->data['clipboard'] = array('docs'=>array(), 'folders'=>array());
 		return $id;
 	} /* }}} */
