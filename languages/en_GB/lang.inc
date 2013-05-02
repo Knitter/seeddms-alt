@@ -256,6 +256,7 @@ $text = array(
 'expiry_changed_email' => "Expiry date changed",
 'expiry_changed_email_subject' => "[sitename]: [name] - Expiry date changed",
 'expiry_changed_email_body' => "Expiry date changed\r\nDocument: [name]\r\nParent folder: [folder_path]\r\nUser: [username]\r\nURL: [url]",
+'extension_manager' => "Extensions",
 'february' => "February",
 'file' => "File",
 'files_deletion' => "Files deletion",
