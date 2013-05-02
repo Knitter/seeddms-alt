@@ -185,6 +185,7 @@ class Settings { /* {{{ */
 	var $_ldapAccountDomainName = "";
 	var $_ldapType = 1; // 0 = ldap; 1 = AD
 	var $_converters = array(); // list of commands used to convert files to text for Indexer
+	var $_extensions = array(); // configuration for extensions
 
 	/**
 	 * Constructor
@@ -473,6 +474,17 @@ class Settings { /* {{{ */
 			$tab = $converter->attributes();
 			$this->_converters[trim(strval($tab['mimeType']))] = trim(strval($converter));
 		}
+
+		// XML Path: /configuration/extensions
+		$extensions = $xml->xpath('/configuration/extensions/extension');
+		$this->_extensions = array();
+		foreach($extensions as $extension) {
+			$extname = strval($extension->attributes()['name']);
+			foreach($extension->children() as $parameter) {
+				$this->_extensions[$extname][strval($parameter->attributes()['name'])] = strval($parameter);
+			}
+		}
+
 		return true;
 	} /* }}} */
 
@@ -726,6 +738,29 @@ class Settings { /* {{{ */
 
     } // foreach
 
+
+    // XML Path: /configuration/extensions
+    $extnodes = $xml->xpath('/configuration/extensions');
+		if(!$extnodes) {
+			$nodeParent = $xml->xpath('/configuration');
+			$extnodes = $nodeParent[0]->addChild("extensions");
+		} else {
+			unset($xml->extensions);
+			$extnodes = $xml->addChild("extensions");
+		}
+    foreach($this->_extensions as $name => $extension)
+    {
+      // search XML node
+			$extnode = $extnodes->addChild('extension');
+      $this->setXMLAttributValue($extnode, 'name', $name);
+			foreach($GLOBALS['EXT_CONF'][$name]['config'] as $fieldname=>$conf) {
+				$parameter = $extnode->addChild('parameter');
+				$parameter[0] = $extension[$fieldname];
+				$this->setXMLAttributValue($parameter, 'name', $fieldname);
+			}
+
+
+    } // foreach
 
     // Save
     return $xml->asXML($configFilePath);
