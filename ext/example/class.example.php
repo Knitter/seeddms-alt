@@ -22,7 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once("inc/inc.ClassExtBase.php");
 
 /**
  * Example extension
@@ -38,6 +37,7 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 	 */
 	function init() { /* {{{ */
 		$GLOBALS['SEEDDMS_HOOKS']['addDocument'][] = new SeedDMS_ExtExample_AddDocument;
+		$GLOBALS['SEEDDMS_HOOKS']['viewFolder'][] = new SeedDMS_ExtExample_ViewFolder;
 	} /* }}} */
 
 	function main() { /* {{{ */
@@ -57,6 +57,35 @@ class SeedDMS_ExtExample_AddDocument {
 	 */
 	function postAddDocument($document) { /* {{{ */
 	} /* }}} */
+}
+
+class SeedDMS_ExtExample_ViewFolder {
+
+	/**
+	 * Hook when showing a folder
+	 *
+	 * The returned string will be output after the object menu and before
+	 * the actual content on the page
+	 *
+	 * @param object $view the current view object
+	 * @return string content to be output
+	 */
+	function preContent($view) { /* {{{ */
+		return $view->infoMsg("Content created by viewFolder::preContent hook");
+	} /* }}} */
+
+	/**
+	 * Hook when showing a folder
+	 *
+	 * The returned string will be output at the end of the content area
+	 *
+	 * @param object $view the current view object
+	 * @return string content to be output
+	 */
+	function postContent($view) { /* {{{ */
+		return $view->infoMsg("Content created by viewFolder::postContent hook");
+	} /* }}} */
+
 }
 
 ?>
