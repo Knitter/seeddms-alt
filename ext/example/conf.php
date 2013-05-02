@@ -10,7 +10,7 @@ $EXT_CONF['example'] = array(
 	'icon' => '',
 	'class' => array(
 		'file' => 'class.example.php',
-		'name' => 'ext_example'
+		'name' => 'SeedDMS_ExtExample'
 	),
 );
 ?>
