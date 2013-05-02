@@ -28,7 +28,6 @@
  * @author  Uwe Steinmann <uwe@steinmann.cx>
  * @package SeedDMS
  */
-<?php
 class SeedDMS_ExtBase {
 }
 
