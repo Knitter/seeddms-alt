@@ -597,6 +597,7 @@ $text = array(
 'settings_contentOffsetDir_desc' => "To work around limitations in the underlying file system, a new directory structure has been devised that exists within the content directory (Content Directory). This requires a base directory from which to begin. Usually leave this to the default setting, 1048576, but can  be any number or string that does not already exist within (Content Directory)",
 'settings_coreDir' => "Core SeedDMS directory",
 'settings_coreDir_desc' => "Path to SeedDMS_Core (optional). Leave this empty if you have installed SeedDMS_Core at a place where it can be found by PHP, e.g. Extra PHP Include-Path",
+'settings_Extensions' => "Extensions",
 'settings_loginFailure_desc' => "Disable account after n login failures.",
 'settings_loginFailure' => "Login failure",
 'settings_luceneClassDir' => "Lucene SeedDMS directory",
