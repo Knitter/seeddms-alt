@@ -27,6 +27,10 @@ class SeedDMS_Version {
 		return;
 	}
 
+	function version() {
+		return $this->_number;
+	}
+
 	function banner() {
 		return $this->_string .", ". $this->_number;
 	}
