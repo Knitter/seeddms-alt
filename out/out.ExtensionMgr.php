@@ -28,7 +28,7 @@ if (!$user->isAdmin()) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'httproot'=>$settings->_httpRoot));
 if($view) {
 	$view->show();
 	exit;
