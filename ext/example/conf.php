@@ -3,6 +3,7 @@ $EXT_CONF['example'] = array(
 	'title' => 'Example Extension',
 	'description' => 'This sample extension demonstrate the use of various hooks',
 	'version' => '1.0.0',
+	'releasedate' => '2013-05-03',
 	'author' => array('name'=>'Uwe Steinmann', 'email'=>'uwe@steinmann.cx', 'company'=>'MMK GmbH'),
 	'config' => array(
 		'input_field' => array(
@@ -18,7 +19,7 @@ $EXT_CONF['example'] = array(
 	'constraints' => array(
 		'depends' => array('php' => '5.4.4-', 'seeddms' => '4.2.0-'),
 	),
-	'icon' => '',
+	'icon' => 'icon.png',
 	'class' => array(
 		'file' => 'class.example.php',
 		'name' => 'SeedDMS_ExtExample'
