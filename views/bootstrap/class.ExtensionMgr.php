@@ -30,24 +30,28 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$logfileenable = $this->params['logfileenable'];
-		$enablefullsearch = $this->params['enablefullsearch'];
+		$httproot = $this->params['httproot'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 		$this->contentContainerStart();
-		echo "<table class=\"table-condensed\">\n";
+		echo "<table class=\"table table-condensed\">\n";
 		print "<thead>\n<tr>\n";
+		print "<th></th>\n";	
 		print "<th>".getMLText('name')."</th>\n";	
 		print "<th>".getMLText('version')."</th>\n";	
 		print "<th>".getMLText('author')."</th>\n";	
 		print "</tr></thead>\n";
 		foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
 			echo "<tr>";
+			echo "<td>";
+			if($extconf['icon'])
+				echo "<img src=\"".$httproot."ext/".$extname."/".$extconf['icon']."\">";
+			echo "</td>";
 			echo "<td>".$extconf['title']."<br /><small>".$extconf['description']."</small></td>";
-			echo "<td>".$extconf['version']."</td>";
+			echo "<td>".$extconf['version']."<br /><small>".$extconf['releasedate']."</small></td>";
 			echo "<td><a href=\"mailto:".$extconf['author']['email']."\">".$extconf['author']['name']."</a><br /><small>".$extconf['author']['company']."</small></td>";
 			echo "</tr>\n";
 		}
