@@ -2,6 +2,7 @@
 $EXT_CONF['example'] = array(
 	'title' => 'Example Extension',
 	'description' => 'This sample extension demonstrate the use of various hooks',
+	'disable' => false,
 	'version' => '1.0.0',
 	'releasedate' => '2013-05-03',
 	'author' => array('name'=>'Uwe Steinmann', 'email'=>'uwe@steinmann.cx', 'company'=>'MMK GmbH'),
@@ -17,7 +18,7 @@ $EXT_CONF['example'] = array(
 		),
 	),
 	'constraints' => array(
-		'depends' => array('php' => '5.4.4-', 'seeddms' => '4.2.0-'),
+		'depends' => array('php' => '5.4.4-', 'seeddms' => '4.2.1-'),
 	),
 	'icon' => 'icon.png',
 	'class' => array(
