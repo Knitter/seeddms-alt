@@ -31,6 +31,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$httproot = $this->params['httproot'];
+		$version = $this->params['version'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -44,13 +45,40 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 		print "<th>".getMLText('version')."</th>\n";	
 		print "<th>".getMLText('author')."</th>\n";	
 		print "</tr></thead>\n";
+		$errmsgs = array();
 		foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
-			echo "<tr>";
+			if(!isset($extconf['disable']) || $extconf['disable'] == false) {
+				/* check dependency on specific seeddms version */
+				if(isset($extconf['constraints']['depends']['seeddms'])) {
+					$tmp = explode('-', $extconf['constraints']['depends']['seeddms'], 2);
+					if($tmp[0] > $version->version() || ($tmp[1] && $tmp[1] < $version->version()))
+						$errmsgs[] = sprintf("Incorrect SeedDMS version (needs version %s)", $extconf['constraints']['depends']['seeddms']);
+				} else {
+					$errmsgs[] = "Missing dependency on SeedDMS";
+				}
+
+				/* check dependency on specific php version */
+				if(isset($extconf['constraints']['depends']['php'])) {
+					$tmp = explode('-', $extconf['constraints']['depends']['php'], 2);
+					if($tmp[0] > phpversion() || ($tmp[1] && $tmp[1] < phpversion()))
+						$errmsgs[] = sprintf("Incorrect PHP version (needs version %s)", $extconf['constraints']['depends']['php']);
+				} else {
+					$errmsgs[] = "Missing dependency on PHP";
+				}
+				if($errmsgs)
+					echo "<tr class=\"error\">";
+				else
+					echo "<tr class=\"success\">";
+			} else
+				echo "<tr class=\"warning\">";
 			echo "<td>";
 			if($extconf['icon'])
 				echo "<img src=\"".$httproot."ext/".$extname."/".$extconf['icon']."\">";
 			echo "</td>";
-			echo "<td>".$extconf['title']."<br /><small>".$extconf['description']."</small></td>";
+			echo "<td>".$extconf['title']."<br /><small>".$extconf['description']."</small>";
+			if($errmsgs)
+				echo "<div><img src=\"".$this->getImgPath("attention.gif")."\"> ".implode('<br />', $errmsgs)."</div>";
+			echo "</td>";
 			echo "<td>".$extconf['version']."<br /><small>".$extconf['releasedate']."</small></td>";
 			echo "<td><a href=\"mailto:".$extconf['author']['email']."\">".$extconf['author']['name']."</a><br /><small>".$extconf['author']['company']."</small></td>";
 			echo "</tr>\n";
