@@ -84,6 +84,12 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 			echo "</tr>\n";
 		}
 		echo "</table>\n";
+?>
+<form action="../op/op.ExtensionMgr.php" name="form1" method="post">
+  <?php echo createHiddenFieldWithKey('extensionmgr'); ?>
+	<p><button type="submit" class="btn"><i class="icon-refresh"></i> <?php printMLText("refresh");?></button></p>
+</form>
+<?php
 		$this->contentContainerEnd();
 		$this->htmlEndPage();
 	} /* }}} */
