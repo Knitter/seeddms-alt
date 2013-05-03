@@ -16,6 +16,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+include("../inc/inc.Version.php");
 include("../inc/inc.Settings.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
@@ -27,8 +28,10 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
+$v = new SeedDMS_Version;
+
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'httproot'=>$settings->_httpRoot));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'httproot'=>$settings->_httpRoot, 'version'=>$v));
 if($view) {
 	$view->show();
 	exit;
