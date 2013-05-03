@@ -23,11 +23,13 @@ if(file_exists($extconffile)) {
 }
 
 foreach($EXT_CONF as $extname=>$extconf) {
-	$classfile = $settings->_rootDir."/ext/".$extname."/".$extconf['class']['file'];
-	if(file_exists($classfile)) {
-		include($classfile);
-		$obj = new $extconf['class']['name'];
-		if(method_exists($obj, 'init'))
-			$obj->init();
+	if(!isset($extconf['disable']) || $extconf['disable'] == false) {
+		$classfile = $settings->_rootDir."/ext/".$extname."/".$extconf['class']['file'];
+		if(file_exists($classfile)) {
+			include($classfile);
+			$obj = new $extconf['class']['name'];
+			if(method_exists($obj, 'init'))
+				$obj->init();
+		}
 	}
 }
