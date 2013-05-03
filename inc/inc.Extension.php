@@ -16,11 +16,10 @@ require_once "inc.ClassExtBase.php";
 
 $extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
 $extconffile = $extMgr->getExtensionsConfFile();
-if(file_exists($extconffile)) {
-	include($extconffile);
-} else {
+if(!file_exists($extconffile)) {
 	$extMgr->createExtensionConf();
 }
+include($extconffile);
 
 foreach($EXT_CONF as $extname=>$extconf) {
 	if(!isset($extconf['disable']) || $extconf['disable'] == false) {
