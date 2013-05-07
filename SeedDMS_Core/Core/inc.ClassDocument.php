@@ -1210,7 +1210,7 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			if (isset($approvers[$i])) {
 				foreach ($approvers[$i] as $approverID) {
 					$approver=($i=="i" ? $this->_dms->getUser($approverID) : $this->_dms->getGroup($approverID));
-					$res=($i=="i" ? $docResultSet->getContent()->addIndApprover($approver, $user, !$pendingReview) : $docResultSet->getContent()->addGrpApprover($approver, $user, !$pendingReview));
+					$res=($i=="i" ? $docResultSet->getContent()->addIndApprover($approver, $user, true) : $docResultSet->getContent()->addGrpApprover($approver, $user, !$pendingReview));
 					$docResultSet->addApprover($approver, $i, $res);
 					if ($res==0 || $res=-3 || $res=-4) {
 						$pendingApproval=true;
@@ -2380,14 +2380,18 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_approvalStatus;
 	} /* }}} */
 
-	function addIndReviewer($user, $requestUser) { /* {{{ */
+	function addIndReviewer($user, $requestUser, $listadmin=false) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
 
 		// Get the list of users and groups with read access to this document.
+		if($this->_document->getAccessMode($user) < M_READ) {
+			return -2;
+		}
+		/*
 		if (!isset($this->_readAccessList)) {
-			$this->_readAccessList = $this->_document->getReadAccessList();
+			$this->_readAccessList = $this->_document->getReadAccessList($listadmin);
 		}
 		$approved = false;
 		foreach ($this->_readAccessList["users"] as $appUser) {
@@ -2399,6 +2403,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (!$approved) {
 			return -2;
 		}
+		*/
 
 		// Check to see if the user has already been added to the review list.
 		$reviewStatus = $user->getReviewStatus($this->_document->getID(), $this->_version);
@@ -2605,18 +2610,19 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		}
  } /* }}} */
 
-	function addIndApprover($user, $requestUser) { /* {{{ */
+	function addIndApprover($user, $requestUser, $listadmin=false) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
 		$userID = $user->getID();
 
 		// Get the list of users and groups with read access to this document.
-		if (!isset($this->_readAccessList)) {
-			// TODO: error checking.
-			$this->_readAccessList = $this->_document->getReadAccessList();
+		if($this->_document->getAccessMode($user) < M_READ) {
+			return -2;
 		}
+		/*
+		$readAccessList = $this->_document->getReadAccessList($listadmin);
 		$approved = false;
-		foreach ($this->_readAccessList["users"] as $appUser) {
+		foreach ($readAccessList["users"] as $appUser) {
 			if ($userID == $appUser->getID()) {
 				$approved = true;
 				break;
@@ -2625,6 +2631,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		if (!$approved) {
 			return -2;
 		}
+		*/
 
 		// Check to see if the user has already been added to the approvers list.
 		$approvalStatus = $user->getApprovalStatus($this->_document->getID(), $this->_version);
