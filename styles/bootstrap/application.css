@@ -35,6 +35,10 @@ ul.actions li a.btn > i {
 	font-size: 200%;
 }
 
+ul.tree, ul.tree ul {
+	margin-left: 20px;
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;

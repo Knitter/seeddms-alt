@@ -966,8 +966,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		}
 		if ($folder->getAccessMode($this->params['user']) >= $accessMode) {
 
-			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >";
-			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >";
+			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i>";
+			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i>";
+//			print "<span style=\"padding-left:5px\" >";
 
 			if ($folderID != $currentFolderID){
 			
