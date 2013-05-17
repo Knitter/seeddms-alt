@@ -705,25 +705,17 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 
 	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
-		?>
-		<script language="JavaScript">
-		var openDlg;
-		function chooseFolder<?php print $formName ?>() {
-			openDlg = open("out.FolderChooser.php?form=<?php echo $formName?>&mode=<?php echo $accessMode?>&exclude=<?php echo $exclude?>", "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
-		}
-		</script>
-		<?php
 		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 //		print "<button type=\"button\" class=\"btn\" onclick=\"chooseFolder".$formName."(); return false;\">".getMLText("folder")."...</button>";
-		print "<a data-target=\"#folderChooser\" href=\"out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "<a data-target=\"#folderChooser".$formName."\" href=\"out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="folderChooser" tabindex="-1" role="dialog" aria-labelledby="folderChooserLabel" aria-hidden="true">
+<div class="modal hide" id="folderChooser<?= $formName ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?= $formName ?>Label" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="folderChooserLabel"><?php printMLText("choose_target_folder") ?></h3>
+    <h3 id="folderChooser<?= $formName ?>Label"><?php printMLText("choose_target_folder") ?></h3>
   </div>
   <div class="modal-body">
     <p>Please wait, until document tree is loaded …</p>
@@ -732,6 +724,13 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
+<script language="JavaScript">
+/* Set up a callback which is called when a folder in the tree is selected */
+modalFolderChooser<?= $formName ?> = $('#folderChooser<?= $formName ?>');
+function folderSelectedCallback<?= $formName ?>(id, name) {
+	modalFolderChooser<?= $formName ?>.modal('hide');
+}
+</script>
 <?php
 	} /* }}} */
 
@@ -967,8 +966,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		}
 		if ($folder->getAccessMode($this->params['user']) >= $accessMode) {
 
-			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >";
-			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i><span style=\"padding-left:5px\" >";
+			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i>";
+			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i>";
+//			print "<span style=\"padding-left:5px\" >";
 
 			if ($folderID != $currentFolderID){
 			

@@ -12,10 +12,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-04-30</date>
- <time>07:43:29</time>
+ <date>2013-05-17</date>
+ <time>09:21:37</time>
  <version>
-  <release>4.2.1</release>
+  <release>4.2.2</release>
   <api>4.2.1</api>
  </version>
  <stability>
@@ -24,7 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- fixed bug in SeedDMS_Core_DocumentContent::addIndApp()
+- admins can be added as reviewer/approver again
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -503,6 +503,22 @@ New release
    <version>
     <release>4.2.0</release>
     <api>4.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- fixed bug in SeedDMS_Core_DocumentContent::addIndApp()
+   </notes>
+  </release>
+  <release>
+   <date>2013-04-30</date>
+   <time>07:43:29</time>
+   <version>
+    <release>4.2.1</release>
+    <api>4.2.1</api>
    </version>
    <stability>
     <release>stable</release>
