@@ -52,22 +52,19 @@ function toggleTree(id){
 
 var targetName;
 var targetID;
-
 function folderSelected(id, name) {
 	targetName.value = name;
 	targetID.value = id;
-//	window.close();
-//	return true;
+	if(typeof(folderSelectedCallback<?= $form ?>) !== 'undefined')
+		folderSelectedCallback<?= $form ?>(id, name);
 }
 </script>
-
 
 <?php
 		$this->contentContainerStart();
 		$this->printFoldersTree($mode, $exclude, $rootfolderid);
 		$this->contentContainerEnd();
 ?>
-
 
 <script language="JavaScript">
 targetName = document.<?php echo $form?>.targetname<?php print $form ?>;

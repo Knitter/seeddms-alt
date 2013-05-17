@@ -10,6 +10,13 @@
   is now actually used.
 
 --------------------------------------------------------------------------------
+                     Changes in version 4.2.2
+--------------------------------------------------------------------------------
+- admin can be set as reviewer/approver again and do the review/approval
+- fixed minor layout problem in folder tree (Bug #51)
+- close folder choose dialog when folder is selected (Bug #52)
+
+--------------------------------------------------------------------------------
                      Changes in version 4.2.1
 --------------------------------------------------------------------------------
 - fixing jumploader upload, added missing file for uploading attachments

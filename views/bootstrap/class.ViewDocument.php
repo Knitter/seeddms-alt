@@ -406,11 +406,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($user->isAdmin()) {
 			$this->contentHeading(getMLText("status"));
 			$this->contentContainerStart();
-			$status = $latestContent->getStatusLog();
+			$statuslog = $latestContent->getStatusLog();
 			echo "<table class=\"table table-condensed\"><thead>";
 			echo "<th>".getMLText('date')."</th><th>".getMLText('status')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>\n";
 			echo "</thead><tbody>";
-			foreach($status as $entry) {
+			foreach($statuslog as $entry) {
 				if($suser = $dms->getUser($entry['userID']))
 					$fullname = $suser->getFullName();
 				else
@@ -457,7 +457,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			print "<tr><td colspan=5>\n";
 			$this->contentSubHeading(getMLText("reviewers"));
 			print "</tr>";
-			
+
 			print "<tr>\n";
 			print "<td width='20%'><b>".getMLText("name")."</b></td>\n";
 			print "<td width='20%'><b>".getMLText("last_update")."</b></td>\n";
@@ -510,7 +510,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						print "<li><a href=\"../out/out.ReviewDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&reviewid=".$r['reviewID']."\" class=\"btn btn-mini\">".getMLText("edit")."</a></li>";
 					}
 				}
-				
+
 				print "</ul></td>\n";	
 				print "</td>\n</tr>\n";
 			}
@@ -566,7 +566,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<td>".htmlspecialchars($a["comment"])."</td>\n";
 				print "<td>".getApprovalStatusText($a["status"])."</td>\n";
 				print "<td><ul class=\"unstyled\">";
-			
+
 				if($accessop->mayApprove()) {
 					if ($is_approver && $status["status"]==S_DRAFT_APP) {
 						print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("submit_approval")."</a></li>";
@@ -574,7 +574,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						print "<li><a class=\"btn btn-mini\" href=\"../out/out.ApproveDocument.php?documentid=".$documentid."&version=".$latestContent->getVersion()."&approveid=".$a['approveID']."\">".getMLText("edit")."</a></li>";
 					}
 				}
-				
+
 				print "</ul>";
 				print "</td>\n";	
 				print "</td>\n</tr>\n";
@@ -787,10 +787,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$vstat = $version->getStatus();
 				$workflow = $version->getWorkflow();
 				$workflowstate = $version->getWorkflowState();
-				
+
 				// verify if file exists
 				$file_exists=file_exists($dms->contentDir . $version->getPath());
-				
+
 				print "<tr>\n";
 				print "<td nowrap>";
 				/*
@@ -800,7 +800,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					if ($viewonlinefiletypes && in_array(strtolower($version->getFileType()), $viewonlinefiletypes))
 						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&version=".$version->getVersion()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a>";
 				}else print "<li><img class=\"mimeicon\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
-				
+
 				print "</ul>";
 				*/
 				if ($viewonlinefiletypes && in_array(strtolower($version->getFileType()), $viewonlinefiletypes))
@@ -885,10 +885,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			foreach($files as $file) {
 
 				$file_exists=file_exists($dms->contentDir . $file->getPath());
-				
+
 				$responsibleUser = $file->getUser();
 
 				print "<tr>";
+<<<<<<< HEAD
 				print "<td>";
 				$previewer->createPreview($file);
 				if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes))
@@ -903,6 +904,16 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "</a>";
 				print "</td>";
 				
+=======
+				print "<td><ul class=\"actions unstyled\">";
+				if ($file_exists) {
+					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><i class=\"icon-download\"></i>".getMLText('download')."</a>";
+					if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
+						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
+				} else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
+				print "</ul></td>";
+
+>>>>>>> seeddms-4.2.2
 				print "<td><ul class=\"unstyled\">\n";
 				print "<li>".htmlspecialchars($file->getName())."</li>\n";
 				print "<li>".htmlspecialchars($file->getOriginalFileName())."</li>\n";
@@ -914,6 +925,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<li>".getLongReadableDate($file->getDate())."</li>";
 
 				print "<td>".htmlspecialchars($file->getComment())."</td>";
+<<<<<<< HEAD
 			
 				print "<td><ul class=\"unstyled actions\">";
 				if ($file_exists) {
@@ -926,6 +938,14 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					print "<li><a href=\"out.RemoveDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\"><i class=\"icon-remove\"></i>".getMLText("delete")."</a></li>";
 				print "</ul></td>";		
 				
+=======
+
+				print "<td><span class=\"actions\">";
+				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
+					print "<form action=\"../out/out.RemoveDocumentFile.php\" method=\"get\"><input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"fileid\" value=\"".$file->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
+				print "</span></td>";		
+
+>>>>>>> seeddms-4.2.2
 				print "</tr>";
 			}
 			print "</tbody>\n</table>\n";	
