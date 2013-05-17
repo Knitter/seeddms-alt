@@ -889,7 +889,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$responsibleUser = $file->getUser();
 
 				print "<tr>";
-<<<<<<< HEAD
 				print "<td>";
 				$previewer->createPreview($file);
 				if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes))
@@ -904,16 +903,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "</a>";
 				print "</td>";
 				
-=======
-				print "<td><ul class=\"actions unstyled\">";
-				if ($file_exists) {
-					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><i class=\"icon-download\"></i>".getMLText('download')."</a>";
-					if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
-						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
-				} else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
-				print "</ul></td>";
-
->>>>>>> seeddms-4.2.2
 				print "<td><ul class=\"unstyled\">\n";
 				print "<li>".htmlspecialchars($file->getName())."</li>\n";
 				print "<li>".htmlspecialchars($file->getOriginalFileName())."</li>\n";
@@ -925,7 +914,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<li>".getLongReadableDate($file->getDate())."</li>";
 
 				print "<td>".htmlspecialchars($file->getComment())."</td>";
-<<<<<<< HEAD
 			
 				print "<td><ul class=\"unstyled actions\">";
 				if ($file_exists) {
@@ -938,14 +926,6 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					print "<li><a href=\"out.RemoveDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\"><i class=\"icon-remove\"></i>".getMLText("delete")."</a></li>";
 				print "</ul></td>";		
 				
-=======
-
-				print "<td><span class=\"actions\">";
-				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
-					print "<form action=\"../out/out.RemoveDocumentFile.php\" method=\"get\"><input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"fileid\" value=\"".$file->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
-				print "</span></td>";		
-
->>>>>>> seeddms-4.2.2
 				print "</tr>";
 			}
 			print "</tbody>\n</table>\n";	
