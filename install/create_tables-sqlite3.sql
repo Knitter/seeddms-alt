@@ -427,7 +427,8 @@ CREATE TABLE `tblSessions` (
   `theme` varchar(30) NOT NULL default '',
   `language` varchar(30) NOT NULL default '',
   `clipboard` text default '',
-	`su` INTEGER DEFAULT NULL
+	`su` INTEGER DEFAULT NULL,
+  `flashmsg` text default ''
 ) ;
 
 -- --------------------------------------------------------
