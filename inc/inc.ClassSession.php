@@ -82,7 +82,10 @@ class SeedDMS_Session {
 			$this->data['clipboard'] = json_decode($resArr[0]['clipboard'], true);
 		else
 			$this->data['clipboard'] = array('docs'=>array(), 'folders'=>array());
-		$this->data['flashmsg'] = array();
+		if($resArr[0]['flashmsg'])
+			$this->data['flashmsg'] = json_decode($resArr[0]['flashmsg'], true);
+		else
+			$this->data['flashmsg'] = array();
 		return $resArr[0];
 	} /* }}} */
 
@@ -241,7 +244,7 @@ class SeedDMS_Session {
 	function setClipboard($clipboard) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET clipboard = " . json_encode($this->db->qstr($clipboard)) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE tblSessions SET clipboard = " . $this->db->qstr(json_encode($clipboard)) . " WHERE id = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['clipboard'] = $clipboard;	
@@ -312,10 +315,26 @@ class SeedDMS_Session {
 	function setFlashMsg($msg) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET flashmsg = " . json_encode($this->db->qstr($msg)) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE tblSessions SET flashmsg = " . $this->db->qstr(json_encode($msg)) . " WHERE id = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
 			$this->data['flashmsg'] = $msg;	
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Set flash message of session
+	 *
+	 * @param array $msg contains 'typ' and 'msg'
+	 */
+	function clearFlashMsg() { /* {{{ */
+		/* id is only set if load() was called before */
+		if($this->id) {
+			$queryStr = "UPDATE tblSessions SET flashmsg = '' WHERE id = " . $this->db->qstr($this->id);
+			if (!$this->db->getResult($queryStr))
+				return false;
+			$this->data['flashmsg'] = '';	
 		}
 		return true;
 	} /* }}} */
