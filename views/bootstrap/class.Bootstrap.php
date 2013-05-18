@@ -55,6 +55,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		if($flashmsg = $this->params['session']->getFlashMsg()) {
+			$this->params['session']->clearFlashMsg();
 ?>
 		<script>
   	noty({
