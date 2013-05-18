@@ -426,7 +426,8 @@ CREATE TABLE `tblSessions` (
   `lastAccess` INTEGER NOT NULL default '0',
   `theme` varchar(30) NOT NULL default '',
   `language` varchar(30) NOT NULL default '',
-  `clipboard` text default ''
+  `clipboard` text default '',
+	`su` INTEGER DEFAULT NULL
 ) ;
 
 -- --------------------------------------------------------
