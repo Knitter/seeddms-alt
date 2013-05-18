@@ -46,11 +46,29 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 			echo $this->extraheader;
 		echo '<script type="text/javascript" src="../styles/bootstrap/jquery/jquery.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/bootstrap/noty/js/noty/jquery.noty.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/bootstrap/noty/js/noty/layouts/topRight.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/bootstrap/noty/js/noty/themes/default.js"></script>'."\n";
 
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
+		if($flashmsg = $this->params['session']->getFlashMsg()) {
+?>
+		<script>
+  	noty({
+  		text: '<?= $flashmsg['msg'] ?>',
+  		type: '<?= $flashmsg['type'] ?>',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			timeout: 1500,
+			_template: '<div class="noty_message alert alert-block alert-error"><span class="noty_text"></span><div class="noty_close"></div></div>'
+  	});
+		</script>
+<?php
+		}
 	} /* }}} */
 
 	function htmlAddHeader($head) { /* {{{ */

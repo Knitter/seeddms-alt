@@ -77,11 +77,12 @@ class SeedDMS_Session {
 		if (!$this->db->getResult($queryStr))
 			return false;
 		$this->id = $id;
-		$this->data = array('userid'=>$resArr[0]['userID'], 'theme'=>$resArr[0]['theme'], 'lang'=>$resArr[0]['language'], 'id'=>$resArr[0]['id'], 'lastaccess'=>$resArr[0]['lastAccess'], 'flashmsg'=>'', 'su'=>$resArr[0]['su']);
+		$this->data = array('userid'=>$resArr[0]['userID'], 'theme'=>$resArr[0]['theme'], 'lang'=>$resArr[0]['language'], 'id'=>$resArr[0]['id'], 'lastaccess'=>$resArr[0]['lastAccess'], 'su'=>$resArr[0]['su']);
 		if($resArr[0]['clipboard'])
 			$this->data['clipboard'] = json_decode($resArr[0]['clipboard'], true);
 		else
 			$this->data['clipboard'] = array('docs'=>array(), 'folders'=>array());
+		$this->data['flashmsg'] = array();
 		return $resArr[0];
 	} /* }}} */
 
@@ -107,6 +108,8 @@ class SeedDMS_Session {
 		$this->data['lastaccess'] = $lastaccess;
 		$this->data['su'] = 0;
 		$this->data['clipboard'] = array('docs'=>array(), 'folders'=>array());
+		$this->data['clipboard'] = array('type'=>'', 'msg'=>'');
+		$this->data['flashmsg'] = array();
 		return $id;
 	} /* }}} */
 
@@ -299,6 +302,31 @@ class SeedDMS_Session {
 				return false;
 		}
 		return true;
+	} /* }}} */
+
+	/**
+	 * Set flash message of session
+	 *
+	 * @param array $msg contains 'typ' and 'msg'
+	 */
+	function setFlashMsg($msg) { /* {{{ */
+		/* id is only set if load() was called before */
+		if($this->id) {
+			$queryStr = "UPDATE tblSessions SET flashmsg = " . json_encode($this->db->qstr($msg)) . " WHERE id = " . $this->db->qstr($this->id);
+			if (!$this->db->getResult($queryStr))
+				return false;
+			$this->data['flashmsg'] = $msg;	
+		}
+		return true;
+	} /* }}} */
+
+	/**
+	 * Get flash message of session
+	 *
+	 * @return array last flash message
+	 */
+	function getFlashMsg() { /* {{{ */
+		return (array) $this->data['flashmsg'];
 	} /* }}} */
 
 }
