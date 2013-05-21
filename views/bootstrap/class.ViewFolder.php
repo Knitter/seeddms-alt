@@ -218,11 +218,29 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			print "</small></td>";
 			print "<td></td>";
 			print "<td>";
+			print "<div class=\"list-action\">";
+			if($subFolder->getAccessMode() >= M_READWRITE) {
 ?>
-     <div class="list-action"><a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
-     <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a>
-     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a></div>
+     <a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
 <?php
+			} else {
+?>
+     <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
+<?php
+			}
+			if($subFolder->getAccessMode() >= M_READWRITE) {
+?>
+     <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a>
+<?php
+			} else {
+?>
+     <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
+<?php
+			}
+?>
+     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+<?php
+			print "</div>";
 			print "</td>";
 			print "</tr>\n";
 		}
@@ -290,11 +308,29 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print getOverallStatusText($status["status"])."</small></td>";
 				print "<td>".$version."</td>";
 				print "<td>";
+				print "<div class=\"list-action\">";
+				if($document->getAccessMode() >= M_READWRITE) {
 ?>
-     <div class="list-action"><a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
-     <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
-     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a></div>
+     <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
 <?php
+				} else {
+?>
+     <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
+<?php
+				}
+				if($document->getAccessMode() >= M_READWRITE) {
+?>
+     <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
+<?php
+				} else {
+?>
+     <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
+<?php
+				}
+?>
+     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+<?php
+				print "</div>";
 				print "</td>";
 				print "</tr>\n";
 			}
