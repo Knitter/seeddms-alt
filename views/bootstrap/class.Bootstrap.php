@@ -54,8 +54,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
-		if($flashmsg = $this->params['session']->getFlashMsg()) {
-			$this->params['session']->clearFlashMsg();
+		if($flashmsg = $this->params['session']->getSplashMsg()) {
+			$this->params['session']->clearSplashMsg();
 ?>
 		<script>
   	noty({

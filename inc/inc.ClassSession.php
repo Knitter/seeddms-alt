@@ -82,10 +82,10 @@ class SeedDMS_Session {
 			$this->data['clipboard'] = json_decode($resArr[0]['clipboard'], true);
 		else
 			$this->data['clipboard'] = array('docs'=>array(), 'folders'=>array());
-		if($resArr[0]['flashmsg'])
-			$this->data['flashmsg'] = json_decode($resArr[0]['flashmsg'], true);
+		if($resArr[0]['splashmsg'])
+			$this->data['splashmsg'] = json_decode($resArr[0]['splashmsg'], true);
 		else
-			$this->data['flashmsg'] = array();
+			$this->data['splashmsg'] = array();
 		return $resArr[0];
 	} /* }}} */
 
@@ -112,7 +112,7 @@ class SeedDMS_Session {
 		$this->data['su'] = 0;
 		$this->data['clipboard'] = array('docs'=>array(), 'folders'=>array());
 		$this->data['clipboard'] = array('type'=>'', 'msg'=>'');
-		$this->data['flashmsg'] = array();
+		$this->data['splashmsg'] = array();
 		return $id;
 	} /* }}} */
 
@@ -308,44 +308,44 @@ class SeedDMS_Session {
 	} /* }}} */
 
 	/**
-	 * Set flash message of session
+	 * Set splash message of session
 	 *
 	 * @param array $msg contains 'typ' and 'msg'
 	 */
-	function setFlashMsg($msg) { /* {{{ */
+	function setSplashMsg($msg) { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET flashmsg = " . $this->db->qstr(json_encode($msg)) . " WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE tblSessions SET splashmsg = " . $this->db->qstr(json_encode($msg)) . " WHERE id = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
-			$this->data['flashmsg'] = $msg;	
+			$this->data['splashmsg'] = $msg;	
 		}
 		return true;
 	} /* }}} */
 
 	/**
-	 * Set flash message of session
+	 * Set splash message of session
 	 *
 	 * @param array $msg contains 'typ' and 'msg'
 	 */
-	function clearFlashMsg() { /* {{{ */
+	function clearSplashMsg() { /* {{{ */
 		/* id is only set if load() was called before */
 		if($this->id) {
-			$queryStr = "UPDATE tblSessions SET flashmsg = '' WHERE id = " . $this->db->qstr($this->id);
+			$queryStr = "UPDATE tblSessions SET splashmsg = '' WHERE id = " . $this->db->qstr($this->id);
 			if (!$this->db->getResult($queryStr))
 				return false;
-			$this->data['flashmsg'] = '';	
+			$this->data['splashmsg'] = '';	
 		}
 		return true;
 	} /* }}} */
 
 	/**
-	 * Get flash message of session
+	 * Get splash message of session
 	 *
-	 * @return array last flash message
+	 * @return array last splash message
 	 */
-	function getFlashMsg() { /* {{{ */
-		return (array) $this->data['flashmsg'];
+	function getSplashMsg() { /* {{{ */
+		return (array) $this->data['splashmsg'];
 	} /* }}} */
 
 }
