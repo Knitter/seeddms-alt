@@ -57,7 +57,7 @@ else {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-$session->setFlashMsg(array('type'=>'success', 'msg'=>'Document unlocked'));
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_document_unlocked')));
 
 add_log_line();
 header("Location:../out/out.ViewDocument.php?documentid=".$documentid);

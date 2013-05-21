@@ -25,6 +25,8 @@ include("../inc/inc.Authentication.php");
 
 $session->resetSu();
 
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_switched_back_user')));
+
 add_log_line("");
 header("Location: ../".(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php?folderid=".$settings->_rootFolderID));
 
