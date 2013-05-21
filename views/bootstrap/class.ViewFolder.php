@@ -219,7 +219,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			print "<td></td>";
 			print "<td>";
 			print "<div class=\"list-action\">";
-			if($subFolder->getAccessMode() >= M_READWRITE) {
+			if($subFolder->getAccessMode($user) >= M_ALL) {
 ?>
      <a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
 <?php
@@ -228,7 +228,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
      <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
 <?php
 			}
-			if($subFolder->getAccessMode() >= M_READWRITE) {
+			if($subFolder->getAccessMode($user) >= M_READWRITE) {
 ?>
      <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a>
 <?php
@@ -309,7 +309,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print "<td>".$version."</td>";
 				print "<td>";
 				print "<div class=\"list-action\">";
-				if($document->getAccessMode() >= M_READWRITE) {
+				if($document->getAccessMode($user) >= M_ALL) {
 ?>
      <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
 <?php
@@ -318,7 +318,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
      <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
 <?php
 				}
-				if($document->getAccessMode() >= M_READWRITE) {
+				if($document->getAccessMode($user) >= M_READWRITE) {
 ?>
      <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
 <?php
