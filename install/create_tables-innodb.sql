@@ -491,7 +491,7 @@ CREATE TABLE `tblSessions` (
   `language` varchar(30) NOT NULL default '',
   `clipboard` text default '',
 	`su` INTEGER DEFAULT NULL,
-  `flashmsg` text default '',
+  `splashmsg` text default '',
   PRIMARY KEY  (`id`),
   CONSTRAINT `tblSessions_user` FOREIGN KEY (`userID`) REFERENCES `tblUsers` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
