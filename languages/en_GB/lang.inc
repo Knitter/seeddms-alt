@@ -777,6 +777,7 @@ $text = array(
 'sign_out_user' => "Sign out user",
 'space_used_on_data_folder' => "Space used on data folder",
 'splash_added_to_clipboard' => "Added to clipboard",
+'splash_document_edited' => "Document saved",
 'splash_document_locked' => "Document locked",
 'splash_document_unlocked' => "Document unlocked",
 'splash_folder_edited' => "Save folder changes",
