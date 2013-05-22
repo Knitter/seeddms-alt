@@ -170,6 +170,8 @@ if(strcasecmp($sequence, "keep")) {
 	}
 }
 
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_folder_edited')));
+
 add_log_line("?folderid=".$folderid);
 
 header("Location:../out/out.ViewFolder.php?folderid=".$folderid."&showtree=".$_POST["showtree"]);

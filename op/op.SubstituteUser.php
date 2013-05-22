@@ -33,6 +33,8 @@ if (!isset($_GET["userid"])) {
 
 $session->setSu($_GET['userid']);
 
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_substituted_user')));
+
 add_log_line("?userid=".$_GET["userid"]);
 header("Location: ../".(isset($settings->_siteDefaultPage) && strlen($settings->_siteDefaultPage)>0 ? $settings->_siteDefaultPage : "out/out.ViewFolder.php?folderid=".$settings->_rootFolderID));
 
