@@ -202,7 +202,7 @@ function chooseKeywords(target) {
 </td>
 </tr>
 <tr>
-<td></td><td><input type="submit" class="btn" value="<?php printMLText("search"); ?>"></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"> <?php printMLText("search"); ?></button></td>
 </tr>
 
 </table>
@@ -264,7 +264,7 @@ function chooseKeywords(target) {
 </td>
 </tr>
 <tr>
-<td colspan="2"><input type="submit" class="btn" value="<?php printMLText("search"); ?>"></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"> <?php printMLText("search"); ?></button></td>
 </tr>
 </table>
 

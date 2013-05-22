@@ -77,7 +77,7 @@ function checkForm()
 		else {
 			foreach ($notifyList["users"] as $userNotify) {
 				print "<tr>";
-				print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>";
+				print "<td><i class=\"icon-user\"></i></td>";
 				print "<td>" . htmlspecialchars($userNotify->getLogin() . " - " . $userNotify->getFullName()) . "</td>";
 				if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
 					print "<td><a href=\"../op/op.DocumentNotify.php?documentid=". $document->getID() . "&action=delnotify&userid=".$userNotify->getID()."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a></td>";
@@ -87,7 +87,7 @@ function checkForm()
 			}
 			foreach ($notifyList["groups"] as $groupNotify) {
 				print "<tr>";
-				print "<td><img src=\"images/groupicon.gif\" width=16 height=16 border=0></td>";
+				print "<td><i class=\"icon-group\"></i></td>";
 				print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
 				if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
 					print "<td><a href=\"../op/op.DocumentNotify.php?documentid=". $document->getID() . "&action=delnotify&groupid=".$groupNotify->getID()."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a></td>";

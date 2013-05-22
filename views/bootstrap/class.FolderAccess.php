@@ -161,7 +161,7 @@ function checkForm()
 			foreach ($accessList["users"] as $userAccess) {
 				$userObj = $userAccess->getUser();
 				print "<tr>\n";
-				print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>\n";
+				print "<td><i class=\"icon-user\"></i></td>\n";
 				print "<td>". htmlspecialchars($userObj->getFullName()) . "</td>\n";
 				print "<form action=\"../op/op.FolderAccess.php\">\n";
 				echo createHiddenFieldWithKey('folderaccess')."\n";
@@ -191,7 +191,7 @@ function checkForm()
 				$groupObj = $groupAccess->getGroup();
 				$mode = $groupAccess->getMode();
 				print "<tr>";
-				print "<td><img src=\"images/groupicon.gif\" class=\"mimeicon\"></td>";
+				print "<td><i class=\"icon-group\"></i></td>";
 				print "<td>". htmlspecialchars($groupObj->getName()) . "</td>";
 				print "<form action=\"../op/op.FolderAccess.php\">";
 				echo createHiddenFieldWithKey('folderaccess')."\n";

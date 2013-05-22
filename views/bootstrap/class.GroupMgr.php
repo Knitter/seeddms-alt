@@ -187,7 +187,7 @@ function showUser(selectObj) {
 				foreach ($members as $member) {
 				
 					print "<tr>";
-					print "<td><img src=\"images/usericon.gif\" width=16 height=16></td>";
+					print "<td><i class=\"icon-user\"></i></td>";
 					print "<td>" . htmlspecialchars($member->getFullName()) . "</td>";
 					print "<td>" . ($group->isMember($member,true)?getMLText("manager"):"&nbsp;") . "</td>";
 					print "<td>";

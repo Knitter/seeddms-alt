@@ -79,7 +79,7 @@ function checkForm()
 		else {
 			foreach ($notifyList["users"] as $userNotify) {
 				print "<tr>";
-				print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>";
+				print "<td><i class=\"icon-user\"></i></td>";
 				print "<td>" . htmlspecialchars($userNotify->getFullName()) . "</td>";
 				if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
 					print "<form action=\"../op/op.FolderNotify.php\" method=\"post\">\n";
@@ -98,7 +98,7 @@ function checkForm()
 
 			foreach ($notifyList["groups"] as $groupNotify) {
 				print "<tr>";
-				print "<td><img src=\"images/groupicon.gif\" class=\"mimeicon\"></td>";
+				print "<td><i class=\"icon-group\"></i></td>";
 				print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
 				if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
 					print "<form action=\"../op/op.FolderNotify.php\" method=\"post\">\n";
@@ -107,7 +107,7 @@ function checkForm()
 					print "<input type=\"Hidden\" name=\"action\" value=\"delnotify\">\n";
 					print "<input type=\"Hidden\" name=\"groupid\" value=\"".$groupNotify->getID()."\">\n";
 					print "<td>";
-					print "<input type=\"submit\" class=\"btn btn-mini\" value=\"".getMLText("delete")."\">";
+					print "<button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button>";
 					print "</td>";
 					print "</form>\n";
 				}else print "<td></td>";
