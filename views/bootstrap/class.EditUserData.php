@@ -49,14 +49,20 @@ class SeedDMS_View_EditUserData extends SeedDMS_Bootstrap_Style {
 
 function checkForm()
 {
-	msg = "";
-	if (document.form1.pwd.value != document.form1.pwdconf.value) msg += "<?php printMLText("js_pwd_not_conf");?>\n";
-	if (document.form1.fullname.value == "") msg += "<?php printMLText("js_no_name");?>\n";
-	if (document.form1.email.value == "") msg += "<?php printMLText("js_no_email");?>\n";
-//	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
+	msg = new Array();
+	if (document.form1.pwd.value != document.form1.pwdconf.value) msg.push("<?php printMLText("js_pwd_not_conf");?>");
+	if (document.form1.fullname.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if (document.form1.email.value == "") msg.push("<?php printMLText("js_no_email");?>");
+//	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else

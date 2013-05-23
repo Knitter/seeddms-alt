@@ -50,41 +50,47 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
 		
 ?>
-		<script language="JavaScript">
-		function checkForm()
-		{
-			msg = "";
-			//if (document.form1.userfile[].value == "") msg += "<?php printMLText("js_no_file");?>\n";
+<script language="JavaScript">
+function checkForm()
+	{
+	msg = new Array();
+	//if (document.form1.userfile[].value == "") msg += "<?php printMLText("js_no_file");?>\n";
 			
 <?php
 			if ($strictformcheck) {
 ?>
-			if(!document.form1.name.disabled){
-				if (document.form1.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
-			}
-			if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-			if (document.form1.keywords.value == "") msg += "<?php printMLText("js_no_keywords");?>\n";
+	if(!document.form1.name.disabled){
+		if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	}
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (document.form1.keywords.value == "") msg.push("<?php printMLText("js_no_keywords");?>");
 <?php
 			}
 ?>
-			if (msg != ""){
-				alert(msg);
-				return false;
-			}
-			return true;
-		}
+	if (msg != ""){
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	return true;
+}
 
-
-		function addFiles()
-		{
-			var li = document.createElement('li');
-			li.innerHTML = '<input type="File" name="userfile[]" size="60">';
-			document.getElementById('files').appendChild(li);	
-		//	document.getElementById("files").innerHTML += '<br><input type="File" name="userfile[]" size="60">'; 
-			document.form1.name.disabled=true;
-		}
+function addFiles()
+	{
+	var li = document.createElement('li');
+	li.innerHTML = '<input type="File" name="userfile[]" size="60">';
+	document.getElementById('files').appendChild(li);	
+//	document.getElementById("files").innerHTML += '<br><input type="File" name="userfile[]" size="60">'; 
+	document.form1.name.disabled=true;
+}
 		
-		</script>
+</script>
 
 <?php
 		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");

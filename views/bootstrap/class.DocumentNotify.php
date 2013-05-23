@@ -49,13 +49,19 @@ class SeedDMS_View_DocumentNotify extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
+	msg = new Array();
 	if ((document.form1.userid.options[document.form1.userid.selectedIndex].value == -1) && 
 		(document.form1.groupid.options[document.form1.groupid.selectedIndex].value == -1))
-			msg += "<?php printMLText("js_select_user_or_group");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
+			msg.push("<?php printMLText("js_select_user_or_group");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else

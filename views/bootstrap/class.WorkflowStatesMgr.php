@@ -48,13 +48,20 @@ class SeedDMS_View_WorkflowStatesMgr extends SeedDMS_Bootstrap_Style {
 
 function checkForm(num)
 {
-	msg = "";
+	msg = new Array();
 	eval("var formObj = document.form" + num + ";");
 
-	if (formObj.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
+	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else

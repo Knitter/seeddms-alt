@@ -48,20 +48,27 @@ class SeedDMS_View_GroupMgr extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 
 function checkForm1(num) {
-	msg = "";
+	msg = new Array();
 	eval("var formObj = document.form" + num + "_1;");
 	
-	if (formObj.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
+	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 <?php
 	if ($strictformcheck) {
-	?>
-	if (formObj.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+?>
+	if (formObj.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 <?php
 	}
 ?>
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -76,7 +83,14 @@ function checkForm2(num) {
 
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg,
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
