@@ -228,7 +228,7 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 			print "<li><a href=\"../out/out.Calendar.php?mode=m&year=".($year)."&month=".($month+1)."\"><i style=\"color: black;\" class=\"icon-arrow-right\"></i></a></li>";
 			echo "</ul>";
 			echo "</div>";
-			$this->contentContainerStart();
+//			$this->contentContainerStart();
 			
 			$days=$this->getDaysInMonth($month, $year);
 			$today = getdate(time());
@@ -237,7 +237,8 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 
 			echo "<div class=\"row-fluid\">";
 			echo "<div class=\"span2\">";
-			echo "<table class=\"table table-condensed\">";
+			echo "<h4><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=1\">".date('W', mktime(12, 0, 0, $month, 1, $year)).". ".getMLText('calendar_week')."</a></h4>";
+			echo "<div class=\"well\">";
 			$fd = getdate(mktime(12, 0, 0, $month, 1, $year));
 			for($i=0; $i<$fd['wday']-1; $i++)
 				echo "<tr><td colspan=\"2\">&nbsp;</td></tr>";
@@ -247,40 +248,38 @@ class SeedDMS_View_Calendar extends SeedDMS_Bootstrap_Style {
 				// separate weeks
 				$date = getdate(mktime(12, 0, 0, $month, $i, $year));
 				if (($date["wday"]==$this->firstdayofweek) && ($i!=1)) {
-					echo "</table>";
+					echo "</div>";
 					echo "</div>";
 					echo "<div class=\"span2\">";
-					echo "<table class=\"table table-condensed\">";
+					echo "<h4><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".date('W', mktime(12, 0, 0, $month, $i, $year)).". ".getMLText('calendar_week')."</a></h4>";
+					echo "<div class=\"well\">";
 				}
 				
 				// highlight today
 				$class = ($year == $today["year"] && $month == $today["mon"] && $i == $today["mday"]) ? "todayHeader" : "header";
 				
-				echo "<tr>";
-				echo "<td class='".$class."'><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".$i."</a></td>";
-				echo "<td class='".$class."'><a href=\"../out/out.Calendar.php?mode=w&year=".($year)."&month=".($month)."&day=".($i)."\">".$this->dayNamesLong[$date["wday"]]."</a></td>";
-				echo "</tr>";
+				echo "<h5>".$i.". - ".$this->dayNamesLong[$date["wday"]]."</h5>";
 				
 				if ($class=="todayHeader") $class="today";
 				else $class="";
 				
 				$xdate=mktime(0, 0, 0, $month, $i, $year);
 				foreach ($events as $event){
-					echo "<tr>";
+					echo "<div>";
 					if (($event["start"]<=$xdate)&&($event["stop"]>=$xdate)){
 					
 						if (strlen($event['name']) > 25) $event['name'] = substr($event['name'], 0, 22) . "...";
-						print "<td class='".$class."' colspan='2'><a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a></td>";
+						print "<i class=\"icon-lightbulb\"></i> <a href=\"../out/out.ViewEvent.php?id=".$event['id']."\">".htmlspecialchars($event['name'])."</a>";
 					}
-					echo "</tr>";
+					echo "</div>";
 				}
 				
 			}
-			echo "</table>";
+			echo "</div>";
 			echo "</div>\n";
 			echo "</div>\n";
 
-			$this->contentContainerEnd();
+//			$this->contentContainerEnd();
 			
 		}else{
 
