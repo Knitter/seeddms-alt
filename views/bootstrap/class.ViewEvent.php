@@ -78,22 +78,18 @@ class SeedDMS_View_ViewEvent extends SeedDMS_Bootstrap_Style {
 		echo "<td>".(is_object($u)?htmlspecialchars($u->getFullName()):getMLText("unknown_user"))."</td>";
 		echo "</tr>";
 
+		if (($user->getID()==$event["userID"])||($user->isAdmin())){
+			echo "<tr>";
+			echo "<td></td>";
+			echo "<td>";
+			print "<a href=\"../out/out.RemoveEvent.php?id=".$event["id"]."\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a> ";
+			print "<a href=\"../out/out.EditEvent.php?id=".$event["id"]."\" class=\"btn\"><i class=\"icon-edit\"></i> ".getMLText("edit")."</a>";
+			echo "</tr>";
+		}
+
 		echo "</table>";
 
 		$this->contentContainerEnd();
-
-		if (($user->getID()==$event["userID"])||($user->isAdmin())){
-
-			$this->contentHeading(getMLText("edit"));
-			$this->contentContainerStart();
-
-			print "<ul class=\"actions\">";
-			print "<li><a href=\"../out/out.RemoveEvent.php?id=".$event["id"]."\">".getMLText("delete")."</a>";
-			print "<li><a href=\"../out/out.EditEvent.php?id=".$event["id"]."\">".getMLText("edit")."</a>";
-			print "</ul>";
-			
-			$this->contentContainerEnd();
-		}
 
 		$this->htmlEndPage();
 	} /* }}} */
