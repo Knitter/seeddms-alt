@@ -51,10 +51,21 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/bootstrap/noty/themes/default.js"></script>'."\n";
 
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
+		if($this->params['session'] && $this->params['session']->getSu()) {
+?>
+<style type="text/css">
+.navbar-inverse .navbar-inner {
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#882222), to(#111111));
+background-image: webkit-linear-gradient(top, #882222, #111111);
+background-image: linear-gradient(to bottom, #882222, #111111);;
+}
+</style>
+<?php
+		}
 		echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
-		if($flashmsg = $this->params['session']->getSplashMsg()) {
+		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
 			$this->params['session']->clearSplashMsg();
 ?>
 		<script>
