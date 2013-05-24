@@ -47,16 +47,15 @@ class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 			print "<ul style='list-style-type: none;'>\n";
 		}
 		print "  <li>\n";
-		print "<img class='treeicon' src=\"";
-		if ($level == 0) $this->printImgPath("minus.png");
-		else if (count($subFolders) + count($documents) > 0) $this->printImgPath("minus.png");
+		print "<i class=\"";
+		if ($level == 0) echo "icon-minus-sign";
+		else if (count($subFolders) + count($documents) > 0) echo "icon-minus-sign";
 		else $this->printImgPath("blank.png");
-		print "\" border=0>\n";
+		print "\"></i>\n";
 		if ($folder->getAccessMode($this->user) >= M_READ) {
-			print "<img src=\"".$this->getImgPath("folder_opened.gif")."\" border=0>".htmlspecialchars($folder->getName())."\n";
-		}
-		else
-			print "<img src=\"".$this->getImgPath("folder_opened.gif")."\" width=18 height=18 border=0>".htmlspecialchars($folder->getName())."\n";
+			print "<i class=\"icon-folder-open\"></i> ".htmlspecialchars($folder->getName())."\n";
+		} else
+			print "<i class=\"icon-folder-open\"></i> ".htmlspecialchars($folder->getName())."\n";
 		print "  </li>\n";
 
 		print "<ul style='list-style-type: none;'>";
@@ -70,17 +69,17 @@ class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 				$documents_  = SeedDMS_Core_DMS::filterAccess($subFolders[$i]->getDocuments(), $this->user, M_READ);
 				
 				if (count($subFolders_) + count($documents_) > 0)
-					print "<a href=\"out.DocumentChooser.php?form=".$this->form."&folderid=".$subFolders[$i]->getID()."\"><img class='treeicon' src=\"".$this->getImgPath("plus.png")."\" border=0></a>";
+					print "<a href=\"out.DocumentChooser.php?form=".$this->form."&folderid=".$subFolders[$i]->getID()."\"><i class='icon-plus-sign'></i></a> ";
 				else
-					print "<img class='treeicon' src=\"".$this->getImgPath("blank.png")."\">";
-				print "<img src=\"".$this->getImgPath("folder_closed.gif")."\" border=0>".htmlspecialchars($subFolders[$i]->getName())."\n";
+					print "<i class='icon-circle'></i> ";
+				print "<i class=\"icon-folder-close\"></i> ".htmlspecialchars($subFolders[$i]->getName())."\n";
 				print "</li>";
 			}
 		}
 		for ($i = 0; $i < count($documents); $i++) {
 			print "<li>\n";
-			print "<img class='treeicon' src=\"images/blank.png\">";
-			print "<a  class=\"foldertree_selectable\" href=\"javascript:documentSelected(".$documents[$i]->getID().",'".str_replace("'", "\\'", htmlspecialchars($documents[$i]->getName()))."');\"><img src=\"images/file.gif\" border=0>".htmlspecialchars($documents[$i]->getName())."</a>";
+			print "<i class='icon-circle'></i> ";
+			print "<i class=\"icon-file\"></i> <a class=\"foldertree_selectable\" href=\"javascript:documentSelected(".$documents[$i]->getID().",'".str_replace("'", "\\'", htmlspecialchars($documents[$i]->getName()))."');\">".htmlspecialchars($documents[$i]->getName())."</a>";
 			print "</li>";
 		}
 
@@ -98,36 +97,11 @@ class SeedDMS_View_DocumentChooser extends SeedDMS_Bootstrap_Style {
 		$this->form = $this->params['form'];
 
 		$this->htmlStartPage(getMLText("choose_target_document"));
-//		$this->globalBanner();
-//		$this->pageNavigation(getMLText("choose_target_document"));
-?>
-
-<script language="JavaScript">
-var targetName;
-var targetID;
-
-function documentSelected(id, name) {
-	targetName.value = name;
-	targetID.value = id;
-//	window.close();
-//	return true;
-}
-</script>
-
-<?php
 		$this->contentContainerStart();
+		$this->printNewTreeNavigation($folderid, $showtree, 1);
 		$this->printTree($folder->getPath());
 		$this->contentContainerEnd();
-?>
-
-<script language="JavaScript">
-targetName = document.<?php echo $this->form?>.docname<?php print $this->form ?>;
-targetID   = document.<?php echo $this->form?>.docid<?php print $this->form ?>;
-</script>
-
-<?php
 		echo "</body>\n</html>\n";
-//		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>
