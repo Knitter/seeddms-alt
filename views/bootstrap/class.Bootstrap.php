@@ -737,8 +737,7 @@ function documentSelected(id, name) {
 	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
 		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosefoldersearch\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-//		print "<button type=\"button\" class=\"btn\" onclick=\"chooseFolder".$formName."(); return false;\">".getMLText("folder")."...</button>";
+		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 		print "<a data-target=\"#folderChooser".$formName."\" href=\"out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -759,7 +758,7 @@ function documentSelected(id, name) {
 modalFolderChooser<?= $formName ?> = $('#folderChooser<?= $formName ?>');
 function folderSelected(id, name) {
 	$('#targetid<?= $formName ?>').val(id);
-	$('#choosefoldersearch').val(name);
+	$('#choosefoldersearch<?= $formName ?>').val(name);
 	modalFolderChooser<?= $formName ?>.modal('hide');
 }
 </script>
@@ -941,112 +940,31 @@ function folderSelected(id, name) {
 		exit;	
 	} /* }}} */
 
-	// navigation flag is used for items links (navigation or selection)
-	function printFoldersTree($accessMode, $exclude, $folderID, $currentFolderID=-1, $navigation=false) {	/* {{{ */
-		if ($this->params['expandfoldertree']==2){
-		
-			// folder completely open
-			$is_open=true;
-			
-		}else if ($this->params['expandfoldertree']==1 && $folderID==$this->params['rootfolderid'] ){
-		
-			$is_open=true;
-			
-		}else{
-			// open the tree until the current folder
-			$is_open=false;
-			
-			if ($currentFolderID!=-1){
-				
-				$currentFolder=$this->params['dms']->getFolder($currentFolderID);
-				
-				if (is_object($currentFolder)){
-				
-					$parent=$currentFolder->getParent();
-					
-					while (is_object($parent)){
-						if ($parent->getID()==$folderID){
-							$is_open=true;
-							break;
-						}
-						$parent=$parent->getParent();
-					}
-				}
-			}
-		}
-		
-		$folder = $this->params['dms']->getFolder($folderID);
-		if (!is_object($folder)) return;
-		
-		$subFolders = $folder->getSubFolders();
-		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $this->params['user'], M_READ);
-		
-		if ($folderID == $this->params['rootfolderid']) print "<ul style='list-style-type: none;' class='tree'>\n";
-
-		print "<li>\n";
-
-		if (count($subFolders) > 0){
-			print "<a href=\"javascript:toggleTree(".$folderID.")\">";
-			print "<i name=\"treedot".$folderID."\" class=\"";	
-			if ($is_open) print "icon-minus-sign";
-			else print "icon-plus-sign";
-			print "\" ></i>";
-			print "</a>\n";
-		}
-		else{
-			print "<i class=\"icon-\"></i>\n";
-		}
-		if ($folder->getAccessMode($this->params['user']) >= $accessMode) {
-
-			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i>";
-			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i>";
-//			print "<span style=\"padding-left:5px\" >";
-
-			if ($folderID != $currentFolderID){
-			
-				if ($navigation) print "<a href=\"../out/out.ViewFolder.php?folderid=" . $folderID . "&showtree=1\"";
-				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . str_replace("'", "\\'", htmlspecialchars($folder->getName())) . "')\"";
-				print " rel=\"folder_".$folder->getID()."\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\"";
-				print ">";
-
-			} else print "<span class=\"selectedfoldertree\">";
-			
-			print htmlspecialchars($folder->getName());
-
-			if ($folderID != $currentFolderID) print "</a>\n";
-			else print "</span>";
-
-		}
-		else print "<i class=\"icon-folder-close\"></i>".htmlspecialchars($folder->getName())."\n";
-
-		if ($is_open) print "<ul style='list-style-type: none;' id=\"tree".$folderID."\" >\n";
-		else print "<ul style='list-style-type: none; display: none;' id=\"tree".$folderID."\" >\n";
-		
-		for ($i = 0; $i < count($subFolders); $i++) {
-		
-			if ($subFolders[$i]->getID() == $exclude) continue;
-			
-			$this->printFoldersTree( $accessMode, $exclude, $subFolders[$i]->getID(),$currentFolderID,$navigation);
-		}
-
-		print "</ul>\n";
-		
-		if ($folderID == $this->params['rootfolderid']) print "</ul>\n";
-	} /* }}} */
-
-	function printNewTreeNavigation($folderid, $showtree, $showdocs=0) { /* {{{ */
+	/**
+	 * Create a tree of folders using jqtree.
+	 *
+	 * The tree can contain folders only or include documents.
+	 *
+	 * @params integer $folderid current folderid. If set the tree will be
+	 *   folded out and the all folders in the path will be visible
+	 * @params integer $accessmode use this access mode when retrieving folders
+	 *   and documents shown in the tree
+	 * @params boolean $showdocs set to true if tree shall contain documents
+	 *   as well.
+	 */
+	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0) { /* {{{ */
 		function jqtree($path, $folder, $user, $showdocs=1) {
 			if($path) {
 				$pathfolder = array_shift($path);
 				$subfolders = $folder->getSubFolders();
-				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, M_READ);
+				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
 				$children = array();
 				foreach($subfolders as $subfolder) {
 					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
 					if($pathfolder->getID() == $subfolder->getID()) {
 						if($showdocs) {
 							$documents = $folder->getDocuments();
-							$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
+							$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, $accessmode);
 							foreach($documents as $document) {
 								$node2 = array('label'=>$document->getName(), 'id'=>$document->getID(), 'load_on_demand'=>false, 'is_folder'=>false);
 								$children[] = $node2;
@@ -1093,7 +1011,6 @@ $(function() {
 				folderSelected(node.id, node.name);
 			else
 				documentSelected(node.id, node.name);
-			console.log(node);
 		},
 		autoOpen: true,
 		drapAndDrop: true,
@@ -1121,7 +1038,7 @@ $(function() {
 	}
 	</script>
 <?php
-			$this->printNewTreeNavigation($folderid, $showtree, 0);
+			$this->printNewTreeNavigation($folderid, M_READ, 0);
 			$this->contentContainerEnd();
 		} else {
 			$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);

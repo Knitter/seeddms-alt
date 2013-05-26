@@ -94,7 +94,23 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 		echo "<div class=\"row-fluid\">\n";
 		echo "<div class=\"span4\">\n";
-		if ($enableFolderTree) $this->printTreeNavigation($folderid, $showtree);
+		if ($enableFolderTree) {
+			if ($showtree==1){
+				$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
+				$this->contentContainerStart();
+?>
+		<script language="JavaScript">
+		function folderSelected(id, name) {
+			window.location = '../out/out.ViewFolder.php?folderid=' + id;
+		}
+		</script>
+<?php
+				$this->printNewTreeNavigation($folderid, M_READ, 0);
+				$this->contentContainerEnd();
+			} else {
+				$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
+			}
+		}
 		if (1 || $enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
 		echo "</div>\n";
 		echo "<div class=\"span8\">\n";
