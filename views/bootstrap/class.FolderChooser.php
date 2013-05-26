@@ -41,7 +41,7 @@ class SeedDMS_View_FolderChooser extends SeedDMS_Bootstrap_Style {
 
 		$this->htmlStartPage(getMLText("choose_target_folder"));
 		$this->contentContainerStart();
-		$this->printNewTreeNavigation($folderid, $showtree, 0);
+		$this->printNewTreeNavigation($folderid, $mode, 0);
 //		$this->printFoldersTree($mode, $exclude, $rootfolderid);
 		$this->contentContainerEnd();
 		echo "</body>\n</html>\n";
