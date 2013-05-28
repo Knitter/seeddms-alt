@@ -997,7 +997,7 @@ function folderSelected(id, name) {
 			$tree = array(array('label'=>$root->getName(), 'id'=>$root->getID(), 'load_on_demand'=>true, 'is_folder'=>true));
 		}
 
-		echo "<div id=\"jqtree\" style=\"margin-left: 20px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."\"></div>\n";
+		echo "<div id=\"jqtree\" style=\"margin-left: 10px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."\"></div>\n";
 ?>
 	<script language="JavaScript">
 var data = <?php echo json_encode($tree); ?>;
