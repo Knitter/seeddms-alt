@@ -14,7 +14,7 @@
 require "inc.ClassExtensionMgr.php";
 require_once "inc.ClassExtBase.php";
 
-$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+$extMgr = new SeedDMS_Extension_Mgr($db, $settings->_rootDir."/ext", $settings->_cacheDir);
 $extconffile = $extMgr->getExtensionsConfFile();
 if(!file_exists($extconffile)) {
 	$extMgr->createExtensionConf();
