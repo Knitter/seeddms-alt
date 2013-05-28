@@ -1,5 +1,5 @@
 ul.jqtree-tree {
-    margin-left: 12px;
+    margin-left: 18px;
 }
 
 ul.jqtree-tree,
@@ -11,7 +11,7 @@ ul.jqtree-tree ul.jqtree_common {
 
 ul.jqtree-tree ul.jqtree_common {
     display: block;
-    margin-left: 12px;
+    margin-left: 18px;
     margin-right: 0;
 }
 ul.jqtree-tree li.jqtree-closed > ul.jqtree_common {
@@ -25,7 +25,7 @@ ul.jqtree-tree li.jqtree_common {
 ul.jqtree-tree .jqtree-toggler {
     display: block;
     position: absolute;
-    left: -1.5em;
+    left: -1.3em;
     top: 0%;
     *top: 0;  /* fix for ie7 */
     /*font-size: 12px; 
