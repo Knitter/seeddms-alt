@@ -51,7 +51,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 				/* check dependency on specific seeddms version */
 				if(isset($extconf['constraints']['depends']['seeddms'])) {
 					$tmp = explode('-', $extconf['constraints']['depends']['seeddms'], 2);
-					if($tmp[0] > $version->version() || ($tmp[1] && $tmp[1] < $version->version()))
+					if(cmpVersion($tmp[0], $version->version()) > 0 || ($tmp[1] && cmpVersion($tmp[1], $version->version()) < 0))
 						$errmsgs[] = sprintf("Incorrect SeedDMS version (needs version %s)", $extconf['constraints']['depends']['seeddms']);
 				} else {
 					$errmsgs[] = "Missing dependency on SeedDMS";
@@ -60,7 +60,7 @@ class SeedDMS_View_ExtensionMgr extends SeedDMS_Bootstrap_Style {
 				/* check dependency on specific php version */
 				if(isset($extconf['constraints']['depends']['php'])) {
 					$tmp = explode('-', $extconf['constraints']['depends']['php'], 2);
-					if($tmp[0] > phpversion() || ($tmp[1] && $tmp[1] < phpversion()))
+					if(cmpVersion($tmp[0], phpversion()) > 0 || ($tmp[1] && cmpVersion($tmp[1], phpversion()) < 0))
 						$errmsgs[] = sprintf("Incorrect PHP version (needs version %s)", $extconf['constraints']['depends']['php']);
 				} else {
 					$errmsgs[] = "Missing dependency on PHP";
