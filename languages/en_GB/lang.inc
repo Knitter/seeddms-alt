@@ -85,6 +85,7 @@ $text = array(
 'assign_reviewers' => "Assign Reviewers",
 'assign_user_property_to' => "Assign user's properties to",
 'assumed_released' => "Assumed released",
+'attr_no_regex_match' => "The attribute value does not match the regular expression",
 'attrdef_management' => "Attribute definition management",
 'attrdef_exists' => "Attribute definition already exists",
 'attrdef_in_use' => "Attribute definition still in use",
