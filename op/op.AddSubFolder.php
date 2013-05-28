@@ -60,6 +60,17 @@ if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
 else
 	$attributes = array();
+foreach($attributes as $attrdefid=>$attribute) {
+	$attrdef = $dms->getAttributeDefinition($attrdefid);
+	if($attribute) {
+		if($attrdef->getRegex()) {
+			if(!preg_match($attrdef->getRegex(), $attribute)) {
+				UI::exitError(getMLText("folder_title", array("foldername" => $document->getName())),getMLText("attr_no_regex_match"));
+			}
+		}
+	}
+}
+
 $subFolder = $folder->addSubFolder($name, $comment, $user, $sequence, $attributes);
 
 if (is_object($subFolder)) {

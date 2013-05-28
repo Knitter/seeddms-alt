@@ -127,6 +127,9 @@ function showAttributeDefinitions(selectObj) {
 					<td><?php printMLText("attrdef_valueset");?>:</td><td><input type="text" value="" name="valueset" /></td>
 				</tr>
 				<tr>
+					<td><?php printMLText("attrdef_regex");?>:</td><td><input type="text" value="" name="regex" /></td>
+				</tr>
+				<tr>
 					<td></td>
 					<td><input type="submit" class="btn" value="<?php printMLText("new_attrdef"); ?>"></td>
 				</tr>
@@ -220,6 +223,14 @@ function showAttributeDefinitions(selectObj) {
 						</td>
 						<td>
 							<input type="text" value="<?php echo $attrdef->getValueSet() ?>" name="valueset" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<?php printMLText("attrdef_regex");?>:
+						</td>
+						<td>
+							<input type="text" value="<?php echo $attrdef->getRegex() ?>" name="regex" />
 						</td>
 					</tr>
 					<tr>

@@ -58,10 +58,32 @@ if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
 else
 	$attributes = array();
+foreach($attributes as $attrdefid=>$attribute) {
+	$attrdef = $dms->getAttributeDefinition($attrdefid);
+	if($attribute) {
+		if($attrdef->getRegex()) {
+			if(!preg_match($attrdef->getRegex(), $attribute)) {
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_no_regex_match"));
+			}
+		}
+	}
+}
+
 if(isset($_POST["attributes_version"]))
 	$attributes_version = $_POST["attributes_version"];
 else
 	$attributes_version = array();
+foreach($attributes_version as $attrdefid=>$attribute) {
+	$attrdef = $dms->getAttributeDefinition($attrdefid);
+	if($attribute) {
+		if($attrdef->getRegex()) {
+			if(!preg_match($attrdef->getRegex(), $attribute)) {
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_no_regex_match"));
+			}
+		}
+	}
+}
+
 
 if(isset($_POST["workflow"]))
 	$workflow = $dms->getWorkflow($_POST["workflow"]);

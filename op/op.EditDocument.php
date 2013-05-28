@@ -234,8 +234,19 @@ if($categories) {
 if($attributes) {
 	$oldattributes = $document->getAttributes();
 	foreach($attributes as $attrdefid=>$attribute) {
-		if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
-			if(!$document->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
+		$attrdef = $dms->getAttributeDefinition($attrdefid);
+		if($attribute) {
+			if($attrdef->getRegex()) {
+				if(!preg_match($attrdef->getRegex(), $attribute)) {
+					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("attr_no_regex_match"));
+				}
+			}
+			if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
+				if(!$document->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
+					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+			}
+		} elseif(isset($oldattributes[$attrdefid])) {
+			if(!$document->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 		}
 	}

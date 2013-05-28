@@ -50,6 +50,7 @@ if ($action == "addattrdef") {
 	$minvalues = intval($_POST["minvalues"]);
 	$maxvalues = intval($_POST["maxvalues"]);
 	$valueset = trim($_POST["valueset"]);
+	$regex = trim($_POST["regex"]);
 
 	if($name == '') {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_noname"));
@@ -57,7 +58,7 @@ if ($action == "addattrdef") {
 	if (is_object($dms->getAttributeDefinitionByName($name))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_exists"));
 	}
-	$newAttrdef = $dms->addAttributeDefinition($name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset);
+	$newAttrdef = $dms->addAttributeDefinition($name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex);
 	if (!$newAttrdef) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
@@ -114,6 +115,7 @@ else if ($action == "editattrdef") {
 	$minvalues = intval($_POST["minvalues"]);
 	$maxvalues = intval($_POST["maxvalues"]);
 	$valueset = trim($_POST["valueset"]);
+	$regex = trim($_POST["regex"]);
 	if (!$attrdef->setName($name)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
@@ -133,6 +135,9 @@ else if ($action == "editattrdef") {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
 	if (!$attrdef->setValueSet($valueset)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
+	if (!$attrdef->setRegex($regex)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
 }
