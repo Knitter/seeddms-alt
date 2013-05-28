@@ -6,8 +6,10 @@
   Even in the past it was set for the document, but this was not clear
 	for the user.
 - reorganization of ViewDocument page
-- maximum execution time of php scripts can be set in the settings
+- maximum execution time of php scripts can be set in the settings and
   is now actually used.
+- replaced folder tree view with a tree based on jquery which loads subfolders
+  on demand
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
