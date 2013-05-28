@@ -249,8 +249,9 @@ if($sequence != "keep") {
 	}
 }
 
-add_log_line("?documentid=".$documentid);
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_document_edited')));
 
+add_log_line("?documentid=".$documentid);
 header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
 
 ?>

@@ -59,13 +59,20 @@ class SeedDMS_View_DocumentAccess extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
+	msg = new Array();
 	if ((document.form1.userid.options[document.form1.userid.selectedIndex].value == -1) && 
 		(document.form1.groupid.options[document.form1.groupid.selectedIndex].value == -1))
-			msg += "<?php printMLText("js_select_user_or_group");?>\n";
+			msg.push("<?php printMLText("js_select_user_or_group");?>");
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -166,7 +173,7 @@ function checkForm()
 				$userObj = $userAccess->getUser();
 				$memusers[] = $userObj->getID();
 				print "<tr>\n";
-				print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>\n";
+				print "<td><i class=\"icon-user\"></i></td>\n";
 				print "<td>". htmlspecialchars($userObj->getFullName()) . "</td>\n";
 				print "<form action=\"../op/op.DocumentAccess.php\">\n";
 				print "<td>\n";
@@ -197,7 +204,7 @@ function checkForm()
 				$memgroups[] = $groupObj->getID();
 				$mode = $groupAccess->getMode();
 				print "<tr>";
-				print "<td><img src=\"images/groupicon.gif\" class=\"mimeicon\"></td>";
+				print "<td><i class=\"icon-group\"></i></td>";
 				print "<td>". htmlspecialchars($groupObj->getName()) . "</td>";
 				print "<form action=\"../op/op.DocumentAccess.php\">";
 				print "<td>";

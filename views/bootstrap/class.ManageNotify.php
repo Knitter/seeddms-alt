@@ -85,7 +85,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 				if (is_object($fld)) {
 					$owner = $fld->getOwner();
 					print "<tr class=\"folder\">";
-					print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
+					print "<td><i class=\"icon-folder-close-alt\"></i></td>";
 					print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$ID."\">" . htmlspecialchars($fld->getName()) . "</a></td>\n";
 					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 					print "<td>";
@@ -120,7 +120,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 					$latest = $doc->getLatestContent();
 					$status = $latest->getStatus();
 					print "<tr>\n";
-					print "<td><img src=\"images/file.gif\" width=18 height=18 border=0></td>";
+					print "<td><i class=\"icon-file\"></i></td>";
 					print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$ID."\">" . htmlspecialchars($doc->getName()) . "</a></td>\n";
 					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 					print "<td>".getOverallStatusText($status["status"])."</td>";
@@ -159,7 +159,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		print "<input type=\"checkbox\" name=\"recursedoc\" value=\"1\">";
 		print getMLText("include_documents");
 		print "</label>";
-		print "<input type='submit' class='btn' name='' value='".getMLText("add")."'/>";
+		print "<button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
 		print "</form>";
 
 		print "<form method=\"post\" action=\"../op/op.ManageNotify.php?type=document&action=add\" name=\"form2\">";
@@ -167,7 +167,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		/* 'form1' must be passed to printDocumentChooser() because the typeahead
 		 * function is currently hardcoded on this value */
 		$this->printDocumentChooser("form1");
-		print "<input type=\"submit\" class=\"btn\" value=\"".getMLText("add")."\">";
+		print "<button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
 		print "</form>";
 
 		$this->contentContainerEnd();

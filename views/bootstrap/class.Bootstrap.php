@@ -42,19 +42,32 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
 		if($this->extraheader)
 			echo $this->extraheader;
-		echo '<script type="text/javascript" src="../styles/bootstrap/jquery/jquery.min.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/bootstrap/noty/js/noty/jquery.noty.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/bootstrap/noty/js/noty/layouts/topRight.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/bootstrap/noty/js/noty/themes/default.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/jquery.noty.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
 
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
+		if($this->params['session'] && $this->params['session']->getSu()) {
+?>
+<style type="text/css">
+.navbar-inverse .navbar-inner {
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#882222), to(#111111));
+background-image: webkit-linear-gradient(top, #882222, #111111);
+background-image: linear-gradient(to bottom, #882222, #111111);;
+}
+</style>
+<?php
+		}
 		echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
-		if($flashmsg = $this->params['session']->getSplashMsg()) {
+		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
 			$this->params['session']->clearSplashMsg();
 ?>
 		<script>
@@ -693,22 +706,13 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 	} /* }}} */
 	
 	function printDocumentChooser($formName) { /* {{{ */
-?>
-		<script language="JavaScript">
-		var openDlg;
-		function chooseDoc<?php print $formName ?>() {
-			openDlg = open("../out/out.DocumentChooser.php?folderid=<?php echo $this->params['rootfolderid']?>&form=<?php echo urlencode($formName)?>", "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
-		}
-		</script>
-		<?php
 		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid".$formName."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosedocsearch\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-//		print "<button type=\"button\"  onclick=\"chooseDoc".$formName."();\">".getMLText("document")."...</button>";
-		print "<a data-target=\"#docChooser\" href=\"out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
+		print "<a data-target=\"#docChooser".$formName."\" href=\"out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="docChooser" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
+<div class="modal hide" id="docChooser<?= $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="docChooserLabel"><?php printMLText("choose_target_document") ?></h3>
@@ -720,14 +724,21 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
   </div>
 </div>
+		<script language="JavaScript">
+modalDocChooser<?= $formName ?> = $('#docChooser<?= $formName ?>');
+function documentSelected(id, name) {
+	$('#docid<?= $formName ?>').val(id);
+	$('#choosedocsearch').val(name);
+	modalDocChooser<?= $formName ?>.modal('hide');
+}
+		</script>
 <?php
 	} /* }}} */
 
 	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
 		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosefoldersearch\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-//		print "<button type=\"button\" class=\"btn\" onclick=\"chooseFolder".$formName."(); return false;\">".getMLText("folder")."...</button>";
+		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 		print "<a data-target=\"#folderChooser".$formName."\" href=\"out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
@@ -746,7 +757,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 <script language="JavaScript">
 /* Set up a callback which is called when a folder in the tree is selected */
 modalFolderChooser<?= $formName ?> = $('#folderChooser<?= $formName ?>');
-function folderSelectedCallback<?= $formName ?>(id, name) {
+function folderSelected(id, name) {
+	$('#targetid<?= $formName ?>').val(id);
+	$('#choosefoldersearch<?= $formName ?>').val(name);
 	modalFolderChooser<?= $formName ?>.modal('hide');
 }
 </script>
@@ -928,136 +941,109 @@ function folderSelectedCallback<?= $formName ?>(id, name) {
 		exit;	
 	} /* }}} */
 
-	// navigation flag is used for items links (navigation or selection)
-	function printFoldersTree($accessMode, $exclude, $folderID, $currentFolderID=-1, $navigation=false) {	/* {{{ */
-		if ($this->params['expandfoldertree']==2){
-		
-			// folder completely open
-			$is_open=true;
-			
-		}else if ($this->params['expandfoldertree']==1 && $folderID==$this->params['rootfolderid'] ){
-		
-			$is_open=true;
-			
-		}else{
-			// open the tree until the current folder
-			$is_open=false;
-			
-			if ($currentFolderID!=-1){
-				
-				$currentFolder=$this->params['dms']->getFolder($currentFolderID);
-				
-				if (is_object($currentFolder)){
-				
-					$parent=$currentFolder->getParent();
-					
-					while (is_object($parent)){
-						if ($parent->getID()==$folderID){
-							$is_open=true;
-							break;
+	/**
+	 * Create a tree of folders using jqtree.
+	 *
+	 * The tree can contain folders only or include documents.
+	 *
+	 * @params integer $folderid current folderid. If set the tree will be
+	 *   folded out and the all folders in the path will be visible
+	 * @params integer $accessmode use this access mode when retrieving folders
+	 *   and documents shown in the tree
+	 * @params boolean $showdocs set to true if tree shall contain documents
+	 *   as well.
+	 */
+	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0) { /* {{{ */
+		function jqtree($path, $folder, $user, $showdocs=1) {
+			if($path) {
+				$pathfolder = array_shift($path);
+				$subfolders = $folder->getSubFolders();
+				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
+				$children = array();
+				foreach($subfolders as $subfolder) {
+					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
+					if($pathfolder->getID() == $subfolder->getID()) {
+						if($showdocs) {
+							$documents = $folder->getDocuments();
+							$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, $accessmode);
+							foreach($documents as $document) {
+								$node2 = array('label'=>$document->getName(), 'id'=>$document->getID(), 'load_on_demand'=>false, 'is_folder'=>false);
+								$children[] = $node2;
+							}
 						}
-						$parent=$parent->getParent();
+						$node['children'] = jqtree($path, $subfolder, $user, $showdocs);
 					}
+					$children[] = $node;
 				}
+				return $children;
+			} else
+				return array();
+		}
+
+		if($folderid) {
+			$folder = $this->params['dms']->getFolder($folderid);
+			$path = $folder->getPath();
+			$folder = array_shift($path);
+			$node = array('label'=>$folder->getName(), 'id'=>$folder->getID(), 'load_on_demand'=>true, 'is_folder'=>true);
+			if(!$folder->hasSubFolders()) {
+				$node['load_on_demand'] = false;
+				$node['children'] = array();
+			} else {
+				$node['children'] = jqtree($path, $folder, $this->params['user'], $showdocs);
 			}
-		}
-		
-		$folder = $this->params['dms']->getFolder($folderID);
-		if (!is_object($folder)) return;
-		
-		$subFolders = $folder->getSubFolders();
-		$subFolders = SeedDMS_Core_DMS::filterAccess($subFolders, $this->params['user'], M_READ);
-		
-		if ($folderID == $this->params['rootfolderid']) print "<ul style='list-style-type: none;' class='tree'>\n";
-
-		print "<li>\n";
-
-		if (count($subFolders) > 0){
-			print "<a href=\"javascript:toggleTree(".$folderID.")\">";
-			print "<i name=\"treedot".$folderID."\" class=\"";	
-			if ($is_open) print "icon-minus-sign";
-			else print "icon-plus-sign";
-			print "\" ></i>";
-			print "</a>\n";
-		}
-		else{
-			print "<i class=\"icon-\"></i>\n";
-		}
-		if ($folder->getAccessMode($this->params['user']) >= $accessMode) {
-
-			if ($is_open) print "<i class=\"icon-folder-open\" name=\"treeimg".$folderID."\"></i>";
-			else print "<i class=\"icon-folder-close\" name=\"treeimg".$folderID."\"></i>";
-//			print "<span style=\"padding-left:5px\" >";
-
-			if ($folderID != $currentFolderID){
+			$tree[] = $node;
 			
-				if ($navigation) print "<a href=\"../out/out.ViewFolder.php?folderid=" . $folderID . "&showtree=1\"";
-				else print "<a class=\"foldertree_selectable\" href=\"javascript:folderSelected(" . $folderID . ", '" . str_replace("'", "\\'", htmlspecialchars($folder->getName())) . "')\"";
-				print " rel=\"folder_".$folder->getID()."\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\"";
-				print ">";
-
-			} else print "<span class=\"selectedfoldertree\">";
-			
-			print htmlspecialchars($folder->getName());
-
-			if ($folderID != $currentFolderID) print "</a>\n";
-			else print "</span>";
-
-		}
-		else print "<i class=\"icon-folder-close\"></i>".htmlspecialchars($folder->getName())."\n";
-
-		if ($is_open) print "<ul style='list-style-type: none;' id=\"tree".$folderID."\" >\n";
-		else print "<ul style='list-style-type: none; display: none;' id=\"tree".$folderID."\" >\n";
-		
-		for ($i = 0; $i < count($subFolders); $i++) {
-		
-			if ($subFolders[$i]->getID() == $exclude) continue;
-			
-			$this->printFoldersTree( $accessMode, $exclude, $subFolders[$i]->getID(),$currentFolderID,$navigation);
+		} else {
+			$root = $this->params['dms']->getFolder($this->params['rootfolderid']);
+			$tree = array(array('label'=>$root->getName(), 'id'=>$root->getID(), 'load_on_demand'=>true, 'is_folder'=>true));
 		}
 
-		print "</ul>\n";
-		
-		if ($folderID == $this->params['rootfolderid']) print "</ul>\n";
+		echo "<div id=\"jqtree\" style=\"margin-left: 20px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."\"></div>\n";
+?>
+	<script language="JavaScript">
+var data = <?php echo json_encode($tree); ?>;
+$(function() {
+  $('#jqtree').tree({
+		data: data,
+		openedIcon: '<i class="icon-minus-sign"></i>',
+		closedIcon: '<i class="icon-plus-sign"></i>',
+		onCanSelectNode: function(node) {
+			if(node.is_folder)
+				folderSelected(node.id, node.name);
+			else
+				documentSelected(node.id, node.name);
+		},
+		autoOpen: true,
+		drapAndDrop: true,
+    onCreateLi: function(node, $li) {
+        // Add 'icon' span before title
+				if(node.is_folder)
+					$li.find('.jqtree-title').before('<i class="icon-folder-close-alt" rel="folder_' + node.id + '" ondragover="allowDrop(event)" ondrop="onDrop(event)"></i> ').attr('rel', 'folder_' + node.id).attr('ondragover', 'allowDrop(event)').attr('ondrop', 'onDrop(event)');
+				else
+					$li.find('.jqtree-title').before('<i class="icon-file"></i> ');
+    }
+  });
+});
+	</script>
+<?php
 	} /* }}} */
 
 	function printTreeNavigation($folderid, $showtree){ /* {{{ */
-?>
-		<script language="JavaScript">
-		function toggleTree(id){
-			
-			obj = document.getElementById("tree" + id);
-			
-			if ( obj.style.display == "none" ){
-				obj.style.display = "";
-				$("i[name='treeimg" +id+ "']").removeClass("icon-folder-close");
-				$("i[name='treeimg" +id+ "']").addClass("icon-folder-open");
-				$("i[name='treedot" +id+ "']").removeClass("icon-plus-sign");
-				$("i[name='treedot" +id+ "']").addClass("icon-minus-sign");		
-			}else{
-				obj.style.display = "none";
-				$("i[name='treeimg" +id+ "']").removeClass("icon-folder-open");
-				$("i[name='treeimg" +id+ "']").addClass("icon-folder-close");
-				$("i[name='treedot" +id+ "']").removeClass("icon-minus-sign");
-				$("i[name='treedot" +id+ "']").addClass("icon-plus-sign");
-			}
-
-		}
-		</script>
-<?php
-	
 		if ($showtree==1){
-
 			$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
 			$this->contentContainerStart();
-			$this->printFoldersTree(M_READ, -1, $this->params['rootfolderid'], $folderid, true);
+?>
+	<script language="JavaScript">
+	function folderSelected(id, name) {
+		window.location = '../out/out.ViewFolder.php?folderid=' + id;
+	}
+	</script>
+<?php
+			$this->printNewTreeNavigation($folderid, M_READ, 0);
 			$this->contentContainerEnd();
-
-		}else{
-		
+		} else {
 			$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
 		}
-
 	} /* }}} */
 
 	function printClipboard($clipboard){ /* {{{ */

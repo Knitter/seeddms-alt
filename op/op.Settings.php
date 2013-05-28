@@ -168,6 +168,8 @@ if ($action == "saveSettings")
 	add_log_line(".php&action=savesettings");
 }
 
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_settings_saved')));
+
 
 header("Location:../out/out.Settings.php");
 

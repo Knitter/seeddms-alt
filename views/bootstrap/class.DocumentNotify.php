@@ -49,13 +49,19 @@ class SeedDMS_View_DocumentNotify extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
+	msg = new Array();
 	if ((document.form1.userid.options[document.form1.userid.selectedIndex].value == -1) && 
 		(document.form1.groupid.options[document.form1.groupid.selectedIndex].value == -1))
-			msg += "<?php printMLText("js_select_user_or_group");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
+			msg.push("<?php printMLText("js_select_user_or_group");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -77,7 +83,7 @@ function checkForm()
 		else {
 			foreach ($notifyList["users"] as $userNotify) {
 				print "<tr>";
-				print "<td><img src=\"images/usericon.gif\" class=\"mimeicon\"></td>";
+				print "<td><i class=\"icon-user\"></i></td>";
 				print "<td>" . htmlspecialchars($userNotify->getLogin() . " - " . $userNotify->getFullName()) . "</td>";
 				if ($user->isAdmin() || $user->getID() == $userNotify->getID()) {
 					print "<td><a href=\"../op/op.DocumentNotify.php?documentid=". $document->getID() . "&action=delnotify&userid=".$userNotify->getID()."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a></td>";
@@ -87,7 +93,7 @@ function checkForm()
 			}
 			foreach ($notifyList["groups"] as $groupNotify) {
 				print "<tr>";
-				print "<td><img src=\"images/groupicon.gif\" width=16 height=16 border=0></td>";
+				print "<td><i class=\"icon-group\"></i></td>";
 				print "<td>" . htmlspecialchars($groupNotify->getName()) . "</td>";
 				if ($user->isAdmin() || $groupNotify->isMember($user,true)) {
 					print "<td><a href=\"../op/op.DocumentNotify.php?documentid=". $document->getID() . "&action=delnotify&groupid=".$groupNotify->getID()."\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a></td>";

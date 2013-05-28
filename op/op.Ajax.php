@@ -41,6 +41,11 @@ if (isset($_COOKIE["mydms_session"])) {
 		exit;
 	}
 	$dms->setUser($user);
+	if($user->isAdmin()) {
+		if($resArr["su"]) {
+			$user = $dms->getUser($resArr["su"]);
+		}
+	}
 } else {
 	$user = null;
 }
@@ -98,6 +103,41 @@ switch($command) {
 				echo json_encode($result);
 			}
 		}
+		break;
+
+	case 'subtree':
+		if(empty($_GET['node']))
+			$nodeid = $settings->_rootFolderID;
+		else
+			$nodeid = (int) $_GET['node'];
+		if(empty($_GET['showdocs']))
+			$showdocs = false;
+		else
+			$showdocs = true;
+
+		$folder = $dms->getFolder($nodeid);
+		if (!is_object($folder)) return '';
+		
+		$subfolders = $folder->getSubFolders();
+		$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, M_READ);
+		$tree = array();
+		foreach($subfolders as $subfolder) {
+			$level = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
+			if(!$subfolder->hasSubFolders())
+				$level['children'] = array();
+			$tree[] = $level;
+		}
+		if($showdocs) {
+			$documents = $folder->getDocuments();
+			$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
+			foreach($documents as $document) {
+				$level = array('label'=>$document->getName(), 'id'=>$document->getID(), 'load_on_demand'=>false, 'is_folder'=>false);
+				$tree[] = $level;
+			}
+		}
+
+		echo json_encode($tree);
+//		echo json_encode(array(array('label'=>'test1', 'id'=>1, 'load_on_demand'=> true), array('label'=>'test2', 'id'=>2, 'load_on_demand'=> true)));
 		break;
 }
 ?>

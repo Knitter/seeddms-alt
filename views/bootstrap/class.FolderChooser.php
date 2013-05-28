@@ -40,40 +40,11 @@ class SeedDMS_View_FolderChooser extends SeedDMS_Bootstrap_Style {
 		$rootfolderid = $this->params['rootfolderid'];
 
 		$this->htmlStartPage(getMLText("choose_target_folder"));
-//		$this->globalBanner();
-?>
-
-<script language="JavaScript">
-function toggleTree(id){
-	obj = document.getElementById("tree" + id);
-	if ( obj.style.display == "none" ) obj.style.display = "";
-	else obj.style.display = "none";
-}
-
-var targetName;
-var targetID;
-function folderSelected(id, name) {
-	targetName.value = name;
-	targetID.value = id;
-	if(typeof(folderSelectedCallback<?= $form ?>) !== 'undefined')
-		folderSelectedCallback<?= $form ?>(id, name);
-}
-</script>
-
-<?php
 		$this->contentContainerStart();
-		$this->printFoldersTree($mode, $exclude, $rootfolderid);
+		$this->printNewTreeNavigation($folderid, $mode, 0);
+//		$this->printFoldersTree($mode, $exclude, $rootfolderid);
 		$this->contentContainerEnd();
-?>
-
-<script language="JavaScript">
-targetName = document.<?php echo $form?>.targetname<?php print $form ?>;
-targetID   = document.<?php echo $form?>.targetid<?php print $form ?>;
-</script>
-
-<?php
 		echo "</body>\n</html>\n";
-//		$this->htmlEndPage();
 	} /* }}} */
 }
 ?>

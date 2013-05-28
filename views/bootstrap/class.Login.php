@@ -45,12 +45,18 @@ class SeedDMS_View_Login extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
-	if (document.form1.login.value == "") msg += "<?php printMLText("js_no_login");?>\n";
-	if (document.form1.pwd.value == "") msg += "<?php printMLText("js_no_pwd");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
+	msg = new Array()
+	if (document.form1.login.value == "") msg.push("<?php printMLText("js_no_login");?>");
+	if (document.form1.pwd.value == "") msg.push("<?php printMLText("js_no_pwd");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else

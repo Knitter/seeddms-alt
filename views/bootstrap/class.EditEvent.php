@@ -48,18 +48,24 @@ class SeedDMS_View_EditEvent extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
-	if (document.form1.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
+	msg = new Array()
+	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 <?php
 	if ($strictformcheck) {
-	?>
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+?>
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 <?php
 	}
 ?>
-	if (msg != "")
-	{
-		alert(msg);
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else

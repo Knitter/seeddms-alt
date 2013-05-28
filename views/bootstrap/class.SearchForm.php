@@ -49,17 +49,23 @@ class SeedDMS_View_SearchForm extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
+	msg = new Array()
 	if (document.form1.query.value == "")
 	{
 		if (!document.form1.creationdate.checked && !document.form1.lastupdate.checked &&
 				!document.form1.pendingReview.checked && !document.form1.pendingApproval.checked)
-			msg += "<?php printMLText("js_no_query");?>\n";
+			msg.push("<?php printMLText("js_no_query");?>");
 	}
 	
-	if (msg != "")
-	{
-		alert(msg);
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -202,7 +208,7 @@ function chooseKeywords(target) {
 </td>
 </tr>
 <tr>
-<td></td><td><input type="submit" class="btn" value="<?php printMLText("search"); ?>"></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"> <?php printMLText("search"); ?></button></td>
 </tr>
 
 </table>
@@ -264,7 +270,7 @@ function chooseKeywords(target) {
 </td>
 </tr>
 <tr>
-<td colspan="2"><input type="submit" class="btn" value="<?php printMLText("search"); ?>"></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"> <?php printMLText("search"); ?></button></td>
 </tr>
 </table>
 

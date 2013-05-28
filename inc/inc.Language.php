@@ -18,6 +18,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+$LANG = array();
 foreach(getLanguages() as $_lang) {
 	if(file_exists($settings->_rootDir . "languages/" . $_lang . "/lang.inc")) {
 		include $settings->_rootDir . "languages/" . $_lang . "/lang.inc";
