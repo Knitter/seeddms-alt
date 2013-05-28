@@ -62,53 +62,45 @@ $attributes = $_POST["attributes"];
 if($attributes) {
 	$oldattributes = $version->getAttributes();
 	foreach($attributes as $attrdefid=>$attribute) {
-		if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
-			if(!$version->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute)) {
-				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
-			} else {
-				if($notifier) {
-					$notifyList = $document->getNotifyList();
-/*
-					$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("attribute_changed_email");
-					$message = getMLText("attribute_changed_email")."\r\n";
-					$message .= 
-						getMLText("document").": ".$document->getName()."\r\n".
-						getMLText("version").": ".$version->_version."\r\n".
-						getMLText("attribute").": ".$attribute."\r\n".
-						getMLText("user").": ".$user->getFullName()." <". $user->getEmail() .">\r\n".
-						"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->_version."\r\n";
-
-					if(isset($document->_notifyList["users"])) {
-						$notifier->toList($user, $document->_notifyList["users"], $subject, $message);
-					}
-					if(isset($document->_notifyList["groups"])) {
-						foreach ($document->_notifyList["groups"] as $grp) {
-							$notifier->toGroup($user, $grp, $subject, $message);
-						}
-					}
-*/
-					$subject = "attribute_changed_email_subject";
-					$message = "attribute_changed_email_body";
-					$params = array();
-					$params['name'] = $document->getName();
-					$params['version'] = $version->getVersion();
-					$params['attribute'] = $attribute;
-					$params['folder_path'] = $folder->getFolderPathPlain();
-					$params['username'] = $user->getFullName();
-					$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->getVersion();
-					$params['sitename'] = $settings->_siteName;
-					$params['http_root'] = $settings->_httpRoot;
-
-					$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
-					foreach ($notifyList["groups"] as $grp) {
-						$notifier->toGroup($user, $grp, $subject, $message, $params);
-					}
-					// if user is not owner send notification to owner
-					if ($user->getID() != $document->getOwner()->getID()) 
-						$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
-
+		$attrdef = $dms->getAttributeDefinition($attrdefid);
+		if($attribute) {
+			if($attrdef->getRegex()) {
+				if(!preg_match($attrdef->getRegex(), $attribute)) {
+					UI::exitError(getMLText("folder_title", array("foldername" => $document->getName())),getMLText("attr_no_regex_match"));
 				}
 			}
+			if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
+				if(!$version->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute)) {
+					UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+				} else {
+					if($notifier) {
+						$notifyList = $document->getNotifyList();
+						$subject = "attribute_changed_email_subject";
+						$message = "attribute_changed_email_body";
+						$params = array();
+						$params['name'] = $document->getName();
+						$params['version'] = $version->getVersion();
+						$params['attribute'] = $attribute;
+						$params['folder_path'] = $folder->getFolderPathPlain();
+						$params['username'] = $user->getFullName();
+						$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID()."&version=".$version->getVersion();
+						$params['sitename'] = $settings->_siteName;
+						$params['http_root'] = $settings->_httpRoot;
+
+						$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+						foreach ($notifyList["groups"] as $grp) {
+							$notifier->toGroup($user, $grp, $subject, $message, $params);
+						}
+						// if user is not owner send notification to owner
+						if ($user->getID() != $document->getOwner()->getID()) 
+							$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
+
+					}
+				}
+			}
+		} elseif(isset($oldattributes[$attrdefid])) {
+			if(!$folder->removeAttribute($dms->getAttributeDefinition($attrdefid)))
+				UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("error_occured"));
 		}
 	}
 }
