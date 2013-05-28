@@ -85,7 +85,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 				if (is_object($fld)) {
 					$owner = $fld->getOwner();
 					print "<tr class=\"folder\">";
-					print "<td><i class=\"icon-folder-close\"></i></td>";
+					print "<td><i class=\"icon-folder-close-alt\"></i></td>";
 					print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$ID."\">" . htmlspecialchars($fld->getName()) . "</a></td>\n";
 					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 					print "<td>";
