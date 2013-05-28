@@ -1453,7 +1453,7 @@ class SeedDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$attrdef = new SeedDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"]);
+		$attrdef = new SeedDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"], $resArr["regex"]);
 		$attrdef->setDMS($this);
 		return $attrdef;
 	} /* }}} */
@@ -1477,7 +1477,7 @@ class SeedDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$attrdef = new SeedDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"]);
+		$attrdef = new SeedDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"], $resArr["regex"]);
 		$attrdef->setDMS($this);
 		return $attrdef;
 	} /* }}} */
@@ -1505,7 +1505,7 @@ class SeedDMS_Core_DMS {
 		$attrdefs = array();
 
 		for ($i = 0; $i < count($resArr); $i++) {
-			$attrdef = new SeedDMS_Core_AttributeDefinition($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["objtype"], $resArr[$i]["type"], $resArr[$i]["multiple"], $resArr[$i]["minvalues"], $resArr[$i]["maxvalues"], $resArr[$i]["valueset"]);
+			$attrdef = new SeedDMS_Core_AttributeDefinition($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["objtype"], $resArr[$i]["type"], $resArr[$i]["multiple"], $resArr[$i]["minvalues"], $resArr[$i]["maxvalues"], $resArr[$i]["valueset"], $resArr[$i]["regex"]);
 			$attrdef->setDMS($this);
 			$attrdefs[$i] = $attrdef;
 		}
@@ -1524,13 +1524,13 @@ class SeedDMS_Core_DMS {
 	 * @param string $valueset list of allowed values (csv format)
 	 * @return object of {@link SeedDMS_Core_User}
 	 */
-	function addAttributeDefinition($name, $objtype, $type, $multiple=0, $minvalues=0, $maxvalues=1, $valueset='') { /* {{{ */
+	function addAttributeDefinition($name, $objtype, $type, $multiple=0, $minvalues=0, $maxvalues=1, $valueset='', $regex='') { /* {{{ */
 		if (is_object($this->getAttributeDefinitionByName($name))) {
 			return false;
 		}
 		if(!$type)
 			return false;
-		$queryStr = "INSERT INTO tblAttributeDefinitions (name, objtype, type, multiple, minvalues, maxvalues, valueset) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).")";
+		$queryStr = "INSERT INTO tblAttributeDefinitions (name, objtype, type, multiple, minvalues, maxvalues, valueset, regex) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).", ".$this->db->qstr($regex).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;

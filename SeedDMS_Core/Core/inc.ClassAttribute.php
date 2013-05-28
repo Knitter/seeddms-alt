@@ -222,6 +222,13 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	protected $_valueset;
 
 	/**
+	 * @var string regular expression the value must match
+	 *
+	 * @access protected
+	 */
+	protected $_regex;
+
+	/**
 	 * @var object SeedDMS_Core_DMS reference to the dms instance this attribute definition belongs to
 	 *
 	 * @access protected
@@ -258,7 +265,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 * @param string $valueset separated list of allowed values, the first char
 	 *        is taken as the separator
 	 */
-	function SeedDMS_Core_AttributeDefinition($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset) { /* {{{ */
+	function SeedDMS_Core_AttributeDefinition($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_type = $type;
@@ -268,6 +275,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		$this->_maxvalues = $maxvalues;
 		$this->_valueset = $valueset;
 		$this->_separator = '';
+		$this->_regex = $regex;
 		$this->_dms = null;
 	} /* }}} */
 
@@ -435,6 +443,35 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 
 		$this->_valueset = $valueset;
 		$this->_separator = substr($valueset, 0, 1);
+		return true;
+	} /* }}} */
+
+	/**
+	 * Get the regular expression as saved in the database
+	 *
+	 * @return string regular expression
+	 */
+	function getRegex() { /* {{{ */
+		return $this->_regex;
+	} /* }}} */
+
+	/**
+	 * Set the regular expression
+	 *
+	 * A value of the attribute must match this regular expression.
+	 *
+	 * @param string $regex
+	 * @return boolean true if regex could be set, otherwise false
+	 */
+	function setRegex($regex) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "UPDATE tblAttributeDefinitions SET regex =".$db->qstr($regex)." WHERE id = " . $this->_id;
+		$res = $db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		$this->_regex = $regex;
 		return true;
 	} /* }}} */
 

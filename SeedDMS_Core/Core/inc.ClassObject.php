@@ -158,5 +158,37 @@ class SeedDMS_Core_Object { /* {{{ */
 		return true;
 	} /* }}} */
 
+	/**
+	 * Remove an attribute of the object for the given attribute definition
+	 *
+	 * @return boolean true if operation was successful, otherwise false
+	 */
+	function removeAttribute($attrdef) { /* {{{ */
+		$db = $this->_dms->getDB();
+		if (!$this->_attributes) {
+			$this->getAttributes();
+		}
+		if(isset($this->_attributes[$attrdef->getId()])) {
+			switch(get_class($this)) {
+				case "SeedDMS_Core_Document":
+					$queryStr = "DELETE FROM tblDocumentAttributes WHERE document=".$this->_id." AND attrdef=".$attrdef->getId();
+					break;
+				case "SeedDMS_Core_DocumentContent":
+					$queryStr = "DELETE FROM tblDocumentContentAttributes WHERE content=".$this->_id." AND attrdef=".$attrdef->getId();
+					break;
+				case "SeedDMS_Core_Folder":
+					$queryStr = "DELETE FROM tblFolderAttributes WHERE folder=".$this->_id." AND attrdef=".$attrdef->getId();
+					break;
+				default:
+					return false;
+			}
+			$res = $db->getResult($queryStr);
+			if (!$res)
+				return false;
+
+			unset($this->_attributes[$attrdef->getId()]);
+		}
+		return true;
+	} /* }}} */
 } /* }}} */
 ?>
