@@ -469,6 +469,30 @@ class SeedDMS_Core_DMS {
 		return $document;
 	} /* }}} */
 
+	/**
+	 * Return a document content by its id
+	 *
+	 * This function retrieves a document content from the database by its id.
+	 *
+	 * @param integer $id internal id of document content
+	 * @return object instance of {@link SeedDMS_Core_DocumentContent} or false
+	 */
+	function getDocumentContent($id) { /* {{{ */
+		if (!is_numeric($id)) return false;
+
+		$queryStr = "SELECT * FROM tblDocumentContent WHERE id = ".(int) $id;
+		$resArr = $this->db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		if (count($resArr) != 1)
+			return false;
+		$row = $resArr[0];
+
+		$document = $this->getDocument($row['document']);
+		$version = new SeedDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
+		return $version;
+	} /* }}} */
+
 	function makeTimeStamp($hour, $min, $sec, $year, $month, $day) {
 		$thirtyone = array (1, 3, 5, 7, 8, 10, 12);
 		$thirty = array (4, 6, 9, 11);
