@@ -857,20 +857,8 @@ function folderSelected(id, name) {
 	} /* }}} */
 
 	function printDropFolderChooser($formName, $dropfolderfile="") { /* {{{ */
-?>
-		<script language="JavaScript">
-		var openDlg;
-		function chooseDropFolderFile<?php print $formName ?>() {
-			var current = document.<?php echo $formName ?>.dropfolderfile<?php echo $formName ?>;
-			openDlg = open("out.DropFolderChooser.php?form=<?php echo $formName?>&dropfolderfile="+current.value, "openDlg", "width=480,height=480,scrollbars=yes,resizable=yes,status=yes");
-		}
-		function clearFilename<?php print $formName ?>() {
-			document.<?php echo $formName ?>.dropfolderfile<?php echo $formName ?>.value = '';
-		}
-		</script>
-<?php
 		print "<div class=\"input-append\">\n";
-		print "<input readonly type=\"text\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
+		print "<input readonly type=\"text\" id=\"dropfolderfile".$formName."\" name=\"dropfolderfile".$formName."\" value=\"".$dropfolderfile."\">";
 		print "<button type=\"button\" class=\"btn\" onclick=\"javascript:clearFilename".$formName."();\"><i class=\"icon-remove\"></i></button>";
 		print "<a data-target=\"#dropfolderChooser\" href=\"out.DropFolderChooser.php?form=form1&dropfolderfile=".$dropfolderfile."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("choose_target_file")."…</a>\n";
 		print "</div>\n";
@@ -885,9 +873,20 @@ function folderSelected(id, name) {
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php printMLText("close") ?></button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button>
+<!--    <button class="btn" data-dismiss="modal" aria-hidden="true" onClick="acceptCategories();"><i class="icon-save"></i> <?php printMLText("save") ?></button> -->
   </div>
 </div>
+<script language="JavaScript">
+/* Set up a callback which is called when a folder in the tree is selected */
+modalDropfolderChooser = $('#dropfolderChooser');
+function fileSelected(name) {
+	$('#dropfolderfile<?= $formName ?>').val(name);
+	modalDropfolderChooser.modal('hide');
+}
+function clearFilename<?php print $formName ?>() {
+	$('#dropfolderfile<?= $formName ?>').val('');
+}
+</script>
 <?php
 	} /* }}} */
 
