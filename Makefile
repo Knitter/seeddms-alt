@@ -19,7 +19,13 @@ webdav:
 	(cd tmp; tar --exclude=.svn -czvf ../seeddms-webdav-$(VERSION).tar.gz seeddms-webdav-$(VERSION))
 	rm -rf tmp
 
+webapp:
+	mkdir -p tmp/seeddms-webapp-$(VERSION)
+	cp -a restapi webapp tmp/seeddms-webapp-$(VERSION)
+	(cd tmp; tar --exclude=.svn -czvf ../seeddms-webapp-$(VERSION).tar.gz seeddms-webapp-$(VERSION))
+	rm -rf tmp
+
 doc:
 	phpdoc -d SeedDMS_Core --ignore 'getusers.php,getfoldertree.php,config.php,reverselookup.php' -t html
 
-.PHONY: webdav
+.PHONY: webdav webapp
