@@ -311,7 +311,10 @@ else if ($action == "setdefault") {
 			$message = "access_permission_changed_email_body";
 			$params = array();
 			$params['name'] = $folder->getName();
-			$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			if($folder->getParent())
+				$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			else
+				$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
 			$params['sitename'] = $settings->_siteName;
