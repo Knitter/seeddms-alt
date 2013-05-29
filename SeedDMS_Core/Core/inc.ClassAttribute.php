@@ -478,8 +478,8 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	/**
 	 * Check if the attribute definition is used
 	 *
-	 * Checks all attributes whether at least one of them referenceѕ
-	 * this attribute definition
+	 * Checks all documents, folders and document content whether at least
+	 * one of them referenceѕ this attribute definition
 	 *
 	 * @return boolean true if attribute definition is used, otherwise false
 	 */
@@ -501,6 +501,70 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			}
 		}
 		return true;
+	} /* }}} */
+
+	/**
+	 * Return a list of documents, folders, document contents where this
+	 * attribute definition is used
+	 *
+	 * @param integer $limit return not more the n objects of each type
+	 * @return boolean true if attribute definition is used, otherwise false
+	 */
+	function getStatistics($limit=0) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$result = array('docs'=>array(), 'folders'=>array(), 'contents'=>array());
+		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
+		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_document) {
+			$queryStr = "SELECT * FROM tblDocumentAttributes WHERE attrdef=".$this->_id;
+			if($limit)
+				$queryStr .= " limit ".(int) $limit;
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				foreach($resArr as $rec) {
+					if($doc = $this->_dms->getDocument($rec['document'])) {
+						$result['docs'][] = $doc;
+					}
+				}
+			}
+			$queryStr = "SELECT count(*) c, value FROM tblDocumentAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				$result['frequencies'] = $resArr;
+			}
+		}
+
+		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
+		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_folder) {
+			$queryStr = "SELECT * FROM tblFolderAttributes WHERE attrdef=".$this->_id;
+			if($limit)
+				$queryStr .= " limit ".(int) $limit;
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				foreach($resArr as $rec) {
+					if($folder = $this->_dms->getFolder($rec['folder'])) {
+						$result['folders'][] = $folder;
+					}
+				}
+			}
+		}
+
+		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
+		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
+			$queryStr = "SELECT * FROM tblDocumentContentAttributes WHERE attrdef=".$this->_id;
+			if($limit)
+				$queryStr .= " limit ".(int) $limit;
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				foreach($resArr as $rec) {
+					if($content = $this->_dms->getDocumentContent($rec['content'])) {
+						$result['contents'][] = $content;
+					}
+				}
+			}
+		}
+
+		return $result;
 	} /* }}} */
 
 	/**
