@@ -98,9 +98,7 @@ function showAttributeDefinitions(selectObj) {
 </div>
 
 <div class="span8">
-<div class="well">
-	<table class="table-condensed"><tr>
-		<td id="attrdefs0" style="display : none;">
+<div class="well" id="attrdefs0" style="display : none;">
 			<form action="../op/op.AttributeMgr.php" method="post">
   		<?php echo createHiddenFieldWithKey('addattrdef'); ?>
 			<input type="hidden" name="action" value="addattrdef">
@@ -135,18 +133,16 @@ function showAttributeDefinitions(selectObj) {
 				</tr>
 			</table>
 			</form>
-		</td>
+			</div>
 	
 <?php	
 	
 			if($attrdefs) {
 				foreach ($attrdefs as $attrdef) {
 				
-					print "<td id=\"attrdefs".$attrdef->getID()."\" style=\"display : none;\">";	
+					print "<div id=\"attrdefs".$attrdef->getID()."\" style=\"display : none;\">";	
 ?>
-				<table class="table-condensed">
-					<tr>
-						<td></td><td>
+				<div class="well">
 <?php
 					if(!$attrdef->isUsed()) {
 ?>
@@ -158,13 +154,101 @@ function showAttributeDefinitions(selectObj) {
 							</form>
 <?php
 					} else {
-?>
-							<p><?php echo getMLText('attrdef_in_use') ?></p>
-<?php
+						echo '<p>'.getMLText('attrdef_in_use').'</p>';
+						$res = $attrdef->getStatistics(3);
+						if(isset($res['frequencies']) && $res['frequencies']) {
+							print "<table class=\"table-condensed\">";
+							print "<thead>\n<tr>\n";
+							print "<th>".getMLText("count")."</th>\n";
+							print "<th>".getMLText("value")."</th>\n";
+							print "</tr></thead>\n<tbody>\n";
+							foreach($res['frequencies'] as $entry) {
+								echo "<tr><td>".$entry['c']."</td><td>".$entry['value']."</td></tr>";
+							}
+							print "</tbody></table>";
+						}
+						if($res['docs']) {
+							print "<table class=\"table-condensed\">";
+							print "<thead>\n<tr>\n";
+							print "<th></th>\n";
+							print "<th>".getMLText("name")."</th>\n";
+							print "<th>".getMLText("owner")."</th>\n";
+							print "<th>".getMLText("status")."</th>\n";
+							print "<th>".getMLText("value")."</th>\n";
+							print "<th>".getMLText("actions")."</th>\n";
+							print "</tr></thead>\n<tbody>\n";
+							foreach($res['docs'] as $doc) {
+								$owner = $doc->getOwner();
+								$latest = $doc->getLatestContent();
+								$status = $latest->getStatus();
+								print "<tr>\n";
+								print "<td><i class=\"icon-file\"></i></td>";
+								print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."\">" . htmlspecialchars($doc->getName()) . "</a></td>\n";
+								print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+								print "<td>".getOverallStatusText($status["status"])."</td>";
+								print "<td>".$doc->getAttributeValue($attrdef)."</td>";
+								print "<td>";
+								print "<a href='../out/out.EditDocument.php?documentid=".$doc->getID()."' class=\"btn btn-mini\"><i class=\"icon-edit\"></i> ".getMLText("edit")."</a>";
+								print "</td></tr>\n";
+							}
+							print "</tbody></table>";
+						}
+
+						if($res['folders']) {
+							print "<table class=\"table-condensed\">";
+							print "<thead><tr>\n";
+							print "<th></th>\n";
+							print "<th>".getMLText("name")."</th>\n";
+							print "<th>".getMLText("owner")."</th>\n";
+							print "<th>".getMLText("value")."</th>\n";
+							print "<th>".getMLText("actions")."</th>\n";
+							print "</tr></thead>\n<tbody>\n";
+							foreach($res['folders'] as $folder) {
+								$owner = $folder->getOwner();
+								print "<tr class=\"folder\">";
+								print "<td><i class=\"icon-folder-close-alt\"></i></td>";
+								print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">" . htmlspecialchars($folder->getName()) . "</a></td>\n";
+								print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+								print "<td>".$folder->getAttributeValue($attrdef)."</td>";
+								print "<td>";
+								print "<a href='../out/out.EditFolder.php?folderid=".$folder->getID()."' class=\"btn btn-mini\"><i class=\"icon-edit\"></i> ".getMLText("edit")."</a>";
+								print "</td></tr>";
+							}
+							print "</tbody></table>";
+						}
+
+						if($res['contents']) {
+							print "<table class=\"table-condensed\">";
+							print "<thead>\n<tr>\n";
+							print "<th></th>\n";
+							print "<th>".getMLText("name")."</th>\n";
+							print "<th>".getMLText("owner")."</th>\n";
+							print "<th>".getMLText("mimetype")."</th>\n";
+							print "<th>".getMLText("version")."</th>\n";
+							print "<th>".getMLText("value")."</th>\n";
+							print "<th>".getMLText("actions")."</th>\n";
+							print "</tr></thead>\n<tbody>\n";
+							foreach($res['contents'] as $content) {
+								$doc = $content->getDocument();
+								$owner = $doc->getOwner();
+								print "<tr>\n";
+								print "<td><i class=\"icon-file\"></i></td>";
+								print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."\">" . htmlspecialchars($doc->getName()) . "</a></td>\n";
+								print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+								print "<td>".$content->getMimeType()."</td>";
+								print "<td>".$content->getVersion()."</td>";
+								print "<td>".$content->getAttributeValue($attrdef)."</td>";
+								print "<td>";
+								print "<a href='../out/out.EditDocument.php?documentid=".$doc->getID()."' class=\"btn btn-mini\"><i class=\"icon-edit\"></i> ".getMLText("edit")."</a>";
+								print "</td></tr>\n";
+							}
+							print "</tbody></table>";
+						}
 					}
 ?>
-						</td>
-					</tr>
+				</div>
+				<div class="well">
+				<table class="table-condensed">
 					<form action="../op/op.AttributeMgr.php" method="post">
 					<tr>
 						<td>
@@ -242,12 +326,12 @@ function showAttributeDefinitions(selectObj) {
 					</form>
 					
 				</table>
-			</td>
+			</div>
+			</div>
 <?php
 				}
 			}
 ?>
-	</tr></table>
 </div>
 </div>
 </div>
