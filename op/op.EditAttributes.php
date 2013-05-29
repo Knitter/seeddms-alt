@@ -99,7 +99,7 @@ if($attributes) {
 				}
 			}
 		} elseif(isset($oldattributes[$attrdefid])) {
-			if(!$folder->removeAttribute($dms->getAttributeDefinition($attrdefid)))
+			if(!$version->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 				UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("error_occured"));
 		}
 	}
