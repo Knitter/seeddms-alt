@@ -14,6 +14,7 @@
 - show more information about attributes in attribute manager
 - set url in notification mail after document review (Bug #56)
 - new configuration settings with a list of user ids that cannot be deleted
+- fix output of breadcrumbs on some pages (Bug #55)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
