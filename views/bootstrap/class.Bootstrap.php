@@ -952,7 +952,7 @@ function clearFilename<?php print $formName ?>() {
 	 *   as well.
 	 */
 	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0) { /* {{{ */
-		function jqtree($path, $folder, $user, $showdocs=1) {
+		function jqtree($path, $folder, $user, $accessmode, $showdocs=1) {
 			if($path) {
 				$pathfolder = array_shift($path);
 				$subfolders = $folder->getSubFolders();
@@ -969,13 +969,22 @@ function clearFilename<?php print $formName ?>() {
 								$children[] = $node2;
 							}
 						}
-						$node['children'] = jqtree($path, $subfolder, $user, $showdocs);
+						$node['children'] = jqtree($path, $subfolder, $user, $accessmode, $showdocs);
 					}
 					$children[] = $node;
 				}
 				return $children;
-			} else
-				return array();
+			} else {
+				$subfolders = $folder->getSubFolders();
+				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
+				$children = array();
+				foreach($subfolders as $subfolder) {
+					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
+					$children[] = $node;
+				}
+				return $children;
+			}
+			return array();
 		}
 
 		if($folderid) {
@@ -987,7 +996,7 @@ function clearFilename<?php print $formName ?>() {
 				$node['load_on_demand'] = false;
 				$node['children'] = array();
 			} else {
-				$node['children'] = jqtree($path, $folder, $this->params['user'], $showdocs);
+				$node['children'] = jqtree($path, $folder, $this->params['user'], $accessmode, $showdocs);
 			}
 			$tree[] = $node;
 			
