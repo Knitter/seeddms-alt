@@ -40,7 +40,7 @@ class SeedDMS_View_RemoveDocumentFile extends SeedDMS_Blue_Style {
 
 		$this->htmlStartPage(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))));
 		$this->globalNavigation($folder);
-		$this->pageNavigation(getFolderPathHTML($folder, true, $document), "view_document");
+		$this->pageNavigation($this->getFolderPathHTML($folder, true, $document), "view_document");
 		$this->contentHeading(getMLText("rm_file"));
 		$this->contentContainerStart();
 
