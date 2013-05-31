@@ -114,6 +114,7 @@ if ($_POST["reviewType"] == "ind") {
 			$params['status'] = getReviewStatusText($_POST["reviewStatus"]);
 			$params['comment'] = $comment;
 			$params['username'] = $user->getFullName();
+			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;
 			$notifier->toList($user, $nl["users"], $subject, $message, $params);
