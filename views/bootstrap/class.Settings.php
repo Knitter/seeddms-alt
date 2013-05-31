@@ -324,6 +324,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_quota");?>:</td>
         <td><input type="text" name="quota" value="<?php echo $settings->_quota; ?>" size="2" /></td>
       </tr>
+      <tr title="<?php printMLText("settings_undelUserIds_desc");?>">
+        <td><?php printMLText("settings_undelUserIds");?>:</td>
+        <td><input type="text" name="undelUserIds" value="<?php echo $settings->_undelUserIds; ?>" size="32" /></td>
+      </tr>
       <tr title="<?php printMLText("settings_encryptionKey_desc");?>">
         <td><?php printMLText("settings_encryptionKey");?>:</td>
         <td><input type="text" name="encryptionKey" value="<?php echo $settings->_encryptionKey; ?>" size="32" /></td>
