@@ -10,6 +10,10 @@
   is now actually used.
 - replaced folder tree view with a tree based on jquery which loads subfolders
   on demand
+- attribute value must match regular expression if given (Bug #49)
+- show more information about attributes in attribute manager
+- set url in notification mail after document review (Bug #56)
+- new configuration settings with a list of user ids that cannot be deleted
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
