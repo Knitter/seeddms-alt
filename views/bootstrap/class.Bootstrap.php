@@ -705,7 +705,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	} /* }}} */
 	
 	function printDocumentChooser($formName) { /* {{{ */
-		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid".$formName."\">";
+		print "<input type=\"hidden\" id=\"docid".$formName."\" name=\"docid\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosedocsearch\" data-provide=\"typeahead\" name=\"docname".$formName."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
 		print "<a data-target=\"#docChooser".$formName."\" href=\"out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
@@ -725,7 +725,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 </div>
 		<script language="JavaScript">
 modalDocChooser<?= $formName ?> = $('#docChooser<?= $formName ?>');
-function documentSelected(id, name) {
+function documentSelected<?= $formName ?>(id, name) {
 	$('#docid<?= $formName ?>').val(id);
 	$('#choosedocsearch').val(name);
 	modalDocChooser<?= $formName ?>.modal('hide');
@@ -756,7 +756,7 @@ function documentSelected(id, name) {
 <script language="JavaScript">
 /* Set up a callback which is called when a folder in the tree is selected */
 modalFolderChooser<?= $formName ?> = $('#folderChooser<?= $formName ?>');
-function folderSelected(id, name) {
+function folderSelected<?= $formName ?>(id, name) {
 	$('#targetid<?= $formName ?>').val(id);
 	$('#choosefoldersearch<?= $formName ?>').val(name);
 	modalFolderChooser<?= $formName ?>.modal('hide');
@@ -951,7 +951,7 @@ function clearFilename<?php print $formName ?>() {
 	 * @params boolean $showdocs set to true if tree shall contain documents
 	 *   as well.
 	 */
-	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0) { /* {{{ */
+	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1') { /* {{{ */
 		function jqtree($path, $folder, $user, $accessmode, $showdocs=1) {
 			if($path) {
 				$pathfolder = array_shift($path);
@@ -1005,20 +1005,20 @@ function clearFilename<?php print $formName ?>() {
 			$tree = array(array('label'=>$root->getName(), 'id'=>$root->getID(), 'load_on_demand'=>true, 'is_folder'=>true));
 		}
 
-		echo "<div id=\"jqtree\" style=\"margin-left: 10px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."\"></div>\n";
+		echo "<div id=\"jqtree".$formid."\" style=\"margin-left: 10px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."\"></div>\n";
 ?>
 	<script language="JavaScript">
 var data = <?php echo json_encode($tree); ?>;
 $(function() {
-  $('#jqtree').tree({
+  $('#jqtree<?= $formid ?>').tree({
 		data: data,
 		openedIcon: '<i class="icon-minus-sign"></i>',
 		closedIcon: '<i class="icon-plus-sign"></i>',
 		onCanSelectNode: function(node) {
 			if(node.is_folder)
-				folderSelected(node.id, node.name);
+				folderSelected<?= $formid ?>(node.id, node.name);
 			else
-				documentSelected(node.id, node.name);
+				documentSelected<?= $formid ?>(node.id, node.name);
 		},
 		autoOpen: true,
 		drapAndDrop: true,
@@ -1046,7 +1046,7 @@ $(function() {
 	}
 	</script>
 <?php
-			$this->printNewTreeNavigation($folderid, M_READ, 0);
+			$this->printNewTreeNavigation($folderid, M_READ, 0, '');
 			$this->contentContainerEnd();
 		} else {
 			$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
