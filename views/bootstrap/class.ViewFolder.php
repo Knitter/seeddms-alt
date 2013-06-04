@@ -213,7 +213,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			}
 			print "</td>\n";
 //			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			print "<td colspan=\"1\"><small>";
+			print "<td colspan=\"1\" nowrap><small>";
 			if($enableRecursiveCount) {
 				if($user->isAdmin()) {
 					/* No need to check for access rights in countChildren() for
@@ -308,7 +308,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				}
 				print "</td>\n";
 //				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-				print "<td>";
+				print "<td nowrap>";
 				$attentionstr = '';
 				if ( $document->isLocked() ) {
 					$attentionstr .= "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
