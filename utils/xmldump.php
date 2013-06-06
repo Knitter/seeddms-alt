@@ -50,15 +50,15 @@ if(isset($options['config'])) {
 	$settings = new Settings();
 }
 
-if(isset($settings->_extraPath))
-	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
-
-/* Set alternative config file */
+/* Set maximum size of files included in xml file */
 if(isset($options['maxsize'])) {
 	$maxsize = intval($maxsize);
 } else {
 	$maxsize = 100000;
 }
+
+if(isset($settings->_extraPath))
+	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
 
 require_once("SeedDMS/Core.php");
 
@@ -312,6 +312,11 @@ $db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostna
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
 
 $dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+if(!$dms->checkVersion()) {
+	echo "Database update needed.";
+	exit;
+}
+
 $dms->setRootFolderID($settings->_rootFolderID);
 
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
