@@ -15,6 +15,8 @@
 - set url in notification mail after document review (Bug #56)
 - new configuration setting specifying a list of user ids that cannot be deleted
 - fix output of breadcrumbs on some pages (Bug #55)
+- do not take document comment for version if version comment is empty.
+  The user must explicitly force it.
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
