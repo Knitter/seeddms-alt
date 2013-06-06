@@ -94,6 +94,7 @@ $text = array(
 'attrdef_type' => "Typ",
 'attrdef_minvalues' => "Min. Anzahl Werte",
 'attrdef_maxvalues' => "Max. Anzahl Werte",
+'attrdef_regex' => "Regulärer Ausdruck",
 'attrdef_valueset' => "Werteauswahl",
 'attribute_changed_email_subject' => "[sitename]: [name] - Attribut geändert",
 'attribute_changed_email_body' => "Attribut geändert\r\nDokument: [name]\r\nVersion: [version]\r\nAttribut: [attribute]\r\nElternordner: [folder_path]\r\nBenutzer: [username]\r\nURL: [url]",
