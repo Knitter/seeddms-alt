@@ -52,6 +52,8 @@ class Settings { /* {{{ */
 	var $_loginFailure = 0;
 	// maximum amount of bytes a user may consume, 0 = unlimited
 	var $_quota = 0;
+	// comma separated list of undeleteable user ids
+	var $_undelUserIds = 0;
 	// Restricted access: only allow users to log in if they have an entry in
 	// the local database (irrespective of successful authentication with LDAP).
 	var $_restricted = true;
@@ -347,6 +349,7 @@ class Settings { /* {{{ */
 		$this->_passwordHistory = intval($tab["passwordHistory"]);
 		$this->_loginFailure = intval($tab["loginFailure"]);
 		$this->_quota = intval($tab["quota"]);
+		$this->_undelUserIds = strval($tab["undelUserIds"]);
 		$this->_encryptionKey = strval($tab["encryptionKey"]);
 		$this->_cookieLifetime = intval($tab["cookieLifetime"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
@@ -606,6 +609,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "passwordHistory", $this->_passwordHistory);
     $this->setXMLAttributValue($node, "loginFailure", $this->_loginFailure);
     $this->setXMLAttributValue($node, "quota", $this->_quota);
+    $this->setXMLAttributValue($node, "undelUserIds", $this->_undelUserIds);
     $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
     $this->setXMLAttributValue($node, "cookieLifetime", $this->_cookieLifetime);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);

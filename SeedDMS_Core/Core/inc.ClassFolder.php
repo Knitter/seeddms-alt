@@ -701,9 +701,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		$document = $this->_dms->getDocument($db->getInsertID());
 
-		if ($version_comment!="")
+//		if ($version_comment!="")
 			$res = $document->addContent($version_comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes, $workflow);
-		else $res = $document->addContent($comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes, $workflow);
+//		else $res = $document->addContent($comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes, $workflow);
 
 		if (is_bool($res) && !$res) {
 			$db->rollbackTransaction();

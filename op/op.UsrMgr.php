@@ -135,6 +135,10 @@ else if ($action == "removeuser") {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
 	}
 
+	if(in_array($userid, explode(',', $settings->_undelUserIds))) {
+		UI::exitError(getMLText("admin_tools"),getMLText("cannot_delete_user"));
+	}
+
 	/* This used to be a check if an admin is deleted. Now it checks if one
 	 * wants to delete herself.
 	 */

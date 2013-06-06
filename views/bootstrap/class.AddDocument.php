@@ -162,7 +162,7 @@ function addFiles()
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
         <label class="checkbox inline">
-				  <input type="checkbox" name="expires" value="false" checked><?php printMLText("does_not_expire");?><br>
+				  <input type="checkbox" name="expires" value="false" checked><?php printMLText("does_not_expire");?>
         </label>
 			</td>
 		</tr>
@@ -193,7 +193,8 @@ function addFiles()
 <?php } ?>
 		<tr>
 			<td><?php printMLText("comment_for_current_version");?>:</td>
-			<td><textarea name="version_comment" rows="3" cols="80"></textarea></td>
+			<td><textarea name="version_comment" rows="3" cols="80"></textarea><br />
+			<label class="checkbox inline"><input type="checkbox" name="use_comment" value="1" /> <?php printMLText("use_comment_of_document"); ?></label></td>
 		</tr>
 <?php
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));

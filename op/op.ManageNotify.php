@@ -63,8 +63,8 @@ $userid=$user->getID();
 if ($_GET["type"]=="document"){
 
 	if ($_GET["action"]=="add"){
-		if (!isset($_POST["docidform1"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
-		$documentid = $_POST["docidform1"];
+		if (!isset($_POST["docid"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
+		$documentid = $_POST["docid"];
 	}else if ($_GET["action"]=="del"){
 		if (!isset($_GET["id"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
 		$documentid = $_GET["id"];

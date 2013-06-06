@@ -77,6 +77,11 @@ $db = new SeedDMS_Core_DatabaseAccess($settings->_dbDriver, $settings->_dbHostna
 $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostname . "\"");
 
 $dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+if(!$dms->checkVersion()) {
+	echo "Database update needed.";
+	exit;
+}
+
 $dms->setRootFolderID($settings->_rootFolderID);
 
 $index = Zend_Search_Lucene::create($settings->_luceneDir);

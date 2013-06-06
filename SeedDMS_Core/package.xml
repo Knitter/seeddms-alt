@@ -24,6 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
+- various small corrections
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">

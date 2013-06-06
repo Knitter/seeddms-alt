@@ -166,7 +166,7 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		$this->contentSubHeading(getMLText("choose_target_document"));
 		/* 'form1' must be passed to printDocumentChooser() because the typeahead
 		 * function is currently hardcoded on this value */
-		$this->printDocumentChooser("form1");
+		$this->printDocumentChooser("form2");
 		print "<button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
 		print "</form>";
 

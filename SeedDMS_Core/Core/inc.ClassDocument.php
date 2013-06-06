@@ -3228,7 +3228,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 				"SELECT * FROM tblWorkflowDocumentContent WHERE workflow=". intval($this->_workflow->getID())
 				. " AND `version`='".$this->_version
 				."' AND `document` = '". $this->_document->getID() ."' ";
-				echo $queryStr;
 			$recs = $db->getResultArray($queryStr);
 			if (is_bool($recs) && !$recs) {
 				$db->rollbackTransaction();
@@ -3240,7 +3239,6 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 			}
 
 			$queryStr = "DELETE FROM `tblWorkflowDocumentContent` WHERE `workflow` =". intval($this->_workflow->getID())." AND `document` = '". $this->_document->getID() ."' AND `version` = '" . $this->_version."'";
-				echo $queryStr;
 			if (!$db->getResult($queryStr)) {
 				$db->rollbackTransaction();
 				return false;

@@ -189,9 +189,9 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";	
 			print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
-			print "<th>".getMLText("owner")."</th>\n";
+//			print "<th>".getMLText("owner")."</th>\n";
 			print "<th>".getMLText("status")."</th>\n";
-			print "<th>".getMLText("version")."</th>\n";
+//			print "<th>".getMLText("version")."</th>\n";
 			print "<th>".getMLText("action")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 		}
@@ -212,12 +212,13 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
 			print "<td><a rel=\"folder_".$subFolder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
 			print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
+			print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $subFolder->getDate())."</b></span>";
 			if($comment) {
 				print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 			}
 			print "</td>\n";
-			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			print "<td colspan=\"1\"><small>";
+//			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+			print "<td colspan=\"1\" nowrap><small>";
 			if($enableRecursiveCount) {
 				if($user->isAdmin()) {
 					/* No need to check for access rights in countChildren() for
@@ -237,7 +238,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents");
 			}
 			print "</small></td>";
-			print "<td></td>";
+//			print "<td></td>";
 			print "<td>";
 			print "<div class=\"list-action\">";
 			if($subFolder->getAccessMode($user) >= M_ALL) {
@@ -306,12 +307,13 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 					print "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
 				
 				print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+				print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
 				if($comment) {
 					print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 				}
 				print "</td>\n";
-				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-				print "<td>";
+//				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+				print "<td nowrap>";
 				$attentionstr = '';
 				if ( $document->isLocked() ) {
 					$attentionstr .= "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
@@ -327,7 +329,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				if(count($links))
 					print count($links)." ".getMLText("linked_documents")."<br />";
 				print getOverallStatusText($status["status"])."</small></td>";
-				print "<td>".$version."</td>";
+//				print "<td>".$version."</td>";
 				print "<td>";
 				print "<div class=\"list-action\">";
 				if($document->getAccessMode($user) >= M_ALL) {

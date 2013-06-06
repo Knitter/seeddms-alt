@@ -222,6 +222,13 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	protected $_valueset;
 
 	/**
+	 * @var string regular expression the value must match
+	 *
+	 * @access protected
+	 */
+	protected $_regex;
+
+	/**
 	 * @var object SeedDMS_Core_DMS reference to the dms instance this attribute definition belongs to
 	 *
 	 * @access protected
@@ -258,7 +265,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	 * @param string $valueset separated list of allowed values, the first char
 	 *        is taken as the separator
 	 */
-	function SeedDMS_Core_AttributeDefinition($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset) { /* {{{ */
+	function SeedDMS_Core_AttributeDefinition($id, $name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex) { /* {{{ */
 		$this->_id = $id;
 		$this->_name = $name;
 		$this->_type = $type;
@@ -268,6 +275,7 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 		$this->_maxvalues = $maxvalues;
 		$this->_valueset = $valueset;
 		$this->_separator = '';
+		$this->_regex = $regex;
 		$this->_dms = null;
 	} /* }}} */
 
@@ -439,10 +447,39 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 	} /* }}} */
 
 	/**
+	 * Get the regular expression as saved in the database
+	 *
+	 * @return string regular expression
+	 */
+	function getRegex() { /* {{{ */
+		return $this->_regex;
+	} /* }}} */
+
+	/**
+	 * Set the regular expression
+	 *
+	 * A value of the attribute must match this regular expression.
+	 *
+	 * @param string $regex
+	 * @return boolean true if regex could be set, otherwise false
+	 */
+	function setRegex($regex) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$queryStr = "UPDATE tblAttributeDefinitions SET regex =".$db->qstr($regex)." WHERE id = " . $this->_id;
+		$res = $db->getResult($queryStr);
+		if (!$res)
+			return false;
+
+		$this->_regex = $regex;
+		return true;
+	} /* }}} */
+
+	/**
 	 * Check if the attribute definition is used
 	 *
-	 * Checks all attributes whether at least one of them referenceѕ
-	 * this attribute definition
+	 * Checks all documents, folders and document content whether at least
+	 * one of them referenceѕ this attribute definition
 	 *
 	 * @return boolean true if attribute definition is used, otherwise false
 	 */
@@ -464,6 +501,70 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 			}
 		}
 		return true;
+	} /* }}} */
+
+	/**
+	 * Return a list of documents, folders, document contents where this
+	 * attribute definition is used
+	 *
+	 * @param integer $limit return not more the n objects of each type
+	 * @return boolean true if attribute definition is used, otherwise false
+	 */
+	function getStatistics($limit=0) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$result = array('docs'=>array(), 'folders'=>array(), 'contents'=>array());
+		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
+		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_document) {
+			$queryStr = "SELECT * FROM tblDocumentAttributes WHERE attrdef=".$this->_id;
+			if($limit)
+				$queryStr .= " limit ".(int) $limit;
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				foreach($resArr as $rec) {
+					if($doc = $this->_dms->getDocument($rec['document'])) {
+						$result['docs'][] = $doc;
+					}
+				}
+			}
+			$queryStr = "SELECT count(*) c, value FROM tblDocumentAttributes WHERE attrdef=".$this->_id." GROUP BY value ORDER BY c DESC";
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				$result['frequencies'] = $resArr;
+			}
+		}
+
+		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
+		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_folder) {
+			$queryStr = "SELECT * FROM tblFolderAttributes WHERE attrdef=".$this->_id;
+			if($limit)
+				$queryStr .= " limit ".(int) $limit;
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				foreach($resArr as $rec) {
+					if($folder = $this->_dms->getFolder($rec['folder'])) {
+						$result['folders'][] = $folder;
+					}
+				}
+			}
+		}
+
+		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
+		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
+			$queryStr = "SELECT * FROM tblDocumentContentAttributes WHERE attrdef=".$this->_id;
+			if($limit)
+				$queryStr .= " limit ".(int) $limit;
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				foreach($resArr as $rec) {
+					if($content = $this->_dms->getDocumentContent($rec['content'])) {
+						$result['contents'][] = $content;
+					}
+				}
+			}
+		}
+
+		return $result;
 	} /* }}} */
 
 	/**

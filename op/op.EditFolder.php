@@ -156,8 +156,19 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 if($attributes) {
 	$oldattributes = $folder->getAttributes();
 	foreach($attributes as $attrdefid=>$attribute) {
-		if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
-			if(!$folder->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
+		$attrdef = $dms->getAttributeDefinition($attrdefid);
+		if($attribute) {
+			if($attrdef->getRegex()) {
+				if(!preg_match($attrdef->getRegex(), $attribute)) {
+					UI::exitError(getMLText("folder_title", array("foldername" => $document->getName())),getMLText("attr_no_regex_match"));
+				}
+			}
+			if(!isset($oldattributes[$attrdefid]) || $attribute != $oldattributes[$attrdefid]->getValue()) {
+				if(!$folder->setAttributeValue($dms->getAttributeDefinition($attrdefid), $attribute))
+					UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+			}
+		} elseif(isset($oldattributes[$attrdefid])) {
+			if(!$folder->removeAttribute($dms->getAttributeDefinition($attrdefid)))
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 		}
 	}
