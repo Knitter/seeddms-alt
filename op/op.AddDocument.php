@@ -51,6 +51,8 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 
 $comment  = $_POST["comment"];
 $version_comment = $_POST["version_comment"];
+if($version_comment == "" && isset($_POST["use_comment"]))
+	$version_comment = $comment;
 
 $keywords = $_POST["keywords"];
 $categories = isset($_POST["categories"]) ? $_POST["categories"] : null;

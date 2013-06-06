@@ -848,6 +848,7 @@ $text = array(
 'uploaded_by' => "Uploaded by",
 'uploading_failed' => "Uploading one of your files failed. Please check your maximum upload file size.",
 'uploading_zerosize' => "Uploading an empty file. Upload is canceled.",
+'use_comment_of_document' => "Use comment of document",
 'use_default_categories' => "Use predefined categories",
 'use_default_keywords' => "Use predefined keywords",
 'used_discspace' => "Used disk space",

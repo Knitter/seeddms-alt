@@ -846,6 +846,7 @@ $text = array(
 'uploaded_by' => "Hochgeladen durch",
 'uploading_failed' => "Das Hochladen einer Datei ist fehlgeschlagen. Bitte überprüfen Sie die maximale Dateigröße für Uploads.",
 'uploading_zerosize' => "Versuch eine leere Datei hochzuladen. Vorgang wird abgebrochen.",
+'use_comment_of_document' => "Verwende Kommentar des Dokuments",
 'use_default_categories' => "Kategorievorlagen",
 'use_default_keywords' => "Stichwortvorlagen",
 'used_discspace' => "Verbrauchter Speicherplatz",
