@@ -53,7 +53,7 @@ $(document).ready( function() {
 			if(item.charAt(0) == 'D')
 				return '<i class="icon-file"></i> ' + item.substring(1);
 			else if(item.charAt(0) == 'F')
-				return '<i class="icon-folder-close"></i> ' + item.substring(1);
+				return '<i class="icon-folder-close-alt"></i> ' + item.substring(1);
 			else
 				return '<i class="icon-search"></i> ' + item.substring(1);
 		}
@@ -113,7 +113,7 @@ $(document).ready( function() {
 		},
 		highlighter : function (item) {
 			strarr = item.split("#");
-			return '<i class="icon-folder-close"></i> ' + strarr[1];
+			return '<i class="icon-folder-close-alt"></i> ' + strarr[1];
 		}
 	});
 });
