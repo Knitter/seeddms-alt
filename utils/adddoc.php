@@ -130,8 +130,13 @@ $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostn
 
 
 $dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+if(!$dms->checkVersion()) {
+	echo "Database update needed.";
+	exit;
+}
+
 $dms->setRootFolderID($settings->_rootFolderID);
-$dms->setEnableAdminRevApp($settings->_enableAdminRevApp);
+$dms->setMaxDirID($settings->_maxDirID);
 $dms->setEnableConverting($settings->_enableConverting);
 $dms->setViewOnlineFileTypes($settings->_viewOnlineFileTypes);
 
