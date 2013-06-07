@@ -17,7 +17,9 @@
 - fix output of breadcrumbs on some pages (Bug #55)
 - do not take document comment for version if version comment is empty.
   The user must explicitly force it.
-- combine full text and database search in one form
+- combine full text and database search in one form, filtering search result
+  by document status or category will no longer return folders
+- update of translation for zh_CN
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
