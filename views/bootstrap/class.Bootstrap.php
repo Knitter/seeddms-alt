@@ -738,7 +738,7 @@ function documentSelected<?= $formName ?>(id, name) {
 		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#folderChooser".$formName."\" href=\"out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "<a data-target=\"#folderChooser".$formName."\" href=\"../out/out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="folderChooser<?= $formName ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?= $formName ?>Label" aria-hidden="true">
