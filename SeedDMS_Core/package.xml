@@ -27,6 +27,7 @@
 - various small corrections
 - comment of version is no longer taken from document if version comment is empty
 - passing an array of users to SeedDMЅ_Core_DMS::search() instead of a single user ist now allowed
+- turn on foreign key constraints for sqlite3
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
