@@ -60,7 +60,7 @@ $(document).ready( function() {
 	});
 
 	/* Document chooser */
-	$("#choosedocsearch").typeahead({
+	$("[id^=choosedocsearch]").typeahead({
 		minLength: 3,
 		formname: 'form1',
 		source: function(query, process) {
@@ -89,7 +89,7 @@ $(document).ready( function() {
 	});
 
 	/* Folder chooser */
-	$("#choosefoldersearch").typeahead({
+	$("[id^=choosefoldersearch]").typeahead({
 		minLength: 3,
 		formname: 'form1',
 		source: function(query, process) {
