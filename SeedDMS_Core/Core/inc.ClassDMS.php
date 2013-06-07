@@ -604,7 +604,15 @@ class SeedDMS_Core_DMS {
 			// document owner.
 			$searchOwner = "";
 			if ($owner) {
-				$searchOwner = "`tblFolders`.`owner` = '".$owner->getId()."'";
+				if(is_array($owner)) {
+					$ownerids = array();
+					foreach($owner as $o)
+						$ownerids[] = $o->getID();
+					if($ownerids)
+						$searchOwner = "`tblFolders`.`owner` IN (".implode(',', $ownerids).")";
+				} else {
+					$searchOwner = "`tblFolders`.`owner` = '".$owner->getId()."'";
+				}
 			}
 
 			// Is the search restricted to documents created between two specific dates?
@@ -726,7 +734,15 @@ class SeedDMS_Core_DMS {
 			// document owner.
 			$searchOwner = "";
 			if ($owner) {
-				$searchOwner = "`tblDocuments`.`owner` = '".$owner->getId()."'";
+				if(is_array($owner)) {
+					$ownerids = array();
+					foreach($owner as $o)
+						$ownerids[] = $o->getID();
+					if($ownerids)
+						$searchOwner = "`tblDocuments`.`owner` IN (".implode(',', $ownerids).")";
+				} else {
+					$searchOwner = "`tblDocuments`.`owner` = '".$owner->getId()."'";
+				}
 			}
 
 			// Check to see if the search has been restricted to a particular
