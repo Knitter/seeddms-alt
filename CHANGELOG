@@ -17,6 +17,7 @@
 - fix output of breadcrumbs on some pages (Bug #55)
 - do not take document comment for version if version comment is empty.
   The user must explicitly force it.
+- combine full text and database search in one form
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
