@@ -50,7 +50,6 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
-		$folder = $this->params['folder'];
 		$fullsearch = $this->params['fullsearch'];
 		$attrdefs = $this->params['attrdefs'];
 		$allCats = $this->params['allcategories'];
@@ -79,7 +78,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$cachedir = $this->params['cachedir'];
 
 		$this->htmlStartPage(getMLText("search_results"));
-		$this->globalNavigation($folder);
+		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("search_results"), "");
 
@@ -124,7 +123,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </td>
 </tr>
 <?php
-		if($attrdefs) {
+		if($attrdefs && $attributes) {
 			foreach($attrdefs as $attrdef) {
 ?>
 <tr>
