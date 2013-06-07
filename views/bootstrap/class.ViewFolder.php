@@ -338,7 +338,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				}
 				if($document->getAccessMode($user) >= M_READWRITE) {
 ?>
-     <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
+     <a href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
 <?php
 				} else {
 ?>
@@ -346,7 +346,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 <?php
 				}
 ?>
-     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+     <a href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
 <?php
 				print "</div>";
 				print "</td>";
