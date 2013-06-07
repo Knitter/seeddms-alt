@@ -61,6 +61,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$attributes = $this->params['attributes'];
 		$categories = $this->params['categories'];
 		$owner = $this->params['owner'];
+		$startfolder = $this->params['startfolder'];
 		$startdate = $this->params['startdate'];
 		$stopdate = $this->params['stopdate'];
 		$expstartdate = $this->params['expstartdate'];
@@ -219,7 +220,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </td>
 </tr>
 <tr>
-<td></td><td><button type="submit" class="btn"><i class="icon-search"> <?php printMLText("search"); ?></button></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
 </tr>
 
 </table>
@@ -283,7 +284,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </td>
 </tr>
 <tr>
-<td></td><td><button type="submit" class="btn"><i class="icon-search"> <?php printMLText("search"); ?></button></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
 </tr>
 </table>
 
@@ -317,6 +318,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			print "<th>".getMLText("name")."</th>\n";
 			print "<th>".getMLText("attributes")."</th>\n";
 			print "<th>".getMLText("status")."</th>\n";
+			print "<th>".getMLText("action")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
@@ -384,6 +386,28 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 
 					$display_status=$lc->getStatus();
 					print "<td>".getOverallStatusText($display_status["status"]). "</td>";
+					print "<td>";
+					print "<div class=\"list-action\">";
+					if($document->getAccessMode($user) >= M_ALL) {
+?>
+     <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $document->getID(); ?>"><i class="icon-remove"></i></a>
+<?php
+					} else {
+?>
+     <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
+<?php
+					}
+					if($document->getAccessMode($user) >= M_READWRITE) {
+?>
+     <a href="../out/out.EditDocument.php?documentid=<?php echo $document->getID(); ?>"><i class="icon-edit"></i></a>
+<?php
+					} else {
+?>
+     <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
+<?php
+					}
+					print "</div>";
+					print "</td>";
 
 					print "</tr>\n";
 				} elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
@@ -422,6 +446,28 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					}
 					print "</td>";
 					print "<td></td>";
+					print "<td>";
+					print "<div class=\"list-action\">";
+					if($folder->getAccessMode($user) >= M_ALL) {
+?>
+     <a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $folder->getID(); ?>"><i class="icon-remove"></i></a>
+<?php
+					} else {
+?>
+     <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
+<?php
+					}
+					if($folder->getAccessMode($user) >= M_READWRITE) {
+?>
+     <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $folder->getID(); ?>"><i class="icon-edit"></i></a>
+<?php
+					} else {
+?>
+     <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
+<?php
+					}
+					print "</div>";
+					print "</td>";
 					print "</tr>\n";
 				}
 			}
