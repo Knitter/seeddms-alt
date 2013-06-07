@@ -395,22 +395,22 @@ if(count($entries) == 1) {
 	}
 } else {
 	$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-	$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$startFolder, 'query'=>$query, 'searchhits'=>$entries, 'totalpages'=>$resArr['totalPages'], 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'searchin'=>$searchin, 'cachedir'=>$settings->_cacheDir));
+	$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'query'=>$query, 'searchhits'=>$entries, 'totalpages'=>$resArr['totalPages'], 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'cachedir'=>$settings->_cacheDir));
 	if($view) {
 		$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"]) ? true : false);
-		$view->setParam('mode', $mode);
-		$view->setParam('searchin', $searchin);
-		$view->setParam('startfolder', $startFolder);
+		$view->setParam('mode', isset($mode) ? $mode : '');
+		$view->setParam('searchin', isset($searchin) ? $searchin : array());
+		$view->setParam('startfolder', isset($startFolder) ? $startFolder : null);
 		$view->setParam('owner', $owner);
-		$view->setParam('startdate', $startdate);
-		$view->setParam('stopdate', $stopdate);
-		$view->setParam('expstartdate', $expstartdate);
-		$view->setParam('expstopdate', $expstopdate);
-		$view->setParam('creationdate', $creationdate);
-		$view->setParam('expirationdate', $expirationdate);
-		$view->setParam('status', $status);
-		$view->setParam('categories', $categories);
-		$view->setParam('attributes', $attributes);
+		$view->setParam('startdate', isset($startdate) ? $startdate : array());
+		$view->setParam('stopdate', isset($stopdate) ? $stopdate : array());
+		$view->setParam('expstartdate', isset($expstartdate) ? $expstartdate : array());
+		$view->setParam('expstopdate', isset($expstopdate) ? $expstopdate : array());
+		$view->setParam('creationdate', isset($creationdate) ? $creationdate : '');
+		$view->setParam('expirationdate', isset($expirationdate) ? $expirationdate: '');
+		$view->setParam('status', isset($status) ? $status : array());
+		$view->setParam('categories', isset($categories) ? $categories : '');
+		$view->setParam('attributes', isset($attributes) ? $attributes : '');
 		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_documentcontent/*, SeedDMS_Core_AttributeDefinition::objtype_all*/));
 		$view->setParam('attrdefs', $attrdefs);
 		$allCats = $dms->getDocumentCategories();
