@@ -105,7 +105,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 		</script>
 <?php
-				$this->printNewTreeNavigation($folderid, M_READ, 0);
+				$this->printNewTreeNavigation($folderid, M_READ, 0, '');
 				$this->contentContainerEnd();
 			} else {
 				$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
