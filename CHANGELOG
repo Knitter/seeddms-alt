@@ -19,7 +19,7 @@
   The user must explicitly force it.
 - combine full text and database search in one form, filtering search result
   by document status or category will no longer return folders
-- update of translation for zh_CN
+- update of translation for zh_CN, fr_FR
 - turn on foreign key constraints for sqlite3 databases
 
 --------------------------------------------------------------------------------
