@@ -9,7 +9,7 @@
     -->
     <display
       siteName = "SeedDMS"
-      footNote = "SeedDMS free document management system - www.seeddms.org"
+      footNote = "SeedDMS free document management system - &lt;a href='http://www.seeddms.org'&gt;www.seeddms.org&lt;/a&gt; - please donate if you like SeedDMS!"
       printDisclaimer="true"
       language = "en_GB"
       theme = "bootstrap"
