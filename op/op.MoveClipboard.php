@@ -121,6 +121,9 @@ $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_moved_c
 
 add_log_line();
 
-header("Location:../out/out.ViewFolder.php?folderid=".$targetid);
+if($_GET['refferer'])
+	header("Location:".urldecode($_GET['refferer']));
+else
+	header("Location:../out/out.ViewFolder.php?folderid=".$targetid);
 
 ?>
