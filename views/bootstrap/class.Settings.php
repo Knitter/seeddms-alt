@@ -147,6 +147,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_stopWordsFile");?>:</td>
         <td><input type="text" name="stopWordsFile" value="<?php echo $settings->_stopWordsFile; ?>" size="100" /></td>
       </tr>
+	  <tr title="<?php printMLText("settings_enableClipboard_desc");?>">
+        <td><?php printMLText("settings_enableClipboard");?>:</td>
+        <td><input name="enableClipboard" type="checkbox" <?php if ($settings->_enableClipboard) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableFolderTree_desc");?>">
         <td><?php printMLText("settings_enableFolderTree");?>:</td>
         <td><input name="enableFolderTree" type="checkbox" <?php if ($settings->_enableFolderTree) echo "checked" ?> /></td>
