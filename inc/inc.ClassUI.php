@@ -51,6 +51,7 @@ class UI extends UI_Default {
 			$classname = "SeedDMS_View_".$class;
 			$view = new $classname($params, $theme);
 			/* Set some configuration parameters */
+			$view->setParam('refferer', $_SERVER['REQUEST_URI']);
 			$view->setParam('session', $session);
 			$view->setParam('sitename', $settings->_siteName);
 			$view->setParam('rootfolderid', $settings->_rootFolderID);
