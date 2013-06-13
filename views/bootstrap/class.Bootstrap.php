@@ -202,8 +202,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 						echo "    <li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
 				}
 				echo "    <li class=\"divider\"></li>\n";
-				echo "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."\">".getMLText("move_clipboard")."</a></li>\n";
-				echo "    <li><a href=\"../op/op.ClearClipboard.php\">".getMLText("clear_clipboard")."</a></li>\n";
+				echo "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
+				echo "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a></li>\n";
 				echo "     </ul>\n";
 				echo "    </li>\n";
 				echo "   </ul>\n";
