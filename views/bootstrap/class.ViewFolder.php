@@ -93,11 +93,21 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
 
 		echo "<div class=\"row-fluid\">\n";
-		echo "<div class=\"span4\">\n";
-		if ($enableFolderTree) {
-			if ($showtree==1){
-				$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
-				$this->contentContainerStart();
+
+		// dynamic columns - left column removed if no content and right column then fills span12.
+		if (!($enableFolderTree || $enableClipboard)) {
+			$LeftColumnSpan = 0;
+			$RightColumnSpan = 12;
+		} else {
+			$LeftColumnSpan = 4;
+			$RightColumnSpan = 8;
+		}
+		if ($LeftColumnSpan > 0) {
+			echo "<div class=\"span".$LeftColumnSpan."\">\n";
+			if ($enableFolderTree) {
+				if ($showtree==1){
+					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
+					$this->contentContainerStart();
 ?>
 		<script language="JavaScript">
 		function folderSelected(id, name) {
@@ -105,15 +115,16 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 		</script>
 <?php
-				$this->printNewTreeNavigation($folderid, M_READ, 0, '');
-				$this->contentContainerEnd();
-			} else {
-				$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
+					$this->printNewTreeNavigation($folderid, M_READ, 0, '');
+					$this->contentContainerEnd();
+				} else {
+					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
+				}
+				if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
+				echo "</div>\n";
 			}
 		}
-		if (1 || $enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
-		echo "</div>\n";
-		echo "<div class=\"span8\">\n";
+		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
 		$this->contentHeading(getMLText("folder_infos"));
 
