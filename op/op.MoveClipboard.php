@@ -33,7 +33,11 @@ $targetid = $_GET["targetid"];
 $targetFolder = $dms->getFolder($targetid);
 
 if (!is_object($targetFolder)) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_target_folder"));
+	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
+}
+
+if ($targetFolder->getAccessMode($user) < M_READWRITE) {
+	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 }
 
 $clipboard = $session->getClipboard();
@@ -41,7 +45,7 @@ foreach($clipboard['docs'] as $documentid) {
 	$document = $dms->getDocument($documentid);
 	$oldFolder = $document->getFolder();
 
-	if (($document->getAccessMode($user) < M_READWRITE) || ($targetFolder->getAccessMode($user) < M_READWRITE)) {
+	if ($document->getAccessMode($user) < M_READWRITE) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 	}
 
@@ -78,7 +82,7 @@ foreach($clipboard['docs'] as $documentid) {
 foreach($clipboard['folders'] as $folderid) {
 	$folder = $dms->getFolder($folderid);
 
-	if ($folder->getAccessMode($user) < M_READWRITE || $targetFolder->getAccessMode($user) < M_READWRITE) {
+	if ($folder->getAccessMode($user) < M_READWRITE) {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 	}
 
