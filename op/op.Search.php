@@ -135,6 +135,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	$lucenesearch = new SeedDMS_Lucene_Search($index);
 	$hits = $lucenesearch->search($query, $owner ? $owner->getLogin() : '', '', $categorynames);
 	$totalDocs = count($hits);
+	$totalFolders = 0;
 	$limit = 20;
 	$resArr = array();
 	if($pageNumber != 'all' && count($hits) > $limit) {
@@ -399,6 +400,8 @@ if(count($entries) == 1) {
 	$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 	$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'query'=>$query, 'searchhits'=>$entries, 'totalpages'=>$resArr['totalPages'], 'pagenumber'=>$pageNumber, 'searchtime'=>$searchTime, 'urlparams'=>$_GET, 'cachedir'=>$settings->_cacheDir));
 	if($view) {
+		$view->setParam('totaldocs', $resArr['totalDocs']);
+		$view->setParam('totalfolders', $resArr['totalFolders']);
 		$view->setParam('fullsearch', (isset($_GET["fullsearch"]) && $_GET["fullsearch"]) ? true : false);
 		$view->setParam('mode', isset($mode) ? $mode : '');
 		$view->setParam('searchin', isset($searchin) ? $searchin : array());
