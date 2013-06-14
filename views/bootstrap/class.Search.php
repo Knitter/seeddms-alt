@@ -123,12 +123,12 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </td>
 </tr>
 <?php
-		if($attrdefs && $attributes) {
+		if($attrdefs) {
 			foreach($attrdefs as $attrdef) {
 ?>
 <tr>
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-	<td><?php $this->printAttributeEditField($attrdef, $attributes[$attrdef->getID()]) ?></td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
 </tr>
 <?php
 			}
@@ -138,7 +138,9 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <td><?php printMLText("category");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
 <td>
 <select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>">
+<!--
 <option value="-1"><?php printMLText("all_categories");?>
+-->
 <?php
 		$tmpcatids = array();
 		foreach($categories as $tmpcat)
@@ -190,12 +192,12 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
         <label class="checkbox inline">
 				  <input type="checkbox" name="creationdate" value="true" <?php if($creationdate) echo "checked"; ?>/><?php printMLText("between");?>
         </label><br />
-        <span class="input-append date" id="createstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date" style="display: inline;" id="createstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span4" size="16" name="createstart" type="text" value="<?php if($startdate) printf("%02d-%02d-%04d", $startdate['day'], $startdate['month'], $startdate['year']); else echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
 				<?php printMLText("and"); ?>
-        <span class="input-append date" id="createenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date" style="display: inline;" id="createenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span4" size="16" name="createend" type="text" value="<?php if($stopdate) printf("%02d-%02d-%04d", $stopdate['day'], $stopdate['month'], $stopdate['year']); else echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>
@@ -207,12 +209,12 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
         <label class="checkbox inline">
 				  <input type="checkbox" name="expirationdate" value="true" <?php if($expirationdate) echo "checked"; ?>/><?php printMLText("between");?>
         </label><br />
-        <span class="input-append date" id="expirationstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date" style="display: inline;" id="expirationstartdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span4" size="16" name="expirationstart" type="text" value="<?php if($expstartdate) printf("%02d-%02d-%04d", $expstartdate['day'], $expstartdate['month'], $expstartdate['year']); else echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
 				<?php printMLText("and"); ?>
-        <span class="input-append date" id="expirationenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date" style="display: inline;" id="expirationenddate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span4" size="16" name="expirationend" type="text" value="<?php if($expstopdate) printf("%02d-%02d-%04d", $expstopdate['day'], $expstopdate['month'], $expstopdate['year']); else echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>
@@ -250,6 +252,21 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </td>
 </tr>
 <tr>
+<td><?php printMLText("owner");?>:</td>
+<td>
+<select class="chzn-select-deselect" name="ownerid">
+<option value="-1"></option>
+<?php
+			foreach ($allUsers as $userObj) {
+				if ($userObj->isGuest())
+					continue;
+				print "<option value=\"".$userObj->getID()."\" ".(($owner && $userObj->getID() == $owner->getID()) ? "selected" : "").">" . htmlspecialchars($userObj->getLogin()." - ".$userObj->getFullName()) . "\n";
+			}
+?>
+</select>
+</td>
+</tr>
+<tr>
 <td><?php printMLText("category_filter");?>:</td>
 <td>
 <select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>">
@@ -263,21 +280,6 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		foreach ($allCats as $catObj) {
 			print "<option value=\"".$catObj->getID()."\" ".(in_array($catObj->getID(), $tmpcatids) ? "selected" : "").">" . htmlspecialchars($catObj->getName()) . "\n";
 		}
-?>
-</select>
-</td>
-</tr>
-<tr>
-<td><?php printMLText("owner");?>:</td>
-<td>
-<select class="chzn-select-deselect" name="ownerid">
-<option value="-1"></option>
-<?php
-			foreach ($allUsers as $userObj) {
-				if ($userObj->isGuest())
-					continue;
-				print "<option value=\"".$userObj->getID()."\" ".(($owner && $userObj->getID() == $owner->getID()) ? "selected" : "").">" . htmlspecialchars($userObj->getLogin()." - ".$userObj->getFullName()) . "\n";
-			}
 ?>
 </select>
 </td>
@@ -405,6 +407,9 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
      <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
 <?php
 					}
+?>
+     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?documentid=<?php echo $document->getID(); ?>&type=document&id=<?php echo $document->getID(); ?>&refferer=<?php echo urlencode($this->params['refferer']); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+<?php
 					print "</div>";
 					print "</td>";
 
@@ -465,6 +470,9 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
      <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
 <?php
 					}
+?>
+     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $folder->getID(); ?>&refferer=<?php echo urlencode($this->params['refferer']); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+<?php
 					print "</div>";
 					print "</td>";
 					print "</tr>\n";
