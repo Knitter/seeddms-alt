@@ -70,11 +70,13 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 
 	// category
 	$categories = array();
+	$categorynames = array();
 	if(isset($_GET['categoryids']) && $_GET['categoryids']) {
 		foreach($_GET['categoryids'] as $catid) {
 			if($catid > 0) {
 				$category = $dms->getDocumentCategory($catid);
-				$categories[] = $category->getName();
+				$categories[] = $category;
+				$categorynames[] = $category->getName();
 			}
 		}
 	}
@@ -131,7 +133,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	Zend_Search_Lucene_Search_QueryParser::setDefaultEncoding('utf-8');
 	$index = Zend_Search_Lucene::open($settings->_luceneDir);
 	$lucenesearch = new SeedDMS_Lucene_Search($index);
-	$hits = $lucenesearch->search($query, $owner ? $owner->getLogin() : '', '', $categories);
+	$hits = $lucenesearch->search($query, $owner ? $owner->getLogin() : '', '', $categorynames);
 	$totalDocs = count($hits);
 	$limit = 20;
 	$resArr = array();
@@ -273,7 +275,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 			UI::exitError(getMLText("search"),getMLText("invalid_expiration_date_start"));
 		}
 	} else {
-		$expstartdate = array('year'=>$_GET["expirationstartyear"], 'month'=>$_GET["expirationstartmonth"], 'day'=>$_GET["expirationstartday"], 'hour'=>0, 'minute'=>0, 'second'=>0);
+//		$expstartdate = array('year'=>$_GET["expirationstartyear"], 'month'=>$_GET["expirationstartmonth"], 'day'=>$_GET["expirationstartday"], 'hour'=>0, 'minute'=>0, 'second'=>0);
 		$expstartdate = array();
 	}
 	if(isset($_GET["expirationend"]) && $_GET["expirationend"]) {
@@ -283,7 +285,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 			UI::exitError(getMLText("search"),getMLText("invalid_expiration_date_end"));
 		}
 	} else {
-		$expstopdate = array('year'=>$_GET["expirationendyear"], 'month'=>$_GET["expirationendmonth"], 'day'=>$_GET["expirationendday"], 'hour'=>23, 'minute'=>59, 'second'=>59);
+		//$expstopdate = array('year'=>$_GET["expirationendyear"], 'month'=>$_GET["expirationendmonth"], 'day'=>$_GET["expirationendday"], 'hour'=>23, 'minute'=>59, 'second'=>59);
 		$expstopdate = array();
 	}
 
