@@ -55,7 +55,9 @@ if ($action == "addgroup") {
 	
 	$groupid=$newGroup->getID();
 	
-	add_log_line();
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_add_group')));
+
+	add_log_line("&action=addgroup&name=".$name);
 }
 
 // Delete group -------------------------------------------------------------
@@ -80,7 +82,10 @@ else if ($action == "removegroup") {
 	}
 	
 	$groupid = '';
-	add_log_line(".php?groupid=".$_POST["groupid"]."&action=removegroup");
+
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_group')));
+
+	add_log_line("?groupid=".$_POST["groupid"]."&action=removegroup");
 }
 
 // Modifiy group ------------------------------------------------------------
@@ -110,7 +115,9 @@ else if ($action == "editgroup") {
 	if ($group->getComment() != $comment)
 		$group->setComment($comment);
 		
-	add_log_line();
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_edit_group')));
+
+	add_log_line("?groupid=".$_POST["groupid"]."&action=editgroup");
 }
 
 // Add user to group --------------------------------------------------------
@@ -146,7 +153,9 @@ else if ($action == "addmember") {
 		if (isset($_POST["manager"])) $group->toggleManager($newMember);
 	}
 	
-	add_log_line(".php?groupid=".$groupid."&userid=".$_POST["userid"]."&action=addmember");
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_add_group_member')));
+
+	add_log_line("?groupid=".$groupid."&userid=".$_POST["userid"]."&action=addmember");
 }
 
 // Remove user from group --------------------------------------------------
@@ -179,7 +188,9 @@ else if ($action == "rmmember") {
 
 	$group->removeUser($oldMember);
 	
-	add_log_line();
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_group_member')));
+
+	add_log_line("?groupid=".$groupid."&userid=".$_POST["userid"]."&action=rmmember");
 }
 
 // toggle manager flag
@@ -212,7 +223,9 @@ else if ($action == "tmanager") {
 	
 	$group->toggleManager($usertoedit);
 	
-	add_log_line();
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_toogle_group_manager')));
+
+	add_log_line("?groupid=".$groupid."&userid=".$_POST["userid"]."&action=tmanager");
 }
 
 header("Location:../out/out.GroupMgr.php?groupid=".$groupid);

@@ -116,6 +116,8 @@ if ($action == "adduser") {
 	
 	$userid=$newUser->getID();
 	
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_add_user')));
+
 	add_log_line(".php&action=adduser&login=".$login);
 }
 
@@ -158,6 +160,7 @@ else if ($action == "removeuser") {
 		
 	add_log_line(".php&action=removeuser&userid=".$userid);
 	
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_user')));
 	$userid=-1;
 }
 
@@ -289,8 +292,8 @@ else if ($action == "edituser") {
 		$group->removeUser($editedUser);
 	}
 
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_edit_user')));
 	add_log_line(".php&action=edituser&userid=".$userid);
-
 }
 else UI::exitError(getMLText("admin_tools"),getMLText("unknown_command"));
 
