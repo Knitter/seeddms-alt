@@ -51,6 +51,8 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$fullsearch = $this->params['fullsearch'];
+		$totaldocs = $this->params['totaldocs'];
+		$totalfolders = $this->params['totalfolders'];
 		$attrdefs = $this->params['attrdefs'];
 		$allCats = $this->params['allcategories'];
 		$allUsers = $this->params['allusers'];
@@ -309,7 +311,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					$foldercount++;
 				}
 			}
-			print "<div class=\"alert\">".getMLText("search_report", array("doccount" => $doccount, "foldercount" => $foldercount, 'searchtime'=>$searchTime))."</div>";
+			print "<div class=\"alert\">".getMLText("search_report", array("doccount" => $totaldocs, "foldercount" => $totalfolders, 'searchtime'=>$searchTime))."</div>";
 			$this->pageList($pageNumber, $totalpages, "../op/op.Search.php", $urlparams);
 			$this->contentContainerStart();
 
