@@ -571,6 +571,7 @@ class SeedDMS_Core_DMS {
 			$searchin=array(1, 2, 3, 4);
 
 		/*--------- Do it all over again for folders -------------*/
+		$totalFolders = 0;
 		if($mode & 0x2) {
 			$searchKey = "";
 			$searchFields = array();
@@ -650,7 +651,6 @@ class SeedDMS_Core_DMS {
 			/* Do not search for folders if not at least a search for a key,
 			 * an owner, or creation date is requested.
 			 */
-			$totalFolders = 0;
 			if($searchKey || $searchOwner || $searchCreateDate) {
 				// Count the number of rows that the search will produce.
 				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
