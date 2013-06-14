@@ -187,7 +187,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "   </ul>\n";
 
 			$clipboard = $this->params['session']->getClipboard();
-			if (!$this->params['user']->isGuest() && isset($this->params['folder']) && (count($clipboard['docs']) + count($clipboard['folders'])) > 0) {
+			if (!$this->params['user']->isGuest() && (count($clipboard['docs']) + count($clipboard['folders'])) > 0) {
 				echo "   <div class=\"nav-collapse nav-col1\">\n";
 				echo "   <ul class=\"nav pull-right\">\n";
 				echo "    <li class=\"dropdown\">\n";
@@ -202,7 +202,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 						echo "    <li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
 				}
 				echo "    <li class=\"divider\"></li>\n";
-				echo "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
+				if(isset($this->params['folder'])) {
+					echo "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
+				}
 				echo "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a></li>\n";
 				echo "     </ul>\n";
 				echo "    </li>\n";
