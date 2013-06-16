@@ -915,6 +915,7 @@ $text = array(
 'year_view' => "Year View",
 'yes' => "Yes",
 
+'ar_EG' => "Arabic",
 'ca_ES' => "Catalan",
 'cs_CZ' => "Czech",
 'de_DE' => "German",
