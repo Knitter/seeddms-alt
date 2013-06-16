@@ -168,16 +168,20 @@ if ($_FILES['userfile']['error'] == 0) {
 		}
 	}
 
-	$attributes = $_POST["attributes"];
-	foreach($attributes as $attrdefid=>$attribute) {
-		$attrdef = $dms->getAttributeDefinition($attrdefid);
-		if($attribute) {
-			if($attrdef->getRegex()) {
-				if(!preg_match($attrdef->getRegex(), $attribute)) {
-					UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("attr_no_regex_match"));
+	if(isset($_POST["attributes"]) && $_POST["attributes"]) {
+		$attributes = $_POST["attributes"];
+		foreach($attributes as $attrdefid=>$attribute) {
+			$attrdef = $dms->getAttributeDefinition($attrdefid);
+			if($attribute) {
+				if($attrdef->getRegex()) {
+					if(!preg_match($attrdef->getRegex(), $attribute)) {
+						UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("attr_no_regex_match"));
+					}
 				}
 			}
 		}
+	} else {
+		$attributes = array();
 	}
 
 	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes);
