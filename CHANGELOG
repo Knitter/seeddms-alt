@@ -20,6 +20,7 @@
 - combine full text and database search in one form, filtering search result
   by document status or category will no longer return folders
 - update of translation for zh_CN, fr_FR, sv_SE
+- added new language arabic (Egypt) (Bug #63)
 - turn on foreign key constraints for sqlite3 databases
 - update to bootstrap 2.3.2
 
