@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2012-12-03</date>
+ <date>2013-06-17</date>
  <time>10:31:23</time>
  <version>
-  <release>1.1.1</release>
+  <release>1.1.2</release>
   <api>1.1.1</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-catch exception if index is opened but not available
+parse query term and catch errors before using it
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -102,6 +102,22 @@ catch exception if index is opened but not available
    <notes>
 use a configurable list of mime type converters, fixed indexing and searching
 of special chars like german umlaute.
+   </notes>
+  </release>
+  <release>
+   <date>2012-12-03</date>
+   <time>10:31:23</time>
+   <version>
+    <release>1.1.1</release>
+    <api>1.1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+catch exception if index is opened but not available
    </notes>
   </release>
  </changelog>
