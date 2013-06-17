@@ -72,10 +72,13 @@ foreach($clipboard['docs'] as $documentid) {
 				if ($user->getID() != $document->getOwner()->getID()) 
 					$notifier->toIndividual($user, $document->getOwner(), $subject, $message, $params);
 			}
+			$session->removeFromClipboard($document);
 
 		} else {
 			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 		}
+	} else {
+		$session->removeFromClipboard($document);
 	}
 }
 
@@ -110,12 +113,11 @@ foreach($clipboard['folders'] as $folderid) {
 				$notifier->toIndividual($user, $folder->getOwner(), $subject, $message, $params);
 
 		}
+		$session->removeFromClipboard($folder);
 	} else {
 		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 	}
 }
-
-$session->clearClipboard();
 
 $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_moved_clipboard')));
 
