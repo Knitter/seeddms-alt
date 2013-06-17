@@ -800,6 +800,7 @@ $text = array(
 'splash_edit_user' => "User saved",
 'splash_folder_edited' => "Save folder changes",
 'splash_invalid_folder_id' => "Invalid folder ID",
+'splash_invalid_searchterm' => "Invalid search term",
 'splash_moved_clipboard' => "Clipboard moved into current folder",
 'splash_removed_from_clipboard' => "Removed from clipboard",
 'splash_rm_attribute' => "Attribute removed",
