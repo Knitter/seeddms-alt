@@ -116,6 +116,30 @@ $(document).ready( function() {
 			return '<i class="icon-folder-close-alt"></i> ' + strarr[1];
 		}
 	});
+
+	$('a.addtoclipboard').click(function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		type = attr_rel.substring(0, 1) == 'F' ? 'folder' : 'document';
+		id = attr_rel.substring(1);
+		$.get('../op/op.Ajax.php',
+			{ command: 'addtoclipboard', type: type, id: id },
+			function(data) {
+				console.log(data);
+				$('#menu-clipboard ul').remove();
+				$(data).appendTo('#menu-clipboard');
+				noty({
+					text: attr_msg,
+					type: 'success',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 1500,
+				});
+			}
+		);
+	});
 });
 
 function allowDrop(ev) {
