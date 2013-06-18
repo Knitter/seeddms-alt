@@ -266,7 +266,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 <?php
 			}
 ?>
-     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+     <a class="addtoclipboard" rel="<?php echo "F".$subFolder->getID(); ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
 <?php
 			print "</div>";
 			print "</td>";
@@ -357,7 +357,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 <?php
 				}
 ?>
-     <a href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+     <a class="addtoclipboard" rel="<?php echo "D".$docID; ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
 <?php
 				print "</div>";
 				print "</td>";
