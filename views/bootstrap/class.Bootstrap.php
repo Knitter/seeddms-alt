@@ -138,6 +138,31 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "</div>\n";
 	} /* }}} */
 
+	function menuClipboard($clipboard) { /* {{{ */
+		$content = '';
+		$content .= "   <ul id=\"main-menu-clipboard\" class=\"nav pull-right\">\n";
+		$content .= "    <li class=\"dropdown\">\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		foreach($clipboard['folders'] as $folderid) {
+			if($folder = $this->params['dms']->getFolder($folderid))
+				$content .= "    <li><a href=\"../out/out.ViewFolder.php?id=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
+		}
+		foreach($clipboard['docs'] as $docid) {
+			if($document = $this->params['dms']->getDocument($docid))
+				$content .= "    <li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
+		}
+		$content .= "    <li class=\"divider\"></li>\n";
+		if(isset($this->params['folder']) && $this->params['folder']->getAccessMode($this->params['user']) >= M_READWRITE) {
+			$content .= "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
+		}
+		$content .= "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a></li>\n";
+		$content .= "     </ul>\n";
+		$content .= "    </li>\n";
+		$content .= "   </ul>\n";
+		return $content;
+	} /* }}} */
+
 	function globalNavigation($folder=null) { /* {{{ */
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
@@ -149,7 +174,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "   </a>\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
-			echo "   <ul class=\"nav pull-right\">\n";
+			echo "   <ul id=\"main-menu-admin\"class=\"nav pull-right\">\n";
 			echo "    <li class=\"dropdown\">\n";
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".($this->params['session']->getSu() ? getMLText("switched_to") : getMLText("signed_in_as"))." '".htmlspecialchars($this->params['user']->getFullName())."' <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
@@ -186,30 +211,12 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "    </li>\n";
 			echo "   </ul>\n";
 
+			echo "   <div id=\"menu-clipboard\">";
 			$clipboard = $this->params['session']->getClipboard();
 			if (!$this->params['user']->isGuest() && (count($clipboard['docs']) + count($clipboard['folders'])) > 0) {
-				echo "   <div class=\"nav-collapse nav-col1\">\n";
-				echo "   <ul class=\"nav pull-right\">\n";
-				echo "    <li class=\"dropdown\">\n";
-				echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
-				echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
-				foreach($clipboard['folders'] as $folderid) {
-					if($folder = $this->params['dms']->getFolder($folderid))
-						echo "    <li><a href=\"../out/out.ViewFolder.php?id=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
-				}
-				foreach($clipboard['docs'] as $docid) {
-					if($document = $this->params['dms']->getDocument($docid))
-						echo "    <li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
-				}
-				echo "    <li class=\"divider\"></li>\n";
-				if(isset($this->params['folder']) && $this->params['folder']->getAccessMode($this->params['user']) >= M_READWRITE) {
-					echo "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
-				}
-				echo "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a></li>\n";
-				echo "     </ul>\n";
-				echo "    </li>\n";
-				echo "   </ul>\n";
+				echo $this->menuClipboard($clipboard);
 			}
+			echo "   </div>";
 
 
 			echo "   <ul class=\"nav\">\n";
