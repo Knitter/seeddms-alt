@@ -19,6 +19,8 @@
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.Language.php");
+include("../inc/inc.ClassUI.php");
 
 require_once("../inc/inc.Utils.php");
 require_once("../inc/inc.ClassSession.php");
@@ -73,7 +75,7 @@ switch($command) {
 		}
 		break;
 
-	case 'searchdocument':
+	case 'searchdocument': /* {{{ */
 		if($user) {
 			$query = $_GET['query'];
 
@@ -87,9 +89,9 @@ switch($command) {
 				echo json_encode($result);
 			}
 		}
-		break;
+		break; /* }}} */
 
-	case 'searchfolder':
+	case 'searchfolder': /* {{{ */
 		if($user) {
 			$query = $_GET['query'];
 
@@ -103,9 +105,9 @@ switch($command) {
 				echo json_encode($result);
 			}
 		}
-		break;
+		break; /* }}} */
 
-	case 'subtree':
+	case 'subtree': /* {{{ */
 		if(empty($_GET['node']))
 			$nodeid = $settings->_rootFolderID;
 		else
@@ -138,6 +140,27 @@ switch($command) {
 
 		echo json_encode($tree);
 //		echo json_encode(array(array('label'=>'test1', 'id'=>1, 'load_on_demand'=> true), array('label'=>'test2', 'id'=>2, 'load_on_demand'=> true)));
-		break;
+		break; /* }}} */
+
+	case 'addtoclipboard': /* {{{ */
+		if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET['type'])) {
+			switch($_GET['type']) {
+				case "folder":
+					$session->addToClipboard($dms->getFolder($_GET['id']));
+					break;
+				case "document":
+					$session->addToClipboard($dms->getDocument($_GET['id']));
+					break;
+			}
+		}
+		$view = UI::factory($theme, '', array('dms'=>$dms, 'user'=>$user));
+		if($view) {
+			$view->setParam('refferer', '');
+			$content = $view->menuClipboard($session->getClipboard());
+			header('Content-Type: application/json');
+			echo json_encode($content);
+		} else {
+		}
+		break; /* }}} */
 }
 ?>
