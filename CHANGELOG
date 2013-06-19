@@ -24,6 +24,7 @@
 - turn on foreign key constraints for sqlite3 databases
 - update to bootstrap 2.3.2
 - better checking of valid search term for fulltext search (Bug #61)
+- moving several documents/folders at a time (Bug #64)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
