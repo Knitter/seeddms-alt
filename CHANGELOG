@@ -26,6 +26,7 @@
 - better checking of valid search term for fulltext search (Bug #61)
 - moving several documents/folders at a time (Bug #64)
 - set encoding of terms when adding document to full text index (Bug #66)
+- droped support for myisam database engine
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
