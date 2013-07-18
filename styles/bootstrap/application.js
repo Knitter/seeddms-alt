@@ -9,7 +9,7 @@ $(document).ready( function() {
 	$('#expirationdate, #fromdate, #todate, #createstartdate, #createenddate, #expirationstartdate, #expirationenddate')
 		.datepicker()
 		.on('changeDate', function(ev){
-			$('#expirationdate, #fromdate, #todate, #createstartdate, #createenddate, #expirationstartdate, #expirationenddate').datepicker('hide');
+			$(ev.currentTarget).datepicker('hide');
 		});
 
 	$(".chzn-select").chosen();
