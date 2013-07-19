@@ -42,7 +42,7 @@ class SeedDMS_View_Help extends SeedDMS_Bootstrap_Style {
 
 		$this->contentContainerStart();
 
-		readfile("../languages/".$user->getLanguage()."/help.htm");
+		readfile("../languages/".$this->params['session']->getLanguage()."/help.htm");
 
 		$this->contentContainerEnd();
 		$this->htmlEndPage();

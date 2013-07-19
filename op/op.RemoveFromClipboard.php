@@ -40,6 +40,11 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET['type'])) {
 $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_removed_from_clipboard')));
 
 $folderid = $_GET['folderid'];
-header("Location:../out/out.ViewFolder.php?folderid=".$folderid);
 
+if($_GET['refferer'])
+	header("Location:".urldecode($_GET['refferer']));
+else {
+	$folderid = $_GET['folderid'];
+	header("Location:../out/out.ViewFolder.php?folderid=".$folderid);
+}
 ?>

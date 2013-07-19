@@ -49,30 +49,35 @@ class SeedDMS_Lucene_Search {
 	 * @return object instance of SeedDMS_Lucene_Search
 	 */
 	function search($term, $owner, $status='', $categories=array(), $fields=array()) { /* {{{ */
-		$query = '';
+		$querystr = '';
 		if($fields) {
 		} else {
 			if($term)
-				$query .= trim($term);
+				$querystr .= trim($term);
 		}
 		if($owner) {
-			if($query)
-				$query .= ' && ';
-			$query .= 'owner:'.$owner;
+			if($querystr)
+				$querystr .= ' && ';
+			$querystr .= 'owner:'.$owner;
 		}
 		if($categories) {
-			if($query)
-				$query .= ' && ';
-			$query .= '(category:"';
-			$query .= implode('" || category:"', $categories);
-			$query .= '")';
+			if($querystr)
+				$querystr .= ' && ';
+			$querystr .= '(category:"';
+			$querystr .= implode('" || category:"', $categories);
+			$querystr .= '")';
 		}
-		$hits = $this->index->find($query);
-		$recs = array();
-		foreach($hits as $hit) {
-			$recs[] = array('id'=>$hit->id, 'document_id'=>$hit->document_id);
+		try {
+			$query = Zend_Search_Lucene_Search_QueryParser::parse($querystr);
+			$hits = $this->index->find($query);
+			$recs = array();
+			foreach($hits as $hit) {
+				$recs[] = array('id'=>$hit->id, 'document_id'=>$hit->document_id);
+			}
+			return $recs;
+		} catch (Zend_Search_Lucene_Search_QueryParserException $e) {
+			return array();
 		}
-		return $recs;
 	} /* }}} */
 }
 ?>

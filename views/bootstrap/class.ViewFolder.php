@@ -95,11 +95,21 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		echo $this->callHook('preContent');
 
 		echo "<div class=\"row-fluid\">\n";
-		echo "<div class=\"span4\">\n";
-		if ($enableFolderTree) {
-			if ($showtree==1){
-				$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
-				$this->contentContainerStart();
+
+		// dynamic columns - left column removed if no content and right column then fills span12.
+		if (!($enableFolderTree || $enableClipboard)) {
+			$LeftColumnSpan = 0;
+			$RightColumnSpan = 12;
+		} else {
+			$LeftColumnSpan = 4;
+			$RightColumnSpan = 8;
+		}
+		if ($LeftColumnSpan > 0) {
+			echo "<div class=\"span".$LeftColumnSpan."\">\n";
+			if ($enableFolderTree) {
+				if ($showtree==1){
+					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=0\"><i class=\"icon-minus-sign\"></i></a>", true);
+					$this->contentContainerStart();
 ?>
 		<script language="JavaScript">
 		function folderSelected(id, name) {
@@ -107,10 +117,13 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 		</script>
 <?php
-				$this->printNewTreeNavigation($folderid, M_READ, 0);
-				$this->contentContainerEnd();
-			} else {
-				$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
+					$this->printNewTreeNavigation($folderid, M_READ, 0, '');
+					$this->contentContainerEnd();
+				} else {
+					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
+				}
+				if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
+				echo "</div>\n";
 			}
 		}
 
@@ -118,7 +131,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 		if (1 || $enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
 		echo "</div>\n";
-		echo "<div class=\"span8\">\n";
+		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
 		$this->contentHeading(getMLText("folder_infos"));
 
@@ -260,7 +273,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 <?php
 			}
 ?>
-     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+     <a class="addtoclipboard" rel="<?php echo "F".$subFolder->getID(); ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
 <?php
 			print "</div>";
 			print "</td>";
@@ -343,7 +356,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				}
 				if($document->getAccessMode($user) >= M_READWRITE) {
 ?>
-     <a class_="btn btn-mini" href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
+     <a href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
 <?php
 				} else {
 ?>
@@ -351,7 +364,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 <?php
 				}
 ?>
-     <a class_="btn btn-mini" href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+     <a class="addtoclipboard" rel="<?php echo "D".$docID; ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
 <?php
 				print "</div>";
 				print "</td>";

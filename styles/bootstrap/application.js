@@ -9,7 +9,7 @@ $(document).ready( function() {
 	$('#expirationdate, #fromdate, #todate, #createstartdate, #createenddate, #expirationstartdate, #expirationenddate')
 		.datepicker()
 		.on('changeDate', function(ev){
-			$('#expirationdate, #fromdate, #todate, #createstartdate, #createenddate, #expirationstartdate, #expirationenddate').datepicker('hide');
+			$(ev.currentTarget).datepicker('hide');
 		});
 
 	$(".chzn-select").chosen();
@@ -53,14 +53,14 @@ $(document).ready( function() {
 			if(item.charAt(0) == 'D')
 				return '<i class="icon-file"></i> ' + item.substring(1);
 			else if(item.charAt(0) == 'F')
-				return '<i class="icon-folder-close"></i> ' + item.substring(1);
+				return '<i class="icon-folder-close-alt"></i> ' + item.substring(1);
 			else
 				return '<i class="icon-search"></i> ' + item.substring(1);
 		}
 	});
 
 	/* Document chooser */
-	$("#choosedocsearch").typeahead({
+	$("[id^=choosedocsearch]").typeahead({
 		minLength: 3,
 		formname: 'form1',
 		source: function(query, process) {
@@ -89,7 +89,7 @@ $(document).ready( function() {
 	});
 
 	/* Folder chooser */
-	$("#choosefoldersearch").typeahead({
+	$("[id^=choosefoldersearch]").typeahead({
 		minLength: 3,
 		formname: 'form1',
 		source: function(query, process) {
@@ -113,8 +113,32 @@ $(document).ready( function() {
 		},
 		highlighter : function (item) {
 			strarr = item.split("#");
-			return '<i class="icon-folder-close"></i> ' + strarr[1];
+			return '<i class="icon-folder-close-alt"></i> ' + strarr[1];
 		}
+	});
+
+	$('a.addtoclipboard').click(function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		type = attr_rel.substring(0, 1) == 'F' ? 'folder' : 'document';
+		id = attr_rel.substring(1);
+		$.get('../op/op.Ajax.php',
+			{ command: 'addtoclipboard', type: type, id: id },
+			function(data) {
+				console.log(data);
+				$('#menu-clipboard ul').remove();
+				$(data).appendTo('#menu-clipboard');
+				noty({
+					text: attr_msg,
+					type: 'success',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 1500,
+				});
+			}
+		);
 	});
 });
 

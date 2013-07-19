@@ -308,6 +308,19 @@ class SeedDMS_Session {
 	} /* }}} */
 
 	/**
+	 * Clear clipboard
+	 *
+	 */
+	function clearClipboard() { /* {{{ */
+		$this->data['clipboard']['docs'] = array();
+		$this->data['clipboard']['folders'] = array();
+		$queryStr = "UPDATE tblSessions SET clipboard = " . $this->db->qstr(json_encode($this->data['clipboard'])) . " WHERE id = " . $this->db->qstr($this->id);
+		if (!$this->db->getResult($queryStr))
+			return false;
+		return true;
+	} /* }}} */
+
+	/**
 	 * Set splash message of session
 	 *
 	 * @param array $msg contains 'typ' and 'msg'

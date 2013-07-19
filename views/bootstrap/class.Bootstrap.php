@@ -138,6 +138,31 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "</div>\n";
 	} /* }}} */
 
+	function menuClipboard($clipboard) { /* {{{ */
+		$content = '';
+		$content .= "   <ul id=\"main-menu-clipboard\" class=\"nav pull-right\">\n";
+		$content .= "    <li class=\"dropdown\">\n";
+		$content .= "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText('clipboard')." (".count($clipboard['folders'])."/".count($clipboard['docs']).") <i class=\"icon-caret-down\"></i></a>\n";
+		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
+		foreach($clipboard['folders'] as $folderid) {
+			if($folder = $this->params['dms']->getFolder($folderid))
+				$content .= "    <li><a href=\"../out/out.ViewFolder.php?id=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
+		}
+		foreach($clipboard['docs'] as $docid) {
+			if($document = $this->params['dms']->getDocument($docid))
+				$content .= "    <li><a href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\"><i class=\"icon-file\"></i> ".htmlspecialchars($document->getName())."</a></li>\n";
+		}
+		$content .= "    <li class=\"divider\"></li>\n";
+		if(isset($this->params['folder']) && $this->params['folder']->getAccessMode($this->params['user']) >= M_READWRITE) {
+			$content .= "    <li><a href=\"../op/op.MoveClipboard.php?targetid=".$this->params['folder']->getID()."&refferer=".urlencode($this->params['refferer'])."\">".getMLText("move_clipboard")."</a></li>\n";
+		}
+		$content .= "    <li><a href=\"../op/op.ClearClipboard.php?refferer=".urlencode($this->params['refferer'])."\">".getMLText("clear_clipboard")."</a></li>\n";
+		$content .= "     </ul>\n";
+		$content .= "    </li>\n";
+		$content .= "   </ul>\n";
+		return $content;
+	} /* }}} */
+
 	function globalNavigation($folder=null) { /* {{{ */
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
@@ -149,8 +174,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "   </a>\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		if(isset($this->params['user']) && $this->params['user']) {
-			echo "   <div class=\"nav-collapse nav-col1\">\n";
-			echo "   <ul class=\"nav pull-right\">\n";
+			echo "   <ul id=\"main-menu-admin\"class=\"nav pull-right\">\n";
 			echo "    <li class=\"dropdown\">\n";
 			echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".($this->params['session']->getSu() ? getMLText("switched_to") : getMLText("signed_in_as"))." '".htmlspecialchars($this->params['user']->getFullName())."' <i class=\"icon-caret-down\"></i></a>\n";
 			echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
@@ -187,6 +211,14 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "    </li>\n";
 			echo "   </ul>\n";
 
+			echo "   <div id=\"menu-clipboard\">";
+			$clipboard = $this->params['session']->getClipboard();
+			if (!$this->params['user']->isGuest() && (count($clipboard['docs']) + count($clipboard['folders'])) > 0) {
+				echo $this->menuClipboard($clipboard);
+			}
+			echo "   </div>";
+
+
 			echo "   <ul class=\"nav\">\n";
 	//		echo "    <li id=\"first\"><a href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".getMLText("content")."</a></li>\n";
 	//		echo "    <li><a href=\"../out/out.SearchForm.php?folderid=".$this->params['rootfolderid']."\">".getMLText("search")."</a></li>\n";
@@ -202,6 +234,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"1\" />";
 			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"2\" />";
 			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"3\" />";
+			echo "      <input type=\"hidden\" name=\"searchin[]\" value=\"4\" />";
 			echo "      <input name=\"query\" class=\"search-query\" id=\"searchfield\" data-provide=\"typeahead\" type=\"text\" style=\"width: 150px;\" placeholder=\"".getMLText("search")."\"/>";
 			if($this->params['enablefullsearch']) {
 				echo "      <label class=\"checkbox\" style=\"color: #999999;\"><input type=\"checkbox\" name=\"fullsearch\" value=\"1\" title=\"".getMLText('fullsearch_hint')."\"/> ".getMLText('fullsearch')."</label>";
@@ -739,7 +772,7 @@ function documentSelected<?= $formName ?>(id, name) {
 		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
 		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#folderChooser".$formName."\" href=\"out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "<a data-target=\"#folderChooser".$formName."\" href=\"../out/out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
 <div class="modal hide" id="folderChooser<?= $formName ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?= $formName ?>Label" aria-hidden="true">

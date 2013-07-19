@@ -2,7 +2,7 @@
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005 Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
-//    Copyright (C) 2010-2013 Uwe Steinmann
+//    Copyright (C) 2009-2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -18,21 +18,24 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-class SeedDMS_Version {
+include("../inc/inc.Settings.php");
+include("../inc/inc.LogInit.php");
+include("../inc/inc.DBInit.php");
+include("../inc/inc.Language.php");
+include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassEmail.php");
+include("../inc/inc.Authentication.php");
 
-	var $_number = "4.3.0RC1";
-	var $_string = "SeedDMS";
+$session->clearClipboard();
 
-	function SeedDMS_Version() {
-		return;
-	}
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_cleared_clipboard')));
 
-	function version() {
-		return $this->_number;
-	}
+add_log_line();
 
-	function banner() {
-		return $this->_string .", ". $this->_number;
-	}
+if($_GET['refferer'])
+	header("Location:".urldecode($_GET['refferer']));
+else {
+	$folderid = $_GET['folderid'];
+	header("Location:../out/out.ViewFolder.php?folderid=".$folderid);
 }
 ?>

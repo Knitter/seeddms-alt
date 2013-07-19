@@ -85,6 +85,7 @@ if(!$dms->checkVersion()) {
 $dms->setRootFolderID($settings->_rootFolderID);
 
 $index = Zend_Search_Lucene::create($settings->_luceneDir);
+SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
 
 $folder = $dms->getFolder($settings->_rootFolderID);
 tree($folder);

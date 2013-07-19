@@ -17,6 +17,16 @@
 - fix output of breadcrumbs on some pages (Bug #55)
 - do not take document comment for version if version comment is empty.
   The user must explicitly force it.
+- combine full text and database search in one form, filtering search result
+  by document status or category will no longer return folders
+- update of translation for zh_CN, fr_FR, sv_SE, es_ES
+- added new language arabic (Egypt) (Bug #63)
+- turn on foreign key constraints for sqlite3 databases
+- update to bootstrap 2.3.2
+- better checking of valid search term for fulltext search (Bug #61)
+- moving several documents/folders at a time (Bug #64)
+- set encoding of terms when adding document to full text index (Bug #66)
+- droped support for myisam database engine
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2

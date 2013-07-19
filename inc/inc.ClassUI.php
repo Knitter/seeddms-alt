@@ -44,13 +44,20 @@ class UI extends UI_Default {
 	 * @param array $params parameter passed to constructor of view class
 	 * @return object an object of a class implementing the view
 	 */
-	static function factory($theme, $class, $params=array()) { /* {{{ */
+	static function factory($theme, $class='', $params=array()) { /* {{{ */
 		global $settings, $session;
-		if(file_exists("../views/".$theme."/class.".$class.".php")) {
-			require("../views/".$theme."/class.".$class.".php");
+		if(!$class) {
+			$class = 'Bootstrap';
+			$classname = "SeedDMS_Bootstrap_Style";
+		} else {
 			$classname = "SeedDMS_View_".$class;
+		}
+		$filename = "../views/".$theme."/class.".$class.".php";
+		if(file_exists($filename)) {
+			require($filename);
 			$view = new $classname($params, $theme);
 			/* Set some configuration parameters */
+			$view->setParam('refferer', $_SERVER['REQUEST_URI']);
 			$view->setParam('session', $session);
 			$view->setParam('sitename', $settings->_siteName);
 			$view->setParam('rootfolderid', $settings->_rootFolderID);

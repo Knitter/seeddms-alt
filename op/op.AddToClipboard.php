@@ -41,6 +41,12 @@ $session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_added_t
 
 /* FIXME: this does not work because the folder id is not passed */
 $folderid = $_GET['folderid'];
-header("Location:../out/out.ViewFolder.php?folderid=".$folderid);
+
+if(isset($_GET['refferer']) && $_GET['refferer'])
+	header("Location:".urldecode($_GET['refferer']));
+else {
+	$folderid = $_GET['folderid'];
+	header("Location:../out/out.ViewFolder.php?folderid=".$folderid);
+}
 
 ?>

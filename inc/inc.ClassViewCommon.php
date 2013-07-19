@@ -44,6 +44,11 @@ class SeedDMS_View_Common {
 		$this->params[$name] = $value;
 	}
 
+	function unsetParam($name) {
+		if(isset($this->params[$name]))
+			unset($this->params[$name]);
+	}
+
 /*
 	function setConfiguration($conf) {
 		$this->settings = $conf;

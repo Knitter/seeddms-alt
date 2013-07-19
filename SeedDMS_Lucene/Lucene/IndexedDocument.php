@@ -51,37 +51,37 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 				foreach($attributes as $attribute) {
 					$attrdef = $attribute->getAttributeDefinition();
 					if($attrdef->getValueSet() != '')
-						$this->addField(Zend_Search_Lucene_Field::Keyword('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue()));
+						$this->addField(Zend_Search_Lucene_Field::Keyword('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue(), 'utf-8'));
 					else
-						$this->addField(Zend_Search_Lucene_Field::Text('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue()));
+						$this->addField(Zend_Search_Lucene_Field::Text('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue(), 'utf-8'));
 				}
 			}
 		}
-		$this->addField(Zend_Search_Lucene_Field::Text('title', $document->getName()));
+		$this->addField(Zend_Search_Lucene_Field::Text('title', $document->getName(), 'utf-8'));
 		if($categories = $document->getCategories()) {
 			$names = array();
 			foreach($categories as $cat) {
 				$names[] = $cat->getName();
 			}
-			$this->addField(Zend_Search_Lucene_Field::Text('category', implode(' ', $names)));
+			$this->addField(Zend_Search_Lucene_Field::Text('category', implode(' ', $names), 'utf-8'));
 		}
 		if($attributes = $document->getAttributes()) {
 			foreach($attributes as $attribute) {
 				$attrdef = $attribute->getAttributeDefinition();
 				if($attrdef->getValueSet() != '')
-					$this->addField(Zend_Search_Lucene_Field::Keyword('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue()));
+					$this->addField(Zend_Search_Lucene_Field::Keyword('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue(), 'utf-8'));
 				else
-					$this->addField(Zend_Search_Lucene_Field::Text('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue()));
+					$this->addField(Zend_Search_Lucene_Field::Text('attr_'.str_replace(' ', '_', $attrdef->getName()), $attribute->getValue(), 'utf-8'));
 			}
 		}
 
 		$owner = $document->getOwner();
-		$this->addField(Zend_Search_Lucene_Field::Text('owner', $owner->getLogin()));
+		$this->addField(Zend_Search_Lucene_Field::Text('owner', $owner->getLogin(), 'utf-8'));
 		if($keywords = $document->getKeywords()) {
-			$this->addField(Zend_Search_Lucene_Field::Text('keywords', $keywords));
+			$this->addField(Zend_Search_Lucene_Field::Text('keywords', $keywords, 'utf-8'));
 		}
 		if($comment = $document->getComment()) {
-			$this->addField(Zend_Search_Lucene_Field::Text('comment', $comment));
+			$this->addField(Zend_Search_Lucene_Field::Text('comment', $comment, 'utf-8'));
 		}
 		if($version && !$nocontent) {
 			$path = $dms->contentDir . $version->getPath();

@@ -169,6 +169,9 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'mysql':
 				$this->_conn->exec('SET NAMES utf8');
 				break;
+			case 'sqlite':
+				$this->_conn->exec('PRAGMA foreign_keys = ON');
+				break;
 		}
 		$this->_connected = true;
 		return true;

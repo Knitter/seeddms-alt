@@ -904,6 +904,7 @@ $text = array(
 'hu_HU' => "Ungarisch",
 'it_IT' => "Italienisch",
 'nl_NL' => "Hollandisch",
+'pl_PL' => "Polnisch",
 'pt_BR' => "Portugiesisch (BR)",
 'ru_RU' => "Russisch",
 'sk_SK' => "Slovakisch",

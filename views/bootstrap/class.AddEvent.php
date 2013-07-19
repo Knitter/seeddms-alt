@@ -76,7 +76,7 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("from");?>:</td>
 			<td><?php //$this->printDateChooser(-1, "from");?>
-    		<span class="input-append date" id="fromdate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
+    		<span class="input-append date span12" id="fromdate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
       		<input class="span6" size="16" name="from" type="text" value="<?php echo $expdate; ?>">
       		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>
@@ -85,7 +85,7 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("to");?>:</td>
 			<td><?php //$this->printDateChooser(-1, "to");?>
-    		<span class="input-append date" id="todate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
+    		<span class="input-append date span12" id="todate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
       		<input class="span6" size="16" name="to" type="text" value="<?php echo $expdate; ?>">
       		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>

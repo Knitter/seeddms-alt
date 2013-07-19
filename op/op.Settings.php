@@ -66,6 +66,7 @@ if ($action == "saveSettings")
   $settings->_enableEmail =getBoolValue("enableEmail");
   $settings->_enableUsersView = getBoolValue("enableUsersView");
   $settings->_enableFullSearch = getBoolValue("enableFullSearch");
+  $settings->_enableClipboard = getBoolValue("enableClipboard");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
   $settings->_enableRecursiveCount = getBoolValue("enableRecursiveCount");
   $settings->_maxRecursiveCount = intval($_POST["maxRecursiveCount"]);

@@ -266,6 +266,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 					foreach ($approvalStatus["grpstatus"] as $st) {
 					
 						if (!in_array($st["documentID"], $iRev) && $st["status"]==0 && isset($docIdx[$st["documentID"]][$st["version"]]) && $docIdx[$st["documentID"]][$st["version"]]['owner'] != $user->getId()) {
+							$document = $dms->getDocument($st["documentID"]);
 							if ($printheader){
 								print "<table class=\"table table-condensed\">";
 								print "<thead>\n<tr>\n";
