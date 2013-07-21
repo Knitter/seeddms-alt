@@ -46,8 +46,8 @@ class SeedDMS_ExtExample extends SeedDMS_ExtBase {
 	 * $GLOBALS['SEEDDMS_HOOKS'] : all hooks added so far
 	 */
 	function init() { /* {{{ */
-		$GLOBALS['SEEDDMS_HOOKS']['addDocument'][] = new SeedDMS_ExtExample_AddDocument;
-		$GLOBALS['SEEDDMS_HOOKS']['viewFolder'][] = new SeedDMS_ExtExample_ViewFolder;
+		$GLOBALS['SEEDDMS_HOOKS']['view']['addDocument'][] = new SeedDMS_ExtExample_AddDocument;
+		$GLOBALS['SEEDDMS_HOOKS']['view']['viewFolder'][] = new SeedDMS_ExtExample_ViewFolder;
 	} /* }}} */
 
 	function main() { /* {{{ */
@@ -66,13 +66,13 @@ class SeedDMS_ExtExample_AddDocument {
 	/**
 	 * Hook before adding a new document
 	 */
-	function preAddDocument($params) { /* {{{ */
+	function preAddDocument($view) { /* {{{ */
 	} /* }}} */
 
 	/**
 	 * Hook after successfully adding a new document
 	 */
-	function postAddDocument($document) { /* {{{ */
+	function postAddDocument($view) { /* {{{ */
 	} /* }}} */
 }
 
