@@ -60,8 +60,8 @@ class SeedDMS_View_Common {
 
 	function callHook($hook) {
 		$tmp = explode('_', get_class($this));
-		if(isset($GLOBALS['SEEDDMS_HOOKS'][lcfirst($tmp[2])])) {
-			foreach($GLOBALS['SEEDDMS_HOOKS'][lcfirst($tmp[2])] as $hookObj) {
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])] as $hookObj) {
 				if (method_exists($hookObj, $hook)) {
 					return $hookObj->$hook($this);
 				}
