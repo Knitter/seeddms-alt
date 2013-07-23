@@ -23,10 +23,14 @@ include("../inc/inc.LogInit.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
+include("../inc/inc.Extension.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 $documentid = $_GET["documentid"];
-
 if (!isset($documentid) || !is_numeric($documentid) || intval($documentid)<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
@@ -54,16 +58,9 @@ if(isset($_GET["version"])) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 	}
 
-	if (isset($settings->_viewOnlineFileTypes) && is_array($settings->_viewOnlineFileTypes) && in_array(strtolower($content->getFileType()), $settings->_viewOnlineFileTypes)) {
-		header("Content-Type: " . $content->getMimeType());
-	}
-	header("Content-Disposition: filename=\"" . $document->getName().$content->getFileType()) . "\"";
-	header("Content-Length: " . filesize($dms->contentDir . $content->getPath()));
-	header("Expires: 0");
-	header("Cache-Control: no-cache, must-revalidate");
-	header("Pragma: no-cache");
-
-	readfile($dms->contentDir . $content->getPath());
+	$controller->setParam('content', $content);
+	$controller->setParam('type', 'version');
+	$controller->run();
 } elseif(isset($_GET["file"])) {
 	$fileid = $_GET["file"];
 
