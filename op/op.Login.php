@@ -24,7 +24,9 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassSession.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.ClassEmail.php");
+include("../inc/inc.Extension.php");
 
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
@@ -39,6 +41,9 @@ function _printMessage($heading, $message) {
 	UI::htmlEndPage();
 	return;
 }
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 if (isset($_REQUEST["sesstheme"]) && strlen($_REQUEST["sesstheme"])>0 && is_numeric(array_search($_REQUEST["sesstheme"],UI::getStyles())) ) {
 	$theme = $_REQUEST["sesstheme"];
@@ -292,6 +297,10 @@ if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {
 else if (isset($_GET["referuri"]) && strlen($_GET["referuri"])>0) {
 	$referuri = urldecode($_GET["referuri"]);
 }
+
+$controller->setParam('user', $user);
+$controller->setParam('session', $session);
+$controller->run();
 
 add_log_line();
 
