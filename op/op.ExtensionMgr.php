@@ -33,7 +33,7 @@ if(!checkFormKey('extensionmgr')) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }
 
-$extMgr = new SeedDMS_Extension_Mgr($settings->_rootDir."/ext", $settings->_cacheDir);
+$extMgr = new SeedDMS_Extension_Mgr($db, $settings->_rootDir."/ext", $settings->_cacheDir);
 $extconffile = $extMgr->getExtensionsConfFile();
 $extMgr->createExtensionConf();
 
