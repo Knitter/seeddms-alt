@@ -49,7 +49,8 @@ class SeedDMS_Email extends SeedDMS_Notify {
 		$message = getMLText("email_header", array(), "", $lang)."\r\n\r\n".getMLText($message, $params, "", $lang);
 		$message .= "\r\n\r\n".getMLText("email_footer", array(), "", $lang);
 
-		mail($recipient->getEmail(), getMLText($subject, $params, "", $lang), $message, implode("\r\n", $headers));
+		$subject = "=?UTF-8?B?".base64_encode(getMLText($subject, $params, "", $lang))."?=";
+		mail($recipient->getEmail(), $subject, $message, implode("\r\n", $headers));
 
 		return true;
 	} /* }}} */
@@ -86,10 +87,11 @@ class SeedDMS_Email extends SeedDMS_Notify {
 		$headers   = array();
 		$headers[] = "MIME-Version: 1.0";
 		$headers[] = "Content-type: text/plain; charset=utf-8";
-		$headers[] = "From: ". $settings->_smtpSendFrom();
-		$headers[] = "Reply-To: ". $settings->_smtpSendFrom();
+		$headers[] = "From: ". $settings->_smtpSendFrom;
+		$headers[] = "Reply-To: ". $settings->_smtpSendFrom;
 
-		return (mail($recipient->getEmail(), $this->replaceMarker($subject), $this->replaceMarker($message), implode("\r\n", $header)) ? 0 : -1);
+		$subject = "=?UTF-8?B?".base64_encode($this->replaceMarker($subject))."?=";
+		return (mail($recipient->getEmail(), $subject, $this->replaceMarker($message), implode("\r\n", $header)) ? 0 : -1);
 	} /* }}} */
 }
 ?>
