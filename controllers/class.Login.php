@@ -29,7 +29,7 @@ class SeedDMS_Controller_Login extends SeedDMS_Controller_Common {
 		$session = $this->params['session'];
 
 		if($this->callHook('postLogin')) {
-			$session->setSplashMsg(array('type'=>'success', 'msg'=>'Hallo, du bist als "'.$user->getFullname().'" eingeloggt'));
+			$session->setSplashMsg(array('type'=>'success', 'msg'=>'The environment for "'.$user->getFullname().'" has been set up!'));
 		}
 	}
 }
