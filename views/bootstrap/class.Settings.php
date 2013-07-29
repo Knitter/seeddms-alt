@@ -550,7 +550,7 @@ if(!is_writeable($settings->_configFilePath)) {
 								break;
 							default:
 ?>
-        <input type="text" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" value="<?php if(isset($settings->_extensions[$extname][$confkey])) echo $settings->_extensions[$extname][$confkey]; ?>" size="<?php echo $conf['size']; ?>" />
+        <input type="text" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" title="<?php echo $conf['help']; ?>" value="<?php if(isset($settings->_extensions[$extname][$confkey])) echo $settings->_extensions[$extname][$confkey]; ?>" size="<?php echo $conf['size']; ?>" />
 <?php
 						}
 ?>
