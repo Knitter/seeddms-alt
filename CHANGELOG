@@ -27,6 +27,7 @@
 - moving several documents/folders at a time (Bug #64)
 - set encoding of terms when adding document to full text index (Bug #66)
 - droped support for myisam database engine
+- add support for connecting to ldap servers without anonymous bind
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
