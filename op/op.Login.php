@@ -76,7 +76,8 @@ if(isset($GLOBALS['SEEDDMS_HOOKS']['authentication'])) {
 	foreach($GLOBALS['SEEDDMS_HOOKS']['authentication'] as $authObj) {
 		if(method_exists($authObj, 'authenticate')) {
 			$user = $authObj->authenticate($dms, $settings, $login, $pwd);
-			$userid = $user->getID();
+			if(is_object($user))
+				$userid = $user->getID();
 		}
 	}
 }
