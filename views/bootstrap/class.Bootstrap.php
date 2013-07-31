@@ -1123,35 +1123,40 @@ $(function() {
 				//echo "<tr><th colspan=\"3\">Documents</th></tr>\n";
 				foreach($clipboard['docs'] as $docid) {
 					if($document = $dms->getDocument($docid)) {
-						$comment = $document->getComment();
-						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-						if($latestContent = $document->getLatestContent()) {
-							$previewer->createPreview($latestContent);
-							$version = $latestContent->getVersion();
-							$status = $latestContent->getStatus();
-							
-							print "<tr>";
+						$txt = $this->callHook('documentClipboardItem', $document, $previewer);
+						if(is_string($txt))
+							echo $txt;
+						else {
+							$comment = $document->getComment();
+							if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
+							if($latestContent = $document->getLatestContent()) {
+								$previewer->createPreview($latestContent);
+								$version = $latestContent->getVersion();
+								$status = $latestContent->getStatus();
+								
+								print "<tr>";
 
-							if (file_exists($dms->contentDir . $latestContent->getPath())) {
-								print "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
-								if($previewer->hasPreview($latestContent)) {
-									print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-								} else {
-									print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								if (file_exists($dms->contentDir . $latestContent->getPath())) {
+									print "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
+									if($previewer->hasPreview($latestContent)) {
+										print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									} else {
+										print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									}
+									print "</a></td>";
+								} else
+									print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
+								
+								print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
+								if($comment) {
+									print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 								}
-								print "</a></td>";
-							} else
-								print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-							
-							print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
-							if($comment) {
-								print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+								print "</td>\n";
+								print "<td>\n";
+								print "<div class=\"list-action\"><a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
+								print "</td>\n";
+								print "</tr>";
 							}
-							print "</td>\n";
-							print "<td>\n";
-							print "<div class=\"list-action\"><a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
-							print "</td>\n";
-							print "</tr>";
 						}
 					}
 				}
