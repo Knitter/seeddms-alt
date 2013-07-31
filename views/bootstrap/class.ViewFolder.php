@@ -280,93 +280,97 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
 		foreach($documents as $document) {
-
-			$owner = $document->getOwner();
-			$comment = $document->getComment();
-			if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-			$docID = $document->getID();
-			if($latestContent = $document->getLatestContent()) {
-				$previewer->createPreview($latestContent);
-				$version = $latestContent->getVersion();
-				$status = $latestContent->getStatus();
-				$needwkflaction = false;
-				if($workflowmode == 'advanced') {
-					$workflow = $latestContent->getWorkflow();
-					if($workflow) {
-						$needwkflaction = $latestContent->needsWorkflowAction($user);
+			$txt = $this->callHook('documentListItem', $document, $previewer);
+			if(is_string($txt))
+				echo $txt;
+			else {
+				$owner = $document->getOwner();
+				$comment = $document->getComment();
+				if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
+				$docID = $document->getID();
+				if($latestContent = $document->getLatestContent()) {
+					$previewer->createPreview($latestContent);
+					$version = $latestContent->getVersion();
+					$status = $latestContent->getStatus();
+					$needwkflaction = false;
+					if($workflowmode == 'advanced') {
+						$workflow = $latestContent->getWorkflow();
+						if($workflow) {
+							$needwkflaction = $latestContent->needsWorkflowAction($user);
+						}
 					}
-				}
-				
-				/* Retrieve attacheѕ files */
-				$files = $document->getDocumentFiles();
+					
+					/* Retrieve attacheѕ files */
+					$files = $document->getDocumentFiles();
 
-				/* Retrieve linked documents */
-				$links = $document->getDocumentLinks();
-				$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
+					/* Retrieve linked documents */
+					$links = $document->getDocumentLinks();
+					$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
-				print "<tr>";
+					print "<tr>";
 
-				if (file_exists($dms->contentDir . $latestContent->getPath())) {
-					print "<td><a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
-					if($previewer->hasPreview($latestContent)) {
-						print "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+					if (file_exists($dms->contentDir . $latestContent->getPath())) {
+						print "<td><a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
+						if($previewer->hasPreview($latestContent)) {
+							print "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						} else {
+							print "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						}
+						print "</a></td>";
+					} else
+						print "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
+					
+					print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
+					print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
+					if($comment) {
+						print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+					}
+					print "</td>\n";
+	//				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+					print "<td nowrap>";
+					$attentionstr = '';
+					if ( $document->isLocked() ) {
+						$attentionstr .= "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
+					}
+					if ( $needwkflaction ) {
+						$attentionstr .= "<img src=\"".$this->getImgPath("attention.gif")."\" title=\"". getMLText("workflow").": "."\"> ";
+					}
+					if($attentionstr)
+						print $attentionstr."<br />";
+					print "<small>";
+					if(count($files))
+						print count($files)." ".getMLText("linked_files")."<br />";
+					if(count($links))
+						print count($links)." ".getMLText("linked_documents")."<br />";
+					print getOverallStatusText($status["status"])."</small></td>";
+	//				print "<td>".$version."</td>";
+					print "<td>";
+					print "<div class=\"list-action\">";
+					if($document->getAccessMode($user) >= M_ALL) {
+	?>
+			 <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
+	<?php
 					} else {
-						print "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+	?>
+			 <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
+	<?php
 					}
-					print "</a></td>";
-				} else
-					print "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-				
-				print "<td><a href=\"out.ViewDocument.php?documentid=".$docID."&showtree=".$showtree."\">" . htmlspecialchars($document->getName()) . "</a>";
-				print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latestContent->getDate())."</b></span>";
-				if($comment) {
-					print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+					if($document->getAccessMode($user) >= M_READWRITE) {
+	?>
+			 <a href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
+	<?php
+					} else {
+	?>
+			 <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
+	<?php
+					}
+	?>
+			 <a class="addtoclipboard" rel="<?php echo "D".$docID; ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+	<?php
+					print "</div>";
+					print "</td>";
+					print "</tr>\n";
 				}
-				print "</td>\n";
-//				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-				print "<td nowrap>";
-				$attentionstr = '';
-				if ( $document->isLocked() ) {
-					$attentionstr .= "<img src=\"".$this->getImgPath("lock.png")."\" title=\"". getMLText("locked_by").": ".htmlspecialchars($document->getLockingUser()->getFullName())."\"> ";
-				}
-				if ( $needwkflaction ) {
-					$attentionstr .= "<img src=\"".$this->getImgPath("attention.gif")."\" title=\"". getMLText("workflow").": "."\"> ";
-				}
-				if($attentionstr)
-					print $attentionstr."<br />";
-				print "<small>";
-				if(count($files))
-					print count($files)." ".getMLText("linked_files")."<br />";
-				if(count($links))
-					print count($links)." ".getMLText("linked_documents")."<br />";
-				print getOverallStatusText($status["status"])."</small></td>";
-//				print "<td>".$version."</td>";
-				print "<td>";
-				print "<div class=\"list-action\">";
-				if($document->getAccessMode($user) >= M_ALL) {
-?>
-     <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
-<?php
-				} else {
-?>
-     <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
-<?php
-				}
-				if($document->getAccessMode($user) >= M_READWRITE) {
-?>
-     <a href="../out/out.EditDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-edit"></i></a>
-<?php
-				} else {
-?>
-     <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
-<?php
-				}
-?>
-     <a class="addtoclipboard" rel="<?php echo "D".$docID; ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=document&id=<?php echo $docID; ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
-<?php
-				print "</div>";
-				print "</td>";
-				print "</tr>\n";
 			}
 		}
 
