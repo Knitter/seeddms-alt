@@ -62,6 +62,7 @@ if($view) {
 	$view->setParam('enableFolderTree', $settings->_enableFolderTree);
 	$view->setParam('enableClipboard', $settings->_enableClipboard);
 	$view->setParam('showtree', showtree());
+	$view->setParam('settings', $settings);
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->setParam('enableRecursiveCount', $settings->_enableRecursiveCount);
