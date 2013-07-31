@@ -95,7 +95,7 @@ class SeedDMS_ExtExample_ViewFolder {
 	 * @return string content to be output
 	 */
 	function preContent($view) { /* {{{ */
-		return $view->infoMsg("Content created by viewFolder::preContent hook");
+		return $view->infoMsg("Content created by viewFolder::preContent hook.");
 	} /* }}} */
 
 	/**
