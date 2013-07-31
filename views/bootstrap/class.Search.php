@@ -327,95 +327,100 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
 			foreach ($entries as $entry) {
 				if(get_class($entry) == 'SeedDMS_Core_Document') {
-					$document = $entry;
-					$owner = $document->getOwner();
-					$lc = $document->getLatestContent();
-					$version = $lc->getVersion();
-					$previewer->createPreview($lc);
+					$txt = $this->callHook('documentListItem', $entry, $previewer);
+					if(is_string($txt))
+						echo $txt;
+					else {
+						$document = $entry;
+						$owner = $document->getOwner();
+						$lc = $document->getLatestContent();
+						$version = $lc->getVersion();
+						$previewer->createPreview($lc);
 
-					if (in_array(3, $searchin))
-						$comment = $this->markQuery(htmlspecialchars($document->getComment()));
-					else
-						$comment = htmlspecialchars($document->getComment());
-					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					print "<tr>";
-					//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
-					if (in_array(2, $searchin)) {
-						$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
-					} else {
-						$docName = htmlspecialchars($document->getName());
-					}
-					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">";
-					if($previewer->hasPreview($lc)) {
-						print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=40\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
-					} else {
-						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
-					}
-					print "</a></td>";
-					print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
-					$folder = $document->getFolder();
-					$path = $folder->getPath();
-					for ($i = 1; $i  < count($path); $i++) {
-						print htmlspecialchars($path[$i]->getName())."/";
-					}
-					print $docName;
-					print "</a>";
-				print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $lc->getDate())."</b></span>";
-					if($comment) {
-						print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
-					}
-					print "</td>";
-
-					print "<td>";
-					print "<ul class=\"unstyled\">\n";
-					$lcattributes = $lc->getAttributes();
-					if($lcattributes) {
-						foreach($lcattributes as $lcattribute) {
-							$attrdef = $lcattribute->getAttributeDefinition();
-							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($lcattribute->getValue())."</li>\n";
+						if (in_array(3, $searchin))
+							$comment = $this->markQuery(htmlspecialchars($document->getComment()));
+						else
+							$comment = htmlspecialchars($document->getComment());
+						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
+						print "<tr>";
+						//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
+						if (in_array(2, $searchin)) {
+							$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
+						} else {
+							$docName = htmlspecialchars($document->getName());
 						}
-					}
-					print "</ul>\n";
-					print "<ul class=\"unstyled\">\n";
-					$docttributes = $document->getAttributes();
-					if($docttributes) {
-						foreach($docttributes as $docttribute) {
-							$attrdef = $docttribute->getAttributeDefinition();
-							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($docttribute->getValue())."</li>\n";
+						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">";
+						if($previewer->hasPreview($lc)) {
+							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=40\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
+						} else {
+							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
 						}
-					}
-					print "</ul>\n";
-					print "</td>";
+						print "</a></td>";
+						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">/";
+						$folder = $document->getFolder();
+						$path = $folder->getPath();
+						for ($i = 1; $i  < count($path); $i++) {
+							print htmlspecialchars($path[$i]->getName())."/";
+						}
+						print $docName;
+						print "</a>";
+					print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $document->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $lc->getDate())."</b></span>";
+						if($comment) {
+							print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+						}
+						print "</td>";
 
-					$display_status=$lc->getStatus();
-					print "<td>".getOverallStatusText($display_status["status"]). "</td>";
-					print "<td>";
-					print "<div class=\"list-action\">";
-					if($document->getAccessMode($user) >= M_ALL) {
-?>
-     <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $document->getID(); ?>"><i class="icon-remove"></i></a>
-<?php
-					} else {
-?>
-     <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
-<?php
-					}
-					if($document->getAccessMode($user) >= M_READWRITE) {
-?>
-     <a href="../out/out.EditDocument.php?documentid=<?php echo $document->getID(); ?>"><i class="icon-edit"></i></a>
-<?php
-					} else {
-?>
-     <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
-<?php
-					}
-?>
-     <a class="addtoclipboard" rel="<?php echo "D".$document->getID(); ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?documentid=<?php echo $document->getID(); ?>&type=document&id=<?php echo $document->getID(); ?>&refferer=<?php echo urlencode($this->params['refferer']); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
-<?php
-					print "</div>";
-					print "</td>";
+						print "<td>";
+						print "<ul class=\"unstyled\">\n";
+						$lcattributes = $lc->getAttributes();
+						if($lcattributes) {
+							foreach($lcattributes as $lcattribute) {
+								$attrdef = $lcattribute->getAttributeDefinition();
+								print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($lcattribute->getValue())."</li>\n";
+							}
+						}
+						print "</ul>\n";
+						print "<ul class=\"unstyled\">\n";
+						$docttributes = $document->getAttributes();
+						if($docttributes) {
+							foreach($docttributes as $docttribute) {
+								$attrdef = $docttribute->getAttributeDefinition();
+								print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($docttribute->getValue())."</li>\n";
+							}
+						}
+						print "</ul>\n";
+						print "</td>";
 
-					print "</tr>\n";
+						$display_status=$lc->getStatus();
+						print "<td>".getOverallStatusText($display_status["status"]). "</td>";
+						print "<td>";
+						print "<div class=\"list-action\">";
+						if($document->getAccessMode($user) >= M_ALL) {
+	?>
+			 <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $document->getID(); ?>"><i class="icon-remove"></i></a>
+	<?php
+						} else {
+	?>
+			 <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
+	<?php
+						}
+						if($document->getAccessMode($user) >= M_READWRITE) {
+	?>
+			 <a href="../out/out.EditDocument.php?documentid=<?php echo $document->getID(); ?>"><i class="icon-edit"></i></a>
+	<?php
+						} else {
+	?>
+			 <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
+	<?php
+						}
+	?>
+			 <a class="addtoclipboard" rel="<?php echo "D".$document->getID(); ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?documentid=<?php echo $document->getID(); ?>&type=document&id=<?php echo $document->getID(); ?>&refferer=<?php echo urlencode($this->params['refferer']); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+	<?php
+						print "</div>";
+						print "</td>";
+
+						print "</tr>\n";
+					}
 				} elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
 					$folder = $entry;
 					$owner = $folder->getOwner();
