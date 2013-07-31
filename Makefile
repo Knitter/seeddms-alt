@@ -4,6 +4,7 @@ SRC=CHANGELOG inc conf utils index.php languages views op out controllers README
 
 EXTENSIONS := \
 	dynamic_content.tar.gz\
+	login_action.tar.gz\
 	example.tar.gz
 
 dist:
@@ -34,6 +35,9 @@ dynamic_content.tar.gz: ext/dynamic_content
 
 example.tar.gz: ext/example
 	tar czvf example.tar.gz ext/example
+
+login_action.tar.gz: ext/login_action
+	tar czvf login_action.tar.gz ext/login_action
 
 extensions: $(EXTENSIONS)
 
