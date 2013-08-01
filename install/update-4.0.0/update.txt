@@ -1,9 +1,9 @@
 LetoDMS is now SeedDMS
 ======================
 
-I had to change of LetoDMS and took SeedDMS. It is a smooth continuation
-of LetoDMS. This initial version of SeedDMS will be able to update all
-former versions of LetoDMS back to 3.0.0.
+I had to change the name of LetoDMS and took SeedDMS. It is a smooth
+continuation of LetoDMS. This initial version of SeedDMS will be able
+to update all former versions of LetoDMS back to 3.0.0.
 
 Run object check after upgrade
 ==============================
