@@ -114,7 +114,11 @@ if (is_bool($user)) {
 			ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
 
 			// try an anonymous bind first. If it succeeds, get the DN for the user.
-			$bind = @ldap_bind($ds);
+			if (isset($settings->_ldapBindDN)) {
+				$bind = @ldap_bind($ds, $settings->_ldapBindDN, $settings->_ldapBindPw);
+			} else {
+				$bind = @ldap_bind($ds);
+			}
 			$dn = false;
 					
 			/* new code by doudoux - TO BE TESTED */

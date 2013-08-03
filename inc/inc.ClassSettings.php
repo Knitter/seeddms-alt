@@ -186,6 +186,8 @@ class Settings { /* {{{ */
 	var $_ldapHost = ""; // URIs are supported, e.g.: ldaps://ldap.host.com
 	var $_ldapPort = 389; // Optional.
 	var $_ldapBaseDN = "";
+	var $_ldapBindDN = "";
+	var $_ldapBindPw = "";
 	var $_ldapAccountDomainName = "";
 	var $_ldapType = 1; // 0 = ldap; 1 = AD
 	var $_converters = array(); // list of commands used to convert files to text for Indexer
@@ -383,6 +385,8 @@ class Settings { /* {{{ */
 				$this->_ldapHost = strVal($connectorNode["host"]);
 				$this->_ldapPort = intVal($connectorNode["port"]);
 				$this->_ldapBaseDN = strVal($connectorNode["baseDN"]);
+				$this->_ldapBindDN = strVal($connectorNode["bindDN"]);
+				$this->_ldapBindPw = strVal($connectorNode["bindPw"]);
 				$this->_ldapType = 0;
 			}
 			else if ($params['enable'] && ($typeConn == "AD"))
@@ -390,6 +394,8 @@ class Settings { /* {{{ */
 				$this->_ldapHost = strVal($connectorNode["host"]);
 				$this->_ldapPort = intVal($connectorNode["port"]);
 				$this->_ldapBaseDN = strVal($connectorNode["baseDN"]);
+				$this->_ldapBindDN = strVal($connectorNode["bindDN"]);
+				$this->_ldapBindPw = strVal($connectorNode["bindPw"]);
 				$this->_ldapType = 1;
 				$this->_ldapAccountDomainName = strVal($connectorNode["accountDomainName"]);
 			}

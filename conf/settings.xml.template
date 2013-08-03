@@ -118,6 +118,8 @@
           host = "ldaps://ldap.host.com"
           port = "389"
           baseDN = ""
+          bindDN="" 
+          bindPw=""
         >
         </connector>
         <!-- ***** CONNECTOR Microsoft Active Directory  *****
@@ -135,6 +137,8 @@
           port = "389"
           baseDN = ""
           accountDomainName = "example.com"
+	  bindDN="" 
+	  bindPw=""
         >
         </connector>
       </connectors>
