@@ -104,7 +104,7 @@ function checkForm()
 	<input type='hidden' name='documentid' value='<?php echo $document->getId(); ?>'/>
 	<input type='hidden' name='version' value='<?php echo $latestContent->getVersion(); ?>'/>
 	<input type='hidden' name='transition' value='<?php echo $transition->getID(); ?>'/>
-	<input type='submit' class="btn" value='<?php printMLText("action_".$action->getName()); ?>'/>
+	<input type='submit' class="btn" value='<?php printMLText("action_".strtolower($action->getName()), array(), $action->getName()); ?>'/>
 	</td></tr></table>
 	</form>
 	</div>
@@ -121,7 +121,7 @@ function checkForm()
 			echo "<tr><th>".getMLText('action')."</th><th>Start state</th><th>End state</th><th>".getMLText('date')."</th><th>".getMLText('user')."</th><th>".getMLText('comment')."</th></tr>";
 			foreach($wkflog as $entry) {
 				echo "<tr>";
-				echo "<td>".getMLText('action_'.$entry->getTransition()->getAction()->getName())."</td>";
+				echo "<td>".getMLText('action_'.strtolower($entry->getTransition()->getAction()->getName()), array(), $entry->getTransition()->getAction()->getName())."</td>";
 				echo "<td>".$entry->getTransition()->getState()->getName()."</td>";
 				echo "<td>".$entry->getTransition()->getNextState()->getName()."</td>";
 				echo "<td>".$entry->getDate()."</td>";
