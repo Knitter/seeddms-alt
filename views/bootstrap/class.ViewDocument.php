@@ -619,7 +619,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo "<td>Action:</td>";
 			foreach($transitions as $transition) {
 				$action = $transition->getAction();
-				echo "<td>".getMLText('action_'.$action->getName())."</td>";
+				echo "<td>".getMLText('action_'.strtolower($action->getName()), array(), $action->getName())."</td>";
 			}
 			echo "</tr>";
 			echo "<tr>";
@@ -682,7 +682,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				echo "<td>";
 				if($latestContent->triggerWorkflowTransitionIsAllowed($user, $transition)) {
 					$action = $transition->getAction();
-					print "<form action=\"../out/out.TriggerWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('triggerworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"hidden\" name=\"transition\" value=\"".$transition->getID()."\" /><input type=\"submit\" class=\"btn\" value=\"".getMLText('action_'.$action->getName())."\" /></form>";
+					print "<form action=\"../out/out.TriggerWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('triggerworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"hidden\" name=\"transition\" value=\"".$transition->getID()."\" /><input type=\"submit\" class=\"btn\" value=\"".getMLText('action_'.strtolower($action->getName()), array(), $action->getName())."\" /></form>";
 				}
 				echo "</td>";
 			}
