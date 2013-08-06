@@ -168,6 +168,8 @@ if ($_FILES['userfile']['error'] == 0) {
 		}
 	}
 
+	$workflow = $user->getMandatoryWorkflow();
+
 	if(isset($_POST["attributes"]) && $_POST["attributes"]) {
 		$attributes = $_POST["attributes"];
 		foreach($attributes as $attrdefid=>$attribute) {
@@ -184,7 +186,7 @@ if ($_FILES['userfile']['error'] == 0) {
 		$attributes = array();
 	}
 
-	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes);
+	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes, $workflow);
 	if (is_bool($contentResult) && !$contentResult) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}

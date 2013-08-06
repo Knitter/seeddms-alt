@@ -87,11 +87,6 @@ foreach($attributes_version as $attrdefid=>$attribute) {
 }
 
 
-if(isset($_POST["workflow"]))
-	$workflow = $dms->getWorkflow($_POST["workflow"]);
-else
-	$workflow = null;
-
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
 
@@ -182,6 +177,14 @@ foreach ($res as $r){
 			}
 	}
 }
+
+if(!$workflow = $user->getMandatoryWorkflow()) {
+	if(isset($_POST["workflow"]))
+		$workflow = $dms->getWorkflow($_POST["workflow"]);
+	else
+		$workflow = null;
+}
+
 
 if($settings->_dropFolderDir) {
 	if(isset($_POST["dropfolderfileform1"]) && $_POST["dropfolderfileform1"]) {
