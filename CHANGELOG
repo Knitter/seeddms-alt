@@ -28,6 +28,10 @@
 - set encoding of terms when adding document to full text index (Bug #66)
 - droped support for myisam database engine
 - add support for connecting to ldap servers without anonymous bind
+- if user has a mandatory workflow, don't him/her set a workflow on
+  insert/update of a document
+- fixed calculation of password strength when simple password strength
+  is set and user data is saved (Bug #69)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2

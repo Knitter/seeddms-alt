@@ -202,9 +202,12 @@ else if ($action == "edituser") {
 		if($settings->_passwordStrength) {
 			$ps = new Password_Strength();
 			$ps->set_password($_POST["pwd"]);
-			$ps->calculate();
+			if($settings->_passwordStrengthAlgorithm == 'simple')
+				$ps->simple_calculate();
+			else
+				$ps->calculate();
 			$score = $ps->get_score();
-			if($score > $settings->_passwordStrength) {
+			if($score >= $settings->_passwordStrength) {
 				$editedUser->setPwd(md5($pwd));
 				$editedUser->setPwdExpiration($pwdexpiration);
 			} else {

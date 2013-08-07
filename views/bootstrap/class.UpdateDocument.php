@@ -274,19 +274,30 @@ function checkForm()
 			<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
       </td>
       <td>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 				$mandatoryworkflow = $user->getMandatoryWorkflow();
-				$workflows=$dms->getAllWorkflows();
-				print "<option value=\"\">"."</option>";
-				foreach ($workflows as $workflow) {
-					print "<option value=\"".$workflow->getID()."\"";
-					if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
-						echo " selected=\"selected\"";
-					print ">". htmlspecialchars($workflow->getName())."</option>";
-				}
+				if($mandatoryworkflow) {
+?>
+				<?php echo $mandatoryworkflow->getName(); ?>
+				<input type="hidden" name="workflow" value="<?php echo $mandatoryworkflow->getID(); ?>">
+<?php
+				} else {
+?>
+        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+<?php
+					$workflows=$dms->getAllWorkflows();
+					print "<option value=\"\">"."</option>";
+					foreach ($workflows as $workflow) {
+						print "<option value=\"".$workflow->getID()."\"";
+						if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
+							echo " selected=\"selected\"";
+						print ">". htmlspecialchars($workflow->getName())."</option>";
+					}
 ?>
         </select>
+<?php
+				}
+?>
       </td>
     </tr>
 		<tr>	
