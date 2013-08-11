@@ -131,62 +131,67 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		echo "</div>\n";
 		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
-		$this->contentHeading(getMLText("folder_infos"));
+		$txt = $this->callHook('folderInfo', $folder);
+		if(is_string($txt))
+			echo $txt;
+		else {
+			$this->contentHeading(getMLText("folder_infos"));
 
-		$owner = $folder->getOwner();
-		$this->contentContainerStart();
-		echo "<table class=\"table-condensed\">\n";
-		if($user->isAdmin()) {
-			echo "<tr>";
-			echo "<td>".getMLText("id").":</td>\n";
-			echo "<td>".htmlspecialchars($folder->getID())."</td>\n";
-			echo "</tr>";
-		}
-		echo "<tr>";
-		echo "<td>".getMLText("owner").":</td>\n";
-		echo "<td><a href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a></td>\n";
-		echo "</tr>";
-		if($folder->getComment()) {
-			echo "<tr>";
-			echo "<td>".getMLText("comment").":</td>\n";
-			echo "<td>".htmlspecialchars($folder->getComment())."</td>\n";
-			echo "</tr>";
-		}
-
-		if($user->isAdmin()) {
-			if($folder->inheritsAccess()) {
+			$owner = $folder->getOwner();
+			$this->contentContainerStart();
+			echo "<table class=\"table-condensed\">\n";
+			if($user->isAdmin()) {
 				echo "<tr>";
-				echo "<td>".getMLText("access_mode").":</td>\n";
-				echo "<td>";
-				echo getMLText("inherited");
-				echo "</tr>";
-			} else {
-				echo "<tr>";
-				echo "<td>".getMLText('default_access').":</td>";
-				echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
-				echo "</tr>";
-				echo "<tr>";
-				echo "<td>".getMLText('access_mode').":</td>";
-				echo "<td>";
-				$this->printAccessList($folder);
-				echo "</td>";
+				echo "<td>".getMLText("id").":</td>\n";
+				echo "<td>".htmlspecialchars($folder->getID())."</td>\n";
 				echo "</tr>";
 			}
-		}
-		$attributes = $folder->getAttributes();
-		if($attributes) {
-			foreach($attributes as $attribute) {
-				$attrdef = $attribute->getAttributeDefinition();
-		?>
-				<tr>
-				<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-				<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
-				</tr>
-		<?php
+			echo "<tr>";
+			echo "<td>".getMLText("owner").":</td>\n";
+			echo "<td><a href=\"mailto:".htmlspecialchars($owner->getEmail())."\">".htmlspecialchars($owner->getFullName())."</a></td>\n";
+			echo "</tr>";
+			if($folder->getComment()) {
+				echo "<tr>";
+				echo "<td>".getMLText("comment").":</td>\n";
+				echo "<td>".htmlspecialchars($folder->getComment())."</td>\n";
+				echo "</tr>";
 			}
+
+			if($user->isAdmin()) {
+				if($folder->inheritsAccess()) {
+					echo "<tr>";
+					echo "<td>".getMLText("access_mode").":</td>\n";
+					echo "<td>";
+					echo getMLText("inherited");
+					echo "</tr>";
+				} else {
+					echo "<tr>";
+					echo "<td>".getMLText('default_access').":</td>";
+					echo "<td>".$this->getAccessModeText($folder->getDefaultAccess())."</td>";
+					echo "</tr>";
+					echo "<tr>";
+					echo "<td>".getMLText('access_mode').":</td>";
+					echo "<td>";
+					$this->printAccessList($folder);
+					echo "</td>";
+					echo "</tr>";
+				}
+			}
+			$attributes = $folder->getAttributes();
+			if($attributes) {
+				foreach($attributes as $attribute) {
+					$attrdef = $attribute->getAttributeDefinition();
+			?>
+					<tr>
+					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+					<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
+					</tr>
+			<?php
+				}
+			}
+			echo "</table>\n";
+			$this->contentContainerEnd();
 		}
-		echo "</table>\n";
-		$this->contentContainerEnd();
 
 		$this->contentHeading(getMLText("folder_contents"));
 
@@ -210,72 +215,76 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 
 		foreach($subFolders as $subFolder) {
-
-			$owner = $subFolder->getOwner();
-			$comment = $subFolder->getComment();
-			if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-			$subsub = $subFolder->getSubFolders();
-			$subsub = SeedDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
-			$subdoc = $subFolder->getDocuments();
-			$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
-			
-			print "<tr rel=\"folder_".$subFolder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
-		//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
-			print "<td><a rel=\"folder_".$subFolder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
-			print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
-			print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $subFolder->getDate())."</b></span>";
-			if($comment) {
-				print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
-			}
-			print "</td>\n";
-//			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-			print "<td colspan=\"1\" nowrap><small>";
-			if($enableRecursiveCount) {
-				if($user->isAdmin()) {
-					/* No need to check for access rights in countChildren() for
-					 * admin. So pass 0 as the limit.
-					 */
-					$cc = $subFolder->countChildren($user, 0);
-					print $cc['folder_count']." ".getMLText("folders")."<br />".$cc['document_count']." ".getMLText("documents");
-				} else {
-					$cc = $subFolder->countChildren($user, $maxRecursiveCount);
-					if($maxRecursiveCount > 5000)
-						$rr = 100.0;
-					else
-						$rr = 10.0;
-					print (!$cc['folder_precise'] ? '~'.(round($cc['folder_count']/$rr)*$rr) : $cc['folder_count'])." ".getMLText("folders")."<br />".(!$cc['document_precise'] ? '~'.(round($cc['document_count']/$rr)*$rr) : $cc['document_count'])." ".getMLText("documents");
+			$txt = $this->callHook('folderListItem', $subFolder);
+			if(is_string($txt))
+				echo $txt;
+			else {
+				$owner = $subFolder->getOwner();
+				$comment = $subFolder->getComment();
+				if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
+				$subsub = $subFolder->getSubFolders();
+				$subsub = SeedDMS_Core_DMS::filterAccess($subsub, $user, M_READ);
+				$subdoc = $subFolder->getDocuments();
+				$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
+				
+				print "<tr rel=\"folder_".$subFolder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
+			//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
+				print "<td><a rel=\"folder_".$subFolder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
+				print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
+				print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666;\">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $subFolder->getDate())."</b></span>";
+				if($comment) {
+					print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 				}
-			} else {
-				print count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents");
+				print "</td>\n";
+	//			print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+				print "<td colspan=\"1\" nowrap><small>";
+				if($enableRecursiveCount) {
+					if($user->isAdmin()) {
+						/* No need to check for access rights in countChildren() for
+						 * admin. So pass 0 as the limit.
+						 */
+						$cc = $subFolder->countChildren($user, 0);
+						print $cc['folder_count']." ".getMLText("folders")."<br />".$cc['document_count']." ".getMLText("documents");
+					} else {
+						$cc = $subFolder->countChildren($user, $maxRecursiveCount);
+						if($maxRecursiveCount > 5000)
+							$rr = 100.0;
+						else
+							$rr = 10.0;
+						print (!$cc['folder_precise'] ? '~'.(round($cc['folder_count']/$rr)*$rr) : $cc['folder_count'])." ".getMLText("folders")."<br />".(!$cc['document_precise'] ? '~'.(round($cc['document_count']/$rr)*$rr) : $cc['document_count'])." ".getMLText("documents");
+					}
+				} else {
+					print count($subsub)." ".getMLText("folders")."<br />".count($subdoc)." ".getMLText("documents");
+				}
+				print "</small></td>";
+	//			print "<td></td>";
+				print "<td>";
+				print "<div class=\"list-action\">";
+				if($subFolder->getAccessMode($user) >= M_ALL) {
+	?>
+			 <a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
+	<?php
+				} else {
+	?>
+			 <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
+	<?php
+				}
+				if($subFolder->getAccessMode($user) >= M_READWRITE) {
+	?>
+			 <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a>
+	<?php
+				} else {
+	?>
+			 <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
+	<?php
+				}
+	?>
+			 <a class="addtoclipboard" rel="<?php echo "F".$subFolder->getID(); ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
+	<?php
+				print "</div>";
+				print "</td>";
+				print "</tr>\n";
 			}
-			print "</small></td>";
-//			print "<td></td>";
-			print "<td>";
-			print "<div class=\"list-action\">";
-			if($subFolder->getAccessMode($user) >= M_ALL) {
-?>
-     <a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
-<?php
-			} else {
-?>
-     <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
-<?php
-			}
-			if($subFolder->getAccessMode($user) >= M_READWRITE) {
-?>
-     <a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-edit"></i></a>
-<?php
-			} else {
-?>
-     <span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>
-<?php
-			}
-?>
-     <a class="addtoclipboard" rel="<?php echo "F".$subFolder->getID(); ?>" msg="<?php printMLText('splash_added_to_clipboard'); ?>" _href="../op/op.AddToClipboard.php?folderid=<?php echo $folder->getID(); ?>&type=folder&id=<?php echo $subFolder->getID(); ?>" title="<?php printMLText("add_to_clipboard");?>"><i class="icon-copy"></i></a>
-<?php
-			print "</div>";
-			print "</td>";
-			print "</tr>\n";
 		}
 
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
