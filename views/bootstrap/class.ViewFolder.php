@@ -90,7 +90,12 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 		$this->globalNavigation($folder);
 		$this->contentStart();
-		$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
+		$txt = $this->callHook('folderMenu', $folder);
+		if(is_string($txt))
+			echo $txt;
+		else {
+			$this->pageNavigation($this->getFolderPathHTML($folder), "view_folder", $folder);
+		}
 
 		echo $this->callHook('preContent');
 
