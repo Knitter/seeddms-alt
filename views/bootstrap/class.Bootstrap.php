@@ -281,7 +281,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".col2\">\n";
 			echo " 		<span class=\"icon-bar\"></span>\n";
 			echo " 		<span class=\"icon-bar\"></span>\n";
-			echo " 		<span class=\"icon-bar\"></span></a>\n";
+			echo " 		<span class=\"icon-bar\"></span>\n";
+			echo "   </a>\n";
 			switch ($pageType) {
 				case "view_folder":
 					$this->folderNavigationBar($extra);
