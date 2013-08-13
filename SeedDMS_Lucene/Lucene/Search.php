@@ -77,10 +77,10 @@ class SeedDMS_Lucene_Search {
 				}
 				return $recs;
 			} catch (Zend_Search_Lucene_Exception $e) {
-				return array();
+				return false;
 			}
 		} catch (Zend_Search_Lucene_Search_QueryParserException $e) {
-			return array();
+			return false;
 		}
 	} /* }}} */
 }
