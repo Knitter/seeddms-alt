@@ -32,6 +32,8 @@
   on insert/update of a document
 - fixed calculation of password strength when simple password strength
   is set and user data is saved (Bug #69)
+- better handling of invalid query terms in full text search.
+- check for minimum php version 5.2.0 in install tool (Bug #74)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
