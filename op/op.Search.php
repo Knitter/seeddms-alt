@@ -143,25 +143,35 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 		$index = Zend_Search_Lucene::open($settings->_luceneDir);
 		$lucenesearch = new SeedDMS_Lucene_Search($index);
 		$hits = $lucenesearch->search($query, $owner ? $owner->getLogin() : '', '', $categorynames);
-		$limit = 20;
-		$resArr = array();
-		$resArr['totalDocs'] = count($hits);
-		$resArr['totalFolders'] = 0;
-		if($pageNumber != 'all' && count($hits) > $limit) {
-			$resArr['totalPages'] = (int) (count($hits) / $limit);
-			if ((count($hits)%$limit) > 0)
-				$resArr['totalPages']++;
-			$hits = array_slice($hits, ($pageNumber-1)*$limit, $limit);
+		if($hits === false) {
+			$session->setSplashMsg(array('type'=>'error', 'msg'=>getMLText('splash_invalid_searchterm')));
+			$resArr = array();
+			$resArr['totalDocs'] = 0;
+			$resArr['totalFolders'] = 0;
+			$resArr['totalPages'] = 0;
+			$entries = array();
+			$searchTime = 0;
 		} else {
-			$resArr['totalPages'] = 1;
-		}
+			$limit = 20;
+			$resArr = array();
+			$resArr['totalDocs'] = count($hits);
+			$resArr['totalFolders'] = 0;
+			if($pageNumber != 'all' && count($hits) > $limit) {
+				$resArr['totalPages'] = (int) (count($hits) / $limit);
+				if ((count($hits)%$limit) > 0)
+					$resArr['totalPages']++;
+				$hits = array_slice($hits, ($pageNumber-1)*$limit, $limit);
+			} else {
+				$resArr['totalPages'] = 1;
+			}
 
-		$entries = array();
-		if($hits) {
-			foreach($hits as $hit) {
-				if($tmp = $dms->getDocument($hit['document_id'])) {
-					if($tmp->getAccessMode($user) >= M_READ) {
-						$entries[] = $tmp;
+			$entries = array();
+			if($hits) {
+				foreach($hits as $hit) {
+					if($tmp = $dms->getDocument($hit['document_id'])) {
+						if($tmp->getAccessMode($user) >= M_READ) {
+							$entries[] = $tmp;
+						}
 					}
 				}
 			}
