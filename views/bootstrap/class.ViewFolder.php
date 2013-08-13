@@ -132,7 +132,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 		echo $this->callHook('leftContent');
 
-		if (1 || $enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
+		if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
 		echo "</div>\n";
 		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
