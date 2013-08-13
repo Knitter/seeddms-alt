@@ -69,12 +69,16 @@ class SeedDMS_Lucene_Search {
 		}
 		try {
 			$query = Zend_Search_Lucene_Search_QueryParser::parse($querystr);
-			$hits = $this->index->find($query);
-			$recs = array();
-			foreach($hits as $hit) {
-				$recs[] = array('id'=>$hit->id, 'document_id'=>$hit->document_id);
+			try {
+				$hits = $this->index->find($query);
+				$recs = array();
+				foreach($hits as $hit) {
+					$recs[] = array('id'=>$hit->id, 'document_id'=>$hit->document_id);
+				}
+				return $recs;
+			} catch (Zend_Search_Lucene_Exception $e) {
+				return array();
 			}
-			return $recs;
 		} catch (Zend_Search_Lucene_Search_QueryParserException $e) {
 			return array();
 		}
