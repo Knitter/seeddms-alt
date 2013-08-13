@@ -1090,6 +1090,15 @@ class Settings { /* {{{ */
 			}
 		}
 
+		// Check PHP version
+		if (version_compare(PHP_VERSION, '5.2.0') < 0) {
+			$result["php_version"] = array(
+				"status" => "versiontolow",
+				"type" => "error",
+				"suggestion" => "upgrade_php"
+			);
+		}
+
 		// Check PHP configuration
 		$loaded_extensions = get_loaded_extensions();
 		// gd2
