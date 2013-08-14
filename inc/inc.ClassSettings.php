@@ -769,7 +769,7 @@ class Settings { /* {{{ */
       $this->setXMLAttributValue($extnode, 'name', $name);
 			foreach($GLOBALS['EXT_CONF'][$name]['config'] as $fieldname=>$conf) {
 				$parameter = $extnode->addChild('parameter');
-				$parameter[0] = $extension[$fieldname];
+				$parameter[0] = isset($extension[$fieldname]) ? $extension[$fieldname] : '';
 				$this->setXMLAttributValue($parameter, 'name', $fieldname);
 			}
 
