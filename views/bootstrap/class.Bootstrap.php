@@ -532,8 +532,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				continue;
 			}
 			if (is_array($value)) {
-				foreach ($value as $subvalue) {
-					$resultsURI .= ($first ? "?" : "&").$key."%5B%5D=".$subvalue;
+				foreach ($value as $subkey=>$subvalue) {
+					$resultsURI .= ($first ? "?" : "&").$key."%5B".$subkey."%5D=".$subvalue;
 					$first = false;
 				}
 			}
