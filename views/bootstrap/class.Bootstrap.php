@@ -77,7 +77,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
       dismissQueue: true,
   		layout: 'topRight',
   		theme: 'defaultTheme',
-			timeout: 1500,
+			timeout: <?php echo isset($flashmsg['duration']) && is_numeric($flashmsg['duration']) ? $flashmsg['duration'] : ($flashmsg['type'] == "error" ? "3000" : "1500"); ?>,
 			_template: '<div class="noty_message alert alert-block alert-error"><span class="noty_text"></span><div class="noty_close"></div></div>'
   	});
 		</script>
