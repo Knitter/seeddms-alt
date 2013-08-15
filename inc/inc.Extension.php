@@ -30,5 +30,20 @@ foreach($EXT_CONF as $extname=>$extconf) {
 			if(method_exists($obj, 'init'))
 				$obj->init();
 		}
+		if(isset($extconf['language']['file'])) {
+			$langfile = $settings->_rootDir."/ext/".$extname."/".$extconf['language']['file'];
+			if(file_exists($langfile)) {
+				unset($__lang);
+				include($langfile);
+				if($__lang) {
+					foreach($__lang as $lang=>&$data) {
+						if(isset($GLOBALS['LANG'][$lang]))
+							$GLOBALS['LANG'][$lang] = array_merge($GLOBALS['LANG'][$lang], $data);
+						else
+							$GLOBALS['LANG'][$lang] = $data;
+					}
+				}
+			}
+		}
 	}
 }
