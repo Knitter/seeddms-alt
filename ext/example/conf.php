@@ -25,5 +25,8 @@ $EXT_CONF['example'] = array(
 		'file' => 'class.example.php',
 		'name' => 'SeedDMS_ExtExample'
 	),
+	'language' => array(
+		'file' => 'lang.php',
+	),
 );
 ?>
