@@ -91,7 +91,7 @@ class SeedDMS_Email extends SeedDMS_Notify {
 		$headers[] = "Reply-To: ". $settings->_smtpSendFrom;
 
 		$subject = "=?UTF-8?B?".base64_encode($this->replaceMarker($subject))."?=";
-		return (mail($recipient->getEmail(), $subject, $this->replaceMarker($message), implode("\r\n", $header)) ? 0 : -1);
+		return (mail($recipient->getEmail(), $subject, $this->replaceMarker($message), implode("\r\n", $headers)) ? 0 : -1);
 	} /* }}} */
 }
 ?>
