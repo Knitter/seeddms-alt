@@ -35,6 +35,7 @@
 - better handling of invalid query terms in full text search.
 - check for minimum php version 5.2.0 in install tool (Bug #74)
 - fix missing url params of paginator in search result
+- fix missing email header in password forgotten mail (Bug #81)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.2.2
