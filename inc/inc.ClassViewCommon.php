@@ -72,22 +72,31 @@ class SeedDMS_View_Common {
 	 */
 	function callHook($hook) {
 		$tmp = explode('_', get_class($this));
+		$ret = null;
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])] as $hookObj) {
 				if (method_exists($hookObj, $hook)) {
 					switch(func_num_args()) {
 						case 1:
-							return $hookObj->$hook($this);
+							$tmpret = $hookObj->$hook($this);
+							if(is_string($tmpret))
+								$ret .= $tmpret;
+							break;
 						case 2:
-							return $hookObj->$hook($this, func_get_arg(1));
+							$tmpret = $hookObj->$hook($this, func_get_arg(1));
+							if(is_string($tmpret))
+								$ret .= $tmpret;
+							break;
 						case 3:
 						default:
-							return $hookObj->$hook($this, func_get_arg(1), func_get_arg(2));
+							$tmpret = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2));
+							if(is_string($tmpret))
+								$ret .= $tmpret;
 					}
 				}
 			}
 		}
-		return null;
+		return $ret;
 	}
 }
 ?>
