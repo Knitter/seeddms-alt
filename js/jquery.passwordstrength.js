@@ -47,15 +47,18 @@
 			var target = $(obj).attr('rel');
 
 		 	$(obj).unbind().keyup(function() {
-				$.getJSON(opts.url,
-					{command: 'checkpwstrength', pwd: $(this).val()},
-					function(data) {
+				$.ajax({url: opts.url,
+					type: 'POST',
+					dataType: "json",
+					data: {command: 'checkpwstrength', pwd: $(this).val()},
+					success: function(data) {
 						if(data.error) {
 							opts.onError(data, target);
 						} else {
 							opts.onChange(data, target);
 						}
-					}); 
+					}
+				}); 
 			});
 		});
 	};  
