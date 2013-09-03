@@ -54,11 +54,11 @@ if (isset($_COOKIE["mydms_session"])) {
 
 include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
 
-$command = $_GET["command"];
+$command = $_REQUEST["command"];
 switch($command) {
 	case 'checkpwstrength':
 		$ps = new Password_Strength();
-		$ps->set_password($_GET["pwd"]);
+		$ps->set_password($_REQUEST["pwd"]);
 		if($settings->_passwordStrengthAlgorithm == 'simple')
 			$ps->simple_calculate();
 		else
