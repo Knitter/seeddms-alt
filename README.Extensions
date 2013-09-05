@@ -1,0 +1,31 @@
+Extensions in SeedDMS
+====================
+
+Since verson 5.0.0 SeedDMS can be extended by extensions. Extensions
+can hook up functions into certain operations, e.g.
+uploading, removing or displaying a document. They can also be
+used to modify some of the internal variables like the list of
+translations.
+
+All extensions are located in the folder 'ext'. Each extension
+has its own folder named by the name of the extension. The central
+configuration of an extension is stored in conf.php.
+The configuration sets the file and classname which is loaded
+during initialization of the extension. The class has to have
+a method init() which is called with any page request. The
+configuration itself is cached and must be updated within
+the extension manager if it was changed.
+
+The integration into SeedDMS is done by hooks. SeedDMS manages
+a globally available array of hooks ($GLOBALS['SEEDDMS_HOOKS']).
+This array has the elements 'view' and 'controller'. All entries
+in those array elements contain instances of self defined classes
+containing the hook methods. For setting up the hooks in the view
+'viewFolder' the following code is needed.
+
+$GLOBALS['SEEDDMS_HOOKS']['view']['viewFolder'][] = new SeedDMS_ExtExample_ViewFolder;
+
+class SeedDMS_ExtExample_ViewFolder {
+  ...
+};
+
