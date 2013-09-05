@@ -411,6 +411,7 @@ class SeedDMS_Blue_Style extends SeedDMS_View_Common {
 		$icons["bz2"]  = "gz.png";
 		$icons["tgz"]  = "gz.png";
 		$icons["zip"]  = "gz.png";
+		$icons["rar"]  = "gz.png";
 		$icons["mpg"]  = "video.png";
 		$icons["avi"]  = "video.png";
 		$icons["tex"]  = "tex.png";
