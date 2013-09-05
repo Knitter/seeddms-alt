@@ -131,7 +131,7 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
       <p>Please wait, until document tree is loaded …</p>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true"><?php print getMLText("close"); ?></button>
     </div>
   </div>
 <?php
