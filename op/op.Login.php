@@ -99,8 +99,13 @@ if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 		// Required for most authentication methods, including SASL.
 		ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-		// try an anonymous bind first. If it succeeds, get the DN for the user.
-		$bind = @ldap_bind($ds);
+		// try an authenticated/anonymous bind first. If it succeeds, get the DN for the user.
+		$bind = false;
+		if (isset($settings->_ldapBindDN)) {
+			$bind = @ldap_bind($ds, $settings->_ldapBindDN, $settings->_ldapBindPw);
+		} else {
+			$bind = @ldap_bind($ds);
+		}
 		$dn = false;
 				
 		/* new code by doudoux - TO BE TESTED */

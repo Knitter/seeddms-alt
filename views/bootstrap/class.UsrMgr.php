@@ -41,6 +41,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 		$passwordexpiration = $this->params['passwordexpiration'];
 		$httproot = $this->params['httproot'];
 		$enableuserimage = $this->params['enableuserimage'];
+		$undeluserids = $this->params['undeluserids'];
 		$workflowmode = $this->params['workflowmode'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
@@ -53,18 +54,25 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 
 function checkForm(num)
 {
-	msg = "";
+	msg = new Array();
 	eval("var formObj = document.form" + num + ";");
 
-	if (formObj.login.value == "") msg += "<?php printMLText("js_no_login");?>\n";
-	if ((num == '0') && (formObj.pwd.value == "")) msg += "<?php printMLText("js_no_pwd");?>\n";
-	if ((formObj.pwd.value != formObj.pwdconf.value)&&(formObj.pwd.value != "" )&&(formObj.pwd.value != "" )) msg += "<?php printMLText("js_pwd_not_conf");?>\n";
-	if (formObj.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
-	if (formObj.email.value == "") msg += "<?php printMLText("js_no_email");?>\n";
-	//if (formObj.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+	if (formObj.login.value == "") msg.push("<?php printMLText("js_no_login");?>");
+	if ((num == '0') && (formObj.pwd.value == "")) msg.push("<?php printMLText("js_no_pwd");?>");
+	if ((formObj.pwd.value != formObj.pwdconf.value)&&(formObj.pwd.value != "" )&&(formObj.pwd.value != "" )) msg.push("<?php printMLText("js_pwd_not_conf");?>");
+	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if (formObj.email.value == "") msg.push("<?php printMLText("js_no_email");?>");
+	//if (formObj.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -315,10 +323,16 @@ function showUser(selectObj) {
 	<input type="hidden" name="userid" value="<?php print $currUser->getID();?>">
 	<input type="hidden" name="action" value="edituser">
 	<table class="table-condensed">
+<?php
+	if(!in_array($currUser->getID(), $undeluserids)) {
+?>
 		<tr>
 			<td></td>
 			<td><a class="standardText btn" href="../out/out.RemoveUser.php?userid=<?php print $currUser->getID();?>"><i class="icon-remove"></i> <?php printMLText("rm_user");?></a></td>
 		</tr>
+<?php
+	}
+?>
 		<tr>
 			<td><?php printMLText("user_login");?>:</td>
 			<td><input type="text" name="login" value="<?php print htmlspecialchars($currUser->getLogin());?>"></td>

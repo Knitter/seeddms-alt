@@ -65,6 +65,7 @@ if ($action == "saveSettings")
   $settings->_enableEmail =getBoolValue("enableEmail");
   $settings->_enableUsersView = getBoolValue("enableUsersView");
   $settings->_enableFullSearch = getBoolValue("enableFullSearch");
+  $settings->_enableClipboard = getBoolValue("enableClipboard");
   $settings->_enableFolderTree = getBoolValue("enableFolderTree");
   $settings->_enableRecursiveCount = getBoolValue("enableRecursiveCount");
   $settings->_maxRecursiveCount = intval($_POST["maxRecursiveCount"]);
@@ -104,6 +105,7 @@ if ($action == "saveSettings")
   $settings->_passwordHistory = intval($_POST["passwordHistory"]);
   $settings->_loginFailure = intval($_POST["loginFailure"]);
   $settings->_quota = intval($_POST["quota"]);
+  $settings->_undelUserIds = strval($_POST["undelUserIds"]);
   $settings->_encryptionKey = strval($_POST["encryptionKey"]);
   $settings->_cookieLifetime = intval($_POST["cookieLifetime"]);
 
@@ -163,6 +165,8 @@ if ($action == "saveSettings")
 
 	add_log_line(".php&action=savesettings");
 }
+
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_settings_saved')));
 
 
 header("Location:../out/out.Settings.php");

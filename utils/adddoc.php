@@ -112,9 +112,9 @@ if(isset($options['f'])) {
 	exit(1);
 }
 
-$filetype = '';
+$mimetype = '';
 if(isset($options['t'])) {
-	$filetype = $options['t'];
+	$mimetype = $options['t'];
 }
 
 $reqversion = 0;
@@ -130,8 +130,13 @@ $db->connect() or die ("Could not connect to db-server \"" . $settings->_dbHostn
 
 
 $dms = new SeedDMS_Core_DMS($db, $settings->_contentDir.$settings->_contentOffsetDir);
+if(!$dms->checkVersion()) {
+	echo "Database update needed.";
+	exit;
+}
+
 $dms->setRootFolderID($settings->_rootFolderID);
-$dms->setEnableAdminRevApp($settings->_enableAdminRevApp);
+$dms->setMaxDirID($settings->_maxDirID);
 $dms->setEnableConverting($settings->_enableConverting);
 $dms->setViewOnlineFileTypes($settings->_viewOnlineFileTypes);
 
@@ -141,9 +146,12 @@ $user = $dms->getUser(1);
 if(is_readable($filename)) {
 	if(filesize($filename)) {
 		$finfo = new finfo(FILEINFO_MIME);
-		if(!$filetype) {
-			$filetype = $finfo->file($filename);
+		if(!$mimetype) {
+			$mimetype = $finfo->file($filename);
 		}
+		$lastDotIndex = strrpos(basename($filename), ".");
+		if (is_bool($lastDotIndex) && !$lastDotIndex) $filetype = ".";
+		else $filetype = substr($filename, $lastDotIndex);
 	} else {
 		echo "File has zero size\n";
 		exit(1);
@@ -182,7 +190,7 @@ $approvers = array();
 
 $res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
                             $categories, $filetmp, basename($filename),
-                            '', $filetype, $sequence, $reviewers,
+                            $filetype, $mimetype, $sequence, $reviewers,
                             $approvers, $reqversion, $version_comment);
 
 if (is_bool($res) && !$res) {

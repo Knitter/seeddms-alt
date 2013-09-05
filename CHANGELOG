@@ -1,4 +1,44 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.0
+--------------------------------------------------------------------------------
+- create preview images for attachted document files
+- expiration date cannot be set for the version as indicated by the gui.
+  Even in the past it was set for the document, but this was not clear
+	for the user.
+- reorganization of ViewDocument page
+- maximum execution time of php scripts can be set in the settings and
+  is now actually used.
+- replaced folder tree view with a tree based on jquery which loads subfolders
+  on demand
+- attribute value must match regular expression if given (Bug #49)
+- show more information about attributes in attribute manager
+- set url in notification mail after document review (Bug #56)
+- new configuration setting specifying a list of user ids that cannot be deleted
+- fix output of breadcrumbs on some pages (Bug #55)
+- do not take document comment for version if version comment is empty.
+  The user must explicitly force it.
+- combine full text and database search in one form, filtering search result
+  by document status or category will no longer return folders
+- update of translation for zh_CN, fr_FR, sv_SE, es_ES
+- added new language arabic (Egypt) (Bug #63)
+- turn on foreign key constraints for sqlite3 databases
+- update to bootstrap 2.3.2
+- better checking of valid search term for fulltext search (Bug #61)
+- moving several documents/folders at a time (Bug #64)
+- set encoding of terms when adding document to full text index (Bug #66)
+- droped support for myisam database engine
+- add support for connecting to ldap servers without anonymous bind
+- if a user has a mandatory workflow, don't allow him/her to set a workflow
+  on insert/update of a document
+- fixed calculation of password strength when simple password strength
+  is set and user data is saved (Bug #69)
+- better handling of invalid query terms in full text search.
+- check for minimum php version 5.2.0 in install tool (Bug #74)
+- fix missing url params of paginator in search result
+- fix missing email header in password forgotten mail (Bug #81)
+- use POST request for password strength checking
+
+--------------------------------------------------------------------------------
                      Changes in version 4.2.2
 --------------------------------------------------------------------------------
 - admin can be set as reviewer/approver again and do the review/approval

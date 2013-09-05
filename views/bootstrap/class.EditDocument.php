@@ -48,19 +48,26 @@ class SeedDMS_View_EditDocument extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
-	if (document.form1.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
+	msg = new Array();
+	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>)";
 <?php
 	if ($strictformcheck) {
 	?>
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-	if (document.form1.keywords.value == "") msg += "<?php printMLText("js_no_keywords");?>\n";
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (document.form1.keywords.value == "") msg.push("<?php printMLText("js_no_keywords");?>");
 <?php
 	}
 ?>
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -71,6 +78,11 @@ function checkForm()
 <?php
 		$this->contentHeading(getMLText("edit_document_props"));
 		$this->contentContainerStart();
+
+		if($document->expires())
+			$expdate = date('d-m-Y', $document->getExpires());
+		else
+			$expdate = '';
 ?>
 <form action="../op/op.EditDocument.php" name="form1" onsubmit="return checkForm();" method="post">
 	<input type="hidden" name="documentid" value="<?php echo $document->getID() ?>">
@@ -106,6 +118,18 @@ function checkForm()
 ?>
 				</select>
       </td>
+		</tr>
+		<tr>
+			<td><?php printMLText("expires");?>:</td>
+			<td>
+        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+          <input class="span3" size="16" name="expdate" type="text" value="<?php echo $expdate; ?>">
+          <span class="add-on"><i class="icon-calendar"></i></span>
+        </span><br />
+        <label class="checkbox inline">
+				  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
+        </label>
+			</td>
 		</tr>
 <?php
 		if ($folder->getAccessMode($user) > M_READ) {

@@ -49,11 +49,11 @@ if ($public && ($document->getAccessMode($user) == M_READ)) {
 	$public = false;
 }
 
-if (!isset($_GET["docidform1"]) || !is_numeric($_GET["docidform1"]) || intval($_GET["docidform1"])<1) {
+if (!isset($_GET["docid"]) || !is_numeric($_GET["docid"]) || intval($_GET["docid"])<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_target_doc_id"));
 }
 
-$docid = $_GET["docidform1"];
+$docid = $_GET["docid"];
 $doc = $dms->getDocument($docid);
 
 if (!is_object($doc)) {

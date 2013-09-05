@@ -129,16 +129,13 @@ class SeedDMS_AccessOperation {
 	 * Check if expiration date may be set
 	 *
 	 * This check can only be done for documents. Setting the documents
-	 * expiration date is only allowed if version modification is turned on in
-	 * the settings and the document has not been obsoleted.
-	 * The admin may set the expiration date even if is
-	 * disallowed in the settings.
+	 * expiration date is only allowed if the document has not been obsoleted.
 	 */
 	function maySetExpires() { /* {{{ */
 		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
-			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) == M_ALL)) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
+			if ((($this->obj->getAccessMode($this->user) == M_ALL) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {
 				return true;
 			}
 		}

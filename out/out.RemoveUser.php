@@ -33,13 +33,16 @@ if (!isset($_GET["userid"]) || !is_numeric($_GET["userid"]) || intval($_GET["use
 }
 
 $rmuser = $dms->getUser(intval($_GET["userid"]));
-
-if ($rmuser->getID()==$user->getID()) {
-	UI::exitError(getMLText("rm_user"),getMLText("access_denied"));
-}
-
 if (!is_object($rmuser)) {
 	UI::exitError(getMLText("rm_user"),getMLText("invalid_user_id"));
+}
+
+if(in_array($rmuser->getID(), explode(',', $settings->_undelUserIds))) {
+	UI::exitError(getMLText("rm_user"),getMLText("cannot_delete_user"));
+}
+
+if ($rmuser->getID()==$user->getID()) {
+	UI::exitError(getMLText("rm_user"),getMLText("cannot_delete_yourself"));
 }
 
 $allusers = $dms->getAllUsers($settings->_sortUsersInList);

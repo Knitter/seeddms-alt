@@ -139,15 +139,14 @@ function showKeywords(selectObj) {
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="editkeywords">
 									<input type="text" name="keywords" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
-									<input name="action" value="editkeywords" type="Image" src="images/save.gif" class="btn" title="<?php echo getMLText("save")?>" border="0">
-									<!--	 <input name="action" value="removekeywords" type="Image" src="images/del.gif" title="<?php echo getMLText("delete")?>" border="0"> &nbsp; -->
+									<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 									</form>
 									<form style="display: inline-block;" method="post" action="../op/op.UserDefaultKeywords.php" >
   								<?php echo createHiddenFieldWithKey('removekeywords'); ?>
 									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
 									<input type="Hidden" name="action" value="removekeywords">
-									<input name="action" value="removekeywords" type="Image" src="images/del.gif" class="btn" title="<?php echo getMLText("delete")?>" style="border: 0px;">
+									<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("delete")?></button>
 									</form>
 									<br>
 						<?php }  ?>

@@ -49,17 +49,23 @@ class SeedDMS_View_SearchForm extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
+	msg = new Array()
 	if (document.form1.query.value == "")
 	{
 		if (!document.form1.creationdate.checked && !document.form1.lastupdate.checked &&
 				!document.form1.pendingReview.checked && !document.form1.pendingApproval.checked)
-			msg += "<?php printMLText("js_no_query");?>\n";
+			msg.push("<?php printMLText("js_no_query");?>");
 	}
 	
-	if (msg != "")
-	{
-		alert(msg);
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -86,17 +92,6 @@ function checkForm()
 <option value="1" selected><?php printMLText("search_mode_and");?>
 <option value="0"><?php printMLText("search_mode_or");?>
 </select>
-<!--
-<br />
-<a href="javascript:chooseKeywords('form1.query');"><?php printMLText("use_default_keywords");?></a>
-<script language="JavaScript">
-var openDlg;
-
-function chooseKeywords(target) {
-	openDlg = open("out.KeywordChooser.php?target="+target, "openDlg", "width=500,height=400,scrollbars=yes,resizable=yes");
-}
-</script>
--->
 </td>
 </tr>
 <tr>
@@ -202,7 +197,7 @@ function chooseKeywords(target) {
 </td>
 </tr>
 <tr>
-<td></td><td><input type="submit" class="btn" value="<?php printMLText("search"); ?>"></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"> <?php printMLText("search"); ?></button></td>
 </tr>
 
 </table>
@@ -264,7 +259,7 @@ function chooseKeywords(target) {
 </td>
 </tr>
 <tr>
-<td colspan="2"><input type="submit" class="btn" value="<?php printMLText("search"); ?>"></td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"> <?php printMLText("search"); ?></button></td>
 </tr>
 </table>
 

@@ -55,22 +55,29 @@ class SeedDMS_View_UpdateDocument extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
+	msg = new Array();
 <?php if($dropfolderdir) { ?>
-	if (document.form1.userfile.value == "" && document.form1.dropfolderfileform1.value == "") msg += "<?php printMLText("js_no_file");?>\n";
+	if (document.form1.userfile.value == "" && document.form1.dropfolderfileform1.value == "") msg.push("<?php printMLText("js_no_file");?>");
 <?php } else { ?>
-	if (document.form1.userfile.value == "") msg += "<?php printMLText("js_no_file");?>\n";
+	if (document.form1.userfile.value == "") msg.push("<?php printMLText("js_no_file");?>");
 <?php } ?>
 <?php
 	if ($strictformcheck) {
 	?>
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 <?php
 	}
 ?>
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -142,10 +149,10 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("expires");?>:</td>
 			<td class="standardText">
-        <span class="input-append date" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
-        </span>&nbsp;
+        </span><br />
         <label class="checkbox inline">
 				  <input type="checkbox" name="expires" value="false"<?php if (!$document->expires()) print " checked";?>><?php printMLText("does_not_expire");?><br>
         </label>
@@ -267,19 +274,30 @@ function checkForm()
 			<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
       </td>
       <td>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 				$mandatoryworkflow = $user->getMandatoryWorkflow();
-				$workflows=$dms->getAllWorkflows();
-				print "<option value=\"\">"."</option>";
-				foreach ($workflows as $workflow) {
-					print "<option value=\"".$workflow->getID()."\"";
-					if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
-						echo " selected=\"selected\"";
-					print ">". htmlspecialchars($workflow->getName())."</option>";
-				}
+				if($mandatoryworkflow) {
+?>
+				<?php echo $mandatoryworkflow->getName(); ?>
+				<input type="hidden" name="workflow" value="<?php echo $mandatoryworkflow->getID(); ?>">
+<?php
+				} else {
+?>
+        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+<?php
+					$workflows=$dms->getAllWorkflows();
+					print "<option value=\"\">"."</option>";
+					foreach ($workflows as $workflow) {
+						print "<option value=\"".$workflow->getID()."\"";
+						if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
+							echo " selected=\"selected\"";
+						print ">". htmlspecialchars($workflow->getName())."</option>";
+					}
 ?>
         </select>
+<?php
+				}
+?>
       </td>
     </tr>
 		<tr>	

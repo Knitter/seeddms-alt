@@ -70,4 +70,7 @@ if (isset($settingsOLD)) {
 if(isset($settings->_extraPath))
 	ini_set('include_path', $settings->_extraPath. PATH_SEPARATOR .ini_get('include_path'));
 
+if(isset($settings->_maxExecutionTime))
+	ini_set('max_execution_time', $settings->_maxExecutionTime);
+
 ?>

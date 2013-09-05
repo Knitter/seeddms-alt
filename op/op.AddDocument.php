@@ -51,6 +51,8 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 
 $comment  = $_POST["comment"];
 $version_comment = $_POST["version_comment"];
+if($version_comment == "" && isset($_POST["use_comment"]))
+	$version_comment = $comment;
 
 $keywords = $_POST["keywords"];
 $categories = isset($_POST["categories"]) ? $_POST["categories"] : null;
@@ -58,15 +60,32 @@ if(isset($_POST["attributes"]))
 	$attributes = $_POST["attributes"];
 else
 	$attributes = array();
+foreach($attributes as $attrdefid=>$attribute) {
+	$attrdef = $dms->getAttributeDefinition($attrdefid);
+	if($attribute) {
+		if($attrdef->getRegex()) {
+			if(!preg_match($attrdef->getRegex(), $attribute)) {
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_no_regex_match"));
+			}
+		}
+	}
+}
+
 if(isset($_POST["attributes_version"]))
 	$attributes_version = $_POST["attributes_version"];
 else
 	$attributes_version = array();
+foreach($attributes_version as $attrdefid=>$attribute) {
+	$attrdef = $dms->getAttributeDefinition($attrdefid);
+	if($attribute) {
+		if($attrdef->getRegex()) {
+			if(!preg_match($attrdef->getRegex(), $attribute)) {
+				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("attr_no_regex_match"));
+			}
+		}
+	}
+}
 
-if(isset($_POST["workflow"]))
-	$workflow = $dms->getWorkflow($_POST["workflow"]);
-else
-	$workflow = null;
 
 $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
@@ -77,7 +96,7 @@ if (!is_numeric($sequence)) {
 }
 
 $expires = false;
-if ($_POST["expires"] != "false") {
+if (!isset($_POST['expires']) || $_POST["expires"] != "false") {
 	if($_POST["expdate"]) {
 		$tmp = explode('-', $_POST["expdate"]);
 		$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);
@@ -158,6 +177,14 @@ foreach ($res as $r){
 			}
 	}
 }
+
+if(!$workflow = $user->getMandatoryWorkflow()) {
+	if(isset($_POST["workflow"]))
+		$workflow = $dms->getWorkflow($_POST["workflow"]);
+	else
+		$workflow = null;
+}
+
 
 if($settings->_dropFolderDir) {
 	if(isset($_POST["dropfolderfileform1"]) && $_POST["dropfolderfileform1"]) {

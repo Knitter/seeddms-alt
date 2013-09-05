@@ -46,18 +46,24 @@ class SeedDMS_View_AddEvent extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkForm()
 {
-	msg = "";
-	if (document.form1.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
+	msg = new Array();
+	if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
 <?php
 	if (isset($settings->_strictFormCheck) && $settings->_strictFormCheck) {
-	?>
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+?>
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 <?php
 	}
 ?>
-	if (msg != "")
-	{
-		alert(msg);
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -70,7 +76,7 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("from");?>:</td>
 			<td><?php //$this->printDateChooser(-1, "from");?>
-    		<span class="input-append date" id="fromdate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
+    		<span class="input-append date span12" id="fromdate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
       		<input class="span6" size="16" name="from" type="text" value="<?php echo $expdate; ?>">
       		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>
@@ -79,7 +85,7 @@ function checkForm()
 		<tr>
 			<td><?php printMLText("to");?>:</td>
 			<td><?php //$this->printDateChooser(-1, "to");?>
-    		<span class="input-append date" id="todate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
+    		<span class="input-append date span12" id="todate" data-date="<?php echo $expdate; ?>" data-date-format="dd-mm-yyyy">
       		<input class="span6" size="16" name="to" type="text" value="<?php echo $expdate; ?>">
       		<span class="add-on"><i class="icon-calendar"></i></span>
     		</span>

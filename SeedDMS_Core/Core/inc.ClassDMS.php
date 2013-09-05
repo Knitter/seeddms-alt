@@ -243,7 +243,7 @@ class SeedDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.2.2';
+			$this->version = '4.3.0';
 	} /* }}} */
 
 	function getDB() { /* {{{ */
@@ -469,6 +469,30 @@ class SeedDMS_Core_DMS {
 		return $document;
 	} /* }}} */
 
+	/**
+	 * Return a document content by its id
+	 *
+	 * This function retrieves a document content from the database by its id.
+	 *
+	 * @param integer $id internal id of document content
+	 * @return object instance of {@link SeedDMS_Core_DocumentContent} or false
+	 */
+	function getDocumentContent($id) { /* {{{ */
+		if (!is_numeric($id)) return false;
+
+		$queryStr = "SELECT * FROM tblDocumentContent WHERE id = ".(int) $id;
+		$resArr = $this->db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		if (count($resArr) != 1)
+			return false;
+		$row = $resArr[0];
+
+		$document = $this->getDocument($row['document']);
+		$version = new SeedDMS_Core_DocumentContent($row['id'], $document, $row['version'], $row['comment'], $row['date'], $row['createdBy'], $row['dir'], $row['orgFileName'], $row['fileType'], $row['mimeType'], $row['fileSize'], $row['checksum']);
+		return $version;
+	} /* }}} */
+
 	function makeTimeStamp($hour, $min, $sec, $year, $month, $day) {
 		$thirtyone = array (1, 3, 5, 7, 8, 10, 12);
 		$thirty = array (4, 6, 9, 11);
@@ -547,6 +571,7 @@ class SeedDMS_Core_DMS {
 			$searchin=array(1, 2, 3, 4);
 
 		/*--------- Do it all over again for folders -------------*/
+		$totalFolders = 0;
 		if($mode & 0x2) {
 			$searchKey = "";
 			$searchFields = array();
@@ -580,7 +605,15 @@ class SeedDMS_Core_DMS {
 			// document owner.
 			$searchOwner = "";
 			if ($owner) {
-				$searchOwner = "`tblFolders`.`owner` = '".$owner->getId()."'";
+				if(is_array($owner)) {
+					$ownerids = array();
+					foreach($owner as $o)
+						$ownerids[] = $o->getID();
+					if($ownerids)
+						$searchOwner = "`tblFolders`.`owner` IN (".implode(',', $ownerids).")";
+				} else {
+					$searchOwner = "`tblFolders`.`owner` = '".$owner->getId()."'";
+				}
 			}
 
 			// Is the search restricted to documents created between two specific dates?
@@ -618,7 +651,6 @@ class SeedDMS_Core_DMS {
 			/* Do not search for folders if not at least a search for a key,
 			 * an owner, or creation date is requested.
 			 */
-			$totalFolders = 0;
 			if($searchKey || $searchOwner || $searchCreateDate) {
 				// Count the number of rows that the search will produce.
 				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
@@ -702,7 +734,15 @@ class SeedDMS_Core_DMS {
 			// document owner.
 			$searchOwner = "";
 			if ($owner) {
-				$searchOwner = "`tblDocuments`.`owner` = '".$owner->getId()."'";
+				if(is_array($owner)) {
+					$ownerids = array();
+					foreach($owner as $o)
+						$ownerids[] = $o->getID();
+					if($ownerids)
+						$searchOwner = "`tblDocuments`.`owner` IN (".implode(',', $ownerids).")";
+				} else {
+					$searchOwner = "`tblDocuments`.`owner` = '".$owner->getId()."'";
+				}
 			}
 
 			// Check to see if the search has been restricted to a particular
@@ -1453,7 +1493,7 @@ class SeedDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$attrdef = new SeedDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"]);
+		$attrdef = new SeedDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"], $resArr["regex"]);
 		$attrdef->setDMS($this);
 		return $attrdef;
 	} /* }}} */
@@ -1477,7 +1517,7 @@ class SeedDMS_Core_DMS {
 
 		$resArr = $resArr[0];
 
-		$attrdef = new SeedDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"]);
+		$attrdef = new SeedDMS_Core_AttributeDefinition($resArr["id"], $resArr["name"], $resArr["objtype"], $resArr["type"], $resArr["multiple"], $resArr["minvalues"], $resArr["maxvalues"], $resArr["valueset"], $resArr["regex"]);
 		$attrdef->setDMS($this);
 		return $attrdef;
 	} /* }}} */
@@ -1505,7 +1545,7 @@ class SeedDMS_Core_DMS {
 		$attrdefs = array();
 
 		for ($i = 0; $i < count($resArr); $i++) {
-			$attrdef = new SeedDMS_Core_AttributeDefinition($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["objtype"], $resArr[$i]["type"], $resArr[$i]["multiple"], $resArr[$i]["minvalues"], $resArr[$i]["maxvalues"], $resArr[$i]["valueset"]);
+			$attrdef = new SeedDMS_Core_AttributeDefinition($resArr[$i]["id"], $resArr[$i]["name"], $resArr[$i]["objtype"], $resArr[$i]["type"], $resArr[$i]["multiple"], $resArr[$i]["minvalues"], $resArr[$i]["maxvalues"], $resArr[$i]["valueset"], $resArr[$i]["regex"]);
 			$attrdef->setDMS($this);
 			$attrdefs[$i] = $attrdef;
 		}
@@ -1524,13 +1564,13 @@ class SeedDMS_Core_DMS {
 	 * @param string $valueset list of allowed values (csv format)
 	 * @return object of {@link SeedDMS_Core_User}
 	 */
-	function addAttributeDefinition($name, $objtype, $type, $multiple=0, $minvalues=0, $maxvalues=1, $valueset='') { /* {{{ */
+	function addAttributeDefinition($name, $objtype, $type, $multiple=0, $minvalues=0, $maxvalues=1, $valueset='', $regex='') { /* {{{ */
 		if (is_object($this->getAttributeDefinitionByName($name))) {
 			return false;
 		}
 		if(!$type)
 			return false;
-		$queryStr = "INSERT INTO tblAttributeDefinitions (name, objtype, type, multiple, minvalues, maxvalues, valueset) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).")";
+		$queryStr = "INSERT INTO tblAttributeDefinitions (name, objtype, type, multiple, minvalues, maxvalues, valueset, regex) VALUES (".$this->db->qstr($name).", ".intval($objtype).", ".intval($type).", ".intval($multiple).", ".intval($minvalues).", ".intval($maxvalues).", ".$this->db->qstr($valueset).", ".$this->db->qstr($regex).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
 			return false;

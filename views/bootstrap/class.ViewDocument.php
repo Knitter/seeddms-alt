@@ -121,30 +121,12 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($needwkflaction) {
 			$this->infoMsg(getMLText('needs_workflow_action'));
 		}
+
+		$status = $latestContent->getStatus();
+		$reviewStatus = $latestContent->getReviewStatus();
+		$approvalStatus = $latestContent->getApprovalStatus();
+
 ?>
-    <ul class="nav nav-tabs" id="docinfotab">
-		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('document_infos'); ?> / <?php printMLText('current_version'); ?></a></li>
-			<?php if (count($versions)>1) { ?>
-		  <li><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
-<?php
-			}
-			if($workflowmode == 'traditional') {
-?>
-		  <li><a data-target="#revapp" data-toggle="tab"><?php echo getMLText('reviewers')."/".getMLText('approvers'); ?></a></li>
-<?php
-			} else {
-				if($workflow) {
-?>
-		  <li><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
-<?php
-				}
-			}
-?>
-		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
-		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
-		</ul>
-		<div class="tab-content">
-		  <div class="tab-pane active" id="docinfo">
 
 <div class="row-fluid">
 <div class="span3">
@@ -265,6 +247,32 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 </div>
 <div class="span9">
+    <ul class="nav nav-tabs" id="docinfotab">
+		  <li class="active"><a data-target="#docinfo" data-toggle="tab"><?php printMLText('current_version'); ?></a></li>
+			<?php if (count($versions)>1) { ?>
+		  <li><a data-target="#previous" data-toggle="tab"><?php printMLText('previous_versions'); ?></a></li>
+<?php
+			}
+			if($workflowmode == 'traditional') {
+				if((is_array($reviewStatus) && count($reviewStatus)>0) ||
+					(is_array($approvalStatus) && count($approvalStatus)>0)) {
+?>
+		  <li><a data-target="#revapp" data-toggle="tab"><?php echo getMLText('reviewers')."/".getMLText('approvers'); ?></a></li>
+<?php
+				}
+			} else {
+				if($workflow) {
+?>
+		  <li><a data-target="#workflow" data-toggle="tab"><?php echo getMLText('workflow'); ?></a></li>
+<?php
+				}
+			}
+?>
+		  <li><a data-target="#attachments" data-toggle="tab"><?php printMLText('linked_files'); echo (count($files)) ? " (".count($files).")" : ""; ?></a></li>
+		  <li><a data-target="#links" data-toggle="tab"><?php printMLText('linked_documents'); echo (count($links)) ? " (".count($links).")" : ""; ?></a></li>
+		</ul>
+		<div class="tab-content">
+		  <div class="tab-pane active" id="docinfo">
 <?php
 		if(!$latestContent) {
 			$this->contentContainerStart();
@@ -274,14 +282,9 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			exit;
 		}
 
-		$status = $latestContent->getStatus();
-		$reviewStatus = $latestContent->getReviewStatus();
-		$approvalStatus = $latestContent->getApprovalStatus();
-
 		// verify if file exists
 		$file_exists=file_exists($dms->contentDir . $latestContent->getPath());
 
-		$this->contentHeading(getMLText("current_version"));
 		$this->contentContainerStart();
 		print "<table class=\"table\">";
 		print "<thead>\n<tr>\n";
@@ -436,11 +439,11 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 		}
 ?>
-		  </div>
-		</div>
 		</div>
 <?php
 		if($workflowmode == 'traditional') {
+			if((is_array($reviewStatus) && count($reviewStatus)>0) ||
+				(is_array($approvalStatus) && count($approvalStatus)>0)) {
 ?>
 		  <div class="tab-pane" id="revapp">
 <?php
@@ -581,6 +584,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		  </div>
 <?php
+		}
 		} else {
 			if($workflow) {
 ?>
@@ -589,7 +593,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 			if($user->isAdmin()) {
 				if(SeedDMS_Core_DMS::checkIfEqual($workflow->getInitState(), $latestContent->getWorkflowState())) {
-					print "<form action=\"../out/out.RemoveWorkflowFromDocument.php\" method=\"post\">".createHiddenFieldWithKey('removeworkflowfromdocument')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i>".getMLText('rm_workflow')."</button></form>";
+					print "<form action=\"../out/out.RemoveWorkflowFromDocument.php\" method=\"post\">".createHiddenFieldWithKey('removeworkflowfromdocument')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-remove\"></i> ".getMLText('rm_workflow')."</button></form>";
 				} else {
 					print "<form action=\"../out/out.RewindWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('rewindworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><button type=\"submit\" class=\"btn\"><i class=\"icon-refresh\"></i>".getMLText('rewind_workflow')."</button></form>";
 				}
@@ -614,7 +618,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			echo "<td>Action:</td>";
 			foreach($transitions as $transition) {
 				$action = $transition->getAction();
-				echo "<td>".getMLText('action_'.$action->getName())."</td>";
+				echo "<td>".getMLText('action_'.strtolower($action->getName()), array(), $action->getName())."</td>";
 			}
 			echo "</tr>";
 			echo "<tr>";
@@ -677,7 +681,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				echo "<td>";
 				if($latestContent->triggerWorkflowTransitionIsAllowed($user, $transition)) {
 					$action = $transition->getAction();
-					print "<form action=\"../out/out.TriggerWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('triggerworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"hidden\" name=\"transition\" value=\"".$transition->getID()."\" /><input type=\"submit\" class=\"btn\" value=\"".getMLText('action_'.$action->getName())."\" /></form>";
+					print "<form action=\"../out/out.TriggerWorkflow.php\" method=\"post\">".createHiddenFieldWithKey('triggerworkflow')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"version\" value=\"".$latestContent->getVersion()."\" /><input type=\"hidden\" name=\"transition\" value=\"".$transition->getID()."\" /><input type=\"submit\" class=\"btn\" value=\"".getMLText('action_'.strtolower($action->getName()), array(), $action->getName())."\" /></form>";
 				}
 				echo "</td>";
 			}
@@ -845,7 +849,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					print "<li><a href=\"out.RemoveVersion.php?documentid=".$documentid."&version=".$version->getVersion()."\"><i class=\"icon-remove\"></i>".getMLText("rm_version")."</a></li>";
 				}
 				if($accessop->mayEditComment()) {
-					print "<li><a href=\"out.EditComment.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_comment")."</a></li>";
+					print "<li><a href=\"out.EditComment.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-comment\"></i>".getMLText("edit_comment")."</a></li>";
 				}
 				if($accessop->mayEditAttributes()) {
 					print "<li><a href=\"out.EditAttributes.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."\"><i class=\"icon-edit\"></i>".getMLText("edit_attributes")."</a></li>";
@@ -883,14 +887,20 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$responsibleUser = $file->getUser();
 
 				print "<tr>";
-				print "<td><ul class=\"actions unstyled\">";
-				if ($file_exists) {
-					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><i class=\"icon-download\"></i>".getMLText('download')."</a>";
-					if ($viewonlinefiletypes && in_array(strtolower($latestContent->getFileType()), $viewonlinefiletypes))
-						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
-				} else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
-				print "</ul></td>";
-
+				print "<td>";
+				$previewer->createPreview($file);
+				if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes))
+					print "<a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\">";
+				else
+					print "<a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\">";
+				if($previewer->hasPreview($file)) {
+					print("<img class=\"mimeicon\" width=\"100\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&file=".$file->getID()."&width=100\" title=\"".htmlspecialchars($file->getMimeType())."\">");
+				} else {
+					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
+				}
+				print "</a>";
+				print "</td>";
+				
 				print "<td><ul class=\"unstyled\">\n";
 				print "<li>".htmlspecialchars($file->getName())."</li>\n";
 				print "<li>".htmlspecialchars($file->getOriginalFileName())."</li>\n";
@@ -902,12 +912,18 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				print "<li>".getLongReadableDate($file->getDate())."</li>";
 
 				print "<td>".htmlspecialchars($file->getComment())."</td>";
-
-				print "<td><span class=\"actions\">";
+			
+				print "<td><ul class=\"unstyled actions\">";
+				if ($file_exists) {
+					print "<li><a href=\"../op/op.Download.php?documentid=".$documentid."&file=".$file->getID()."\"><i class=\"icon-download\"></i>".getMLText('download')."</a>";
+					if ($viewonlinefiletypes && in_array(strtolower($file->getFileType()), $viewonlinefiletypes))
+						print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$documentid."&file=". $file->getID()."\"><i class=\"icon-star\"></i>" . getMLText("view_online") . "</a></li>";
+				} else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($file->getFileType())."\" title=\"".htmlspecialchars($file->getMimeType())."\">";
+				echo "</ul><ul class=\"unstyled actions\">";
 				if (($document->getAccessMode($user) == M_ALL)||($file->getUserID()==$user->getID()))
-					print "<form action=\"../out/out.RemoveDocumentFile.php\" method=\"get\"><input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"fileid\" value=\"".$file->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
-				print "</span></td>";		
-
+					print "<li><a href=\"out.RemoveDocumentFile.php?documentid=".$documentid."&fileid=".$file->getID()."\"><i class=\"icon-remove\"></i>".getMLText("delete")."</a></li>";
+				print "</ul></td>";		
+				
 				print "</tr>";
 			}
 			print "</tbody>\n</table>\n";	
@@ -940,6 +956,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				$targetDoc = $link->getTarget();
 				$targetlc = $targetDoc->getLatestContent();
 
+				$previewer->createPreview($targetlc);
 				print "<tr>";
 				print "<td><a href=\"../op/op.Download.php?documentid=".$targetDoc->getID()."&version=".$targetlc->getVersion()."\">";
 				if($previewer->hasPreview($targetlc)) {
@@ -992,6 +1009,8 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 		$this->contentContainerEnd();
 ?>
+		  </div>
+		</div>
 		  </div>
 		</div>
 <?php

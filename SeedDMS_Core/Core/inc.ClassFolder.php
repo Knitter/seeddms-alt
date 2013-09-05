@@ -437,7 +437,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @return array Array of parents
 	 */
 	function getPath() { /* {{{ */
-		if (!isset($this->_parentID) || ($this->_parentID == "") || ($this->_parentID == 0)) {
+		if (!isset($this->_parentID) || ($this->_parentID == "") || ($this->_parentID == 0) || ($this->_id == $this->_dms->rootFolderID)) {
 			return array($this);
 		}
 		else {
@@ -701,9 +701,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		$document = $this->_dms->getDocument($db->getInsertID());
 
-		if ($version_comment!="")
+//		if ($version_comment!="")
 			$res = $document->addContent($version_comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes, $workflow);
-		else $res = $document->addContent($comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes, $workflow);
+//		else $res = $document->addContent($comment, $owner, $tmpFile, $orgFileName, $fileType, $mimeType, $reviewers, $approvers,$reqversion, $version_attributes, $workflow);
 
 		if (is_bool($res) && !$res) {
 			$db->rollbackTransaction();

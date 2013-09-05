@@ -42,7 +42,7 @@ class SeedDMS_View_AddMultiDocument extends SeedDMS_Bootstrap_Style {
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 		$this->globalNavigation($folder);
 		$this->contentStart();
-		$this->pageNavigation(getFolderPathHTML($folder, true), "view_folder", $folder);
+		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
 
 ?>
 <script language="JavaScript">

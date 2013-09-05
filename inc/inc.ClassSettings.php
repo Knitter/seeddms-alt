@@ -52,6 +52,8 @@ class Settings { /* {{{ */
 	var $_loginFailure = 0;
 	// maximum amount of bytes a user may consume, 0 = unlimited
 	var $_quota = 0;
+	// comma separated list of undeleteable user ids
+	var $_undelUserIds = 0;
 	// Restricted access: only allow users to log in if they have an entry in
 	// the local database (irrespective of successful authentication with LDAP).
 	var $_restricted = true;
@@ -141,6 +143,8 @@ class Settings { /* {{{ */
 	var $_calendarDefaultView = "y";
 	// first day of the week (0=sunday, 1=monday, 6=saturday)
 	var $_firstDayOfWeek = 0;
+	// enable/disable display of the clipboard
+	var $_enableClipboard = true;
 	// enable/disable display of the folder tree
 	var $_enableFolderTree = true;
 	// count documents and folders for folderview recursively
@@ -182,6 +186,8 @@ class Settings { /* {{{ */
 	var $_ldapHost = ""; // URIs are supported, e.g.: ldaps://ldap.host.com
 	var $_ldapPort = 389; // Optional.
 	var $_ldapBaseDN = "";
+	var $_ldapBindDN = "";
+	var $_ldapBindPw = "";
 	var $_ldapAccountDomainName = "";
 	var $_ldapType = 1; // 0 = ldap; 1 = AD
 	var $_converters = array(); // list of commands used to convert files to text for Indexer
@@ -304,6 +310,7 @@ class Settings { /* {{{ */
 		$this->_enableConverting = Settings::boolVal($tab["enableConverting"]);
 		$this->_enableEmail = Settings::boolVal($tab["enableEmail"]);
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
+		$this->_enableClipboard = Settings::boolVal($tab["enableClipboard"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
 		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
 		$this->_maxRecursiveCount = intval($tab["maxRecursiveCount"]);
@@ -346,6 +353,7 @@ class Settings { /* {{{ */
 		$this->_passwordHistory = intval($tab["passwordHistory"]);
 		$this->_loginFailure = intval($tab["loginFailure"]);
 		$this->_quota = intval($tab["quota"]);
+		$this->_undelUserIds = strval($tab["undelUserIds"]);
 		$this->_encryptionKey = strval($tab["encryptionKey"]);
 		$this->_cookieLifetime = intval($tab["cookieLifetime"]);
 		$this->_restricted = Settings::boolVal($tab["restricted"]);
@@ -376,6 +384,8 @@ class Settings { /* {{{ */
 				$this->_ldapHost = strVal($connectorNode["host"]);
 				$this->_ldapPort = intVal($connectorNode["port"]);
 				$this->_ldapBaseDN = strVal($connectorNode["baseDN"]);
+				$this->_ldapBindDN = strVal($connectorNode["bindDN"]);
+				$this->_ldapBindPw = strVal($connectorNode["bindPw"]);
 				$this->_ldapType = 0;
 			}
 			else if ($params['enable'] && ($typeConn == "AD"))
@@ -383,6 +393,8 @@ class Settings { /* {{{ */
 				$this->_ldapHost = strVal($connectorNode["host"]);
 				$this->_ldapPort = intVal($connectorNode["port"]);
 				$this->_ldapBaseDN = strVal($connectorNode["baseDN"]);
+				$this->_ldapBindDN = strVal($connectorNode["bindDN"]);
+				$this->_ldapBindPw = strVal($connectorNode["bindPw"]);
 				$this->_ldapType = 1;
 				$this->_ldapAccountDomainName = strVal($connectorNode["accountDomainName"]);
 			}
@@ -554,6 +566,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableConverting", $this->_enableConverting);
     $this->setXMLAttributValue($node, "enableEmail", $this->_enableEmail);
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);
+	$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
     $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);
     $this->setXMLAttributValue($node, "maxRecursiveCount", $this->_maxRecursiveCount);
@@ -594,6 +607,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "passwordHistory", $this->_passwordHistory);
     $this->setXMLAttributValue($node, "loginFailure", $this->_loginFailure);
     $this->setXMLAttributValue($node, "quota", $this->_quota);
+    $this->setXMLAttributValue($node, "undelUserIds", $this->_undelUserIds);
     $this->setXMLAttributValue($node, "encryptionKey", $this->_encryptionKey);
     $this->setXMLAttributValue($node, "cookieLifetime", $this->_cookieLifetime);
     $this->setXMLAttributValue($node, "restricted", $this->_restricted);
@@ -1074,6 +1088,15 @@ class Settings { /* {{{ */
 					"suggestion" => "activate_module"
 				);
 			}
+		}
+
+		// Check PHP version
+		if (version_compare(PHP_VERSION, '5.2.0') < 0) {
+			$result["php_version"] = array(
+				"status" => "versiontolow",
+				"type" => "error",
+				"suggestion" => "upgrade_php"
+			);
 		}
 
 		// Check PHP configuration

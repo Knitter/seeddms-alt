@@ -19,6 +19,8 @@
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.Language.php");
+include("../inc/inc.ClassUI.php");
 
 require_once("../inc/inc.Utils.php");
 require_once("../inc/inc.ClassSession.php");
@@ -41,17 +43,22 @@ if (isset($_COOKIE["mydms_session"])) {
 		exit;
 	}
 	$dms->setUser($user);
+	if($user->isAdmin()) {
+		if($resArr["su"]) {
+			$user = $dms->getUser($resArr["su"]);
+		}
+	}
 } else {
 	$user = null;
 }
 
 include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
 
-$command = $_GET["command"];
+$command = $_REQUEST["command"];
 switch($command) {
 	case 'checkpwstrength':
 		$ps = new Password_Strength();
-		$ps->set_password($_GET["pwd"]);
+		$ps->set_password($_REQUEST["pwd"]);
 		if($settings->_passwordStrengthAlgorithm == 'simple')
 			$ps->simple_calculate();
 		else
@@ -68,7 +75,7 @@ switch($command) {
 		}
 		break;
 
-	case 'searchdocument':
+	case 'searchdocument': /* {{{ */
 		if($user) {
 			$query = $_GET['query'];
 
@@ -82,9 +89,9 @@ switch($command) {
 				echo json_encode($result);
 			}
 		}
-		break;
+		break; /* }}} */
 
-	case 'searchfolder':
+	case 'searchfolder': /* {{{ */
 		if($user) {
 			$query = $_GET['query'];
 
@@ -98,6 +105,62 @@ switch($command) {
 				echo json_encode($result);
 			}
 		}
-		break;
+		break; /* }}} */
+
+	case 'subtree': /* {{{ */
+		if(empty($_GET['node']))
+			$nodeid = $settings->_rootFolderID;
+		else
+			$nodeid = (int) $_GET['node'];
+		if(empty($_GET['showdocs']))
+			$showdocs = false;
+		else
+			$showdocs = true;
+
+		$folder = $dms->getFolder($nodeid);
+		if (!is_object($folder)) return '';
+		
+		$subfolders = $folder->getSubFolders();
+		$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, M_READ);
+		$tree = array();
+		foreach($subfolders as $subfolder) {
+			$level = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
+			if(!$subfolder->hasSubFolders())
+				$level['children'] = array();
+			$tree[] = $level;
+		}
+		if($showdocs) {
+			$documents = $folder->getDocuments();
+			$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
+			foreach($documents as $document) {
+				$level = array('label'=>$document->getName(), 'id'=>$document->getID(), 'load_on_demand'=>false, 'is_folder'=>false);
+				$tree[] = $level;
+			}
+		}
+
+		echo json_encode($tree);
+//		echo json_encode(array(array('label'=>'test1', 'id'=>1, 'load_on_demand'=> true), array('label'=>'test2', 'id'=>2, 'load_on_demand'=> true)));
+		break; /* }}} */
+
+	case 'addtoclipboard': /* {{{ */
+		if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET['type'])) {
+			switch($_GET['type']) {
+				case "folder":
+					$session->addToClipboard($dms->getFolder($_GET['id']));
+					break;
+				case "document":
+					$session->addToClipboard($dms->getDocument($_GET['id']));
+					break;
+			}
+		}
+		$view = UI::factory($theme, '', array('dms'=>$dms, 'user'=>$user));
+		if($view) {
+			$view->setParam('refferer', '');
+			$content = $view->menuClipboard($session->getClipboard());
+			header('Content-Type: application/json');
+			echo json_encode($content);
+		} else {
+		}
+		break; /* }}} */
 }
 ?>

@@ -147,6 +147,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_stopWordsFile");?>:</td>
         <td><input type="text" name="stopWordsFile" value="<?php echo $settings->_stopWordsFile; ?>" size="100" /></td>
       </tr>
+	  <tr title="<?php printMLText("settings_enableClipboard_desc");?>">
+        <td><?php printMLText("settings_enableClipboard");?>:</td>
+        <td><input name="enableClipboard" type="checkbox" <?php if ($settings->_enableClipboard) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_enableFolderTree_desc");?>">
         <td><?php printMLText("settings_enableFolderTree");?>:</td>
         <td><input name="enableFolderTree" type="checkbox" <?php if ($settings->_enableFolderTree) echo "checked" ?> /></td>
@@ -323,6 +327,10 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_quota_desc");?>">
         <td><?php printMLText("settings_quota");?>:</td>
         <td><input type="text" name="quota" value="<?php echo $settings->_quota; ?>" size="2" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_undelUserIds_desc");?>">
+        <td><?php printMLText("settings_undelUserIds");?>:</td>
+        <td><input type="text" name="undelUserIds" value="<?php echo $settings->_undelUserIds; ?>" size="32" /></td>
       </tr>
       <tr title="<?php printMLText("settings_encryptionKey_desc");?>">
         <td><?php printMLText("settings_encryptionKey");?>:</td>

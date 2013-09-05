@@ -56,12 +56,18 @@ class SeedDMS_View_ApproveDocument extends SeedDMS_Bootstrap_Style {
 <script language="JavaScript">
 function checkIndForm()
 {
-	msg = "";
-	if (document.form1.approvalStatus.value == "") msg += "<?php printMLText("js_no_approval_status");?>\n";
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-	if (msg != "")
-	{
-		alert(msg);
+	msg = new Array();
+	if (document.form1.approvalStatus.value == "") msg.push("<?php printMLText("js_no_approval_status");?>");
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (msg != "") {
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else
@@ -69,13 +75,20 @@ function checkIndForm()
 }
 function checkGrpForm()
 {
-	msg = "";
-//	if (document.form1.approvalGroup.value == "") msg += "<?php printMLText("js_no_approval_group");?>\n";
-	if (document.form1.approvalStatus.value == "") msg += "<?php printMLText("js_no_approval_status");?>\n";
-	if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
+	msg = new Array();
+//	if (document.form1.approvalGroup.value == "") msg.push("<?php printMLText("js_no_approval_group");?>");
+	if (document.form1.approvalStatus.value == "") msg.push("<?php printMLText("js_no_approval_status");?>");
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
 	if (msg != "")
 	{
-		alert(msg);
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
 		return false;
 	}
 	else

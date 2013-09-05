@@ -50,6 +50,7 @@ if ($action == "addattrdef") {
 	$minvalues = intval($_POST["minvalues"]);
 	$maxvalues = intval($_POST["maxvalues"]);
 	$valueset = trim($_POST["valueset"]);
+	$regex = trim($_POST["regex"]);
 
 	if($name == '') {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_noname"));
@@ -57,11 +58,15 @@ if ($action == "addattrdef") {
 	if (is_object($dms->getAttributeDefinitionByName($name))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("attrdef_exists"));
 	}
-	$newAttrdef = $dms->addAttributeDefinition($name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset);
+	$newAttrdef = $dms->addAttributeDefinition($name, $objtype, $type, $multiple, $minvalues, $maxvalues, $valueset, $regex);
 	if (!$newAttrdef) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
 	$attrdefid=$newAttrdef->getID();
+
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_add_attribute')));
+
+	add_log_line("&action=addattrdef&name=".$name);
 }
 
 // delet attribute definition -----------------------------------------------
@@ -84,6 +89,10 @@ else if ($action == "removeattrdef") {
 	if (!$attrdef->remove()) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_attribute')));
+
+	add_log_line("&action=removeattrdef&attrdefid=".$attrdefid);
+
 	$attrdefid=-1;
 }
 
@@ -114,6 +123,7 @@ else if ($action == "editattrdef") {
 	$minvalues = intval($_POST["minvalues"]);
 	$maxvalues = intval($_POST["maxvalues"]);
 	$valueset = trim($_POST["valueset"]);
+	$regex = trim($_POST["regex"]);
 	if (!$attrdef->setName($name)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
@@ -135,9 +145,14 @@ else if ($action == "editattrdef") {
 	if (!$attrdef->setValueSet($valueset)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
 	}
-}
+	if (!$attrdef->setRegex($regex)) {
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
 
-else {
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_edit_attribute')));
+
+	add_log_line("&action=editattrdef&attrdefid=".$attrdefid);
+} else {
 	UI::exitError(getMLText("admin_tools"),getMLText("unknown_command"));
 }
 

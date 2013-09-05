@@ -51,6 +51,8 @@ if (!$document->setLocked($user)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 }
 
+$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_document_locked')));
+
 add_log_line();
 header("Location:../out/out.ViewDocument.php?documentid=".$documentid);
 

@@ -50,41 +50,47 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation($this->getFolderPathHTML($folder, true), "view_folder", $folder);
 		
 ?>
-		<script language="JavaScript">
-		function checkForm()
-		{
-			msg = "";
-			//if (document.form1.userfile[].value == "") msg += "<?php printMLText("js_no_file");?>\n";
+<script language="JavaScript">
+function checkForm()
+	{
+	msg = new Array();
+	//if (document.form1.userfile[].value == "") msg += "<?php printMLText("js_no_file");?>\n";
 			
 <?php
 			if ($strictformcheck) {
 ?>
-			if(!document.form1.name.disabled){
-				if (document.form1.name.value == "") msg += "<?php printMLText("js_no_name");?>\n";
-			}
-			if (document.form1.comment.value == "") msg += "<?php printMLText("js_no_comment");?>\n";
-			if (document.form1.keywords.value == "") msg += "<?php printMLText("js_no_keywords");?>\n";
+	if(!document.form1.name.disabled){
+		if (document.form1.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	}
+	if (document.form1.comment.value == "") msg.push("<?php printMLText("js_no_comment");?>");
+	if (document.form1.keywords.value == "") msg.push("<?php printMLText("js_no_keywords");?>");
 <?php
 			}
 ?>
-			if (msg != ""){
-				alert(msg);
-				return false;
-			}
-			return true;
-		}
+	if (msg != ""){
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	return true;
+}
 
-
-		function addFiles()
-		{
-			var li = document.createElement('li');
-			li.innerHTML = '<input type="File" name="userfile[]" size="60">';
-			document.getElementById('files').appendChild(li);	
-		//	document.getElementById("files").innerHTML += '<br><input type="File" name="userfile[]" size="60">'; 
-			document.form1.name.disabled=true;
-		}
+function addFiles()
+	{
+	var li = document.createElement('li');
+	li.innerHTML = '<input type="File" name="userfile[]" size="60">';
+	document.getElementById('files').appendChild(li);	
+//	document.getElementById("files").innerHTML += '<br><input type="File" name="userfile[]" size="60">'; 
+	document.form1.name.disabled=true;
+}
 		
-		</script>
+</script>
 
 <?php
 		$msg = getMLText("max_upload_size").": ".ini_get( "upload_max_filesize");
@@ -151,12 +157,12 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 		<tr>
 			<td><?php printMLText("expires");?>:</td>
 			<td>
-        <span class="input-append date" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
+        <span class="input-append date span12" id="expirationdate" data-date="<?php echo date('d-m-Y'); ?>" data-date-format="dd-mm-yyyy" data-date-language="<?php echo str_replace('_', '-', $this->params['session']->getLanguage()); ?>">
           <input class="span3" size="16" name="expdate" type="text" value="<?php echo date('d-m-Y'); ?>">
           <span class="add-on"><i class="icon-calendar"></i></span>
         </span>&nbsp;
         <label class="checkbox inline">
-				  <input type="checkbox" name="expires" value="false" checked><?php printMLText("does_not_expire");?><br>
+				  <input type="checkbox" name="expires" value="false" checked><?php printMLText("does_not_expire");?>
         </label>
 			</td>
 		</tr>
@@ -187,7 +193,8 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 <?php } ?>
 		<tr>
 			<td><?php printMLText("comment_for_current_version");?>:</td>
-			<td><textarea name="version_comment" rows="3" cols="80"></textarea></td>
+			<td><textarea name="version_comment" rows="3" cols="80"></textarea><br />
+			<label class="checkbox inline"><input type="checkbox" name="use_comment" value="1" /> <?php printMLText("use_comment_of_document"); ?></label></td>
 		</tr>
 <?php
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_all));
@@ -208,19 +215,30 @@ class SeedDMS_View_AddDocument extends SeedDMS_Bootstrap_Style {
 			<div class="cbSelectTitle"><?php printMLText("workflow");?>:</div>
       </td>
       <td>
-        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
 <?php
 				$mandatoryworkflow = $user->getMandatoryWorkflow();
-				$workflows=$dms->getAllWorkflows();
-				print "<option value=\"\">"."</option>";
-				foreach ($workflows as $workflow) {
-					print "<option value=\"".$workflow->getID()."\"";
-					if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
-						echo " selected=\"selected\"";
-					print ">". htmlspecialchars($workflow->getName())."</option>";
-				}
+				if($mandatoryworkflow) {
+?>
+				<?php echo $mandatoryworkflow->getName(); ?>
+				<input type="hidden" name="workflow" value="<?php echo $mandatoryworkflow->getID(); ?>">
+<?php
+				} else {
+?>
+        <select class="_chzn-select-deselect span9" name="workflow" data-placeholder="<?php printMLText('select_workflow'); ?>">
+<?php
+					$workflows=$dms->getAllWorkflows();
+					print "<option value=\"\">"."</option>";
+					foreach ($workflows as $workflow) {
+						print "<option value=\"".$workflow->getID()."\"";
+						if($mandatoryworkflow && $mandatoryworkflow->getID() == $workflow->getID())
+							echo " selected=\"selected\"";
+						print ">". htmlspecialchars($workflow->getName())."</option>";
+					}
 ?>
         </select>
+<?php
+				}
+?>
       </td>
     </tr>
 		<tr>	

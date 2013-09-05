@@ -168,9 +168,25 @@ if ($_FILES['userfile']['error'] == 0) {
 		}
 	}
 
-	$attributes = $_POST["attributes"];
+	$workflow = $user->getMandatoryWorkflow();
 
-	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes);
+	if(isset($_POST["attributes"]) && $_POST["attributes"]) {
+		$attributes = $_POST["attributes"];
+		foreach($attributes as $attrdefid=>$attribute) {
+			$attrdef = $dms->getAttributeDefinition($attrdefid);
+			if($attribute) {
+				if($attrdef->getRegex()) {
+					if(!preg_match($attrdef->getRegex(), $attribute)) {
+						UI::exitError(getMLText("document_title", array("documentname" => $folder->getName())),getMLText("attr_no_regex_match"));
+					}
+				}
+			}
+		}
+	} else {
+		$attributes = array();
+	}
+
+	$contentResult=$document->addContent($comment, $user, $userfiletmp, basename($userfilename), $fileType, $userfiletype, $reviewers, $approvers, $version=0, $attributes, $workflow);
 	if (is_bool($contentResult) && !$contentResult) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}
@@ -218,7 +234,7 @@ if ($_FILES['userfile']['error'] == 0) {
 		}
 
 		$expires = false;
-		if ($_POST["expires"] != "false") {
+		if (!isset($_POST['expires']) || $_POST["expires"] != "false") {
 			if($_POST["expdate"]) {
 				$tmp = explode('-', $_POST["expdate"]);
 				$expires = mktime(0,0,0, $tmp[1], $tmp[0], $tmp[2]);

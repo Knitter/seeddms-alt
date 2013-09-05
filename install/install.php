@@ -33,8 +33,8 @@ if (!file_exists("create_tables-innodb.sql")) {
   echo "Can't install SeedDMS, 'create_tables-innodb.sql' missing";
   exit;
 }
-if (!file_exists("create_tables.sql")) {
-  echo "Can't install SeedDMS, 'create_tables.sql' missing";
+if (!file_exists("create_tables-sqlite3.sql")) {
+  echo "Can't install SeedDMS, 'create_tables-sqlite3.sql' missing";
   exit;
 }
 if (!file_exists("settings.xml.template_install")) {
@@ -116,7 +116,7 @@ function fileExistsInIncludePath($file) { /* {{{ */
  * Load default settings + set
  */
 define("SEEDDMS_INSTALL", "on");
-define("SEEDDMS_VERSION", "4.2.2");
+define("SEEDDMS_VERSION", "4.3.0");
 
 require_once('../inc/inc.ClassSettings.php');
 

@@ -60,9 +60,8 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 				if($created >= $content->getDate()) {
 					echo $indent."(document unchanged)";
 				} else {
-					if($index->delete($hit->id)) {
-						$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, $this->converters ? $this->converters : null));
-					}
+					$index->delete($hit->id);
+					$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, $this->converters ? $this->converters : null));
 					echo $indent."(document updated)";
 				}
 			}
@@ -89,6 +88,7 @@ class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 		echo "</pre>";
 
 		$index->commit();
+		$index->optimize();
 
 		$this->htmlEndPage();
 	} /* }}} */
