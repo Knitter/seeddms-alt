@@ -437,7 +437,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	 * @return array Array of parents
 	 */
 	function getPath() { /* {{{ */
-		if (!isset($this->_parentID) || ($this->_parentID == "") || ($this->_parentID == 0)) {
+		if (!isset($this->_parentID) || ($this->_parentID == "") || ($this->_parentID == 0) || ($this->_id == $this->_dms->rootFolderID)) {
 			return array($this);
 		}
 		else {
