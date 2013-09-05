@@ -960,7 +960,7 @@ function clearFilename<?php print $formName ?>() {
 		$this->contentStart();
 
 		print "<div class=\"alert alert-error\">";
-		print "<h4>Error!</h4>";
+		print "<h4>".getMLText('error')."!</h4>";
 		print htmlspecialchars($error);
 		print "</div>";
 		print "<div><button class=\"btn\" onclick=\"window.history.back();\">".getMLText('back')."</button></div>";
