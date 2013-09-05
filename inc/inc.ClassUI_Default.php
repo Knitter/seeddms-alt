@@ -447,6 +447,7 @@ class UI_Default {
 		$icons["bz2"]  = "gz.png";
 		$icons["tgz"]  = "gz.png";
 		$icons["zip"]  = "gz.png";
+		$icons["rar"]  = "gz.png";
 		$icons["mpg"]  = "video.png";
 		$icons["avi"]  = "video.png";
 		$icons["tex"]  = "tex.png";
