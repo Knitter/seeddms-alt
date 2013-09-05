@@ -12,8 +12,8 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-05-22</date>
- <time>09:21:37</time>
+ <date>2013-09-05</date>
+ <time>07:41:57</time>
  <version>
   <release>4.3.0</release>
   <api>4.3.0</api>
@@ -28,6 +28,7 @@
 - comment of version is no longer taken from document if version comment is empty
 - passing an array of users to SeedDMЅ_Core_DMS::search() instead of a single user ist now allowed
 - turn on foreign key constraints for sqlite3
+- SeedDMЅ_Core_Folder::getPath() can handle a subfolder treated as a root folder
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
