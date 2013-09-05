@@ -24,7 +24,9 @@ include("../inc/inc.Language.php");
 include("../inc/inc.ClassSession.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.ClassEmail.php");
+include("../inc/inc.Extension.php");
 
 include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
@@ -39,6 +41,9 @@ function _printMessage($heading, $message) {
 	UI::htmlEndPage();
 	return;
 }
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 if (isset($_REQUEST["sesstheme"]) && strlen($_REQUEST["sesstheme"])>0 && is_numeric(array_search($_REQUEST["sesstheme"],UI::getStyles())) ) {
 	$theme = $_REQUEST["sesstheme"];
@@ -65,110 +70,119 @@ if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin()))  {
 	exit;
 }
 
-//
-// LDAP Sign In
-//
+$user = false;
 
-/* new code by doudoux - TO BE TESTED */
-if (isset($settings->_ldapBaseDN)) {
-	$ldapSearchAttribut = "uid=";
-	$tmpDN = "uid=".$login.",".$settings->_ldapBaseDN;
+if(isset($GLOBALS['SEEDDMS_HOOKS']['authentication'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['authentication'] as $authObj) {
+		if(method_exists($authObj, 'authenticate')) {
+			$user = $authObj->authenticate($dms, $settings, $login, $pwd);
+			if(is_object($user))
+				$userid = $user->getID();
+		}
+	}
 }
 
-if (isset($settings->_ldapType))
-{
-    if ($settings->_ldapType==1)
-    {
-        $ldapSearchAttribut = "sAMAccountName=";
-        $tmpDN = $login.'@'.$settings->_ldapAccountDomainName;
-    }
-} 
-/* end of new code */
+if (is_bool($user)) {
+	//
+	// LDAP Sign In
+	//
 
-
-$user = false;
-if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
-	if (isset($settings->_ldapPort) && is_int($settings->_ldapPort)) {
-		$ds = ldap_connect($settings->_ldapHost, $settings->_ldapPort);
+	/* new code by doudoux - TO BE TESTED */
+	if (isset($settings->_ldapBaseDN)) {
+		$ldapSearchAttribut = "uid=";
+		$tmpDN = "uid=".$login.",".$settings->_ldapBaseDN;
 	}
-	else {
-		$ds = ldap_connect($settings->_ldapHost);
-	}
-	if (!is_bool($ds)) {
-		// Ensure that the LDAP connection is set to use version 3 protocol.
-		// Required for most authentication methods, including SASL.
-		ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-		// try an authenticated/anonymous bind first. If it succeeds, get the DN for the user.
-		$bind = false;
-		if (isset($settings->_ldapBindDN)) {
-			$bind = @ldap_bind($ds, $settings->_ldapBindDN, $settings->_ldapBindPw);
-		} else {
-			$bind = @ldap_bind($ds);
+	if (isset($settings->_ldapType)) {
+		if ($settings->_ldapType==1) {
+			$ldapSearchAttribut = "sAMAccountName=";
+			$tmpDN = $login.'@'.$settings->_ldapAccountDomainName;
 		}
-		$dn = false;
-				
-		/* new code by doudoux - TO BE TESTED */
-	        if ($bind) {        
-	            $search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
-	            if (!is_bool($search)) {
-	                $info = ldap_get_entries($ds, $search);
-	                if (!is_bool($info) && $info["count"]>0) {
-	                    $dn = $info[0]['dn'];
-	                }
-	            }
-	        } 
-		/* end of new code */
-		
-		/* old code */
-		if ($bind) {
-			$search = ldap_search($ds, $settings->_ldapBaseDN, "uid=".$login);
-			if (!is_bool($search)) {
-				$info = ldap_get_entries($ds, $search);
-				if (!is_bool($info) && $info["count"]>0) {
-					$dn = $info[0]['dn'];
-				}
+	} 
+	/* end of new code */
+
+	if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
+		if (isset($settings->_ldapPort) && is_int($settings->_ldapPort)) {
+			$ds = ldap_connect($settings->_ldapHost, $settings->_ldapPort);
+		}
+		else {
+			$ds = ldap_connect($settings->_ldapHost);
+		}
+		if (!is_bool($ds)) {
+			// Ensure that the LDAP connection is set to use version 3 protocol.
+			// Required for most authentication methods, including SASL.
+			ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+			// try an anonymous bind first. If it succeeds, get the DN for the user.
+			if (isset($settings->_ldapBindDN)) {
+				$bind = @ldap_bind($ds, $settings->_ldapBindDN, $settings->_ldapBindPw);
+			} else {
+				$bind = @ldap_bind($ds);
 			}
-		}
-		/* end of old code */
-
-		
-		if (is_bool($dn)) {
-			// This is the fallback position, in case the anonymous bind does not
-			// succeed.
+			$dn = false;
+					
+			/* new code by doudoux - TO BE TESTED */
+						if ($bind) {        
+								$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
+								if (!is_bool($search)) {
+										$info = ldap_get_entries($ds, $search);
+										if (!is_bool($info) && $info["count"]>0) {
+												$dn = $info[0]['dn'];
+										}
+								}
+						} 
+			/* end of new code */
 			
-			/* new code by doudoux  - TO BE TESTED */
-			$dn = $tmpDN;
 			/* old code */
-			//$dn = "uid=".$login.",".$settings->_ldapBaseDN; 
-			
-		}
-		$bind = @ldap_bind($ds, $dn, $pwd);
-		if ($bind) {
-			// Successfully authenticated. Now check to see if the user exists within
-			// the database. If not, add them in, but do not add their password.
-			$user = $dms->getUserByLogin($login);
-			if (is_bool($user) && !$settings->_restricted) {
-				// Retrieve the user's LDAP information.
-				
-				
-				/* new code by doudoux  - TO BE TESTED */
-				$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut . $login); 
-				/* old code */
-				//$search = ldap_search($ds, $dn, "uid=".$login);
-				
+			if ($bind) {
+				$search = ldap_search($ds, $settings->_ldapBaseDN, "uid=".$login);
 				if (!is_bool($search)) {
 					$info = ldap_get_entries($ds, $search);
-					if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
-						$user = $dms->addUser($login, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "");
+					if (!is_bool($info) && $info["count"]>0) {
+						$dn = $info[0]['dn'];
 					}
 				}
 			}
-			if (!is_bool($user)) {
-				$userid = $user->getID();
+			/* end of old code */
+
+			
+			if (is_bool($dn)) {
+				// This is the fallback position, in case the anonymous bind does not
+				// succeed.
+				
+				/* new code by doudoux  - TO BE TESTED */
+				$dn = $tmpDN;
+				/* old code */
+				//$dn = "uid=".$login.",".$settings->_ldapBaseDN; 
+				
 			}
+			$bind = @ldap_bind($ds, $dn, $pwd);
+			if ($bind) {
+				// Successfully authenticated. Now check to see if the user exists within
+				// the database. If not, add them in, but do not add their password.
+				$user = $dms->getUserByLogin($login);
+				if (is_bool($user) && !$settings->_restricted) {
+					// Retrieve the user's LDAP information.
+					
+					
+					/* new code by doudoux  - TO BE TESTED */
+					$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut . $login); 
+					/* old code */
+					//$search = ldap_search($ds, $dn, "uid=".$login);
+					
+					if (!is_bool($search)) {
+						$info = ldap_get_entries($ds, $search);
+						if (!is_bool($info) && $info["count"]==1 && $info[0]["count"]>0) {
+							$user = $dms->addUser($login, null, $info[0]['cn'][0], $info[0]['mail'][0], $settings->_language, $settings->_theme, "");
+						}
+					}
+				}
+				if (!is_bool($user)) {
+					$userid = $user->getID();
+				}
+			}
+			ldap_close($ds);
 		}
-		ldap_close($ds);
 	}
 }
 
@@ -297,6 +311,10 @@ if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {
 else if (isset($_GET["referuri"]) && strlen($_GET["referuri"])>0) {
 	$referuri = urldecode($_GET["referuri"]);
 }
+
+$controller->setParam('user', $user);
+$controller->setParam('session', $session);
+$controller->run();
 
 add_log_line();
 

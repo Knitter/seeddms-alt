@@ -1,6 +1,6 @@
 <?php
-//    MyDMS. Document Management System
-//    Copyright (C) 2010 Matteo Lucarelli
+//    SeedDMS. Document Management System
+//    Copyright (C) 2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -17,25 +17,26 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
+include("../inc/inc.LogInit.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
-include("../inc/inc.Extension.php");
+require "../inc/inc.ClassExtensionMgr.php";
 
 if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-/* Set an encryption key if is not set */
-if(!trim($settings->_encryptionKey))
-	$settings->_encryptionKey = md5(uniqid());
-
-$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'settings'=>$settings));
-if($view) {
-	$view->show();
-	exit;
+/* Check if the form data comes for a trusted request */
+if(!checkFormKey('extensionmgr')) {
+	UI::exitError(getMLText("admin_tools"),getMLText("invalid_request_token"));
 }
 
+$extMgr = new SeedDMS_Extension_Mgr($db, $settings->_rootDir."/ext", $settings->_cacheDir);
+$extconffile = $extMgr->getExtensionsConfFile();
+$extMgr->createExtensionConf();
+
+add_log_line();
+header("Location:../out/out.ExtensionMgr.php");
 ?>

@@ -59,6 +59,7 @@ class UI extends UI_Default {
 			/* Set some configuration parameters */
 			$view->setParam('refferer', $_SERVER['REQUEST_URI']);
 			$view->setParam('session', $session);
+			$view->setParam('settings', $settings);
 			$view->setParam('sitename', $settings->_siteName);
 			$view->setParam('rootfolderid', $settings->_rootFolderID);
 			$view->setParam('disableselfedit', $settings->_disableSelfEdit);

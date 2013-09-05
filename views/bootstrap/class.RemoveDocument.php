@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_RemoveDocument extends SeedDMS_Bootstrap_Style {
 
 	function show() { /* {{{ */
+		parent::show();
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];

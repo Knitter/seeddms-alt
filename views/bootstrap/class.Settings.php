@@ -58,6 +58,7 @@ if(!is_writeable($settings->_configFilePath)) {
 	  <li class="active"><a data-target="#site" data-toggle="tab"><?php printMLText('settings_Site'); ?></a></li>
 	  <li><a data-target="#system" data-toggle="tab"><?php printMLText('settings_System'); ?></a></li>
 	  <li><a data-target="#advanced" data-toggle="tab"><?php printMLText('settings_Advanced'); ?></a></li>
+	  <li><a data-target="#extensions" data-toggle="tab"><?php printMLText('settings_Extensions'); ?></a></li>
 	</ul>
 
 	<div class="tab-content">
@@ -524,6 +525,42 @@ if(!is_writeable($settings->_configFilePath)) {
     </table>
 <?php		$this->contentContainerEnd(); ?>
   </div>
+
+	  <div class="tab-pane" id="extensions">
+<?php		$this->contentContainerStart(); ?>
+    <table class="table-condensed">
+      <!--
+        -- SETTINGS - ADVANCED - DISPLAY
+      -->
+<?php
+				foreach($GLOBALS['EXT_CONF'] as $extname=>$extconf) {
+?>
+      <tr ><td><b><?php echo $extconf['title'];?></b></td></tr>
+<?php
+					foreach($extconf['config'] as $confkey=>$conf) {
+?>
+      <tr title="<?php echo $extconf['title'];?>">
+        <td><?php echo $conf['title'];?>:</td><td>
+<?php
+						switch($conf['type']) {
+							case 'checkbox':
+?>
+        <input type="checkbox" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" value="1" <?php if(isset($settings->_extensions[$extname][$confkey]) && $settings->_extensions[$extname][$confkey]) echo 'checked'; ?> />
+<?php
+								break;
+							default:
+?>
+        <input type="text" name="<?php echo "extensions[".$extname."][".$confkey."]"; ?>" title="<?php echo isset($conf['help']) ? $conf['help'] : ''; ?>" value="<?php if(isset($settings->_extensions[$extname][$confkey])) echo $settings->_extensions[$extname][$confkey]; ?>" size="<?php echo $conf['size']; ?>" />
+<?php
+						}
+?>
+      </td></tr>
+<?php
+					}
+				}
+?>
+		</table>
+	</div>
   </div>
 <?php
 if(is_writeable($settings->_configFilePath)) {

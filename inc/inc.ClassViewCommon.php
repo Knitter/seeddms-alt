@@ -56,7 +56,47 @@ class SeedDMS_View_Common {
 */
 
 	function show() {
+	}
 
+	/**
+	 * Call a hook with a given name
+	 *
+	 * Checks if a hook with the given name and for the current view
+	 * exists and executes it. The name of the current view is taken
+	 * from the current class name by lower casing the first char.
+	 * This function will execute all registered hooks in the order
+	 * they were registered.
+	 *
+	 * @params string $hook name of hook
+	 * @return mixed whatever the hook function returns
+	 */
+	function callHook($hook) {
+		$tmp = explode('_', get_class($this));
+		$ret = null;
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])] as $hookObj) {
+				if (method_exists($hookObj, $hook)) {
+					switch(func_num_args()) {
+						case 1:
+							$tmpret = $hookObj->$hook($this);
+							if(is_string($tmpret))
+								$ret .= $tmpret;
+							break;
+						case 2:
+							$tmpret = $hookObj->$hook($this, func_get_arg(1));
+							if(is_string($tmpret))
+								$ret .= $tmpret;
+							break;
+						case 3:
+						default:
+							$tmpret = $hookObj->$hook($this, func_get_arg(1), func_get_arg(2));
+							if(is_string($tmpret))
+								$ret .= $tmpret;
+					}
+				}
+			}
+		}
+		return $ret;
 	}
 }
 ?>

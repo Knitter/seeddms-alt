@@ -25,12 +25,16 @@ include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
+include("../inc/inc.Extension.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 if (isset($_GET["version"])) {
 
 	// document download
-	
 	if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
 		UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 	}
@@ -58,18 +62,10 @@ if (isset($_GET["version"])) {
 	if (!is_object($content)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 	}
-	
-	//header("Content-Type: application/force-download; name=\"" . mydmsDecodeString($content->getOriginalFileName()) . "\"");
-	header("Content-Transfer-Encoding: binary");
-	header("Content-Length: " . filesize($dms->contentDir . $content->getPath() ));
-	header("Content-Disposition: attachment; filename=\"" . $content->getOriginalFileName() . "\"");
-	//header("Expires: 0");
-	header("Content-Type: " . $content->getMimeType());
-	//header("Cache-Control: no-cache, must-revalidate");
-	header("Cache-Control: must-revalidate");
-	//header("Pragma: no-cache");
 
-	readfile($dms->contentDir . $content->getPath());
+	$controller->setParam('content', $content);
+	$controller->setParam('type', 'version');
+	$controller->run();
 
 } elseif (isset($_GET["file"])) {
 
@@ -219,4 +215,3 @@ if (isset($_GET["version"])) {
 
 add_log_line();
 exit();
-?>

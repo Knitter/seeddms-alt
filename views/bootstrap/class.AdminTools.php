@@ -93,7 +93,8 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 	</div>
 	<p></p>
 	<div class="row-fluid">
-		<a href="../out/out.Settings.php" class="span3 btn btn-medium"><i class="icon-cogs"></i><br /><?php echo getMLText("settings")?></a>
+		<a href="../out/out.Settings.php" class="span3 btn btn-medium"><i class="icon-wrench"></i><br /><?php echo getMLText("settings")?></a>
+		<a href="../out/out.ExtensionMgr.php" class="span3 btn btn-medium"><i class="icon-cogs"></i><br /><?php echo getMLText("extension_manager")?></a>
 	</div>
 	</div>
 <?php

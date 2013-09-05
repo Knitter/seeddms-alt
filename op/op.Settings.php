@@ -25,6 +25,7 @@ include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
+include("../inc/inc.Extension.php");
 
 
 function getBoolValue($post_name)
@@ -156,6 +157,9 @@ if ($action == "saveSettings")
 
   // SETTINGS - ADVANCED - INDEX CMD
   $settings->_converters = $_POST["converters"];
+
+  // SETTINGS - EXTENSIONS
+  $settings->_extensions = $_POST["extensions"];
 
   // -------------------------------------------------------------------------
   // save

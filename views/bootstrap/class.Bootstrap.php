@@ -77,7 +77,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
       dismissQueue: true,
   		layout: 'topRight',
   		theme: 'defaultTheme',
-			timeout: 1500,
+			timeout: <?php echo isset($flashmsg['duration']) && is_numeric($flashmsg['duration']) ? $flashmsg['duration'] : ($flashmsg['type'] == "error" ? "3000" : "1500"); ?>,
 			_template: '<div class="noty_message alert alert-block alert-error"><span class="noty_text"></span><div class="noty_close"></div></div>'
   	});
 		</script>
@@ -281,7 +281,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".col2\">\n";
 			echo " 		<span class=\"icon-bar\"></span>\n";
 			echo " 		<span class=\"icon-bar\"></span>\n";
-			echo " 		<span class=\"icon-bar\"></span></a>\n";
+			echo " 		<span class=\"icon-bar\"></span>\n";
+			echo "   </a>\n";
 			switch ($pageType) {
 				case "view_folder":
 					$this->folderNavigationBar($extra);
@@ -487,6 +488,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li id=\"first\"><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
@@ -1122,35 +1124,40 @@ $(function() {
 				//echo "<tr><th colspan=\"3\">Documents</th></tr>\n";
 				foreach($clipboard['docs'] as $docid) {
 					if($document = $dms->getDocument($docid)) {
-						$comment = $document->getComment();
-						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-						if($latestContent = $document->getLatestContent()) {
-							$previewer->createPreview($latestContent);
-							$version = $latestContent->getVersion();
-							$status = $latestContent->getStatus();
-							
-							print "<tr>";
+						$txt = $this->callHook('documentClipboardItem', $document, $previewer);
+						if(is_string($txt))
+							echo $txt;
+						else {
+							$comment = $document->getComment();
+							if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
+							if($latestContent = $document->getLatestContent()) {
+								$previewer->createPreview($latestContent);
+								$version = $latestContent->getVersion();
+								$status = $latestContent->getStatus();
+								
+								print "<tr>";
 
-							if (file_exists($dms->contentDir . $latestContent->getPath())) {
-								print "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
-								if($previewer->hasPreview($latestContent)) {
-									print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
-								} else {
-									print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+								if (file_exists($dms->contentDir . $latestContent->getPath())) {
+									print "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
+									if($previewer->hasPreview($latestContent)) {
+										print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									} else {
+										print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									}
+									print "</a></td>";
+								} else
+									print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
+								
+								print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
+								if($comment) {
+									print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 								}
-								print "</a></td>";
-							} else
-								print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
-							
-							print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
-							if($comment) {
-								print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+								print "</td>\n";
+								print "<td>\n";
+								print "<div class=\"list-action\"><a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
+								print "</td>\n";
+								print "</tr>";
 							}
-							print "</td>\n";
-							print "<td>\n";
-							print "<div class=\"list-action\"><a href=\"../op/op.RemoveFromClipboard.php?folderid=".$this->params['folder']->getID()."&id=".$docid."&type=document\" title=\"".getMLText('rm_from_clipboard')."\"><i class=\"icon-remove\"></i></a></div>";
-							print "</td>\n";
-							print "</tr>";
 						}
 					}
 				}
@@ -1461,6 +1468,10 @@ mayscript>
 <p></p>
 <p id="fileList"></p>
 <?php
+	} /* }}} */
+
+	function show(){ /* {{{ */
+		parent::show();
 	} /* }}} */
 }
 ?>

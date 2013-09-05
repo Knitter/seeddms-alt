@@ -49,9 +49,29 @@ $folder = $document->getFolder();
 /* Get the notify list before removing the document */
 $nl =	$document->getNotifyList();
 $docname = $document->getName();
+
+$hookObjectsArr = array();
+if (is_array($GLOBALS['SEEDDMS_HOOKS']['RemoveDocument'])) {
+	foreach($GLOBALS['SEEDDMS_HOOKS']['RemoveDocument'] as $_classRef) {
+		$hookObjectsArr[] = & new $_classRef;
+	}
+}
+
+foreach($hookObjectsArr as $_hookObj) {
+	if (method_exists($_hookObj, 'preRemoveDocument')) {
+		$ret = $_hookObj->preRemoveDocument($dms, $document);
+	}
+}
+
 if (!$document->remove()) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
 } else {
+
+	foreach($hookObjectsArr as $_hookObj) {
+		if (method_exists($_hookObj, 'postRemoveDocument')) {
+			$_hookObj->postRemoveDocument($dms, $documentid);
+		}
+	}
 
 	/* Remove the document from the fulltext index */
 	if($settings->_enableFullSearch) {
