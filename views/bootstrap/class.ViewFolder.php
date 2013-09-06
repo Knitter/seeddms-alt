@@ -78,6 +78,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$orderby = $this->params['orderby'];
 		$enableFolderTree = $this->params['enableFolderTree'];
 		$enableClipboard = $this->params['enableClipboard'];
+		$expandFolderTree = $this->params['expandFolderTree'];
 		$showtree = $this->params['showtree'];
 		$cachedir = $this->params['cachedir'];
 		$workflowmode = $this->params['workflowmode'];
@@ -122,7 +123,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 		</script>
 <?php
-					$this->printNewTreeNavigation($folderid, M_READ, 0, '');
+					$this->printNewTreeNavigation($folderid, M_READ, 0, '', $expandFolderTree == 2);
 					$this->contentContainerEnd();
 				} else {
 					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);

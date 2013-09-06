@@ -987,16 +987,17 @@ function clearFilename<?php print $formName ?>() {
 	 * @params boolean $showdocs set to true if tree shall contain documents
 	 *   as well.
 	 */
-	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1') { /* {{{ */
-		function jqtree($path, $folder, $user, $accessmode, $showdocs=1) {
-			if($path) {
-				$pathfolder = array_shift($path);
+	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0) { /* {{{ */
+		function jqtree($path, $folder, $user, $accessmode, $showdocs=1, $expandtree=0) {
+			if($path || $expandtree) {
+				if($path)
+					$pathfolder = array_shift($path);
 				$subfolders = $folder->getSubFolders();
 				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
 				$children = array();
 				foreach($subfolders as $subfolder) {
 					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
-					if($pathfolder->getID() == $subfolder->getID()) {
+					if($expandtree || $pathfolder->getID() == $subfolder->getID()) {
 						if($showdocs) {
 							$documents = $folder->getDocuments();
 							$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, $accessmode);
@@ -1005,7 +1006,7 @@ function clearFilename<?php print $formName ?>() {
 								$children[] = $node2;
 							}
 						}
-						$node['children'] = jqtree($path, $subfolder, $user, $accessmode, $showdocs);
+						$node['children'] = jqtree($path, $subfolder, $user, $accessmode, $showdocs, $expandtree);
 					}
 					$children[] = $node;
 				}
@@ -1032,7 +1033,7 @@ function clearFilename<?php print $formName ?>() {
 				$node['load_on_demand'] = false;
 				$node['children'] = array();
 			} else {
-				$node['children'] = jqtree($path, $folder, $this->params['user'], $accessmode, $showdocs);
+				$node['children'] = jqtree($path, $folder, $this->params['user'], $accessmode, $showdocs, $expandtree);
 			}
 			$tree[] = $node;
 			
