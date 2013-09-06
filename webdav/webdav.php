@@ -239,7 +239,19 @@ class HTTP_WebDAV_Server_SeedDMS extends HTTP_WebDAV_Server
 				// TODO recursion needed if "Depth: infinite"
 			}
 			$documents = $obj->getDocuments();
-			$documents = SeedDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
+			$docs = SeedDMS_Core_DMS::filterAccess($documents, $this->user, M_READ);
+			if(!$this->user->isAdmin()) {
+				$documents = array();
+				foreach($docs as $document) {
+					$lc = $document->getLatestContent();
+					$status = $lc->getStatus();
+					if($status['status'] == S_RELEASED) {
+						$documents[] = $document;
+					}
+				}
+			} else {
+				$documents = $docs;
+			}
 			if ($documents) {
 				// ok, now get all its contents
 				foreach($documents as $document) {
