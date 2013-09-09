@@ -21,10 +21,13 @@
 include("../inc/inc.Settings.php");
 include("../inc/inc.Utils.php");
 include("../inc/inc.ClassSession.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.DBInit.php");
 
-// Delete session from database
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
+// Delete session from database
 $dms_session = $_COOKIE["mydms_session"];
 
 $session = new SeedDMS_Session($db);
@@ -42,6 +45,10 @@ if(!$session->delete($dms_session)) {
 
 // Delete Cookie
 setcookie("mydms_session", $_COOKIE["mydms_session"], time()-3600, $settings->_httpRoot);
+
+$controller->setParam('user', $user);
+$controller->setParam('session', $session);
+$controller->run();
 
 //Forward to Login-page
 header("Location: ../out/out.Login.php");
