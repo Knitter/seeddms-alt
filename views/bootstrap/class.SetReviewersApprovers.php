@@ -85,7 +85,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 <?php $this->contentSubHeading(getMLText("update_reviewers"));?>
 
   <div class="cbSelectTitle"><?php printMLText("individuals")?>:</div>
-  <select class="chzn-select span9" name="indReviewers[]" multiple="multiple">
+  <select class="chzn-select span9" name="indReviewers[]" multiple="multiple" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 
 		$res=$user->getMandatoryReviewers();
@@ -120,7 +120,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
   </select>
 
   <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
-  <select class="chzn-select span9" name="grpReviewers[]" multiple="multiple">
+  <select class="chzn-select span9" name="grpReviewers[]" multiple="multiple" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
 		foreach ($docAccess["groups"] as $group) {
 
@@ -155,7 +155,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
 <?php $this->contentSubHeading(getMLText("update_approvers"));?>
 
   <div class="cbSelectTitle cbSelectMargin"><?php printMLText("individuals")?>:</div>
-  <select class="chzn-select span9" name="indApprovers[]" multiple="multiple">
+  <select class="chzn-select span9" name="indApprovers[]" multiple="multiple" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 
 		$res=$user->getMandatoryApprovers();
@@ -193,7 +193,7 @@ class SeedDMS_View_SetReviewersApprovers extends SeedDMS_Bootstrap_Style {
   </select>
   <div class="cbSelectTitle"><?php printMLText("groups")?>:</div>
 
-  <select class="chzn-select span9" name="grpApprovers[]" multiple="multiple">
+  <select class="chzn-select span9" name="grpApprovers[]" multiple="multiple" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
 		foreach ($docAccess["groups"] as $group) {
 

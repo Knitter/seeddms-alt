@@ -306,14 +306,14 @@ function showWorkflow(selectObj) {
 			echo "</select>";
 			echo "</td>";
 			echo "<td>";
-      echo "<select class=\"chzn-select\" name=\"users[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_users')."\">";
+      echo "<select class=\"chzn-select\" name=\"users[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_users')."\" data-no_results_text=\"".getMLText('unknown_user')."\">";
 			$allusers = $dms->getAllUsers();
 			foreach($allusers as $usr) {
 				print "<option value=\"".$usr->getID()."\">". htmlspecialchars($usr->getLogin()." - ".$usr->getFullName())."</option>";
 			}
 			echo "</select>";
 			echo "<br />";
-      echo "<select class=\"chzn-select\" name=\"groups[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_groups')."\">";
+      echo "<select class=\"chzn-select\" name=\"groups[]\" multiple=\"multiple\" data-placeholder=\"".getMLText('select_groups')."\" data-no_results_text=\"".getMLText('unknown_group')."\">";
 			$allgroups = $dms->getAllGroups();
 			foreach($allgroups as $grp) {
 				print "<option value=\"".$grp->getID()."\">". htmlspecialchars($grp->getName())."</option>";

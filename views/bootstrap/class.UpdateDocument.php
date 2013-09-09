@@ -185,7 +185,7 @@ function checkForm()
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
       </td>
       <td>
-        <select class="chzn-select span9" name="indReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>">
+        <select class="chzn-select span9" name="indReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_reviewers'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 				$res=$user->getMandatoryReviewers();
 				foreach ($docAccess["users"] as $usr) {
@@ -205,7 +205,7 @@ function checkForm()
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
       </td>
       <td>
-        <select class="chzn-select span9" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_reviewers'); ?>">
+        <select class="chzn-select span9" name="grpReviewers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_reviewers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
 				foreach ($docAccess["groups"] as $grp) {
 				
@@ -228,7 +228,7 @@ function checkForm()
 				<div class="cbSelectTitle"><?php printMLText("individuals");?>:</div>
       </td>
       <td>
-        <select class="chzn-select span9" name="indApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_approvers'); ?>">
+        <select class="chzn-select span9" name="indApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_ind_approvers'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <?php
 				$res=$user->getMandatoryApprovers();
 				foreach ($docAccess["users"] as $usr) {
@@ -248,7 +248,7 @@ function checkForm()
 				<div class="cbSelectTitle"><?php printMLText("groups");?>:</div>
       </td>
       <td>
-        <select class="chzn-select span9" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_approvers'); ?>">
+        <select class="chzn-select span9" name="grpApprovers[]" multiple="multiple" data-placeholder="<?php printMLText('select_grp_approvers'); ?>" data-no_results_text="<?php printMLText('unknown_group'); ?>">
 <?php
 				foreach ($docAccess["groups"] as $grp) {
 				
