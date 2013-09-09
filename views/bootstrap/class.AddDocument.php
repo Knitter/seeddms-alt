@@ -126,7 +126,7 @@ function addFiles()
 		<tr>
 			<td><?php printMLText("categories")?>:</td>
 			<td>
-        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>">
+        <select class="chzn-select" name="categories[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
 <?php
 			$categories = $dms->getDocumentCategories();
 			foreach($categories as $category) {

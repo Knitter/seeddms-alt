@@ -139,7 +139,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <tr>
 <td><?php printMLText("category");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
 <td>
-<select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>">
+<select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
 <!--
 <option value="-1"><?php printMLText("all_categories");?>
 -->
@@ -172,7 +172,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <tr>
 <td><?php printMLText("owner");?>:</td>
 <td>
-<select class="chzn-select-deselect" name="ownerid">
+<select class="chzn-select-deselect" name="ownerid" data-placeholder="<?php printMLText('select_users'); ?>" data-no_results_text="<?php printMLText('unknown_owner'); ?>">
 <option value="-1"></option>
 <?php
 		foreach ($allUsers as $userObj) {
@@ -271,7 +271,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <tr>
 <td><?php printMLText("category_filter");?>:</td>
 <td>
-<select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>">
+<select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
 <!--
 <option value="-1"><?php printMLText("all_categories");?>
 -->
