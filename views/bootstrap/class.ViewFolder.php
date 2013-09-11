@@ -86,6 +86,8 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 
 		$folderid = $folder->getId();
 
+		echo $this->callHook('startPage');
+
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
 
 		$this->globalNavigation($folder);
