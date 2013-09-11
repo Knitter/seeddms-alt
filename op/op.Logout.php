@@ -23,32 +23,36 @@ include("../inc/inc.Utils.php");
 include("../inc/inc.ClassSession.php");
 include("../inc/inc.ClassController.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.Authentication.php");
+include("../inc/inc.Extension.php");
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $controller = Controller::factory($tmp[1]);
 
 // Delete session from database
-$dms_session = $_COOKIE["mydms_session"];
+if(isset($_COOKIE['mydms_session'])) {
+	$dms_session = $_COOKIE["mydms_session"];
 
-$session = new SeedDMS_Session($db);
-$session->load($dms_session);
+	$session = new SeedDMS_Session($db);
+	$session->load($dms_session);
 
-// If setting the user id to 0 worked, it would be a way to logout a
-// user. It doesn't work because of a foreign constraint in the database
-// won't allow it. So we keep on deleting the session and the cookie on
-// logout
-// $session->setUser(0); does not work because of foreign user constraint
+	// If setting the user id to 0 worked, it would be a way to logout a
+	// user. It doesn't work because of a foreign constraint in the database
+	// won't allow it. So we keep on deleting the session and the cookie on
+	// logout
+	// $session->setUser(0); does not work because of foreign user constraint
 
-if(!$session->delete($dms_session)) {
-	UI::exitError(getMLText("logout"),$db->getErrorMsg());
+	if(!$session->delete($dms_session)) {
+		UI::exitError(getMLText("logout"),$db->getErrorMsg());
+	}
+
+	// Delete Cookie
+	setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot);
+
+	$controller->setParam('user', $user);
+	$controller->setParam('session', $session);
+	$controller->run();
 }
-
-// Delete Cookie
-setcookie("mydms_session", $_COOKIE["mydms_session"], time()-3600, $settings->_httpRoot);
-
-$controller->setParam('user', $user);
-$controller->setParam('session', $session);
-$controller->run();
 
 //Forward to Login-page
 header("Location: ../out/out.Login.php");
