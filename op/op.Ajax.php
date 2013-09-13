@@ -162,5 +162,24 @@ switch($command) {
 		} else {
 		}
 		break; /* }}} */
+
+	case 'testmail': /* {{{ */
+		if($user && $user->isAdmin()) {
+			if($user->getEmail()) {
+				include("../inc/inc.ClassEmail.php");
+
+				$emailobj = new SeedDMS_Email($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
+				$params = array();
+
+				if($emailobj->toIndividual($settings->_smtpSendFrom, $user, "testmail_subject", "testmail_body", $params)) {
+					echo json_encode(array("error"=>0, "msg"=>"Sending email succeded"));
+				} else {
+					echo json_encode(array("error"=>1, "msg"=>"Sending email failed"));
+				}
+			} else {
+				echo json_encode(array("error"=>1, "msg"=>"No email address"));
+			}
+		}
+		break; /* }}} */
 }
 ?>
