@@ -140,6 +140,25 @@ $(document).ready( function() {
 			}
 		);
 	});
+	$('a.sendtestmail').click(function(ev){
+		ev.preventDefault();
+		$.ajax({url: '../op/op.Ajax.php',
+			type: 'GET',
+			dataType: "json",
+			data: {command: 'testmail'},
+			success: function(data) {
+				console.log(data);
+				noty({
+					text: data.msg,
+					type: (data.error) ? 'error' : 'success',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 1500,
+				});
+			}
+		}); 
+	});
 });
 
 function allowDrop(ev) {
