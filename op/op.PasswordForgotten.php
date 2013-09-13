@@ -54,11 +54,14 @@ if (empty($email) || empty($login)) {
 $user = $dms->getUserByLogin($login, $email);
 if($user) {
 	if($hash = $dms->createPasswordRequest($user)) {
-		$emailobj = new SeedDMS_Email();
-		$subject = "###SITENAME###: ".getMLText("password_forgotten_email_subject");
-		$message = str_replace('###HASH###', $hash, getMLText("password_forgotten_email_body"));
-		
-		$emailobj->sendPassword('', $user, $subject, $message);
+		$emailobj = new SeedDMS_Email($settings->_smtpSendFrom, $settings->_smtpServer, $settings->_smtpPort, $settings->_smtpUser, $settings->_smtpPassword);
+		$subject = "password_forgotten_email_subject";
+		$message = "password_forgotten_email_body";
+		$params = array();
+		$params['sitename'] = $settings->_siteName;
+		$params['hash'] = $hash;
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ChangePassword.php?hash=".$hash;
+		$emailobj->sendPassword($settings->_smtpSendFrom, $user, $subject, $message, $params);
 	}
 }
 
