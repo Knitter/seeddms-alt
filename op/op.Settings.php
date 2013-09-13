@@ -123,6 +123,8 @@ if ($action == "saveSettings")
   $settings->_smtpServer = $_POST["smtpServer"];
   $settings->_smtpPort = $_POST["smtpPort"];
   $settings->_smtpSendFrom = $_POST["smtpSendFrom"];
+  $settings->_smtpUser = $_POST["smtpUser"];
+  $settings->_smtpPassword = $_POST["smtpPassword"];
 
   // SETTINGS -ADVANCED - DISPLAY
   $settings->_siteDefaultPage = $_POST["siteDefaultPage"];

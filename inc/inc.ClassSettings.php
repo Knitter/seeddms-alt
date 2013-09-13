@@ -182,6 +182,10 @@ class Settings { /* {{{ */
 	var $_smtpPort = null;
 	// SMTP : send from
 	var $_smtpSendFrom = null;
+	// SMTP : user
+	var $_smtpUser = null;
+	// SMTP : password
+	var $_smtpPassword = null;
 	// LDAP
 	var $_ldapHost = ""; // URIs are supported, e.g.: ldaps://ldap.host.com
 	var $_ldapPort = 389; // Optional.
@@ -430,6 +434,9 @@ class Settings { /* {{{ */
 				$this->_smtpSendFrom = strval($tab["smtpSendFrom"]);
 			else
 				$this->_smtpSendFrom = ini_get("sendmail_from");
+			// smtpUser
+			$this->_smtpUser = strval($tab["smtpUser"]);
+			$this->_smtpPassword = strval($tab["smtpPassword"]);
 		}
 
 		// XML Path: /configuration/advanced/display
@@ -688,6 +695,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "smtpServer", $this->_smtpServer);
     $this->setXMLAttributValue($node, "smtpPort", $this->_smtpPort);
     $this->setXMLAttributValue($node, "smtpSendFrom", $this->_smtpSendFrom);
+    $this->setXMLAttributValue($node, "smtpUser", $this->_smtpUser);
+    $this->setXMLAttributValue($node, "smtpPassword", $this->_smtpPassword);
 
     // XML Path: /configuration/advanced/display
     $this->getXMLNode($xml, '/configuration', 'advanced');

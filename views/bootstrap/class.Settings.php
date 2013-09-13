@@ -372,7 +372,7 @@ if(!is_writeable($settings->_configFilePath)) {
      <!--
         -- SETTINGS - SYSTEM - SMTP
       -->
-      <tr ><td><b> <?php printMLText("settings_SMTP");?></b></td> </tr>
+      <tr ><td><b> <?php printMLText("settings_SMTP");?></b></td><td><a class="btn sendtestmail">Send test mail</a></td> </tr>
       <tr title="<?php printMLText("settings_smtpServer_desc");?>">
         <td><?php printMLText("settings_smtpServer");?>:</td>
         <td><input type="text" name="smtpServer" value="<?php echo $settings->_smtpServer ?>" /></td>
@@ -384,6 +384,14 @@ if(!is_writeable($settings->_configFilePath)) {
       <tr title="<?php printMLText("settings_smtpSendFrom_desc");?>">
         <td><?php printMLText("settings_smtpSendFrom");?>:</td>
         <td><input type="text" name="smtpSendFrom" value="<?php echo $settings->_smtpSendFrom ?>" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_smtpUser_desc");?>">
+        <td><?php printMLText("settings_smtpUser");?>:</td>
+        <td><input type="text" name="smtpUser" value="<?php echo $settings->_smtpUser ?>" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_smtpPassword_desc");?>">
+        <td><?php printMLText("settings_smtpPassword");?>:</td>
+        <td><input type="password" name="smtpPassword" value="<?php echo $settings->_smtpPassword ?>" /></td>
       </tr>
 
     </table>
