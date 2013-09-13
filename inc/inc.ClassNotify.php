@@ -35,14 +35,18 @@ abstract class SeedDMS_Notify {
 	abstract function toGroup($sender, $groupRecipient, $subject, $message, $params=array());
 	abstract function toList($sender, $recipients, $subject, $message, $params=array());
 
-	function replaceMarker($text) {
+	/**
+	 * Deprecated: don't use any more
+	 * 
+	 */
+	function replaceMarker($text) { /* {{{ */
 		global $settings;
 
 		return(str_replace(
 			array('###SITENAME###', '###HTTP_ROOT###', '###URL_PREFIX###'),
 			array($settings->_siteName, $settings->_httpRoot, "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot),
 			$text));
-	}
+	} /* }}} */
 
 	function setSender($user) {
 		$this->sender = $user;
