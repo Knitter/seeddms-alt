@@ -1036,7 +1036,13 @@ function clearFilename<?php print $formName ?>() {
 			} else {
 				$node['children'] = jqtree($path, $folder, $this->params['user'], $accessmode, $showdocs, $expandtree);
 			}
-			$tree[] = $node;
+			/* Nasty hack to remove the highest folder */
+			if(isset($this->params['remove_root_from_tree']) && $this->params['remove_root_from_tree']) {
+				foreach($node['children'] as $n)
+					$tree[] = $n;
+			} else {
+				$tree[] = $node;
+			}
 			
 		} else {
 			$root = $this->params['dms']->getFolder($this->params['rootfolderid']);
