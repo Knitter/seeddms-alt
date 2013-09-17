@@ -121,6 +121,11 @@ can still be set
 in the configuration, which is not recommend anymore. Just leave those
 parameters empty.
 
+On Linux/Unix your web server should be run with the environment variable
+LANG set to your system default. If LANG=C, then the original filename
+of an uploaded document will not be preserved if the filename contains
+non ascii characters.
+
 1. Using the installation tool
 ------------------------------
 
