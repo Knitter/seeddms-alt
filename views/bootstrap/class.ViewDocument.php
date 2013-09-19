@@ -78,6 +78,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$document = $this->params['document'];
 		$accessop = $this->params['accessobject'];
 		$viewonlinefiletypes = $this->params['viewonlinefiletypes'];
+		$enableownerrevapp = $this->params['enableownerrevapp'];
 		$workflowmode = $this->params['workflowmode'];
 		$cachedir = $this->params['cachedir'];
 		$documentid = $document->getId();
@@ -476,7 +477,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						else {
 							$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
 						}
-						if($r["required"] == $user->getId())
+						if($r["required"] == $user->getId() && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
 							$is_reviewer = true;
 						break;
 					case 1: // Reviewer is a group.
@@ -486,7 +487,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						}
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
-							if($required->isMember($user) && ($user->getId() != $owner->getId()))
+							if($required->isMember($user) && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
 								$is_reviewer = true;
 						}
 						break;
