@@ -814,6 +814,7 @@ $text = array(
 'splash_settings_saved' => "Settings saved",
 'splash_substituted_user' => "Substituted user",
 'splash_switched_back_user' => "Switched back to original user",
+'statistic' => "Statistic",
 'status_approval_rejected' => "Draft rejected",
 'status_approved' => "Approved",
 'status_approver_removed' => "Approver removed from process",

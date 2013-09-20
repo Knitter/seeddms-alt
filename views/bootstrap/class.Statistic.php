@@ -219,7 +219,7 @@ print "<li><span style=\"color:".$this->getAccessColor(M_READ)."\">".getMLText("
 print "<li><span style=\"color:".$this->getAccessColor(M_NONE)."\">".getMLText("access_mode_none")." </span></li>";
 print "</ul>\n";
 
-print "<legend>Statistic</legend>\n";
+print "<legend>".getMLText("statistic")."</legend>\n";
 print "<ul class=\"unstyled\">\n";
 print "<li>".getMLText("folders").": ".$this->folder_count."</li>\n";
 print "<li>".getMLText("documents").": ".$this->document_count."</li>\n";

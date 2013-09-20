@@ -790,6 +790,7 @@ $text = array(
 'splash_settings_saved' => "Einstellungen gesichert",
 'splash_substituted_user' => "Benutzer gewechselt",
 'splash_switched_back_user' => "Zum ursprünglichen Benutzer zurückgekehrt",
+'statistic' => "Statistik",
 'status_approval_rejected' => "Entwurf abgelehnt",
 'status_approved' => "freigegeben",
 'status_approver_removed' => "Freigebender wurde vom Prozess ausgeschlossen",
