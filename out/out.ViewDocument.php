@@ -71,6 +71,7 @@ if($view) {
 	$view->setParam('document', $document);
 	$view->setParam('accessobject', $accessop);
 	$view->setParam('viewonlinefiletypes', $settings->_viewOnlineFileTypes);
+	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('workflowmode', $settings->_workflowMode);
 	$view->show();
