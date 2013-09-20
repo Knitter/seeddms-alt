@@ -1,4 +1,14 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.1
+--------------------------------------------------------------------------------
+- translates strings (Bug #86, #87, #88, #90)
+- add icon for rar files (Bug #85)
+- webdav: PROPFIND returns only released documents (just like GET did already)
+- folder tree can be completely expanded again if set in configuration
+- add missing div to header and fix folding of main menu
+- consistent implementation of approval/release of document owner
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.0
 --------------------------------------------------------------------------------
 - create preview images for attachted document files
