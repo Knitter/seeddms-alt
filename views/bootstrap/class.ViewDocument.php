@@ -623,7 +623,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 			echo "</tr>";
 			echo "<tr>";
-			echo "<td>Users:</td>";
+			echo "<td>".getMLText('users').":</td>";
 			foreach($transitions as $transition) {
 				$transusers = $transition->getUsers();
 				echo "<td>";
@@ -639,13 +639,15 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 			}
 			echo "</tr>";
 			echo "<tr>";
-			echo "<td>Groups:</td>";
+			echo "<td>".getMLText('groups').":</td>";
 			foreach($transitions as $transition) {
 				$transgroups = $transition->getGroups();
 				echo "<td>";
 				foreach($transgroups as $transgroup) {
 					$g = $transgroup->getGroup();
-					echo "At least ".$transgroup->getNumOfUsers()." users of ".$g->getName();
+					echo getMLText('at_least_n_users_of_group',
+						array("number_of_users" => $transgroup->getNumOfUsers(),
+							"group" => $g->getName()));
 					if ($document->getGroupAccessMode($g) < M_READ) {
 						echo " (no access)";
 					}
