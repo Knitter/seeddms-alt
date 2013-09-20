@@ -23,7 +23,12 @@ include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.ClassController.php");
 include("../inc/inc.Authentication.php");
+include("../inc/inc.Extension.php");
+
+$tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
+$controller = Controller::factory($tmp[1]);
 
 /* Check if the form data comes for a trusted request */
 if(!checkFormKey('removedocument')) {
@@ -44,86 +49,40 @@ if ($document->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("access_denied"));
 }
 
-$folder = $document->getFolder();
+if($settings->_enableFullSearch) {
+	if(!empty($settings->_luceneClassDir))
+		require_once($settings->_luceneClassDir.'/Lucene.php');
+	else
+		require_once('SeedDMS/Lucene.php');
 
-/* Get the notify list before removing the document */
+	$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
+} else {
+	$index = null;
+}
+
+/* save this for notification later on */
 $nl =	$document->getNotifyList();
+$folder = $document->getFolder();
 $docname = $document->getName();
 
-$hookObjectsArr = array();
-if (is_array($GLOBALS['SEEDDMS_HOOKS']['RemoveDocument'])) {
-	foreach($GLOBALS['SEEDDMS_HOOKS']['RemoveDocument'] as $_classRef) {
-		$hookObjectsArr[] = & new $_classRef;
-	}
-}
-
-foreach($hookObjectsArr as $_hookObj) {
-	if (method_exists($_hookObj, 'preRemoveDocument')) {
-		$ret = $_hookObj->preRemoveDocument($dms, $document);
-	}
-}
-
-if (!$document->remove()) {
+$controller->setParam('document', $document);
+$controller->setParam('index', $index);
+if(!$controller->run()) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("error_occured"));
-} else {
+}
 
-	foreach($hookObjectsArr as $_hookObj) {
-		if (method_exists($_hookObj, 'postRemoveDocument')) {
-			$_hookObj->postRemoveDocument($dms, $documentid);
-		}
-	}
-
-	/* Remove the document from the fulltext index */
-	if($settings->_enableFullSearch) {
-		if(!empty($settings->_luceneClassDir))
-			require_once($settings->_luceneClassDir.'/Lucene.php');
-		else
-			require_once('SeedDMS/Lucene.php');
-
-		$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
-		if($index && $hits = $index->find('document_id:'.$documentid)) {
-			$hit = $hits[0];
-			$index->delete($hit->id);
-			$index->commit();
-		}
-	}
-
-	if ($notifier){
-/*
-		$path = "";
-		$folderPath = $folder->getPath();
-		for ($i = 0; $i  < count($folderPath); $i++) {
-			$path .= $folderPath[$i]->getName();
-			if ($i +1 < count($folderPath))
-				$path .= " / ";
-		}
-	
-		$subject = "###SITENAME###: ".$document->getName()." - ".getMLText("document_deleted_email");
-		$message = getMLText("document_deleted_email")."\r\n";
-		$message .= 
-			getMLText("document").": ".$document->getName()."\r\n".
-			getMLText("folder").": ".$path."\r\n".
-			getMLText("comment").": ".$document->getComment()."\r\n".
-			getMLText("user").": ".$user->getFullName()." <". $user->getEmail() ."> ";
-
-		// Send notification to subscribers.
-		$notifier->toList($user, $nl["users"], $subject, $message);
-		foreach ($nl["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message);
-		}
-*/
-		$subject = "document_deleted_email_subject";
-		$message = "document_deleted_email_body";
-		$params = array();
-		$params['name'] = $docname;
-		$params['folder_path'] = $folder->getFolderPathPlain();
-		$params['username'] = $user->getFullName();
-		$params['sitename'] = $settings->_siteName;
-		$params['http_root'] = $settings->_httpRoot;
-		$notifier->toList($user, $nl["users"], $subject, $message, $params);
-		foreach ($nl["groups"] as $grp) {
-			$notifier->toGroup($user, $grp, $subject, $message, $params);
-		}
+if ($notifier){
+	$subject = "document_deleted_email_subject";
+	$message = "document_deleted_email_body";
+	$params = array();
+	$params['name'] = $docname;
+	$params['folder_path'] = $folder->getFolderPathPlain();
+	$params['username'] = $user->getFullName();
+	$params['sitename'] = $settings->_siteName;
+	$params['http_root'] = $settings->_httpRoot;
+	$notifier->toList($user, $nl["users"], $subject, $message, $params);
+	foreach ($nl["groups"] as $grp) {
+		$notifier->toGroup($user, $grp, $subject, $message, $params);
 	}
 }
 
