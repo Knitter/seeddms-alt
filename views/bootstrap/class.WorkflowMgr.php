@@ -235,7 +235,7 @@ function showWorkflow(selectObj) {
 		if($actions) {
 		$transitions = $currWorkflow->getTransitions();
 		echo "<table class=\"table table-condensed\">";
-		echo "<tr><th>State/Next state</th><th>Action</th><th>".getMLText('user')."/".getMLText('group')."</th></tr>";
+		echo "<tr><th>".getMLText('state_and_next_state')."</th><th>".getMLText('action')."</th><th>".getMLText('users_and_groups')."</th></tr>";
 		if($transitions) {
 			foreach($transitions as $transition) {
 				$state = $transition->getState();
@@ -258,12 +258,14 @@ function showWorkflow(selectObj) {
 				echo "<td>";
 				foreach($transusers as $transuser) {
 					$u = $transuser->getUser();
-					echo "User ".$u->getFullName();
+					echo getMLText('user').": ".$u->getFullName();
 					echo "<br />";
 				}
 				foreach($transgroups as $transgroup) {
 					$g = $transgroup->getGroup();
-					echo "At least ".$transgroup->getNumOfUsers()." users of ".$g->getName();
+					echo getMLText('at_least_n_users_of_group',
+						array("number_of_users" => $transgroup->getNumOfUsers(),
+							"group" => $g->getName()));
 					echo "<br />";
 				}
 				echo "</td>";
