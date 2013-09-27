@@ -2512,7 +2512,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * reviewers. In that case -4 will be returned.
 	 * If the given review status has been set by the user before, it cannot
 	 * be set again and 0 will be returned. Іf the review could be succesfully
-	 * added the review log id will be returned.
+	 * added, the review log id will be returned.
 	 *
 	 * @see SeedDMS_Core_DocumentContent::setApprovalByInd()
 	 * @param object $user user doing the review
@@ -2731,10 +2731,10 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Sets approval status of a document content for a user
+	 *
 	 * This function can be used to approve or reject a document content, or
-	 * to reset its approval state. The user initiating the approval may
-	 * not be the user filled in as an approver of the document content.
-	 * In most cases this will be but an admin may set the approval for
+	 * to reset its approval state. In most cases this function will be
+	 * called by an user, but  an admin may set the approval for
 	 * somebody else.
 	 * It is first checked if the user is in the list of approvers at all.
 	 * Then it is check if the approval status is already -2. In both cases
