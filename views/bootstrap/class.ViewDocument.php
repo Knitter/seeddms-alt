@@ -552,7 +552,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 						else {
 							$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
 						}
-						if($required->isMember($user) && ($user->getId() != $owner->getId()))
+						if($required->isMember($user) && ($user->getId() != $owner->getId() || $enableownerrevapp == 1))
 							$is_approver = true;
 						break;
 				}
