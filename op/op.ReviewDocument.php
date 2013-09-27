@@ -256,11 +256,11 @@ if ($_POST["reviewStatus"]==-1){
 		// If the approvals received is less than the approvals total, then
 		// change status to pending approval.
 		if ($approvalCT<$approvalTotal) {
-			$newStatus=1;
+			$newStatus=S_DRAFT_APP;
 		}
 		else {
 			// Otherwise, change the status to released.
-			$newStatus=2;
+			$newStatus=S_RELEASED;
 		}
 		if ($content->setStatus($newStatus, getMLText("automatic_status_update"), $user)) {
 			// Send notification to subscribers.

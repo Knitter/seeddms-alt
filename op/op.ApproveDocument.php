@@ -231,7 +231,7 @@ if ($_POST["approvalStatus"]==-1){
 	// count of the approvals required for this document.
 	if ($approvalCT == $approvalTotal) {
 		// Change the status to released.
-		$newStatus=2;
+		$newStatus=S_RELEASED;
 		if($content->setStatus($newStatus, getMLText("automatic_status_update"), $user)) {
 			// Send notification to subscribers.
 			if($notifier) {
