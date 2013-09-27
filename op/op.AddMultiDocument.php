@@ -71,15 +71,27 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		else
 			$keywords = '';
 
-		$reqversion = (int)$_POST["reqversion"];
-		if ($reqversion<1) $reqversion=1;
+		if(isset($_POST["reqversion"])) {
+			$reqversion = (int)$_POST["reqversion"];
+			if ($reqversion<1) $reqversion=1;
+		} else {
+			$reqversion = 1;
+		}
 
-		$sequence = $_POST["sequence"];
-		if (!is_numeric($sequence)) {
+		if(isset($_POST['sequence'])) {
+			$sequence = $_POST["sequence"];
+			if (!is_numeric($sequence)) {
+				$sequence = 1;
+			}
+		} else {
 			$sequence = 1;
 		}
 
-		$expires = ($_POST["expires"] == "true") ? mktime(0,0,0, intval($_POST["expmonth"]), intval($_POST["expday"]), intval($_POST["expyear"])) : false;
+		if(isset($_POST["expires"])) {
+			$expires = ($_POST["expires"] == "true") ? mktime(0,0,0, intval($_POST["expmonth"]), intval($_POST["expday"]), intval($_POST["expyear"])) : false;
+		} else {
+			$expires = false;
+		}
 
 		// Get the list of reviewers and approvers for this document.
 		$reviewers = array();
@@ -162,17 +174,19 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		if (is_bool($lastDotIndex) && !$lastDotIndex) $fileType = ".";
 		else $fileType = substr($userfilename, $lastDotIndex);
 
-		if($_POST["name"] != "")
+		if(isset($_POST["name"]) && $_POST["name"] != "")
 			$name = $_POST["name"];
 		else
 			$name = basename($userfilename);
 
-		$categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryids"]);
 		$cats = array();
-		if($categories) {
-			$catids = explode(',', $categories);
-			foreach($catids as $catid) {
-				$cats[] = $dms->getDocumentCategory($catid);
+		if(isset($_POST["categoryids"])) {
+			$categories = preg_replace('/[^0-9,]+/', '', $_POST["categoryids"]);
+			if($categories) {
+				$catids = explode(',', $categories);
+				foreach($catids as $catid) {
+					$cats[] = $dms->getDocumentCategory($catid);
+				}
 			}
 		}
 		$res = $folder->addDocument($name, $comment, $expires, $user, $keywords,
