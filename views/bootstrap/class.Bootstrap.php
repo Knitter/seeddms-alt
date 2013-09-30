@@ -1201,8 +1201,8 @@ mayscript>
     /**
      * applet initialized notification
      */
-    function appletInitialized(  ) {
-        var uploader = document.jumpLoaderApplet.getUploader();
+    function appletInitialized(applet) {
+        var uploader = applet.getUploader();
         var attrSet = uploader.getAttributeSet();
         var attr;
 <?php
