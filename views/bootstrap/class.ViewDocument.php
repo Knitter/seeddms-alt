@@ -125,8 +125,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		$status = $latestContent->getStatus();
 		$reviewStatus = $latestContent->getReviewStatus();
-		$approvalStatus = $latestContent->getApprovalStatus();
-
+		$approvalStatus = $latestContent->getApprovalStatus(10);
 ?>
 
 <div class="row-fluid">
@@ -581,8 +580,112 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		}
 
 		print "</table>\n";
-		$this->contentContainerEnd();
+		if($user->isAdmin()) {
+			$this->contentContainerEnd();
 ?>
+			<div class="row-fluid">
+				<div class="span6">
+				<table class="table condensed">
+					<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>/<?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
+<?php
+					$reviewStatusList = $latestContent->getReviewStatus(10);
+					foreach($reviewStatusList as $rec) {
+						echo "<tr>";
+						echo "<td>";
+						switch ($rec["type"]) {
+							case 0: // Approver is an individual.
+								$required = $dms->getUser($rec["required"]);
+								if (!is_object($required)) {
+									$reqName = getMLText("unknown_user")." '".$rec["required"]."'";
+								}
+								else {
+									$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+								}
+								break;
+							case 1: // Approver is a group.
+								$required = $dms->getGroup($rec["required"]);
+								if (!is_object($required)) {
+									$reqName = getMLText("unknown_group")." '".$rec["required"]."'";
+								}
+								else {
+									$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+								}
+								break;
+						}
+						echo $reqName;
+						echo "</td>";
+						echo "<td>";
+						echo "<i style=\"font-size: 80%;\">".$rec['date']." - ";
+						$updateuser = $dms->getUser($rec["userID"]);
+						if(!is_object($required))
+							echo getMLText("unknown_user");
+						else
+							echo htmlspecialchars($updateuser->getFullName()." (".$updateuser->getLogin().")");
+						echo "</i>";
+						if($rec['comment'])
+							echo "<br />".htmlspecialchars($rec['comment']);
+						echo "</td>";
+						echo "<td>";
+						echo getApprovalStatusText($rec["status"]);
+						echo "</td>";
+						echo "</tr>";
+					}
+?>
+					</table>
+				</div>
+				<div class="span6">
+				<table class="table condensed">
+					<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>/<?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
+<?php
+					$approvalStatusList = $latestContent->getApprovalStatus(10);
+					foreach($approvalStatusList as $rec) {
+						echo "<tr>";
+						echo "<td>";
+						switch ($rec["type"]) {
+							case 0: // Approver is an individual.
+								$required = $dms->getUser($rec["required"]);
+								if (!is_object($required)) {
+									$reqName = getMLText("unknown_user")." '".$rec["required"]."'";
+								}
+								else {
+									$reqName = htmlspecialchars($required->getFullName()." (".$required->getLogin().")");
+								}
+								break;
+							case 1: // Approver is a group.
+								$required = $dms->getGroup($rec["required"]);
+								if (!is_object($required)) {
+									$reqName = getMLText("unknown_group")." '".$rec["required"]."'";
+								}
+								else {
+									$reqName = "<i>".htmlspecialchars($required->getName())."</i>";
+								}
+								break;
+						}
+						echo $reqName;
+						echo "</td>";
+						echo "<td>";
+						echo "<i style=\"font-size: 80%;\">".$rec['date']." - ";
+						$updateuser = $dms->getUser($rec["userID"]);
+						if(!is_object($required))
+							echo getMLText("unknown_user");
+						else
+							echo htmlspecialchars($updateuser->getFullName()." (".$updateuser->getLogin().")");
+						echo "</i>";
+						if($rec['comment'])
+							echo "<br />".htmlspecialchars($rec['comment']);
+						echo "</td>";
+						echo "<td>";
+						echo getApprovalStatusText($rec["status"]);
+						echo "</td>";
+						echo "</tr>";
+					}
+?>
+				</table>
+				</div>
+<?php
+			}
+?>
+			</div>
 		  </div>
 <?php
 		}
