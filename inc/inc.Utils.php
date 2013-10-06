@@ -311,15 +311,26 @@ function dskspace($dir) { /* {{{ */
    return $space;
 } /* }}} */
 
-function add_log_line($msg="") { /* {{{ */
+/**
+ * Log a message
+ *
+ * This function is still here for convienice and because it is
+ * used at so many places.
+ *
+ * @param string $msg
+ * @param int $priority can be one of PEAR_LOG_EMERG, PEAR_LOG_ALERT,
+ *            PEAR_LOG_CRIT, PEAR_LOG_ERR, PEAR_LOG_WARNING,
+ *						PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
+ */
+function add_log_line($msg="", $priority=null) { /* {{{ */
 	global $logger, $user;
 
 	if(!$logger) return;
 
 	if($user)
-		$logger->log($user->getLogin()." (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg);
+		$logger->log($user->getLogin()." (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg, $priority);
 	else
-		$logger->log("-- (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg);
+		$logger->log("-- (".$_SERVER['REMOTE_ADDR'].") ".basename($_SERVER["REQUEST_URI"], ".php").$msg, $priority);
 } /* }}} */
 
 function _add_log_line($msg="") { /* {{{ */
