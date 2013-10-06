@@ -971,7 +971,7 @@ function clearFilename<?php print $formName ?>() {
 		
 		$this->htmlEndPage();
 		
-		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle);
+		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle, PEAR_LOG_ERR);
 		
 		exit;	
 	} /* }}} */
