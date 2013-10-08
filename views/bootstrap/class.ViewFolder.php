@@ -212,15 +212,20 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
-			print "<table class=\"table\">";
-			print "<thead>\n<tr>\n";
-			print "<th></th>\n";	
-			print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
-//			print "<th>".getMLText("owner")."</th>\n";
-			print "<th>".getMLText("status")."</th>\n";
-//			print "<th>".getMLText("version")."</th>\n";
-			print "<th>".getMLText("action")."</th>\n";
-			print "</tr>\n</thead>\n<tbody>\n";
+			$txt = $this->callHook('folderListHeader', $folder, $orderby);
+			if(is_string($txt))
+				echo $txt;
+			else {
+				print "<table class=\"table\">";
+				print "<thead>\n<tr>\n";
+				print "<th></th>\n";	
+				print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
+	//			print "<th>".getMLText("owner")."</th>\n";
+				print "<th>".getMLText("status")."</th>\n";
+	//			print "<th>".getMLText("version")."</th>\n";
+				print "<th>".getMLText("action")."</th>\n";
+				print "</tr>\n</thead>\n<tbody>\n";
+			}
 		}
 		else printMLText("empty_folder_list");
 
@@ -394,7 +399,13 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			}
 		}
 
-		if ((count($subFolders) > 0)||(count($documents) > 0)) echo "</tbody>\n</table>\n";
+		if ((count($subFolders) > 0)||(count($documents) > 0)) {
+			$txt = $this->callHook('folderListFooter', $folder);
+			if(is_string($txt))
+				echo $txt;
+			else
+				echo "</tbody>\n</table>\n";
+		}
 
 
 		echo "</div>\n";
