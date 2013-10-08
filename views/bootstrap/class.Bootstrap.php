@@ -37,12 +37,12 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap.css" rel="stylesheet">'."\n";
-		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/font-awesome/css/font-awesome.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
+		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
 		if($this->extraheader)
 			echo $this->extraheader;
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
@@ -51,6 +51,7 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";
 
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		if($this->params['session'] && $this->params['session']->getSu()) {
@@ -1056,12 +1057,13 @@ var data = <?php echo json_encode($tree); ?>;
 $(function() {
   $('#jqtree<?= $formid ?>').tree({
 		data: data,
+		saveState: 'jqtree<?= $formid; ?>',
 		openedIcon: '<i class="icon-minus-sign"></i>',
 		closedIcon: '<i class="icon-plus-sign"></i>',
-		onCanSelectNode: function(node) {
-			if(node.is_folder)
+		_onCanSelectNode: function(node) {
+			if(node.is_folder) {
 				folderSelected<?= $formid ?>(node.id, node.name);
-			else
+			} else
 				documentSelected<?= $formid ?>(node.id, node.name);
 		},
 		autoOpen: true,
@@ -1074,6 +1076,18 @@ $(function() {
 					$li.find('.jqtree-title').before('<i class="icon-file"></i> ');
     }
   });
+  $('#jqtree<?= $formid ?>').bind(
+		'tree.click',
+		function(event) {
+			var node = event.node;
+			$('#jqtree<?= $formid ?>').tree('openNode', node);
+//			event.preventDefault();
+			if(node.is_folder) {
+				folderSelected<?= $formid ?>(node.id, node.name);
+			} else
+				documentSelected<?= $formid ?>(node.id, node.name);
+		}
+	);
 });
 	</script>
 <?php
