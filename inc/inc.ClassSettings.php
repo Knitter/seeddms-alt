@@ -818,10 +818,10 @@ class Settings { /* {{{ */
 	 * @return string path where file was found
 	 */
 	function findInIncPath($file) { /* {{{ */
-		$incarr = explode(':', ini_get('include_path'));
+		$incarr = explode(PATH_SEPARATOR, ini_get('include_path'));
 		$found = '';
 		foreach($incarr as $path) {
-			if(file_exists($path.'/'.$file)) {
+			if(file_exists($path.DIRECTORY_SEPARATOR.$file)) {
 				$found = $path;
 			}
 		}
