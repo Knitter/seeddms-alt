@@ -32,7 +32,7 @@
     -->   
     <edition
       strictFormCheck = "false"
-      viewOnlineFileTypes = ".txt;.text;.html;.htm;.pdf;.gif;.png;.jpg;.jpeg"
+      viewOnlineFileTypes = ".txt;.text;.html;.htm;.xml;.pdf;.gif;.png;.jpg;.jpeg"
       enableConverting = "true"
       enableEmail = "true"	
       enableUsersView = "true"
