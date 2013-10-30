@@ -47,7 +47,10 @@ if (file_exists("../inc/inc.Settings.old.php")) {
 }
 
 require_once('inc.ClassSettings.php');
-$settings = new Settings();
+if(defined("SEEDDMS_CONFIG_FILE"))
+	$settings = new Settings(SEEDDMS_CONFIG_FILE);
+else
+	$settings = new Settings();
 if(!defined("SEEDDMS_INSTALL") && file_exists(dirname($settings->_configFilePath)."/ENABLE_INSTALL_TOOL")) {
 	die("SeedDMS won't run unless your remove the file ENABLE_INSTALL_TOOL from your configuration directory.");
 }
