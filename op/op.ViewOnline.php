@@ -77,7 +77,7 @@ if(isset($_GET["version"])) {
 	if (isset($settings->_viewOnlineFileTypes) && is_array($settings->_viewOnlineFileTypes) && in_array(strtolower($file->getFileType()), $settings->_viewOnlineFileTypes)) {
 		header("Content-Type: " . $file->getMimeType());
 	}
-	header("Content-Disposition: filename=\"" . $file->getOriginalFileName()) . "\"";
+	header("Content-Disposition: filename=\"" . $file->getOriginalFileName() . "\"");
 	header("Content-Length: " . filesize($dms->contentDir . $file->getPath() ));
 	header("Expires: 0");
 	header("Cache-Control: no-cache, must-revalidate");
