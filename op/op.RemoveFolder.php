@@ -63,7 +63,6 @@ if($settings->_enableFullSearch) {
 	function removeFromIndex($index, $document) {
 		if($hits = $index->find('document_id:'.$document->getId())) {
 			$hit = $hits[0];
-			echo $hit->id;
 			$index->delete($hit->id);
 			$index->commit();
 		}

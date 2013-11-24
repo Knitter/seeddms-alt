@@ -200,10 +200,10 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				}
 				echo "     </ul>\n";
 				echo "    </li>\n";
-				if($this->params['user']->isAdmin())
-					echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
-				echo "    <li class=\"divider\"></li>\n";
 			}
+			if($this->params['user']->isAdmin())
+				echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
+			echo "    <li class=\"divider\"></li>\n";
 			if($this->params['session']->getSu()) {
 				echo "    <li><a href=\"../op/op.ResetSu.php\">".getMLText("sign_out_user")."</a></li>\n";
 			} else {
@@ -1228,8 +1228,8 @@ mayscript>
     /**
      * applet initialized notification
      */
-    function appletInitialized(  ) {
-        var uploader = document.jumpLoaderApplet.getUploader();
+    function appletInitialized(applet) {
+        var uploader = applet.getUploader();
         var attrSet = uploader.getAttributeSet();
         var attr;
 <?php

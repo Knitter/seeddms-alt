@@ -2291,7 +2291,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Get the current review status of the document content
-	 * The review status is a list of reviewers and its current status
+	 * The review status is a list of reviews and its current status
 	 *
 	 * @param integer $limit the number of recent status changes per reviewer
 	 * @return array list of review status
@@ -2303,7 +2303,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		// Retrieve the current status of each assigned reviewer for the content
 		// represented by this object.
-		if (!isset($this->_reviewStatus)) {
+		// FIXME: caching was turned off to make list of review log in ViewDocument
+		// possible
+		if (1 || !isset($this->_reviewStatus)) {
 			/* First get a list of all reviews for this document content */
 			$queryStr=
 				"SELECT reviewID FROM tblDocumentReviewers WHERE `version`='".$this->_version
@@ -2337,6 +2339,13 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 		return $this->_reviewStatus;
 	} /* }}} */
 
+	/**
+	 * Get the current approval status of the document content
+	 * The approval status is a list of approvals and its current status
+	 *
+	 * @param integer $limit the number of recent status changes per approver
+	 * @return array list of approval status
+	 */
 	function getApprovalStatus($limit=1) { /* {{{ */
 		$db = $this->_document->_dms->getDB();
 
@@ -2344,7 +2353,9 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 		// Retrieve the current status of each assigned approver for the content
 		// represented by this object.
-		if (!isset($this->_approvalStatus)) {
+		// FIXME: caching was turned off to make list of approval log in ViewDocument
+		// possible
+		if (1 || !isset($this->_approvalStatus)) {
 			/* First get a list of all approvals for this document content */
 			$queryStr=
 				"SELECT approveID FROM tblDocumentApprovers WHERE `version`='".$this->_version
@@ -2512,7 +2523,7 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 	 * reviewers. In that case -4 will be returned.
 	 * If the given review status has been set by the user before, it cannot
 	 * be set again and 0 will be returned. Іf the review could be succesfully
-	 * added the review log id will be returned.
+	 * added, the review log id will be returned.
 	 *
 	 * @see SeedDMS_Core_DocumentContent::setApprovalByInd()
 	 * @param object $user user doing the review
@@ -2731,10 +2742,10 @@ class SeedDMS_Core_DocumentContent extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Sets approval status of a document content for a user
+	 *
 	 * This function can be used to approve or reject a document content, or
-	 * to reset its approval state. The user initiating the approval may
-	 * not be the user filled in as an approver of the document content.
-	 * In most cases this will be but an admin may set the approval for
+	 * to reset its approval state. In most cases this function will be
+	 * called by an user, but  an admin may set the approval for
 	 * somebody else.
 	 * It is first checked if the user is in the list of approvers at all.
 	 * Then it is check if the approval status is already -2. In both cases
