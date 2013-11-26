@@ -35,6 +35,28 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 
 		/* Don't do folderlist check for root folder */
 		if($path != ':') {
+			/* If the path contains a folder id twice, the a cyclic relation
+			 * exists.
+			 */
+			$tmparr = explode(':', $path);
+			array_shift($tmparr);
+			if(count($tmparr) != count(array_unique($tmparr))) {
+				print "<tr>\n";
+				print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
+				print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
+				print htmlspecialchars($path);
+				print "</a></td>";
+				
+				$owner = $folder->getOwner();
+				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+				print "<td>Folder path contains cyclic relation</td>";
+				if($repair) {
+					print "<td><span class=\"success\">".getMLText('repaired')."</span></td>\n";
+				} else {
+					print "<td></td>\n";
+				}
+				print "</tr>\n";
+			}
 			$folderList = $folder->getFolderList();
 			/* Check the folder */
 			if($folderList != $path) {
