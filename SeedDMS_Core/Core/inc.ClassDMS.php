@@ -243,7 +243,7 @@ class SeedDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.3.1';
+			$this->version = '4.3.2';
 	} /* }}} */
 
 	function getDB() { /* {{{ */
@@ -493,7 +493,7 @@ class SeedDMS_Core_DMS {
 		return $version;
 	} /* }}} */
 
-	function makeTimeStamp($hour, $min, $sec, $year, $month, $day) {
+	function makeTimeStamp($hour, $min, $sec, $year, $month, $day) { /* {{{ */
 		$thirtyone = array (1, 3, 5, 7, 8, 10, 12);
 		$thirty = array (4, 6, 9, 11);
 
@@ -524,7 +524,7 @@ class SeedDMS_Core_DMS {
 		}
 
 		return mktime($hour, $min, $sec, $month, $day, $year);
-	}
+	} /* }}} */
 
 	/*
 	 * Search the database for documents
@@ -997,6 +997,85 @@ class SeedDMS_Core_DMS {
 		$folder = new SeedDMS_Core_Folder($resArr["id"], $resArr["name"], $resArr["parent"], $resArr["comment"], $resArr["date"], $resArr["owner"], $resArr["inheritAccess"], $resArr["defaultAccess"], $resArr["sequence"]);
 		$folder->setDMS($this);
 		return $folder;
+	} /* }}} */
+
+	/**
+	 * Returns a list of folders and error message not linked in the tree
+	 *
+	 * This function checks all folders in the database.
+	 *
+	 * @return array list of errors
+	 */
+	function checkFolders() { /* {{{ */
+		$queryStr = "SELECT * FROM tblFolders";
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr === false)
+			return false;
+
+		$cache = array();
+		foreach($resArr as $rec) {
+			$cache[$rec['id']] = array('name'=>$rec['name'], 'parent'=>$rec['parent'], 'folderList'=>$rec['folderList']);
+		}
+		$errors = array();
+		foreach($cache as $id=>$rec) {
+			if(!array_key_exists($rec['parent'], $cache) && $rec['parent'] != 0) {
+				$errors[$id] = array('id'=>$id, 'name'=>$rec['name'], 'parent'=>$rec['parent'], 'msg'=>'Missing parent');
+			} else {
+				$tmparr = explode(':', $rec['folderList']);
+				array_shift($tmparr);
+				if(count($tmparr) != count(array_unique($tmparr))) {
+					$errors[$id] = array('id'=>$id, 'name'=>$rec['name'], 'parent'=>$rec['parent'], 'msg'=>'Duplicate entry in folder list ('.$rec['folderList'].')');
+				}
+			}
+		}
+
+		return $errors;
+	} /* }}} */
+
+	/**
+	 * Returns a list of documents and error message not linked in the tree
+	 *
+	 * This function checks all documents in the database.
+	 *
+	 * @return array list of errors
+	 */
+	function checkDocuments() { /* {{{ */
+		$queryStr = "SELECT * FROM tblFolders";
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr === false)
+			return false;
+
+		$fcache = array();
+		foreach($resArr as $rec) {
+			$fcache[$rec['id']] = array('name'=>$rec['name'], 'parent'=>$rec['parent'], 'folderList'=>$rec['folderList']);
+		}
+
+		$queryStr = "SELECT * FROM tblDocuments";
+		$resArr = $this->db->getResultArray($queryStr);
+
+		if (is_bool($resArr) && $resArr === false)
+			return false;
+
+		$dcache = array();
+		foreach($resArr as $rec) {
+			$dcache[$rec['id']] = array('name'=>$rec['name'], 'parent'=>$rec['folder'], 'folderList'=>$rec['folderList']);
+		}
+		$errors = array();
+		foreach($dcache as $id=>$rec) {
+			if(!array_key_exists($rec['parent'], $fcache) && $rec['parent'] != 0) {
+				$errors[$id] = array('id'=>$id, 'name'=>$rec['name'], 'parent'=>$rec['parent'], 'msg'=>'Missing parent');
+			} else {
+				$tmparr = explode(':', $rec['folderList']);
+				array_shift($tmparr);
+				if(count($tmparr) != count(array_unique($tmparr))) {
+					$errors[$id] = array('id'=>$id, 'name'=>$rec['name'], 'parent'=>$rec['parent'], 'msg'=>'Duplicate entry in folder list ('.$rec['folderList'].'');
+				}
+			}
+		}
+
+		return $errors;
 	} /* }}} */
 
 	/**

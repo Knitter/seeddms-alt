@@ -46,13 +46,16 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 if(isset($_GET['targetid']) && $_GET['targetid']) {
 	$target = $dms->getFolder($_GET["targetid"]);
 	if (!is_object($target)) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_target_folder"));
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_target_folder"));
 	}
 
 	if ($target->getAccessMode($user) < M_READWRITE) {
-		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
+		UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));
 	}
 
+	if($folder->isSubFolder($target)) {
+		UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_target_folder"));
+	}
 } else {
 	$target = null;
 }

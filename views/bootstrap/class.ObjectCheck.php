@@ -35,6 +35,28 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 
 		/* Don't do folderlist check for root folder */
 		if($path != ':') {
+			/* If the path contains a folder id twice, the a cyclic relation
+			 * exists.
+			 */
+			$tmparr = explode(':', $path);
+			array_shift($tmparr);
+			if(count($tmparr) != count(array_unique($tmparr))) {
+				print "<tr>\n";
+				print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"../out/images/folder_closed.gif\" width=18 height=18 border=0></a></td>";
+				print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
+				print htmlspecialchars($path);
+				print "</a></td>";
+				
+				$owner = $folder->getOwner();
+				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+				print "<td>Folder path contains cyclic relation</td>";
+				if($repair) {
+					print "<td><span class=\"success\">".getMLText('repaired')."</span></td>\n";
+				} else {
+					print "<td></td>\n";
+				}
+				print "</tr>\n";
+			}
 			$folderList = $folder->getFolderList();
 			/* Check the folder */
 			if($folderList != $path) {
@@ -146,6 +168,8 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$folder = $this->params['folder'];
 		$unlinkedversions = $this->params['unlinkedcontent'];
+		$unlinkedfolders = $this->params['unlinkedfolders'];
+		$unlinkeddocuments = $this->params['unlinkeddocuments'];
 		$nofilesizeversions = $this->params['nofilesizeversions'];
 		$nochecksumversions = $this->params['nochecksumversions'];
 		$repair = $this->params['repair'];
@@ -179,6 +203,52 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 			echo '<p><a href="out.ObjectCheck.php?repair=1">'.getMLText('do_object_repair').'</a></p>';
 		}
 		$this->contentContainerEnd();
+
+		if($unlinkedfolders) {
+			$this->contentHeading(getMLText("unlinked_folders"));
+			$this->contentContainerStart();
+			print "<table class=\"table-condensed\">";
+			print "<thead>\n<tr>\n";
+			print "<th>".getMLText("name")."</th>\n";
+			print "<th>".getMLText("id")."</th>\n";
+			print "<th>".getMLText("parent")."</th>\n";
+			print "<th>".getMLText("error")."</th>\n";
+			print "<th></th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+			foreach($unlinkedfolders as $error) {
+				echo "<tr>";
+				echo "<td>".$error['name']."</td>";
+				echo "<td>".$error['id']."</td>";
+				echo "<td>".$error['parent']."</td>";
+				echo "<td>".$error['msg']."</td>";
+				echo "</tr>";
+			}
+			print "</tbody></table>\n";
+			$this->contentContainerEnd();
+		}
+
+		if($unlinkeddocuments) {
+			$this->contentHeading(getMLText("unlinked_documents"));
+			$this->contentContainerStart();
+			print "<table class=\"table-condensed\">";
+			print "<thead>\n<tr>\n";
+			print "<th>".getMLText("name")."</th>\n";
+			print "<th>".getMLText("id")."</th>\n";
+			print "<th>".getMLText("parent")."</th>\n";
+			print "<th>".getMLText("error")."</th>\n";
+			print "<th></th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+			foreach($unlinkeddocuments as $error) {
+				echo "<tr>";
+				echo "<td>".$error['name']."</td>";
+				echo "<td>".$error['id']."</td>";
+				echo "<td>".$error['parent']."</td>";
+				echo "<td>".$error['msg']."</td>";
+				echo "</tr>";
+			}
+			print "</tbody></table>\n";
+			$this->contentContainerEnd();
+		}
 
 		$this->contentHeading(getMLText("unlinked_content"));
 		$this->contentContainerStart();

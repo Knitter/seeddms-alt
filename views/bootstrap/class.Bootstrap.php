@@ -998,7 +998,7 @@ function clearFilename<?php print $formName ?>() {
 				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
 				$children = array();
 				foreach($subfolders as $subfolder) {
-					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
+					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>($subfolder->hasSubFolders() || ($subfolder->hasDocuments() && $showdocs)) ? true : false, 'is_folder'=>true);
 					if($expandtree || $pathfolder->getID() == $subfolder->getID()) {
 						if($showdocs) {
 							$documents = $folder->getDocuments();
@@ -1018,7 +1018,7 @@ function clearFilename<?php print $formName ?>() {
 				$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, $accessmode);
 				$children = array();
 				foreach($subfolders as $subfolder) {
-					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
+					$node = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>($subfolder->hasSubFolders() || ($subfolder->hasDocuments() && $showdocs)) ? true : false, 'is_folder'=>true);
 					$children[] = $node;
 				}
 				return $children;

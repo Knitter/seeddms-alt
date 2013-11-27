@@ -1,4 +1,16 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.2
+--------------------------------------------------------------------------------
+- fix approval of documents by group if owner of document is member of group
+- make jumploader work with java 1.7
+- turning of the language selector will no longer turn off user substitution
+- use PATH_SEPARATOR and DIRECTORY_SEPARATOR when checking the include path
+  for files
+- check if target folder is a child of the current folder when moving folders
+- fix missing documents in tree of document choser (Bug #105)
+- add another folder/document check
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.1
 --------------------------------------------------------------------------------
 - translates strings (Bug #86, #87, #88, #90)

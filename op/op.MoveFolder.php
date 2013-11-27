@@ -50,6 +50,10 @@ if (!is_object($targetFolder)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => getMLText("invalid_folder_id"))),getMLText("invalid_folder_id"));
 }
 
+if($folder->isSubFolder($targetFolder)) {
+	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_target_folder"));
+}
+
 if ($folder->getAccessMode($user) < M_READWRITE || $targetFolder->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 }

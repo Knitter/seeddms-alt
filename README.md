@@ -216,6 +216,12 @@ full text search engine support, you will also need to unpack
 	>       Server
 	>       Server.php
 
+  If you run PHP in CGI mode, you also need to place a .htaccess file
+	in the webdav directory with the following content.
+
+	RewriteEngine on
+	RewriteRule .* - [env=HTTP_AUTHORIZATION:%{HTTP:Authorization},last]
+
 * Create a data folder somewhere on your web server including the subdirectories
   staging, cache and lucene and make sure they are writable by your web server,
   but not accessible through the web.

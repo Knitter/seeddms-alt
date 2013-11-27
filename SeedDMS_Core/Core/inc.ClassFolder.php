@@ -150,18 +150,49 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 	} /* }}} */
 
 	/**
+	 * Check if the folder is subfolder
+	 *
+	 * This function checks if the passed folder is a subfolder of the current
+	 * folder. 
+	 *
+	 * @param object $subFolder potential sub folder
+	 * @return boolean true if passes folder is a subfolder
+	 */
+	function isSubFolder($subfolder) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$path = $this->getPath();
+		$sfpath = $subfolder->getPath();
+		/* It is a potential sub folder start with the path of the current folder.
+		 * If the path differs, it can't be a sub folder.
+		 */
+		for($i=0; $i < count($path); $i++) { 
+			if($path[$i] != $sfpath[$i])
+				return false;
+		}
+		return true;
+	} /* }}} */
+
+	/**
 	 * Set a new folder
 	 *
 	 * This function moves a folder from one parent folder into another parent
 	 * folder. It will fail if the root folder is moved.
 	 *
-	 * @param object new parent folder
+	 * @param object $newParent new parent folder
 	 * @return boolean true if operation was successful otherwise false
 	 */
 	function setParent($newParent) { /* {{{ */
 		$db = $this->_dms->getDB();
 
 		if ($this->_id == $this->_dms->rootFolderID || empty($this->_parentID)) {
+			return false;
+		}
+
+		/* Check if the new parent is the folder to be moved or even
+		 * a subfolder of that folder
+		 */
+		if($this->isSubFolder($newParent)) {
 			return false;
 		}
 
