@@ -52,7 +52,7 @@ class SeedDMS_View_MoveFolder extends SeedDMS_Blue_Style {
 			<td><?php $this->printFolderChooser("form1", M_READWRITE, $folder->getID());?></td>
 		</tr>
 		<tr>
-			<td colspan="2"><input type="ubmit" value="<?php printMLText("move_folder"); ?>"></td>
+			<td colspan="2"><input type="submit" value="<?php printMLText("move_folder"); ?>"></td>
 		</tr>
 	</table>
 	</form>
