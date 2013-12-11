@@ -72,8 +72,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 ?>
 		<script>
   	noty({
-  		text: '<?= $flashmsg['msg'] ?>',
-  		type: '<?= $flashmsg['type'] ?>',
+  		text: '<?php echo $flashmsg['msg'] ?>',
+  		type: '<?php echo $flashmsg['type'] ?>',
       dismissQueue: true,
   		layout: 'topRight',
   		theme: 'defaultTheme',
@@ -746,7 +746,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		print "<a data-target=\"#docChooser".$formName."\" href=\"out.DocumentChooser.php?form=".$formName."&folderid=".$this->params['rootfolderid']."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("document")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="docChooser<?= $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
+<div class="modal hide" id="docChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="docChooserLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="docChooserLabel"><?php printMLText("choose_target_document") ?></h3>
@@ -759,11 +759,11 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
   </div>
 </div>
 		<script language="JavaScript">
-modalDocChooser<?= $formName ?> = $('#docChooser<?= $formName ?>');
-function documentSelected<?= $formName ?>(id, name) {
-	$('#docid<?= $formName ?>').val(id);
+modalDocChooser<?php echo $formName ?> = $('#docChooser<?php echo $formName ?>');
+function documentSelected<?php echo $formName ?>(id, name) {
+	$('#docid<?php echo $formName ?>').val(id);
 	$('#choosedocsearch').val(name);
-	modalDocChooser<?= $formName ?>.modal('hide');
+	modalDocChooser<?php echo $formName ?>.modal('hide');
 }
 		</script>
 <?php
@@ -776,10 +776,10 @@ function documentSelected<?= $formName ?>(id, name) {
 		print "<a data-target=\"#folderChooser".$formName."\" href=\"../out/out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="folderChooser<?= $formName ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?= $formName ?>Label" aria-hidden="true">
+<div class="modal hide" id="folderChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $formName ?>Label" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="folderChooser<?= $formName ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+    <h3 id="folderChooser<?php echo $formName ?>Label"><?php printMLText("choose_target_folder") ?></h3>
   </div>
   <div class="modal-body">
     <p>Please wait, until document tree is loaded …</p>
@@ -790,11 +790,11 @@ function documentSelected<?= $formName ?>(id, name) {
 </div>
 <script language="JavaScript">
 /* Set up a callback which is called when a folder in the tree is selected */
-modalFolderChooser<?= $formName ?> = $('#folderChooser<?= $formName ?>');
-function folderSelected<?= $formName ?>(id, name) {
-	$('#targetid<?= $formName ?>').val(id);
-	$('#choosefoldersearch<?= $formName ?>').val(name);
-	modalFolderChooser<?= $formName ?>.modal('hide');
+modalFolderChooser<?php echo $formName ?> = $('#folderChooser<?php echo $formName ?>');
+function folderSelected<?php echo $formName ?>(id, name) {
+	$('#targetid<?php echo $formName ?>').val(id);
+	$('#choosefoldersearch<?php echo $formName ?>').val(name);
+	modalFolderChooser<?php echo $formName ?>.modal('hide');
 }
 </script>
 <?php
@@ -915,11 +915,11 @@ function folderSelected<?= $formName ?>(id, name) {
 /* Set up a callback which is called when a folder in the tree is selected */
 modalDropfolderChooser = $('#dropfolderChooser');
 function fileSelected(name) {
-	$('#dropfolderfile<?= $formName ?>').val(name);
+	$('#dropfolderfile<?php echo $formName ?>').val(name);
 	modalDropfolderChooser.modal('hide');
 }
 function clearFilename<?php print $formName ?>() {
-	$('#dropfolderfile<?= $formName ?>').val('');
+	$('#dropfolderfile<?php echo $formName ?>').val('');
 }
 </script>
 <?php
@@ -1046,15 +1046,15 @@ function clearFilename<?php print $formName ?>() {
 	<script language="JavaScript">
 var data = <?php echo json_encode($tree); ?>;
 $(function() {
-  $('#jqtree<?= $formid ?>').tree({
+  $('#jqtree<?php echo $formid ?>').tree({
 		data: data,
 		openedIcon: '<i class="icon-minus-sign"></i>',
 		closedIcon: '<i class="icon-plus-sign"></i>',
 		onCanSelectNode: function(node) {
 			if(node.is_folder)
-				folderSelected<?= $formid ?>(node.id, node.name);
+				folderSelected<?php echo $formid ?>(node.id, node.name);
 			else
-				documentSelected<?= $formid ?>(node.id, node.name);
+				documentSelected<?php echo $formid ?>(node.id, node.name);
 		},
 		autoOpen: true,
 		drapAndDrop: true,
