@@ -27,7 +27,7 @@ transition: a transition is the change from one state to a new state
 
 trigger a transition: a user runs an action on the document which possibly
   changes the state. Internally this is identical to triggering a transition.
-  Such a trigger may or may not change the statei of the document,
+  Such a trigger may or may not change the state of the document,
   because there could
   be other users which also have to trigger the transition.
   After each trigger of an transition it will
@@ -51,7 +51,7 @@ there are a number of possible transitions ending in a new state. Each
 transition can only be triggered if the user has the right to do so.
 
 A workflow can be assigned to a document just like any other attribute
-if the user has right access. Once a workflow is assigned the document
+if the user has sufficient rights. Once a workflow is assigned, the document
 will be in the initial state of the workflow. As long as the workflow
 has not left its initial state, it can be removed from the document by
 any users with write permission on the document. Once it has left the
