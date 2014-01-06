@@ -516,7 +516,7 @@ if(!is_writeable($settings->_configFilePath)) {
 ?>
       <tr title="<?php echo $mimetype;?>">
         <td><?php echo $mimetype;?>:</td>
-        <td><input type="text" name="converters[<?php echo $mimetype;?>]" value="<?php echo $cmd ?>" size="100" /></td>
+        <td><input type="text" name="converters[<?php echo $mimetype;?>]" value="<?php echo htmlspecialchars($cmd) ?>" size="100" /></td>
       </tr>
 <?php
 	}
