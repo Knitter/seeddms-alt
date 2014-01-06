@@ -32,6 +32,7 @@ require_once("inc.ClassNotify.php");
 class SeedDMS_Email extends SeedDMS_Notify {
 
 	function toIndividual($sender, $recipient, $subject, $message, $params=array()) { /* {{{ */
+		global $settings;
 		if ($recipient->getEmail()=="") return 0;
 
 		if ((!is_object($sender) && strcasecmp(get_class($sender), "SeedDMS_Core_User")) ||
@@ -42,7 +43,8 @@ class SeedDMS_Email extends SeedDMS_Notify {
 		$headers   = array();
 		$headers[] = "MIME-Version: 1.0";
 		$headers[] = "Content-type: text/plain; charset=utf-8";
-		$headers[] = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">";
+		//$headers[] = "From: ". $sender->getFullName() ." <". $sender->getEmail() .">";
+		$headers[] = "From: ". $settings->_smtpSendFrom;
 		$headers[] = "Reply-To: ". $sender->getFullName() ." <". $sender->getEmail() .">";
 
 		$lang = $recipient->getLanguage();
