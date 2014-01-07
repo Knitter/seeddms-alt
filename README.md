@@ -127,6 +127,9 @@ LANG set to your system default. If LANG=C, then the original filename
 of an uploaded document will not be preserved if the filename contains
 non ascii characters.
 
+Turn off magic_quotes_gpc in your php.ini, if you are using a php version
+below 5.4.
+
 1. Using the installation tool
 ------------------------------
 
