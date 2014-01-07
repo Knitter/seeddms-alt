@@ -39,7 +39,7 @@ CREATE TABLE `tblAttributeDefinitions` (
   `minvalues` int(11) NOT NULL default '0',
   `maxvalues` int(11) NOT NULL default '0',
   `valueset` text default NULL,
-  `regex` text DEFAULT '',
+  `regex` text default NULL,
   UNIQUE(`name`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -708,8 +708,8 @@ CREATE TABLE `tblVersion` (
 -- Initial content for database
 --
 
-INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '', 0, 0, 0);
-INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '', 0, 0, 0);
+INSERT INTO tblUsers VALUES (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrator', 'address@server.com', '', '', '', 1, 0, '0000-00-00 00:00:00', 0, 0, 0);
+INSERT INTO tblUsers VALUES (2, 'guest', NULL, 'Guest User', NULL, '', '', '', 2, 0, '0000-00-00 00:00:00', 0, 0, 0);
 INSERT INTO tblFolders VALUES (1, 'DMS', 0, '', 'DMS root', UNIX_TIMESTAMP(), 1, 0, 2, 0);
 INSERT INTO tblVersion VALUES (NOW(), 4, 3, 0);
 INSERT INTO tblCategory VALUES (0, '');
