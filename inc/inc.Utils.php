@@ -27,11 +27,11 @@ function formatted_size($size_bytes) { /* {{{ */
 } /* }}} */
 
 function getReadableDate($timestamp) {
-	return date("d/m/Y", $timestamp);
+	return date("Y-m-d", $timestamp);
 }
 
 function getLongReadableDate($timestamp) {
-	return date("d/m/Y H:i", $timestamp);
+	return date("Y-m-d H:i:s", $timestamp);
 }
 
 function getReadableDuration($secs) {
