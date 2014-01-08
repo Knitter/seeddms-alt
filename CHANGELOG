@@ -1,4 +1,13 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.3
+--------------------------------------------------------------------------------
+- fix minor compatibility errors in database table creation
+- strip slashes from _GET, _POST, _COOKIE, _REQUEST if magic quotes is
+  turned on
+- use From address from smtp settings when sending mails
+- major translation update
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.2
 --------------------------------------------------------------------------------
 - fix approval of documents by group if owner of document is member of group
