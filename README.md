@@ -60,9 +60,10 @@ Here is a detailed list of requirements:
 4. Various command line programms to convert files into text for indexing
    pdftotext, catdoc, xls2csv or scconvert, cat, id3 (optional, only needed
    for fulltext search)
-5. The Zend Framework (version 1) (optional, only needed for fulltext search)
-6. The pear Log package
-7. The pear HTTP_WebDAV_Server package (optional, only need for webdav)
+5. ImageMagic (the convert program) is needed for creating preview images 
+6. The Zend Framework (version 1) (optional, only needed for fulltext search)
+7. The pear Log package
+8. The pear HTTP_WebDAV_Server package (optional, only need for webdav)
 
 
 BEFORE YOU START
@@ -125,6 +126,9 @@ On Linux/Unix your web server should be run with the environment variable
 LANG set to your system default. If LANG=C, then the original filename
 of an uploaded document will not be preserved if the filename contains
 non ascii characters.
+
+Turn off magic_quotes_gpc in your php.ini, if you are using a php version
+below 5.4.
 
 1. Using the installation tool
 ------------------------------
