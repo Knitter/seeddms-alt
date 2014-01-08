@@ -78,7 +78,7 @@ function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {
 			$lang = $settings->_language;
 	}
 
-	if(!isset($LANG[$lang][$key])) {
+	if(!isset($LANG[$lang][$key]) || !$LANG[$lang][$key]) {
 		if (!$defaulttext) {
 			if(isset($LANG[$settings->_language][$key]))
 				$tmpText = $LANG[$settings->_language][$key];
