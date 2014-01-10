@@ -31,28 +31,32 @@ class SeedDMS_Controller_RemoveDocument extends SeedDMS_Controller_Common {
 
 		$folder = $document->getFolder();
 
-		/* Get the notify list before removing the document */
+		/* Get the document id and name before removing the document */
 		$docname = $document->getName();
 		$documentid = $document->getID();
 
 		if(!$this->callHook('preRemoveDocument')) {
 		}
 
-		if (!$document->remove()) {
-			return false;
-		} else {
+		$result = $this->callHook('removeDocument', $document);
+		if($result === null) {
+			if (!$document->remove()) {
+				return false;
+			} else {
 
-			if(!$this->callHook('postRemoveDocument')) {
+				if(!$this->callHook('postRemoveDocument')) {
+				}
+
+				/* Remove the document from the fulltext index */
+				if($index && $hits = $index->find('document_id:'.$documentid)) {
+					$hit = $hits[0];
+					$index->delete($hit->id);
+					$index->commit();
+				}
+
 			}
-
-			/* Remove the document from the fulltext index */
-			if($index && $hits = $index->find('document_id:'.$documentid)) {
-				$hit = $hits[0];
-				$index->delete($hit->id);
-				$index->commit();
-			}
-
 		}
+
 		return true;
 	}
 }
