@@ -23,6 +23,7 @@ include("../inc/inc.Utils.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
+include("../inc/inc.Extension.php");
 include("../inc/inc.Authentication.php");
 
 if (!isset($_GET["documentid"]) || !is_numeric($_GET["documentid"]) || intval($_GET["documentid"])<1) {
