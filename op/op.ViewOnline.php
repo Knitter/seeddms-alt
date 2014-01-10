@@ -83,6 +83,7 @@ if(isset($_GET["version"])) {
 	header("Cache-Control: no-cache, must-revalidate");
 	header("Pragma: no-cache");
 
+	ob_clean();
 	readfile($dms->contentDir . $file->getPath());
 }
 
