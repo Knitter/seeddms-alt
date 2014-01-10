@@ -68,9 +68,9 @@ class SeedDMS_View_Common {
 	 * they were registered.
 	 *
 	 * @params string $hook name of hook
-	 * @return mixed whatever the hook function returns
+	 * @return string concatenated string of whatever the hook function returns
 	 */
-	function callHook($hook) {
+	function callHook($hook) { /* {{{ */
 		$tmp = explode('_', get_class($this));
 		$ret = null;
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
@@ -97,6 +97,27 @@ class SeedDMS_View_Common {
 			}
 		}
 		return $ret;
-	}
+	} /* }}} */
+
+	/**
+	 * Check if a hook is registered
+	 *
+	 * @param $hook string name of hook
+	 * @return mixed false if one of the hooks fails,
+	 *               true if all hooks succedded,
+	 *               null if no hook was called
+	 */
+	function hasHook($hook) { /* {{{ */
+		$tmp = explode('_', get_class($this));
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['view'][lcfirst($tmp[2])] as $hookObj) {
+				if (method_exists($hookObj, $hook)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	} /* }}} */
+
 }
 ?>
