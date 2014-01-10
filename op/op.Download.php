@@ -109,6 +109,7 @@ if (isset($_GET["version"])) {
 	header("Cache-Control: must-revalidate");
 	//header("Pragma: no-cache");
 
+	ob_clean();
 	readfile($dms->contentDir . $file->getPath());
 
 } elseif (isset($_GET["arkname"])) {
@@ -137,6 +138,7 @@ if (isset($_GET["version"])) {
 	header("Cache-Control: public");
 	//header("Pragma: no-cache");	
 	
+	ob_clean();
 	readfile($settings->_contentDir .$_GET["arkname"] );
 	
 } elseif (isset($_GET["logname"])) {
@@ -156,7 +158,8 @@ if (isset($_GET["version"])) {
 	header("Content-Length: " . filesize($settings->_contentDir . $_GET["logname"] ));
 	header("Content-Disposition: attachment; filename=\"" .$_GET["logname"] . "\"");
 	header("Cache-Control: must-revalidate");
-	
+
+	ob_clean();
 	readfile($settings->_contentDir .$_GET["logname"] );
 	
 } elseif (isset($_GET["vfile"])) {
@@ -185,6 +188,7 @@ if (isset($_GET["version"])) {
 	header("Cache-Control: must-revalidate");
 	//header("Pragma: no-cache");	
 	
+	ob_clean();
 	readfile($dms->contentDir . $document->getDir() .$settings->_versioningFileName);
 	
 } elseif (isset($_GET["dumpname"])) {
@@ -210,6 +214,7 @@ if (isset($_GET["version"])) {
 	header("Cache-Control: must-revalidate");
 	//header("Pragma: no-cache");	
 	
+	ob_clean();
 	readfile($settings->_contentDir .$_GET["dumpname"] );
 }
 
