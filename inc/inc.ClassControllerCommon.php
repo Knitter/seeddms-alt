@@ -37,15 +37,55 @@ class SeedDMS_Controller_Common {
 	function run() {
 	}
 
-	function callHook($hook) {
+	/**
+	 * Call a controller hook
+	 *
+	 * @param $hook string name of hook
+	 * @return mixed false if one of the hooks fails,
+	 *               true if all hooks succedded,
+	 *               null if no hook was called
+	 */
+	function callHook($hook) { /* {{{ */
 		$tmp = explode('_', get_class($this));
 		if(isset($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])])) {
 			foreach($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])] as $hookObj) {
 				if (method_exists($hookObj, $hook)) {
-					return $hookObj->$hook($this);
+					switch(func_num_args()) {
+						case 2:
+							$result = $hookObj->$hook($this, func_get_arg(1));
+							break;
+						case 1:
+						default:
+							$result = $hookObj->$hook($this);
+					}
+					if($result === false) {
+						return $result;
+					}
+				}
+			}
+			return true;
+		}
+		return null;
+	} /* }}} */
+
+	/**
+	 * Check if a hook is registered
+	 *
+	 * @param $hook string name of hook
+	 * @return mixed false if one of the hooks fails,
+	 *               true if all hooks succedded,
+	 *               null if no hook was called
+	 */
+	function hasHook($hook) { /* {{{ */
+		$tmp = explode('_', get_class($this));
+		if(isset($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])])) {
+			foreach($GLOBALS['SEEDDMS_HOOKS']['controller'][lcfirst($tmp[2])] as $hookObj) {
+				if (method_exists($hookObj, $hook)) {
+					return true;
 				}
 			}
 		}
 		return false;
-	}
+	} /* }}} */
+
 }
