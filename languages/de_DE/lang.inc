@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1809)
+//    Translators: Admin (1811)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -318,6 +318,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Expiry date changed',
+'extension_manager' => 'Erweiterungen verwalten',
 'february' => 'Februar',
 'file' => 'Datei',
 'files' => 'Dateien',
@@ -819,6 +820,7 @@ URL: [url]',
 'settings_expandFolderTree_val0' => 'versteckt',
 'settings_expandFolderTree_val1' => 'sichtbar und erste Ebene ausgeklappt',
 'settings_expandFolderTree_val2' => 'sichtbar und komplett ausgeklappt',
+'settings_Extensions' => 'Erweiterungen',
 'settings_extraPath' => 'Extra PHP Include-Pfad',
 'settings_extraPath_desc' => 'Pfad für zusätzliche Software. Dies ist das Verzeichnis, welches die zusätzlichen PEAR-Pakete beinhaltet.',
 'settings_firstDayOfWeek' => 'Erster Tag der Woche',

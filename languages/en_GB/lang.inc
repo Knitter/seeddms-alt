@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (965), netixw (14)
+//    Translators: Admin (967), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -318,6 +318,7 @@ Parent folder: [folder_path]
 User: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Expiry date changed',
+'extension_manager' => 'Manage extensions',
 'february' => 'February',
 'file' => 'File',
 'files' => 'Files',
@@ -819,6 +820,7 @@ URL: [url]',
 'settings_expandFolderTree_val0' => 'start with tree hidden',
 'settings_expandFolderTree_val1' => 'start with tree shown and first level expanded',
 'settings_expandFolderTree_val2' => 'start with tree shown fully expanded',
+'settings_Extensions' => 'Extensions',
 'settings_extraPath' => 'Extra PHP include Path',
 'settings_extraPath_desc' => 'Path to additional software. This is the directory containing e.g. the adodb directory or additional pear packages',
 'settings_firstDayOfWeek' => 'First day of the week',
