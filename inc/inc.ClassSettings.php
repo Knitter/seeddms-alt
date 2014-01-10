@@ -806,16 +806,30 @@ class Settings { /* {{{ */
 	/**
 	 * Returns absolute path for configuration files respecting links
 	 *
-	 * This function checks three directories for a configuration directory
-	 * 1. The directory where the current script is located adding '/conf'
-	 * 2. The parent directory of the current script adding '/conf'
-	 * 3. The directory /etc/seeddms
+	 * This function checks all parent directories of the current script
+	 * for a configuration directory named 'conf'. It doesn't check
+	 * if that directory contains a configuration file.
+	 * If none was found a final try will be made checking /etc/seeddms
 	 * @return NULL|string config directory
 	 */
 	function getConfigDir() { /* {{{ */
 		$_tmp = dirname($_SERVER['SCRIPT_FILENAME']);
 		$_arr = preg_split('/\//', $_tmp);
 		$configDir = null;
+		/* new code starts here */
+		while($_arr && !$configDir) {
+			if(file_exists(implode('/', $_arr)."/conf/"))
+				$configDir = implode('/', $_arr)."/conf/";
+			else
+				array_pop($_arr);
+		}
+		if(!$configDir) {
+			if(file_exists('/etc/seeddms'))
+				$configDir = '/etc/seeddms';
+		}
+		return $configDir;
+		/* new code ends here */
+
 		if(file_exists(implode('/', $_arr)."/conf/"))
 			$configDir = implode('/', $_arr)."/conf/";
 		else {
