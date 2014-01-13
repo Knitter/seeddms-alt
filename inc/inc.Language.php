@@ -89,7 +89,7 @@ function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {
 	} else
 		$tmpText = $LANG[$lang][$key];
 
-	if($settings->_otrance) {
+	if(0 && $settings->_otrance) {
 		$_GLOBALS['used_langs'][$key] = $tmpText;
 	}
 
