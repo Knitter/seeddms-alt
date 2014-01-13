@@ -52,7 +52,7 @@ class UI extends UI_Default {
 		} else {
 			$classname = "SeedDMS_View_".$class;
 		}
-		$filename = "../views/".$theme."/class.".$class.".php";
+		$filename = $settings->_rootDir."views/".$theme."/class.".$class.".php";
 		if(file_exists($filename)) {
 			require($filename);
 			$view = new $classname($params, $theme);
