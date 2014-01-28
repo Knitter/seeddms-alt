@@ -38,6 +38,11 @@ class SeedDMS_Core_DatabaseAccess {
 	protected $_hostname;
 
 	/**
+	 * @var int port number of database 
+	 */
+	protected $_port;
+
+	/**
 	 * @var string name of database
 	 */
 	protected $_database;
@@ -125,7 +130,11 @@ class SeedDMS_Core_DatabaseAccess {
 	 */
 	function SeedDMS_Core_DatabaseAccess($driver, $hostname, $user, $passw, $database = false) { /* {{{ */
 		$this->_driver = $driver;
-		$this->_hostname = $hostname;
+		$tmp = explode(":", $hostname);
+		$this->_hostname = $tmp[0];
+		$this->_port = null;
+		if(!empty($tmp[1]))
+			$this->_port = $tmp[1];
 		$this->_database = $database;
 		$this->_user = $user;
 		$this->_passw = $passw;
@@ -156,6 +165,8 @@ class SeedDMS_Core_DatabaseAccess {
 			case 'mysqli':
 			case 'mysqlnd':
 				$dsn = $this->_driver.":dbname=".$this->_database.";host=".$this->_hostname;
+				if($this->_port)
+					$dsn .= ";port=".$this->_port;
 				break;
 			case 'sqlite':
 				$dsn = $this->_driver.":".$this->_database;
