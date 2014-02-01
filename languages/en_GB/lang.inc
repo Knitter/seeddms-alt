@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (972), netixw (14)
+//    Translators: Admin (975), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -789,7 +789,7 @@ URL: [url]',
 'settings_enableGuestLogin' => 'Enable Guest Login',
 'settings_enableGuestLogin_desc' => 'If you want anybody to login as guest, check this option. Note: guest login should be used only in a trusted environment',
 'settings_enableLanguageSelector' => 'Enable Language Selector',
-'settings_enableLanguageSelector_desc' => 'Show selector for user interface language after being logged in. This does not affect the language selection on the login page.',
+'settings_enableLanguageSelector_desc' => 'Show selector for user interface language after being logged in.',
 'settings_enableLargeFileUpload' => 'Enable large file upload',
 'settings_enableLargeFileUpload_desc' => 'If set, file upload is also available through a java applet called jumploader without a file size limit set by the browser. It also allows to upload several files in one step.',
 'settings_enableNotificationAppRev' => 'Enable reviewer/approver notification',
@@ -804,6 +804,8 @@ URL: [url]',
 'settings_enableRecursiveCount_desc' => 'If turned on, the number of documents and folders in the folder view will be determined by counting all objects by recursively processing the folders and counting those documents and folders the user is allowed to access.',
 'settings_enableSelfRevApp' => 'Allow review/approval for logged in user',
 'settings_enableSelfRevApp_desc' => 'Enable this if you want the currently logged in user to be listed as reviewers/approvers and for workflow transitions.',
+'settings_enableThemeSelector' => 'Theme selection',
+'settings_enableThemeSelector_desc' => 'Turns on/off the theme selector on the login page.',
 'settings_enableUserImage' => 'Enable User Image',
 'settings_enableUserImage_desc' => 'Enable users images',
 'settings_enableUsersView' => 'Enable Users View',

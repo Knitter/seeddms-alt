@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1816)
+//    Translators: Admin (1819)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -789,7 +789,7 @@ URL: [url]',
 'settings_enableGuestLogin' => 'Anmeldung als Gast',
 'settings_enableGuestLogin_desc' => 'Wenn Sie Gast-Logins erlauben wollen, dann wählen Sie diese Option an. Anmerkung: Gast-Logins sollten nur in einer vertrauenswürdigen Umgebung erlaubt werden.',
 'settings_enableLanguageSelector' => 'Sprachauswahl einschalten',
-'settings_enableLanguageSelector_desc' => 'Zeige Auswahl der verfügbaren Sprachen nachdem man sich angemeldet hat. Dies hat keinen Einfluss auf die Sprachauswahl auf der Anmeldeseite.',
+'settings_enableLanguageSelector_desc' => 'Zeige Auswahl der verfügbaren Sprachen nachdem man sich angemeldet hat.',
 'settings_enableLargeFileUpload' => 'Hochladen von sehr großen Dateien ermöglichen',
 'settings_enableLargeFileUpload_desc' => 'Wenn dies gesetzt ist, dann ist ebenfalls der Upload von Dokumenten durch ein java applet mit Namen \'jumploader\' ohne Begrenzung der maximalen Dateigröße möglich. Auch das Hochladen mehrerer Dokumente in einem Schritt wird dadurch ermöglicht.',
 'settings_enableNotificationAppRev' => 'Prűfer/Freigeber benachrichtigen',
@@ -804,6 +804,8 @@ URL: [url]',
 'settings_enableRecursiveCount_desc' => 'Wenn diese Option eingeschaltet ist, wird die Anzahl der Dokumente und Ordner in der Ordner-Ansicht rekursiv, unter Berücksichtigung der Zugriffsrechte ermittelt.',
 'settings_enableSelfRevApp' => 'Allow review/approval for logged in user',
 'settings_enableSelfRevApp_desc' => 'Enable this if you want the currently logged in user to be listed as reviewers/approvers and for workflow transitions.',
+'settings_enableThemeSelector' => 'Auswahl des Themas',
+'settings_enableThemeSelector_desc' => 'Schaltet das Auswahlmenü für die Themenauswahl in der Anmeldemaske ein oder aus.',
 'settings_enableUserImage' => 'Benutzerbilder einschalten',
 'settings_enableUserImage_desc' => 'Foto der Benutzer ein-/ausschalten',
 'settings_enableUsersView' => 'Benutzeransicht aktivieren',
