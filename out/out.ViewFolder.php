@@ -49,7 +49,7 @@ $showtree=showtree();
 
 if (isset($_GET["orderby"]) && strlen($_GET["orderby"])==1 ) {
 	$orderby=$_GET["orderby"];
-} else $orderby="";
+} else $orderby=$settings->_sortFoldersDefault;
 
 if ($folder->getAccessMode($user) < M_READ) {
 	UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("access_denied"));

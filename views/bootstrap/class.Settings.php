@@ -184,6 +184,15 @@ if(!is_writeable($settings->_configFilePath)) {
             <OPTION VALUE="fullname" <?php if ($settings->_sortUsersInList=='fullname') echo "SELECTED" ?> ><?php printMLText("settings_sortUsersInList_val_fullname");?></OPTION>
           </SELECT>
       </tr>
+      <tr title="<?php printMLText("settings_sortFoldersDefault_desc");?>">
+        <td><?php printMLText("settings_sortFoldersDefault");?>:</td>
+        <td>
+          <SELECT name="sortFoldersDefault">
+            <OPTION VALUE="u" <?php if ($settings->_sortFoldersDefault=='') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_unsorted");?></OPTION>
+            <OPTION VALUE="n" <?php if ($settings->_sortFoldersDefault=='s') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_sequence");?></OPTION>
+            <OPTION VALUE="n" <?php if ($settings->_sortFoldersDefault=='n') echo "SELECTED" ?> ><?php printMLText("settings_sortFoldersDefault_val_name");?></OPTION>
+          </SELECT>
+      </tr>
 
       <!--
         -- SETTINGS - SITE - CALENDAR
