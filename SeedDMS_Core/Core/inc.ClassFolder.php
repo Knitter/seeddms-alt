@@ -395,8 +395,10 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_subFolders)) {
-			if ($orderby=="n") $queryStr = "SELECT * FROM tblFolders WHERE parent = " . $this->_id . " ORDER BY name";
-			else $queryStr = "SELECT * FROM tblFolders WHERE parent = " . $this->_id . " ORDER BY sequence";
+			$queryStr = "SELECT * FROM tblFolders WHERE parent = " . $this->_id;
+
+			if ($orderby=="n") $queryStr .= " ORDER BY name";
+			elseif ($orderby=="s") $queryStr .= " ORDER BY sequence";
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && $resArr == false)
 				return false;
@@ -570,8 +572,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 		$db = $this->_dms->getDB();
 
 		if (!isset($this->_documents)) {
-			if ($orderby=="n") $queryStr = "SELECT * FROM tblDocuments WHERE folder = " . $this->_id . " ORDER BY name";
-			else $queryStr = "SELECT * FROM tblDocuments WHERE folder = " . $this->_id . " ORDER BY sequence";
+			$queryStr = "SELECT * FROM tblDocuments WHERE folder = " . $this->_id;
+			if ($orderby=="n") $queryStr .= " ORDER BY name";
+			elseif($orderby=="s") $queryStr .= " ORDER BY sequence";
 
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
