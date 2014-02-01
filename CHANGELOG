@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.3.3
 --------------------------------------------------------------------------------
+- default method for sorting folders and documents can be set (#112)
 - port of database can be set behind hostname (separated by colon)
 - fix minor compatibility errors in database table creation
 - fix some php warnings when php 5.5.x is used (Bug #119)
