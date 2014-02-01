@@ -28,6 +28,7 @@
        -                   2 to start with tree shown fully expanded     
        - stopWordsFile: path to stop word file for indexer
        - sortUsersInList: how to sort users in lists ('fullname' or '' (default))
+       - sortFoldersDefault: how to sort folders and documents in folder view  ('n' (name) or 's' (sequence, default))
     -->   
     <edition
       strictFormCheck = "false"
@@ -41,6 +42,7 @@
       enableLanguageSelector = "true"
       stopWordsFile = ""
       sortUsersInList = ""
+			sortFoldersDefault="s"
     >
     </edition> 
     <!-- enableCalendar: enable/disable calendar

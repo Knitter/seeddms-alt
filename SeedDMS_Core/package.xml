@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-11-27</date>
- <time>10:57:32</time>
+ <date>2014-01-13</date>
+ <time>14:29:34</time>
  <version>
-  <release>4.3.2</release>
-  <api>4.3.2</api>
+  <release>4.3.3</release>
+  <api>4.3.3</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,9 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- new method SeedDMS_Core_Folder::isSubFolder()
-- check for subFolder in SeedDMS_Core_Folder::setParent()
-- new methods SeedDMS_Core_DMS::checkFolders() and SeedDMS_Core_DMS::checkDocuments()
+- database hostname can have port seperated by ':'
+- make all functions in SeedDMS_Core_File static (fixes problem with php 5.5.x)
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -565,6 +564,24 @@ New release
 - passing an array of users to SeedDMЅ_Core_DMS::search() instead of a single user ist now allowed
 - turn on foreign key constraints for sqlite3
 - SeedDMЅ_Core_Folder::getPath() can handle a subfolder treated as a root folder
+   </notes>
+  </release>
+  <release>
+   <date>2013-11-27</date>
+   <time>10:57:32</time>
+   <version>
+    <release>4.3.2</release>
+    <api>4.3.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- new method SeedDMS_Core_Folder::isSubFolder()
+- check for subFolder in SeedDMS_Core_Folder::setParent()
+- new methods SeedDMS_Core_DMS::checkFolders() and SeedDMS_Core_DMS::checkDocuments()
    </notes>
   </release>
  </changelog>

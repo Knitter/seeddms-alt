@@ -37,7 +37,7 @@ else if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {
 $themes = UI::getStyles();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('enableguestlogin'=>$settings->_enableGuestLogin, 'enablepasswordforgotten'=>$settings->_enablePasswordForgotten, 'referrer'=>$refer, 'themes'=>$themes));
+$view = UI::factory($theme, $tmp[1], array('enableguestlogin'=>$settings->_enableGuestLogin, 'enablepasswordforgotten'=>$settings->_enablePasswordForgotten, 'referrer'=>$refer, 'themes'=>$themes, 'languages'=>getLanguages(), 'enablelanguageselector'=>$settings->_enableLanguageSelector, 'enablethemeselector'=>$settings->_enableThemeSelector));
 if($view) {
 	$view->show();
 	exit;

@@ -1,7 +1,12 @@
 --------------------------------------------------------------------------------
                      Changes in version 4.3.3
 --------------------------------------------------------------------------------
+- theme and language selector can be turned off (Bug #109)
+  turning off the language selector will also turn it off on the login page
+- default method for sorting folders and documents can be set (#112)
+- port of database can be set behind hostname (separated by colon)
 - fix minor compatibility errors in database table creation
+- fix some php warnings when php 5.5.x is used (Bug #119)
 - strip slashes from _GET, _POST, _COOKIE, _REQUEST if magic quotes is
   turned on
 - use From address from smtp settings when sending mails

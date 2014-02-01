@@ -219,7 +219,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print "<table class=\"table\">";
 				print "<thead>\n<tr>\n";
 				print "<th></th>\n";	
-				print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
+				print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
 	//			print "<th>".getMLText("owner")."</th>\n";
 				print "<th>".getMLText("status")."</th>\n";
 	//			print "<th>".getMLText("version")."</th>\n";

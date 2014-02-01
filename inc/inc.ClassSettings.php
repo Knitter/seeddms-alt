@@ -153,12 +153,16 @@ class Settings { /* {{{ */
 	var $_maxRecursiveCount = 10000;
 	// enable/disable language selection menu
 	var $_enableLanguageSelector = true;
+	// enable/disable theme selector
+	var $_enableThemeSelector = true;
 	// expandFolderTree
 	var $_expandFolderTree = 1;
 	// enable/disable editing of users own profile
 	var $_disableSelfEdit = false;
 	// Sort order of users in lists('fullname' or '' (login))
 	var $_sortUsersInList = '';
+	// Sort method for forders and documents ('n' (name) or '')
+	var $_sortFoldersDefault = '';
 	// enable/disable lucene fulltext search
 	// if enabled admin can login only by specified IP addres
 	var $_adminIP = "";
@@ -320,9 +324,11 @@ class Settings { /* {{{ */
 		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
 		$this->_maxRecursiveCount = intval($tab["maxRecursiveCount"]);
 		$this->_enableLanguageSelector = Settings::boolVal($tab["enableLanguageSelector"]);
+		$this->_enableThemeSelector = Settings::boolVal($tab["enableThemeSelector"]);
 		$this->_enableFullSearch = Settings::boolVal($tab["enableFullSearch"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
+		$this->_sortFoldersDefault = strval($tab["sortFoldersDefault"]);
 		$this->_expandFolderTree = intval($tab["expandFolderTree"]);
 
 		// XML Path: /configuration/site/calendar
@@ -590,10 +596,12 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);
     $this->setXMLAttributValue($node, "maxRecursiveCount", $this->_maxRecursiveCount);
     $this->setXMLAttributValue($node, "enableLanguageSelector", $this->_enableLanguageSelector);
+    $this->setXMLAttributValue($node, "enableThemeSelector", $this->_enableThemeSelector);
     $this->setXMLAttributValue($node, "enableFullSearch", $this->_enableFullSearch);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);
     $this->setXMLAttributValue($node, "sortUsersInList", $this->_sortUsersInList);
+    $this->setXMLAttributValue($node, "sortFoldersDefault", $this->_sortFoldersDefault);
 
     // XML Path: /configuration/site/calendar
     $node = $this->getXMLNode($xml, '/configuration/site', 'calendar');
