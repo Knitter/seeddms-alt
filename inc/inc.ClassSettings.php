@@ -153,6 +153,8 @@ class Settings { /* {{{ */
 	var $_maxRecursiveCount = 10000;
 	// enable/disable language selection menu
 	var $_enableLanguageSelector = true;
+	// enable/disable theme selector
+	var $_enableThemeSelector = true;
 	// expandFolderTree
 	var $_expandFolderTree = 1;
 	// enable/disable editing of users own profile
@@ -317,6 +319,7 @@ class Settings { /* {{{ */
 		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
 		$this->_maxRecursiveCount = intval($tab["maxRecursiveCount"]);
 		$this->_enableLanguageSelector = Settings::boolVal($tab["enableLanguageSelector"]);
+		$this->_enableThemeSelector = Settings::boolVal($tab["enableThemeSelector"]);
 		$this->_enableFullSearch = Settings::boolVal($tab["enableFullSearch"]);
 		$this->_stopWordsFile = strval($tab["stopWordsFile"]);
 		$this->_sortUsersInList = strval($tab["sortUsersInList"]);
@@ -574,6 +577,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);
     $this->setXMLAttributValue($node, "maxRecursiveCount", $this->_maxRecursiveCount);
     $this->setXMLAttributValue($node, "enableLanguageSelector", $this->_enableLanguageSelector);
+    $this->setXMLAttributValue($node, "enableThemeSelector", $this->_enableThemeSelector);
     $this->setXMLAttributValue($node, "enableFullSearch", $this->_enableFullSearch);
     $this->setXMLAttributValue($node, "expandFolderTree", $this->_expandFolderTree);
     $this->setXMLAttributValue($node, "stopWordsFile", $this->_stopWordsFile);

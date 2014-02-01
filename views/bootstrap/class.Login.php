@@ -36,6 +36,9 @@ class SeedDMS_View_Login extends SeedDMS_Bootstrap_Style {
 		$enablepasswordforgotten = $this->params['enablepasswordforgotten'];
 		$refer = $this->params['referrer'];
 		$themes = $this->params['themes'];
+		$languages = $this->params['languages'];
+		$enableLanguageSelector = $this->params['enablelanguageselector'];
+		$enableThemeSelector = $this->params['enablethemeselector'];
 
 		$this->htmlStartPage(getMLText("sign_in"), "login");
 		$this->globalBanner();
@@ -94,13 +97,13 @@ function guestLogin()
 			<input type="Password" id="pwd" name="pwd">
 		</div>
 	</div>
+<?php if($enableLanguageSelector) { ?>
 	<div class="control-group">
 		<label class="control-label" for="pwd"><?php printMLText("language");?>:</label>
 		<div class="controls">
 <?php
 			print "<select name=\"lang\">";
 			print "<option value=\"\">-";
-			$languages = getLanguages();
 			foreach ($languages as $currLang) {
 				print "<option value=\"".$currLang."\">".getMLText($currLang)."</option>";
 			}
@@ -108,6 +111,10 @@ function guestLogin()
 ?>
 		</div>
 	</div>
+<?php
+	}
+	if($enableThemeSelector) {
+?>
 	<div class="control-group">
 		<label class="control-label" for="pwd"><?php printMLText("theme");?>:</label>
 		<div class="controls">
@@ -122,6 +129,9 @@ function guestLogin()
 ?>
 		</div>
 	</div>
+<?php
+	}
+?>
 	<div class="control-group">
 		<div class="controls">
 		<button type="submit" class="btn"><?php printMLText("submit_login") ?></button>

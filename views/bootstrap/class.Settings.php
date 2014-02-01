@@ -176,6 +176,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_enableLanguageSelector");?>:</td>
         <td><input name="enableLanguageSelector" type="checkbox" <?php if ($settings->_enableLanguageSelector) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_enableThemeSelector_desc");?>">
+        <td><?php printMLText("settings_enableThemeSelector");?>:</td>
+        <td><input name="enableThemeSelector" type="checkbox" <?php if ($settings->_enableThemeSelector) echo "checked" ?> /></td>
+      </tr>
       <tr title="<?php printMLText("settings_sortUsersInList_desc");?>">
         <td><?php printMLText("settings_sortUsersInList");?>:</td>
         <td>

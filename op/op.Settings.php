@@ -70,6 +70,7 @@ if ($action == "saveSettings")
   $settings->_enableRecursiveCount = getBoolValue("enableRecursiveCount");
   $settings->_maxRecursiveCount = intval($_POST["maxRecursiveCount"]);
   $settings->_enableLanguageSelector = getBoolValue("enableLanguageSelector");
+  $settings->_enableThemeSelector = getBoolValue("enableThemeSelector");
   $settings->_expandFolderTree = intval($_POST["expandFolderTree"]);
 	$settings->_stopWordsFile = $_POST["stopWordsFile"];
 	$settings->_sortUsersInList = $_POST["sortUsersInList"];
