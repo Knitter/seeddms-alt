@@ -85,6 +85,8 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
 
+		$previewwidth = 40;
+
 		$folderid = $folder->getId();
 
 		$this->htmlStartPage(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))));
@@ -274,7 +276,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			print "</tr>\n";
 		}
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 		foreach($documents as $document) {
 
 			$owner = $document->getOwner();
@@ -305,7 +307,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				if (file_exists($dms->contentDir . $latestContent->getPath())) {
 					print "<td><a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
 					if($previewer->hasPreview($latestContent)) {
-						print "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+						print "<img draggable=\"false\" class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					} else {
 						print "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 					}

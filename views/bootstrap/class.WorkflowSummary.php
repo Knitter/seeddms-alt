@@ -36,6 +36,8 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$cachedir = $this->params['cachedir'];
 
+		$previewwidth = 40;
+
 		$this->htmlStartPage(getMLText("my_documents"));
 		$this->globalNavigation();
 		$this->contentStart();
@@ -47,7 +49,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		// Get document list for the current user.
 		$workflowStatus = $user->getWorkflowStatus();
 
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 
 		$printheader=true;
 		$iRev = array();
@@ -81,7 +83,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 				print "<tr>\n";
 				print "<td><a href=\"../op/op.Download.php?documentid=".$document->getID()."&version=".$st['version']."\">";
 				if($previewer->hasPreview($version)) {
-					print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=40\" title=\"".htmlspecialchars($version->getMimeType())."\">";
+					print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
 				} else {
 					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
 				}
@@ -137,7 +139,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 				print "<tr>\n";
 				print "<td><a href=\"../op/op.Download.php?documentid=".$document->getID()."&version=".$st['version']."\">";
 				if($previewer->hasPreview($version)) {
-					print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=40\" title=\"".htmlspecialchars($version->getMimeType())."\">";
+					print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
 				} else {
 					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\">";
 				}
