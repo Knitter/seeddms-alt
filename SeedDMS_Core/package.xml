@@ -583,7 +583,7 @@ New release
 - new methods SeedDMS_Core_DMS::checkFolders() and SeedDMS_Core_DMS::checkDocuments()
    </notes>
   </release>
-  </release>
+  <release>
    <date>2014-02-01</date>
    <time>16:19:34</time>
    <version>
