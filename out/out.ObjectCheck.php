@@ -60,9 +60,10 @@ $unlinkedfolders = $dms->checkFolders();
 $unlinkeddocuments = $dms->checkDocuments();
 $nofilesizeversions = $dms->getNoFileSizeDocumentContent();
 $nochecksumversions = $dms->getNoChecksumDocumentContent();
+$rootfolder = $dms->getFolder($settings->_rootFolderID);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'unlinkedcontent'=>$unlinkedversions, 'unlinkedfolders'=>$unlinkedfolders, 'unlinkeddocuments'=>$unlinkeddocuments, 'nofilesizeversions'=>$nofilesizeversions, 'nochecksumversions'=>$nochecksumversions, 'unlink'=>$unlink, 'setfilesize'=>$setfilesize, 'setchecksum'=>$setchecksum, 'repair'=>$repair));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'unlinkedcontent'=>$unlinkedversions, 'unlinkedfolders'=>$unlinkedfolders, 'unlinkeddocuments'=>$unlinkeddocuments, 'nofilesizeversions'=>$nofilesizeversions, 'nochecksumversions'=>$nochecksumversions, 'unlink'=>$unlink, 'setfilesize'=>$setfilesize, 'setchecksum'=>$setchecksum, 'repair'=>$repair, 'rootfolder'=>$rootfolder));
 if($view) {
 	$view->show();
 	exit;

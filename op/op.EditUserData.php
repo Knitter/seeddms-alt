@@ -100,7 +100,7 @@ if ($user->getTheme() != $mytheme)
 if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
 {
 	$finfo = new finfo(FILEINFO_MIME);
-	echo $finfo->file($_FILES["userfile"]["tmp_name"]);
+	// echo $finfo->file($_FILES["userfile"]["tmp_name"]);
 	if(substr($finfo->file($_FILES["userfile"]["tmp_name"]), 0, 10) != "image/jpeg") {;
 		UI::exitError(getMLText("user_info"),getMLText("only_jpg_user_images"));
 	}

@@ -181,5 +181,72 @@ switch($command) {
 			}
 		}
 		break; /* }}} */
+
+	case 'movefolder': /* {{{ */
+		if($user) {
+			$mfolder = $dms->getFolder($_REQUEST['folderid']);
+			if($mfolder) {
+				if ($mfolder->getAccessMode($user) >= M_READ) {
+					if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
+						if($folder->getAccessMode($user) >= M_READWRITE) {
+							if($mfolder->setParent($folder)) {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>true, 'message'=>'Folder moved', 'data'=>''));
+							} else {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+							}
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
+						}
+					} else {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+				}
+			} else {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+			}
+		}
+		break; /* }}} */
+
+	case 'movedocument': /* {{{ */
+		if($user) {
+			$mdocument = $dms->getDocument($_REQUEST['docid']);
+			if($mdocument) {
+				if ($mdocument->getAccessMode($user) >= M_READ) {
+					if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
+						if($folder->getAccessMode($user) >= M_READWRITE) {
+							if($mdocument->setFolder($folder)) {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>true, 'message'=>'Document moved', 'data'=>''));
+							} else {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+							}
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
+						}
+					} else {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+				}
+			} else {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+			}
+		}
+		break; /* }}} */
+
 }
 ?>

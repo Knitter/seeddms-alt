@@ -159,6 +159,49 @@ $(document).ready( function() {
 			}
 		}); 
 	});
+
+	$('a.movefolder').click(function(ev){
+		ev.preventDefault();
+		attr_source = $(ev.currentTarget).attr('source');
+		attr_dest = $(ev.currentTarget).attr('dest');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		$.get('../op/op.Ajax.php',
+			{ command: 'movefolder', folderid: attr_source, targetfolderid: attr_dest },
+			function(data) {
+				console.log(data);
+				noty({
+					text: data.msg,
+					type: data.success ? 'success' : 'error',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 1500,
+				});
+			}
+		);
+	});
+
+	$('a.movedocument').click(function(ev){
+		ev.preventDefault();
+		attr_source = $(ev.currentTarget).attr('source');
+		attr_dest = $(ev.currentTarget).attr('dest');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		$.get('../op/op.Ajax.php',
+			{ command: 'movedocument', docid: attr_source, targetfolderid: attr_dest },
+			function(data) {
+				console.log(data);
+				noty({
+					text: data.msg,
+					type: data.success ? 'success' : 'error',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 1500,
+				});
+			}
+		);
+	});
+
 });
 
 function allowDrop(ev) {

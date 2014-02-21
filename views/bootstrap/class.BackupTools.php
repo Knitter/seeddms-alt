@@ -52,7 +52,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 		print "<p>".getMLText("versioning_file_creation_warning")."</p>\n";
 
-		print "<form action=\"../op/op.CreateVersioningFiles.php\" name=\"form1\">";
+		print "<form class=\"form-inline\" action=\"../op/op.CreateVersioningFiles.php\" name=\"form1\">";
 		$this->printFolderChooser("form1",M_READWRITE);
 		print "<input type='submit' class='btn' name='' value='".getMLText("versioning_file_creation")."'/>";
 		print "</form>\n";
@@ -183,7 +183,7 @@ class SeedDMS_View_BackupTools extends SeedDMS_Bootstrap_Style {
 		$this->contentContainerStart();
 		print "<p>".getMLText("files_deletion_warning")."</p>\n";
 
-		print "<form action=\"../out/out.RemoveFolderFiles.php\" name=\"form3\">";
+		print "<form class=\"form-inline\" action=\"../out/out.RemoveFolderFiles.php\" name=\"form3\">";
 		$this->printFolderChooser("form3",M_READWRITE);
 		print "<input type='submit' class='btn' name='' value='".getMLText("files_deletion")."'/>";
 		print "</form>\n";

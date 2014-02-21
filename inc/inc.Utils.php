@@ -175,7 +175,7 @@ function createVersionigFile($document) { /* {{{ */
 	
 	if (is_bool($handle)&&!$handle) return false;
 	
-	$tmp = $document->getName()." (ID ".$document->getID()."\n\n";
+	$tmp = $document->getName()." (ID ".$document->getID().")\n\n";
 	fwrite($handle, $tmp);
 
 	$owner = $document->getOwner();

@@ -79,6 +79,8 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$searchin = $this->params['searchin'];
 		$cachedir = $this->params['cachedir'];
 
+		$previewwidth = 40;
+
 		$this->htmlStartPage(getMLText("search_results"));
 		$this->globalNavigation();
 		$this->contentStart();
@@ -324,7 +326,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			print "<th>".getMLText("action")."</th>\n";
 			print "</tr>\n</thead>\n<tbody>\n";
 
-			$previewer = new SeedDMS_Preview_Previewer($cachedir, 40);
+			$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);
 			foreach ($entries as $entry) {
 				if(get_class($entry) == 'SeedDMS_Core_Document') {
 					$txt = $this->callHook('documentListItem', $entry, $previewer);
@@ -351,7 +353,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 						}
 						print "<td><a class=\"standardText\" href=\"../out/out.ViewDocument.php?documentid=".$document->getID()."\">";
 						if($previewer->hasPreview($lc)) {
-							print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=40\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
+							print "<img class=\"mimeicon\" width=\"".$previewwidth."\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$lc->getVersion()."&width=".$previewwidth."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
 						} else {
 							print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($lc->getFileType())."\" title=\"".htmlspecialchars($lc->getMimeType())."\">";
 						}

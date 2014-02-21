@@ -141,20 +141,12 @@ function showAttributeDefinitions(selectObj) {
 				foreach ($attrdefs as $attrdef) {
 				
 					print "<div id=\"attrdefs".$attrdef->getID()."\" style=\"display : none;\">";	
+					if($attrdef->isUsed())
+						echo '<div class="alert alert-warning">'.getMLText('attrdef_in_use').'</div>';
 ?>
 				<div class="well">
 <?php
-					if(!$attrdef->isUsed()) {
-?>
-							<form style="display: inline-block;" method="post" action="../op/op.AttributeMgr.php" >
-							<?php echo createHiddenFieldWithKey('removeattrdef'); ?>
-							<input type="hidden" name="attrdefid" value="<?php echo $attrdef->getID()?>">
-							<input type="hidden" name="action" value="removeattrdef">
-							<button type="submit" class="btn"><i class="icon-remove"></i> <?php echo getMLText("rm_attrdef")?></button>
-							</form>
-<?php
-					} else {
-						echo '<p>'.getMLText('attrdef_in_use').'</p>';
+					if($attrdef->isUsed()) {
 						$res = $attrdef->getStatistics(3);
 						if(isset($res['frequencies']) && $res['frequencies']) {
 							print "<table class=\"table-condensed\">";
@@ -256,6 +248,15 @@ function showAttributeDefinitions(selectObj) {
 							}
 							print "</tbody></table>";
 						}
+					} else {
+?>
+				<form style="display: inline-block;" method="post" action="../op/op.AttributeMgr.php" >
+					<?php echo createHiddenFieldWithKey('removeattrdef'); ?>
+					<input type="hidden" name="attrdefid" value="<?php echo $attrdef->getID()?>">
+					<input type="hidden" name="action" value="removeattrdef">
+					<button type="submit" class="btn"><i class="icon-remove"></i> <?php echo getMLText("rm_attrdef")?></button>
+				</form>
+<?php
 					}
 ?>
 				</div>
