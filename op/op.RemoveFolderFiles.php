@@ -48,7 +48,6 @@ function removeFolderFiles($folder) {
 	return true;
 }
 
-
 if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_folder_id"));
 }
