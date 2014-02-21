@@ -176,6 +176,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 		$unlink = $this->params['unlink'];
 		$setfilesize = $this->params['setfilesize'];
 		$setchecksum = $this->params['setchecksum'];
+		$rootfolder = $this->params['rootfolder'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -221,6 +222,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				echo "<td>".$error['id']."</td>";
 				echo "<td>".$error['parent']."</td>";
 				echo "<td>".$error['msg']."</td>";
+				echo "<td><a class=\"btn movefolder\" source=\"".$error['id']."\" dest=\"".$rootfolder->getID()."\">Move</a> </td>";
 				echo "</tr>";
 			}
 			print "</tbody></table>\n";
@@ -244,6 +246,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				echo "<td>".$error['id']."</td>";
 				echo "<td>".$error['parent']."</td>";
 				echo "<td>".$error['msg']."</td>";
+				echo "<td><a class=\"btn movedocument\" source=\"".$error['id']."\" dest=\"".$rootfolder->getID()."\">Move</a> </td>";
 				echo "</tr>";
 			}
 			print "</tbody></table>\n";
