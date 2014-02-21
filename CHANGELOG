@@ -3,6 +3,10 @@
 --------------------------------------------------------------------------------
 - clean up and test ldap authentication code
 - fix handling of multivalue attributes
+- use same ordering in tree as in list view (Bug #121)
+- add missing parenthesis in version file (Bug #100)
+- add missing file views/bootstrap/class.RemoveFolderFileѕ.php (Bug #101)
+- unlinked documents/folders can be moved into root folder
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.3
