@@ -15,8 +15,8 @@
  <date>2014-02-01</date>
  <time>16:19:34</time>
  <version>
-  <release>4.3.3</release>
-  <api>4.3.3</api>
+  <release>4.3.4</release>
+  <api>4.3.4</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,10 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- SeedDMS_Folder::getDocuments() and SeedDMS_Folder::getSubFolders() do not
-  do any sorting if $orderby is not set.
-- database hostname can have port seperated by ':'
-- make all functions in SeedDMS_Core_File static (fixes problem with php 5.5.x)
+- fix handling of multivalue attributes
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -584,6 +581,25 @@ New release
 - new method SeedDMS_Core_Folder::isSubFolder()
 - check for subFolder in SeedDMS_Core_Folder::setParent()
 - new methods SeedDMS_Core_DMS::checkFolders() and SeedDMS_Core_DMS::checkDocuments()
+   </notes>
+  </release>
+  </release>
+   <date>2014-02-01</date>
+   <time>16:19:34</time>
+   <version>
+    <release>4.3.3</release>
+    <api>4.3.3</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- SeedDMS_Folder::getDocuments() and SeedDMS_Folder::getSubFolders() do not
+  do any sorting if $orderby is not set.
+- database hostname can have port seperated by ':'
+- make all functions in SeedDMS_Core_File static (fixes problem with php 5.5.x)
    </notes>
   </release>
  </changelog>
