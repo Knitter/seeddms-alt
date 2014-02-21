@@ -7,6 +7,8 @@
 - add missing parenthesis in version file (Bug #100)
 - add missing file views/bootstrap/class.RemoveFolderFileѕ.php (Bug #101)
 - unlinked documents/folders can be moved into root folder
+- take out debug echo statement (Bug #125)
+
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.3
