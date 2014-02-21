@@ -70,6 +70,10 @@ if ((!isset($pwd) || strlen($pwd)==0) && ($login != $guestUser->getLogin()))  {
 	exit;
 }
 
+/* Initialy set $user to false. It will contain a valid user record
+ * if authentication against ldap succeeds.
+ * _ldapHost will only have a value if the ldap connector has been enabled
+ */
 $user = false;
 
 if(isset($GLOBALS['SEEDDMS_HOOKS']['authentication'])) {
@@ -83,78 +87,70 @@ if(isset($GLOBALS['SEEDDMS_HOOKS']['authentication'])) {
 }
 
 if (is_bool($user)) {
-	//
-	// LDAP Sign In
-	//
-
-	/* new code by doudoux - TO BE TESTED */
-	if (isset($settings->_ldapBaseDN)) {
-		$ldapSearchAttribut = "uid=";
-		$tmpDN = "uid=".$login.",".$settings->_ldapBaseDN;
+if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
+	if (isset($settings->_ldapPort) && is_int($settings->_ldapPort)) {
+		$ds = ldap_connect($settings->_ldapHost, $settings->_ldapPort);
+	} else {
+		$ds = ldap_connect($settings->_ldapHost);
 	}
 
-	if (isset($settings->_ldapType)) {
-		if ($settings->_ldapType==1) {
-			$ldapSearchAttribut = "sAMAccountName=";
-			$tmpDN = $login.'@'.$settings->_ldapAccountDomainName;
+	if (!is_bool($ds)) {
+		/* Check if ldap base dn is set, and use ldap server if it is */
+		if (isset($settings->_ldapBaseDN)) {
+			$ldapSearchAttribut = "uid=";
+			$tmpDN = "uid=".$login.",".$settings->_ldapBaseDN;
 		}
-	} 
-	/* end of new code */
 
-	if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
-		if (isset($settings->_ldapPort) && is_int($settings->_ldapPort)) {
-			$ds = ldap_connect($settings->_ldapHost, $settings->_ldapPort);
-		}
-		else {
-			$ds = ldap_connect($settings->_ldapHost);
-		}
-		if (!is_bool($ds)) {
-			// Ensure that the LDAP connection is set to use version 3 protocol.
-			// Required for most authentication methods, including SASL.
-			ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-			// try an anonymous bind first. If it succeeds, get the DN for the user.
-			if (isset($settings->_ldapBindDN)) {
-				$bind = @ldap_bind($ds, $settings->_ldapBindDN, $settings->_ldapBindPw);
-			} else {
-				$bind = @ldap_bind($ds);
+		/* Active directory has a different base dn */
+		if (isset($settings->_ldapType)) {
+			if ($settings->_ldapType==1) {
+				$ldapSearchAttribut = "sAMAccountName=";
+				$tmpDN = $login.'@'.$settings->_ldapAccountDomainName;
 			}
-			$dn = false;
-					
-			/* new code by doudoux - TO BE TESTED */
-						if ($bind) {        
-								$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
-								if (!is_bool($search)) {
-										$info = ldap_get_entries($ds, $search);
-										if (!is_bool($info) && $info["count"]>0) {
-												$dn = $info[0]['dn'];
-										}
-								}
-						} 
-			/* end of new code */
-			
-			/* old code */
-			if ($bind) {
-				$search = ldap_search($ds, $settings->_ldapBaseDN, "uid=".$login);
-				if (!is_bool($search)) {
-					$info = ldap_get_entries($ds, $search);
-					if (!is_bool($info) && $info["count"]>0) {
-						$dn = $info[0]['dn'];
-					}
+		} 
+
+		// Ensure that the LDAP connection is set to use version 3 protocol.
+		// Required for most authentication methods, including SASL.
+		ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+		// try an authenticated/anonymous bind first.
+		// If it succeeds, get the DN for the user and use it for an authentication
+		// with the users password.
+		$bind = false;
+		if (isset($settings->_ldapBindDN)) {
+			$bind = @ldap_bind($ds, $settings->_ldapBindDN, $settings->_ldapBindPw);
+		} else {
+			$bind = @ldap_bind($ds);
+		}
+		$dn = false;
+		/* If bind succeed, then get the dn of for the user */
+		if ($bind) {        
+			$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut.$login);
+			if (!is_bool($search)) {
+				$info = ldap_get_entries($ds, $search);
+				if (!is_bool($info) && $info["count"]>0) {
+					$dn = $info[0]['dn'];
 				}
 			}
-			/* end of old code */
+		} 
 
-			
-			if (is_bool($dn)) {
-				// This is the fallback position, in case the anonymous bind does not
-				// succeed.
-				
-				/* new code by doudoux  - TO BE TESTED */
-				$dn = $tmpDN;
-				/* old code */
-				//$dn = "uid=".$login.",".$settings->_ldapBaseDN; 
-				
+		/* If the previous bind failed, try it with the users creditionals
+		 * by simply setting $dn to a default string
+		 */
+		if (is_bool($dn)) {
+			$dn = $tmpDN;
+		}
+
+		/* No do the actual authentication of the user */
+		$bind = @ldap_bind($ds, $dn, $pwd);
+		if ($bind) {
+			// Successfully authenticated. Now check to see if the user exists within
+			// the database. If not, add them in if _restricted is not set,
+			// but do not add their password.
+			$user = $dms->getUserByLogin($login);
+			if (is_bool($user) && !$settings->_restricted) {
+				// Retrieve the user's LDAP information.
+				$search = ldap_search($ds, $settings->_ldapBaseDN, $ldapSearchAttribut . $login); 
 			}
 			$bind = @ldap_bind($ds, $dn, $pwd);
 			if ($bind) {
@@ -184,6 +180,7 @@ if (is_bool($user)) {
 			ldap_close($ds);
 		}
 	}
+}
 }
 
 if (is_bool($user)) {

@@ -105,16 +105,23 @@ class SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Returns an attribute of the object for the given attribute definition
 	 *
-	 * @return object object of class SeedDMS_Core_Attribute or false
+	 * @return array|string value of attritbute or false. The value is an array
+	 * if the attribute is defined as multi value
 	 */
 	function getAttributeValue($attrdef) { /* {{{ */
 		if (!$this->_attributes) {
 			$this->getAttributes();
 		}
 
-		if (isset($this->_attributes[$attrdef->getId()]))
-			return $this->_attributes[$attrdef->getId()]->getValue();
-		else
+		if (isset($this->_attributes[$attrdef->getId()])) {
+			$value =  $this->_attributes[$attrdef->getId()]->getValue();
+			if($attrdef->getMultipleValues()) {
+				$sep = substr($value, 0, 1);
+				return(explode($sep, substr($value, 1)));
+			} else {
+				return $value;
+			}
+		} else
 			return false;
 
 	} /* }}} */
@@ -122,12 +129,19 @@ class SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Set an attribute of the object for the given attribute definition
 	 *
+	 * @param object $attrdef definition of attribute
+	 * @param array|sting $value value of attribute, for multiple values this
+	 * must be an array
 	 * @return boolean true if operation was successful, otherwise false
 	 */
 	function setAttributeValue($attrdef, $value) { /* {{{ */
 		$db = $this->_dms->getDB();
 		if (!$this->_attributes) {
 			$this->getAttributes();
+		}
+		if($attrdef->getMultipleValues() && is_array($value)) {
+			$sep = substr($attrdef->getValueSet(), 0, 1);
+			$value = $sep.implode($sep, $value);
 		}
 		if(!isset($this->_attributes[$attrdef->getId()])) {
 			switch(get_class($this)) {

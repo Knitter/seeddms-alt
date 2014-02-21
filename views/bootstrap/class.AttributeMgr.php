@@ -186,7 +186,11 @@ function showAttributeDefinitions(selectObj) {
 								print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$doc->getID()."\">" . htmlspecialchars($doc->getName()) . "</a></td>\n";
 								print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 								print "<td>".getOverallStatusText($status["status"])."</td>";
-								print "<td>".$doc->getAttributeValue($attrdef)."</td>";
+								$value = $doc->getAttributeValue($attrdef);
+								if(is_array($value))
+									print "<td>".implode('; ', $value)."</td>";
+								else
+									print "<td>".$value."</td>";
 								print "<td>";
 								print "<a href='../out/out.EditDocument.php?documentid=".$doc->getID()."' class=\"btn btn-mini\"><i class=\"icon-edit\"></i> ".getMLText("edit")."</a>";
 								print "</td></tr>\n";
@@ -209,7 +213,11 @@ function showAttributeDefinitions(selectObj) {
 								print "<td><i class=\"icon-folder-close-alt\"></i></td>";
 								print "<td><a href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">" . htmlspecialchars($folder->getName()) . "</a></td>\n";
 								print "<td>".htmlspecialchars($owner->getFullName())."</td>";
-								print "<td>".$folder->getAttributeValue($attrdef)."</td>";
+								$value = $folder->getAttributeValue($attrdef);
+								if(is_array($value))
+									print "<td>".implode('; ', $value)."</td>";
+								else
+									print "<td>".$value."</td>";
 								print "<td>";
 								print "<a href='../out/out.EditFolder.php?folderid=".$folder->getID()."' class=\"btn btn-mini\"><i class=\"icon-edit\"></i> ".getMLText("edit")."</a>";
 								print "</td></tr>";
@@ -237,7 +245,11 @@ function showAttributeDefinitions(selectObj) {
 								print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 								print "<td>".$content->getMimeType()."</td>";
 								print "<td>".$content->getVersion()."</td>";
-								print "<td>".$content->getAttributeValue($attrdef)."</td>";
+								$value = $content->getAttributeValue($attrdef);
+								if(is_array($value))
+									print "<td>".implode('; ', $value)."</td>";
+								else
+									print "<td>".$value."</td>";
 								print "<td>";
 								print "<a href='../out/out.EditDocument.php?documentid=".$doc->getID()."' class=\"btn btn-mini\"><i class=\"icon-edit\"></i> ".getMLText("edit")."</a>";
 								print "</td></tr>\n";

@@ -153,8 +153,8 @@ if(($oldcomment = $folder->getComment()) != $comment) {
 	}
 }
 
+$oldattributes = $folder->getAttributes();
 if($attributes) {
-	$oldattributes = $folder->getAttributes();
 	foreach($attributes as $attrdefid=>$attribute) {
 		$attrdef = $dms->getAttributeDefinition($attrdefid);
 		if($attribute) {
@@ -172,6 +172,13 @@ if($attributes) {
 				UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
 		}
 	}
+}
+foreach($oldattributes as $attrdefid=>$oldattribute) {
+	if(!isset($attributes[$attrdefid])) {
+		if(!$folder->removeAttribute($dms->getAttributeDefinition($attrdefid)))
+			UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("error_occured"));
+	}
+	
 }
 
 if(strcasecmp($sequence, "keep")) {

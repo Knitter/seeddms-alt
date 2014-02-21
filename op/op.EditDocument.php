@@ -231,8 +231,8 @@ if($categories) {
 	}
 }
 
+$oldattributes = $document->getAttributes();
 if($attributes) {
-	$oldattributes = $document->getAttributes();
 	foreach($attributes as $attrdefid=>$attribute) {
 		$attrdef = $dms->getAttributeDefinition($attrdefid);
 		if($attribute) {
@@ -250,6 +250,13 @@ if($attributes) {
 				UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 		}
 	}
+}
+foreach($oldattributes as $attrdefid=>$oldattribute) {
+	if(!isset($attributes[$attrdefid])) {
+		if(!$document->removeAttribute($dms->getAttributeDefinition($attrdefid)))
+			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
+	}
+	
 }
 
 if($sequence != "keep") {

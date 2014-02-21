@@ -878,13 +878,21 @@ function folderSelected<?php echo $formName ?>(id, name) {
 
 	function printAttributeEditField($attrdef, $objvalue, $fieldname='attributes') { /* {{{ */
 		if($valueset = $attrdef->getValueSetAsArray()) {
-			echo "<select name=\"".$fieldname."[".$attrdef->getId()."]\">";
-			if($attrdef->getMinValues() < 1) {
+			echo "<select name=\"".$fieldname."[".$attrdef->getId()."]";
+			if($attrdef->getMultipleValues()) {
+				echo "[]\" multiple";
+			} else {
+				echo "\"";
+			}
+			echo ">";
+			if(!$attrdef->getMultipleValues()) {
 				echo "<option value=\"\"></option>";
 			}
 			foreach($valueset as $value) {
 				echo "<option value=\"".htmlspecialchars($value)."\"";
-				if($value == $objvalue)
+				if(is_array($objvalue) && in_array($value, $objvalue))
+					echo " selected";
+				elseif($value == $objvalue)
 					echo " selected";
 				echo ">".htmlspecialchars($value)."</option>";
 			}
