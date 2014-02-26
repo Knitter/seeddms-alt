@@ -137,15 +137,11 @@ class SeedDMS_View_LogManagement extends SeedDMS_Bootstrap_Style {
 <?php
 		$this->htmlEndPage();
 		} elseif(file_exists($this->contentdir.$logname)){
-//			$this->htmlStartPage(getMLText("backup_tools"));
-
-//			$this->contentSubHeading(sanitizeString($logname));
-
 			echo $logname."<pre>\n";
 			readfile($this->contentdir.$logname);
 			echo "</pre>\n";
-
-//			echo "</body>\n</html>\n";
+		} else {
+			UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 		}
 
 	} /* }}} */

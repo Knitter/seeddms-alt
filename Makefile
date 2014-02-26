@@ -1,6 +1,6 @@
 VERSION=4.3.4
-SRC=CHANGELOG inc conf utils index.php languages views op out controllers README.md README.Notification README.Ubuntu drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install
-#restapi webapp
+SRC=CHANGELOG inc conf utils index.php languages views op out controllers README.md README.Notification README.Ubuntu drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi
+# webapp
 
 EXTENSIONS := \
 	dynamic_content.tar.gz\

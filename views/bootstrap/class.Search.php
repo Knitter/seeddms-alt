@@ -110,7 +110,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <tr>
 <td><?php printMLText("search_query");?>:</td>
 <td>
-<input type="text" name="query" value="<?php echo $this->query; ?>" />
+<input type="text" name="query" value="<?php echo htmlspecialchars($this->query); ?>" />
 <select name="mode">
 <option value="1" <?php echo ($mode=='AND') ? "selected" : ""; ?>><?php printMLText("search_mode_and");?>
 <option value="0"<?php echo ($mode=='OR') ? "selected" : ""; ?>><?php printMLText("search_mode_or");?>
@@ -246,7 +246,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <tr>
 <td><?php printMLText("search_query");?>:</td>
 <td>
-<input type="text" name="query" value="<?php echo $this->query; ?>" />
+<input type="text" name="query" value="<?php echo htmlspecialchars($this->query); ?>" />
 <!--
 <select name="mode">
 <option value="1" selected><?php printMLText("search_mode_and");?>

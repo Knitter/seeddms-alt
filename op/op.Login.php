@@ -278,7 +278,7 @@ if (isset($_COOKIE["mydms_session"])) {
 	/* Load session */
 	$dms_session = $_COOKIE["mydms_session"];
 	if(!$resArr = $session->load($dms_session)) {
-		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot); //delete cookie
+		setcookie("mydms_session", $dms_session, time()-3600, $settings->_httpRoot, null, null, true); //delete cookie
 		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
 		exit;
 	} else {
@@ -296,7 +296,7 @@ if (isset($_COOKIE["mydms_session"])) {
 		$lifetime = time() + intval($settings->_cookieLifetime);
 	else
 		$lifetime = 0;
-	setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot);
+	setcookie("mydms_session", $id, $lifetime, $settings->_httpRoot, null, null, true);
 }
 
 // TODO: by the PHP manual: The superglobals $_GET and $_REQUEST  are already decoded. 

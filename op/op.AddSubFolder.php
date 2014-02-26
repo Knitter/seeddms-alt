@@ -98,6 +98,7 @@ if (is_object($subFolder)) {
 		$message = "new_subfolder_email_body";
 		$params = array();
 		$params['name'] = $subFolder->getName();
+		$params['folder_name'] = $folder->getName();
 		$params['folder_path'] = $folder->getFolderPathPlain();
 		$params['username'] = $user->getFullName();
 		$params['comment'] = $comment;

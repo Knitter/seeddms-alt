@@ -27,7 +27,7 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-if (isset($_GET["logname"])) $logname=$_GET["logname"];
+if (isset($_GET["logname"])) $logname=basename($_GET["logname"]);
 else $logname=NULL;
 
 if (isset($_GET["mode"])) $mode=$_GET["mode"];
