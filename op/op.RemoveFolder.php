@@ -94,10 +94,11 @@ if ($folder->remove()) {
 		$message = "folder_deleted_email_body";
 		$params = array();
 		$params['name'] = $foldername;
-		$params['folder_path'] = $folder->getFolderPathPlain();
+		$params['folder_path'] = $parent->getFolderPathPlain();
 		$params['username'] = $user->getFullName();
 		$params['sitename'] = $settings->_siteName;
 		$params['http_root'] = $settings->_httpRoot;
+		$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$parent->getID();
 		$notifier->toList($user, $nl["users"], $subject, $message, $params);
 		foreach ($nl["groups"] as $grp) {
 			$notifier->toGroup($user, $grp, $subject, $message, $params);
