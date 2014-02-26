@@ -10,6 +10,7 @@
 - take out debug echo statement (Bug #125)
 - fix some errors in notification mails
 - fix some security holes
+- add initial version of REST api
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.3
