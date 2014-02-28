@@ -9,7 +9,7 @@
 - unlinked documents/folders can be moved into root folder
 - take out debug echo statement (Bug #125)
 - fix some errors in notification mails
-- fix some security holes
+- fix some security holes (found by Craig Arendt, Stratum Security)
 - add initial version of REST api
 
 --------------------------------------------------------------------------------
