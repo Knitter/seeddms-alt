@@ -42,20 +42,20 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		fclose($fpnew);
 
 		if (!isset($_POST["documentid"]) || !is_numeric($_POST["documentid"]) || intval($_POST["documentid"])<1) {
-			echo getMLText("invalid_doc_id");
+			UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 		}
 
 		$documentid = $_POST["documentid"];
 		$document = $dms->getDocument($documentid);
 
 		if (!is_object($document)) {
-			echo getMLText("invalid_doc_id");
+			UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 		}
 
 		$folder = $document->getFolder();
 
 		if ($document->getAccessMode($user) < M_READWRITE) {
-			echo getMLText("access_denied");
+			UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 		}
 
 		$userfiletmp = $settings->_stagingDir.$fileId;
