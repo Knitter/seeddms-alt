@@ -55,6 +55,7 @@ if(isset($_POST['categoryidform1'])) {
 	$categories = array();
 }
 $sequence = $_POST["sequence"];
+$sequence = str_replace(',', '.', $_POST["sequence"]);
 if (!is_numeric($sequence)) {
 	$sequence="keep";
 }

@@ -49,6 +49,7 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 }
 
 $sequence = $_POST["sequence"];
+$sequence = str_replace(',', '.', $_POST["sequence"]);
 
 if (!is_numeric($sequence)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_sequence"));

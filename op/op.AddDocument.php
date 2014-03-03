@@ -91,6 +91,7 @@ $reqversion = (int)$_POST["reqversion"];
 if ($reqversion<1) $reqversion=1;
 
 $sequence = $_POST["sequence"];
+$sequence = str_replace(',', '.', $_POST["sequence"]);
 if (!is_numeric($sequence)) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("invalid_sequence"));
 }

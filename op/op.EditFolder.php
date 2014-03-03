@@ -46,7 +46,7 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 $name    = $_POST["name"];
 $comment = $_POST["comment"];
 if(isset($_POST["sequence"])) {
-	$sequence = $_POST["sequence"];
+	$sequence = str_replace(',', '.', $_POST["sequence"]);
 	if (!is_numeric($sequence)) {
 		$sequence = "keep";
 	}
