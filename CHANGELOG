@@ -1,4 +1,11 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.5
+--------------------------------------------------------------------------------
+- fix setting of order by sequence in configuration (Bug #127)
+- fix ordering by sequence in folder listing
+- list mandatory approvers/reviewers without access on document
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.4
 --------------------------------------------------------------------------------
 - clean up and test ldap authentication code
