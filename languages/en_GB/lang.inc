@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (975), netixw (14)
+//    Translators: Admin (981), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'Comment changed',
 'folder_comment_changed_email_body' => 'Comment changed
 Folder: [name]
-Version: [version]
 Old comment: [old_comment]
 Comment: [new_comment]
 Parent folder: [folder_path]
 User: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - Comment changed',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - Comment changed',
 'folder_contents' => 'Folder Contents',
 'folder_deleted_email' => 'Folder deleted',
 'folder_deleted_email_body' => 'Folder deleted
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'Logout',
 'log_management' => 'Log files management',
 'manager' => 'Manager',
+'mandatory_approvergroup_no_access' => 'Mandatory group of approvers \'[group]\' has insufficient access rights.',
+'mandatory_approver_no_access' => 'Mandatory approver \'[user]\' has insufficient access rights.',
+'mandatory_reviewergroup_no_access' => 'Mandatory group of reviewers \'[group]\' has insufficient access rights.',
+'mandatory_reviewer_no_access' => 'Mandatory reviewer \'[user]\' has insufficient access rights.',
 'march' => 'March',
 'max_upload_size' => 'Maximum upload size',
 'may' => 'May',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (875)
+//    Translators: Admin (877)
 
 $text = array(
 'accept' => 'وافق',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'تم تعديل التعليق',
 'folder_comment_changed_email_body' => 'تم تعديل التعليق
 الملجلد: [name]
-الإصدرا: [version]
 التعليق القديم: [old_comment]
 التعليق الجديد: [new_comment]
 Parent folder: [folder_path]
 المستخدم: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - تم تعديل التعليق',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - تم تعديل التعليق',
 'folder_contents' => 'محتوى المجلدات',
 'folder_deleted_email' => 'تم مسح المجلد',
 'folder_deleted_email_body' => 'تم مسح المجلد
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'خروج',
 'log_management' => 'ادارة ملفات السجلات',
 'manager' => 'مدير',
+'mandatory_approvergroup_no_access' => '',
+'mandatory_approver_no_access' => '',
+'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewer_no_access' => '',
 'march' => 'مارس',
 'max_upload_size' => 'الحجم الاقصى للملف',
 'may' => 'مايو',

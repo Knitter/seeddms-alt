@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (907), francisco (2)
+//    Translators: Admin (909), francisco (2)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'Comentario modificado',
 'folder_comment_changed_email_body' => 'Comentario modificado
 Carpeta: [name]
-Versión: [version]
 Comentario antiguo: [old_comment]
 Comentario: [new_comment]
 Carpeta principal: [folder_path]
 Usuario: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - Comentario modificado',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - Comentario modificado',
 'folder_contents' => 'Contenido de Carpetas',
 'folder_deleted_email' => 'Carpeta eliminada',
 'folder_deleted_email_body' => 'Carpeta eliminada
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'Desconectar',
 'log_management' => 'Gestión de ficheros de registro',
 'manager' => 'Manager',
+'mandatory_approvergroup_no_access' => '',
+'mandatory_approver_no_access' => '',
+'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewer_no_access' => '',
 'march' => 'Marzo',
 'max_upload_size' => 'Tamaño máximo de subida para cada fichero',
 'may' => 'Mayo',

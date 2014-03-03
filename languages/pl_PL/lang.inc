@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (667), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (669), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'Zmiana komentarza',
 'folder_comment_changed_email_body' => 'Komentarz uległ zmianie
 Folder: [name]
-Wersja: [version]
 Poprzedni komentarz: [old_comment]
 Komentarz: [new_comment]
 Parent folder: [folder_path]
 Użytkownik: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - Zmiana komentarza',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - Zmiana komentarza',
 'folder_contents' => 'Zawartość folderu',
 'folder_deleted_email' => 'Folder został usunięty',
 'folder_deleted_email_body' => 'Folder usunięto
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'Wyloguj',
 'log_management' => 'Zarządzanie plikami dziennika',
 'manager' => 'Zarządca',
+'mandatory_approvergroup_no_access' => '',
+'mandatory_approver_no_access' => '',
+'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewer_no_access' => '',
 'march' => 'Marzec',
 'max_upload_size' => 'Maksymalny rozmiar pliku',
 'may' => 'Maj',

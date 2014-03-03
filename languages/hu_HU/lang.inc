@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (535), ribaz (956)
+//    Translators: Admin (537), ribaz (956)
 
 $text = array(
 'accept' => 'Elfogad',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'Megjegyzés módosult',
 'folder_comment_changed_email_body' => 'Megjegyzés módosult
 Mappa: [name]
-Verzió: [version]
 Régi megjegyzés: [old_comment]
 Megjegyzés: [new_comment]
 Szülő mappa: [folder_path]
 Felhasználó: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - Megjegyzés módosult',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - Megjegyzés módosult',
 'folder_contents' => 'Mappa tartalom',
 'folder_deleted_email' => 'Mappa törölve',
 'folder_deleted_email_body' => 'Mappa törölve
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'Kijelentkezés',
 'log_management' => 'Napló állományok kezelése',
 'manager' => 'Kezelő',
+'mandatory_approvergroup_no_access' => '',
+'mandatory_approver_no_access' => '',
+'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewer_no_access' => '',
 'march' => 'Március',
 'max_upload_size' => 'Legnagyobb feltölthető méret',
 'may' => 'Május',
