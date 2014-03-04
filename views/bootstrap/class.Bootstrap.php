@@ -963,7 +963,7 @@ function clearFilename<?php print $formName ?>() {
 		echo "</div>\n";
 	} /* }}} */
 
-	function exitError($pagetitle,$error) { /* {{{ */
+	function exitError($pagetitle, $error, $noexit=false) { /* {{{ */
 	
 		$this->htmlStartPage($pagetitle);
 		$this->globalNavigation();
@@ -978,7 +978,10 @@ function clearFilename<?php print $formName ?>() {
 		$this->htmlEndPage();
 		
 		add_log_line(" UI::exitError error=".$error." pagetitle=".$pagetitle);
-		
+
+		if($noexit)
+			return;
+
 		exit;	
 	} /* }}} */
 
