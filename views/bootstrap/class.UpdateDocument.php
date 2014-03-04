@@ -198,6 +198,22 @@ function checkForm()
 				}
 ?>
         </select>
+<?php
+				/* Check for mandatory reviewer without access */
+				foreach($res as $r) {
+					if($r['reviewerUserID']) {
+						$hasAccess = false;
+						foreach ($docAccess["users"] as $usr) {
+							if ($r['reviewerUserID']==$usr->getID())
+								$hasAccess = true;
+						}
+						if(!$hasAccess) {
+							$noAccessUser = $dms->getUser($r['reviewerUserID']);
+							echo "<div class=\"alert alert-warning\">".getMLText("mandatory_reviewer_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")")))."</div>";
+						}
+					}
+				}
+?>
       </td>
     </tr>
     <tr>
@@ -214,6 +230,23 @@ function checkForm()
 
 					if ($mandatory) print "<option value=\"".$grp->getID()."\" disabled=\"disabled\">".htmlspecialchars($grp->getName())."</option>";
 					else print "<option value=\"".$grp->getID()."\">".htmlspecialchars($grp->getName())."</option>";
+				}
+?>
+			</select>
+<?php
+				/* Check for mandatory reviewer group without access */
+				foreach($res as $r) {
+					if ($r['reviewerGroupID']) {
+						$hasAccess = false;
+						foreach ($docAccess["groups"] as $grp) {
+							if ($r['reviewerGroupID']==$grp->getID())
+								$hasAccess = true;
+						}
+						if(!$hasAccess) {
+							$noAccessGroup = $dms->getGroup($r['reviewerGroupID']);
+							echo "<div class=\"alert alert-warning\">".getMLText("mandatory_reviewergroup_no_access", array('group'=>htmlspecialchars($noAccessGroup->getName())))."</div>";
+						}
+					}
 				}
 ?>
       </td>
@@ -242,6 +275,22 @@ function checkForm()
 				}
 ?>
         </select>
+<?php
+				/* Check for mandatory approvers without access */
+				foreach($res as $r) {
+					if($r['approverUserID']) {
+						$hasAccess = false;
+						foreach ($docAccess["users"] as $usr) {
+							if ($r['approverUserID']==$usr->getID())
+								$hasAccess = true;
+						}
+						if(!$hasAccess) {
+							$noAccessUser = $dms->getUser($r['approverUserID']);
+							echo "<div class=\"alert alert-warning\">".getMLText("mandatory_approver_no_access", array('user'=>htmlspecialchars($noAccessUser->getFullName()." (".$noAccessUser->getLogin().")")))."</div>";
+						}
+					}
+				}
+?>
       </td>
     </tr>
       <td>
@@ -261,6 +310,22 @@ function checkForm()
 				}
 ?>
         </select>
+<?php
+				/* Check for mandatory approver groups without access */
+				foreach($res as $r) {
+					if ($r['approverGroupID']) {
+						$hasAccess = false;
+						foreach ($docAccess["groups"] as $grp) {
+							if ($r['approverGroupID']==$grp->getID())
+								$hasAccess = true;
+						}
+						if(!$hasAccess) {
+							$noAccessGroup = $dms->getGroup($r['approverGroupID']);
+							echo "<div class=\"alert alert-warning\">".getMLText("mandatory_approvergroup_no_access", array('group'=>htmlspecialchars($noAccessGroup->getName())))."</div>";
+						}
+					}
+				}
+?>
 			</td>
 			</tr>
 		<tr>

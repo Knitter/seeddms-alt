@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (608), kreml (370)
+//    Translators: Admin (610), kreml (379)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -318,7 +318,7 @@ Nadřazená složka: [folder_path]
 Uživatel: [username]
 URL: [url]',
 'expiry_changed_email_subject' => '[sitename]: [name] - Datum ukončení platnosti změněn',
-'extension_manager' => '',
+'extension_manager' => 'Správa rozšíření',
 'february' => 'Únor',
 'file' => 'Soubor',
 'files' => 'Soubory',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'Změna komentáře',
 'folder_comment_changed_email_body' => 'Změna komentáře
 Složka: [name]
-Verze: [version]
 Starý komentář: [old_comment]
 Komentář: [new_comment]
 Nadřazená složka: [folder_path]
 Uživatel: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - Změna komentáře',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - Změna komentáře',
 'folder_contents' => 'Obsah složky',
 'folder_deleted_email' => 'Složka odstraněna',
 'folder_deleted_email_body' => 'Složka smazána
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'Odhlášení',
 'log_management' => 'Správa LOG souborů',
 'manager' => 'Správce',
+'mandatory_approvergroup_no_access' => '',
+'mandatory_approver_no_access' => '',
+'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewer_no_access' => '',
 'march' => 'Březen',
 'max_upload_size' => 'Max. délka pro nahrání jednoho souboru',
 'may' => 'Květen',
@@ -799,8 +802,8 @@ URL: [url]',
 'settings_enableRecursiveCount_desc' => 'Při zapnutí je počet dokumentů a složek v zobrazení složek určen počítáním všech objektů při rekurzivním zpracování složek a počítáním těch dokumentů a složek, ke kterým má uživatel přístup.',
 'settings_enableSelfRevApp' => 'Povolit posouzení/schválení pro přihlášeného uživatele',
 'settings_enableSelfRevApp_desc' => 'Povolte, pokud chcete aktuálně přihlášeného uvést jako posuzovatele/schvalovatele a pro přechody pracovního postupu',
-'settings_enableThemeSelector' => '',
-'settings_enableThemeSelector_desc' => '',
+'settings_enableThemeSelector' => 'Volba tématu',
+'settings_enableThemeSelector_desc' => 'Volba témat na přihlašovací stránce.',
 'settings_enableUserImage' => 'Enable User Image',
 'settings_enableUserImage_desc' => 'Enable users images',
 'settings_enableUsersView' => 'Enable Users View',
@@ -817,7 +820,7 @@ URL: [url]',
 'settings_expandFolderTree_val0' => 'start with tree hidden',
 'settings_expandFolderTree_val1' => 'start with tree shown and first level expanded',
 'settings_expandFolderTree_val2' => 'start with tree shown fully expanded',
-'settings_Extensions' => '',
+'settings_Extensions' => 'Rozšíření',
 'settings_extraPath' => 'Extra PHP include Path',
 'settings_extraPath_desc' => 'Cesta pro další software. To je adresář obsahující např. "adodb" adresář nebo další "pear" balíčky.',
 'settings_firstDayOfWeek' => 'First day of the week',
@@ -906,11 +909,11 @@ URL: [url]',
 'settings_smtpServer_desc' => 'SMTP Server hostname',
 'settings_smtpUser' => 'Uživatel SMTP serveru',
 'settings_smtpUser_desc' => 'Uživatel SMTP serveru',
-'settings_sortFoldersDefault' => '',
-'settings_sortFoldersDefault_desc' => '',
-'settings_sortFoldersDefault_val_name' => '',
-'settings_sortFoldersDefault_val_sequence' => '',
-'settings_sortFoldersDefault_val_unsorted' => '',
+'settings_sortFoldersDefault' => 'Výchozí metoda řazení',
+'settings_sortFoldersDefault_desc' => 'Toto nastaví metodu třídění pro složky a dokumenty v zobrazení složek.',
+'settings_sortFoldersDefault_val_name' => 'podle jména',
+'settings_sortFoldersDefault_val_sequence' => 'podle posloupnosti',
+'settings_sortFoldersDefault_val_unsorted' => 'netříděno',
 'settings_sortUsersInList' => 'Seřadit uživatele v seznamu',
 'settings_sortUsersInList_desc' => 'Nastavuje, zda budou uživatelé v nabídce seřazeni podle "login-u" nebo podle celého jména',
 'settings_sortUsersInList_val_fullname' => 'Řadit podle celého jména',

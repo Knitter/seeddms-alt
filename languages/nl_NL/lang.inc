@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (669), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (671), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'Commentaar gewijzigd',
 'folder_comment_changed_email_body' => 'Commentaar gewijzigd
 Map: [name]
-Versie: [version]
 Oude commentaar: [old_comment]
 Commentaar: [new_comment]
 Bovenliggende map: [folder_path]
 Gebruiker: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - Commentaar gewijzigd',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - Commentaar gewijzigd',
 'folder_contents' => 'Map Inhoud',
 'folder_deleted_email' => 'Map verwijderd',
 'folder_deleted_email_body' => 'Map verwijderd
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'Log uit',
 'log_management' => 'Logbestanden beheer',
 'manager' => 'Beheerder',
+'mandatory_approvergroup_no_access' => '',
+'mandatory_approver_no_access' => '',
+'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewer_no_access' => '',
 'march' => 'maart',
 'max_upload_size' => 'Maximale upload omvang voor ieder bestand',
 'may' => 'mei',

@@ -32,13 +32,9 @@ include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
 
 function _printMessage($heading, $message) {
 
-	UI::exitError($heading, $message);
-	exit;
-	UI::htmlStartPage($heading, "login");
-	UI::globalBanner();
-	UI::pageNavigation($heading);
-	UI::contentContainer($message);
-	UI::htmlEndPage();
+	global $theme;
+	$view = UI::factory($theme, 'ErrorDlg');
+	$view->exitError($heading, $message, true);
 	return;
 }
 

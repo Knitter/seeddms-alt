@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1072), tmichelfelder (56)
+//    Translators: Admin (1074), tmichelfelder (56)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'Kommentar har ändrats',
 'folder_comment_changed_email_body' => 'Kommentar har ändrats
 Katalog: [name]
-Version: [version]
 Gamla kommentaret: [old_comment]
 Kommentar: [new_comment]
 Överordnade katalog: [folder_path]
 Användare: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - Kommentar har ändrats',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - Kommentar har ändrats',
 'folder_contents' => 'Kataloginnehåll',
 'folder_deleted_email' => 'Katalog har tagits bort',
 'folder_deleted_email_body' => 'Katalog har tagits bort
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'Logga ut',
 'log_management' => 'Loggfilshantering',
 'manager' => 'Manager',
+'mandatory_approvergroup_no_access' => '',
+'mandatory_approver_no_access' => '',
+'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewer_no_access' => '',
 'march' => 'mars',
 'max_upload_size' => 'Maximal storlek för uppladdning',
 'may' => 'maj',

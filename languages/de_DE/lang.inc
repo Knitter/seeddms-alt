@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1819)
+//    Translators: Admin (1826)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -331,13 +331,12 @@ URL: [url]',
 'folder_comment_changed_email' => 'Kommentar geändert',
 'folder_comment_changed_email_body' => 'Comment changed
 Ordner: [name]
-Version: [version]
 Old comment: [old_comment]
 Comment: [new_comment]
 Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
-'folder_comment_changed_email_subject' => '[sitename]: [folder] - Comment changed',
+'folder_comment_changed_email_subject' => '[sitename]: [name] - Comment changed',
 'folder_contents' => 'Ordner enthält',
 'folder_deleted_email' => 'Ordner gelöscht',
 'folder_deleted_email_body' => 'Ordner gelöscht
@@ -468,6 +467,10 @@ URL: [url]',
 'logout' => 'Abmelden',
 'log_management' => 'Management der Log-Dateien',
 'manager' => 'Manager',
+'mandatory_approvergroup_no_access' => 'Zwingende Gruppe von Freigebern \'[group]\' hat unzureichende Zugriffsrechte.',
+'mandatory_approver_no_access' => 'Zwingender Freigeber \'[user]\' hat unzureichende Zugriffsrechte.',
+'mandatory_reviewergroup_no_access' => 'Zwingende Gruppe von Prüfern \'[group]\' hat unzureichende Zugriffsrechte.',
+'mandatory_reviewer_no_access' => 'Zwingender Prüfer \'[user]\' hat nicht ausreichende Zugriffsrechte.',
 'march' => 'März',
 'max_upload_size' => 'Maximale Dateigröße',
 'may' => 'Mai',
