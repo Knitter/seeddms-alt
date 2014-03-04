@@ -145,7 +145,7 @@ if ($action == "setowner") {
 			$message = "ownership_changed_email_body";
 			$params = array();
 			$params['name'] = $folder->getName();
-			$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
 			$params['old_owner'] = $oldOwner->getFullName();
 			$params['new_owner'] = $newOwner->getFullName();
