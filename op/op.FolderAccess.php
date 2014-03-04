@@ -145,7 +145,10 @@ if ($action == "setowner") {
 			$message = "ownership_changed_email_body";
 			$params = array();
 			$params['name'] = $folder->getName();
-			$params['folder_path'] = $folder->getFolderPathPlain();
+			if($folder->getParent())
+				$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			else
+				$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
 			$params['old_owner'] = $oldOwner->getFullName();
 			$params['new_owner'] = $newOwner->getFullName();
@@ -189,7 +192,10 @@ else if ($action == "notinherit") {
 			$message = "access_permission_changed_email_body";
 			$params = array();
 			$params['name'] = $folder->getName();
-			$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			if($folder->getParent())
+				$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			else
+				$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
 			$params['sitename'] = $settings->_siteName;
@@ -222,7 +228,10 @@ else if ($action == "notinherit") {
 			$message = "access_permission_changed_email_body";
 			$params = array();
 			$params['name'] = $folder->getName();
-			$params['folder_path'] = $folder->getFolderPathPlain();
+			if($folder->getParent())
+				$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			else
+				$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
 			$params['sitename'] = $settings->_siteName;
@@ -273,7 +282,10 @@ else if ($action == "inherit") {
 			$message = "access_permission_changed_email_body";
 			$params = array();
 			$params['name'] = $folder->getName();
-			$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			if($folder->getParent())
+				$params['folder_path'] = $folder->getParent()->getFolderPathPlain();
+			else
+				$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewFolder.php?folderid=".$folder->getID();
 			$params['sitename'] = $settings->_siteName;
