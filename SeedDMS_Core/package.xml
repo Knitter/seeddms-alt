@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2014-02-01</date>
+ <date>2014-03-04</date>
  <time>16:19:34</time>
  <version>
-  <release>4.3.4</release>
-  <api>4.3.4</api>
+  <release>4.3.5</release>
+  <api>4.3.5</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,7 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- fix handling of multivalue attributes
+no changes
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -600,6 +600,22 @@ New release
   do any sorting if $orderby is not set.
 - database hostname can have port seperated by ':'
 - make all functions in SeedDMS_Core_File static (fixes problem with php 5.5.x)
+   </notes>
+  </release>
+  <release>
+   <date>2014-02-01</date>
+   <time>16:19:34</time>
+   <version>
+    <release>4.3.4</release>
+    <api>4.3.4</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- fix handling of multivalue attributes
    </notes>
   </release>
  </changelog>
