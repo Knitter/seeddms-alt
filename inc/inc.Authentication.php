@@ -93,4 +93,10 @@ if (!$user->isAdmin()) {
 		}
 	}
 }
+
+/* Update cookie lifetime */
+if($settings->_cookieLifetime) {
+	$lifetime = time() + intval($settings->_cookieLifetime);
+	setcookie("mydms_session", $dms_session, $lifetime, $settings->_httpRoot, null, null, true);
+}
 ?>
