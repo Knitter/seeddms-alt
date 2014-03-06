@@ -57,7 +57,7 @@ class SeedDMS_View_GroupView extends SeedDMS_Blue_Style {
 				echo " : ".htmlspecialchars($group->getComment());
 			foreach($managers as $manager)
 				if($manager->getId() == $user->getId()) {
-					echo " : you are the manager of this group";
+					echo " : ".getMLText("manager_of_group");
 					$ismanager = true;
 				}
 			echo "</li>";
