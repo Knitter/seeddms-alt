@@ -122,11 +122,15 @@ switch($command) {
 				$showdocs = false;
 			else
 				$showdocs = true;
+			if(empty($_GET['orderby']))
+				$orderby = $settings->_sortFoldersDefault;
+			else
+				$orderby = $_GET['orderby'];
 
 			$folder = $dms->getFolder($nodeid);
 			if (!is_object($folder)) return '';
 			
-			$subfolders = $folder->getSubFolders();
+			$subfolders = $folder->getSubFolders($orderby);
 			$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, M_READ);
 			$tree = array();
 			foreach($subfolders as $subfolder) {
@@ -136,7 +140,7 @@ switch($command) {
 				$tree[] = $level;
 			}
 			if($showdocs) {
-				$documents = $folder->getDocuments();
+				$documents = $folder->getDocuments($orderby);
 				$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 				foreach($documents as $document) {
 					$level = array('label'=>$document->getName(), 'id'=>$document->getID(), 'load_on_demand'=>false, 'is_folder'=>false);
