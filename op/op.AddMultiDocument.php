@@ -128,7 +128,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		}
 
 		// add mandatory reviewers/approvers
-		$docAccess = $folder->getReadAccessList();
+		$docAccess = $folder->getReadAccessList($settings->_enableAdminRevApp, $settings->_enableOwnerRevApp);
 		$res=$user->getMandatoryReviewers();
 		foreach ($res as $r){
 
