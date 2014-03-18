@@ -1433,17 +1433,30 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 	/**
 	 * Return all document links
 	 *
-	 * The list contains all links to other documents, even those which
-	 * may not be visible certain users. The application should call
+	 * The list may contain all links to other documents, even those which
+	 * may not be visible by certain users, unless you pass appropriate
+	 * parameters to filter out public links and those created by
+	 * the given user. The application may call
 	 * SeedDMS_Core_DMS::filterDocumentLinks() afterwards.
 	 *
+	 * @param boolean $publiconly return on publically visible links
+	 * @param object $user return also private links of this user
 	 * @return array list of objects of class SeedDMS_Core_DocumentLink
 	 */
-	function getDocumentLinks() { /* {{{ */
+	function getDocumentLinks($publiconly=false, $user=null) { /* {{{ */
 		if (!isset($this->_documentLinks)) {
 			$db = $this->_dms->getDB();
 
 			$queryStr = "SELECT * FROM tblDocumentLinks WHERE document = " . $this->_id;
+			$tmp = array();
+			if($publiconly)
+				$tmp[] = "public=1";
+			if($user)
+				$tmp[] = "userID=".$user->getID();
+			if($tmp) {
+				$queryStr .= " AND (".implode(" OR ", $tmp).")";
+			}
+
 			$resArr = $db->getResultArray($queryStr);
 			if (is_bool($resArr) && !$resArr)
 				return false;
@@ -1455,6 +1468,50 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 			}
 		}
 		return $this->_documentLinks;
+	} /* }}} */
+
+	/**
+	 * Return all document having a link on this document
+	 *
+	 * The list contains all documents which have a link to the current
+	 * document. The list contains even those documents which
+	 * may not be accessible by the user, unless you pass appropriate
+	 * parameters to filter out public links and those created by
+	 * the given user.
+	 * This functions is basically the reverse of
+	 * SeedDMS_Core_Document::getDocumentLinks()
+	 *
+	 * The application may call
+	 * SeedDMS_Core_DMS::filterDocumentLinks() afterwards.
+	 *
+	 * @param boolean $publiconly return on publically visible links
+	 * @param object $user return also private links of this user
+	 * @return array list of objects of class SeedDMS_Core_DocumentLink
+	 */
+	function getReverseDocumentLinks($publiconly=false, $user=null) { /* {{{ */
+			$db = $this->_dms->getDB();
+
+			$queryStr = "SELECT * FROM tblDocumentLinks WHERE target = " . $this->_id;
+			$tmp = array();
+			if($publiconly)
+				$tmp[] = "public=1";
+			if($user)
+				$tmp[] = "userID=".$user->getID();
+			if($tmp) {
+				$queryStr .= " AND (".implode(" OR ", $tmp).")";
+			}
+
+			$resArr = $db->getResultArray($queryStr);
+			if (is_bool($resArr) && !$resArr)
+				return false;
+
+			$links = array();
+			foreach ($resArr as $row) {
+				$document = $this->_dms->getDocument($row["document"]);
+				array_push($links, new SeedDMS_Core_DocumentLink($row["id"], $document, $this, $row["userID"], $row["public"]));
+			}
+
+		return $links;
 	} /* }}} */
 
 	function addDocumentLink($targetID, $userID, $public) { /* {{{ */
@@ -1672,6 +1729,9 @@ class SeedDMS_Core_Document extends SeedDMS_Core_Object { /* {{{ */
 
 	/**
 	 * Get List of users and groups which have read access on the document
+	 * The list will not include any guest users,
+	 * administrators and the owner of the folder unless $listadmin resp.
+	 * $listowner is set to true.
 	 *
 	 * This function is deprecated. Use
 	 * {@see SeedDMS_Core_Document::getReadAccessList()} instead.
