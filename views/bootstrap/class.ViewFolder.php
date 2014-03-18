@@ -84,8 +84,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$workflowmode = $this->params['workflowmode'];
 		$enableRecursiveCount = $this->params['enableRecursiveCount'];
 		$maxRecursiveCount = $this->params['maxRecursiveCount'];
-
-		$previewwidth = 40;
+		$previewwidth = $this->params['previewWidthList'];
 
 		$folderid = $folder->getId();
 

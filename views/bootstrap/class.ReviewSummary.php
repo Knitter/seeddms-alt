@@ -77,7 +77,7 @@ class SeedDMS_View_ReviewSummary extends SeedDMS_Bootstrap_Style {
 				}
 			
 				print "<tr>\n";
-				print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".htmlspecialchars($docIdx[$st["documentID"]][$st["version"]]["name"])."</a></td>";
+				print "<td><a href=\"out.DocumentVersionDetail.php?documentid=".$st["documentID"]."&version=".$st["version"]."\">".htmlspecialchars($document->getName())."</a></td>";
 				print "<td>".htmlspecialchars($owner->getFullName())."</td>";
 				print "<td>".getOverallStatusText($st["status"])."</td>";
 				print "<td>".$st["version"]."</td>";

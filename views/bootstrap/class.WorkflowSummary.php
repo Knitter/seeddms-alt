@@ -35,8 +35,7 @@ class SeedDMS_View_WorkflowSummary extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$cachedir = $this->params['cachedir'];
-
-		$previewwidth = 40;
+		$previewwidth = $this->params['previewWidthList'];
 
 		$this->htmlStartPage(getMLText("my_documents"));
 		$this->globalNavigation();
