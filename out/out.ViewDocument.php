@@ -74,6 +74,8 @@ if($view) {
 	$view->setParam('enableownerrevapp', $settings->_enableOwnerRevApp);
 	$view->setParam('cachedir', $settings->_cacheDir);
 	$view->setParam('workflowmode', $settings->_workflowMode);
+	$view->setParam('previewWidthList', $settings->_previewWidthList);
+	$view->setParam('previewWidthDetail', $settings->_previewWidthDetail);
 	$view->show();
 	exit;
 }

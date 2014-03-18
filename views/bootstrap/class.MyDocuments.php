@@ -38,8 +38,7 @@ class SeedDMS_View_MyDocuments extends SeedDMS_Bootstrap_Style {
 		$showInProcess = $this->params['showinprocess'];
 		$cachedir = $this->params['cachedir'];
 		$workflowmode = $this->params['workflowmode'];
-
-		$previewwidth = 40;
+		$previewwidth = $this->params['previewWidthList'];
 
 		$db = $dms->getDB();
 		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidth);

@@ -168,6 +168,10 @@ class Settings { /* {{{ */
 	var $_adminIP = "";
 	// Max Execution Time
 	var $_maxExecutionTime = null;
+	// Preview image width in lists
+	var $_previewWidthList = 40;
+	// Preview image width on document details page
+	var $_previewWidthDetail = 100;
 	// Extra Path to additional software, will be added to include path
 	var $_extraPath = null;
 	// DB-Driver used by adodb (see adodb-readme)
@@ -310,6 +314,8 @@ class Settings { /* {{{ */
 		$this->_printDisclaimer = Settings::boolVal($tab["printDisclaimer"]);
 		$this->_language = strval($tab["language"]);
 		$this->_theme = strval($tab["theme"]);
+		$this->_previewWidthList = intval($tab["previewWidthList"]);
+		$this->_previewWidthDetail = intval($tab["previewWidthDetail"]);
 
 		// XML Path: /configuration/site/edition
 		$node = $xml->xpath('/configuration/site/edition');
@@ -583,6 +589,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "printDisclaimer", $this->_printDisclaimer);
     $this->setXMLAttributValue($node, "language", $this->_language);
     $this->setXMLAttributValue($node, "theme", $this->_theme);
+    $this->setXMLAttributValue($node, "previewWidthList", $this->_previewWidthList);
+    $this->setXMLAttributValue($node, "previewWidthDetail", $this->_previewWidthDetail);
 
     // XML Path: /configuration/site/edition
     $node = $this->getXMLNode($xml, '/configuration/site', 'edition');

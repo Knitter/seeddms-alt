@@ -142,7 +142,7 @@ if (isset($_POST["grpApprovers"])) {
 }
 
 // add mandatory reviewers/approvers
-$docAccess = $folder->getReadAccessList();
+$docAccess = $folder->getReadAccessList($settings->_enableAdminRevApp, $settings->_enableOwnerRevApp);
 $res=$user->getMandatoryReviewers();
 foreach ($res as $r){
 

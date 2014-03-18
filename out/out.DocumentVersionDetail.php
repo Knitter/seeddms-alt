@@ -64,7 +64,7 @@ if ($latestContent->getVersion()==$version->getVersion()) {
 $folder = $document->getFolder();
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'viewonlinefiletypes'=>$settings->_viewOnlineFileTypes, 'enableversionmodification'=>$settings->_enableVersionModification, 'cachedir'=>$settings->_cacheDir));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'folder'=>$folder, 'document'=>$document, 'version'=>$version, 'viewonlinefiletypes'=>$settings->_viewOnlineFileTypes, 'enableversionmodification'=>$settings->_enableVersionModification, 'previewwidthdetail'=>$settings->_previewWidthDetail, 'cachedir'=>$settings->_cacheDir));
 if($view) {
 	$view->show();
 	exit;

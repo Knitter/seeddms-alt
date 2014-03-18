@@ -115,6 +115,14 @@ if(!is_writeable($settings->_configFilePath)) {
           </SELECT>
         </td>
       </tr>
+      <tr title="<?php printMLText("settings_previewWidthList_desc");?>">
+        <td><?php printMLText("settings_previewWidthList");?>:</td>
+        <td><input name="previewWidthList" type="text" value="<?php echo $settings->_previewWidthList ?>" /></td>
+      </tr>
+      <tr title="<?php printMLText("settings_previewWidthDetail_desc");?>">
+        <td><?php printMLText("settings_previewWidthDetail");?>:</td>
+        <td><input name="previewWidthDetail" type="text" value="<?php echo $settings->_previewWidthDetail ?>" /></td>
+      </tr>
 
       <!--
         -- SETTINGS - SITE - EDITION

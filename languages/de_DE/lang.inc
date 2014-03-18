@@ -638,6 +638,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'return_from_subworkflow_email_subject' => '[sitename]: [name] - Rückkehr vom Subworkflow',
+'reverse_links' => 'Dokumente mit Verknüpfung auf dieses Dokument',
 'reviewers' => 'Prüfer',
 'reviewer_already_assigned' => 'Prüfer bereits zugewiesen',
 'reviewer_already_removed' => 'Prüfer wurde bereits aus dem Prüfvorgang entfernt oder hat die Prüfung bereits abgeschlossen',

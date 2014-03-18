@@ -1019,7 +1019,7 @@ function clearFilename<?php print $formName ?>() {
 								$children[] = $node2;
 							}
 						}
-						$node['children'] = jqtree($path, $subfolder, $user, $accessmode, $showdocs, $expandtree);
+						$node['children'] = jqtree($path, $subfolder, $user, $accessmode, $showdocs, $expandtree, $orderby);
 					}
 					$children[] = $node;
 				}
@@ -1061,7 +1061,7 @@ function clearFilename<?php print $formName ?>() {
 			$tree = array(array('label'=>$root->getName(), 'id'=>$root->getID(), 'load_on_demand'=>true, 'is_folder'=>true));
 		}
 
-		echo "<div id=\"jqtree".$formid."\" style=\"margin-left: 10px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."\"></div>\n";
+		echo "<div id=\"jqtree".$formid."\" style=\"margin-left: 10px;\" data-url=\"../op/op.Ajax.php?command=subtree&showdocs=".$showdocs."&orderby=".$orderby."\"></div>\n";
 ?>
 	<script language="JavaScript">
 var data = <?php echo json_encode($tree); ?>;
