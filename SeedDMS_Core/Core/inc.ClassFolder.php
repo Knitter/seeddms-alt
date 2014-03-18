@@ -1302,6 +1302,9 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 	/**
 	 * Returns a list of groups and users with read access on the folder
+	 * The list will not include any guest users,
+	 * administrators and the owner of the folder unless $listadmin resp.
+	 * $listowner is set to true.
 	 *
 	 * @param boolean $listadmin if set to true any admin will be listed too
 	 * @param boolean $listowner if set to true the owner will be listed too
