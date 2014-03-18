@@ -106,6 +106,10 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		$links = $document->getDocumentLinks();
 		$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
+		/* Retrieve reverse linked documents */
+		$reverselinks = $document->getReverseDocumentLinks();
+		$reverselinks = SeedDMS_Core_DMS::filterDocumentLinks($user, $reverselinks);
+
 		/* Retrieve latest content */
 		$latestContent = $document->getLatestContent();
 		$needwkflaction = false;
@@ -1114,6 +1118,49 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 <?php
 		}
 		$this->contentContainerEnd();
+
+		if (count($reverselinks) > 0) {
+			$this->contentHeading(getMLText("reverse_links"));
+			$this->contentContainerStart();
+
+			print "<table class=\"table table-condensed\">";
+			print "<thead>\n<tr>\n";
+			print "<th></th>\n";
+			print "<th></th>\n";
+			print "<th>".getMLText("comment")."</th>\n";
+			print "<th></th>\n";
+			print "<th></th>\n";
+			print "</tr>\n</thead>\n<tbody>\n";
+
+			foreach($reverselinks as $link) {
+				$responsibleUser = $link->getUser();
+				$sourceDoc = $link->getDocument();
+				$sourcelc = $sourceDoc->getLatestContent();
+
+				$previewer->createPreview($sourcelc);
+				print "<tr>";
+				print "<td><a href=\"../op/op.Download.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."\">";
+				if($previewer->hasPreview($sourcelc)) {
+					print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$sourceDoc->getID()."&version=".$sourcelc->getVersion()."&width=40\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
+				} else {
+					print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($sourcelc->getFileType())."\" title=\"".htmlspecialchars($sourcelc->getMimeType())."\">";
+				}
+				print "</td>";
+				print "<td><a href=\"out.ViewDocument.php?documentid=".$sourceDoc->getID()."\" class=\"linklist\">".htmlspecialchars($sourceDoc->getName())."</a></td>";
+				print "<td>".htmlspecialchars($sourceDoc->getComment())."</td>";
+				print "<td>".getMLText("document_link_by")." ".htmlspecialchars($responsibleUser->getFullName());
+				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
+					print "<br />".getMLText("document_link_public").": ".(($link->isPublic()) ? getMLText("yes") : getMLText("no"));
+				print "</td>";
+				print "<td><span class=\"actions\">";
+				if (($user->getID() == $responsibleUser->getID()) || ($document->getAccessMode($user) == M_ALL ))
+					print "<form action=\"../op/op.RemoveDocumentLink.php\" method=\"post\">".createHiddenFieldWithKey('removedocumentlink')."<input type=\"hidden\" name=\"documentid\" value=\"".$documentid."\" /><input type=\"hidden\" name=\"linkid\" value=\"".$link->getID()."\" /><button type=\"submit\" class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</button></form>";
+				print "</span></td>";
+				print "</tr>";
+			}
+			print "</tbody>\n</table>\n";
+			$this->contentContainerEnd();
+		}
 ?>
 		  </div>
 		</div>
