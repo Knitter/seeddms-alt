@@ -40,6 +40,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		$viewonlinefiletypes = $this->params['viewonlinefiletypes'];
 		$enableversionmodification = $this->params['enableversionmodification'];
 		$cachedir = $this->params['cachedir'];
+		$previewwidthdetail = $this->params['previewwidthdetail'];
 
 		$latestContent = $document->getLatestContent();
 		$status = $version->getStatus();
@@ -64,19 +65,42 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 ?>
 </td>
 </tr>
+<?php
+		if($document->getComment()) {
+?>
 <tr>
 <td><?php printMLText("comment");?>:</td>
 <td><?php print htmlspecialchars($document->getComment());?></td>
 </tr>
+<?php
+		}
+?>
+<tr>
+<td><?php printMLText("used_discspace");?>:</td>
+<td><?php print SeedDMS_Core_File::format_filesize($document->getUsedDiskSpace());?></td>
+</tr>
+<tr>
 <tr>
 <td><?php printMLText("creation_date");?>:</td>
 <td><?php print getLongReadableDate($document->getDate()); ?></td>
 </tr>
+<?php
+		if($document->expires()) {
+?>
+		<tr>
+		<td><?php printMLText("expires");?>:</td>
+		<td><?php print getReadableDate($document->getExpires()); ?></td>
+		</tr>
+<?php
+		}
+		if($document->getKeywords()) {
+?>
 <tr>
 <td><?php printMLText("keywords");?>:</td>
 <td><?php print htmlspecialchars($document->getKeywords());?></td>
 </tr>
 <?php
+		}
 		if ($document->isLocked()) {
 			$lockingUser = $document->getLockingUser();
 ?>
@@ -88,6 +112,20 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		}
 ?>
 </tr>
+<?php
+		$attributes = $document->getAttributes();
+		if($attributes) {
+			foreach($attributes as $attribute) {
+				$attrdef = $attribute->getAttributeDefinition();
+?>
+		    <tr>
+					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+					<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
+		    </tr>
+<?php
+			}
+		}
+?>
 </table>
 <?php
 		$this->contentContainerEnd();
@@ -100,8 +138,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		print "<table class=\"table table-condensed\">";
 		print "<thead>\n<tr>\n";
 		print "<th width='10%'></th>\n";
-		print "<th width='10%'>".getMLText("version")."</th>\n";
-		print "<th width='20%'>".getMLText("file")."</th>\n";
+		print "<th width='30%'>".getMLText("file")."</th>\n";
 		print "<th width='25%'>".getMLText("comment")."</th>\n";
 		print "<th width='15%'>".getMLText("status")."</th>\n";
 		print "<th width='20%'></th>\n";
@@ -109,23 +146,17 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		print "<tr>\n";
 		print "<td><ul class=\"unstyled\">";
 
-		if ($file_exists){
-			print "<li><a href=\"../op/op.Download.php?documentid=".$document->getID()."&version=".$version->getVersion()."\" title=\"".htmlspecialchars($version->getMimeType())."\"><i class=\"icon-download\"></i> ".getMLText("download")."</a>";
-			if ($viewonlinefiletypes && in_array(strtolower($version->getFileType()), $viewonlinefiletypes))
-				print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-star\"></i> " . getMLText("view_online") . "</a>";
-		}else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\"> ";
-
 		print "</ul>";
-		$previewer = new SeedDMS_Preview_Previewer($cachedir, 100);
+		$previewer = new SeedDMS_Preview_Previewer($cachedir, $previewwidthdetail);
 		$previewer->createPreview($version);
 		if($previewer->hasPreview($version)) {
-			print("<img class=\"mimeicon\" width=\"100\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=100\" title=\"".htmlspecialchars($version->getMimeType())."\">");
+			print("<img class=\"mimeicon\" width=\"".$previewwidthdetail."\" src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$version->getVersion()."&width=".$previewwidthdetail."\" title=\"".htmlspecialchars($version->getMimeType())."\">");
 		}
 		print "</td>\n";
-		print "<td class=\"center\">".$version->getVersion()."</td>\n";
 
 		print "<td><ul class=\"unstyled\">\n";
 		print "<li>".$version->getOriginalFileName()."</li>\n";
+		print "<li>".getMLText('version').": ".$version->getVersion()."</li>\n";
 
 		if ($file_exists) print "<li>". formatted_size(filesize($dms->contentDir . $version->getPath())) ." ".htmlspecialchars($version->getMimeType())."</li>";
 		else print "<li><span class=\"warning\">".getMLText("document_deleted")."</span></li>";
@@ -140,7 +171,13 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 		print "<td>";
 
 		//if (($document->getAccessMode($user) >= M_READWRITE)) {
-		print "<ul class=\"unstyled\">";
+		print "<ul class=\"actions unstyled\">";
+		if ($file_exists){
+			print "<li><a href=\"../op/op.Download.php?documentid=".$document->getID()."&version=".$version->getVersion()."\" title=\"".htmlspecialchars($version->getMimeType())."\"><i class=\"icon-download\"></i> ".getMLText("download")."</a>";
+			if ($viewonlinefiletypes && in_array(strtolower($version->getFileType()), $viewonlinefiletypes))
+				print "<li><a target=\"_blank\" href=\"../op/op.ViewOnline.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-star\"></i> " . getMLText("view_online") . "</a>";
+		}else print "<li><img class=\"mimeicon\" src=\"images/icons/".$this->getMimeIcon($version->getFileType())."\" title=\"".htmlspecialchars($version->getMimeType())."\"> ";
+
 		if (($enableversionmodification && ($document->getAccessMode($user) >= M_READWRITE)) || $user->isAdmin()) {
 			print "<li><a href=\"out.RemoveVersion.php?documentid=".$document->getID()."&version=".$version->getVersion()."\"><i class=\"icon-remove\"></i> ".getMLText("rm_version")."</a></li>";
 		}
