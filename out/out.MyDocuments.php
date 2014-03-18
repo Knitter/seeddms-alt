@@ -46,7 +46,7 @@ if (isset($_GET["orderby"]) && strlen($_GET["orderby"])==1 ) {
 }
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'orderby'=>$orderby, 'showinprocess'=>$showInProcess, 'workflowmode'=>$settings->_workflowMode, 'cachedir'=>$settings->_cacheDir));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'orderby'=>$orderby, 'showinprocess'=>$showInProcess, 'workflowmode'=>$settings->_workflowMode, 'cachedir'=>$settings->_cacheDir, 'previewWidthList'=>$settings->_previewWidthList));
 if($view) {
 	$view->show();
 	exit;
