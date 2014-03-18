@@ -1,4 +1,17 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.6
+--------------------------------------------------------------------------------
+- fix mandatory reviewer/approver, if it is the owner or an administrator
+- fix wrong sort order in second level of folder tree
+- add missing translation (Bug #130)
+- update of russion translation (Bug #131)
+- turn off http only cookies if large file upload is turned on (Bug #132)
+- list documents having a link to the current document
+- preview image sizes can be set in configuration (Bug #124)
+- show missing link to document in list of approvals
+- update of document version detail page
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.5
 --------------------------------------------------------------------------------
 - fix setting of order by sequence in configuration (Bug #127)
