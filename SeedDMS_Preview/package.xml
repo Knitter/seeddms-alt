@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-04-29</date>
- <time>19:34:07</time>
+ <date>2014-03-18</date>
+ <time>16:34:59</time>
  <version>
-  <release>1.1.0</release>
+  <release>1.1.1</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-preview image can also be created from a document file (SeedDMS_Core_DocumentFile)
+add converters for .tar.gz, .ps, .txt
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -65,6 +65,22 @@ preview image can also be created from a document file (SeedDMS_Core_DocumentFil
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
  initial version
+   </notes>
+  </release>
+  <release>
+   <date>2013-04-29</date>
+   <time>19:34:07</time>
+   <version>
+    <release>1.1.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+preview image can also be created from a document file (SeedDMS_Core_DocumentFile)
    </notes>
   </release>
  </changelog>
