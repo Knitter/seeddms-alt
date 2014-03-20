@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (877)
+//    Translators: Admin (879)
 
 $text = array(
 'accept' => 'وافق',
@@ -467,6 +467,7 @@ URL: [url]',
 'logout' => 'خروج',
 'log_management' => 'ادارة ملفات السجلات',
 'manager' => 'مدير',
+'manager_of_group' => '',
 'mandatory_approvergroup_no_access' => '',
 'mandatory_approver_no_access' => '',
 'mandatory_reviewergroup_no_access' => '',
@@ -631,6 +632,7 @@ Parent folder: [folder_path]
 مستخدم: [username]
 URL: [url]',
 'return_from_subworkflow_email_subject' => '[sitename]: [name] - عودة من مسار عمل فرعي',
+'reverse_links' => '',
 'reviewers' => 'المراجعون',
 'reviewer_already_assigned' => 'بالفعل تم تخصيصة كمراجع',
 'reviewer_already_removed' => 'بالفعل تم ازالته من عملية المراجعة او تم تقديمه للمراجعة',
@@ -787,7 +789,7 @@ URL: [url]',
 'settings_enableLanguageSelector' => 'Enable Language Selector',
 'settings_enableLanguageSelector_desc' => 'Show selector for user interface language after being logged in.',
 'settings_enableLargeFileUpload' => 'Enable large file upload',
-'settings_enableLargeFileUpload_desc' => 'If set, file upload is also available through a java applet called jumploader without a file size limit set by the browser. It also allows to upload several files in one step.',
+'settings_enableLargeFileUpload_desc' => 'If set, file upload is also available through a java applet called jumploader without a file size limit set by the browser. It also allows to upload several files in one step. Turning this on will turn off http only cookies.',
 'settings_enableNotificationAppRev' => 'Enable reviewer/approver notification',
 'settings_enableNotificationAppRev_desc' => 'Check to send a notification to the reviewer/approver when a new document version is added',
 'settings_enableOwnerNotification' => 'Enable owner notification by default',
@@ -879,6 +881,10 @@ URL: [url]',
 'settings_php_gd2' => 'PHP extension : php_gd2',
 'settings_php_mbstring' => 'PHP extension : php_mbstring',
 'settings_php_version' => '',
+'settings_previewWidthDetail' => '',
+'settings_previewWidthDetail_desc' => '',
+'settings_previewWidthList' => '',
+'settings_previewWidthList_desc' => '',
 'settings_printDisclaimer' => 'Print Disclaimer',
 'settings_printDisclaimer_desc' => 'If true the disclaimer message the lang.inc files will be print on the bottom of the page',
 'settings_quota' => 'User\'s quota',

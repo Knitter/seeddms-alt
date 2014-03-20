@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1826)
+//    Translators: Admin (1835)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -467,6 +467,7 @@ URL: [url]',
 'logout' => 'Abmelden',
 'log_management' => 'Management der Log-Dateien',
 'manager' => 'Manager',
+'manager_of_group' => 'Sie sind der Manager dieser Gruppe',
 'mandatory_approvergroup_no_access' => 'Zwingende Gruppe von Freigebern \'[group]\' hat unzureichende Zugriffsrechte.',
 'mandatory_approver_no_access' => 'Zwingender Freigeber \'[user]\' hat unzureichende Zugriffsrechte.',
 'mandatory_reviewergroup_no_access' => 'Zwingende Gruppe von Prüfern \'[group]\' hat unzureichende Zugriffsrechte.',
@@ -638,7 +639,7 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'return_from_subworkflow_email_subject' => '[sitename]: [name] - Rückkehr vom Subworkflow',
-'reverse_links' => 'Dokumente mit Verknüpfung auf dieses Dokument',
+'reverse_links' => 'Dokumente, die eine Verknüpfung zu diesem Dokument haben',
 'reviewers' => 'Prüfer',
 'reviewer_already_assigned' => 'Prüfer bereits zugewiesen',
 'reviewer_already_removed' => 'Prüfer wurde bereits aus dem Prüfvorgang entfernt oder hat die Prüfung bereits abgeschlossen',
@@ -795,7 +796,7 @@ URL: [url]',
 'settings_enableLanguageSelector' => 'Sprachauswahl einschalten',
 'settings_enableLanguageSelector_desc' => 'Zeige Auswahl der verfügbaren Sprachen nachdem man sich angemeldet hat.',
 'settings_enableLargeFileUpload' => 'Hochladen von sehr großen Dateien ermöglichen',
-'settings_enableLargeFileUpload_desc' => 'Wenn dies gesetzt ist, dann ist ebenfalls der Upload von Dokumenten durch ein java applet mit Namen \'jumploader\' ohne Begrenzung der maximalen Dateigröße möglich. Auch das Hochladen mehrerer Dokumente in einem Schritt wird dadurch ermöglicht.',
+'settings_enableLargeFileUpload_desc' => 'Wenn dies gesetzt ist, dann ist ebenfalls der Upload von Dokumenten durch ein java applet mit Namen \'jumploader\' ohne Begrenzung der maximalen Dateigröße möglich. Auch das Hochladen mehrerer Dokumente in einem Schritt wird dadurch ermöglicht. Das Einschalten bewirkt, dass keine http only Cookies mehr gesetzt werden.',
 'settings_enableNotificationAppRev' => 'Prűfer/Freigeber benachrichtigen',
 'settings_enableNotificationAppRev_desc' => 'Setzen Sie diese Option, wenn die Prüfer und Freigeber eines Dokuments beim Hochladen einer neuen Version benachrichtigt werden sollen.',
 'settings_enableOwnerNotification' => 'Besitzer als Beobachter eintragen',
@@ -887,6 +888,10 @@ URL: [url]',
 'settings_php_gd2' => 'PHP-Erweiterung: php_gd2',
 'settings_php_mbstring' => 'PHP-Erweiterung: php_mbstring',
 'settings_php_version' => 'PHP Version',
+'settings_previewWidthDetail' => 'Breite der Vorschaubilder (Detail)',
+'settings_previewWidthDetail_desc' => 'Breite des Vorschaubildes, das auf der Detailseite angezeigt wird',
+'settings_previewWidthList' => 'Breite der Vorschaubilder (Liste)',
+'settings_previewWidthList_desc' => 'Breite der Vorschaubilder, die in Listen angezeigt werden',
 'settings_printDisclaimer' => 'Rechtliche Hinweise',
 'settings_printDisclaimer_desc' => 'Anwählen, um die rechtlichen Hinweise am Ende jeder Seite anzuzeigen.',
 'settings_quota' => 'User\'s quota',

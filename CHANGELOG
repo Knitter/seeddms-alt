@@ -10,6 +10,7 @@
 - preview image sizes can be set in configuration (Bug #124)
 - show missing link to document in list of approvals
 - update of document version detail page
+- fix link to folder in clipboard shown in menu (Bug #123)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.5
