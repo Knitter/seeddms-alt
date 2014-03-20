@@ -309,8 +309,10 @@ class Settings { /* {{{ */
 		$this->_printDisclaimer = Settings::boolVal($tab["printDisclaimer"]);
 		$this->_language = strval($tab["language"]);
 		$this->_theme = strval($tab["theme"]);
-		$this->_previewWidthList = intval($tab["previewWidthList"]);
-		$this->_previewWidthDetail = intval($tab["previewWidthDetail"]);
+		if(isset($tab["previewWidthList"]))
+			$this->_previewWidthList = intval($tab["previewWidthList"]);
+		if(isset($tab["previewWidthDetail"]))
+			$this->_previewWidthDetail = intval($tab["previewWidthDetail"]);
 
 		// XML Path: /configuration/site/edition
 		$node = $xml->xpath('/configuration/site/edition');
