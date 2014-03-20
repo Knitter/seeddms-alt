@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (610), kreml (379)
+//    Translators: Admin (610), kreml (389)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -467,10 +467,11 @@ URL: [url]',
 'logout' => 'Odhlášení',
 'log_management' => 'Správa LOG souborů',
 'manager' => 'Správce',
-'mandatory_approvergroup_no_access' => '',
-'mandatory_approver_no_access' => '',
-'mandatory_reviewergroup_no_access' => '',
-'mandatory_reviewer_no_access' => '',
+'manager_of_group' => 'Jste správcem této skupiny',
+'mandatory_approvergroup_no_access' => 'Stanovená skupina schvalovatelů \'[group]\' má nedostatečná přístupová práva.',
+'mandatory_approver_no_access' => 'Stanovený schvalovatel \'[user]\' má nedostatečná přístupová práva.',
+'mandatory_reviewergroup_no_access' => 'Stanovená skupina recenzentů \'[group]\' má nedostatečná přístupová práva.',
+'mandatory_reviewer_no_access' => 'Stanovený recenzent \'[user]\' má nedostatečná přístupová práva.',
 'march' => 'Březen',
 'max_upload_size' => 'Max. délka pro nahrání jednoho souboru',
 'may' => 'Květen',
@@ -634,6 +635,7 @@ Nadřazená složka: [folder_path]
 Uživatel: [username]
 URL: [url]',
 'return_from_subworkflow_email_subject' => '[sitename]: [name] - Návrat z vedlejšího pracovního postupu',
+'reverse_links' => '',
 'reviewers' => 'Kontroloři',
 'reviewer_already_assigned' => 'je už pověřen jako kontrolor',
 'reviewer_already_removed' => 'už byl odstraněn z procesu kontroly nebo poslal kontrolu',
@@ -881,6 +883,10 @@ URL: [url]',
 'settings_php_gd2' => 'PHP extension : php_gd2',
 'settings_php_mbstring' => 'PHP extension : php_mbstring',
 'settings_php_version' => 'Verze PHP',
+'settings_previewWidthDetail' => '',
+'settings_previewWidthDetail_desc' => '',
+'settings_previewWidthList' => '',
+'settings_previewWidthList_desc' => '',
 'settings_printDisclaimer' => 'Print Disclaimer',
 'settings_printDisclaimer_desc' => 'If true the disclaimer message the lang.inc files will be print on the bottom of the page',
 'settings_quota' => 'Kvóta uživatele',
