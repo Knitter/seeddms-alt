@@ -146,7 +146,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		$content .= "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		foreach($clipboard['folders'] as $folderid) {
 			if($folder = $this->params['dms']->getFolder($folderid))
-				$content .= "    <li><a href=\"../out/out.ViewFolder.php?id=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
+				$content .= "    <li><a href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><i class=\"icon-folder-close-alt\"></i> ".htmlspecialchars($folder->getName())."</a></li>\n";
 		}
 		foreach($clipboard['docs'] as $docid) {
 			if($document = $this->params['dms']->getDocument($docid))
