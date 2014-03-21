@@ -30,14 +30,16 @@ include("../inc/inc.Authentication.php");
 $file_param_name = 'file';
 $file_name = $_FILES[ $file_param_name ][ 'name' ];
 $source_file_path = $_FILES[ $file_param_name ][ 'tmp_name' ];
-$target_file_path =$settings->_stagingDir.$_POST['fileId']."-".$_POST['partitionIndex'];
+$fileId = basename($_POST['fileId']);
+$partitionIndex = (int) $_POST['partitionIndex'];
+$target_file_path =$settings->_stagingDir.$fileId."-".$partitionIndex;
 if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
-	if($_POST['partitionIndex']+1 == $_POST['partitionCount']) {
-		$fpnew = fopen($settings->_stagingDir.$_POST['fileId'], 'w+');
+	if($partitionIndex+1 == $_POST['partitionCount']) {
+		$fpnew = fopen($settings->_stagingDir.$fileId, 'w+');
 		for($i=0; $i<$_POST['partitionCount']; $i++) {
-			$content = file_get_contents($settings->_stagingDir.$_POST['fileId']."-".$i, 'r');
+			$content = file_get_contents($settings->_stagingDir.$fileId."-".$i, 'r');
 			fwrite($fpnew, $content);
-			unlink($settings->_stagingDir.$_POST['fileId']."-".$i);
+			unlink($settings->_stagingDir.$fileId."-".$i);
 		}
 		fclose($fpnew);
 
@@ -166,7 +168,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 			}
 		}
 
-		$userfiletmp = $settings->_stagingDir.$_POST['fileId'];;
+		$userfiletmp = $settings->_stagingDir.$fileId;
 		$userfiletype = $_FILES[ $file_param_name ]["type"];
 		$userfilename = $_FILES[ $file_param_name ]["name"];
 

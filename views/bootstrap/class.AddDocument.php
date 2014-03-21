@@ -139,7 +139,7 @@ function addFiles()
 		</tr>
 		<tr>
 			<td><?php printMLText("sequence");?>:</td>
-			<td><?php $this->printSequenceChooser($folder->getDocuments());?></td>
+			<td><?php $this->printSequenceChooser($folder->getDocuments('s'));?></td>
 		</tr>
 <?php
 			$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_all));

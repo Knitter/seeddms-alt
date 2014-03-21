@@ -768,6 +768,8 @@ function documentSelected<?php echo $formName ?>(id, name) {
 	$('#choosedocsearch').val(name);
 	modalDocChooser<?php echo $formName ?>.modal('hide');
 }
+function folderSelected<?php echo $formName ?>(id, name) {
+}
 		</script>
 <?php
 	} /* }}} */

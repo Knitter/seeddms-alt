@@ -87,7 +87,7 @@ function checkForm()
 		</tr>
 		<tr>
 			<td class="inputDescription"><?php printMLText("sequence");?>:</td>
-			<td><?php $this->printSequenceChooser($folder->getSubFolders());?></td>
+			<td><?php $this->printSequenceChooser($folder->getSubFolders('s'));?></td>
 		</tr>
 <?php
 	$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));

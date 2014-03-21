@@ -136,7 +136,7 @@ function checkForm()
 			print "<tr>";
 			print "<td class=\"inputDescription\">" . getMLText("sequence") . ":</td>";
 			print "<td>";
-			$this->printSequenceChooser($folder->getDocuments(), $document->getID());
+			$this->printSequenceChooser($folder->getDocuments('s'), $document->getID());
 			print "</td></tr>";
 		}
 		if($attrdefs) {

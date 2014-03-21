@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2014-03-18</date>
- <time>16:19:34</time>
+ <date>2014-03-21</date>
+ <time>09:03:59</time>
  <version>
-  <release>4.3.6</release>
-  <api>4.3.6</api>
+  <release>4.3.7</release>
+  <api>4.3.7</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- add optional parameters $publiconly=false and $user=null to SeedDMS_Core_Document::getDocumentLinks()
-- add new method SeedDMS_Core_Document::getReverseDocumentLinks()
+no changes
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -633,6 +632,23 @@ New release
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 no changes
+   </notes>
+  </release>
+  <release>
+   <date>2014-03-18</date>
+   <time>16:19:34</time>
+   <version>
+    <release>4.3.6</release>
+    <api>4.3.6</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+- add optional parameters $publiconly=false and $user=null to SeedDMS_Core_Document::getDocumentLinks()
+- add new method SeedDMS_Core_Document::getReverseDocumentLinks()
    </notes>
   </release>
  </changelog>

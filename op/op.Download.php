@@ -113,6 +113,7 @@ if (isset($_GET["version"])) {
 	readfile($dms->contentDir . $file->getPath());
 
 } elseif (isset($_GET["arkname"])) {
+	$filename = basename($_GET["arkname"]);
 
 	// backup download
 	
@@ -120,17 +121,17 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	if (!isset($_GET["arkname"]) || !file_exists($settings->_contentDir.$_GET["arkname"]) ) {
+	if (!isset($filename) || !file_exists($settings->_contentDir.$filename) ) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 	}
 
 	header('Content-Description: File Transfer');
-	//header("Content-Type: application/force-download; name=\"" . $_GET["arkname"] . "\"");
+	//header("Content-Type: application/force-download; name=\"" . $filename . "\"");
 	//header("Content-Type: application/octet-stream");
 	header("Content-Type: application/zip");
 	header("Content-Transfer-Encoding: binary");
-	header("Content-Length: " . filesize($settings->_contentDir . $_GET["arkname"] ));
-	header("Content-Disposition: attachment; filename=\"" .$_GET["arkname"] . "\"");
+	header("Content-Length: " . filesize($settings->_contentDir . $filename ));
+	header("Content-Disposition: attachment; filename=\"" .$filename . "\"");
 //	header("Expires: 0");
 	//header("Content-Type: " . $content->getMimeType());
 	//header("Cache-Control: no-cache, must-revalidate");
@@ -138,10 +139,15 @@ if (isset($_GET["version"])) {
 	header("Cache-Control: public");
 	//header("Pragma: no-cache");	
 	
+<<<<<<< HEAD
 	ob_clean();
 	readfile($settings->_contentDir .$_GET["arkname"] );
+=======
+	readfile($settings->_contentDir .$filename );
+>>>>>>> seeddms-4.3.7
 	
 } elseif (isset($_GET["logname"])) {
+	$filename = basename($_GET["logname"]);
 
 	// log download
 	
@@ -149,18 +155,23 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	if (!isset($_GET["logname"]) || !file_exists($settings->_contentDir.$_GET["logname"]) ) {
+	if (!isset($filename) || !file_exists($settings->_contentDir.$filename) ) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 	}
 
-	header("Content-Type: text/plain; name=\"" . $_GET["logname"] . "\"");
+	header("Content-Type: text/plain; name=\"" . $filename . "\"");
 	header("Content-Transfer-Encoding: binary");
-	header("Content-Length: " . filesize($settings->_contentDir . $_GET["logname"] ));
-	header("Content-Disposition: attachment; filename=\"" .$_GET["logname"] . "\"");
+	header("Content-Length: " . filesize($settings->_contentDir . $filename ));
+	header("Content-Disposition: attachment; filename=\"" .$filename . "\"");
 	header("Cache-Control: must-revalidate");
+<<<<<<< HEAD
 
 	ob_clean();
 	readfile($settings->_contentDir .$_GET["logname"] );
+=======
+	
+	readfile($settings->_contentDir .$filename );
+>>>>>>> seeddms-4.3.7
 	
 } elseif (isset($_GET["vfile"])) {
 
@@ -192,6 +203,7 @@ if (isset($_GET["version"])) {
 	readfile($dms->contentDir . $document->getDir() .$settings->_versioningFileName);
 	
 } elseif (isset($_GET["dumpname"])) {
+	$filename = basename($_GET["dumpname"]);
 
 	// dump file download
 	
@@ -199,23 +211,27 @@ if (isset($_GET["version"])) {
 		UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 	}
 
-	if (!isset($_GET["dumpname"]) || !file_exists($settings->_contentDir.$_GET["dumpname"]) ) {
+	if (!isset($filename) || !file_exists($settings->_contentDir.$filename) ) {
 		UI::exitError(getMLText("admin_tools"),getMLText("unknown_id"));
 	}
 
-	header("Content-Type: application/zip; name=\"" . $_GET["dumpname"] . "\"");
-	//header("Content-Type: application/force-download; name=\"" . $_GET["dumpname"] . "\"");
+	header("Content-Type: application/zip; name=\"" . $filename . "\"");
+	//header("Content-Type: application/force-download; name=\"" . $filename . "\"");
 	header("Content-Transfer-Encoding: binary");
-	header("Content-Length: " . filesize($settings->_contentDir . $_GET["dumpname"] ));
-	header("Content-Disposition: attachment; filename=\"" .$_GET["dumpname"] . "\"");
+	header("Content-Length: " . filesize($settings->_contentDir . $filename ));
+	header("Content-Disposition: attachment; filename=\"" .$filename . "\"");
 	//header("Expires: 0");
 	//header("Content-Type: " . $content->getMimeType());
 	//header("Cache-Control: no-cache, must-revalidate");
 	header("Cache-Control: must-revalidate");
 	//header("Pragma: no-cache");	
 	
+<<<<<<< HEAD
 	ob_clean();
 	readfile($settings->_contentDir .$_GET["dumpname"] );
+=======
+	readfile($settings->_contentDir .$filename );
+>>>>>>> seeddms-4.3.7
 }
 
 add_log_line();

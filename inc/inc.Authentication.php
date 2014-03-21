@@ -12,9 +12,11 @@
  * @version    Release: @package_version@
  */
 
-$refer=urlencode($_SERVER["REQUEST_URI"]);
+$refer = $_SERVER["REQUEST_URI"];
 if (!strncmp("/op", $refer, 3)) {
 	$refer="";
+} else {
+	$refer = urlencode($refer);
 }
 if (!isset($_COOKIE["mydms_session"])) {
 	header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);

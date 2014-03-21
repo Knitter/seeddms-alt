@@ -300,10 +300,10 @@ if (isset($_COOKIE["mydms_session"])) {
 // Using urldecode() on an element in $_GET or $_REQUEST could have unexpected and dangerous results.
 
 if (isset($_POST["referuri"]) && strlen($_POST["referuri"])>0) {
-	$referuri = urldecode($_POST["referuri"]);
+	$referuri = trim(urldecode($_POST["referuri"]));
 }
 else if (isset($_GET["referuri"]) && strlen($_GET["referuri"])>0) {
-	$referuri = urldecode($_GET["referuri"]);
+	$referuri = trim(urldecode($_GET["referuri"]));
 }
 
 $controller->setParam('user', $user);

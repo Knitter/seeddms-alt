@@ -1,7 +1,7 @@
 <?php
 //    MyDMS. Document Management System
 //    Copyright (C) 2002-2005 Markus Westphal
-//    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2007-2008 Malcolm Cowe
 //    Copyright (C) 2010-2013 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 
 class SeedDMS_Version {
 
-	var $_number = "4.3.6";
+	var $_number = "4.3.7";
 	var $_string = "SeedDMS";
 
 	function SeedDMS_Version() {
