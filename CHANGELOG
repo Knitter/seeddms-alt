@@ -3,6 +3,7 @@
 --------------------------------------------------------------------------------
 - fix some vulnerabilities discovered by Steven Seeley
 - fix javascript error when clicking on folder in document chooser (Bug #135)
+- always sort folders/documents in sequence chooser by sequence
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.6
