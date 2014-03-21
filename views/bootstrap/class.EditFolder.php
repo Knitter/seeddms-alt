@@ -95,7 +95,7 @@ function checkForm()
 			print "<tr>";
 			print "<td>" . getMLText("sequence") . ":</td>";
 			print "<td>";
-			$this->printSequenceChooser($parent->getSubFolders(), $folder->getID());
+			$this->printSequenceChooser($parent->getSubFolders('s'), $folder->getID());
 			print "</td></tr>\n";
 		}
 
