@@ -139,12 +139,8 @@ if (isset($_GET["version"])) {
 	header("Cache-Control: public");
 	//header("Pragma: no-cache");	
 	
-<<<<<<< HEAD
 	ob_clean();
-	readfile($settings->_contentDir .$_GET["arkname"] );
-=======
 	readfile($settings->_contentDir .$filename );
->>>>>>> seeddms-4.3.7
 	
 } elseif (isset($_GET["logname"])) {
 	$filename = basename($_GET["logname"]);
@@ -164,14 +160,9 @@ if (isset($_GET["version"])) {
 	header("Content-Length: " . filesize($settings->_contentDir . $filename ));
 	header("Content-Disposition: attachment; filename=\"" .$filename . "\"");
 	header("Cache-Control: must-revalidate");
-<<<<<<< HEAD
 
 	ob_clean();
-	readfile($settings->_contentDir .$_GET["logname"] );
-=======
-	
 	readfile($settings->_contentDir .$filename );
->>>>>>> seeddms-4.3.7
 	
 } elseif (isset($_GET["vfile"])) {
 
@@ -226,12 +217,8 @@ if (isset($_GET["version"])) {
 	header("Cache-Control: must-revalidate");
 	//header("Pragma: no-cache");	
 	
-<<<<<<< HEAD
 	ob_clean();
-	readfile($settings->_contentDir .$_GET["dumpname"] );
-=======
 	readfile($settings->_contentDir .$filename );
->>>>>>> seeddms-4.3.7
 }
 
 add_log_line();
