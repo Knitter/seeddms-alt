@@ -48,7 +48,7 @@ require_once("SeedDMS/Core.php");
 require_once("SeedDMS/Lucene.php");
 
 function tree($folder, $indent='') {
-	global $index, $dms;
+	global $index, $dms, $settings;
 	echo $indent."D ".$folder->getName()."\n";
 	$subfolders = $folder->getSubFolders();
 	foreach($subfolders as $subfolder) {
