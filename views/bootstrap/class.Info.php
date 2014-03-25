@@ -46,7 +46,7 @@ class SeedDMS_View_Info extends SeedDMS_Bootstrap_Style {
 //		$this->contentContainerStart();
 //		phpinfo();
 //		$this->contentContainerEnd();
-		$this->contentEnd();
+//		$this->contentEnd();
 		$this->htmlEndPage();
 	} /* }}} */
 }
