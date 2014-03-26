@@ -777,17 +777,20 @@ function folderSelected<?php echo $formName ?>(id, name) {
 <?php
 	} /* }}} */
 
-	function printFolderChooser($formName, $accessMode, $exclude = -1, $default = false) { /* {{{ */
-		print "<input type=\"hidden\" id=\"targetid".$formName."\" name=\"targetid".$formName."\" value=\"". (($default) ? $default->getID() : "") ."\">";
+	function printFolderChooser($form, $accessMode, $exclude = -1, $default = false, $formname) { /* {{{ */
+		$formid = "targetid".$form;
+		if(!$formname)
+			$formname = "targetid".$form;
+		print "<input type=\"hidden\" id=\"".$formid."\" name=\"".$formname."\" value=\"". (($default) ? $default->getID() : "") ."\">";
 		print "<div class=\"input-append\">\n";
-		print "<input type=\"text\" id=\"choosefoldersearch".$formName."\" data-provide=\"typeahead\"  name=\"targetname".$formName."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
-		print "<a data-target=\"#folderChooser".$formName."\" href=\"../out/out.FolderChooser.php?form=".$formName."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
+		print "<input type=\"text\" id=\"choosefoldersearch".$form."\" data-provide=\"typeahead\"  name=\"targetname".$form."\" value=\"". (($default) ? htmlspecialchars($default->getName()) : "") ."\" placeholder=\"".getMLText('type_to_search')."\" autocomplete=\"off\" />";
+		print "<a data-target=\"#folderChooser".$form."\" href=\"../out/out.FolderChooser.php?form=".$form."&mode=".$accessMode."&exclude=".$exclude."\" role=\"button\" class=\"btn\" data-toggle=\"modal\">".getMLText("folder")."…</a>\n";
 		print "</div>\n";
 ?>
-<div class="modal hide" id="folderChooser<?php echo $formName ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $formName ?>Label" aria-hidden="true">
+<div class="modal hide" id="folderChooser<?php echo $form ?>" tabindex="-1" role="dialog" aria-labelledby="folderChooser<?php echo $form ?>Label" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="folderChooser<?php echo $formName ?>Label"><?php printMLText("choose_target_folder") ?></h3>
+    <h3 id="folderChooser<?php echo $form ?>Label"><?php printMLText("choose_target_folder") ?></h3>
   </div>
   <div class="modal-body">
     <p>Please wait, until document tree is loaded …</p>
@@ -798,11 +801,11 @@ function folderSelected<?php echo $formName ?>(id, name) {
 </div>
 <script language="JavaScript">
 /* Set up a callback which is called when a folder in the tree is selected */
-modalFolderChooser<?php echo $formName ?> = $('#folderChooser<?php echo $formName ?>');
-function folderSelected<?php echo $formName ?>(id, name) {
-	$('#targetid<?php echo $formName ?>').val(id);
-	$('#choosefoldersearch<?php echo $formName ?>').val(name);
-	modalFolderChooser<?php echo $formName ?>.modal('hide');
+modalFolderChooser<?php echo $form ?> = $('#folderChooser<?php echo $form ?>');
+function folderSelected<?php echo $form ?>(id, name) {
+	$('#<?php echo $formid ?>').val(id);
+	$('#choosefoldersearch<?php echo $form ?>').val(name);
+	modalFolderChooser<?php echo $form ?>.modal('hide');
 }
 </script>
 <?php
