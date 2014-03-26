@@ -104,7 +104,9 @@ $(document).ready( function() {
 		updater: function (item) {
 			strarr = item.split("#");
 			//console.log(this.options.formname);
-			$('#targetid' + this.options.formname).attr('value', strarr[0]);
+//			console.log(this.$element.attr('target'));
+			/* Attribute target has the field name storing the selected id */
+			$('#'+this.$element.attr('target')).attr('value', strarr[0]);
 			return strarr[1];
 		},
 		/* Set a matcher that allows any returned value */
