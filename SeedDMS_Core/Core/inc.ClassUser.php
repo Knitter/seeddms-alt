@@ -400,15 +400,11 @@ class SeedDMS_Core_User {
 	function setHomeFolder($homefolder) { /* {{{ */
 		$db = $this->_dms->getDB();
 
-		if(get_class($homefolder) == "SeedDMS_Core_Folder") {
-			$queryStr = "UPDATE tblUsers SET homefolder = " . $homeFolder->getID() . " WHERE id = " . $this->_id;
-			if (!$db->getResult($queryStr))
-				return false;
+		$queryStr = "UPDATE tblUsers SET homefolder = " . (int) $homefolder . " WHERE id = " . $this->_id;
+		if (!$db->getResult($queryStr))
+			return false;
 
-			$this->_homeFolder = $homefolder;
-		} else {
-			$this->_homeFolder = null;
-		}
+		$this->_homeFolder = $homefolder;
 		return true;
 	}	 /* }}} */
 
