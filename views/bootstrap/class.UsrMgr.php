@@ -188,6 +188,14 @@ function showUser(selectObj) {
 			</select></td>
 		</tr>
 		<tr>
+			<td><?php printMLText("home_folder")?>:</td>
+			<td><?php $this->printFolderChooser("form0", M_READ, -1, false, 'homefolder');?></td>
+		</tr>
+		<tr>
+			<td><?php printMLText("quota");?>:</td>
+			<td><input type="text" name="quota"></td>
+		</tr>
+		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
 			<td><input type="checkbox" name="ishidden" value="1"></td>
 		</tr>
@@ -392,6 +400,14 @@ function showUser(selectObj) {
 		}
 ?>
 			</select></td>
+		</tr>
+		<tr>
+			<td><?php printMLText("home_folder")?>:</td>
+			<td><?php $this->printFolderChooser("form".$currUser->getId(), M_READ, -1, $dms->getFolder($currUser->getHomeFolder()), 'homefolder');?></td>
+		</tr>
+		<tr>
+			<td><?php printMLText("quota");?>:</td>
+			<td><input type="text" name="quota" value="<?php print $currUser->getQuota(); ?>"></td>
 		</tr>
 		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
