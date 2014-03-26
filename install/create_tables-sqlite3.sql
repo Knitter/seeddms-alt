@@ -62,6 +62,7 @@ CREATE TABLE `tblUsers` (
   `loginfailures` INTEGER NOT NULL default '0',
   `disabled` INTEGER NOT NULL default '0',
   `quota` INTEGER,
+	`homefolder` INTEGER default '0',
   UNIQUE (`login`)
 );
 
