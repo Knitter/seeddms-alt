@@ -49,6 +49,11 @@ if ($document->isLocked()) {
 	else $document->setLocked(false);
 }
 
+$remain = checkQuota();
+if ($remain < 0) {
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("quota_exceeded", array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain)))));
+}
+
 if(isset($_POST["comment"]))
 	$comment  = $_POST["comment"];
 else
