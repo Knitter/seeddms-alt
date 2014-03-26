@@ -353,8 +353,8 @@ if($groups) {
 	echo "<groups>\n";
 	foreach ($groups as $group) {
 		echo " <group id=\"".$group->getId()."\">\n";
-		echo "  <attr name=\"name\">".wrapWithCData($user->getFullName())."</attr>\n";
-		echo "  <attr name=\"comment\">".wrapWithCData($user->getComment())."</attr>\n";
+		echo "  <attr name=\"name\">".wrapWithCData($group->getName())."</attr>\n";
+		echo "  <attr name=\"comment\">".wrapWithCData($group->getComment())."</attr>\n";
 		$users = $group->getUsers();
 		if($users) {
 			echo "  <users>\n";

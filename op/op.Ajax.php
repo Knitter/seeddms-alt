@@ -134,7 +134,8 @@ switch($command) {
 			$subfolders = SeedDMS_Core_DMS::filterAccess($subfolders, $user, M_READ);
 			$tree = array();
 			foreach($subfolders as $subfolder) {
-				$level = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$subfolder->hasSubFolders() ? true : false, 'is_folder'=>true);
+				$loadondemand = $subfolder->hasSubFolders() || ($subfolder->hasDocuments() && $showdocs);
+				$level = array('label'=>$subfolder->getName(), 'id'=>$subfolder->getID(), 'load_on_demand'=>$loadondemand, 'is_folder'=>true);
 				if(!$subfolder->hasSubFolders())
 					$level['children'] = array();
 				$tree[] = $level;

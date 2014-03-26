@@ -43,27 +43,35 @@ class SeedDMS_View_IndexInfo extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
 		$this->contentHeading(getMLText("fulltext_info"));
-		$this->contentContainerStart();
 
 		$numDocs = $index->count();
-		echo "<pre>";
+		echo "<legend>".$numDocs." ".getMLText('documents')."</legend>";
+		$this->contentContainerStart();
 		for ($id = 0; $id < $numDocs; $id++) {
 			if (!$index->isDeleted($id)) {
 				$hit = $index->getDocument($id);
-				echo $hit->document_id.": ".htmlspecialchars($hit->title)."\n";
+				echo "<span title=\"".$hit->document_id."\">".htmlspecialchars($hit->title)."</span>\n";
 			}
 		}
-		echo "</pre>";
+		$this->contentContainerEnd();
 
 		$terms = $index->terms();
-		echo "<p>".count($terms)." Terms</p>";
-		echo "<pre>";
+		echo "<legend>".count($terms)." Terms</legend>";
+//		echo "<pre>";
+		$field = '';
 		foreach($terms as $term) {
-			echo htmlspecialchars($term->field).":".htmlspecialchars($term->text)."\n";
+			if($field != $term->field) {
+				if($field)
+					$this->contentContainerEnd();
+				echo "<h5>".htmlspecialchars($term->field)."</h5>";
+				$this->contentContainerStart();
+				$field = $term->field;
+			}
+			echo htmlspecialchars($term->text)."\n";
 		}
-		echo "</pre>";
-
 		$this->contentContainerEnd();
+//		echo "</pre>";
+
 		$this->htmlEndPage();
 	} /* }}} */
 }

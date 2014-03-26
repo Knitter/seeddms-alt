@@ -48,7 +48,7 @@ require_once("SeedDMS/Core.php");
 require_once("SeedDMS/Lucene.php");
 
 function tree($folder, $indent='') {
-	global $index, $dms;
+	global $index, $dms, $settings;
 	echo $indent."D ".$folder->getName()."\n";
 	$subfolders = $folder->getSubFolders();
 	foreach($subfolders as $subfolder) {
@@ -58,7 +58,7 @@ function tree($folder, $indent='') {
 	foreach($documents as $document) {
 		echo $indent."  ".$document->getId().":".$document->getName()."\n";
 		if(!($hits = $index->find('document_id:'.$document->getId()))) {
-			$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document));
+			$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, $settings->_converters ? $settings->_converters : null));
 		} else {
 			$hit = $hits[0];
 			$created = (int) $hit->getDocument()->getFieldValue('created');
@@ -66,7 +66,7 @@ function tree($folder, $indent='') {
 				echo $indent."    Document unchanged\n";
 			} else {
 				if($index->delete($hit->id)) {
-					$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document));
+					$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, $settings->_converters ? $settings->_converters : null));
 				}
 			}
 		}

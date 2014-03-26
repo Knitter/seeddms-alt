@@ -348,6 +348,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			}
 			echo "<li><a href=\"../out/out.FolderNotify.php?folderid=". $folderID ."&showtree=".showtree()."\">".getMLText("edit_existing_notify")."</a></li>\n";
 		}
+		if ($this->params['user']->isAdmin()) {
+			echo "<li><a href=\"../out/out.Indexer.php?folderid=". $folderID ."\">".getMLText("index_folder")."</a></li>\n";
+		}
 		echo "</ul>\n";
 		echo "</div>\n";
 		return;
@@ -995,11 +998,11 @@ function clearFilename<?php print $formName ?>() {
 	 *
 	 * The tree can contain folders only or include documents.
 	 *
-	 * @params integer $folderid current folderid. If set the tree will be
+	 * @param integer $folderid current folderid. If set the tree will be
 	 *   folded out and the all folders in the path will be visible
-	 * @params integer $accessmode use this access mode when retrieving folders
+	 * @param integer $accessmode use this access mode when retrieving folders
 	 *   and documents shown in the tree
-	 * @params boolean $showdocs set to true if tree shall contain documents
+	 * @param boolean $showdocs set to true if tree shall contain documents
 	 *   as well.
 	 */
 	function printNewTreeNavigation($folderid=0, $accessmode=M_READ, $showdocs=0, $formid='form1', $expandtree=0, $orderby='') { /* {{{ */
