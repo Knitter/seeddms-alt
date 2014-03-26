@@ -56,7 +56,13 @@ if(isset($_GET['create']) && $_GET['create'] == 1) {
 	SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
 }
 
-$folder = $dms->getFolder($settings->_rootFolderID);
+if (!isset($_GET["folderid"]) || !is_numeric($_GET["folderid"]) || intval($_GET["folderid"])<1) {
+	$folderid = $settings->_rootFolderID;
+}
+else {
+	$folderid = intval($_GET["folderid"]);
+}
+$folder = $dms->getFolder($folderid);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'index'=>$index, 'recreate'=>(isset($_GET['create']) && $_GET['create']==1), 'folder'=>$folder, 'converters'=>$settings->_converters));
