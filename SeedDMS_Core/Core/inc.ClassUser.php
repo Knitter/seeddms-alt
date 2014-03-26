@@ -119,6 +119,13 @@ class SeedDMS_Core_User {
 	var $_loginFailures;
 
 	/**
+	 * @var object home folder
+	 *
+	 * @access protected
+	 */
+	var $_homeFolder;
+
+	/**
 	 * @var object reference to the dms instance this user belongs to
 	 *
 	 * @access protected
@@ -129,7 +136,7 @@ class SeedDMS_Core_User {
 	const role_admin = '1';
 	const role_guest = '2';
 
-	function SeedDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='', $loginFailures=0, $quota=0) {
+	function SeedDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='', $loginFailures=0, $quota=0, $homeFolder=null) {
 		$this->_id = $id;
 		$this->_login = $login;
 		$this->_pwd = $pwd;
@@ -144,6 +151,7 @@ class SeedDMS_Core_User {
 		$this->_pwdExpiration = $pwdExpiration;
 		$this->_loginFailures = $loginFailures;
 		$this->_quota = $quota;
+		$this->_homeFolder = $homeFolder;
 		$this->_dms = null;
 	}
 
@@ -384,6 +392,23 @@ class SeedDMS_Core_User {
 			return false;
 
 		$this->_quota = $quota;
+		return true;
+	}	 /* }}} */
+
+	function getHomeFolder() { return $this->_homeFolder; }
+
+	function setHomeFolder($homefolder) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		if(get_class($homefolder) == "SeedDMS_Core_Folder") {
+			$queryStr = "UPDATE tblUsers SET homefolder = " . $homeFolder->getID() . " WHERE id = " . $this->_id;
+			if (!$db->getResult($queryStr))
+				return false;
+
+			$this->_homeFolder = $homefolder;
+		} else {
+			$this->_homeFolder = null;
+		}
 		return true;
 	}	 /* }}} */
 
