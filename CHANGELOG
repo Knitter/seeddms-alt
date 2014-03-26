@@ -1,4 +1,13 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.8
+--------------------------------------------------------------------------------
+- fix error in xml dump (Bug #114)
+- all folders with documenst/subfolders in document chooser can be
+  opened (Bug #136)
+- fix error in command line indexer, now uses converters in settings.xml (Bug #137)
+- more condensed output of full text info page
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.7
 --------------------------------------------------------------------------------
 - fix some vulnerabilities discovered by Steven Seeley
