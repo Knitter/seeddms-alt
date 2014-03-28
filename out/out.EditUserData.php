@@ -34,7 +34,7 @@ if (!$user->isAdmin() && ($settings->_disableSelfEdit)) {
 
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'enableuserimage'=>$settings->_enableUserImage, 'passwordstrength'=>$settings->_passwordStrength, 'httproot'=>$settings->_httpRoot));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'enableuserimage'=>$settings->_enableUserImage, 'enablelanguageselector'=>$settings->_enableLanguageSelector, 'enablethemeselector'=>$settings->_enableThemeSelector, 'passwordstrength'=>$settings->_passwordStrength, 'httproot'=>$settings->_httpRoot));
 if($view) {
 	$view->show();
 	exit;
