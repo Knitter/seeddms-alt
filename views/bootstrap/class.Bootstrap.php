@@ -525,6 +525,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 	function pageList($pageNumber, $totalPages, $baseURI, $params) { /* {{{ */
 
+		$maxpages = 20; // skip pages when more than this is shown
+		$range = 5; // pages left and right of current page
 		if (!is_numeric($pageNumber) || !is_numeric($totalPages) || $totalPages<2) {
 			return;
 		}
@@ -554,9 +556,29 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 		echo "<div class=\"pagination pagination-small\">";
 		echo "<ul>";
-		for ($i = 1; $i  <= $totalPages; $i++) {
-			if ($i == $pageNumber)  echo "<li class=\"active\"><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li> ";
-			else echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li>";
+		if($totalPages <= $maxpages) {
+			for ($i = 1; $i <= $totalPages; $i++) {
+				echo "<li ".($i == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li>";
+			}
+		} else {
+			$i = 1;
+			echo "<li ".($i == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li>";
+			if($pageNumber-$range > 1)
+				$start = $pageNumber-$range;
+			else
+				$start = 2;
+			if($pageNumber+$range < $totalPages)
+				$end = $pageNumber+$range;
+			else
+				$end = $totalPages;
+			if($start > 2)
+				echo "<li><a href=\"#\">...</a></li>";
+			for($j=$start; $j<=$end; $j++)
+				echo "<li ".($j == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$j."\">".$j."</a></li>";
+			if($end < $totalPages-1)
+				echo "<li><a href=\"#\">...</a></li>";
+			if($end < $totalPages)
+				echo "<li ".($totalPages == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$totalPages."\">".$totalPages."</a></li>";
 		}
 		if ($totalPages>1) {
 			echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=all\">".getMLText("all_pages")."</a></li>";
