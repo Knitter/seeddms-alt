@@ -47,8 +47,7 @@ if (isset($_POST["login"])) {
 }
 
 if (empty($email) || empty($login)) {
-	header('Location: ../out/out.PasswordForgotten.php');
-	exit;
+	UI::exitError(getMLText("password_forgotten"),getMLText("no_email_or_login"));
 }
 
 $user = $dms->getUserByLogin($login, $email);
@@ -62,6 +61,6 @@ if($user) {
 	}
 }
 
-header('Location: ../out/out.Login.php');
+header('Location: ../out/out.PasswordSend.php');
 exit;
 ?>
