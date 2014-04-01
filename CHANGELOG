@@ -8,6 +8,11 @@
 - more condensed output of full text info page
 - use settings for enable theme and language selector in profile (Bug #142)
 - restrict number of items in pager on search result page
+- іssue error if end date is before start when adding an event (Bug #146)
+- blank categories and keywords cannot be saved anymore (Bug #148)
+- add missing error msg in attribute editor (Bug #149)
+- better user feedback after reseting password (Bug #139)
+- add page with statistical data (pie charts)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.7
