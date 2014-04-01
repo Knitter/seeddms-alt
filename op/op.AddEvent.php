@@ -60,7 +60,8 @@ if(isset($_POST["to"])) {
 }
 
 if ($to<=$from){
-	$to = $from + 86400 -1;
+//	$to = $from + 86400 -1;
+	UI::exitError(getMLText("add_event"),getMLText("to_before_from"));
 }
 
 $res = addEvent($from, $to, $name, $comment);
