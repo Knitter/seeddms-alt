@@ -6,6 +6,8 @@
   opened (Bug #136)
 - fix error in command line indexer, now uses converters in settings.xml (Bug #137)
 - more condensed output of full text info page
+- use settings for enable theme and language selector in profile (Bug #142)
+- restrict number of items in pager on search result page
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.7
