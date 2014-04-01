@@ -2033,6 +2033,50 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Returns statitical information
+	 *
+	 * This method returns all kind of statistical information like
+	 * documents or used space per user, recent activity, etc.
+	 *
+	 * @param string $type type of statistic
+	 * @param array statistical data
+	 */
+	function getStatisticalData($type='') { /* {{{ */
+		switch($type) {
+			case 'docsperuser':
+				$queryStr = "select b.fullname as `key`, count(owner) as total from tblDocuments a left join tblUsers b on a.owner=b.id group by owner";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'docspermimetype':
+				$queryStr = "select b.mimeType as `key`, count(mimeType) as total from tblDocuments a left join tblDocumentContent b on a.id=b.document group by b.mimeType";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'docspercategory':
+				$queryStr = "select b.name as `key`, count(a.categoryID) as total from tblDocumentCategory a left join tblCategory b on a.categoryID=b.id group by a.categoryID";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'sizeperuser':
+				$queryStr = "select c.fullname as `key`, sum(fileSize) as total from tblDocuments a left join tblDocumentContent b on a.id=b.document left join tblUsers c on a.owner=c.id group by a.owner";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			default:
+				return array();
+		}
+	} /* }}} */
+
+	/**
 	 * Set a callback function
 	 *
 	 * @param string $name internal name of callback
