@@ -581,11 +581,11 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".($pageNumber-1)."\">&laquo;</a></li>";
 			echo "<li ".(1 == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=1\">1</a></li>";
 			if($start > 2)
-				echo "<li><a href=\"#\">...</a></li>";
+				echo "<li><span>...</span></li>";
 			for($j=$start; $j<=$end; $j++)
 				echo "<li ".($j == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$j."\">".$j."</a></li>";
 			if($end < $totalPages-1)
-				echo "<li><a href=\"#\">...</a></li>";
+				echo "<li><span>...</span></li>";
 			if($end < $totalPages)
 				echo "<li ".($totalPages == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$totalPages."\">".$totalPages."</a></li>";
 			if($pageNumber < $totalPages)
