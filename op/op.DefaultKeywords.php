@@ -40,6 +40,9 @@ if ($action == "addcategory") {
 	}
 
 	$name = $_POST["name"];
+	if (!$name) {
+		UI::exitError(getMLText("admin_tools"),getMLText("error_occured"));
+	}
 	if (is_object($dms->getKeywordCategoryByName($name, $user->getID()))) {
 		UI::exitError(getMLText("admin_tools"),getMLText("keyword_exists"));
 	}
