@@ -108,7 +108,7 @@ function showKeywords(selectObj) {
   						<?php echo createHiddenFieldWithKey('removecategory'); ?>
 							<input type="Hidden" name="action" value="removecategory">
 							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input value="<?php printMLText("rm_default_keyword_category");?>" type="submit" class="btn" title="<?php echo getMLText("delete")?>">
+							<button type="submit" class="btn" title="<?php echo getMLText("delete")?>"><i class="icon-remove"></i> <?php printMLText("rm_default_keyword_category");?></button>
 						</form>
 					</td>
 				</tr>
