@@ -184,7 +184,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
 				echo "    <li class=\"divider\"></li>\n";
 			}
+			$showdivider = false;
 			if($this->params['enablelanguageselector']) {
+				$showdivider = true;
 				echo "    <li class=\"dropdown-submenu\">\n";
 				echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("language")."</a>\n";
 				echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
@@ -200,9 +202,12 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "     </ul>\n";
 				echo "    </li>\n";
 			}
-			if($this->params['user']->isAdmin())
+			if($this->params['user']->isAdmin()) {
+				$showdivider = true;
 				echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
-			echo "    <li class=\"divider\"></li>\n";
+			}
+			if($showdivider)
+				echo "    <li class=\"divider\"></li>\n";
 			if($this->params['session']->getSu()) {
 				echo "    <li><a href=\"../op/op.ResetSu.php\">".getMLText("sign_out_user")."</a></li>\n";
 			} else {
