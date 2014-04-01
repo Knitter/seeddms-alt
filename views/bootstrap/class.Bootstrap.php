@@ -525,7 +525,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 	function pageList($pageNumber, $totalPages, $baseURI, $params) { /* {{{ */
 
-		$maxpages = 20; // skip pages when more than this is shown
+		$maxpages = 25; // skip pages when more than this is shown
 		$range = 5; // pages left and right of current page
 		if (!is_numeric($pageNumber) || !is_numeric($totalPages) || $totalPages<2) {
 			return;
@@ -561,8 +561,6 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "<li ".($i == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li>";
 			}
 		} else {
-			$i = 1;
-			echo "<li ".($i == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li>";
 			if($pageNumber-$range > 1)
 				$start = $pageNumber-$range;
 			else
@@ -570,7 +568,18 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			if($pageNumber+$range < $totalPages)
 				$end = $pageNumber+$range;
 			else
-				$end = $totalPages;
+				$end = $totalPages-1;
+			/* Move start or end to always show 2*$range items */
+			$diff = $end-$start-2*$range;
+			if($diff < 0) {
+				if($start > 2)
+					$start += $diff;
+				if($end < $totalPages-1)
+					$end -= $diff;
+			}
+			if($pageNumber > 1)
+				echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".($pageNumber-1)."\">&laquo;</a></li>";
+			echo "<li ".(1 == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=1\">1</a></li>";
 			if($start > 2)
 				echo "<li><a href=\"#\">...</a></li>";
 			for($j=$start; $j<=$end; $j++)
@@ -579,6 +588,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "<li><a href=\"#\">...</a></li>";
 			if($end < $totalPages)
 				echo "<li ".($totalPages == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$totalPages."\">".$totalPages."</a></li>";
+			if($pageNumber < $totalPages)
+				echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".($pageNumber+1)."\">&raquo;</a></li>";
 		}
 		if ($totalPages>1) {
 			echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=all\">".getMLText("all_pages")."</a></li>";
