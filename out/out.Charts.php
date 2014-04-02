@@ -33,6 +33,13 @@ if(!empty($_GET['type'])) {
 	$type = $_GET['type'];
 }
 $data = $dms->getStatisticalData($type);
+switch($type) {
+	case 'docsperstatus':
+		foreach($data as &$rec) {
+			$rec['key'] = getOverallStatusText((int) $rec['key']);
+		}
+		break;
+}
 //print_r($data);
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
 $view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'rootfolder'=>$rootfolder, 'type'=>$type, 'data'=>$data));
