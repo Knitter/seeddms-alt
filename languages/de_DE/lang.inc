@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1852)
+//    Translators: Admin (1853)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -152,6 +152,7 @@ URL: [url]',
 'change_password' => 'Password ändern',
 'change_password_message' => 'Ihr Passwort wurde geändert.',
 'change_status' => 'Status ändern',
+'charts' => 'Diagramme',
 'chart_docspercategory_title' => 'Dokumente pro Kategorie',
 'chart_docspermimetype_title' => 'Dokumente pro Mime-Type',
 'chart_docsperstatus_title' => 'Dokumente pro Status',

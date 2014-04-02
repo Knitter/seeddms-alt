@@ -137,6 +137,7 @@ $text = array(
 'change_password' => '',
 'change_password_message' => '',
 'change_status' => 'Canviar estat',
+'charts' => '',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
 'chart_docsperstatus_title' => '',

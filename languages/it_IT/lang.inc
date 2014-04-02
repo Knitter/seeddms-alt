@@ -137,6 +137,7 @@ $text = array(
 'change_password' => 'Cambia password',
 'change_password_message' => 'La tua password è stata cambiata.',
 'change_status' => 'Modifica lo Stato',
+'charts' => '',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
 'chart_docsperstatus_title' => '',
