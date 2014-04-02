@@ -88,6 +88,7 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 	<p></p>
 	<div class="row-fluid">
 		<a href="../out/out.Statistic.php" class="span3 btn btn-medium"><i class="icon-tasks"></i><br /><?php echo getMLText("folders_and_documents_statistic")?></a>
+		<a href="../out/out.Charts.php" class="span3 btn btn-medium"><i class="icon-bar-chart"></i><br /><?php echo getMLText("charts")?></a>
 		<a href="../out/out.ObjectCheck.php" class="span3 btn btn-medium"><i class="icon-check"></i><br /><?php echo getMLText("objectcheck")?></a>
 		<a href="../out/out.Info.php" class="span3 btn btn-medium"><i class="icon-info-sign"></i><br /><?php echo getMLText("version_info")?></a>
 	</div>
