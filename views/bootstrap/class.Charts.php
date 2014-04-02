@@ -60,8 +60,8 @@ echo "<div class=\"row-fluid\">\n";
 echo "<div class=\"span4\">\n";
 $this->contentHeading(getMLText("chart_selection"));
 echo "<div class=\"well\">\n";
-foreach(array('docsperuser', 'sizeperuser', 'docspermimetype', 'docspercategory') as $atype) {
-	echo "<div><a href=\"?type=".$atype."\">".$atype."</a></div>\n";
+foreach(array('docsperuser', 'sizeperuser', 'docspermimetype', 'docspercategory', 'docsperstatus') as $atype) {
+	echo "<div><a href=\"?type=".$atype."\">".getMLText('chart_'.$atype.'_title')."</a></div>\n";
 }
 echo "</div>\n";
 echo "</div>\n";
@@ -71,38 +71,67 @@ $this->contentHeading(getMLText('chart_'.$type.'_title'));
 echo "<div class=\"well\">\n";
 
 ?>
-	<div id="chart" style="height: 300px;" class="chart"></div>
-	<script type="text/javascript">
-		var data = [
+<div id="chart" style="height: 400px;" class="chart"></div>
+<script type="text/javascript">
+	var data = [
 <?php
 foreach($data as $rec) {
 //$user = $this->dms->getUser($rec['key']);
 	echo '{ label: "'.$rec['key'].'", data: [[1,'.$rec['total'].']]},'."\n";
 }
 ?>
-		];
-		$.plot('#chart', data, {
-			series: {
-				pie: { 
+	];
+	$.plot('#chart', data, {
+		series: {
+			pie: { 
+				show: true,
+				radius: 1,
+				label: {
 					show: true,
-					radius: 1,
-					label: {
-						show: true,
-						radius: 2/3,
-						formatter: labelFormatter,
-						threshold: 0.1,
-						background: {
-							opacity: 0.8
-						}
+					radius: 2/3,
+					formatter: labelFormatter,
+					threshold: 0.1,
+					background: {
+						opacity: 0.8
 					}
 				}
 			}
-		});
+		},
+		grid: {
+			hoverable: true,
+			clickable: true
+		}
+	});
+
+	$("<div id='tooltip'></div>").css({
+		position: "absolute",
+		display: "none",
+		padding: "5px",
+		color: "white",
+		"background-color": "#000",
+		"border-radius": "5px",
+		opacity: 0.80
+	}).appendTo("body");
+
+	$("#chart").bind("plothover", function (event, pos, item) {
+		if(item) {
+//			console.log(item.series);
+			var x = item.series.data[0][0];//.toFixed(2),
+					y = item.series.data[0][1];//.toFixed(2);
+
+			$("#tooltip").html(item.series.label + ": " + y + " (" + Math.round(item.series.percent) + "%)")
+				.css({top: pos.pageY-35, left: pos.pageX+5})
+				.fadeIn(200);
+		} else {
+			$("#tooltip").hide();
+		}
+	});
+
 	function labelFormatter(label, series) {
 	console.log(series);
-		return "<div style='font-size:8pt; text-align:center; padding:2px; color:black; background: white;'>" + label + "<br/>" + series.data[0][1] + " (" + Math.round(series.percent) + "%)</div>";
+		return "<div style='font-size:8pt; line-height: 14px; text-align:center; padding:2px; color:black; background: white; border-radius: 5px;'>" + label + "<br/>" + series.data[0][1] + " (" + Math.round(series.percent) + "%)</div>";
 	}
-	</script>
+</script>
 <?php
 echo "</div>\n";
 echo "</div>\n";
