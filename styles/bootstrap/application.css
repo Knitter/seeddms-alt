@@ -24,6 +24,10 @@ img.mimeicon {
 	min-height: 100px;
 }
 
+#admin-tools a {
+	margin-bottom: 10px;
+}
+
 ul.actions li a:hover > i {
 	text-decoration: none;
 }

@@ -49,7 +49,6 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 		<a href="../out/out.UsrMgr.php" class="span3 btn btn-medium"><i class="icon-user"></i><br /><?php echo getMLText("user_management")?></a>
 		<a href="../out/out.GroupMgr.php" class="span3 btn btn-medium"><i class="icon-group"></i><br /><?php echo getMLText("group_management")?></a>
 	</div>
-	<p></p>
 	<div class="row-fluid">
 		<a href="../out/out.BackupTools.php" class="span3 btn btn-medium"><i class="icon-hdd"></i><br /><?php echo getMLText("backup_tools")?></a>
 <?php		
@@ -57,7 +56,6 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 			echo "<a href=\"../out/out.LogManagement.php\" class=\"span3 btn btn-medium\"><i class=\"icon-list\"></i><br />".getMLText("log_management")."</a>";
 ?>
 	</div>
-	<p></p>
 	<div class="row-fluid">
 		<a href="../out/out.DefaultKeywords.php" class="span3 btn btn-medium"><i class="icon-reorder"></i><br /><?php echo getMLText("global_default_keywords")?></a>
 		<a href="../out/out.Categories.php" class="span3 btn btn-medium"><i class="icon-columns"></i><br /><?php echo getMLText("global_document_categories")?></a>
@@ -66,7 +64,6 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 <?php
 	if($this->params['workflowmode'] != 'traditional') {
 ?>
-	<p></p>
 	<div class="row-fluid">
 		<a href="../out/out.WorkflowMgr.php" class="span3 btn btn-medium"><i class="icon-sitemap"></i><br /><?php echo getMLText("global_workflows"); ?></a>
 		<a href="../out/out.WorkflowStatesMgr.php" class="span3 btn btn-medium"><i class="icon-star"></i><br /><?php echo getMLText("global_workflow_states"); ?></a>
@@ -76,7 +73,6 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 		}
 		if($enablefullsearch) {
 ?>
-	<p></p>
 	<div class="row-fluid">
 		<a href="../out/out.Indexer.php" class="span3 btn btn-medium"><i class="icon-refresh"></i><br /><?php echo getMLText("update_fulltext_index")?></a>
 		<a href="../out/out.CreateIndex.php" class="span3 btn btn-medium"><i class="icon-search"></i><br /><?php echo getMLText("create_fulltext_index")?></a>
@@ -85,14 +81,12 @@ class SeedDMS_View_AdminTools extends SeedDMS_Bootstrap_Style {
 <?php
 		}
 ?>
-	<p></p>
 	<div class="row-fluid">
 		<a href="../out/out.Statistic.php" class="span3 btn btn-medium"><i class="icon-tasks"></i><br /><?php echo getMLText("folders_and_documents_statistic")?></a>
 		<a href="../out/out.Charts.php" class="span3 btn btn-medium"><i class="icon-bar-chart"></i><br /><?php echo getMLText("charts")?></a>
 		<a href="../out/out.ObjectCheck.php" class="span3 btn btn-medium"><i class="icon-check"></i><br /><?php echo getMLText("objectcheck")?></a>
 		<a href="../out/out.Info.php" class="span3 btn btn-medium"><i class="icon-info-sign"></i><br /><?php echo getMLText("version_info")?></a>
 	</div>
-	<p></p>
 	<div class="row-fluid">
 		<a href="../out/out.Settings.php" class="span3 btn btn-medium"><i class="icon-cogs"></i><br /><?php echo getMLText("settings")?></a>
 	</div>
