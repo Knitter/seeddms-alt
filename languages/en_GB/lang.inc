@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1005), netixw (14)
+//    Translators: Admin (1012), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -120,6 +120,8 @@ Parent folder: [folder_path]
 User: [username]
 URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - Attribute changed',
+'attribute_count' => 'Number of uses',
+'attribute_value' => 'Value of attribute',
 'attr_no_regex_match' => 'The attribute value does not match the regular expression',
 'at_least_n_users_of_group' => 'At least [number_of_users] users of [group]',
 'august' => 'August',
@@ -153,8 +155,10 @@ URL: [url]',
 'change_password_message' => 'Your password has been changed.',
 'change_status' => 'Change Status',
 'charts' => 'Charts',
+'chart_docsaccumulated_title' => 'Number of documents',
 'chart_docspercategory_title' => 'Documents per category',
 'chart_docspermimetype_title' => 'Documents per mime-type',
+'chart_docspermonth_title' => 'New documents per month',
 'chart_docsperstatus_title' => 'Documents per status',
 'chart_docsperuser_title' => 'Documents per user',
 'chart_selection' => 'Select chart',
@@ -405,6 +409,7 @@ URL: [url]',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
 'index_converters' => 'Index document conversion',
+'index_folder' => 'Index folder',
 'individuals' => 'Individuals',
 'inherited' => 'inherited',
 'inherits_access_copy_msg' => 'Copy inherited access list',
@@ -917,6 +922,8 @@ URL: [url]',
 'settings_rootFolderID_desc' => 'ID of root-folder (mostly no need to change)',
 'settings_SaveError' => 'Configuration file save error',
 'settings_Server' => 'Server settings',
+'settings_showMissingTranslations' => 'Show missing translations',
+'settings_showMissingTranslations_desc' => 'List all missing translations on the page at the bottom of the page. The logged in user will be able to submit a proposal for a missing translation which will be saved in a csv file. Do not turn this function on if in a production environment!',
 'settings_Site' => 'Site',
 'settings_siteDefaultPage' => 'Site Default Page',
 'settings_siteDefaultPage_desc' => 'Default page on login. If empty defaults to out/out.ViewFolder.php',

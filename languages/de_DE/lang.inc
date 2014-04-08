@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1853)
+//    Translators: Admin (1860)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -120,6 +120,8 @@ Elternordner: [folder_path]
 Benutzer: [username]
 URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - Attribut geändert',
+'attribute_count' => 'Anzahl Verwendungen',
+'attribute_value' => 'Attributwert',
 'attr_no_regex_match' => 'The attribute value does not match the regular expression',
 'at_least_n_users_of_group' => 'Mindestens [number_of_users] Benutzer der Gruppe [group]',
 'august' => 'August',
@@ -153,8 +155,10 @@ URL: [url]',
 'change_password_message' => 'Ihr Passwort wurde geändert.',
 'change_status' => 'Status ändern',
 'charts' => 'Diagramme',
+'chart_docsaccumulated_title' => 'Anzahl Dokumente',
 'chart_docspercategory_title' => 'Dokumente pro Kategorie',
 'chart_docspermimetype_title' => 'Dokumente pro Mime-Type',
+'chart_docspermonth_title' => 'Neue Dokumente pro Monat',
 'chart_docsperstatus_title' => 'Dokumente pro Status',
 'chart_docsperuser_title' => 'Dokumente pro Benutzer',
 'chart_selection' => 'Diagrammauswahl',
@@ -405,6 +409,7 @@ URL: [url]',
 'include_documents' => 'Dokumente miteinbeziehen',
 'include_subdirectories' => 'Unterverzeichnisse miteinbeziehen',
 'index_converters' => 'Index Dokumentenumwandlung',
+'index_folder' => 'Indiziere Ordner',
 'individuals' => 'Einzelpersonen',
 'inherited' => 'geerbt',
 'inherits_access_copy_msg' => 'Berechtigungen kopieren',
@@ -917,6 +922,8 @@ URL: [url]',
 'settings_rootFolderID_desc' => 'Id des Wurzelordners in SeedDMS (kann in der Regel unverändert bleiben)',
 'settings_SaveError' => 'Fehler beim Speichern der Konfiguration',
 'settings_Server' => 'Server-Einstellungen',
+'settings_showMissingTranslations' => 'Zeige fehlende Übersetzungen',
+'settings_showMissingTranslations_desc' => 'Listet die fehlenden Übersetzungen der Seite unterhalb der Fußzeile und erlaubt dem Benutzer Vorschläge einzureichen. Diese Vorschläge werden in einer CSV-Datei gespeichert. Diese Funktion sollte nicht in Produktionssystemen eingeschaltet sein.',
 'settings_Site' => 'Site',
 'settings_siteDefaultPage' => 'Startseite',
 'settings_siteDefaultPage_desc' => 'Erste Seite nach der Anmeldung. Voreingestellt ist \'out/out.ViewFolder.php\'',
