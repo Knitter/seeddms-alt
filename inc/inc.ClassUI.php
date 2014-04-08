@@ -75,6 +75,7 @@ class UI extends UI_Default {
 			$view->setParam('enablelanguageselector', $settings->_enableLanguageSelector);
 			$view->setParam('workflowmode', $settings->_workflowMode);
 			$view->setParam('partitionsize', $settings->_partitionSize);
+			$view->setParam('showmissingtranslations', $settings->_showMissingTranslations);
 			return $view;
 		}
 		return null;
