@@ -45,7 +45,8 @@ class SeedDMS_View_Charts extends SeedDMS_Bootstrap_Style {
 
 		$this->htmlAddHeader(
 			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.min.js"></script>'."\n".
-			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.pie.min.js"></script>'."\n");
+			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.pie.min.js"></script>'."\n".
+			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.time.min.js"></script>'."\n");
 
 		$this->htmlStartPage(getMLText("folders_and_documents_statistic"));
 		$this->globalNavigation();
@@ -60,7 +61,7 @@ echo "<div class=\"row-fluid\">\n";
 echo "<div class=\"span4\">\n";
 $this->contentHeading(getMLText("chart_selection"));
 echo "<div class=\"well\">\n";
-foreach(array('docsperuser', 'sizeperuser', 'docspermimetype', 'docspercategory', 'docsperstatus') as $atype) {
+foreach(array('docsperuser', 'sizeperuser', 'docspermimetype', 'docspercategory', 'docsperstatus', 'docspermonth', 'docsaccumulated') as $atype) {
 	echo "<div><a href=\"?type=".$atype."\">".getMLText('chart_'.$atype.'_title')."</a></div>\n";
 }
 echo "</div>\n";
@@ -73,10 +74,26 @@ echo "<div class=\"well\">\n";
 ?>
 <div id="chart" style="height: 400px;" class="chart"></div>
 <script type="text/javascript">
+<?php
+if($type == 'docsaccumulated') {
+?>
+	var data = [
+<?php
+	foreach($data as $rec) {
+		echo '['.$rec['key'].','.$rec['total'].'],'."\n";
+	}
+?>
+	];
+	$.plot("#chart", [data], {
+		xaxis: { mode: "time" }
+	});
+
+<?php
+} else {
+?>
 	var data = [
 <?php
 foreach($data as $rec) {
-//$user = $this->dms->getUser($rec['key']);
 	echo '{ label: "'.$rec['key'].'", data: [[1,'.$rec['total'].']]},'."\n";
 }
 ?>
@@ -131,6 +148,9 @@ foreach($data as $rec) {
 	console.log(series);
 		return "<div style='font-size:8pt; line-height: 14px; text-align:center; padding:2px; color:black; background: white; border-radius: 5px;'>" + label + "<br/>" + series.data[0][1] + " (" + Math.round(series.percent) + "%)</div>";
 	}
+<?php
+}
+?>
 </script>
 <?php
 echo "</div>\n";
