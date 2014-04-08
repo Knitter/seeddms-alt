@@ -91,6 +91,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 	function htmlEndPage() { /* {{{ */
 		$this->footNote();
+		if($this->params['showmissingtranslations']) {
+			$this->missingḺanguageKeys();
+		}
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
 		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
@@ -98,6 +101,33 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		echo "</body>\n</html>\n";
+	} /* }}} */
+
+	function missingḺanguageKeys() { /* {{{ */
+		global $MISSING_LANG, $LANG;
+		if($MISSING_LANG) {
+			echo '<div class="alert alert-error">'."\n";
+			echo "<p><strong>This page contains missing translations in the selected language. Please help to improve SeedDMS and provide the translation.</strong></p>";
+			echo "</div>";
+			echo "<table class=\"table table-condensed\">";
+			echo "<tr><th>Key</th><th>engl. Text</th><th>Your translation</th></tr>\n";
+			foreach($MISSING_LANG as $key=>$lang) {
+				echo "<tr><td>".$key."</td><td>".$LANG['en_GB'][$key]."</td><td><div class=\"input-append send-missing-translation\"><input name=\"missing-lang-key\" type=\"hidden\" value=\"".$key."\" /><input name=\"missing-lang-lang\" type=\"hidden\" value=\"".$lang."\" /><input type=\"text\" class=\"input-xxlarge\" name=\"missing-lang-translation\" placeholder=\"Your translation in '".$lang."'\"/><a class=\"btn\">Submit</a></div></td></tr>";
+			}
+			echo "</table>";
+?>
+		<script>
+  	noty({
+  		text: '<b>There are missing translations on this page!</b><br />Please check the bottom of the page.',
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			timeout: 5500,
+  	});
+		</script>
+<?php
+		}
 	} /* }}} */
 
 	function footNote() { /* {{{ */
