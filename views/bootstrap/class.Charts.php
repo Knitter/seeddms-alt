@@ -74,6 +74,16 @@ echo "<div class=\"well\">\n";
 ?>
 <div id="chart" style="height: 400px;" class="chart"></div>
 <script type="text/javascript">
+	$("<div id='tooltip'></div>").css({
+		position: "absolute",
+		display: "none",
+		padding: "5px",
+		color: "white",
+		"background-color": "#000",
+		"border-radius": "5px",
+		opacity: 0.80
+	}).appendTo("body");
+
 <?php
 if($type == 'docsaccumulated') {
 ?>
@@ -84,10 +94,33 @@ if($type == 'docsaccumulated') {
 	}
 ?>
 	];
-	$.plot("#chart", [data], {
-		xaxis: { mode: "time" }
+	var plot = $.plot("#chart", [data], {
+		xaxis: { mode: "time" },
+		series: {
+			lines: {
+				show: true
+			},
+			points: {
+				show: true
+			}
+		},
+		grid: {
+			hoverable: true,
+			clickable: true
+		},
 	});
 
+	$("#chart").bind("plothover", function (event, pos, item) {
+		if(item) {
+			var x = item.datapoint[0];//.toFixed(2),
+					y = item.datapoint[1];//.toFixed(2);
+			$("#tooltip").html($.plot.formatDate(new Date(x), '%e. %b %Y') + ": " + y)
+				.css({top: pos.pageY-35, left: pos.pageX+5})
+				.fadeIn(200);
+		} else {
+			$("#tooltip").hide();
+		}
+	});
 <?php
 } else {
 ?>
@@ -120,19 +153,8 @@ foreach($data as $rec) {
 		}
 	});
 
-	$("<div id='tooltip'></div>").css({
-		position: "absolute",
-		display: "none",
-		padding: "5px",
-		color: "white",
-		"background-color": "#000",
-		"border-radius": "5px",
-		opacity: 0.80
-	}).appendTo("body");
-
 	$("#chart").bind("plothover", function (event, pos, item) {
 		if(item) {
-//			console.log(item.series);
 			var x = item.series.data[0][0];//.toFixed(2),
 					y = item.series.data[0][1];//.toFixed(2);
 
@@ -143,9 +165,7 @@ foreach($data as $rec) {
 			$("#tooltip").hide();
 		}
 	});
-
 	function labelFormatter(label, series) {
-	console.log(series);
 		return "<div style='font-size:8pt; line-height: 14px; text-align:center; padding:2px; color:black; background: white; border-radius: 5px;'>" + label + "<br/>" + series.data[0][1] + " (" + Math.round(series.percent) + "%)</div>";
 	}
 <?php
