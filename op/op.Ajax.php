@@ -244,16 +244,18 @@ switch($command) {
 		break; /* }}} */
 
 	case 'submittranslation': /* {{{ */
-		if($user && !empty($_POST['phrase'])) {
-			if($fp = fopen('/tmp/newtranslations.txt', 'a+')) {
-				fputcsv($fp, array(date('Y-m-d H:i:s'), $user->getLogin(), $_POST['key'], $_POST['lang'], $_POST['phrase']));
-				fclose($fp);
+		if($settings->_showMissingTranslations) {
+			if($user && !empty($_POST['phrase'])) {
+				if($fp = fopen('/tmp/newtranslations.txt', 'a+')) {
+					fputcsv($fp, array(date('Y-m-d H:i:s'), $user->getLogin(), $_POST['key'], $_POST['lang'], $_POST['phrase']));
+					fclose($fp);
+				}
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>true, 'message'=>'Thank you for your contribution', 'data'=>''));
+			}	else {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>'Missing translation', 'data'=>''));
 			}
-			header('Content-Type', 'application/json');
-			echo json_encode(array('success'=>true, 'message'=>'Thank you for your contribution', 'data'=>''));
-		}	else {
-			header('Content-Type', 'application/json');
-			echo json_encode(array('success'=>false, 'message'=>'Missing translation', 'data'=>''));
 		}
 		break; /* }}} */
 
