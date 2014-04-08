@@ -429,6 +429,10 @@ if(!is_writeable($settings->_configFilePath)) {
         <td><?php printMLText("settings_titleDisplayHack");?>:</td>
         <td><input name="titleDisplayHack" type="checkbox" <?php if ($settings->_titleDisplayHack) echo "checked" ?> /></td>
       </tr>
+      <tr title="<?php printMLText("settings_showMissingTranslations_desc");?>">
+        <td><?php printMLText("settings_showMissingTranslations");?>:</td>
+        <td><input name="showMissingTranslations" type="checkbox" <?php if ($settings->_showMissingTranslations) echo "checked" ?> /></td>
+      </tr>
 
       <!--
         -- SETTINGS - ADVANCED - AUTHENTICATION

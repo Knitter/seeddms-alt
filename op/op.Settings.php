@@ -131,6 +131,7 @@ if ($action == "saveSettings")
   $settings->_siteDefaultPage = $_POST["siteDefaultPage"];
   $settings->_rootFolderID = intval($_POST["rootFolderID"]);
   $settings->_titleDisplayHack = getBoolValue("titleDisplayHack");
+  $settings->_showMissingTranslations = getBoolValue("showMissingTranslations");
 
   // SETTINGS - ADVANCED - AUTHENTICATION
   $settings->_guestID = intval($_POST["guestID"]);

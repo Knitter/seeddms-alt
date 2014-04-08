@@ -172,6 +172,8 @@ class Settings { /* {{{ */
 	var $_previewWidthList = 40;
 	// Preview image width on document details page
 	var $_previewWidthDetail = 100;
+	// Show form to submit missing translations at end of page
+	var $_showMissingTranslations = false;
 	// Extra Path to additional software, will be added to include path
 	var $_extraPath = null;
 	// DB-Driver used by adodb (see adodb-readme)
@@ -451,6 +453,7 @@ class Settings { /* {{{ */
 		$this->_siteDefaultPage = strval($tab["siteDefaultPage"]);
 		$this->_rootFolderID = intval($tab["rootFolderID"]);
 		$this->_titleDisplayHack = Settings::boolval($tab["titleDisplayHack"]);
+		$this->_showMissingTranslations = Settings::boolval($tab["showMissingTranslations"]);
 
 		// XML Path: /configuration/advanced/authentication
 		$node = $xml->xpath('/configuration/advanced/authentication');
@@ -701,6 +704,7 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "siteDefaultPage", $this->_siteDefaultPage);
     $this->setXMLAttributValue($node, "rootFolderID", $this->_rootFolderID);
     $this->setXMLAttributValue($node, "titleDisplayHack", $this->_titleDisplayHack);
+    $this->setXMLAttributValue($node, "showMissingTranslations", $this->_showMissingTranslations);
 
     // XML Path: /configuration/advanced/authentication
     $node = $this->getXMLNode($xml, '/configuration/advanced', 'authentication');
