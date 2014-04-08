@@ -2072,6 +2072,26 @@ class SeedDMS_Core_DMS {
 					return false;
 
 				return $resArr;
+			case 'docspermonth':
+				$queryStr = "select `key`, count(`key`) as total from (select from_unixtime(date, '%Y-%m') as `key`from tblDocuments) a group by `key` order by `key`";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'docsaccumulated':
+				$queryStr = "select `key`, count(`key`) as total from (select from_unixtime(date, '%Y-%m-%d') as `key`from tblDocuments) a group by `key` order by `key`";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				$sum = 0;
+				foreach($resArr as &$res) {
+					$sum += $res['total'];
+					$res['key'] = mktime(12, 0, 0, substr($res['key'], 5, 2), substr($res['key'], 8, 2), substr($res['key'], 0, 4)) * 1000;
+					$res['total'] = $sum;
+				}
+				return $resArr;
 			case 'sizeperuser':
 				$queryStr = "select c.fullname as `key`, sum(fileSize) as total from tblDocuments a left join tblDocumentContent b on a.id=b.document left join tblUsers c on a.owner=c.id group by a.owner";
 				$resArr = $this->db->getResultArray($queryStr);
