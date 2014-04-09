@@ -2091,9 +2091,7 @@ class SeedDMS_Core_DMS {
 					/* auxially variable $key is need because sqlite returns
 					 * a key '`key`'
 					 */
-					$key = mktime(12, 0, 0, substr($res['key'], 5, 2), substr($res['key'], 8, 2), substr($res['key'], 0, 4)) * 1000;
-					unset($res['key']);
-					$res['key'] = $key;
+					$res['key'] = mktime(12, 0, 0, substr($res['key'], 5, 2), substr($res['key'], 8, 2), substr($res['key'], 0, 4)) * 1000;
 					$res['total'] = $sum;
 				}
 				return $resArr;
