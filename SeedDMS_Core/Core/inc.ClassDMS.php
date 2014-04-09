@@ -2073,14 +2073,14 @@ class SeedDMS_Core_DMS {
 
 				return $resArr;
 			case 'docspermonth':
-				$queryStr = "select `key`, count(`key`) as total from (select ".$this->db->getDateExtract("date")." as `key` from tblDocuments) a group by `key` order by `key`";
+				$queryStr = "select *, count(`key`) as total from (select ".$this->db->getDateExtract("date", '%Y-%m')." as `key` from tblDocuments) a group by `key` order by `key`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
 
 				return $resArr;
 			case 'docsaccumulated':
-				$queryStr = "select `key`, count(`key`) as total from (select ".$this->db->getDateExtract("date")." as `key` from tblDocuments) a group by `key` order by `key`";
+				$queryStr = "select *, count(`key`) as total from (select ".$this->db->getDateExtract("date")." as `key` from tblDocuments) a group by `key` order by `key`";
 				$resArr = $this->db->getResultArray($queryStr);
 				if (!$resArr)
 					return false;
