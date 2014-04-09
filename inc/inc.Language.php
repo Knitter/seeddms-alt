@@ -19,6 +19,7 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 $LANG = array();
+$MISSING_LANG = array();
 foreach(getLanguages() as $_lang) {
 	if(file_exists($settings->_rootDir . "languages/" . $_lang . "/lang.inc")) {
 		include $settings->_rootDir . "languages/" . $_lang . "/lang.inc";
@@ -64,7 +65,7 @@ function getLanguages()
  * @param string $lang use this language instead of the currently set lang
  */
 function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {{{ */
-	GLOBAL $settings, $LANG, $session;
+	GLOBAL $settings, $LANG, $session, $MISSING_LANG;
 
 	$trantext = '';
 	if(0 && $settings->_otrance) {
@@ -80,10 +81,12 @@ function getMLText($key, $replace = array(), $defaulttext = "", $lang="") { /* {
 
 	if(!isset($LANG[$lang][$key]) || !$LANG[$lang][$key]) {
 		if (!$defaulttext) {
-			if(isset($LANG[$settings->_language][$key]))
+			$MISSING_LANG[$key] = $lang; //$_SERVER['SCRIPT_NAME'];
+			if(!empty($LANG[$settings->_language][$key])) {
 				$tmpText = $LANG[$settings->_language][$key];
-			else
-				$tmpText = '';
+			} else {
+				$tmpText = '**'.$key.'**';
+			}
 		} else
 			$tmpText = $defaulttext;
 	} else

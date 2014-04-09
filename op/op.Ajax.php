@@ -55,7 +55,7 @@ if (isset($_COOKIE["mydms_session"])) {
 
 $command = $_REQUEST["command"];
 switch($command) {
-	case 'checkpwstrength':
+	case 'checkpwstrength': /* {{{ */
 		$ps = new Password_Strength();
 		$ps->set_password($_REQUEST["pwd"]);
 		if($settings->_passwordStrengthAlgorithm == 'simple')
@@ -72,7 +72,7 @@ switch($command) {
 		} else {
 			echo json_encode(array('error'=>0, 'strength'=>$score));
 		}
-		break;
+		break; /* }}} */
 
 	case 'sessioninfo': /* {{{ */
 		if($user) {
@@ -258,6 +258,22 @@ switch($command) {
 			} else {
 				header('Content-Type', 'application/json');
 				echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+			}
+		}
+		break; /* }}} */
+
+	case 'submittranslation': /* {{{ */
+		if($settings->_showMissingTranslations) {
+			if($user && !empty($_POST['phrase'])) {
+				if($fp = fopen('/tmp/newtranslations.txt', 'a+')) {
+					fputcsv($fp, array(date('Y-m-d H:i:s'), $user->getLogin(), $_POST['key'], $_POST['lang'], $_POST['phrase']));
+					fclose($fp);
+				}
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>true, 'message'=>'Thank you for your contribution', 'data'=>''));
+			}	else {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>'Missing translation', 'data'=>''));
 			}
 		}
 		break; /* }}} */

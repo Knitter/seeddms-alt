@@ -204,6 +204,34 @@ $(document).ready( function() {
 		);
 	});
 
+	$('.send-missing-translation a').click(function(ev){
+//		console.log($(ev.target).parent().children('[name=missing-lang-key]').val());
+//		console.log($(ev.target).parent().children('[name=missing-lang-lang]').val());
+//		console.log($(ev.target).parent().children('[name=missing-lang-translation]').val());
+		$.ajax('../op/op.Ajax.php', {
+			type:"POST",
+			async:true,
+			dataType:"json",
+			data: {
+				command: 'submittranslation',
+				key: $(ev.target).parent().children('[name=missing-lang-key]').val(),
+				lang: $(ev.target).parent().children('[name=missing-lang-lang]').val(),
+				phrase: $(ev.target).parent().children('[name=missing-lang-translation]').val()
+			},
+			success: function(data, textStatus) {
+//				console.log(data);
+				noty({
+					text: data.message,
+					type: data.success ? 'success' : 'error',
+					dismissQueue: true,
+					layout: 'topRight',
+					theme: 'defaultTheme',
+					timeout: 1500,
+				});
+			}
+		});
+	});
+	
 });
 
 function allowDrop(ev) {

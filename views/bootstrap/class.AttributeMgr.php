@@ -151,8 +151,8 @@ function showAttributeDefinitions(selectObj) {
 						if(isset($res['frequencies']) && $res['frequencies']) {
 							print "<table class=\"table-condensed\">";
 							print "<thead>\n<tr>\n";
-							print "<th>".getMLText("count")."</th>\n";
-							print "<th>".getMLText("value")."</th>\n";
+							print "<th>".getMLText("attribute_count")."</th>\n";
+							print "<th>".getMLText("attribute_value")."</th>\n";
 							print "</tr></thead>\n<tbody>\n";
 							foreach($res['frequencies'] as $entry) {
 								echo "<tr><td>".$entry['c']."</td><td>".$entry['value']."</td></tr>";
@@ -166,7 +166,7 @@ function showAttributeDefinitions(selectObj) {
 							print "<th>".getMLText("name")."</th>\n";
 							print "<th>".getMLText("owner")."</th>\n";
 							print "<th>".getMLText("status")."</th>\n";
-							print "<th>".getMLText("value")."</th>\n";
+							print "<th>".getMLText("attribute_value")."</th>\n";
 							print "<th>".getMLText("actions")."</th>\n";
 							print "</tr></thead>\n<tbody>\n";
 							foreach($res['docs'] as $doc) {
@@ -196,7 +196,7 @@ function showAttributeDefinitions(selectObj) {
 							print "<th></th>\n";
 							print "<th>".getMLText("name")."</th>\n";
 							print "<th>".getMLText("owner")."</th>\n";
-							print "<th>".getMLText("value")."</th>\n";
+							print "<th>".getMLText("attribute_value")."</th>\n";
 							print "<th>".getMLText("actions")."</th>\n";
 							print "</tr></thead>\n<tbody>\n";
 							foreach($res['folders'] as $folder) {
@@ -225,7 +225,7 @@ function showAttributeDefinitions(selectObj) {
 							print "<th>".getMLText("owner")."</th>\n";
 							print "<th>".getMLText("mimetype")."</th>\n";
 							print "<th>".getMLText("version")."</th>\n";
-							print "<th>".getMLText("value")."</th>\n";
+							print "<th>".getMLText("attribute_value")."</th>\n";
 							print "<th>".getMLText("actions")."</th>\n";
 							print "</tr></thead>\n<tbody>\n";
 							foreach($res['contents'] as $content) {
@@ -358,7 +358,6 @@ showAttributeDefinitions(sel);
 </script>
 
 <?php
-		$this->contentContainerEnd();
 		$this->htmlEndPage();
 
 	} /* }}} */

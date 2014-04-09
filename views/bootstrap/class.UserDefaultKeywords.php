@@ -87,13 +87,20 @@ function showKeywords(selectObj) {
 <div class="well">
 
 <table class="table-condensed"><tr>
-		<td id="keywords0" style="display : none;">
-			<form action="../op/op.UserDefaultKeywords.php" method="post" name="addcategory">
-			<input type="hidden" name="action" value="addcategory">
-			<?php printMLText("name");?> : <input type="text" name="name">
-			<input type="Submit" class="btn" value="<?php printMLText("new_default_keyword_category"); ?>">
-			</form>
-		</td>
+	<td id="keywords0" style="display : none;">
+		<form action="../op/op.UserDefaultKeywords.php" method="post" name="addcategory">
+		<input type="hidden" name="action" value="addcategory">
+		<table class="table-condensed">
+			<tr>
+				<td><?php printMLText("name");?>:</td>
+				<td><input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td></td><td><input type="submit" class="btn" value="<?php printMLText("new_default_keyword_category"); ?>"></td>
+			</tr>
+		</table>
+		</form>
+	</td>
 <?php
 		foreach ($categories as $category) {
 			$owner = $category->getOwner();
@@ -103,12 +110,13 @@ function showKeywords(selectObj) {
 ?>
 			<table class="table-condensed">
 				<tr>
-					<td colspan="2">
+					<td></td>
+					<td>
 						<form action="../op/op.UserDefaultKeywords.php" method="post">
   						<?php echo createHiddenFieldWithKey('removecategory'); ?>
-							<input type="Hidden" name="action" value="removecategory">
-							<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-							<input value="<?php printMLText("rm_default_keyword_category");?>" type="submit" class="btn" title="<?php echo getMLText("delete")?>">
+							<input type="hidden" name="action" value="removecategory">
+							<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+							<button type="submit" class="btn" title="<?php echo getMLText("delete")?>"><i class="icon-remove"></i> <?php printMLText("rm_default_keyword_category");?></button>
 						</form>
 					</td>
 				</tr>
@@ -134,18 +142,18 @@ function showKeywords(selectObj) {
 							else
 								foreach ($lists as $list) {
 ?>
-									<form class="form-inline" style="display: inline-block;" action="../op/op.UserDefaultKeywords.php" method="post" name="<?php echo "cat".$category->getID().".".$list["id"]?>">
-									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
-									<input type="Hidden" name="action" value="editkeywords">
+									<form class="form-inline" style="display: inline-block;margin-bottom: 0px;" action="../op/op.UserDefaultKeywords.php" method="post" name="<?php echo "cat".$category->getID().".".$list["id"]?>">
+									<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+									<input type="hidden" name="keywordsid" value="<?php echo $list["id"]?>">
+									<input type="hidden" name="action" value="editkeywords">
 									<input type="text" name="keywords" value="<?php echo htmlspecialchars($list["keywords"]) ?>">
 									<button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save")?></button>
 									</form>
 									<form style="display: inline-block;" method="post" action="../op/op.UserDefaultKeywords.php" >
   								<?php echo createHiddenFieldWithKey('removekeywords'); ?>
-									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
-									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
-									<input type="Hidden" name="action" value="removekeywords">
+									<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
+									<input type="hidden" name="keywordsid" value="<?php echo $list["id"]?>">
+									<input type="hidden" name="action" value="removekeywords">
 									<button type="submit" class="btn"><i class="icon-remove"></i> <?php printMLText("delete")?></button>
 									</form>
 									<br>

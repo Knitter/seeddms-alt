@@ -35,6 +35,8 @@ class SeedDMS_View_EditUserData extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$enableuserimage = $this->params['enableuserimage'];
+		$enablelanguageselector = $this->params['enablelanguageselector'];
+		$enablethemeselector = $this->params['enablethemeselector'];
 		$passwordstrength = $this->params['passwordstrength'];
 		$httproot = $this->params['httproot'];
 
@@ -130,6 +132,10 @@ function checkForm()
 		<td><?php printMLText("new_user_image");?>:</td>
 		<td><input type="file" name="userfile" accept="image/jpeg" size="30"></td>
 	</tr>
+<?php
+		}
+		if ($enablelanguageselector){	
+?>
 	<tr>
 		<td><?php printMLText("language");?>:</td>
 		<td>
@@ -143,6 +149,10 @@ function checkForm()
 			</select>
 		</td>
 	</tr>
+<?php
+		}
+		if ($enablethemeselector){	
+?>
 	<tr>
 		<td><?php printMLText("theme");?>:</td>
 		<td>
@@ -156,8 +166,9 @@ function checkForm()
 			</select>
 		</td>
 	</tr>
-<?php	} ?>
-
+<?php
+		}
+?>
 	<tr>
 		<td></td>
 	  <td><button type="submit" class="btn"><i class="icon-save"></i> <?php printMLText("save"); ?></button></td>

@@ -2033,6 +2033,83 @@ class SeedDMS_Core_DMS {
 	} /* }}} */
 
 	/**
+	 * Returns statitical information
+	 *
+	 * This method returns all kind of statistical information like
+	 * documents or used space per user, recent activity, etc.
+	 *
+	 * @param string $type type of statistic
+	 * @param array statistical data
+	 */
+	function getStatisticalData($type='') { /* {{{ */
+		switch($type) {
+			case 'docsperuser':
+				$queryStr = "select b.fullname as `key`, count(owner) as total from tblDocuments a left join tblUsers b on a.owner=b.id group by owner";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'docspermimetype':
+				$queryStr = "select b.mimeType as `key`, count(mimeType) as total from tblDocuments a left join tblDocumentContent b on a.id=b.document group by b.mimeType";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'docspercategory':
+				$queryStr = "select b.name as `key`, count(a.categoryID) as total from tblDocumentCategory a left join tblCategory b on a.categoryID=b.id group by a.categoryID";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'docsperstatus':
+				$queryStr = "select b.status as `key`, count(b.status) as total from (select a.id, max(b.version), max(c.statusLogId) as maxlog from tblDocuments a left join tblDocumentStatus b on a.id=b.documentid left join tblDocumentStatusLog c on b.statusid=c.statusid group by a.id, b.version order by a.id, b.statusid) a left join tblDocumentStatusLog b on a.maxlog=b.statusLogId group by b.status";
+				$queryStr = "select b.status as `key`, count(b.status) as total from (select a.id, max(c.statusLogId) as maxlog from tblDocuments a left join tblDocumentStatus b on a.id=b.documentid left join tblDocumentStatusLog c on b.statusid=c.statusid group by a.id  order by a.id, b.statusid) a left join tblDocumentStatusLog b on a.maxlog=b.statusLogId group by b.status";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'docspermonth':
+				$queryStr = "select `key`, count(`key`) as total from (select ".$this->db->getDateExtract("date")." as `key` from tblDocuments) a group by `key` order by `key`";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			case 'docsaccumulated':
+				$queryStr = "select `key`, count(`key`) as total from (select ".$this->db->getDateExtract("date")." as `key` from tblDocuments) a group by `key` order by `key`";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				$sum = 0;
+				foreach($resArr as &$res) {
+					$sum += $res['total'];
+					/* auxially variable $key is need because sqlite returns
+					 * a key '`key`'
+					 */
+					$key = mktime(12, 0, 0, substr($res['key'], 5, 2), substr($res['key'], 8, 2), substr($res['key'], 0, 4)) * 1000;
+					unset($res['key']);
+					$res['key'] = $key;
+					$res['total'] = $sum;
+				}
+				return $resArr;
+			case 'sizeperuser':
+				$queryStr = "select c.fullname as `key`, sum(fileSize) as total from tblDocuments a left join tblDocumentContent b on a.id=b.document left join tblUsers c on a.owner=c.id group by a.owner";
+				$resArr = $this->db->getResultArray($queryStr);
+				if (!$resArr)
+					return false;
+
+				return $resArr;
+			default:
+				return array();
+		}
+	} /* }}} */
+
+	/**
 	 * Set a callback function
 	 *
 	 * @param string $name internal name of callback

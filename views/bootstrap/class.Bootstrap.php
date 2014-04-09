@@ -43,9 +43,9 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		if($this->extraheader)
 			echo $this->extraheader;
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../js/jquery.passwordstrength.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/jquery.noty.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
@@ -92,6 +92,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 	function htmlEndPage() { /* {{{ */
 		$this->footNote();
+		if($this->params['showmissingtranslations']) {
+			$this->missingḺanguageKeys();
+		}
 		echo '<script src="../styles/'.$this->theme.'/bootstrap/js/bootstrap.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/datepicker/js/bootstrap-datepicker.js"></script>'."\n";
 		foreach(array('de', 'es', 'ca', 'nl', 'fi', 'cs', 'it', 'fr', 'sv', 'sl', 'pt-BR', 'zh-CN', 'zh-TW') as $lang)
@@ -99,6 +102,33 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
 		echo "</body>\n</html>\n";
+	} /* }}} */
+
+	function missingḺanguageKeys() { /* {{{ */
+		global $MISSING_LANG, $LANG;
+		if($MISSING_LANG) {
+			echo '<div class="alert alert-error">'."\n";
+			echo "<p><strong>This page contains missing translations in the selected language. Please help to improve SeedDMS and provide the translation.</strong></p>";
+			echo "</div>";
+			echo "<table class=\"table table-condensed\">";
+			echo "<tr><th>Key</th><th>engl. Text</th><th>Your translation</th></tr>\n";
+			foreach($MISSING_LANG as $key=>$lang) {
+				echo "<tr><td>".$key."</td><td>".$LANG['en_GB'][$key]."</td><td><div class=\"input-append send-missing-translation\"><input name=\"missing-lang-key\" type=\"hidden\" value=\"".$key."\" /><input name=\"missing-lang-lang\" type=\"hidden\" value=\"".$lang."\" /><input type=\"text\" class=\"input-xxlarge\" name=\"missing-lang-translation\" placeholder=\"Your translation in '".$lang."'\"/><a class=\"btn\">Submit</a></div></td></tr>";
+			}
+			echo "</table>";
+?>
+		<script>
+  	noty({
+  		text: '<b>There are missing translations on this page!</b><br />Please check the bottom of the page.',
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			timeout: 5500,
+  	});
+		</script>
+<?php
+		}
 	} /* }}} */
 
 	function footNote() { /* {{{ */
@@ -185,7 +215,9 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "    <li><a href=\"../out/out.MyAccount.php\">".getMLText("my_account")."</a></li>\n";
 				echo "    <li class=\"divider\"></li>\n";
 			}
+			$showdivider = false;
 			if($this->params['enablelanguageselector']) {
+				$showdivider = true;
 				echo "    <li class=\"dropdown-submenu\">\n";
 				echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("language")."</a>\n";
 				echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
@@ -201,9 +233,12 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 				echo "     </ul>\n";
 				echo "    </li>\n";
 			}
-			if($this->params['user']->isAdmin())
+			if($this->params['user']->isAdmin()) {
+				$showdivider = true;
 				echo "    <li><a href=\"../out/out.SubstituteUser.php\">".getMLText("substitute_user")."</a></li>\n";
-			echo "    <li class=\"divider\"></li>\n";
+			}
+			if($showdivider)
+				echo "    <li class=\"divider\"></li>\n";
 			if($this->params['session']->getSu()) {
 				echo "    <li><a href=\"../op/op.ResetSu.php\">".getMLText("sign_out_user")."</a></li>\n";
 			} else {
@@ -492,6 +527,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "     <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">".getMLText("misc")." <i class=\"icon-caret-down\"></i></a>\n";
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li id=\"first\"><a href=\"../out/out.Statistic.php\">".getMLText("folders_and_documents_statistic")."</a></li>\n";
+		echo "      <li id=\"first\"><a href=\"../out/out.Charts.php\">".getMLText("charts")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ObjectCheck.php\">".getMLText("objectcheck")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.ExtensionMgr.php\">".getMLText("extension_manager")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.Info.php\">".getMLText("version_info")."</a></li>\n";
@@ -523,6 +559,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 	function pageList($pageNumber, $totalPages, $baseURI, $params) { /* {{{ */
 
+		$maxpages = 25; // skip pages when more than this is shown
+		$range = 5; // pages left and right of current page
 		if (!is_numeric($pageNumber) || !is_numeric($totalPages) || $totalPages<2) {
 			return;
 		}
@@ -552,9 +590,40 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 
 		echo "<div class=\"pagination pagination-small\">";
 		echo "<ul>";
-		for ($i = 1; $i  <= $totalPages; $i++) {
-			if ($i == $pageNumber)  echo "<li class=\"active\"><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li> ";
-			else echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li>";
+		if($totalPages <= $maxpages) {
+			for ($i = 1; $i <= $totalPages; $i++) {
+				echo "<li ".($i == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$i."\">".$i."</a></li>";
+			}
+		} else {
+			if($pageNumber-$range > 1)
+				$start = $pageNumber-$range;
+			else
+				$start = 2;
+			if($pageNumber+$range < $totalPages)
+				$end = $pageNumber+$range;
+			else
+				$end = $totalPages-1;
+			/* Move start or end to always show 2*$range items */
+			$diff = $end-$start-2*$range;
+			if($diff < 0) {
+				if($start > 2)
+					$start += $diff;
+				if($end < $totalPages-1)
+					$end -= $diff;
+			}
+			if($pageNumber > 1)
+				echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".($pageNumber-1)."\">&laquo;</a></li>";
+			echo "<li ".(1 == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=1\">1</a></li>";
+			if($start > 2)
+				echo "<li><span>...</span></li>";
+			for($j=$start; $j<=$end; $j++)
+				echo "<li ".($j == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$j."\">".$j."</a></li>";
+			if($end < $totalPages-1)
+				echo "<li><span>...</span></li>";
+			if($end < $totalPages)
+				echo "<li ".($totalPages == $pageNumber ? 'class="active"' : "" )."><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".$totalPages."\">".$totalPages."</a></li>";
+			if($pageNumber < $totalPages)
+				echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=".($pageNumber+1)."\">&raquo;</a></li>";
 		}
 		if ($totalPages>1) {
 			echo "<li><a href=\"".$resultsURI.($first ? "?" : "&")."pg=all\">".getMLText("all_pages")."</a></li>";

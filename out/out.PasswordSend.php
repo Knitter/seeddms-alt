@@ -1,8 +1,8 @@
 <?php
 //    MyDMS. Document Management System
-//    Copyright (C) 2002-2005  Markus Westphal
+//    Copyright (C) 2002-2005 Markus Westphal
 //    Copyright (C) 2006-2008 Malcolm Cowe
-//    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010-2011 Uwe Steinmann
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -19,22 +19,18 @@
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 include("../inc/inc.Settings.php");
-include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
-include("../inc/inc.Authentication.php");
 
-if ($user->isGuest()) {
-	UI::exitError(getMLText("edit_user_details"),getMLText("access_denied"));
+include $settings->_rootDir . "languages/" . $settings->_language . "/lang.inc";
+
+if (isset($_REQUEST["referuri"]) && strlen($_REQUEST["referuri"])>0) {
+	$referrer = $_REQUEST["referuri"];
+} else {
+	$referrer = '';
 }
-
-if (!$user->isAdmin() && ($settings->_disableSelfEdit)) {
-	UI::exitError(getMLText("edit_user_details"),getMLText("access_denied"));
-}
-
-
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'enableuserimage'=>$settings->_enableUserImage, 'enablelanguageselector'=>$settings->_enableLanguageSelector, 'enablethemeselector'=>$settings->_enableThemeSelector, 'passwordstrength'=>$settings->_passwordStrength, 'httproot'=>$settings->_httpRoot));
+$view = UI::factory($theme, $tmp[1], array('referrer'=>$referrer));
 if($view) {
 	$view->show();
 	exit;

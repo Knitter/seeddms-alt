@@ -1,8 +1,6 @@
 <?php
 //    MyDMS. Document Management System
-//    Copyright (C) 2002-2005  Markus Westphal
-//    Copyright (C) 2006-2008 Malcolm Cowe
-//    Copyright (C) 2006-2008 Malcolm Cowe
+//    Copyright (C) 2010 Matteo Lucarelli
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -20,21 +18,31 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.DBInit.php");
+include("../inc/inc.Utils.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
 include("../inc/inc.Authentication.php");
 
-if ($user->isGuest()) {
-	UI::exitError(getMLText("edit_user_details"),getMLText("access_denied"));
+if (!$user->isAdmin()) {
+	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
+$rootfolder = $dms->getFolder($settings->_rootFolderID);
 
-if (!$user->isAdmin() && ($settings->_disableSelfEdit)) {
-	UI::exitError(getMLText("edit_user_details"),getMLText("access_denied"));
+$type = 'docsperuser';
+if(!empty($_GET['type'])) {
+	$type = $_GET['type'];
 }
-
-
+$data = $dms->getStatisticalData($type);
+switch($type) {
+	case 'docsperstatus':
+		foreach($data as &$rec) {
+			$rec['key'] = getOverallStatusText((int) $rec['key']);
+		}
+		break;
+}
+//print_r($data);
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'enableuserimage'=>$settings->_enableUserImage, 'enablelanguageselector'=>$settings->_enableLanguageSelector, 'enablethemeselector'=>$settings->_enableThemeSelector, 'passwordstrength'=>$settings->_passwordStrength, 'httproot'=>$settings->_httpRoot));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'rootfolder'=>$rootfolder, 'type'=>$type, 'data'=>$data));
 if($view) {
 	$view->show();
 	exit;

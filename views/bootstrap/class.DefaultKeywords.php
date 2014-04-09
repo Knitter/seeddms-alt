@@ -44,6 +44,51 @@ class SeedDMS_View_DefaultKeywords extends SeedDMS_Bootstrap_Style {
 
 ?>
 <script language="JavaScript">
+
+function checkForm(num)
+{
+	msg = new Array();
+	eval("var formObj = document.form" + num + ";");
+
+	if (formObj.name.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if (msg != "")
+	{
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+
+function checkKeywordForm(num)
+{
+	msg = new Array();
+	eval("var formObj = document.formk" + num + ";");
+
+	if (formObj.keywords.value == "") msg.push("<?php printMLText("js_no_name");?>");
+	if (msg != "")
+	{
+  	noty({
+  		text: msg.join('<br />'),
+  		type: 'error',
+      dismissQueue: true,
+  		layout: 'topRight',
+  		theme: 'defaultTheme',
+			_timeout: 1500,
+  	});
+		return false;
+	}
+	else
+		return true;
+}
+
 obj = -1;
 function showKeywords(selectObj) {
 	if (obj != -1)
@@ -91,9 +136,9 @@ function showKeywords(selectObj) {
 
 <table class="table-condensed"><tr>
 		<td id="keywords0" style="display : none;">	
-			<form class="form-inline" action="../op/op.DefaultKeywords.php" method="post">
+			<form class="form-inline" action="../op/op.DefaultKeywords.php" method="post" name="form0" onsubmit="return checkForm('0');">
   		<?php echo createHiddenFieldWithKey('addcategory'); ?>
-			<input type="Hidden" name="action" value="addcategory">
+			<input type="hidden" name="action" value="addcategory">
 			<?php printMLText("name");?>: <input type="text" name="name">
 			<input type="submit" class="btn" value="<?php printMLText("new_default_keyword_category"); ?>">
 			</form>
@@ -121,7 +166,7 @@ function showKeywords(selectObj) {
 				<tr>
 					<td><?php echo getMLText("name")?>:</td>
 					<td>
-						<form class="form-inline" action="../op/op.DefaultKeywords.php" method="post">
+						<form class="form-inline" action="../op/op.DefaultKeywords.php" method="post" name="form<?php echo $category->getID()?>" onsubmit="return checkForm('<?php echo $category->getID()?>');">
   						<?php echo createHiddenFieldWithKey('editcategory'); ?>
 							<input type="hidden" name="action" value="editcategory">
 							<input type="hidden" name="categoryid" value="<?php echo $category->getID()?>">
@@ -140,7 +185,7 @@ function showKeywords(selectObj) {
 							else
 								foreach ($lists as $list) {
 ?>
-									<form class="form-inline" style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" >
+									<form class="form-inline" style="display: inline-block;" method="post" action="../op/op.DefaultKeywords.php" name="formk<?php echo $list['id']?>" onsubmit="return checkKeywordForm('<?php echo $list['id']?>');">
   								<?php echo createHiddenFieldWithKey('editkeywords'); ?>
 									<input type="Hidden" name="categoryid" value="<?php echo $category->getID()?>">
 									<input type="Hidden" name="keywordsid" value="<?php echo $list["id"]?>">
