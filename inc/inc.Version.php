@@ -20,7 +20,7 @@
 
 class SeedDMS_Version {
 
-	var $_number = "4.3.7";
+	var $_number = "4.3.8";
 	var $_string = "SeedDMS";
 
 	function SeedDMS_Version() {
