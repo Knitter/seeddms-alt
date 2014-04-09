@@ -181,12 +181,13 @@
     <!-- siteDefaultPage: Default page on login. Defaults to out/out.ViewFolder.php
        - rootFolderID: ID of root-folder (mostly no need to change)
        - titleDisplayHack: Workaround for page titles that go over more than 2 lines.
+       - showMissingTranslations: Check for missing translations and adds forms at the end of the page for submitting new translations.
     -->  
     <display
       siteDefaultPage =""      
       rootFolderID = "1"
       titleDisplayHack = "true"
-
+      showMissingTranslations = "false"
     >
     </display>
     <!-- guestID: ID of guest-user used when logged in as guest (mostly no need to change)
