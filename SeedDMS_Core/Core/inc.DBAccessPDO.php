@@ -440,13 +440,13 @@ class SeedDMS_Core_DatabaseAccess {
 	 * @param string $fieldname name of field containing the timestamp
 	 * @return string sql code
 	 */
-	function getDateExtract($fieldname) { /* {{{ */
+	function getDateExtract($fieldname, $format='%Y-%m-%d') { /* {{{ */
 		switch($this->_driver) {
 			case 'mysql':
-				return "from_unixtime(`".$fieldname."`, '%Y-%m-%d')";
+				return "from_unixtime(`".$fieldname."`, ".$this->qstr($format).")";
 				break;
 			case 'sqlite':
-				return "date(`".$fieldname."`, 'unixepoch')";
+				return "strftime(".$this->qstr($format).", `".$fieldname."`, 'unixepoch')";
 				break;
 		}
 		return '';
