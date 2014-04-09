@@ -46,6 +46,7 @@ class SeedDMS_View_Charts extends SeedDMS_Bootstrap_Style {
 		$this->htmlAddHeader(
 			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.min.js"></script>'."\n".
 			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.pie.min.js"></script>'."\n".
+			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.categories.min.js"></script>'."\n".
 			'<script type="text/javascript" src="../styles/bootstrap/flot/jquery.flot.time.min.js"></script>'."\n");
 
 		$this->htmlStartPage(getMLText("folders_and_documents_statistic"));
@@ -85,7 +86,48 @@ echo "<div class=\"well\">\n";
 	}).appendTo("body");
 
 <?php
-if($type == 'docsaccumulated') {
+if(in_array($type, array('docspermonth'))) {
+?>
+	var data = [
+<?php
+	foreach($data as $i=>$rec) {
+		$key = mktime(12, 0, 0, substr($rec['key'], 5, 2), 1, substr($rec['key'], 0, 4)) * 1000;
+		echo '["'.$rec['key'].'",'.$rec['total'].'],'."\n";
+//		echo '['.$i.','.$rec['total'].'],'."\n";
+	}
+?>
+	];
+	$.plot("#chart", [data], {
+		xaxis: {
+			mode: "categories",
+			tickLength: 0,
+		},
+		series: {
+			bars: {
+				show: true,
+				align: "center",
+				barWidth: 0.8,
+			},
+		},
+		grid: {
+			hoverable: true,
+			clickable: true
+		},
+	});
+
+	$("#chart").bind("plothover", function (event, pos, item) {
+		if(item) {
+			var x = item.datapoint[0];//.toFixed(2),
+					y = item.datapoint[1];//.toFixed(2);
+			$("#tooltip").html(item.series.xaxis.ticks[x].label + ": " + y)
+				.css({top: pos.pageY-35, left: pos.pageX+5})
+				.fadeIn(200);
+		} else {
+			$("#tooltip").hide();
+		}
+	});
+<?php
+} elseif(in_array($type, array('docsaccumulated'))) {
 ?>
 	var data = [
 <?php
@@ -126,9 +168,9 @@ if($type == 'docsaccumulated') {
 ?>
 	var data = [
 <?php
-foreach($data as $rec) {
-	echo '{ label: "'.$rec['key'].'", data: [[1,'.$rec['total'].']]},'."\n";
-}
+	foreach($data as $rec) {
+		echo '{ label: "'.$rec['key'].'", data: [[1,'.$rec['total'].']]},'."\n";
+	}
 ?>
 	];
 	$.plot('#chart', data, {
