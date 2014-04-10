@@ -30,9 +30,16 @@ if (!$user->isAdmin()) {
 }
 
 $v = new SeedDMS_Version;
+if(@ini_get('allow_url_fopen') == '1') {
+	$lines = file('http://www.seeddms.org/latest', FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+	$versions = array();
+	foreach($lines as $line) {
+		$versions[] = explode(':', $line);
+	}
+}
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'version'=>$v));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'version'=>$v, 'availversions'=>$versions));
 if($view) {
 	$view->show();
 	exit;
