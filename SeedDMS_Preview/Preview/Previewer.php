@@ -99,17 +99,17 @@ class SeedDMS_Preview_Previewer {
 				case "image/jpeg":
 				case "image/jpg":
 				case "image/svg+xml":
-					$cmd = 'convert -resize '.$width.'x'.$width.' '.$file.' '.$target;
+					$cmd = 'convert -resize '.$width.'x '.$file.' '.$target;
 					break;
 				case "application/pdf":
 				case "application/postscript":
-					$cmd = 'convert -density 18 -resize '.$width.'x'.$width.' '.$file.'[0] '.$target;
+					$cmd = 'convert -density 18 -resize '.$width.'x '.$file.'[0] '.$target;
 					break;
 				case "text/plain":
-					$cmd = 'convert -resize '.$width.'x'.$width.' '.$file.'[0] '.$target;
+					$cmd = 'convert -resize '.$width.'x '.$file.'[0] '.$target;
 					break;
 				case "application/x-compressed-tar":
-					$cmd = 'tar tzvf '.$file.' | convert -resize '.$width.'x'.$width.' text:-[0] '.$target;
+					$cmd = 'tar tzvf '.$file.' | convert -resize '.$width.'x text:-[0] '.$target;
 					break;
 			}
 			if($cmd) {
