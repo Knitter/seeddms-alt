@@ -445,6 +445,7 @@ if(count($entries) == 1 && ($resArr['totalDocs'] + $resArr['totalFolders']) == 1
 		$view->setParam('allusers', $allUsers);
 		$view->setParam('workflowmode', $settings->_workflowMode);
 		$view->setParam('enablefullsearch', $settings->_enableFullSearch);
+		$view->setParam('previewWidthList', $settings->_previewWidthList);
 		$view->show();
 		exit;
 	}

@@ -11,10 +11,10 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2014-03-18</date>
- <time>16:34:59</time>
+ <date>2014-04-10</date>
+ <time>20:29:39</time>
  <version>
-  <release>1.1.1</release>
+  <release>1.1.2</release>
   <api>1.1.0</api>
  </version>
  <stability>
@@ -23,7 +23,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-add converters for .tar.gz, .ps, .txt
+create fixed width image with proportional height
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -81,6 +81,22 @@ add converters for .tar.gz, .ps, .txt
    <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
    <notes>
 preview image can also be created from a document file (SeedDMS_Core_DocumentFile)
+   </notes>
+  </release>
+  <release>
+   <date>2014-03-18</date>
+   <time>16:34:59</time>
+   <version>
+    <release>1.1.1</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+add converters for .tar.gz, .ps, .txt
    </notes>
   </release>
  </changelog>
