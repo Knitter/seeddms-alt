@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (881), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (883), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -409,7 +409,7 @@ URL: [url]',
 'include_documents' => 'Inclure les documents',
 'include_subdirectories' => 'Inclure les sous-dossiers',
 'index_converters' => 'Conversion de document Index',
-'index_folder' => '',
+'index_folder' => 'Dossier Index',
 'individuals' => 'Individuels',
 'inherited' => 'hérité',
 'inherits_access_copy_msg' => 'Copier la liste des accès hérités',
@@ -562,6 +562,7 @@ URL: [url]',
 'no_action' => 'Aucune action n\'est nécessaire',
 'no_approval_needed' => 'Aucune approbation en attente',
 'no_attached_files' => 'Aucun fichier attaché',
+'no_current_version' => '',
 'no_default_keywords' => 'Aucun mot-clé disponible',
 'no_docs_locked' => 'Aucun document verrouillé',
 'no_docs_to_approve' => 'Aucun document ne nécessite actuellement une approbation',
@@ -576,6 +577,7 @@ URL: [url]',
 'no_review_needed' => 'Aucune correction en attente',
 'no_update_cause_locked' => 'Vous ne pouvez actuellement pas mettre à jour ce document. Contactez l\'utilisateur qui l\'a verrouillé.',
 'no_user_image' => 'Aucune image trouvée',
+'no_version_check' => '',
 'objectcheck' => 'Vérification des dossiers et documents',
 'obsolete' => 'Obsolète',
 'october' => 'Octobre',
@@ -1010,7 +1012,7 @@ URL: [url]',
 'submit_password_forgotten' => 'Envoyer',
 'submit_review' => 'Soumettre la correction',
 'submit_userinfo' => 'Soumettre info',
-'substitute_user' => '',
+'substitute_user' => 'Utilisateur de substitution',
 'sunday' => 'Dimanche',
 'sunday_abbr' => 'Dim.',
 'sv_SE' => 'Suédois',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1012), netixw (14)
+//    Translators: Admin (1014), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -562,6 +562,7 @@ URL: [url]',
 'no_action' => 'No action required',
 'no_approval_needed' => 'No approval pending.',
 'no_attached_files' => 'No attached files',
+'no_current_version' => 'You are running an old version of SeedDMS. The latest available version is [latestversion].',
 'no_default_keywords' => 'No keywords available',
 'no_docs_locked' => 'No documents locked.',
 'no_docs_to_approve' => 'There are currently no documents that require approval.',
@@ -576,6 +577,7 @@ URL: [url]',
 'no_review_needed' => 'No review pending.',
 'no_update_cause_locked' => 'You can therefore not update this document. Please contact the locking user.',
 'no_user_image' => 'No image found',
+'no_version_check' => 'Checking for a new version of SeedDMS has failed! This could be caused by allow_url_fopen being set to 0 in your php configuration.',
 'objectcheck' => 'Folder/Document check',
 'obsolete' => 'Obsolete',
 'october' => 'October',
