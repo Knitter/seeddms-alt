@@ -14,6 +14,9 @@
 - better user feedback after reseting password (Bug #139)
 - add page with statistical data (pie charts)
 - add mode for showing missing translations (turned off by default)
+- better checking of posted parameters in op/op.EditDocument.php (Bug #150)
+- fix login as guest by clicking on 'Login as guest' link (Bug #152)
+- add check for new version on version info page
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.7
