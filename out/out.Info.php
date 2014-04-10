@@ -31,10 +31,12 @@ if (!$user->isAdmin()) {
 
 $v = new SeedDMS_Version;
 if(@ini_get('allow_url_fopen') == '1') {
-	$lines = file('http://www.seeddms.org/latest', FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+	$lines = @file('http://www.seeddms.org/latest', FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
 	$versions = array();
-	foreach($lines as $line) {
-		$versions[] = explode(':', $line);
+	if($lines) {
+		foreach($lines as $line) {
+			$versions[] = explode(':', $line);
+		}
 	}
 }
 
