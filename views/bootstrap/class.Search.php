@@ -78,8 +78,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 		$urlparams = $this->params['urlparams'];
 		$searchin = $this->params['searchin'];
 		$cachedir = $this->params['cachedir'];
-
-		$previewwidth = 40;
+		$previewwidth = $this->params['previewWidthList'];
 
 		$this->htmlStartPage(getMLText("search_results"));
 		$this->globalNavigation();
