@@ -68,9 +68,13 @@ function checkForm()
 
 function guestLogin()
 {
-	url = "../op/op.Login.php?login=guest" + 
-		"&sesstheme=" + document.form1.sesstheme.options[document.form1.sesstheme.options.selectedIndex].value +
-		"&lang=" + document.form1.lang.options[document.form1.lang.options.selectedIndex].value;
+	theme = $("#themeselector").val();
+	lang = $("#languageselector").val();
+	url = "../op/op.Login.php?login=guest";
+	if(theme)
+		url += "&sesstheme=" + theme;
+	if(lang)
+		url += "&lang=" + lang;
 	if (document.form1.referuri) {
 		url += "&referuri=" + escape(document.form1.referuri.value);
 	}
@@ -102,7 +106,7 @@ function guestLogin()
 		<label class="control-label" for="pwd"><?php printMLText("language");?>:</label>
 		<div class="controls">
 <?php
-			print "<select name=\"lang\">";
+			print "<select id=\"languageselector\" name=\"lang\">";
 			print "<option value=\"\">-";
 			foreach ($languages as $currLang) {
 				print "<option value=\"".$currLang."\">".getMLText($currLang)."</option>";
@@ -120,7 +124,7 @@ function guestLogin()
 		<div class="controls">
 			
 <?php
-			print "<select name=\"sesstheme\">";
+			print "<select id=\"themeselector\" name=\"sesstheme\">";
 			print "<option value=\"\">-";
 			foreach ($themes as $currTheme) {
 				print "<option value=\"".$currTheme."\">".$currTheme;

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (539), flaviove (585)
+//    Translators: Admin (540), flaviove (585)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -408,7 +408,7 @@ URL: [url]',
 'include_documents' => 'Include documents',
 'include_subdirectories' => 'Include subdirectories',
 'index_converters' => 'Índice de conversão de documentos',
-'index_folder' => '',
+'index_folder' => 'Pasta Index',
 'individuals' => 'Individuals',
 'inherited' => 'herdado',
 'inherits_access_copy_msg' => 'Copy inherited access list',
@@ -561,6 +561,7 @@ URL: [url]',
 'no_action' => 'No action required',
 'no_approval_needed' => 'Nenhuma aprovação pendente.',
 'no_attached_files' => 'Não há arquivos anexados',
+'no_current_version' => '',
 'no_default_keywords' => 'No hß palavras-chave disponveis',
 'no_docs_locked' => 'Nenhum documento bloqueado.',
 'no_docs_to_approve' => 'There are currently no documents that require approval.',
@@ -575,6 +576,7 @@ URL: [url]',
 'no_review_needed' => 'Nenhuma revisão pendente.',
 'no_update_cause_locked' => 'Por isso voc no pode atualizar este documento. Por favor contacte usußrio que possui a trava.',
 'no_user_image' => 'No foram encontardas imagens',
+'no_version_check' => '',
 'objectcheck' => 'Verificação da Pasta/Documento',
 'obsolete' => 'Obsolete',
 'october' => 'October',

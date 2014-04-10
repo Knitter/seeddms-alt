@@ -59,7 +59,10 @@ $sequence = str_replace(',', '.', $_POST["sequence"]);
 if (!is_numeric($sequence)) {
 	$sequence="keep";
 }
-$attributes = $_POST["attributes"];
+if(isset($_POST["attributes"]))
+	$attributes = $_POST["attributes"];
+else
+	$attributes = array();
 
 if (($oldname = $document->getName()) != $name) {
 	if($document->setName($name)) {

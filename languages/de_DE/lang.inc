@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1860)
+//    Translators: Admin (1868)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -562,6 +562,7 @@ URL: [url]',
 'no_action' => 'Keine Aktion erforderlich.',
 'no_approval_needed' => 'Keine offenen Freigaben.',
 'no_attached_files' => 'Keine angehängten Dokumente',
+'no_current_version' => 'Sie verwenden eine ältere Version als die zur Zeit verfügbare Version [latestversion].',
 'no_default_keywords' => 'Keine Vorlagen vorhanden',
 'no_docs_locked' => 'Keine Dokumente gesperrt.',
 'no_docs_to_approve' => 'Es gibt zur Zeit keine Dokumente, die eine Freigabe erfordern.',
@@ -576,6 +577,7 @@ URL: [url]',
 'no_review_needed' => 'Keine offenen Prüfungen.',
 'no_update_cause_locked' => 'Sie können daher im Moment diese Datei nicht aktualisieren. Wenden Sie sich an den Benutzer, der die Sperrung eingerichtet hat',
 'no_user_image' => 'Kein Bild vorhanden',
+'no_version_check' => 'Ein Check auf neuere Versionen von SeedDMS ist fehlgeschlagen. Dies könnte daran liegen, dass allow_url_fopen in der PHP-Konfiguration auf 0 gesetzt ist.',
 'objectcheck' => 'Ordner- und Dokumentenprüfung',
 'obsolete' => 'veraltet',
 'october' => 'Oktober',
@@ -819,14 +821,14 @@ URL: [url]',
 'settings_enableNotificationAppRev_desc' => 'Setzen Sie diese Option, wenn die Prüfer und Freigeber eines Dokuments beim Hochladen einer neuen Version benachrichtigt werden sollen.',
 'settings_enableOwnerNotification' => 'Besitzer als Beobachter eintragen',
 'settings_enableOwnerNotification_desc' => 'Setzen Sie diese Option, wenn der Besitzer eines Dokuments nach dem Hochladen in die Liste der Beobachter eingetragen werden soll.',
-'settings_enableOwnerRevApp' => 'Allow review/approval for owner',
-'settings_enableOwnerRevApp_desc' => 'Enable this if you want the owner of a document to be listed as reviewers/approvers and for workflow transitions.',
+'settings_enableOwnerRevApp' => 'Erlaube Prüfung/Freigabe durch Besitzer',
+'settings_enableOwnerRevApp_desc' => 'Anwählen, um den Besitzer eines Dokuments in der Liste der Prüfer/Freigeber und für Workflow-Aktionen auswählbar zu machen.',
 'settings_enablePasswordForgotten' => 'Passwort-Vergessen Funktion einschalten',
 'settings_enablePasswordForgotten_desc' => 'Setzen Sie diese Option, wenn Benutzer ein neues Password per E-Mail anfordern dürfen.',
 'settings_enableRecursiveCount' => 'Rekursive Dokumenten-/Ordner-Zählung',
 'settings_enableRecursiveCount_desc' => 'Wenn diese Option eingeschaltet ist, wird die Anzahl der Dokumente und Ordner in der Ordner-Ansicht rekursiv, unter Berücksichtigung der Zugriffsrechte ermittelt.',
-'settings_enableSelfRevApp' => 'Allow review/approval for logged in user',
-'settings_enableSelfRevApp_desc' => 'Enable this if you want the currently logged in user to be listed as reviewers/approvers and for workflow transitions.',
+'settings_enableSelfRevApp' => 'Erlaube Prüfung/Freigabe durch angemeldeten Benutzer',
+'settings_enableSelfRevApp_desc' => 'Anwählen, um den aktuell angemeldeten Benutzer in der Liste der Prüfer/Freigeber und für Workflow-Aktionen auswählbar zu machen.',
 'settings_enableThemeSelector' => 'Auswahl des Themas',
 'settings_enableThemeSelector_desc' => 'Schaltet das Auswahlmenü für die Themenauswahl in der Anmeldemaske ein oder aus.',
 'settings_enableUserImage' => 'Benutzerbilder einschalten',

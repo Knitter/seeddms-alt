@@ -35,11 +35,24 @@ class SeedDMS_View_Info extends SeedDMS_Bootstrap_Style {
 		$dms = $this->params['dms'];
 		$user = $this->params['user'];
 		$version = $this->params['version'];
+		$availversions = $this->params['availversions'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("admin_tools"), "admin_tools");
+		if($availversions) {
+			$newversion = '';
+			foreach($availversions as $availversion) {
+				if($availversion[0] == 'stable')
+					$newversion = $availversion[1];
+			}
+			if($newversion > $version->_number) {
+				$this->warningMsg(getMLText('no_current_version', array('latestversion'=>$newversion)));
+			}
+		} else {
+			$this->warningMsg(getMLText('no_version_check'));
+		}
 		$this->contentContainerStart();
 		echo $version->banner();
 		$this->contentContainerEnd();

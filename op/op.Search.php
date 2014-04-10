@@ -408,7 +408,7 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 
 // -------------- Output results --------------------------------------------
 
-if(count($entries) == 1) {
+if(count($entries) == 1 && ($resArr['totalDocs'] + $resArr['totalFolders']) == 1) {
 	$entry = $entries[0];
 	if(get_class($entry) == 'SeedDMS_Core_Document') {
 		header('Location: ../out/out.ViewDocument.php?documentid='.$entry->getID());
