@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (909), francisco (2)
+//    Translators: Admin (911), francisco (2)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -92,7 +92,7 @@ URL: [url]',
 'april' => 'Abril',
 'archive_creation' => 'Creación de archivo',
 'archive_creation_warning' => 'Con esta operación usted puede crear un archivo que contenga los ficheros de las carpetas del DMS completo. Después de crearlo el archivo se guardará en la carpeta de datos de su servidor.<br>CUIDADO: un fichero creado como legible por humanos no podrá usarse como copia de seguridad del servidor.',
-'ar_EG' => '',
+'ar_EG' => 'Arabe',
 'assign_approvers' => 'Asignar aprobadores',
 'assign_reviewers' => 'Asignar revisores',
 'assign_user_property_to' => 'Asignar propiedades de usuario a',
@@ -620,7 +620,7 @@ Si continua teniendo problemas de acceso, por favor contacte con el administrado
 'password_strength_insuffient' => 'Insuficiente Seguridad de la contraseña',
 'password_wrong' => 'Contraseña incorrecta',
 'personal_default_keywords' => 'Listas de palabras clave personales',
-'pl_PL' => '',
+'pl_PL' => 'Polaco',
 'previous_state' => 'Estado anterior',
 'previous_versions' => 'Versiones anteriores',
 'pt_BR' => 'Portuges (BR)',

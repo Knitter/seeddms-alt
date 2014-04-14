@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (879)
+//    Translators: Admin (882)
 
 $text = array(
 'accept' => 'وافق',
@@ -409,7 +409,7 @@ URL: [url]',
 'include_documents' => 'اشمل مستندات',
 'include_subdirectories' => 'اشمل مجلدات فرعية',
 'index_converters' => 'فهرس تحويل المستند',
-'index_folder' => '',
+'index_folder' => 'ﻒﻫﺮﺳﺓ ﺎﻠﻤﺠﻟﺩ',
 'individuals' => 'افراد',
 'inherited' => 'موروث',
 'inherits_access_copy_msg' => 'نسخ قائمة صلاحيات موروثة.',
@@ -612,7 +612,7 @@ URL: [url]',
 'password_strength_insuffient' => 'قوة كلمة السر غير كافية',
 'password_wrong' => 'كلمة سر خاطئة',
 'personal_default_keywords' => 'قوائم الكلمات البحثية الشخصية',
-'pl_PL' => '',
+'pl_PL' => 'ﺎﻠﺑﻮﻠﻧﺪﻳﺓ',
 'previous_state' => 'حالة سابقة',
 'previous_versions' => 'اصدارات سابقة',
 'pt_BR' => 'البرتغالية (BR)',
@@ -984,7 +984,7 @@ URL: [url]',
 'sign_out_user' => 'تسجيل خروج مستخدم',
 'sk_SK' => 'السلوفاكية',
 'space_used_on_data_folder' => 'المساحة المستخدمة لمجلد البيانات',
-'splash_added_to_clipboard' => '',
+'splash_added_to_clipboard' => 'ﺖﻣ ﺎﻠﻨﺴﺧ ﻒﻳ ﺎﻠﺣﺎﻔﻇﺓ',
 'splash_add_attribute' => '',
 'splash_add_group' => '',
 'splash_add_group_member' => '',
