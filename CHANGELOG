@@ -17,6 +17,7 @@
 - better checking of posted parameters in op/op.EditDocument.php (Bug #150)
 - fix login as guest by clicking on 'Login as guest' link (Bug #152)
 - add check for new version on version info page
+- preview images are always as wide as configured in the settings (Bug #153, #124)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.7
