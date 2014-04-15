@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (669), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (672), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -154,14 +154,14 @@ URL: [url]',
 'change_password' => 'Zmiana hasła',
 'change_password_message' => 'Twoje hasło zostało zmienione.',
 'change_status' => 'Zmień status',
-'charts' => '',
+'charts' => 'Wykresy',
 'chart_docsaccumulated_title' => '',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
 'chart_docspermonth_title' => '',
 'chart_docsperstatus_title' => '',
 'chart_docsperuser_title' => '',
-'chart_selection' => '',
+'chart_selection' => 'Wybierz wykres',
 'chart_sizeperuser_title' => '',
 'choose_attrdef' => 'Proszę wybrać definicję atrybutu',
 'choose_category' => 'Proszę wybrać',
@@ -409,7 +409,7 @@ URL: [url]',
 'include_documents' => 'Uwzględnij dokumenty',
 'include_subdirectories' => 'Uwzględnij podkatalogi',
 'index_converters' => 'Konwersja indeksu dokumentów',
-'index_folder' => '',
+'index_folder' => 'Indeksuj folder',
 'individuals' => 'Indywidualni',
 'inherited' => 'dziedziczony',
 'inherits_access_copy_msg' => 'Kopiuj odziedziczoną listę dostępu',

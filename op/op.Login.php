@@ -102,6 +102,10 @@ if (isset($settings->_ldapHost) && strlen($settings->_ldapHost)>0) {
 			if ($settings->_ldapType==1) {
 				$ldapSearchAttribut = "sAMAccountName=";
 				$tmpDN = $login.'@'.$settings->_ldapAccountDomainName;
+				// Add the following if authentication with an Active Dir doesn't work
+				// See https://sourceforge.net/p/seeddms/discussion/general/thread/19c70d8d/
+				// and http://stackoverflow.com/questions/6222641/how-to-php-ldap-search-to-get-user-ou-if-i-dont-know-the-ou-for-base-dn
+				ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
 			}
 		} 
 
