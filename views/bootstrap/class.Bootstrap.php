@@ -960,12 +960,14 @@ function folderSelected<?php echo $formName ?>(id, name) {
 				echo "<option value=\"\"></option>";
 			}
 			foreach($valueset as $value) {
-				echo "<option value=\"".htmlspecialchars($value)."\"";
-				if(is_array($objvalue) && in_array($value, $objvalue))
-					echo " selected";
-				elseif($value == $objvalue)
-					echo " selected";
-				echo ">".htmlspecialchars($value)."</option>";
+				if($value) {
+					echo "<option value=\"".htmlspecialchars($value)."\"";
+					if(is_array($objvalue) && in_array($value, $objvalue))
+						echo " selected";
+					elseif($value == $objvalue)
+						echo " selected";
+					echo ">".htmlspecialchars($value)."</option>";
+				}
 			}
 			echo "</select>";
 		} else {
