@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (688)
+//    Translators: Admin (689)
 
 $text = array(
 'accept' => 'Accetta',
@@ -270,7 +270,7 @@ $text = array(
 'email_footer' => 'Puoi cambiare le tue preferenze utilizzando le funzioni del menu \'Account personale\'',
 'email_header' => 'Questo è un messaggio automatico inviato dal server DMS',
 'email_not_given' => 'Devi inserire un indirizzo email valido.',
-'empty_folder_list' => '',
+'empty_folder_list' => 'Cartella vuota',
 'empty_notify_list' => 'Nessun record',
 'en_GB' => 'Inglese (GB)',
 'equal_transition_states' => '',

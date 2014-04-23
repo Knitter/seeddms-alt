@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (417)
+//    Translators: Admin (419), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -31,17 +31,21 @@ $text = array(
 'access_mode_read' => '只读权限',
 'access_mode_readwrite' => '读写权限',
 'access_permission_changed_email' => '权限已改变',
-'access_permission_changed_email_body' => '',
-'access_permission_changed_email_subject' => '',
-'according_settings' => '',
+'access_permission_changed_email_body' => '权限已变更
+文档: [name]
+上级文件夹: [folder_path]
+用户: [username]
+URL: [url]',
+'access_permission_changed_email_subject' => '[sitename]: [name] - 权限已变更',
+'according_settings' => '相应的设置',
 'action' => '',
 'actions' => '动作',
 'action_approve' => '',
 'action_complete' => '',
 'action_is_complete' => '',
 'action_is_not_complete' => '',
-'action_reject' => '',
-'action_review' => '',
+'action_reject' => '拒绝',
+'action_review' => '检查',
 'action_revise' => '',
 'add' => '添加',
 'add_document' => '添加文档',
@@ -992,7 +996,7 @@ $text = array(
 'workflow_user_summary' => '',
 'year_view' => '年视图',
 'yes' => '是',
-'zh_CN' => '',
-'zh_TW' => '',
+'zh_CN' => '中文简体',
+'zh_TW' => '中文繁体',
 );
 ?>

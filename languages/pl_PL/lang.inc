@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (672), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (674), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -160,9 +160,9 @@ URL: [url]',
 'chart_docspermimetype_title' => '',
 'chart_docspermonth_title' => '',
 'chart_docsperstatus_title' => '',
-'chart_docsperuser_title' => '',
+'chart_docsperuser_title' => 'Dokumenty na użytkownika',
 'chart_selection' => 'Wybierz wykres',
-'chart_sizeperuser_title' => '',
+'chart_sizeperuser_title' => 'Zajętość dysku na użytkownika',
 'choose_attrdef' => 'Proszę wybrać definicję atrybutu',
 'choose_category' => 'Proszę wybrać',
 'choose_group' => 'Wybierz grupę',
