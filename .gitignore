@@ -14,3 +14,4 @@ nbproject
 /restapi/Slim
 /restapi/.htaccess
 /.htaccess
+/conf/ENABLE_INSTALL_TOOL
