@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Implementation of an extension management.
  *
@@ -26,64 +27,74 @@
  * @version    Release: @package_version@
  */
 class SeedDMS_Extension_Mgr {
-	/**
-	 * @var object $db reference to database object. This must be an instance
-	 *      of {@link SeedDMS_Core_DatabaseAccess}.
-	 * @access protected
-	 */
-	protected $db;
 
-	/**
-	 * @var string $extdir directory where extensions are located
-	 * @access protected
-	 */
-	protected $extdir;
+    /**
+     * @var object $db reference to database object. This must be an instance
+     *      of {@link SeedDMS_Core_DatabaseAccess}.
+     * @access protected
+     */
+    protected $db;
 
-	/**
-	 * @var string $cachedir directory where cached extension configuration
-	 *      is stored
-	 * @access protected
-	 */
-	protected $cachedir;
+    /**
+     * @var string $extdir directory where extensions are located
+     * @access protected
+     */
+    protected $extdir;
 
+    /**
+     * @var string $cachedir directory where cached extension configuration
+     *      is stored
+     * @access protected
+     */
+    protected $cachedir;
 
-	function __construct($db, $extdir = '', $cachedir = '') {
-		$this->db = $db;
-		$this->cachedir = $cachedir;
-		$this->extdir = $extdir;
-	}
+    public function __construct($db, $extdir = '', $cachedir = '') {
+        $this->db = $db;
+        $this->cachedir = $cachedir;
+        $this->extdir = $extdir;
+    }
 
-	function getExtensionsConfFile() { /* {{{ */
-		return $this->cachedir."/extensions.php";
-	} /* }}} */
+    public function getExtensionsConfFile() {
+        return $this->cachedir . "/extensions.php";
+    }
 
-	function createExtensionConf() { /* {{{ */
-		$extensions = self::getExtensions();
-		if($extensions) {
-			$fp = fopen($this->cachedir."/extensions.php", "w");
-			foreach($extensions as $_ext) {
-				if(file_exists($this->extdir . "/" . $_ext . "/conf.php")) {
-					$content = file_get_contents($this->extdir . "/" . $_ext . "/conf.php");
-					fwrite($fp, $content);
-				}
-			}
-			fclose($fp);
-			include($this->cachedir."/extensions.php");
-		}
-	} /* }}} */
+    public function createExtensionConf() {
+        $extensions = self::getExtensions();
+        if (count($extensions)) {
+            if (is_writable($this->cachedir . "/extensions.php") &&
+                    ($fp = fopen($this->cachedir . "/extensions.php", "w"))) {
 
-	function getExtensions() { /* {{{ */
-		$extensions = array();
-		$handle = opendir($this->extdir);
-		while ($entry = readdir($handle) ) {
-			if ($entry == ".." || $entry == ".")
-				continue;
-			else if (is_dir($this->extdir ."/". $entry))
-				array_push($extensions, $entry);
-		}
-		closedir($handle);
+                foreach ($extensions as $ext) {
+                    if (is_file($this->extdir . "/" . $ext . "/conf.php")) {
+                        $content = file_get_contents($this->extdir . "/" . $ext . "/conf.php");
+                        fwrite($fp, $content);
+                    }
+                }
+                fclose($fp);
+                //NOTE: //TODO: Check that this isn't needed, the code was including
+                // the same thing twice.
+                // include($this->cachedir . "/extensions.php");
+            }
+        }
+    }
 
-		asort($extensions);
-		return $extensions;
-	} /* }}} */
+    public function getExtensions() {
+        $extensions = array();
+        if (is_dir($this->extdir) && ($handle = opendir($this->extdir)) !== false) {
+            while ($entry = readdir($handle)) {
+                if ($entry == ".." || $entry == ".") {
+                    continue;
+                }
+
+                if (is_dir($this->extdir . "/" . $entry)) {
+                    array_push($extensions, $entry);
+                }
+            }
+            closedir($handle);
+            asort($extensions);
+        }
+
+        return $extensions;
+    }
+
 }
