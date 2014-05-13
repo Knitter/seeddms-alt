@@ -10,10 +10,11 @@ Thumbs.db
 # IDE settings
 nbproject
 
-# Project specific
+# Development rules
 /restapi/Slim
 /restapi/.htaccess
 /.htaccess
 /conf/ENABLE_INSTALL_TOOL
 /conf/settings.xml
+/SeedDMS/
 /_data
