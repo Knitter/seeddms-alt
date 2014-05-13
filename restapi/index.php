@@ -715,6 +715,11 @@ $app->get('/document/:id/links', 'getDocumentLinks');
 $app->put('/account/fullname', 'setFullName');
 $app->put('/account/email', 'setEmail');
 $app->get('/account/locked', 'getLockedDocuments');
+
+if(is_file('routing.php')) {
+    include 'routing.php';
+}
+
 $app->run();
 
 ?>
