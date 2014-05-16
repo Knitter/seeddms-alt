@@ -1200,6 +1200,8 @@ class SeedDMS_Core_DMS {
 		}
 		if($role == '')
 			$role = '0';
+		if(trim($pwdexpiration) == '')
+			$pwdexpiration = '0000-00-00 00:00:00';
 		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)
