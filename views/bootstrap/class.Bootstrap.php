@@ -748,6 +748,21 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		}
 	} /* }}} */
 
+	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+?>
+	<div id="upload-files">
+		<div id="upload-file">
+			<div class="input-append">
+				<input type="text" class="form-control" readonly>
+				<span class="btn btn-default btn-file">
+					<?php printMLText("browse");?>&hellip; <input type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+				</span>
+			</div>
+		</div>
+	</div>
+<?php
+	} /* }}} */
+
 	function printDateChooser($defDate = -1, $varName) { /* {{{ */
 	
 		if ($defDate == -1)
