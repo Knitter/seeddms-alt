@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (610), kreml (418)
+//    Translators: Admin (610), kreml (419)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -85,7 +85,16 @@ Uživatel: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Žádost o schválení',
 'approval_status' => 'Stav schválení',
-'approval_submit_email' => 'Předložit ke schválení',
+'approval_submit_email' => '',
+'approval_submit_email_body' => 'Schválení dokumentu
+Dokument: [name]
+Verze: [version]
+Nadřazená složka: [folder_path]
+Stav: [status]
+Komentář: [comment]
+Uživatel: [username]
+URL: [url]',
+'approval_submit_email_subject' => 'Předložit ke schválení',
 'approval_summary' => 'Souhrn schválení',
 'approval_update_failed' => 'Chyba při aktualizaci stavu schválení. Aktualizace selhala.',
 'approvers' => 'Schvalovatelé',
@@ -132,6 +141,7 @@ URL: [url]',
 'backup_remove' => 'Odstranit soubor zálohy',
 'backup_tools' => 'Nástroje pro zálohování',
 'between' => 'mezi',
+'browse' => '',
 'calendar' => 'Kalendář',
 'calendar_week' => 'Kaledářní týden',
 'cancel' => 'Zrušit',
@@ -199,6 +209,7 @@ URL: [url]',
 'creation_date' => 'Vytvořeno',
 'cs_CZ' => 'Čeština',
 'current_password' => 'Současné heslo',
+'current_quota' => '',
 'current_state' => 'Současný stav',
 'current_version' => 'Aktuální verze',
 'daily' => 'Denně',
@@ -622,6 +633,7 @@ Pokud budete mít problém s přihlášením i po změně hesla, kontaktujte Adm
 'pt_BR' => 'Portugalština (BR)',
 'quota' => 'Kvóta',
 'quota_exceeded' => 'Vaše kvóta disku je překročena o [bytes].',
+'quota_is_disabled' => '',
 'quota_warning' => 'Vaše maximální využití disku je překročeno o [bajtů]. Prosím, odstraňte dokumenty nebo předchozí verze.',
 'refresh' => 'Obnovit',
 'rejected' => 'Odmítnuto',

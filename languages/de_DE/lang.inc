@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1868)
+//    Translators: Admin (1874)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -85,7 +85,16 @@ Benutzer: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Aufforderung zur Genehmigung',
 'approval_status' => 'Freigabestatus',
-'approval_submit_email' => 'Genehmigung erteilen',
+'approval_submit_email' => '',
+'approval_submit_email_body' => 'Genehmigung erteilen
+Dokument: [name]
+Version: [version]
+Elternordner: [folder_path]
+Status: [status]
+Kommentar: [comment]
+Benutzer: [username]
+URL: [url]',
+'approval_submit_email_subject' => 'Genehmigung erteilen',
 'approval_summary' => 'Übersicht Freigaben',
 'approval_update_failed' => 'Störung bei der Aktualisierung des Berechtigungsstatus. Aktualisierung gescheitert',
 'approvers' => 'Freigebender',
@@ -132,6 +141,7 @@ URL: [url]',
 'backup_remove' => 'Backup löschen',
 'backup_tools' => 'Backup tools',
 'between' => 'zwischen',
+'browse' => 'Durchsuchen',
 'calendar' => 'Kalender',
 'calendar_week' => 'Kalenderwoche',
 'cancel' => 'Abbrechen',
@@ -199,6 +209,7 @@ URL: [url]',
 'creation_date' => 'Erstellt am',
 'cs_CZ' => 'Tschechisch',
 'current_password' => 'Aktuelles Passwort',
+'current_quota' => 'Der zur Zeit systemweit eingestellt Wert ist [quota].',
 'current_state' => 'Aktueller Status',
 'current_version' => 'Aktuelle Version',
 'daily' => 'täglich',
@@ -625,6 +636,7 @@ Sollen Sie danach immer noch Problem bei der Anmeldung haben, dann kontaktieren 
 'pt_BR' => 'Portugiesisch (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten.',
+'quota_is_disabled' => 'Quota-Support ist zur Zeit ausgeschalten. Benutzer-Quota werden ignoriert bis Quota-Unterstützung eingeschaltet wird.',
 'quota_warning' => 'Ihr maximal verfügbarer Plattenplatz wurde um [bytes] überschritten. Bitte löschen Sie Dokumente oder ältere Versionen.',
 'refresh' => 'Aktualisieren',
 'rejected' => 'abgelehnt',
@@ -915,7 +927,7 @@ URL: [url]',
 'settings_printDisclaimer' => 'Rechtliche Hinweise',
 'settings_printDisclaimer_desc' => 'Anwählen, um die rechtlichen Hinweise am Ende jeder Seite anzuzeigen.',
 'settings_quota' => 'User\'s quota',
-'settings_quota_desc' => 'Die maximale Anzahl Bytes, die ein Benutzer beleen darf. Setzen Sie diesen Wert auf 0 für unbeschränkten Plattenplatz. Dieser Wert kann individuell in den Benutzereinstellungen überschrieben werden.',
+'settings_quota_desc' => 'Die maximale Anzahl Bytes, die ein Benutzer belegen darf. Setzen Sie diesen Wert auf 0 für unbeschränkten Plattenplatz. Dieser Wert kann individuell in den Benutzereinstellungen überschrieben werden.',
 'settings_restricted' => 'Beschränkter Zugriff',
 'settings_restricted_desc' => 'Nur Benutzer, die einen Eintrag in der Benutzerdatenbank haben dürfen sich anmelden (unabhängig von einer erfolgreichen Authentifizierung über LDAP)',
 'settings_rootDir' => 'Wurzelverzeichnis',

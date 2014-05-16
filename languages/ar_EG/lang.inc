@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (882)
+//    Translators: Admin (1061)
 
 $text = array(
 'accept' => 'وافق',
@@ -86,6 +86,8 @@ URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - طلب الموافقة',
 'approval_status' => 'حالة الموافقة',
 'approval_submit_email' => 'تم ارسال الموافقة',
+'approval_submit_email_body' => '',
+'approval_submit_email_subject' => 'تم ارسال الموافقة',
 'approval_summary' => 'ملخص الموافقة',
 'approval_update_failed' => 'خطأ في تحديث حالة الموافقة. فشل التحديث.',
 'approvers' => 'الموافقون',
@@ -132,6 +134,7 @@ URL: [url]',
 'backup_remove' => 'ازالة ملف النسخ الاحتياطي',
 'backup_tools' => 'أدوات النسخ الاحتياطي',
 'between' => 'بين',
+'browse' => '',
 'calendar' => 'النتيجة',
 'calendar_week' => '',
 'cancel' => 'الغاء',
@@ -199,6 +202,7 @@ URL: [url]',
 'creation_date' => 'تم انشاؤه',
 'cs_CZ' => 'التشيكية',
 'current_password' => 'كلمة السر الحالية',
+'current_quota' => '',
 'current_state' => '',
 'current_version' => 'الإصدار الحالي',
 'daily' => 'يومي',
@@ -618,6 +622,7 @@ URL: [url]',
 'pt_BR' => 'البرتغالية (BR)',
 'quota' => 'المساحة المخصصة',
 'quota_exceeded' => 'لقد قمت بتعدي المساحة المخصصة لك بمقدار [bytes].',
+'quota_is_disabled' => '',
 'quota_warning' => 'اقصى مساحة للقرص الصلب تم تعديها بمقدار [bytes]. من فضلك قم بمسح بعض المستندات او اصدارات سابقة منها',
 'refresh' => 'اعادة تحميل',
 'rejected' => 'مرفوض',

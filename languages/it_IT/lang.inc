@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (689)
+//    Translators: Admin (694)
 
 $text = array(
 'accept' => 'Accetta',
@@ -34,7 +34,7 @@ $text = array(
 'access_permission_changed_email_body' => '',
 'access_permission_changed_email_subject' => '',
 'according_settings' => 'Settaggio accordi',
-'action' => '',
+'action' => 'Azione',
 'actions' => 'Azioni',
 'action_approve' => '',
 'action_complete' => '',
@@ -76,7 +76,9 @@ $text = array(
 'approval_request_email_body' => '',
 'approval_request_email_subject' => '',
 'approval_status' => 'Stato approvazione',
-'approval_submit_email' => 'Sottoposta approvazione',
+'approval_submit_email' => '',
+'approval_submit_email_body' => '',
+'approval_submit_email_subject' => 'Sottoposta approvazione',
 'approval_summary' => 'Dettaglio approvazioni',
 'approval_update_failed' => 'Errore nel modificare lo stato di approvazione',
 'approvers' => 'Approvatori',
@@ -117,8 +119,9 @@ $text = array(
 'backup_remove' => 'Elimina file di backup',
 'backup_tools' => 'Strumenti di backup',
 'between' => 'tra',
+'browse' => '',
 'calendar' => 'Calendario',
-'calendar_week' => '',
+'calendar_week' => 'Calendario Settimanale',
 'cancel' => 'Annulla',
 'cannot_assign_invalid_state' => 'Non è possibile modificare le assegnazioni di un documento già in stato finale',
 'cannot_change_final_states' => 'Attenzione: Non si può modificare lo stato dei documenti rifiutati, scaduti o in lavorazione',
@@ -139,7 +142,7 @@ $text = array(
 'change_password' => 'Cambia password',
 'change_password_message' => 'La tua password è stata cambiata.',
 'change_status' => 'Modifica lo Stato',
-'charts' => '',
+'charts' => 'Grafici',
 'chart_docsaccumulated_title' => '',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
@@ -184,6 +187,7 @@ $text = array(
 'creation_date' => 'Data creazione',
 'cs_CZ' => 'Ceco',
 'current_password' => 'Password corrente',
+'current_quota' => '',
 'current_state' => '',
 'current_version' => 'Ultima versione',
 'daily' => 'Giornaliero',
@@ -193,7 +197,7 @@ $text = array(
 'december' => 'Dicembre',
 'default_access' => 'Permesso di default',
 'default_keywords' => 'Parole chiave disponibili',
-'definitions' => '',
+'definitions' => 'Definizioni',
 'delete' => 'Cancella',
 'details' => 'Dettagli',
 'details_version' => 'Dettagli versione: [version]',
@@ -529,6 +533,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'pt_BR' => 'Portoghese (BR)',
 'quota' => '',
 'quota_exceeded' => '',
+'quota_is_disabled' => '',
 'quota_warning' => '',
 'refresh' => 'Refresh',
 'rejected' => 'Rifiutato',
@@ -955,7 +960,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'users_and_groups' => '',
 'users_done_work' => '',
 'user_exists' => 'Utente esistente',
-'user_group_management' => '',
+'user_group_management' => 'Amministarzione Utenti/Gruppi',
 'user_image' => 'Immagine',
 'user_info' => 'Informazioni utente',
 'user_list' => 'Lista utenti',

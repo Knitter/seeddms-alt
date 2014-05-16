@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: 
+//    Translators: Admin (1)
 
 $text = array(
 'accept' => '',
@@ -77,6 +77,8 @@ $text = array(
 'approval_request_email_subject' => '',
 'approval_status' => '',
 'approval_submit_email' => '',
+'approval_submit_email_body' => '',
+'approval_submit_email_subject' => '',
 'approval_summary' => '',
 'approval_update_failed' => '',
 'approvers' => '',
@@ -117,7 +119,8 @@ $text = array(
 'backup_remove' => '',
 'backup_tools' => '',
 'between' => '',
-'calendar' => '',
+'browse' => '',
+'calendar' => '日曆',
 'calendar_week' => '',
 'cancel' => '',
 'cannot_assign_invalid_state' => '',
@@ -184,6 +187,7 @@ $text = array(
 'creation_date' => '',
 'cs_CZ' => '',
 'current_password' => '',
+'current_quota' => '',
 'current_state' => '',
 'current_version' => '',
 'daily' => '',
@@ -521,6 +525,7 @@ $text = array(
 'pt_BR' => '',
 'quota' => '',
 'quota_exceeded' => '',
+'quota_is_disabled' => '',
 'quota_warning' => '',
 'refresh' => '',
 'rejected' => '',

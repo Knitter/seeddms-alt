@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1014), netixw (14)
+//    Translators: Admin (1018), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -85,7 +85,16 @@ User: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Approval request',
 'approval_status' => 'Approval Status',
-'approval_submit_email' => 'Submitted approval',
+'approval_submit_email' => '',
+'approval_submit_email_body' => 'Approval of document
+Document: [name]
+Version: [version]
+Parent folder: [folder_path]
+Status: [status]
+Comment: [comment]
+User: [username]
+URL: [url]',
+'approval_submit_email_subject' => 'Submitted approval',
 'approval_summary' => 'Approval Summary',
 'approval_update_failed' => 'Error updating approval status. Update failed.',
 'approvers' => 'Approvers',
@@ -132,6 +141,7 @@ URL: [url]',
 'backup_remove' => 'Remove backup file',
 'backup_tools' => 'Backup tools',
 'between' => 'between',
+'browse' => 'Browse',
 'calendar' => 'Calendar',
 'calendar_week' => 'Calendar week',
 'cancel' => 'Cancel',
@@ -199,6 +209,7 @@ URL: [url]',
 'creation_date' => 'Created',
 'cs_CZ' => 'Czech',
 'current_password' => 'Current Password',
+'current_quota' => 'The current system wide quota is set [quota].',
 'current_state' => 'Current state',
 'current_version' => 'Current version',
 'daily' => 'Daily',
@@ -625,6 +636,7 @@ If you have still problems to login, then please contact your administrator.',
 'pt_BR' => 'Portugese (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Your disk quota is exceeded by [bytes].',
+'quota_is_disabled' => 'Quota support is currently disabled in the settings. Setting a user quota will have no effect until it is enabled again.',
 'quota_warning' => 'Your maximum disc usage is exceeded by [bytes]. Please remove documents or previous versions.',
 'refresh' => 'Refresh',
 'rejected' => 'Rejected',
