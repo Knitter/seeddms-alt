@@ -200,7 +200,11 @@ function showUser(selectObj) {
 
 		<tr>
 			<td><?php printMLText("user_image");?>:</td>
-			<td><input type="File" name="userfile"></td>
+			<td>
+<?php
+	$this->printFileChooser('userfile', false, 'image/jpeg');
+?>
+			</td>
 		</tr>
 
 <?php
@@ -417,7 +421,11 @@ function showUser(selectObj) {
 		</tr>
 		<tr>
 			<td><?php printMLText("new_user_image");?>:</td>
-			<td><input type="file" name="userfile" accept="image/jpeg"></td>
+			<td>
+<?php
+	$this->printFileChooser('userfile', false, "image/jpeg");
+?>
+			</td>
 		</tr>
 
 <?php
