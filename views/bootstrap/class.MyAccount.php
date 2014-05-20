@@ -37,14 +37,17 @@ class SeedDMS_View_MyAccount extends SeedDMS_Bootstrap_Style {
 		$enableuserimage = $this->params['enableuserimage'];
 		$passwordexpiration = $this->params['passwordexpiration'];
 		$httproot = $this->params['httproot'];
+		$quota = $this->params['quota'];
 
 		$this->htmlStartPage(getMLText("my_account"));
 		$this->globalNavigation();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("my_account"), "my_account");
 
-		if(($remain = checkQuota()) < 0) {
-			$this->warningMsg(getMLText('quota_warning', array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain)))));
+		if($quota > 0) {
+			if(($remain = checkQuota()) < 0) {
+				$this->warningMsg(getMLText('quota_warning', array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain)))));
+			}
 		}
 		$this->contentHeading(getMLText("user_info"));
 		$this->contentContainerStart();
@@ -81,13 +84,34 @@ class SeedDMS_View_MyAccount extends SeedDMS_Bootstrap_Style {
 			print "</tr>\n";
 		}
 		print "<tr>\n";
-		print "<td>".getMLText("quota")." : </td>\n";
-		print "<td>".SeedDMS_Core_File::format_filesize($user->getQuota())."</td>\n";
-		print "</tr>\n";
-		print "<tr>\n";
 		print "<td>".getMLText("used_discspace")." : </td>\n";
 		print "<td>".SeedDMS_Core_File::format_filesize($user->getUsedDiskSpace())."</td>\n";
 		print "</tr>\n";
+		if($quota > 0) {
+			print "<tr>\n";
+			print "<td>".getMLText("quota")." : </td>\n";
+			print "<td>".SeedDMS_Core_File::format_filesize($user->getQuota())."</td>\n";
+			print "</tr>\n";
+			if($user->getQuota() > $user->getUsedDiskSpace()) {
+				$used = (int) ($user->getUsedDiskSpace()/$user->getQuota()*100.0+0.5);
+				$free = 100-$used;
+			} else {
+				$free = 0;
+				$used = 100;
+			}
+			print "<tr>\n";
+			print "<td>\n";
+			print "</td>\n";
+			print "<td>\n";
+?>
+		<div class="progress">
+			<div class="bar bar-danger" style="width: <?php echo $used; ?>%;"></div>
+		  <div class="bar bar-success" style="width: <?php echo $free; ?>%;"></div>
+		</div>
+<?php
+			print "</td>\n";
+			print "</tr>\n";
+		}
 		print "</table>\n";
 		print "</div>\n";
 		print "</div>\n";
