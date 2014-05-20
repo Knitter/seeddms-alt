@@ -404,15 +404,20 @@ function checkFormKey($formid='', $method='POST') { /* {{{ */
  * @return boolean/integer true if no quota is set, number of bytes until
  *         quota is reached. Negative values indicate a disk usage above quota.
  */
-function checkQuota() { /* {{{ */
-	global $settings, $dms, $user;
+function checkQuota($user) { /* {{{ */
+	global $settings, $dms;
+
+	/* check if quota is turn off system wide */
+	if($settings->_quota == 0)
+		return true;
 
 	$quota = 0;
 	$uquota = $user->getQuota();
 	if($uquota > 0)
 		$quota = $uquota;
-	elseif($settings->_quota > 0)
+	elseif($settings->_quota > 0) {
 		$quota = $settings->_quota;
+	}
 
 	if($quota == 0)
 		return true;
