@@ -43,6 +43,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 		$enableuserimage = $this->params['enableuserimage'];
 		$undeluserids = $this->params['undeluserids'];
 		$workflowmode = $this->params['workflowmode'];
+		$quota = $this->params['quota'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -186,6 +187,17 @@ function showUser(selectObj) {
 		}
 ?>
 			</select></td>
+		</tr>
+		<tr>
+			<td><?php printMLText("quota");?>:</td>
+			<td><input type="text" name="quota">
+<?php
+	if($quota > 0)
+		echo $this->warningMsg(getMLText('current_quota', array('quota'=>SeedDMS_Core_File::format_filesize($quota))));
+	else
+		echo $this->warningMsg(getMLText('quota_is_disabled'));
+?>
+			</td>
 		</tr>
 		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
@@ -396,6 +408,17 @@ function showUser(selectObj) {
 		}
 ?>
 			</select></td>
+		</tr>
+		<tr>
+			<td><?php printMLText("quota");?>:</td>
+			<td><input type="text" name="quota" value="<?php echo $currUser->getQuota(); ?>">
+<?php
+	if($quota > 0)
+		echo $this->warningMsg(getMLText('current_quota', array('quota'=>SeedDMS_Core_File::format_filesize($quota))));
+	else
+		echo $this->warningMsg(getMLText('quota_is_disabled'));
+?>
+			</td>
 		</tr>
 		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
