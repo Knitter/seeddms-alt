@@ -49,6 +49,10 @@ if ($action == "adduser") {
 		$pwdexpiration = '';
 	else
 		$pwdexpiration = $_POST["pwdexpiration"];
+	if(!isset($_POST["quota"]))
+		$quota = 0;
+	else
+		$quota = (int) $_POST["quota"];
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
 	$comment = $_POST["comment"];
@@ -62,6 +66,9 @@ if ($action == "adduser") {
 
 	$newUser = $dms->addUser($login, md5($pwd), $name, $email, $settings->_language, $settings->_theme, $comment, $role, $isHidden, $isDisabled, $pwdexpiration);
 	if ($newUser) {
+
+		/* Set Quota */
+		$newUser->setQuota($quota);
 
 		/* Set user image if uploaded */
 		if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
@@ -189,6 +196,10 @@ else if ($action == "edituser") {
 		$pwdexpiration = $_POST["pwdexpiration"];
 	else
 		$pwdexpiration = '';
+	if(!isset($_POST["quota"]))
+		$quota = 0;
+	else
+		$quota = (int) $_POST["quota"];
 	$name    = $_POST["name"];
 	$email   = $_POST["email"];
 	$comment = $_POST["comment"];
@@ -226,6 +237,8 @@ else if ($action == "edituser") {
 		$editedUser->setComment($comment);
 	if ($editedUser->getRole() != $role)
 		$editedUser->setRole($role);
+	if ($editedUser->getQuota() != $quota)
+		$editedUser->setQuota($quota);
 	if ($editedUser->isHidden() != $isHidden)
 		$editedUser->setHidden($isHidden);
 	if ($editedUser->isDisabled() != $isDisabled) {
