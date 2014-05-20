@@ -36,6 +36,7 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$allUsers = $this->params['allusers'];
 		$httproot = $this->params['httproot'];
+		$quota = $this->params['quota'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -70,13 +71,33 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 			}
 			echo "</td>";
 			echo "<td>";
-			if($currUser->getQuota() != 0)
-				echo SeedDMS_Core_File::format_filesize($currUser->getQuota())."<br />";
-			echo SeedDMS_Core_File::format_filesize($currUser->getUsedDiskSpace())."<br />";
+			echo SeedDMS_Core_File::format_filesize($currUser->getUsedDiskSpace());
+			if($quota) {
+				if($user->getQuota() > $currUser->getUsedDiskSpace()) {
+					$used = (int) ($currUser->getUsedDiskSpace()/$currUser->getQuota()*100.0+0.5);
+					$free = 100-$used;
+				} else {
+					$free = 0;
+					$used = 100;
+				}
+				echo " / ";
+				if($currUser->getQuota() != 0)
+					echo SeedDMS_Core_File::format_filesize($currUser->getQuota())."<br />";
+				else
+					echo SeedDMS_Core_File::format_filesize($quota)."<br />";
+?>
+		<div class="progress">
+			<div class="bar bar-danger" style="width: <?php echo $used; ?>%;"></div>
+		  <div class="bar bar-success" style="width: <?php echo $free; ?>%;"></div>
+		</div>
+<?php
+			}
 			echo "</td>";
 			echo "<td>";
+			echo "<div class=\"list-action\">";
      	echo "<a href=\"../out/out.UsrMgr.php?userid=".$currUser->getID()."\"><i class=\"icon-edit\"></i></a> ";
      	echo "<a href=\"../out/out.RemoveUser.php?userid=".$currUser->getID()."\"><i class=\"icon-remove\"></i></a>";
+			echo "</div>";
 			echo "</td>";
 			echo "</tr>";
 		}
