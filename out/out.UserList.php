@@ -29,7 +29,7 @@ if (!$user->isAdmin()) {
 $allUsers = $dms->getAllUsers($settings->_sortUsersInList);
 
 $tmp = explode('.', basename($_SERVER['SCRIPT_FILENAME']));
-$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allusers'=>$allUsers, 'httproot'=>$settings->_httpRoot));
+$view = UI::factory($theme, $tmp[1], array('dms'=>$dms, 'user'=>$user, 'allusers'=>$allUsers, 'httproot'=>$settings->_httpRoot, 'quota'=>$settings->_quota));
 if($view) {
 	$view->show();
 	exit;
