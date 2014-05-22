@@ -37,6 +37,7 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		$allUsers = $this->params['allusers'];
 		$httproot = $this->params['httproot'];
 		$quota = $this->params['quota'];
+		$pwdexpiration = $this->params['pwdexpiration'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -44,10 +45,12 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation("", "admin_tools");
 		$this->contentHeading(getMLText("user_list"));
 		$this->contentContainerStart();
+
+		$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
 ?>
 
 	<table class="table table-condensed">
-	  <tr><th></th><th><?php printMLText('name'); ?></th><th><?php printMLText('groups'); ?></th><th></th><th></th></tr>
+	  <tr><th></th><th><?php printMLText('name'); ?></th><th><?php printMLText('groups'); ?></th><th><?php printMLText('discspace'); ?></th><th><?php printMLText('authentication'); ?></th><th></th></tr>
 <?php
 		foreach ($allUsers as $currUser) {
 			echo "<tr>";
@@ -91,6 +94,25 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		  <div class="bar bar-success" style="width: <?php echo $free; ?>%;"></div>
 		</div>
 <?php
+			}
+			echo "</td>";
+			echo "<td>";
+			if($pwdexpiration) {
+				$now = new DateTime();
+				$expdate = new DateTime($currUser->getPwdExpiration());
+				$diff = $now->diff($expdate);
+				if($expdate > $now) {
+					printf(getMLText('password_expires_in_days'), $diff->format('%a'));
+					echo " (".$expdate->format('Y-m-d H:i:sP').")";
+				} else {
+					printMLText("password_expired");
+				}
+			}
+			$sessions = $sessionmgr->getUserSessions($currUser);
+			if($sessions) {
+				foreach($sessions as $session) {
+					echo "<br />".getMLText('lastaccess').": ".getLongReadableDate($session->getLastAccess());
+				}
 			}
 			echo "</td>";
 			echo "<td>";
