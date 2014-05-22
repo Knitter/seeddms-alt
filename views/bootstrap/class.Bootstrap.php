@@ -431,7 +431,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		if (!$this->params['disableselfedit']) echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || !$this->params['disableselfedit'])
+			echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
 		
 		if (!$this->params['user']->isAdmin()) 
 			echo "<li><a href=\"../out/out.UserDefaultKeywords.php\">".getMLText("edit_default_keywords")."</a></li>\n";
