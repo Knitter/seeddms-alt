@@ -130,7 +130,8 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 					print "</td>";
 
 					print "<td><a href=\"out.ViewDocument.php?documentid=".$ID."\">" . htmlspecialchars($doc->getName()) . "</a>";
-					print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $doc->getDate())."</b>, ".getMLText('version')." <b>".$version."</b> - <b>".date('Y-m-d', $latest->getDate())."</b></span>";
+					print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $doc->getDate())."</b>, ".getMLText('version')." <b>".$latest->getVersion()."</b> - <b>".date('Y-m-d', $latest->getDate())."</b></span>";
+					$comment = $latest->getComment();
 					if($comment) {
 						print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
 					}
