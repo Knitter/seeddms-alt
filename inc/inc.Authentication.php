@@ -36,7 +36,10 @@ if(!$resArr = $session->load($dms_session)) {
 	exit;
 }
 
+/* Update last access time */
+$session->updateAccess($dms_session);
 /* Load user data */
+
 $user = $dms->getUser($resArr["userID"]);
 if($user->isAdmin()) {
 	if($resArr["su"]) {
