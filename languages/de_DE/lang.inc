@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1886)
+//    Translators: Admin (1887)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -477,6 +477,7 @@ URL: [url]',
 'keywords' => 'Stichworte',
 'keyword_exists' => 'Stichwort besteht bereits',
 'language' => 'Sprache',
+'lastaccess' => 'Letzter Zugriff',
 'last_update' => 'Letzte Aktualisierung',
 'legend' => 'Legende',
 'linked_documents' => 'verknüpfte Dokumente',

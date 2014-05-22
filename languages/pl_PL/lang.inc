@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (674), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (675), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -470,6 +470,7 @@ URL: [url]',
 'keywords' => 'Słowa kluczowe',
 'keyword_exists' => 'Słowo kluczowe już istnieje',
 'language' => 'Język',
+'lastaccess' => '',
 'last_update' => 'Ostatnia aktualizacja',
 'legend' => 'Legenda',
 'linked_documents' => 'Powiązane dokumenty',
@@ -664,7 +665,7 @@ URL: [url]',
 'return_from_subworkflow' => 'Powróć z sub procesu',
 'return_from_subworkflow_email_body' => 'Powrót z sub procesu dokumentu: [name] Wersja: [version] Proces: [workflow] Sub proces: [subworkflow] folderu nadrzędnego: [folder_path] Użytkownik: [username] URL: [url]',
 'return_from_subworkflow_email_subject' => '[sitename]: [name] - Powrót z sub procesu',
-'reverse_links' => '',
+'reverse_links' => 'Dokument który posiada link do aktualnego dokumentu',
 'reviewers' => 'Recenzenci',
 'reviewer_already_assigned' => 'jest już przypisany jako recenzent',
 'reviewer_already_removed' => 'został już usunięty z procesu opiniowania lub już wydał swoją opinię',

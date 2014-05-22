@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1026), netixw (14)
+//    Translators: Admin (1027), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -477,6 +477,7 @@ URL: [url]',
 'keywords' => 'Keywords',
 'keyword_exists' => 'Keyword already exists',
 'language' => 'Language',
+'lastaccess' => 'Last access',
 'last_update' => 'Last Update',
 'legend' => 'Legend',
 'linked_documents' => 'Related Documents',

@@ -403,6 +403,7 @@ $text = array(
 'keywords' => 'Mots clau',
 'keyword_exists' => 'El mot clau ja existeix',
 'language' => 'Llenguatge',
+'lastaccess' => '',
 'last_update' => 'Última modificació',
 'legend' => '',
 'linked_documents' => 'Documents relacionats',
