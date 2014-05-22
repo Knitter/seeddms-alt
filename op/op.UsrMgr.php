@@ -189,7 +189,7 @@ else if ($action == "edituser") {
 	if (!is_object($editedUser)) {
 		UI::exitError(getMLText("admin_tools"),getMLText("invalid_user_id"));
 	}
-	
+
 	$login   = $_POST["login"];
 	$pwd     = $_POST["pwd"];
 	if(isset($_POST["pwdexpiration"]))
@@ -209,6 +209,8 @@ else if ($action == "edituser") {
 	
 	if ($editedUser->getLogin() != $login)
 		$editedUser->setLogin($login);
+	if($pwdexpiration)
+		$editedUser->setPwdExpiration($pwdexpiration);
 	if (isset($pwd) && ($pwd != "")) {
 		if($settings->_passwordStrength) {
 			$ps = new Password_Strength();
@@ -220,13 +222,11 @@ else if ($action == "edituser") {
 			$score = $ps->get_score();
 			if($score >= $settings->_passwordStrength) {
 				$editedUser->setPwd(md5($pwd));
-				$editedUser->setPwdExpiration($pwdexpiration);
 			} else {
 				UI::exitError(getMLText("set_password"),getMLText("password_strength_insuffient"));
 			}
 		} else {
 			$editedUser->setPwd(md5($pwd));
-			$editedUser->setPwdExpiration($pwdexpiration);
 		}
 	}
 	if ($editedUser->getFullName() != $name)
