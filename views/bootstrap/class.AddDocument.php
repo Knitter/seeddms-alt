@@ -81,15 +81,12 @@ function checkForm()
 	return true;
 }
 
-function addFiles()
-	{
-	var li = document.createElement('li');
-	li.innerHTML = '<input type="File" name="userfile[]" size="60">';
-	document.getElementById('files').appendChild(li);	
-//	document.getElementById("files").innerHTML += '<br><input type="File" name="userfile[]" size="60">'; 
-	document.form1.name.disabled=true;
-}
-		
+$(document).ready(function() {
+	$('#new-file').click(function(event) {
+			$("#upload-file").clone().appendTo("#upload-files").removeAttr("id").children('div').children('input').val('');
+	});
+});
+
 </script>
 
 <?php
@@ -179,10 +176,16 @@ function addFiles()
 		<tr>
 			<td><?php printMLText("local_file");?>:</td>
 			<td>
+<!--
 			<a href="javascript:addFiles()"><?php printMLtext("add_multiple_files") ?></a>
 			<ol id="files">
 			<li><input type="file" name="userfile[]" size="60"></li>
 			</ol>
+-->
+<?php
+	$this->printFileChooser('userfile[]', false);
+?>
+			<a class="" id="new-file"><?php printMLtext("add_multiple_files") ?></a>
 			</td>
 		</tr>
 <?php if($dropfolderdir) { ?>

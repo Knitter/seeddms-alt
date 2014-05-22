@@ -297,18 +297,27 @@ function createVersionigFile($document) { /* {{{ */
 	return true;
 } /* }}} */
 
-// funcion by shalless at rubix dot net dot au (php.net)
+/**
+ * Calculate disk space of file or directory
+ *
+ * original funcion by shalless at rubix dot net dot au (php.net)
+ * stat() replace by filesize() to make it work on all platforms.
+ *
+ * @param string $dir directory or filename
+ * @return integer number of bytes
+ */
 function dskspace($dir) { /* {{{ */
-   $s = stat($dir);
-   $space = $s["blocks"]*512;
-   if (is_dir($dir)) {
-     $dh = opendir($dir);
-     while (($file = readdir($dh)) !== false)
-       if ($file != "." and $file != "..")
-         $space += dskspace($dir."/".$file);
-     closedir($dh);
-   }
-   return $space;
+	$space = 0;
+	if(is_file($dir)) {
+		$space = filesize($dir);
+	} elseif (is_dir($dir)) {
+		$dh = opendir($dir);
+		while (($file = readdir($dh)) !== false)
+			if ($file != "." and $file != "..")
+				$space += dskspace($dir."/".$file);
+		closedir($dh);
+	}
+	return $space;
 } /* }}} */
 
 /**
@@ -439,15 +448,20 @@ function checkFormKey($formid='', $method='POST') { /* {{{ */
  * @return boolean/integer true if no quota is set, number of bytes until
  *         quota is reached. Negative values indicate a disk usage above quota.
  */
-function checkQuota() { /* {{{ */
-	global $settings, $dms, $user;
+function checkQuota($user) { /* {{{ */
+	global $settings, $dms;
+
+	/* check if quota is turn off system wide */
+	if($settings->_quota == 0)
+		return true;
 
 	$quota = 0;
 	$uquota = $user->getQuota();
 	if($uquota > 0)
 		$quota = $uquota;
-	elseif($settings->_quota > 0)
+	elseif($settings->_quota > 0) {
 		$quota = $settings->_quota;
+	}
 
 	if($quota == 0)
 		return true;

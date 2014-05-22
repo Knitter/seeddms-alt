@@ -36,6 +36,9 @@ if (isset($_COOKIE["mydms_session"])) {
 		exit;
 	}
 
+	/* Update last access time */
+	$session->updateAccess($dms_session);
+
 	/* Load user data */
 	$user = $dms->getUser($resArr["userID"]);
 	if (!is_object($user)) {

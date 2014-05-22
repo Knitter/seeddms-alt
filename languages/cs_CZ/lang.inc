@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (610), kreml (418)
+//    Translators: Admin (610), kreml (419)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -76,6 +76,7 @@ URL: [url]',
 'apply' => 'Použít',
 'approval_deletion_email' => 'Zrušení schválení požadavku',
 'approval_group' => 'Skupina schválení',
+'approval_log' => '',
 'approval_request_email' => 'Schválení požadavku',
 'approval_request_email_body' => 'Žádost o schválení
 Dokument: [name]
@@ -85,7 +86,16 @@ Uživatel: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Žádost o schválení',
 'approval_status' => 'Stav schválení',
-'approval_submit_email' => 'Předložit ke schválení',
+'approval_submit_email' => '',
+'approval_submit_email_body' => 'Schválení dokumentu
+Dokument: [name]
+Verze: [version]
+Nadřazená složka: [folder_path]
+Stav: [status]
+Komentář: [comment]
+Uživatel: [username]
+URL: [url]',
+'approval_submit_email_subject' => 'Předložit ke schválení',
 'approval_summary' => 'Souhrn schválení',
 'approval_update_failed' => 'Chyba při aktualizaci stavu schválení. Aktualizace selhala.',
 'approvers' => 'Schvalovatelé',
@@ -125,6 +135,7 @@ URL: [url]',
 'attr_no_regex_match' => 'Hodnota atributu nesouhlasí s regulárním výrazem',
 'at_least_n_users_of_group' => 'Alespoň [number_of_users] uživatelů z [group]',
 'august' => 'Srpen',
+'authentication' => '',
 'automatic_status_update' => 'Automatická změna stavu',
 'back' => 'Přejít zpět',
 'backup_list' => 'Existující záložní seznam',
@@ -132,6 +143,7 @@ URL: [url]',
 'backup_remove' => 'Odstranit soubor zálohy',
 'backup_tools' => 'Nástroje pro zálohování',
 'between' => 'mezi',
+'browse' => '',
 'calendar' => 'Kalendář',
 'calendar_week' => 'Kaledářní týden',
 'cancel' => 'Zrušit',
@@ -199,6 +211,7 @@ URL: [url]',
 'creation_date' => 'Vytvořeno',
 'cs_CZ' => 'Čeština',
 'current_password' => 'Současné heslo',
+'current_quota' => '',
 'current_state' => 'Současný stav',
 'current_version' => 'Aktuální verze',
 'daily' => 'Denně',
@@ -214,6 +227,7 @@ URL: [url]',
 'details_version' => 'Podrobnosti verze: [version]',
 'de_DE' => 'Němčina',
 'disclaimer' => 'Toto je neveřejná oblast. Přístup povolen pouze oprávněným uživatelům. Jakékoliv narušení bude stíháno podle platných právních norem.',
+'discspace' => '',
 'document' => 'Dokument',
 'documents' => 'Dokumenty',
 'documents_in_process' => 'Zpracovávané dokumenty',
@@ -458,6 +472,7 @@ URL: [url]',
 'js_select_user_or_group' => 'Vyberte aspoň uživatele nebo skupinu',
 'july' => 'Červenec',
 'june' => 'Červen',
+'keep' => '',
 'keep_doc_status' => 'Zachovat stav dokumentu',
 'keywords' => 'Klíčová slova',
 'keyword_exists' => 'Klíčové slovo už existuje',
@@ -599,6 +614,8 @@ URL: [url]',
 'password_already_used' => 'Heslo již použité',
 'password_expiration' => 'Vypršení platnosti hesla',
 'password_expiration_text' => 'Vašemu heslu vypšela platnost. Zvolte nové, než budete pokračovat v práci.',
+'password_expired' => '',
+'password_expires_in_days' => '',
 'password_forgotten' => 'Zapomenuté heslo',
 'password_forgotten_email_body' => 'Uživateli Sportplex DMS,nnobdrželi jsme vaši žádost o změnu hesla.nnToto bude učiněno kliknutím na následující odkaz:
 
@@ -622,6 +639,7 @@ Pokud budete mít problém s přihlášením i po změně hesla, kontaktujte Adm
 'pt_BR' => 'Portugalština (BR)',
 'quota' => 'Kvóta',
 'quota_exceeded' => 'Vaše kvóta disku je překročena o [bytes].',
+'quota_is_disabled' => '',
 'quota_warning' => 'Vaše maximální využití disku je překročeno o [bajtů]. Prosím, odstraňte dokumenty nebo předchozí verze.',
 'refresh' => 'Obnovit',
 'rejected' => 'Odmítnuto',
@@ -661,6 +679,7 @@ URL: [url]',
 'reviewer_already_removed' => 'už byl odstraněn z procesu kontroly nebo poslal kontrolu',
 'review_deletion_email' => 'Žádost na revizi odstraněn',
 'review_group' => 'Skupina kontroly',
+'review_log' => '',
 'review_request_email' => 'Požadavek na kontrolu',
 'review_status' => 'Stav kontroly',
 'review_submit_email' => 'Předložit ke kontrole',

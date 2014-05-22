@@ -43,6 +43,7 @@ class SeedDMS_View_UsrMgr extends SeedDMS_Bootstrap_Style {
 		$enableuserimage = $this->params['enableuserimage'];
 		$undeluserids = $this->params['undeluserids'];
 		$workflowmode = $this->params['workflowmode'];
+		$quota = $this->params['quota'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -193,7 +194,14 @@ function showUser(selectObj) {
 		</tr>
 		<tr>
 			<td><?php printMLText("quota");?>:</td>
-			<td><input type="text" name="quota"></td>
+			<td><input type="text" name="quota">
+<?php
+	if($quota > 0)
+		echo $this->warningMsg(getMLText('current_quota', array('quota'=>SeedDMS_Core_File::format_filesize($quota))));
+	else
+		echo $this->warningMsg(getMLText('quota_is_disabled'));
+?>
+			</td>
 		</tr>
 		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
@@ -208,7 +216,11 @@ function showUser(selectObj) {
 
 		<tr>
 			<td><?php printMLText("user_image");?>:</td>
-			<td><input type="File" name="userfile"></td>
+			<td>
+<?php
+	$this->printFileChooser('userfile', false, 'image/jpeg');
+?>
+			</td>
 		</tr>
 
 <?php
@@ -370,7 +382,7 @@ function showUser(selectObj) {
 ?>
 		<tr>
 			<td><?php printMLText("password_expiration");?>:</td>
-			<td><select name="pwdexpiration"><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option></select> <?php echo $currUser->getPwdExpiration(); ?></td>
+			<td><select name="pwdexpiration"><option value=""><?php printMLText("keep");?></option><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option></select> <?php echo $currUser->getPwdExpiration(); ?></td>
 		</tr>
 <?php
 	}
@@ -407,7 +419,14 @@ function showUser(selectObj) {
 		</tr>
 		<tr>
 			<td><?php printMLText("quota");?>:</td>
-			<td><input type="text" name="quota" value="<?php print $currUser->getQuota(); ?>"></td>
+			<td><input type="text" name="quota" value="<?php print $currUser->getQuota(); ?>">
+<?php
+	if($quota > 0)
+		echo $this->warningMsg(getMLText('current_quota', array('quota'=>SeedDMS_Core_File::format_filesize($quota))));
+	else
+		echo $this->warningMsg(getMLText('quota_is_disabled'));
+?>
+			</td>
 		</tr>
 		<tr>
 			<td><?php printMLText("is_hidden");?>:</td>
@@ -433,7 +452,11 @@ function showUser(selectObj) {
 		</tr>
 		<tr>
 			<td><?php printMLText("new_user_image");?>:</td>
-			<td><input type="file" name="userfile" accept="image/jpeg"></td>
+			<td>
+<?php
+	$this->printFileChooser('userfile', false, "image/jpeg");
+?>
+			</td>
 		</tr>
 
 <?php

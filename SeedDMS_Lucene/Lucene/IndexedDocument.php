@@ -44,7 +44,7 @@ class SeedDMS_Lucene_IndexedDocument extends Zend_Search_Lucene_Document {
 		$this->addField(Zend_Search_Lucene_Field::Keyword('document_id', $document->getID()));
 		if($version) {
 			$this->addField(Zend_Search_Lucene_Field::Keyword('mimetype', $version->getMimeType()));
-			$this->addField(Zend_Search_Lucene_Field::Keyword('origfilename', $version->getOriginalFileName()));
+			$this->addField(Zend_Search_Lucene_Field::Keyword('origfilename', $version->getOriginalFileName(), 'utf-8'));
 			if(!$nocontent)
 				$this->addField(Zend_Search_Lucene_Field::UnIndexed('created', $version->getDate()));
 			if($attributes = $version->getAttributes()) {

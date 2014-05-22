@@ -1,4 +1,19 @@
 --------------------------------------------------------------------------------
+                     Changes in version 4.3.9
+--------------------------------------------------------------------------------
+- fix another encoding error when creating/updating full text index (Bug #83)
+- renew time limit during indexing documents
+- new file selection input when uploading files
+- top navigation uses full width of screen (Bug #157)
+- replace dskspace() with platform independend version (Bug #156)
+- much better handling of quotas
+- add list of users in admin menu
+- delete inactive sessions after configured cookie lifetime or 1 week if
+  cookie lifetime is set to 0
+- add more information on user list page
+- admins can edit their account details even if 'self edit' is turned off
+
+--------------------------------------------------------------------------------
                      Changes in version 4.3.8
 --------------------------------------------------------------------------------
 - fix error in xml dump (Bug #114)

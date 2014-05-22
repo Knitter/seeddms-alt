@@ -162,7 +162,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	function globalBanner() { /* {{{ */
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
-		echo "  <div class=\"container\">\n";
+		echo "  <div class=\"container-fluid\">\n";
 		echo "   <a class=\"brand\" href=\"../out/out.ViewFolder.php?folderid=".$this->params['rootfolderid']."\">".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS")."</a>\n";
 		echo "  </div>\n";
 		echo " </div>\n";
@@ -197,7 +197,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 	function globalNavigation($folder=null) { /* {{{ */
 		echo "<div class=\"navbar navbar-inverse navbar-fixed-top\">\n";
 		echo " <div class=\"navbar-inner\">\n";
-		echo "  <div class=\"container\">\n";
+		echo "  <div class=\"container-fluid\">\n";
 		echo "   <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".nav-col1\">\n";
 		echo "     <span class=\"icon-bar\"></span>\n";
 		echo "     <span class=\"icon-bar\"></span>\n";
@@ -433,7 +433,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "<div class=\"nav-collapse col2\">\n";
 		echo "<ul class=\"nav\">\n";
 
-		if (!$this->params['disableselfedit']) echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
+		if ($this->params['user']->isAdmin() || !$this->params['disableselfedit'])
+			echo "<li id=\"first\"><a href=\"../out/out.EditUserData.php\">".getMLText("edit_user_details")."</a></li>\n";
 		
 		if (!$this->params['user']->isAdmin()) 
 			echo "<li><a href=\"../out/out.UserDefaultKeywords.php\">".getMLText("edit_default_keywords")."</a></li>\n";
@@ -478,6 +479,7 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		echo "     <ul class=\"dropdown-menu\" role=\"menu\">\n";
 		echo "      <li><a href=\"../out/out.UsrMgr.php\">".getMLText("user_management")."</a></li>\n";
 		echo "      <li><a href=\"../out/out.GroupMgr.php\">".getMLText("group_management")."</a></li>\n";
+		echo "      <li><a href=\"../out/out.UserList.php\">".getMLText("user_list")."</a></li>\n";
 		echo "     </ul>\n";
 		echo "    </li>\n";
 		echo "   </ul>\n";
@@ -749,6 +751,21 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 		else {
 			return $this->imgpath.$icons["default"];
 		}
+	} /* }}} */
+
+	function printFileChooser($varname='userfile', $multiple=false, $accept='') { /* {{{ */
+?>
+	<div id="upload-files">
+		<div id="upload-file">
+			<div class="input-append">
+				<input type="text" class="form-control" readonly>
+				<span class="btn btn-default btn-file">
+					<?php printMLText("browse");?>&hellip; <input type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+				</span>
+			</div>
+		</div>
+	</div>
+<?php
 	} /* }}} */
 
 	function printDateChooser($defDate = -1, $varName) { /* {{{ */
