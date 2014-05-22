@@ -131,7 +131,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 
 		$status = $latestContent->getStatus();
 		$reviewStatus = $latestContent->getReviewStatus();
-		$approvalStatus = $latestContent->getApprovalStatus(10);
+		$approvalStatus = $latestContent->getApprovalStatus();
 ?>
 
 <div class="row-fluid">
@@ -591,6 +591,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 			<div class="row-fluid">
 				<div class="span6">
+				<legend><?php printMLText('approval_log'); ?></legend>
 				<table class="table condensed">
 					<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>/<?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
 <?php
@@ -640,6 +641,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 					</table>
 				</div>
 				<div class="span6">
+				<legend><?php printMLText('review_log'); ?></legend>
 				<table class="table condensed">
 					<tr><th><?php printMLText('name'); ?></th><th><?php printMLText('last_update'); ?>/<?php printMLText('comment'); ?></th><th><?php printMLText('status'); ?></th></tr>
 <?php
