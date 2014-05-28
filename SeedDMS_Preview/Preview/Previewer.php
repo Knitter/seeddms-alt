@@ -109,7 +109,7 @@ class SeedDMS_Preview_Previewer {
 					$cmd = 'convert -resize '.$width.'x '.$file.'[0] '.$target;
 					break;
 				case "application/x-compressed-tar":
-					$cmd = 'tar tzvf '.$file.' | convert -resize '.$width.'x text:-[0] '.$target;
+					$cmd = 'tar tzvf '.$file.' | convert -density 100 -resize '.$width.'x text:-[0] '.$target;
 					break;
 			}
 			if($cmd) {
