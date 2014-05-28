@@ -149,18 +149,25 @@ function getLockedDocuments() { /* {{{ */
 
 function getFolder($id) { /* {{{ */
 	global $app, $dms, $userobj;
-	$folder = $dms->getFolder($id);
+	if(is_numeric($id))
+		$folder = $dms->getFolder($id);
+	else {
+		$parentid = $app->request()->get('parentid');
+		$folder = $dms->getFolderByName($id, $parentid);
+	}
 	if($folder) {
 		if($folder->getAccessMode($userobj) >= M_READ) {
 			$app->response()->header('Content-Type', 'application/json');
 			$data = array(
-				'id'=>$id,
+				'id'=>$folder->getID(),
 				'name'=>$folder->getName()
 			);
 			echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$data));
 		} else {
 			$app->response()->status(404);
 		}
+	} else {
+		$app->response()->status(404);
 	}
 } /* }}} */
 
