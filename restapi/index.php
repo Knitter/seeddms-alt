@@ -149,7 +149,8 @@ function getLockedDocuments() { /* {{{ */
 
 function getFolder($id) { /* {{{ */
 	global $app, $dms, $userobj;
-	if(is_numeric($id))
+	$forcebyname = $app->request()->get('forcebyname');
+	if(is_numeric($id) && empty($forcebyname))
 		$folder = $dms->getFolder($id);
 	else {
 		$parentid = $app->request()->get('parentid');
