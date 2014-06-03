@@ -410,8 +410,10 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 					echo "<li><a href=\"../op/op.UnlockDocument". $docid ."\">".getMLText("unlock_document")."</a></li>";
 					echo "<li><a href=\"../out/out.EditDocument". $docid ."\">".getMLText("edit_document_props")."</a></li>";
 					echo "<li><a href=\"../out/out.MoveDocument". $docid ."\">".getMLText("move_document")."</a></li>";
-					echo "<li><a href=\"../out/out.SetExpires". $docid ."\">".getMLText("expires")."</a></li>";
 				}
+			}
+			if($this->params['accessobject']->maySetExpires()) {
+				echo "<li><a href=\"../out/out.SetExpires". $docid ."\">".getMLText("expires")."</a></li>";
 			}
 		}
 		if ($accessMode == M_ALL) {
