@@ -16,6 +16,7 @@ img.mimeicon {
 	text-decoration: none;
 	color: #333;
 	padding: 2px;
+	cursor: pointer;
 }
 
 #admin-tools i {
