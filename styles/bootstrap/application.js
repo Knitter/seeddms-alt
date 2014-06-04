@@ -117,6 +117,41 @@ $(document).ready( function() {
 		}
 	});
 
+	$('body').on('click', 'button.removedocument', function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
+		id = attr_rel;
+		$.get('../op/op.Ajax.php',
+			{ command: 'deletedocument', id: id, formtoken: attr_formtoken },
+			function(data) {
+//				console.log(data);
+				if(data.success) {
+					$('#table-row-document-'+id).hide('slow');
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+	});
+
 	$('a.addtoclipboard').click(function(ev){
 		ev.preventDefault();
 		attr_rel = $(ev.currentTarget).attr('rel');
@@ -126,18 +161,21 @@ $(document).ready( function() {
 		$.get('../op/op.Ajax.php',
 			{ command: 'addtoclipboard', type: type, id: id },
 			function(data) {
-				console.log(data);
-				$('#menu-clipboard ul').remove();
-				$(data).appendTo('#menu-clipboard');
-				noty({
-					text: attr_msg,
-					type: 'success',
-					dismissQueue: true,
-					layout: 'topRight',
-					theme: 'defaultTheme',
-					timeout: 1500,
-				});
-			}
+				if(data.success) {
+					console.log(data);
+					$('#menu-clipboard ul').remove();
+					$(data).appendTo('#menu-clipboard');
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				}
+			},
+			'json'
 		);
 	});
 
@@ -146,19 +184,23 @@ $(document).ready( function() {
 		attr_source = $(ev.currentTarget).attr('source');
 		attr_dest = $(ev.currentTarget).attr('dest');
 		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
 		$.get('../op/op.Ajax.php',
-			{ command: 'movefolder', folderid: attr_source, targetfolderid: attr_dest },
+			{ command: 'movefolder', folderid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
-				console.log(data);
-				noty({
-					text: data.msg,
-					type: data.success ? 'success' : 'error',
-					dismissQueue: true,
-					layout: 'topRight',
-					theme: 'defaultTheme',
-					timeout: 1500,
-				});
-			}
+				if(data.success) {
+					console.log(data);
+					noty({
+						text: data.msg,
+						type: data.success ? 'success' : 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				}
+			},
+			'json'
 		);
 	});
 
@@ -167,19 +209,23 @@ $(document).ready( function() {
 		attr_source = $(ev.currentTarget).attr('source');
 		attr_dest = $(ev.currentTarget).attr('dest');
 		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
 		$.get('../op/op.Ajax.php',
-			{ command: 'movedocument', docid: attr_source, targetfolderid: attr_dest },
+			{ command: 'movedocument', docid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
-				console.log(data);
-				noty({
-					text: data.msg,
-					type: data.success ? 'success' : 'error',
-					dismissQueue: true,
-					layout: 'topRight',
-					theme: 'defaultTheme',
-					timeout: 1500,
-				});
-			}
+				if(data.success) {
+					console.log(data);
+					noty({
+						text: data.msg,
+						type: data.success ? 'success' : 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				}
+			},
+			'json'
 		);
 	});
 
