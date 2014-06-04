@@ -77,7 +77,6 @@ $text = array(
 'approval_request_email_body' => '',
 'approval_request_email_subject' => '',
 'approval_status' => 'Estat d\'aprovació',
-'approval_submit_email' => '',
 'approval_submit_email_body' => '',
 'approval_submit_email_subject' => 'Aprovació enviada',
 'approval_summary' => 'Resum d\'aprovació',

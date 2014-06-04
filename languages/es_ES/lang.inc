@@ -86,7 +86,6 @@ Usuario: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Petición de aprobación',
 'approval_status' => 'Estado de aprobación',
-'approval_submit_email' => '',
 'approval_submit_email_body' => 'Aprobación del documento
 Documento: [name]
 Versión: [version]

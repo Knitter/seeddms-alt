@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (540), flaviove (627), lfcristofoli (334)
+//    Translators: Admin (545), flaviove (627), lfcristofoli (334)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -86,7 +86,6 @@ Usuário: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Solicitação de aprovação',
 'approval_status' => 'Estado da Aprovação',
-'approval_submit_email' => 'Aprovação enviada',
 'approval_submit_email_body' => 'Aprovação do documento
 Documento: [name]
 Versão: [version]
@@ -135,7 +134,7 @@ URL: [url]',
 'attr_no_regex_match' => 'O valor do atributo não corresponde à expressão regular',
 'at_least_n_users_of_group' => 'Pelo menos [nuber_of_users] usuários de [group]',
 'august' => 'Agosto',
-'authentication' => '',
+'authentication' => 'Autenticação',
 'automatic_status_update' => 'Mudança de status automático',
 'back' => 'Voltar',
 'backup_list' => 'Lista de backup existente',
@@ -143,7 +142,7 @@ URL: [url]',
 'backup_remove' => 'Excluir backup',
 'backup_tools' => 'Backup',
 'between' => 'entre',
-'browse' => '',
+'browse' => 'Procurar',
 'calendar' => 'Calendário',
 'calendar_week' => 'Calendário semanal',
 'cancel' => 'Cancelar',
@@ -227,7 +226,7 @@ URL: [url]',
 'details_version' => 'Info. da versão: [version]',
 'de_DE' => 'Alemão',
 'disclaimer' => 'Esta é uma área classificada. O acesso é permitido apenas ao pessoal autorizado. Qualquer violação será processado de acordo com leis internacionais.',
-'discspace' => '',
+'discspace' => 'Espaço em Disco',
 'document' => 'Documento',
 'documents' => 'Documentos',
 'documents_in_process' => 'Documentos em Processo',
@@ -476,7 +475,7 @@ URL: [url]',
 'keywords' => 'Palavras-chaves',
 'keyword_exists' => 'Palavra-chave já existe',
 'language' => 'Linguagem',
-'lastaccess' => '',
+'lastaccess' => 'Último acesso',
 'last_update' => 'Última versão',
 'legend' => 'Legenda',
 'linked_documents' => 'Documentos relacionados',
@@ -642,7 +641,7 @@ Se você ainda tiver problemas para fazer o login, por favor, contate o administ
 'pt_BR' => 'Português (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Sua quota de disco foi ultrapassada em [bytes].',
-'quota_is_disabled' => '',
+'quota_is_disabled' => 'Suporte a cota está desativado nas configurações. A definição de cota do usuário não terá efeito até que seja habilitada novamente.',
 'quota_warning' => 'Seu uso máximo do disco foi ultrapassado em [bytes]. Por favor, remova documentos ou versões anteriores.',
 'refresh' => 'Atualizar',
 'rejected' => 'Rejeitado',

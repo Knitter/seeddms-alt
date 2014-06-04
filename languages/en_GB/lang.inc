@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1027), netixw (14)
+//    Translators: Admin (1028), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -76,7 +76,7 @@ URL: [url]',
 'apply' => 'Apply',
 'approval_deletion_email' => 'Approval request deleted',
 'approval_group' => 'Approval Group',
-'approval_log' => '',
+'approval_log' => 'Approval Log',
 'approval_request_email' => 'Approval request',
 'approval_request_email_body' => 'Approval request
 Document: [name]
@@ -86,7 +86,6 @@ User: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Approval request',
 'approval_status' => 'Approval Status',
-'approval_submit_email' => '',
 'approval_submit_email_body' => 'Approval of document
 Document: [name]
 Version: [version]

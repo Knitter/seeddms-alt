@@ -86,7 +86,6 @@ Użytkownik: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Prośba o zatwierdzenie',
 'approval_status' => 'Status akceptacji',
-'approval_submit_email' => '',
 'approval_submit_email_body' => '',
 'approval_submit_email_subject' => 'Prośba o akceptację',
 'approval_summary' => 'Podsumowanie akceptacji',

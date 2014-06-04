@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1061)
+//    Translators: Admin (1064)
 
 $text = array(
 'accept' => 'وافق',
@@ -76,7 +76,7 @@ URL: [url]',
 'apply' => 'تطبيق',
 'approval_deletion_email' => 'طلب الموافقة تم الغاؤه',
 'approval_group' => 'مجموعة الموافقة',
-'approval_log' => '',
+'approval_log' => 'ﺲﺠﻟ ﺎﻠﻣﻭﺎﻔﻗﺓ',
 'approval_request_email' => 'طلب الموافقة',
 'approval_request_email_body' => 'طلب الموافقة
 Document: [name]
@@ -86,7 +86,6 @@ User: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - طلب الموافقة',
 'approval_status' => 'حالة الموافقة',
-'approval_submit_email' => 'تم ارسال الموافقة',
 'approval_submit_email_body' => '',
 'approval_submit_email_subject' => 'تم ارسال الموافقة',
 'approval_summary' => 'ملخص الموافقة',
@@ -159,7 +158,7 @@ URL: [url]',
 'change_password' => 'تغيير كلمة السر',
 'change_password_message' => 'تم تغيير كلمة السر.',
 'change_status' => 'تغيير الحالة',
-'charts' => '',
+'charts' => 'ﺝﺩﺍﻮﻟ',
 'chart_docsaccumulated_title' => '',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
@@ -670,7 +669,7 @@ URL: [url]',
 'reviewer_already_removed' => 'بالفعل تم ازالته من عملية المراجعة او تم تقديمه للمراجعة',
 'review_deletion_email' => 'طلب المراجعة تم مسحه',
 'review_group' => 'مجموعة المراجعة',
-'review_log' => '',
+'review_log' => 'ﺲﺠﻟ ﺎﻠﻣﺭﺎﺠﻋﺓ',
 'review_request_email' => 'طلب مراجعة',
 'review_status' => 'حالة المراجعة:',
 'review_submit_email' => 'تم تقديم المراجعة',

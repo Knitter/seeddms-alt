@@ -14,6 +14,8 @@
 - admins can edit their account details even if 'self edit' is turned off
 - consistent handling of document locking
 - op/op.ViewOnline.php returns the latest version if version<1
+- delete document with ajax call when clicking on cross-icon in document list
+- critical ajax calls require form token to be set
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.8

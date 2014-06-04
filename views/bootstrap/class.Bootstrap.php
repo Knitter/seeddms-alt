@@ -29,7 +29,18 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		$this->params = $params;
 		$this->imgpath = '../views/'.$theme.'/images/';
 		$this->extraheader = '';
+		$this->footerjs = array();
 	}
+
+	/**
+	 * Add javascript to an internal array which is output at the
+	 * end of the page within a document.ready() function.
+	 *
+	 * @param string $script javascript to be added
+	 */
+	function addFooterJS($script) { /* {{{ */
+		$this->footerjs[] = $script;
+	} /* }}} */
 
 	function htmlStartPage($title="", $bodyClass="") { /* {{{ */
 		echo "<!DOCTYPE html>\n";
@@ -101,6 +112,18 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 			echo '<script src="../styles/'.$this->theme.'/datepicker/js/locales/bootstrap-datepicker.'.$lang.'.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/chosen/js/chosen.jquery.min.js"></script>'."\n";
 		echo '<script src="../styles/'.$this->theme.'/application.js"></script>'."\n";
+		if($this->footerjs) {
+			echo "<script type=\"text/javascript\">
+//<![CDATA[
+$(document).ready(function () {
+";
+			foreach($this->footerjs as $script) {
+				echo $script."\n";
+			}
+			echo "});
+//]]>
+</script>";
+		}
 		echo "</body>\n</html>\n";
 	} /* }}} */
 
@@ -1297,6 +1320,20 @@ $(function() {
 			print "</table>";
 		}
 		echo "</div>\n";
+	} /* }}} */
+
+	function printDeleteDocumentButton($document, $msg){ /* {{{ */
+		$docid = $document->getID();
+?>
+     <a id="delete-btn-<?php echo $docid; ?>" rel="<?php echo $docid; ?>" msg="<?php printMLText($msg); ?>"><i class="icon-remove"></i></a>
+<?php
+					$this->addFooterJS("
+$('#delete-btn-".$docid."').popover({
+	title: '".getMLText("rm_document")."',
+	placement: 'left',
+	html: true,
+	content: '<div>".getMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName())))."</div><!-- div><form action=\"../op/op.RemoveDocument.php\" name=\"form1\" method=\"post\"><input type=\"hidden\" name=\"documentid\" value=\"".$docid."\">".createHiddenFieldWithKey('removedocument')."<button type=\"submit\" class=\"btn btn-danger\" style=\"float: right; margin:10px 0px;\"><i class=\"icon-remove\"></i> ".getMLText("rm_document")."</button></form --><button class=\"btn btn-danger removedocument\" style=\"float: right; margin:10px 0px;\" rel=\"".$docid."\" msg=\"".getMLText($msg)."\" formtoken=\"".createFormKey('removedocument')."\" id=\"confirm-delete-btn-".$docid."\"><i class=\"icon-remove\"></i> ".getMLText("rm_document")."</button></div>'});
+");
 	} /* }}} */
 
 	/**

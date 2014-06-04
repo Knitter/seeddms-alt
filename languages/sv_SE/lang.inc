@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1074), tmichelfelder (106)
+//    Translators: Admin (1075), tmichelfelder (106)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -86,7 +86,6 @@ Användare: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Begäran om godkännande',
 'approval_status' => 'Status för godkännande',
-'approval_submit_email' => '',
 'approval_submit_email_body' => '',
 'approval_submit_email_subject' => 'Skicka godkännande',
 'approval_summary' => 'Sammanfattning av godkännande',
@@ -136,7 +135,7 @@ URL: [url]',
 'backup_remove' => 'Ta bort backup-fil',
 'backup_tools' => 'Backup-verktyg',
 'between' => 'mellan',
-'browse' => '',
+'browse' => 'Bläddra',
 'calendar' => 'Kalender',
 'calendar_week' => 'Kalender vecka',
 'cancel' => 'Avbryt',

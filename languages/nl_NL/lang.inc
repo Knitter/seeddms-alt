@@ -86,7 +86,6 @@ User: [username]
 URL: [url]',
 'approval_request_email_subject' => '[Naam site]: [naam] - Toestemming vereist',
 'approval_status' => 'Goedkeuring Status',
-'approval_submit_email' => '',
 'approval_submit_email_body' => '',
 'approval_submit_email_subject' => 'Uitgevoerde [Goedkeuring]',
 'approval_summary' => 'Goedkeuring Samenvatting',
