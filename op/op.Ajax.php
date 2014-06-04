@@ -215,33 +215,66 @@ switch($command) {
 
 	case 'movedocument': /* {{{ */
 		if($user) {
-			$mdocument = $dms->getDocument($_REQUEST['docid']);
-			if($mdocument) {
-				if ($mdocument->getAccessMode($user) >= M_READ) {
-					if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
-						if($folder->getAccessMode($user) >= M_READWRITE) {
-							if($mdocument->setFolder($folder)) {
-								header('Content-Type', 'application/json');
-								echo json_encode(array('success'=>true, 'message'=>'Document moved', 'data'=>''));
+			if(!checkFormKey('movedocument', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$mdocument = $dms->getDocument($_REQUEST['docid']);
+				if($mdocument) {
+					if ($mdocument->getAccessMode($user) >= M_READ) {
+						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
+							if($folder->getAccessMode($user) >= M_READWRITE) {
+								if($mdocument->setFolder($folder)) {
+									header('Content-Type', 'application/json');
+									echo json_encode(array('success'=>true, 'message'=>'Document moved', 'data'=>''));
+								} else {
+									header('Content-Type', 'application/json');
+									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+								}
 							} else {
 								header('Content-Type', 'application/json');
-								echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+								echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
 							}
 						} else {
 							header('Content-Type', 'application/json');
-							echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
 						}
 					} else {
 						header('Content-Type', 'application/json');
-						echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
+						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 					}
 				} else {
 					header('Content-Type', 'application/json');
-					echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
 				}
-			} else {
+			}
+		}
+		break; /* }}} */
+
+	case 'deletedocument': /* {{{ */
+		if($user) {
+			if(!checkFormKey('removedocument', 'GET')) {
 				header('Content-Type', 'application/json');
-				echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$document = $dms->getDocument($_REQUEST['id']);
+				if($document) {
+					if ($document->getAccessMode($user) >= M_READWRITE) {
+						if($document->remove()) {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''.$_REQUEST['formtoken']));
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'Error removing document', 'data'=>''));
+						}
+					} else {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
+				}
 			}
 		}
 		break; /* }}} */
