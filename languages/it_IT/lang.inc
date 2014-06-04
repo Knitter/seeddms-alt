@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (694)
+//    Translators: Admin (700)
 
 $text = array(
 'accept' => 'Accetta',
@@ -54,7 +54,7 @@ $text = array(
 'add_multiple_documents' => 'Aggiungi documenti multipli',
 'add_multiple_files' => 'Aggiungi documenti multipli (il nome del file verrà usato come nome del documento)',
 'add_subfolder' => 'Aggiungi sottocartella',
-'add_to_clipboard' => '',
+'add_to_clipboard' => 'Aggiungi agli appunti',
 'add_user' => 'Aggiungi nuovo utente',
 'add_user_to_group' => 'Aggiungi utente al gruppo',
 'add_workflow' => '',
@@ -349,7 +349,7 @@ $text = array(
 'include_documents' => 'Includi documenti',
 'include_subdirectories' => 'Includi sottocartelle',
 'index_converters' => 'Indice di conversione documenti',
-'index_folder' => '',
+'index_folder' => 'Indice cartelle',
 'individuals' => 'Singoli',
 'inherited' => 'ereditato',
 'inherits_access_copy_msg' => 'Modifica la lista degli accessi ereditati',
@@ -403,6 +403,7 @@ $text = array(
 'keywords' => 'Parole chiave',
 'keyword_exists' => 'Parola chiave già presente',
 'language' => 'Lingua',
+'lastaccess' => '',
 'last_update' => 'Ultima modifica',
 'legend' => '',
 'linked_documents' => 'Documenti collegati',
@@ -433,7 +434,7 @@ $text = array(
 'may' => 'Maggio',
 'mimetype' => '',
 'minutes' => '',
-'misc' => '',
+'misc' => 'Varie',
 'missing_checksum' => '',
 'missing_filesize' => '',
 'missing_transition_user_group' => '',
@@ -564,7 +565,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'reviewer_already_removed' => 'già rimosso dal processo di revisione oppure già inserito come revisione',
 'review_deletion_email' => 'Cancellata la richiesta di revisione',
 'review_group' => 'Gruppo revisori',
-'review_log' => '',
+'review_log' => 'Rivedi log',
 'review_request_email' => 'Richiesta di revisione',
 'review_status' => 'Stato revisioni',
 'review_submit_email' => 'Sottoposta revisione',
@@ -615,7 +616,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'search_time' => 'Tempo trascorso: [time] sec.',
 'seconds' => '',
 'selection' => 'Selezione',
-'select_category' => '',
+'select_category' => 'Clicca per selezionare la categoria',
 'select_groups' => '',
 'select_grp_approvers' => '',
 'select_grp_reviewers' => '',
@@ -871,7 +872,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'sign_out_user' => '',
 'sk_SK' => 'Slovacco',
 'space_used_on_data_folder' => 'Spazio utilizzato dai dati',
-'splash_added_to_clipboard' => '',
+'splash_added_to_clipboard' => 'Aggiunto agli appunti',
 'splash_add_attribute' => '',
 'splash_add_group' => '',
 'splash_add_group_member' => '',

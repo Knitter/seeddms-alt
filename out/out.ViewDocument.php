@@ -47,6 +47,9 @@ if (!is_object($document)) {
 	$view->exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
+/* Create object for checking access to certain operations */
+$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
+
 $folder = $document->getFolder();
 
 if ($document->getAccessMode($user) < M_READ) {
@@ -60,9 +63,6 @@ if ($document->getAccessMode($user) < M_READ) {
 if ($document->verifyLastestContentExpriry()){
 	header("Location:../out/out.ViewDocument.php?documentid=".$document->getID());
 }
-
-/* Create object for checking access to certain operations */
-$accessop = new SeedDMS_AccessOperation($document, $user, $settings);
 
 if($view) {
 	$view->setParam('dms', $dms);

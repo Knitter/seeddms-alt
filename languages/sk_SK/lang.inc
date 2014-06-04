@@ -403,6 +403,7 @@ $text = array(
 'keywords' => 'Kľúčové slová',
 'keyword_exists' => 'Kľúčové slovo už existuje',
 'language' => 'Jazyk',
+'lastaccess' => '',
 'last_update' => 'Posledná aktualizácia',
 'legend' => '',
 'linked_documents' => 'Súvisiace dokumenty',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (883), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (889), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -159,14 +159,14 @@ URL: [url]',
 'change_password' => 'Changer de mot de passe',
 'change_password_message' => 'Votre mot de passe a été changé.',
 'change_status' => 'Modifier le statut',
-'charts' => '',
-'chart_docsaccumulated_title' => '',
-'chart_docspercategory_title' => '',
+'charts' => 'Graphiques',
+'chart_docsaccumulated_title' => 'Nombre de documents',
+'chart_docspercategory_title' => 'Documents par catégorie',
 'chart_docspermimetype_title' => '',
-'chart_docspermonth_title' => '',
-'chart_docsperstatus_title' => '',
+'chart_docspermonth_title' => 'Nouveau document par mois',
+'chart_docsperstatus_title' => 'Documents par status',
 'chart_docsperuser_title' => '',
-'chart_selection' => '',
+'chart_selection' => 'Sélectionnez un graphique',
 'chart_sizeperuser_title' => '',
 'choose_attrdef' => 'Choisissez une définition d\'attribut',
 'choose_category' => 'SVP choisir',
@@ -470,6 +470,7 @@ URL: [url]',
 'keywords' => 'Mots-clés',
 'keyword_exists' => 'Mot-clé déjà existant',
 'language' => 'Langue',
+'lastaccess' => '',
 'last_update' => 'Dernière modification',
 'legend' => 'Légende',
 'linked_documents' => 'Documents liés',

@@ -403,6 +403,7 @@ $text = array(
 'keywords' => '',
 'keyword_exists' => '',
 'language' => '',
+'lastaccess' => '',
 'last_update' => '',
 'legend' => '',
 'linked_documents' => '',

@@ -49,12 +49,18 @@ if ($document->getAccessMode($user) < M_ALL) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("access_denied"));
 }
 
+if($document->isLocked()) {
+	$lockingUser = $document->getLockingUser();
+	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user) != M_ALL)) {
+		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName()))));
+	}
+}
+
 if($settings->_enableFullSearch) {
 	if(!empty($settings->_luceneClassDir))
 		require_once($settings->_luceneClassDir.'/Lucene.php');
 	else
 		require_once('SeedDMS/Lucene.php');
-
 	$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
 } else {
 	$index = null;

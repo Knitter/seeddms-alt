@@ -53,6 +53,13 @@ if (($document->getAccessMode($user) < M_READWRITE) || ($targetFolder->getAccess
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
+if($document->isLocked()) {
+	$lockingUser = $document->getLockingUser();
+	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user) != M_ALL)) {
+		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName()))));
+	}
+}
+
 if ($targetid != $oldFolder->getID()) {
 	if ($document->setFolder($targetFolder)) {
 		// Send notification to subscribers.
