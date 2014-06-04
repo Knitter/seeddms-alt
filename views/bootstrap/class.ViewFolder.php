@@ -193,7 +193,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$documents = SeedDMS_Core_DMS::filterAccess($documents, $user, M_READ);
 
 		if ((count($subFolders) > 0)||(count($documents) > 0)){
-			print "<table class=\"table\">";
+			print "<table id=\"viewfolder-table\" class=\"table\">";
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";	
 			print "<th><a href=\"../out/out.ViewFolder.php?folderid=". $folderid .($orderby=="n"?"&orderby=s":"&orderby=n")."\">".getMLText("name")."</a></th>\n";
@@ -301,7 +301,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				$links = $document->getDocumentLinks();
 				$links = SeedDMS_Core_DMS::filterDocumentLinks($user, $links);
 
-				print "<tr>";
+				print "<tr id=\"table-row-document-".$docID."\">";
 
 				if (file_exists($dms->contentDir . $latestContent->getPath())) {
 					print "<td><a rel=\"document_".$docID."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docID."&version=".$version."\">";
@@ -341,9 +341,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print "<td>";
 				print "<div class=\"list-action\">";
 				if($document->getAccessMode($user) >= M_ALL) {
-?>
-     <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $docID; ?>"><i class="icon-remove"></i></a>
-<?php
+					$this->printDeleteDocumentButton($document, 'splash_rm_document');
 				} else {
 ?>
      <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
