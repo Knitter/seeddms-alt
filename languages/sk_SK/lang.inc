@@ -77,7 +77,6 @@ $text = array(
 'approval_request_email_body' => '',
 'approval_request_email_subject' => '',
 'approval_status' => 'Stav schválenia',
-'approval_submit_email' => '',
 'approval_submit_email_body' => '',
 'approval_submit_email_subject' => 'Poslane schvalenie',
 'approval_summary' => 'Zhrnutie schválenia',

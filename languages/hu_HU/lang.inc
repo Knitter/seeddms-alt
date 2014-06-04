@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (537), ribaz (978)
+//    Translators: Admin (538), ribaz (978)
 
 $text = array(
 'accept' => 'Elfogad',
@@ -86,7 +86,6 @@ Felhasználó: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Jóváhagyási kérelem',
 'approval_status' => 'Jóváhagyási állapot',
-'approval_submit_email' => '',
 'approval_submit_email_body' => '',
 'approval_submit_email_subject' => 'Beküldött jóváhagyás',
 'approval_summary' => 'Jóváhagyási összesítő',
@@ -416,7 +415,7 @@ URL: [url]',
 'include_documents' => 'Tartalmazó dokumentumok',
 'include_subdirectories' => 'Tartalmazó alkönyvtárak',
 'index_converters' => 'Index dokumentum konverzió',
-'index_folder' => '',
+'index_folder' => 'Mappa indexelése',
 'individuals' => 'Egyedek',
 'inherited' => 'örökölt',
 'inherits_access_copy_msg' => 'Örökített hozzáférési lista másolása',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (508), fengjohn (5)
+//    Translators: Admin (511), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -81,7 +81,6 @@ URL: [url]',
 'approval_request_email_body' => '',
 'approval_request_email_subject' => '',
 'approval_status' => '审核状态',
-'approval_submit_email' => '',
 'approval_submit_email_body' => '',
 'approval_submit_email_subject' => '提交审核',
 'approval_summary' => '审核汇总',
@@ -281,7 +280,7 @@ URL: [url]',
 'email_footer' => '您可以用‘我的账户’选项来改变您的e-mail设置',
 'email_header' => '这是来自于DMS(文档管理系统)的自动发送消息',
 'email_not_given' => '',
-'empty_folder_list' => '',
+'empty_folder_list' => '没有文件或子目录',
 'empty_notify_list' => '没有条目',
 'en_GB' => '英语',
 'equal_transition_states' => '',
@@ -353,7 +352,7 @@ URL: [url]',
 'include_documents' => '包含文档',
 'include_subdirectories' => '包含子目录',
 'index_converters' => '索引文件转换',
-'index_folder' => '',
+'index_folder' => '索引目录',
 'individuals' => '个人',
 'inherited' => '继承',
 'inherits_access_copy_msg' => '复制继承访问权限列表',
@@ -414,7 +413,7 @@ URL: [url]',
 'linked_files' => '附件',
 'link_alt_updatedocument' => '超过20M大文件，请选择<a href="%s">上传大文件</a>.',
 'local_file' => '本地文件',
-'locked_by' => '',
+'locked_by' => '锁定人',
 'lock_document' => '锁定',
 'lock_message' => '此文档已被 <a href="mailto:[email]">[username]</a>锁定. 只有授权用户才能解锁.',
 'lock_status' => '锁定状态',

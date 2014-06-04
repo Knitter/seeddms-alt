@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1887)
+//    Translators: Admin (1888)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -76,7 +76,7 @@ URL: [url]',
 'apply' => 'Anwenden',
 'approval_deletion_email' => 'Genehmigungsaufforderung gelöscht',
 'approval_group' => 'Berechtigungsgruppe',
-'approval_log' => '',
+'approval_log' => 'Freigabeprotokoll',
 'approval_request_email' => 'Aufforderung zur Genehmigung',
 'approval_request_email_body' => 'Aufforderung zur Genehmigung
 Dokument: [name]
@@ -86,7 +86,6 @@ Benutzer: [username]
 URL: [url]',
 'approval_request_email_subject' => '[sitename]: [name] - Aufforderung zur Genehmigung',
 'approval_status' => 'Freigabestatus',
-'approval_submit_email' => '',
 'approval_submit_email_body' => 'Genehmigung erteilen
 Dokument: [name]
 Version: [version]
