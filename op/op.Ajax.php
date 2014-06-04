@@ -182,33 +182,38 @@ switch($command) {
 
 	case 'movefolder': /* {{{ */
 		if($user) {
-			$mfolder = $dms->getFolder($_REQUEST['folderid']);
-			if($mfolder) {
-				if ($mfolder->getAccessMode($user) >= M_READ) {
-					if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
-						if($folder->getAccessMode($user) >= M_READWRITE) {
-							if($mfolder->setParent($folder)) {
-								header('Content-Type', 'application/json');
-								echo json_encode(array('success'=>true, 'message'=>'Folder moved', 'data'=>''));
+			if(!checkFormKey('movefolder', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$mfolder = $dms->getFolder($_REQUEST['folderid']);
+				if($mfolder) {
+					if ($mfolder->getAccessMode($user) >= M_READ) {
+						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
+							if($folder->getAccessMode($user) >= M_READWRITE) {
+								if($mfolder->setParent($folder)) {
+									header('Content-Type', 'application/json');
+									echo json_encode(array('success'=>true, 'message'=>'Folder moved', 'data'=>''));
+								} else {
+									header('Content-Type', 'application/json');
+									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+								}
 							} else {
 								header('Content-Type', 'application/json');
-								echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+								echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
 							}
 						} else {
 							header('Content-Type', 'application/json');
-							echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
 						}
 					} else {
 						header('Content-Type', 'application/json');
-						echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
+						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 					}
 				} else {
 					header('Content-Type', 'application/json');
-					echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
 				}
-			} else {
-				header('Content-Type', 'application/json');
-				echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
 			}
 		}
 		break; /* }}} */
