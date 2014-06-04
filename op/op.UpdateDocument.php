@@ -48,6 +48,14 @@ if($settings->_quota > 0) {
 	}
 }
 
+if ($document->isLocked()) {
+	$lockingUser = $document->getLockingUser();
+	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user) != M_ALL)) {
+		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_update_cause_locked"));
+	}
+	else $document->setLocked(false);
+}
+
 if(isset($_POST["comment"]))
 	$comment  = $_POST["comment"];
 else
