@@ -112,6 +112,8 @@ if (!$document->remove()) {
 			$notifier->toGroup($user, $grp, $subject, $message, $params);
 		}
 	}
+
+	$session->setSplashMsg(array('type'=>'success', 'msg'=>getMLText('splash_rm_document')));
 }
 
 add_log_line("?documentid=".$documentid);
