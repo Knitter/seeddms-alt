@@ -339,7 +339,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					else
 						$comment = htmlspecialchars($document->getComment());
 					if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-					print "<tr>";
+					print "<tr id=\"table-row-document-".$document->getID()."\">";
 					//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
 					if (in_array(2, $searchin)) {
 						$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
@@ -393,9 +393,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					print "<td>";
 					print "<div class=\"list-action\">";
 					if($document->getAccessMode($user) >= M_ALL) {
-?>
-     <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $document->getID(); ?>"><i class="icon-remove"></i></a>
-<?php
+						$this->printDeleteDocumentButton($document, 'splash_rm_document');
 					} else {
 ?>
      <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
