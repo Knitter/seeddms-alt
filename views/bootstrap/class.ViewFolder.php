@@ -135,12 +135,12 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 					$this->contentHeading("<a href=\"../out/out.ViewFolder.php?folderid=". $folderid."&showtree=1\"><i class=\"icon-plus-sign\"></i></a>", true);
 				}
 			}
+
+			echo $this->callHook('leftContent');
+
+			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
+			echo "</div>\n";
 		}
-
-		echo $this->callHook('leftContent');
-
-		if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
-		echo "</div>\n";
 		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
 		$txt = $this->callHook('folderInfo', $folder);
