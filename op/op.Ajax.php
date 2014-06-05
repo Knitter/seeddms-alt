@@ -168,14 +168,31 @@ switch($command) {
 						$session->addToClipboard($dms->getDocument($_GET['id']));
 						break;
 				}
-			}
-			$view = UI::factory($theme, '', array('dms'=>$dms, 'user'=>$user));
-			if($view) {
-				$view->setParam('refferer', '');
-				$content = $view->menuClipboard($session->getClipboard());
 				header('Content-Type: application/json');
-				echo json_encode($content);
+				echo json_encode(array('success'=>true));
 			} else {
+				header('Content-Type: application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('error')));
+			}
+		}
+		break; /* }}} */
+
+	case 'removefromclipboard': /* {{{ */
+		if($user) {
+			if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET['type'])) {
+				switch($_GET['type']) {
+					case "folder":
+						$session->removeFromClipboard($dms->getFolder($_GET['id']));
+						break;
+					case "document":
+						$session->removeFromClipboard($dms->getDocument($_GET['id']));
+						break;
+				}
+				header('Content-Type: application/json');
+				echo json_encode(array('success'=>true));
+			} else {
+				header('Content-Type: application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('error')));
 			}
 		}
 		break; /* }}} */
@@ -328,5 +345,26 @@ switch($command) {
 		}
 		break; /* }}} */
 
+	case 'view': /* {{{ */
+		require_once("SeedDMS/Preview.php");
+		$view = UI::factory($theme, '', array('dms'=>$dms, 'user'=>$user));
+		if($view) {
+			$view->setParam('refferer', '');
+			$view->setParam('cachedir', $settings->_cacheDir);
+		}
+		$viewname = $_REQUEST["view"];
+		switch($viewname) {
+			case 'menuclipboard':
+				$content = $view->menuClipboard($session->getClipboard());
+				break;
+			case 'mainclipboard':
+				$content = $view->mainClipboard($session->getClipboard());
+				break;
+			default:
+				$content = '';
+		}
+		echo $content;
+
+		break; /* }}} */
 }
 ?>
