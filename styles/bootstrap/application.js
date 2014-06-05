@@ -208,10 +208,10 @@ $(document).ready( function() {
 		$.get('../op/op.Ajax.php',
 			{ command: 'addtoclipboard', type: type, id: id },
 			function(data) {
+				console.log(data);
 				if(data.success) {
-					console.log(data);
-					$('#menu-clipboard ul').remove();
-					$(data).appendTo('#menu-clipboard');
+					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
 					noty({
 						text: attr_msg,
 						type: 'success',
@@ -219,6 +219,51 @@ $(document).ready( function() {
 						layout: 'topRight',
 						theme: 'defaultTheme',
 						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+	});
+
+	$('body').on('click', 'a.removefromclipboard', function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		type = attr_rel.substring(0, 1) == 'F' ? 'folder' : 'document';
+		id = attr_rel.substring(1);
+		$.get('../op/op.Ajax.php',
+			{ command: 'removefromclipboard', type: type, id: id },
+			function(data) {
+				console.log(data);
+				if(data.success) {
+					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
 					});
 				}
 			},
