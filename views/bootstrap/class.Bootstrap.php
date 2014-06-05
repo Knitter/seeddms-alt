@@ -1266,13 +1266,13 @@ $(function() {
 							if (file_exists($dms->contentDir . $latestContent->getPath())) {
 								print "<td><a rel=\"document_".$docid."\" draggable=\"true\" ondragstart=\"onDragStartDocument(event);\" href=\"../op/op.Download.php?documentid=".$docid."&version=".$version."\">";
 								if($previewer->hasPreview($latestContent)) {
-									print "<img class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									print "<img draggable=\"false\" class=\"mimeicon\" width=\"40\"src=\"../op/op.Preview.php?documentid=".$document->getID()."&version=".$latestContent->getVersion()."&width=40\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								} else {
-									print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
+									print "<img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\">";
 								}
 								print "</a></td>";
 							} else
-								print "<td><img class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
+								print "<td><img draggable=\"false\" class=\"mimeicon\" src=\"".$this->getMimeIcon($latestContent->getFileType())."\" title=\"".htmlspecialchars($latestContent->getMimeType())."\"></td>";
 							
 							print "<td><a href=\"out.ViewDocument.php?documentid=".$docid."&showtree=".showtree()."\">" . htmlspecialchars($document->getName()) . "</a>";
 							if($comment) {
@@ -1292,17 +1292,56 @@ $(function() {
 		echo "</div>\n";
 	} /* }}} */
 
+	/**
+	 * Print button with link for deleting a document
+	 *
+	 * This button is used in document listings (e.g. on the ViewFolder page)
+	 * for deleting a document. In seeddms version < 4.3.9 this was just a
+	 * link to the out/out.RemoveDocument.php page which asks for confirmation
+	 * an than calls op/op.RemoveDocument.php. Starting with version 4.3.9
+	 * the button just opens a small popup asking for confirmation and than
+	 * calls the ajax command 'deletedocument'. The ajax call is called
+	 * in the click function of 'button.removedocument'. That button needs
+	 * to have two attributes: 'rel' for the id of the document, and 'msg'
+	 * for the message shown by notify if the document could be deleted.
+	 *
+	 * @param object $document document to be deleted
+	 * @param string $msg message shown in case of successful deletion
+	 */
 	function printDeleteDocumentButton($document, $msg){ /* {{{ */
 		$docid = $document->getID();
 ?>
-     <a id="delete-btn-<?php echo $docid; ?>" rel="<?php echo $docid; ?>" msg="<?php printMLText($msg); ?>"><i class="icon-remove"></i></a>
+     <a id="delete-document-btn-<?php echo $docid; ?>" rel="<?php echo $docid; ?>" msg="<?php printMLText($msg); ?>"><i class="icon-remove"></i></a>
 <?php
 					$this->addFooterJS("
-$('#delete-btn-".$docid."').popover({
+$('#delete-document-btn-".$docid."').popover({
 	title: '".getMLText("rm_document")."',
 	placement: 'left',
 	html: true,
-	content: '<div>".getMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName())))."</div><!-- div><form action=\"../op/op.RemoveDocument.php\" name=\"form1\" method=\"post\"><input type=\"hidden\" name=\"documentid\" value=\"".$docid."\">".createHiddenFieldWithKey('removedocument')."<button type=\"submit\" class=\"btn btn-danger\" style=\"float: right; margin:10px 0px;\"><i class=\"icon-remove\"></i> ".getMLText("rm_document")."</button></form --><button class=\"btn btn-danger removedocument\" style=\"float: right; margin:10px 0px;\" rel=\"".$docid."\" msg=\"".getMLText($msg)."\" formtoken=\"".createFormKey('removedocument')."\" id=\"confirm-delete-btn-".$docid."\"><i class=\"icon-remove\"></i> ".getMLText("rm_document")."</button></div>'});
+	content: '<div>".getMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName(), ENT_QUOTES)))."</div><div><button class=\"btn btn-danger removedocument\" style=\"float: right; margin:10px 0px;\" rel=\"".$docid."\" msg=\"".getMLText($msg)."\" formtoken=\"".createFormKey('removedocument')."\" id=\"confirm-delete-document-btn-".$docid."\"><i class=\"icon-remove\"></i> ".getMLText("rm_document")."</button> <button type=\"button\" class=\"btn\" style=\"float: right; margin:10px 10px;\" onclick=\"$(&quot;#delete-document-btn-".$docid."&quot;).popover(&quot;hide&quot;);\">".getMLText('cancel')."</button></div>'});
+");
+	} /* }}} */
+
+	/**
+	 * Print button with link for deleting a folder
+	 *
+	 * This button works like document delete button
+	 * {@link SeedDMS_Bootstrap_Style::printDeleteDocumentButton()}
+	 *
+	 * @param object $folder folder to be deleted
+	 * @param string $msg message shown in case of successful deletion
+	 */
+	function printDeleteFolderButton($folder, $msg){ /* {{{ */
+		$folderid = $folder->getID();
+?>
+     <a id="delete-folder-btn-<?php echo $folderid; ?>" rel="<?php echo $folderid; ?>" msg="<?php printMLText($msg); ?>"><i class="icon-remove"></i></a>
+<?php
+					$this->addFooterJS("
+$('#delete-folder-btn-".$folderid."').popover({
+	title: '".getMLText("rm_folder")."',
+	placement: 'left',
+	html: true,
+	content: '<div>".getMLText("confirm_rm_folder", array ("foldername" => htmlspecialchars($folder->getName(), ENT_QUOTES)))."</div><div><button class=\"btn btn-danger removefolder\" style=\"float: right; margin:10px 0px;\" rel=\"".$folderid."\" msg=\"".getMLText($msg)."\" formtoken=\"".createFormKey('removefolder')."\" id=\"confirm-delete-folder-btn-".$folderid."\"><i class=\"icon-remove\"></i> ".getMLText("rm_folder")."</button> <button type=\"button\" class=\"btn\" style=\"float: right; margin:10px 10px;\" onclick=\"$(&quot;#delete-folder-btn-".$folderid."&quot;).popover(&quot;hide&quot;);\">".getMLText('cancel')."</button></div>'});
 ");
 	} /* }}} */
 
