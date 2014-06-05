@@ -256,6 +256,34 @@ switch($command) {
 		}
 		break; /* }}} */
 
+	case 'deletefolder': /* {{{ */
+		if($user) {
+			if(!checkFormKey('removefolder', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$folder = $dms->getFolder($_REQUEST['id']);
+				if($folder) {
+					if ($folder->getAccessMode($user) >= M_READWRITE) {
+						if($folder->remove()) {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''.$_REQUEST['formtoken']));
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'Error removing folder', 'data'=>''));
+						}
+					} else {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+				}
+			}
+		}
+		break; /* }}} */
+
 	case 'deletedocument': /* {{{ */
 		if($user) {
 			if(!checkFormKey('removedocument', 'GET')) {
