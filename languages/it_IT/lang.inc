@@ -889,6 +889,8 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'splash_moved_clipboard' => '',
 'splash_removed_from_clipboard' => '',
 'splash_rm_attribute' => '',
+'splash_rm_document' => '',
+'splash_rm_folder' => '',
 'splash_rm_group' => '',
 'splash_rm_group_member' => '',
 'splash_rm_user' => '',

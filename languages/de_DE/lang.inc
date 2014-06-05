@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1888)
+//    Translators: Admin (1890)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -1028,6 +1028,8 @@ URL: [url]',
 'splash_moved_clipboard' => 'Inhalt der Zwischenablage in aktuellen Ordner verschoben',
 'splash_removed_from_clipboard' => 'Von der Zwischenablage entfernt',
 'splash_rm_attribute' => 'Attribut gelöscht',
+'splash_rm_document' => 'Dokument gelöscht',
+'splash_rm_folder' => 'Ordner gelöscht',
 'splash_rm_group' => 'Gruppe gelöscht',
 'splash_rm_group_member' => 'Mitglied der Gruppe gelöscht',
 'splash_rm_user' => 'Benutzer gelöscht',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1028), netixw (14)
+//    Translators: Admin (1030), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -1028,6 +1028,8 @@ URL: [url]',
 'splash_moved_clipboard' => 'Clipboard moved into current folder',
 'splash_removed_from_clipboard' => 'Removed from clipboard',
 'splash_rm_attribute' => 'Attribute removed',
+'splash_rm_document' => 'Document removed',
+'splash_rm_folder' => 'Folder deleted',
 'splash_rm_group' => 'Group removed',
 'splash_rm_group_member' => 'Member of group removed',
 'splash_rm_user' => 'User removed',
