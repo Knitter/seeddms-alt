@@ -1,5 +1,14 @@
 
 $(document).ready( function() {
+	/* close popovers when clicking somewhere except in the popover or the
+	 * remove icon
+	 */
+	$('html').on('click', function(e) {
+		if (typeof $(e.target).data('original-title') == 'undefined' && !$(e.target).parents().is('.popover.in') && !$(e.target).is('.icon-remove')) {
+			$('[data-original-title]').popover('hide');
+		}
+	});
+
 	$('body').on('hidden', '.modal', function () {
 		$(this).removeData('modal');
 	});
@@ -15,6 +24,9 @@ $(document).ready( function() {
 	$(".chzn-select").chosen();
 	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
 
+	/* change the color and length of the bar graph showing the password
+	 * strength on each change to the passwod field.
+	 */
 	$(".pwd").passStrength({
 		url: "../op/op.Ajax.php",
 		onChange: function(data, target) {
@@ -131,6 +143,41 @@ $(document).ready( function() {
 //				console.log(data);
 				if(data.success) {
 					$('#table-row-document-'+id).hide('slow');
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+	});
+
+	$('body').on('click', 'button.removefolder', function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
+		id = attr_rel;
+		$.get('../op/op.Ajax.php',
+			{ command: 'deletefolder', id: id, formtoken: attr_formtoken },
+			function(data) {
+//				console.log(data);
+				if(data.success) {
+					$('#table-row-folder-'+id).hide('slow');
 					noty({
 						text: attr_msg,
 						type: 'success',

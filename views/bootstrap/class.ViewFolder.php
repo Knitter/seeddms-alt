@@ -244,7 +244,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				$subdoc = $subFolder->getDocuments();
 				$subdoc = SeedDMS_Core_DMS::filterAccess($subdoc, $user, M_READ);
 				
-				print "<tr rel=\"folder_".$subFolder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
+				print "<tr id=\"table-row-folder-".$subFolder->getID()."\" rel=\"folder_".$subFolder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
 			//	print "<td><img src=\"images/folder_closed.gif\" width=18 height=18 border=0></td>";
 				print "<td><a rel=\"folder_".$subFolder->getID()."\" draggable=\"true\" ondragstart=\"onDragStartFolder(event);\" href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\"><img draggable=\"false\" src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>\n";
 				print "<td><a href=\"out.ViewFolder.php?folderid=".$subFolder->getID()."&showtree=".$showtree."\">" . htmlspecialchars($subFolder->getName()) . "</a>";
@@ -278,9 +278,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				print "<td>";
 				print "<div class=\"list-action\">";
 				if($subFolder->getAccessMode($user) >= M_ALL) {
-	?>
-			 <a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $subFolder->getID(); ?>"><i class="icon-remove"></i></a>
-	<?php
+					$this->printDeleteFolderButton($subFolder, 'splash_rm_folder');
 				} else {
 	?>
 			 <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
