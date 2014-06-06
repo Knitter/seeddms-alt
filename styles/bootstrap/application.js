@@ -201,7 +201,7 @@ $(document).ready( function() {
 		);
 	});
 
-	$('a.addtoclipboard').click(function(ev){
+	$('body').on('click', 'a.addtoclipboard', function(ev){
 		ev.preventDefault();
 		attr_rel = $(ev.currentTarget).attr('rel');
 		attr_msg = $(ev.currentTarget).attr('msg');
@@ -467,7 +467,35 @@ function onAddClipboard(ev) {
 	source_type = ev.dataTransfer.getData("type");
 	source_id = ev.dataTransfer.getData("id");
 	if(source_type == 'document' || source_type == 'folder') {
-		url = "../op/op.AddToClipboard.php?id="+source_id+"&type="+source_type;
-		document.location = url;
+		$.get('../op/op.Ajax.php',
+			{ command: 'addtoclipboard', type: source_type, id: source_id },
+			function(data) {
+				console.log(data);
+				if(data.success) {
+					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+		//url = "../op/op.AddToClipboard.php?id="+source_id+"&type="+source_type;
+		//document.location = url;
 	}
 }
