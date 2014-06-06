@@ -284,7 +284,7 @@ switch($command) {
 					if ($folder->getAccessMode($user) >= M_READWRITE) {
 						if($folder->remove()) {
 							header('Content-Type', 'application/json');
-							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''.$_REQUEST['formtoken']));
+							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 						} else {
 							header('Content-Type', 'application/json');
 							echo json_encode(array('success'=>false, 'message'=>'Error removing folder', 'data'=>''));
@@ -312,7 +312,7 @@ switch($command) {
 					if ($document->getAccessMode($user) >= M_READWRITE) {
 						if($document->remove()) {
 							header('Content-Type', 'application/json');
-							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''.$_REQUEST['formtoken']));
+							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
 						} else {
 							header('Content-Type', 'application/json');
 							echo json_encode(array('success'=>false, 'message'=>'Error removing document', 'data'=>''));
@@ -325,6 +325,45 @@ switch($command) {
 					header('Content-Type', 'application/json');
 					echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
 				}
+			}
+		}
+		break; /* }}} */
+
+	case 'tooglelockdocument': /* {{{ */
+		if($user) {
+			$document = $dms->getDocument($_REQUEST['id']);
+			if($document) {
+				if ($document->getAccessMode($user) >= M_READWRITE) {
+					if ($document->isLocked()) {
+						$lockingUser = $document->getLockingUser();
+						if (($lockingUser->getID() == $user->getID()) || ($document->getAccessMode($user) == M_ALL)) {
+							if (!$document->setLocked(false)) {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>false, 'message'=>'Error unlocking document', 'data'=>''));
+							} else {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							}
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+						}
+					} else {
+						if (!$document->setLocked($user)) {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'Error locking document', 'data'=>''));
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+						}
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+				}
+			} else {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
 			}
 		}
 		break; /* }}} */
@@ -352,6 +391,7 @@ switch($command) {
 			$view->setParam('refferer', '');
 			$view->setParam('cachedir', $settings->_cacheDir);
 		}
+		$content = '';
 		$viewname = $_REQUEST["view"];
 		switch($viewname) {
 			case 'menuclipboard':
@@ -359,6 +399,17 @@ switch($command) {
 				break;
 			case 'mainclipboard':
 				$content = $view->mainClipboard($session->getClipboard());
+				break;
+			case 'documentlistrow':
+				$document = $dms->getDocument($_REQUEST['id']);
+				if($document) {
+					if ($document->getAccessMode($user) >= M_READ) {
+						$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
+						$view->setParam('previewWidthList', $settings->_previewWidthList);
+						$view->setParam('showtree', showtree());
+						$content = $view->documentListRow($document, $previewer, true);
+					}
+				}
 				break;
 			default:
 				$content = '';
