@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (671), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (673), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -1020,8 +1020,8 @@ URL: [url]',
 'splash_moved_clipboard' => 'Klembord verplaatst naar de huidige map',
 'splash_removed_from_clipboard' => 'Verwijderd van het klembord',
 'splash_rm_attribute' => 'Attribuut verwijderd',
-'splash_rm_document' => '',
-'splash_rm_folder' => '',
+'splash_rm_document' => 'Document verwijderd',
+'splash_rm_folder' => 'Map verwijderd',
 'splash_rm_group' => 'Groep verwijderd',
 'splash_rm_group_member' => 'Lid van de groep verwijderd',
 'splash_rm_user' => 'Gebruiker verwijderd',
