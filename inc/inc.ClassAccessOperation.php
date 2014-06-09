@@ -153,6 +153,12 @@ class SeedDMS_AccessOperation {
 	 */
 	function mayEditComment() { /* {{{ */
 		if(get_class($this->obj) == 'SeedDMS_Core_Document') {
+			if($this->obj->isLocked()) {
+				$lockingUser = $this->obj->getLockingUser();
+				if (($lockingUser->getID() != $this->user->getID()) && ($this->obj->getAccessMode($this->user) != M_ALL)) {
+					return false;
+				}
+			}
 			$latestContent = $this->obj->getLatestContent();
 			$status = $latestContent->getStatus();
 			if ((($this->settings->_enableVersionModification && ($this->obj->getAccessMode($this->user) >= M_READWRITE)) || $this->user->isAdmin()) && ($status["status"]!=S_OBSOLETE)) {

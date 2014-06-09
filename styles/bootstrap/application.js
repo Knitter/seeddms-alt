@@ -1,5 +1,14 @@
 
 $(document).ready( function() {
+	/* close popovers when clicking somewhere except in the popover or the
+	 * remove icon
+	 */
+	$('html').on('click', function(e) {
+		if (typeof $(e.target).data('original-title') == 'undefined' && !$(e.target).parents().is('.popover.in') && !$(e.target).is('.icon-remove')) {
+			$('[data-original-title]').popover('hide');
+		}
+	});
+
 	$('body').on('hidden', '.modal', function () {
 		$(this).removeData('modal');
 	});
@@ -15,6 +24,9 @@ $(document).ready( function() {
 	$(".chzn-select").chosen();
 	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
 
+	/* change the color and length of the bar graph showing the password
+	 * strength on each change to the passwod field.
+	 */
 	$(".pwd").passStrength({
 		url: "../op/op.Ajax.php",
 		onChange: function(data, target) {
@@ -119,7 +131,77 @@ $(document).ready( function() {
 		}
 	});
 
-	$('a.addtoclipboard').click(function(ev){
+	$('body').on('click', 'button.removedocument', function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
+		id = attr_rel;
+		$.get('../op/op.Ajax.php',
+			{ command: 'deletedocument', id: id, formtoken: attr_formtoken },
+			function(data) {
+//				console.log(data);
+				if(data.success) {
+					$('#table-row-document-'+id).hide('slow');
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+	});
+
+	$('body').on('click', 'button.removefolder', function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
+		id = attr_rel;
+		$.get('../op/op.Ajax.php',
+			{ command: 'deletefolder', id: id, formtoken: attr_formtoken },
+			function(data) {
+//				console.log(data);
+				if(data.success) {
+					$('#table-row-folder-'+id).hide('slow');
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+	});
+
+	$('body').on('click', 'a.addtoclipboard', function(ev){
 		ev.preventDefault();
 		attr_rel = $(ev.currentTarget).attr('rel');
 		attr_msg = $(ev.currentTarget).attr('msg');
@@ -129,17 +211,99 @@ $(document).ready( function() {
 			{ command: 'addtoclipboard', type: type, id: id },
 			function(data) {
 				console.log(data);
-				$('#menu-clipboard ul').remove();
-				$(data).appendTo('#menu-clipboard');
-				noty({
-					text: attr_msg,
-					type: 'success',
-					dismissQueue: true,
-					layout: 'topRight',
-					theme: 'defaultTheme',
-					timeout: 1500,
-				});
-			}
+				if(data.success) {
+					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+	});
+
+	$('body').on('click', 'a.removefromclipboard', function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		type = attr_rel.substring(0, 1) == 'F' ? 'folder' : 'document';
+		id = attr_rel.substring(1);
+		$.get('../op/op.Ajax.php',
+			{ command: 'removefromclipboard', type: type, id: id },
+			function(data) {
+				console.log(data);
+				if(data.success) {
+					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+	});
+
+	$('body').on('click', 'a.lock-document-btn', function(ev){
+		ev.preventDefault();
+		attr_rel = $(ev.currentTarget).attr('rel');
+		attr_msg = $(ev.currentTarget).attr('msg');
+		id = attr_rel;
+		$.get('../op/op.Ajax.php',
+			{ command: 'tooglelockdocument', id: id },
+			function(data) {
+				console.log(data);
+				if(data.success) {
+					$("#table-row-document-"+id).html('Loading').load('../op/op.Ajax.php?command=view&view=documentlistrow&id='+id)
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
 		);
 	});
 	$('a.sendtestmail').click(function(ev){
@@ -167,19 +331,23 @@ $(document).ready( function() {
 		attr_source = $(ev.currentTarget).attr('source');
 		attr_dest = $(ev.currentTarget).attr('dest');
 		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
 		$.get('../op/op.Ajax.php',
-			{ command: 'movefolder', folderid: attr_source, targetfolderid: attr_dest },
+			{ command: 'movefolder', folderid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
-				console.log(data);
-				noty({
-					text: data.msg,
-					type: data.success ? 'success' : 'error',
-					dismissQueue: true,
-					layout: 'topRight',
-					theme: 'defaultTheme',
-					timeout: 1500,
-				});
-			}
+				if(data.success) {
+					console.log(data);
+					noty({
+						text: data.msg,
+						type: data.success ? 'success' : 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				}
+			},
+			'json'
 		);
 	});
 
@@ -188,19 +356,23 @@ $(document).ready( function() {
 		attr_source = $(ev.currentTarget).attr('source');
 		attr_dest = $(ev.currentTarget).attr('dest');
 		attr_msg = $(ev.currentTarget).attr('msg');
+		attr_formtoken = $(ev.currentTarget).attr('formtoken');
 		$.get('../op/op.Ajax.php',
-			{ command: 'movedocument', docid: attr_source, targetfolderid: attr_dest },
+			{ command: 'movedocument', docid: attr_source, targetfolderid: attr_dest, formtoken: attr_formtoken },
 			function(data) {
-				console.log(data);
-				noty({
-					text: data.msg,
-					type: data.success ? 'success' : 'error',
-					dismissQueue: true,
-					layout: 'topRight',
-					theme: 'defaultTheme',
-					timeout: 1500,
-				});
-			}
+				if(data.success) {
+					console.log(data);
+					noty({
+						text: data.msg,
+						type: data.success ? 'success' : 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				}
+			},
+			'json'
 		);
 	});
 
@@ -233,6 +405,26 @@ $(document).ready( function() {
 	});
 	
 });
+
+$(document).ready( function() {
+	$(document).on('change', '.btn-file :file', function() {
+		var input = $(this),
+		numFiles = input.get(0).files ? input.get(0).files.length : 1,
+		label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+		input.trigger('fileselect', [numFiles, label]);
+	});
+
+	$('#upload-files').on('fileselect', '.btn-file :file', function(event, numFiles, label) {
+		var input = $(this).parents('.input-append').find(':text'),
+		log = numFiles > 1 ? numFiles + ' files selected' : label;
+	
+		if( input.length ) {
+			input.val(log);
+		} else {
+			if( log ) alert(log);
+		}
+	});
+});		
 
 function allowDrop(ev) {
 	ev.preventDefault();
@@ -275,7 +467,35 @@ function onAddClipboard(ev) {
 	source_type = ev.dataTransfer.getData("type");
 	source_id = ev.dataTransfer.getData("id");
 	if(source_type == 'document' || source_type == 'folder') {
-		url = "../op/op.AddToClipboard.php?id="+source_id+"&type="+source_type;
-		document.location = url;
+		$.get('../op/op.Ajax.php',
+			{ command: 'addtoclipboard', type: source_type, id: source_id },
+			function(data) {
+				console.log(data);
+				if(data.success) {
+					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
+					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
+					noty({
+						text: attr_msg,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			},
+			'json'
+		);
+		//url = "../op/op.AddToClipboard.php?id="+source_id+"&type="+source_type;
+		//document.location = url;
 	}
 }

@@ -130,7 +130,11 @@ function checkForm()
 	</tr>
 	<tr>
 		<td><?php printMLText("new_user_image");?>:</td>
-		<td><input type="file" name="userfile" accept="image/jpeg" size="30"></td>
+		<td>
+<?php
+	$this->printFileChooser('userfile', false, "image/jpeg");
+?>
+		</td>
 	</tr>
 <?php
 		}

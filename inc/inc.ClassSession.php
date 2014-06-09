@@ -73,9 +73,6 @@ class SeedDMS_Session {
 			return false;
 		if (count($resArr) == 0)
 			return false;
-		$queryStr = "UPDATE tblSessions SET lastAccess = " . time() . " WHERE id = " . $this->db->qstr($id);
-		if (!$this->db->getResult($queryStr))
-			return false;
 		$this->id = $id;
 		$this->data = array('userid'=>$resArr[0]['userID'], 'theme'=>$resArr[0]['theme'], 'lang'=>$resArr[0]['language'], 'id'=>$resArr[0]['id'], 'lastaccess'=>$resArr[0]['lastAccess'], 'su'=>$resArr[0]['su']);
 		if($resArr[0]['clipboard'])
@@ -114,6 +111,25 @@ class SeedDMS_Session {
 		$this->data['clipboard'] = array('type'=>'', 'msg'=>'');
 		$this->data['splashmsg'] = array();
 		return $id;
+	} /* }}} */
+
+	/**
+	 * Update last access time of session
+	 *
+	 * This function should be called, when the last access time of the
+	 * session must be updated. This should be done at least after login,
+	 * but can also be done at any other time. Sessions that are never
+	 * updated will be deleted when deleteByTime() is called and the session
+	 * life time has exceeded the cookie life time or 1 week.
+	 *
+	 * @param string $id id of session
+	 * @return boolean true if successful otherwise false
+	 */
+	function updateAccess($id) { /* {{{ */
+		$queryStr = "UPDATE tblSessions SET lastAccess = " . time() . " WHERE id = " . $this->db->qstr($id);
+		if (!$this->db->getResult($queryStr))
+			return false;
+		return true;
 	} /* }}} */
 
 	/**
@@ -361,5 +377,104 @@ class SeedDMS_Session {
 		return (array) $this->data['splashmsg'];
 	} /* }}} */
 
+	/**
+	 * Get timestamp of last access
+	 *
+	 * @return int last access time
+	 */
+	function getLastAccess() { /* {{{ */
+		return (int) $this->data['lastaccess'];
+	} /* }}} */
+
+}
+
+/**
+ * Class for managing sessions
+ *
+ * This class is for retrieving sessions.
+ *
+ * @category   DMS
+ * @package    SeedDMS
+ * @author     Uwe Steinmann <uwe@steinmann.cx>
+ * @copyright  2014 Uwe Steinmann
+ * @version    Release: @package_version@
+ */
+class SeedDMS_SessionMgr {
+	/**
+	 * @var object $db reference to database object. This must be an instance
+	 *      of {@link SeedDMS_Core_DatabaseAccess}.
+	 * @access protected
+	 */
+	protected $db;
+
+	/**
+	 * Create a new instance of the session manager
+	 *
+	 * @param object $db object to access the underlying database
+	 * @return object instance of SeedDMS_SessionMgr
+	 */
+	function __construct($db) { /* {{{ */
+		$this->db = $db;
+	} /* }}} */
+
+	/**
+	 * Create a new session and saving the given data into the database
+	 *
+	 * @param array $data data saved in session (the only fields supported
+	 *        are userid, theme, language, su)
+	 * @return string/boolean id of session of false in case of an error
+	 */
+	function create($data) { /* {{{ */
+		$id = "" . rand() . time() . rand() . "";
+		$id = md5($id);
+		$lastaccess = time();
+		$queryStr = "INSERT INTO tblSessions (id, userID, lastAccess, theme, language, su) ".
+		  "VALUES ('".$id."', ".$data['userid'].", ".$lastaccess.", '".$data['theme']."', '".$data['lang']."', 0)";
+		if (!$this->db->getResult($queryStr)) {
+			return false;
+		}
+
+		return $id;
+	} /* }}} */
+
+	/**
+	 * Get list of all active sessions
+	 *
+	 * @return array list of sessions
+	 */
+	function getAllSessions() { /* {{{ */
+		$queryStr = "SELECT * FROM tblSessions";
+		$resArr = $this->db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$sessions = array();
+		foreach($resArr as $rec) {
+			$session = new SeedDMS_Session($this->db);
+			$session->load($rec['id']);
+			$sessions[] = $session;
+		}
+		return $sessions;
+
+	} /* }}} */
+
+	/**
+	 * Get list of active sessions for a given user
+	 *
+	 * @return array list of sessions
+	 */
+	function getUserSessions($user) { /* {{{ */
+		$queryStr = "SELECT * FROM tblSessions WHERE userID=".$user->getID();
+		$resArr = $this->db->getResultArray($queryStr);
+		if (is_bool($resArr) && $resArr == false)
+			return false;
+		$sessions = array();
+		foreach($resArr as $rec) {
+			$session = new SeedDMS_Session($this->db);
+			$session->load($rec['id']);
+			$sessions[] = $session;
+		}
+		return $sessions;
+
+	} /* }}} */
 }
 ?>

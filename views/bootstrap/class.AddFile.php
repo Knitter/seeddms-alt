@@ -94,7 +94,11 @@ function checkForm()
 <table class="table-condensed">
 <tr>
 	<td><?php printMLText("local_file");?>:</td>
-	<td><input type="File" name="userfile" size="60"></td>
+	<td><!-- <input type="File" name="userfile" size="60"> -->
+<?php
+	$this->printFileChooser('userfile', false);
+?>
+	</td>
 </tr>
 <tr>
 	<td><?php printMLText("name");?>:</td>

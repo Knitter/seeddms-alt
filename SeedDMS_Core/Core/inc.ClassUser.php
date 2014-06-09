@@ -136,7 +136,7 @@ class SeedDMS_Core_User {
 	const role_admin = '1';
 	const role_guest = '2';
 
-	function SeedDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='', $loginFailures=0, $quota=0, $homeFolder=null) {
+	function SeedDMS_Core_User($id, $login, $pwd, $fullName, $email, $language, $theme, $comment, $role, $isHidden=0, $isDisabled=0, $pwdExpiration='0000-00-00 00:00:00', $loginFailures=0, $quota=0, $homeFolder=null) {
 		$this->_id = $id;
 		$this->_login = $login;
 		$this->_pwd = $pwd;
@@ -208,6 +208,8 @@ class SeedDMS_Core_User {
 	function setPwdExpiration($newPwdExpiration) { /* {{{ */
 		$db = $this->_dms->getDB();
 
+		if(trim($newPwdExpiration) == '')
+			$newPwdExpiration = '0000-00-00 00:00:00';
 		$queryStr = "UPDATE tblUsers SET pwdExpiration =".$db->qstr($newPwdExpiration)." WHERE id = " . $this->_id;
 		$res = $db->getResult($queryStr);
 		if (!$res)

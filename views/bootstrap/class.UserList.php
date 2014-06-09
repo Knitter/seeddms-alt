@@ -36,6 +36,8 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$allUsers = $this->params['allusers'];
 		$httproot = $this->params['httproot'];
+		$quota = $this->params['quota'];
+		$pwdexpiration = $this->params['pwdexpiration'];
 
 		$this->htmlStartPage(getMLText("admin_tools"));
 		$this->globalNavigation();
@@ -43,10 +45,12 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 		$this->pageNavigation("", "admin_tools");
 		$this->contentHeading(getMLText("user_list"));
 		$this->contentContainerStart();
+
+		$sessionmgr = new SeedDMS_SessionMgr($dms->getDB());
 ?>
 
 	<table class="table table-condensed">
-	  <tr><th></th><th><?php printMLText('name'); ?></th><th><?php printMLText('groups'); ?></th><th></th><th></th></tr>
+	  <tr><th></th><th><?php printMLText('name'); ?></th><th><?php printMLText('groups'); ?></th><th><?php printMLText('discspace'); ?></th><th><?php printMLText('authentication'); ?></th><th></th></tr>
 <?php
 		foreach ($allUsers as $currUser) {
 			echo "<tr>";
@@ -70,13 +74,52 @@ class SeedDMS_View_UserList extends SeedDMS_Bootstrap_Style {
 			}
 			echo "</td>";
 			echo "<td>";
-			if($currUser->getQuota() != 0)
-				echo SeedDMS_Core_File::format_filesize($currUser->getQuota())."<br />";
-			echo SeedDMS_Core_File::format_filesize($currUser->getUsedDiskSpace())."<br />";
+			echo SeedDMS_Core_File::format_filesize($currUser->getUsedDiskSpace());
+			if($quota) {
+				if($user->getQuota() > $currUser->getUsedDiskSpace()) {
+					$used = (int) ($currUser->getUsedDiskSpace()/$currUser->getQuota()*100.0+0.5);
+					$free = 100-$used;
+				} else {
+					$free = 0;
+					$used = 100;
+				}
+				echo " / ";
+				if($currUser->getQuota() != 0)
+					echo SeedDMS_Core_File::format_filesize($currUser->getQuota())."<br />";
+				else
+					echo SeedDMS_Core_File::format_filesize($quota)."<br />";
+?>
+		<div class="progress">
+			<div class="bar bar-danger" style="width: <?php echo $used; ?>%;"></div>
+		  <div class="bar bar-success" style="width: <?php echo $free; ?>%;"></div>
+		</div>
+<?php
+			}
 			echo "</td>";
 			echo "<td>";
+			if($pwdexpiration) {
+				$now = new DateTime();
+				$expdate = new DateTime($currUser->getPwdExpiration());
+				$diff = $now->diff($expdate);
+				if($expdate > $now) {
+					printf(getMLText('password_expires_in_days'), $diff->format('%a'));
+					echo " (".$expdate->format('Y-m-d H:i:sP').")";
+				} else {
+					printMLText("password_expired");
+				}
+			}
+			$sessions = $sessionmgr->getUserSessions($currUser);
+			if($sessions) {
+				foreach($sessions as $session) {
+					echo "<br />".getMLText('lastaccess').": ".getLongReadableDate($session->getLastAccess());
+				}
+			}
+			echo "</td>";
+			echo "<td>";
+			echo "<div class=\"list-action\">";
      	echo "<a href=\"../out/out.UsrMgr.php?userid=".$currUser->getID()."\"><i class=\"icon-edit\"></i></a> ";
      	echo "<a href=\"../out/out.RemoveUser.php?userid=".$currUser->getID()."\"><i class=\"icon-remove\"></i></a>";
+			echo "</div>";
 			echo "</td>";
 			echo "</tr>";
 		}

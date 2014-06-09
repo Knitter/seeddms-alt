@@ -343,7 +343,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 						else
 							$comment = htmlspecialchars($document->getComment());
 						if (strlen($comment) > 150) $comment = substr($comment, 0, 147) . "...";
-						print "<tr>";
+						print "<tr id=\"table-row-document-".$document->getID()."\">";
 						//print "<td><img src=\"../out/images/file.gif\" class=\"mimeicon\"></td>";
 						if (in_array(2, $searchin)) {
 							$docName = $this->markQuery(htmlspecialchars($document->getName()), "i");
@@ -397,9 +397,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 						print "<td>";
 						print "<div class=\"list-action\">";
 						if($document->getAccessMode($user) >= M_ALL) {
-	?>
-			 <a class_="btn btn-mini" href="../out/out.RemoveDocument.php?documentid=<?php echo $document->getID(); ?>"><i class="icon-remove"></i></a>
-	<?php
+							$this->printDeleteDocumentButton($document, 'splash_rm_document');
 						} else {
 	?>
 			 <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>
@@ -430,6 +428,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					} else {
 						$folderName = htmlspecialchars($folder->getName());
 					}
+					print "<tr id=\"table-row-folder-".$folder->getID()."\" rel=\"folder_".$folder->getID()."\" class=\"folder\" ondragover=\"allowDrop(event)\" ondrop=\"onDrop(event)\">";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\"><img src=\"".$this->imgpath."folder.png\" width=\"24\" height=\"24\" border=0></a></td>";
 					print "<td><a class=\"standardText\" href=\"../out/out.ViewFolder.php?folderid=".$folder->getID()."\">";
 					$path = $folder->getPath();
@@ -461,9 +460,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					print "<td>";
 					print "<div class=\"list-action\">";
 					if($folder->getAccessMode($user) >= M_ALL) {
-?>
-     <a class_="btn btn-mini" href="../out/out.RemoveFolder.php?folderid=<?php echo $folder->getID(); ?>"><i class="icon-remove"></i></a>
-<?php
+						$this->printDeleteFolderButton($folder, 'splash_rm_folder');
 					} else {
 ?>
      <span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>

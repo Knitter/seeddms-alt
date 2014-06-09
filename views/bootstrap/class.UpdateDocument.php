@@ -132,7 +132,11 @@ function checkForm()
 	
 		<tr>
 			<td><?php printMLText("local_file");?>:</td>
-			<td><input type="File" name="userfile" size="60"></td>
+			<td><!-- input type="File" name="userfile" size="60" -->
+<?php
+	$this->printFileChooser('userfile', false);
+?>
+			</td>
 		</tr>
 <?php if($dropfolderdir) { ?>
 		<tr>

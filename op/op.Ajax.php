@@ -36,6 +36,9 @@ if (isset($_COOKIE["mydms_session"])) {
 		exit;
 	}
 
+	/* Update last access time */
+	$session->updateAccess($dms_session);
+
 	/* Load user data */
 	$user = $dms->getUser($resArr["userID"]);
 	if (!is_object($user)) {
@@ -165,14 +168,31 @@ switch($command) {
 						$session->addToClipboard($dms->getDocument($_GET['id']));
 						break;
 				}
-			}
-			$view = UI::factory($theme, '', array('dms'=>$dms, 'user'=>$user));
-			if($view) {
-				$view->setParam('refferer', '');
-				$content = $view->menuClipboard($session->getClipboard());
 				header('Content-Type: application/json');
-				echo json_encode($content);
+				echo json_encode(array('success'=>true));
 			} else {
+				header('Content-Type: application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('error')));
+			}
+		}
+		break; /* }}} */
+
+	case 'removefromclipboard': /* {{{ */
+		if($user) {
+			if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET['type'])) {
+				switch($_GET['type']) {
+					case "folder":
+						$session->removeFromClipboard($dms->getFolder($_GET['id']));
+						break;
+					case "document":
+						$session->removeFromClipboard($dms->getDocument($_GET['id']));
+						break;
+				}
+				header('Content-Type: application/json');
+				echo json_encode(array('success'=>true));
+			} else {
+				header('Content-Type: application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('error')));
 			}
 		}
 		break; /* }}} */
@@ -198,58 +218,163 @@ switch($command) {
 
 	case 'movefolder': /* {{{ */
 		if($user) {
-			$mfolder = $dms->getFolder($_REQUEST['folderid']);
-			if($mfolder) {
-				if ($mfolder->getAccessMode($user) >= M_READ) {
-					if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
-						if($folder->getAccessMode($user) >= M_READWRITE) {
-							if($mfolder->setParent($folder)) {
-								header('Content-Type', 'application/json');
-								echo json_encode(array('success'=>true, 'message'=>'Folder moved', 'data'=>''));
+			if(!checkFormKey('movefolder', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$mfolder = $dms->getFolder($_REQUEST['folderid']);
+				if($mfolder) {
+					if ($mfolder->getAccessMode($user) >= M_READ) {
+						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
+							if($folder->getAccessMode($user) >= M_READWRITE) {
+								if($mfolder->setParent($folder)) {
+									header('Content-Type', 'application/json');
+									echo json_encode(array('success'=>true, 'message'=>'Folder moved', 'data'=>''));
+								} else {
+									header('Content-Type', 'application/json');
+									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+								}
 							} else {
 								header('Content-Type', 'application/json');
-								echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+								echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
 							}
 						} else {
 							header('Content-Type', 'application/json');
-							echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
 						}
 					} else {
 						header('Content-Type', 'application/json');
-						echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
+						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
 					}
 				} else {
 					header('Content-Type', 'application/json');
-					echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
 				}
-			} else {
-				header('Content-Type', 'application/json');
-				echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
 			}
 		}
 		break; /* }}} */
 
 	case 'movedocument': /* {{{ */
 		if($user) {
-			$mdocument = $dms->getDocument($_REQUEST['docid']);
-			if($mdocument) {
-				if ($mdocument->getAccessMode($user) >= M_READ) {
-					if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
-						if($folder->getAccessMode($user) >= M_READWRITE) {
-							if($mdocument->setFolder($folder)) {
-								header('Content-Type', 'application/json');
-								echo json_encode(array('success'=>true, 'message'=>'Document moved', 'data'=>''));
+			if(!checkFormKey('movedocument', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$mdocument = $dms->getDocument($_REQUEST['docid']);
+				if($mdocument) {
+					if ($mdocument->getAccessMode($user) >= M_READ) {
+						if($folder = $dms->getFolder($_REQUEST['targetfolderid'])) {
+							if($folder->getAccessMode($user) >= M_READWRITE) {
+								if($mdocument->setFolder($folder)) {
+									header('Content-Type', 'application/json');
+									echo json_encode(array('success'=>true, 'message'=>'Document moved', 'data'=>''));
+								} else {
+									header('Content-Type', 'application/json');
+									echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+								}
 							} else {
 								header('Content-Type', 'application/json');
-								echo json_encode(array('success'=>false, 'message'=>'Error moving folder', 'data'=>''));
+								echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
 							}
 						} else {
 							header('Content-Type', 'application/json');
-							echo json_encode(array('success'=>false, 'message'=>'No access on destination folder', 'data'=>''));
+							echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
 						}
 					} else {
 						header('Content-Type', 'application/json');
-						echo json_encode(array('success'=>false, 'message'=>'No destination folder', 'data'=>''));
+						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+				}
+			}
+		}
+		break; /* }}} */
+
+	case 'deletefolder': /* {{{ */
+		if($user) {
+			if(!checkFormKey('removefolder', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$folder = $dms->getFolder($_REQUEST['id']);
+				if($folder) {
+					if ($folder->getAccessMode($user) >= M_READWRITE) {
+						if($folder->remove()) {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'Error removing folder', 'data'=>''));
+						}
+					} else {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+				}
+			}
+		}
+		break; /* }}} */
+
+	case 'deletedocument': /* {{{ */
+		if($user) {
+			if(!checkFormKey('removedocument', 'GET')) {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			} else {
+				$document = $dms->getDocument($_REQUEST['id']);
+				if($document) {
+					if ($document->getAccessMode($user) >= M_READWRITE) {
+						if($document->remove()) {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'Error removing document', 'data'=>''));
+						}
+					} else {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+					}
+				} else {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
+				}
+			}
+		}
+		break; /* }}} */
+
+	case 'tooglelockdocument': /* {{{ */
+		if($user) {
+			$document = $dms->getDocument($_REQUEST['id']);
+			if($document) {
+				if ($document->getAccessMode($user) >= M_READWRITE) {
+					if ($document->isLocked()) {
+						$lockingUser = $document->getLockingUser();
+						if (($lockingUser->getID() == $user->getID()) || ($document->getAccessMode($user) == M_ALL)) {
+							if (!$document->setLocked(false)) {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>false, 'message'=>'Error unlocking document', 'data'=>''));
+							} else {
+								header('Content-Type', 'application/json');
+								echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+							}
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+						}
+					} else {
+						if (!$document->setLocked($user)) {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>false, 'message'=>'Error locking document', 'data'=>''));
+						} else {
+							header('Content-Type', 'application/json');
+							echo json_encode(array('success'=>true, 'message'=>'', 'data'=>''));
+						}
 					}
 				} else {
 					header('Content-Type', 'application/json');
@@ -257,7 +382,7 @@ switch($command) {
 				}
 			} else {
 				header('Content-Type', 'application/json');
-				echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+				echo json_encode(array('success'=>false, 'message'=>'No document', 'data'=>''));
 			}
 		}
 		break; /* }}} */
@@ -278,5 +403,38 @@ switch($command) {
 		}
 		break; /* }}} */
 
+	case 'view': /* {{{ */
+		require_once("SeedDMS/Preview.php");
+		$view = UI::factory($theme, '', array('dms'=>$dms, 'user'=>$user));
+		if($view) {
+			$view->setParam('refferer', '');
+			$view->setParam('cachedir', $settings->_cacheDir);
+		}
+		$content = '';
+		$viewname = $_REQUEST["view"];
+		switch($viewname) {
+			case 'menuclipboard':
+				$content = $view->menuClipboard($session->getClipboard());
+				break;
+			case 'mainclipboard':
+				$content = $view->mainClipboard($session->getClipboard());
+				break;
+			case 'documentlistrow':
+				$document = $dms->getDocument($_REQUEST['id']);
+				if($document) {
+					if ($document->getAccessMode($user) >= M_READ) {
+						$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $settings->_previewWidthList);
+						$view->setParam('previewWidthList', $settings->_previewWidthList);
+						$view->setParam('showtree', showtree());
+						$content = $view->documentListRow($document, $previewer, true);
+					}
+				}
+				break;
+			default:
+				$content = '';
+		}
+		echo $content;
+
+		break; /* }}} */
 }
 ?>

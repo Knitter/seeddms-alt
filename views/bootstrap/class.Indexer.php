@@ -32,6 +32,7 @@ require_once("class.Bootstrap.php");
 class SeedDMS_View_Indexer extends SeedDMS_Bootstrap_Style {
 
 	function tree($dms, $index, $folder, $indent='') { /* {{{ */
+		set_time_limit(30);
 		echo $indent."D ".htmlspecialchars($folder->getName())."\n";
 		$subfolders = $folder->getSubFolders();
 		foreach($subfolders as $subfolder) {

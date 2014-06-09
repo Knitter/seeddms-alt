@@ -42,18 +42,20 @@ if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 
-if (!$document->isLocked()) {
+if($document->isLocked()) {
+	$lockingUser = $document->getLockingUser();
+	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user) != M_ALL)) {
+		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName()))));
+	}
+} else {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("document_is_not_locked"));
 }
-
-$lockingUser = $document->getLockingUser();
 
 if (($lockingUser->getID() == $user->getID()) || ($document->getAccessMode($user) == M_ALL)) {
 	if (!$document->setLocked(false)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("error_occured"));
 	}
-}
-else {
+} else {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
 }
 

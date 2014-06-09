@@ -94,7 +94,7 @@ class SeedDMS_Core_KeywordCategory {
 	function getKeywordLists() {
 		$db = $this->_dms->getDB();
 
-		$queryStr = "SELECT * FROM tblKeywords WHERE category = " . $this->_id;
+		$queryStr = "SELECT * FROM tblKeywords WHERE category = " . $this->_id . " order by `keywords`";
 		return $db->getResultArray($queryStr);
 	}
 

@@ -16,6 +16,8 @@ img.mimeicon {
 	text-decoration: none;
 	color: #333;
 	padding: 2px;
+	cursor: pointer;
+	font-size: 110%;
 }
 
 #admin-tools i {
@@ -49,6 +51,29 @@ ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
     background: none;
     text-shadow: none;
 		font-weight: bold;
+}
+
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 999px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	background: red;
+	cursor: inherit;
+	display: block;
+}
+input[readonly] {
+	background-color: white !important;
+	cursor: text !important;
 }
 
 @media (max-width: 480px) { 
