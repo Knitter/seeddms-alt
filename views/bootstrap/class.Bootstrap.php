@@ -1494,7 +1494,7 @@ $('#delete-folder-btn-".$folderid."').popover({
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 			}
 			if($document->getAccessMode($user) >= M_READWRITE) {
-				$content .= '<a href="../out/out.EditDocument.php?documentid='.$docID.'"><i class="icon-edit"></i></a>';
+				$content .= '<a href="../out/out.EditDocument.php?documentid='.$docID.'" title="'.getMLText("edit_document_props").'"><i class="icon-edit"></i></a>';
 			} else {
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>';
 			}
@@ -1566,7 +1566,7 @@ $('#delete-folder-btn-".$folderid."').popover({
 			$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 		}
 		if($subFolder->getAccessMode($user) >= M_READWRITE) {
-			$content .= '<a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid='.$subFolder->getID().'"><i class="icon-edit"></i></a>';
+			$content .= '<a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid='.$subFolder->getID().'" title="'.getMLText("edit_folder_props").'"><i class="icon-edit"></i></a>';
 		} else {
 			$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>';
 		}
