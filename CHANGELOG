@@ -18,6 +18,7 @@
   document list (ViewFolder and Search)
 - critical ajax calls require form token to be set
 - fix drag and drop from clipboard
+- much improved document handling
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.8
