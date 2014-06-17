@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (917), angel (123), francisco (2)
+//    Translators: Admin (920), angel (123), francisco (2)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -142,7 +142,7 @@ URL: [url]',
 'backup_remove' => 'Eliminar fichero de copia de seguridad',
 'backup_tools' => 'Herramientas de copia de seguridad',
 'between' => 'entre',
-'browse' => '',
+'browse' => 'Listar',
 'calendar' => 'Calendario',
 'calendar_week' => 'Calendario semanal',
 'cancel' => 'Cancelar',
@@ -498,9 +498,13 @@ URL: [url]',
 'log_management' => 'Gestión de ficheros de registro',
 'manager' => 'Administrador',
 'manager_of_group' => 'Usted es el administrador de este grupo',
+'mandatory_approvergroups' => '',
 'mandatory_approvergroup_no_access' => 'El grupo obligatorio de aprobadores \'[group]\' no tiene suficiente nivel de acceso.',
+'mandatory_approvers' => '',
 'mandatory_approver_no_access' => 'El aprobador obligatorio \'[user]\' no tiene suficiente nivel de acceso.',
+'mandatory_reviewergroups' => '',
 'mandatory_reviewergroup_no_access' => 'El grupo obligatorio de revisores \'[group]\' no tiene suficiente nivel de acceso.',
+'mandatory_reviewers' => '',
 'mandatory_reviewer_no_access' => 'El revisor obligatorio \'[user]\' no tiene suficiente nivel de acceso.',
 'march' => 'Marzo',
 'max_upload_size' => 'Tamaño máximo de subida para cada fichero',
@@ -1029,8 +1033,8 @@ URL: [url]',
 'splash_moved_clipboard' => 'Portapapeles movido a la carpeta actual',
 'splash_removed_from_clipboard' => 'Eliminado del portapapeles',
 'splash_rm_attribute' => 'Atributo eliminado',
-'splash_rm_document' => '',
-'splash_rm_folder' => '',
+'splash_rm_document' => 'Documento eliminado',
+'splash_rm_folder' => 'Carpeta eliminada',
 'splash_rm_group' => 'Grupo eliminado',
 'splash_rm_group_member' => 'Miembro eliminado del grupo',
 'splash_rm_user' => 'Usuario eliminado',

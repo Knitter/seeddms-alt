@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (545), flaviove (627), lfcristofoli (334)
+//    Translators: Admin (546), flaviove (627), lfcristofoli (334)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -497,9 +497,13 @@ URL: [url]',
 'log_management' => 'Arquivos de Log',
 'manager' => 'Gerente',
 'manager_of_group' => 'Você é o gerente deste grupo',
+'mandatory_approvergroups' => '',
 'mandatory_approvergroup_no_access' => 'Grupo obrigatória de aprovadores \'[group]\' tem direitos de acesso insuficientes.',
+'mandatory_approvers' => '',
 'mandatory_approver_no_access' => 'Obrigatória \'[usuário]\' aprovador tem direitos de acesso insuficientes.',
+'mandatory_reviewergroups' => '',
 'mandatory_reviewergroup_no_access' => 'Grupo obrigatória de revisores \'[group]\' tem direitos de acesso insuficientes.',
+'mandatory_reviewers' => '',
 'mandatory_reviewer_no_access' => 'Obrigatória revisor \'[usuário]\' tem direitos de acesso insuficientes.',
 'march' => 'Março',
 'max_upload_size' => 'Tamanho máximo de cada arquivo',
@@ -1026,7 +1030,7 @@ URL: [url]',
 'splash_moved_clipboard' => 'Área de transferência movida para a pasta corrente',
 'splash_removed_from_clipboard' => 'Remover da área de transferência',
 'splash_rm_attribute' => 'Atributo removido',
-'splash_rm_document' => '',
+'splash_rm_document' => 'Documento removido',
 'splash_rm_folder' => '',
 'splash_rm_group' => 'Grupo removido',
 'splash_rm_group_member' => 'Membro do grupo removido',

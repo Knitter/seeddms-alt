@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (700)
+//    Translators: Admin (705)
 
 $text = array(
 'accept' => 'Accetta',
@@ -116,7 +116,7 @@ $text = array(
 'automatic_status_update' => 'Modifica automatica dello stato',
 'back' => 'Ritorna',
 'backup_list' => 'Lista dei backup presenti',
-'backup_log_management' => '',
+'backup_log_management' => 'Backup/Logging',
 'backup_remove' => 'Elimina file di backup',
 'backup_tools' => 'Strumenti di backup',
 'between' => 'tra',
@@ -424,9 +424,13 @@ $text = array(
 'log_management' => 'Amministrazione log file',
 'manager' => 'Manager',
 'manager_of_group' => '',
+'mandatory_approvergroups' => '',
 'mandatory_approvergroup_no_access' => '',
+'mandatory_approvers' => '',
 'mandatory_approver_no_access' => '',
+'mandatory_reviewergroups' => '',
 'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewers' => '',
 'mandatory_reviewer_no_access' => '',
 'march' => 'Marzo',
 'max_upload_size' => 'Dimensione massima caricabile per ogni file',
@@ -434,8 +438,8 @@ $text = array(
 'mimetype' => '',
 'minutes' => '',
 'misc' => 'Varie',
-'missing_checksum' => '',
-'missing_filesize' => '',
+'missing_checksum' => 'Checksum sconosciuto',
+'missing_filesize' => 'Dimensione sconosciuta',
 'missing_transition_user_group' => '',
 'monday' => 'Lunedì',
 'monday_abbr' => '',
@@ -529,7 +533,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'password_repeat' => 'Ripetere password',
 'password_send' => '',
 'password_send_text' => '',
-'password_strength' => '',
+'password_strength' => 'Sicurezza password',
 'password_strength_insuffient' => 'Efficacia della password insufficiente',
 'password_wrong' => 'Password errata',
 'personal_default_keywords' => 'Parole chiave personali',
@@ -946,7 +950,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'unknown_keyword_category' => 'Categoria sconosciuta',
 'unknown_owner' => 'ID proprietario sconosciuto',
 'unknown_user' => 'ID utente sconosciuto',
-'unlinked_content' => '',
+'unlinked_content' => 'Contenuto inappropriato',
 'unlinked_documents' => '',
 'unlinked_folders' => '',
 'unlinking_objects' => '',
