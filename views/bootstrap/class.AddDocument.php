@@ -284,7 +284,7 @@ $(document).ready(function() {
 					foreach ($res as $r) {
 						if($r['reviewerUserID'] > 0) {
 							$u = $dms->getUser($r['reviewerUserID']);
-							$tmp[] =  $u->getFullName().' ('.$u->getLogin().')';
+							$tmp[] =  htmlspecialchars($u->getFullName().' ('.$u->getLogin().')');
 						}
 					}
 					if($tmp) {
@@ -335,7 +335,7 @@ $(document).ready(function() {
 					foreach ($res as $r) {
 						if($r['reviewerGroupID'] > 0) {
 							$u = $dms->getGroup($r['reviewerGroupID']);
-							$tmp[] =  $u->getName();
+							$tmp[] =  htmlspecialchars($u->getName());
 						}
 					}
 					if($tmp) {
@@ -394,7 +394,7 @@ $(document).ready(function() {
 					foreach ($res as $r) {
 						if($r['approverUserID'] > 0) {
 							$u = $dms->getUser($r['approverUserID']);
-							$tmp[] =  $u->getFullName().' ('.$u->getLogin().')';
+							$tmp[] =  htmlspecialchars($u->getFullName().' ('.$u->getLogin().')');
 						}
 					}
 					if($tmp) {
@@ -446,7 +446,7 @@ $(document).ready(function() {
 					foreach ($res as $r) {
 						if($r['approverGroupID'] > 0) {
 							$u = $dms->getGroup($r['approverGroupID']);
-							$tmp[] =  $u->getName();
+							$tmp[] =  htmlspecialchars($u->getName());
 						}
 					}
 					if($tmp) {
