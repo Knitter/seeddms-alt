@@ -12,6 +12,7 @@ class DocumentAPI extends ExtendedAPI {
      * JSON Strcuture:
      * data: {
      *     name: <string, name of the document, required>,
+     *     sequence: <float, required>,
      *     comment: <string, comment describing the document, optional>,
      *     keywords: <string, list of keywords, optional>,
      *     categories: <array of integers, list of categories, optional>,
@@ -31,9 +32,13 @@ class DocumentAPI extends ExtendedAPI {
     public static function add($dms, $user, $settings) {
         //TODO: not handling, $attributes_version = array();
 
+        if (!isset($_POST['data'])) {
+            self::error(400, 'Missing data field.');
+        }
+
         $data = json_decode($_POST['data']);
         if (!$data || empty($data->name) || empty($data->folder) || empty($data->sequence)) {
-            self::error(400, 'Missing required data.');
+            self::error(400, 'Missing name, folder or sequence fields.');
         }
 
         $folder = $dms->getFolder((int) $data->folder);
@@ -45,7 +50,7 @@ class DocumentAPI extends ExtendedAPI {
             self::error(400, 'Given folder is not writable by this user.');
         }
 
-        if (checkQuota() < 0) {
+        if (checkQuota($user) < 0) {
             self::error(400, 'Quota limit reached.');
         }
 
@@ -91,10 +96,13 @@ class DocumentAPI extends ExtendedAPI {
             }
         }
 
-        $fileCount = count($_FILES["file"]["tmp_name"]);
-        for ($i = $fileCount; --$i >= 0;) {
-            if ($_FILES["file"]["size"][$i] == 0 || $_FILES['file']['error'][$i] != 0) {
-                self::error(500, 'File uploading failed on file ' . $_FILES['file']['name'][$i] . '.');
+        if(!count($_FILES)) {
+            self::error(400, 'No attachement found for document creation.');
+        }
+        
+        foreach($_FILES as $file) {
+            if ($file["size"] == 0 || $file['error'] != 0) {
+                self::error(500, 'File uploading failed on file ' . $file['name'] . '.');
             }
         }
 
@@ -124,7 +132,7 @@ class DocumentAPI extends ExtendedAPI {
         $comment = !empty($data->comment) ? $data->comment : null;
         $keywords = !empty($data->keywords) ? $data->keywords : null;
         $categories = array();
-        if (empty($data->categories)) {
+        if (!empty($data->categories)) {
             foreach ($data->categories as $catId) {
                 $categories[] = $dms->getDocumentCategory($catId);
             }
@@ -146,10 +154,10 @@ class DocumentAPI extends ExtendedAPI {
         }
 
         // Handle uploaded files and insert into database
-        for ($i = $fileCount; --$i >= 0;) {
-            $tempName = $_FILES["file"]["tmp_name"][$i];
-            $fileType = $_FILES["file"]["type"][$i];
-            $fileName = $_FILES["file"]["name"][$i];
+        foreach($_FILES as $file) {
+            $tempName = $file["tmp_name"];
+            $fileType = $file["type"];
+            $fileName = $file["name"];
             $fileBaseName = basename($fileName);
 
             $extension = '.';
@@ -172,7 +180,7 @@ class DocumentAPI extends ExtendedAPI {
             }
 
             $result = $folder->addDocument($name, $comment, $expires, $user, $keywords
-                    , $categories, $tempName, $fileBaseName, $fileType, $fileType
+                    , $categories, $tempName, $fileBaseName, $extension, $fileType
                     , $sequence, $reviewers, $approvers, $version, $versionComment
                     , $attributes, array(), $workflow);
 

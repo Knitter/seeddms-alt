@@ -1,5 +1,7 @@
 <?php
 
+include("../inc/inc.Utils.php");
+
 abstract class ExtendedAPI {
 
     protected static function error($code, $reason) {
