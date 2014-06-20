@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (705)
+//    Translators: Admin (709)
 
 $text = array(
 'accept' => 'Accetta',
@@ -249,7 +249,7 @@ $text = array(
 'do_object_unlink' => '',
 'draft_pending_approval' => 'Bozza in approvazione',
 'draft_pending_review' => 'Bozza in revisione',
-'drag_icon_here' => '',
+'drag_icon_here' => 'Trascina qui l\'icona della cartella o del documento',
 'dropfolder_file' => '',
 'dump_creation' => 'Creazione DB dump',
 'dump_creation_warning' => 'Con questa operazione è possibile creare un file di dump del contenuto del database. Dopo la creazione il file viene salvato nella cartella dati del server.',
@@ -882,7 +882,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'splash_add_user' => '',
 'splash_cleared_clipboard' => '',
 'splash_document_edited' => '',
-'splash_document_locked' => '',
+'splash_document_locked' => 'Documento bloccato',
 'splash_document_unlocked' => '',
 'splash_edit_attribute' => '',
 'splash_edit_group' => '',
@@ -893,7 +893,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'splash_moved_clipboard' => '',
 'splash_removed_from_clipboard' => '',
 'splash_rm_attribute' => '',
-'splash_rm_document' => '',
+'splash_rm_document' => 'Documento rimosso',
 'splash_rm_folder' => '',
 'splash_rm_group' => '',
 'splash_rm_group_member' => '',

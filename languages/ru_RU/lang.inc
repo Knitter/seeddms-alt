@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1226)
+//    Translators: Admin (1228)
 
 $text = array(
 'accept' => 'Принять',
@@ -158,13 +158,13 @@ URL: [url]',
 'change_password' => 'Изменить пароль',
 'change_password_message' => 'Пароль изменён',
 'change_status' => 'Изменить статус',
-'charts' => '',
+'charts' => 'Диаграммы',
 'chart_docsaccumulated_title' => '',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
 'chart_docspermonth_title' => '',
 'chart_docsperstatus_title' => '',
-'chart_docsperuser_title' => '',
+'chart_docsperuser_title' => 'Документы на пользователя',
 'chart_selection' => '',
 'chart_sizeperuser_title' => '',
 'choose_attrdef' => 'Выберите атрибут',
