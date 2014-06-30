@@ -269,10 +269,23 @@ function createFolder($id) { /* {{{ */
 	}
 	$parent = $dms->getFolder($id);
 	if($parent) {
-		if($folder = $parent->addSubFolder($app->request()->post('name'), '', $userobj, 0)) {
+		if($name = $app->request()->post('name')) {
+			$comment = $app->request()->post('comment');
+			$attributes = $app->request()->post('attributes');
+			$newattrs = array();
+			foreach($attributes as $attrname=>$attrvalue) {
+				$attrdef = $dms->getAttributeDefinitionByName($attrname);
+				if($attrdef) {
+					$newattrs[$attrdef->getID()] = $attrvalue;
+				}
+			}
+			if($folder = $parent->addSubFolder($name, $comment, $userobj, 0, $newattrs)) {
 
-			$rec = array('id'=>$folder->getId(), 'name'=>$folder->getName());
-			echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
+				$rec = array('id'=>$folder->getId(), 'name'=>$folder->getName(), 'comment'=>$folder->getComment());
+				echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
+			} else {
+				echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
+			}
 		} else {
 			echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
 		}
