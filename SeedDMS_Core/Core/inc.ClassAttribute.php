@@ -585,5 +585,50 @@ class SeedDMS_Core_AttributeDefinition { /* {{{ */
 
 		return true;
 	} /* }}} */
+
+	/**
+	 * Get all documents and folder by a given attribute value
+	 *
+	 * @param string $attrvalue value of attribute
+	 * @param integer $limit limit number of documents/folders
+	 * @return array array containing list of documents and folders
+	 */
+	public function getObjects($attrvalue, $limit) { /* {{{ */
+		$db = $this->_dms->getDB();
+
+		$result = array('docs'=>array(), 'folders'=>array(), 'contents'=>array());
+		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
+		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_document) {
+			$queryStr = "SELECT * FROM tblDocumentAttributes WHERE attrdef=".$this->_id." AND value=".$db->qstr($attrvalue);
+			if($limit)
+				$queryStr .= " limit ".(int) $limit;
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				foreach($resArr as $rec) {
+					if($doc = $this->_dms->getDocument($rec['document'])) {
+						$result['docs'][] = $doc;
+					}
+				}
+			}
+		}
+
+		if($this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_all ||
+		   $this->_objtype == SeedDMS_Core_AttributeDefinition::objtype_folder) {
+			$queryStr = "SELECT * FROM tblFolderAttributes WHERE attrdef=".$this->_id." AND value=".$db->qstr($attrvalue);
+			if($limit)
+				$queryStr .= " limit ".(int) $limit;
+			$resArr = $db->getResultArray($queryStr);
+			if($resArr) {
+				foreach($resArr as $rec) {
+					if($folder = $this->_dms->getFolder($rec['folder'])) {
+						$result['folders'][] = $folder;
+					}
+				}
+			}
+		}
+
+		return $result;
+	} /* }}} */
+
 } /* }}} */
 ?>
