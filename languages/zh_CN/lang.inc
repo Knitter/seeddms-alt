@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (520), fengjohn (5)
+//    Translators: Admin (523), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -140,7 +140,7 @@ URL: [url]',
 'category' => '分类',
 'category_exists' => '',
 'category_filter' => '指定分类',
-'category_in_use' => '',
+'category_in_use' => '已有文件使用此分类',
 'category_noname' => '',
 'ca_ES' => '加泰罗尼亚语',
 'change_assignments' => '分配变更',
@@ -461,7 +461,7 @@ URL: [url]',
 'new_attrdef' => '添加属性',
 'new_default_keywords' => '添加关键字',
 'new_default_keyword_category' => '添加类别',
-'new_document_category' => '',
+'new_document_category' => '增加分类',
 'new_document_email' => '添加新文档',
 'new_document_email_body' => '',
 'new_document_email_subject' => '',
@@ -579,7 +579,7 @@ URL: [url]',
 'rm_attrdef' => '',
 'rm_default_keyword_category' => '删除类别',
 'rm_document' => '删除文档',
-'rm_document_category' => '',
+'rm_document_category' => '删除分类',
 'rm_file' => '删除文件',
 'rm_folder' => '删除文件夹',
 'rm_from_clipboard' => '',

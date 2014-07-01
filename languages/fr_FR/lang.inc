@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (908), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (910), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -1002,8 +1002,8 @@ URL: [url]',
 'splash_moved_clipboard' => 'Presse-papier déplacé dans le répertoire courant',
 'splash_removed_from_clipboard' => '',
 'splash_rm_attribute' => 'Attribut supprimé',
-'splash_rm_document' => '',
-'splash_rm_folder' => '',
+'splash_rm_document' => 'Document supprimé',
+'splash_rm_folder' => 'Dossier supprimé',
 'splash_rm_group' => 'Groupe supprimé',
 'splash_rm_group_member' => 'Membre retiré du groupe',
 'splash_rm_user' => 'Utilisateur supprimé',
