@@ -54,6 +54,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/datepicker/css/datepicker.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
+//		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
+
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		if($this->extraheader)
 			echo $this->extraheader;
@@ -62,7 +64,25 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/layouts/topRight.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
-
+		/*
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/fileupload/jquery.iframe-transport.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/fileupload/jquery.fileupload.js"></script>'."\n";
+		echo "
+<script>
+$(function () {
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+            });
+        }
+    });
+});
+</script>
+";
+		*/
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		if($this->params['session'] && $this->params['session']->getSu()) {
 ?>
@@ -792,12 +812,17 @@ $(document).ready(function () {
 			<div class="input-append">
 				<input type="text" class="form-control" readonly>
 				<span class="btn btn-default btn-file">
-					<?php printMLText("browse");?>&hellip; <input type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+					<?php printMLText("browse");?>&hellip; <input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
 				</span>
 			</div>
 		</div>
 	</div>
 <?php
+/*
+  <script>
+    $('#<?php echo $varname; ?>').fileupload();
+  </script>
+*/
 	} /* }}} */
 
 	function printDateChooser($defDate = -1, $varName) { /* {{{ */

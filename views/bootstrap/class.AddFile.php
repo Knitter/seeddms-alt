@@ -87,10 +87,11 @@ function checkForm()
 </div>
 <?php
 		$this->contentContainerStart();
+//		$this->addFooterJS("$('#fileupload').fileupload();");
 ?>
 
-<form action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
-<input type="Hidden" name="documentid" value="<?php print $document->getId(); ?>">
+<form action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="fileupload" onsubmit="return checkForm();">
+<input type="hidden" name="documentid" value="<?php print $document->getId(); ?>">
 <table class="table-condensed">
 <tr>
 	<td><?php printMLText("local_file");?>:</td>
