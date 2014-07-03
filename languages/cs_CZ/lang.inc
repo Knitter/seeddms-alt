@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (610), kreml (429)
+//    Translators: Admin (613), kreml (429)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -76,7 +76,7 @@ URL: [url]',
 'apply' => 'Použít',
 'approval_deletion_email' => 'Zrušení schválení požadavku',
 'approval_group' => 'Skupina schválení',
-'approval_log' => '',
+'approval_log' => 'Log schvalování',
 'approval_request_email' => 'Schválení požadavku',
 'approval_request_email_body' => 'Žádost o schválení
 Dokument: [name]
@@ -498,9 +498,13 @@ URL: [url]',
 'log_management' => 'Správa LOG souborů',
 'manager' => 'Správce',
 'manager_of_group' => 'Jste správcem této skupiny',
+'mandatory_approvergroups' => '',
 'mandatory_approvergroup_no_access' => 'Stanovená skupina schvalovatelů \'[group]\' má nedostatečná přístupová práva.',
+'mandatory_approvers' => '',
 'mandatory_approver_no_access' => 'Stanovený schvalovatel \'[user]\' má nedostatečná přístupová práva.',
+'mandatory_reviewergroups' => '',
 'mandatory_reviewergroup_no_access' => 'Stanovená skupina recenzentů \'[group]\' má nedostatečná přístupová práva.',
+'mandatory_reviewers' => '',
 'mandatory_reviewer_no_access' => 'Stanovený recenzent \'[user]\' má nedostatečná přístupová práva.',
 'march' => 'Březen',
 'max_upload_size' => 'Max. délka pro nahrání jednoho souboru',
@@ -1023,8 +1027,8 @@ URL: [url]',
 'splash_moved_clipboard' => 'Schránka přenesena do aktuální složky',
 'splash_removed_from_clipboard' => 'Odstraněno ze schránky',
 'splash_rm_attribute' => 'Atribut odstraněn',
-'splash_rm_document' => '',
-'splash_rm_folder' => '',
+'splash_rm_document' => 'Dokument odstraněn',
+'splash_rm_folder' => 'Složka smazána',
 'splash_rm_group' => 'Skupina odstraněna',
 'splash_rm_group_member' => 'Člen skupiny odstraněn',
 'splash_rm_user' => 'Uživatel odstraněn',

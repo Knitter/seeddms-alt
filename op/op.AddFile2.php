@@ -68,11 +68,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 			$name = $userfilename;
 		$comment  = $_POST["comment"];
 
-		$lastDotIndex = strrpos(basename($userfilename), ".");
-		if (is_bool($lastDotIndex) && !$lastDotIndex)
-			$fileType = ".";
-		else
-			$fileType = substr($userfilename, $lastDotIndex);
+		$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 
 		$res = $document->addDocumentFile($name, $comment, $user, $userfiletmp, 
 																			basename($userfilename),$fileType, $userfiletype );

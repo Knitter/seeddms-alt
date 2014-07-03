@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1075), tmichelfelder (106)
+//    Translators: Admin (1077), tmichelfelder (106)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -491,9 +491,13 @@ URL: [url]',
 'log_management' => 'Loggfilshantering',
 'manager' => 'Manager',
 'manager_of_group' => 'Du är förvaltaren av denna grupp',
+'mandatory_approvergroups' => '',
 'mandatory_approvergroup_no_access' => 'Obligatorisk grupp \'[group]\' som ska godkänna har inga rättigheter.',
+'mandatory_approvers' => '',
 'mandatory_approver_no_access' => 'Obligatorisk person som godkänner \'[user]\' har inga rättigheter.',
+'mandatory_reviewergroups' => '',
 'mandatory_reviewergroup_no_access' => 'Obligatorisk grupp \'[group]\' som ska granska har inga rättigheter.',
+'mandatory_reviewers' => '',
 'mandatory_reviewer_no_access' => 'Obligatorisk person som granskar \'[user]\' ar inga rättigheter.',
 'march' => 'mars',
 'max_upload_size' => 'Maximal storlek för uppladdning',
@@ -1014,8 +1018,8 @@ URL: [url]',
 'splash_moved_clipboard' => 'Urklipp flyttades till aktuella katalogen',
 'splash_removed_from_clipboard' => 'Borttagen från urklipp',
 'splash_rm_attribute' => 'Attribut har tagits bort',
-'splash_rm_document' => '',
-'splash_rm_folder' => '',
+'splash_rm_document' => 'Dokument borttaget',
+'splash_rm_folder' => 'Mapp raderad',
 'splash_rm_group' => 'Grupp har tagits bort',
 'splash_rm_group_member' => 'Gruppmedlem har tagits bort',
 'splash_rm_user' => 'Användare har tagits bort',

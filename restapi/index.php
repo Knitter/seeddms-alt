@@ -269,10 +269,23 @@ function createFolder($id) { /* {{{ */
 	}
 	$parent = $dms->getFolder($id);
 	if($parent) {
-		if($folder = $parent->addSubFolder($app->request()->post('name'), '', $userobj, 0)) {
+		if($name = $app->request()->post('name')) {
+			$comment = $app->request()->post('comment');
+			$attributes = $app->request()->post('attributes');
+			$newattrs = array();
+			foreach($attributes as $attrname=>$attrvalue) {
+				$attrdef = $dms->getAttributeDefinitionByName($attrname);
+				if($attrdef) {
+					$newattrs[$attrdef->getID()] = $attrvalue;
+				}
+			}
+			if($folder = $parent->addSubFolder($name, $comment, $userobj, 0, $newattrs)) {
 
-			$rec = array('id'=>$folder->getId(), 'name'=>$folder->getName());
-			echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
+				$rec = array('id'=>$folder->getId(), 'name'=>$folder->getName(), 'comment'=>$folder->getComment());
+				echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$rec));
+			} else {
+				echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
+			}
 		} else {
 			echo json_encode(array('success'=>false, 'message'=>'', 'data'=>''));
 		}
@@ -678,6 +691,66 @@ function doSearch() { /* {{{ */
 	}
 } /* }}} */
 
+/**
+ * Search for documents/folders with a given attribute=value
+ *
+ */
+function doSearchByAttr() { /* {{{ */
+	global $app, $dms, $userobj;
+
+	$attrname = $app->request()->get('name');
+	$query = $app->request()->get('value');
+	if(!$limit = $app->request()->get('limit'))
+		$limit = 50;
+	$attrdef = $dms->getAttributeDefinitionByName($attrname);
+	$entries = array();
+	if($attrdef) {
+		$resArr = $attrdef->getObjects($query, $limit);
+		if($resArr['folders']) {
+			foreach ($resArr['folders'] as $entry) {
+				if ($entry->getAccessMode($userobj) >= M_READ) {
+					$entries[] = $entry;
+				}
+			}
+		}
+		if($resArr['docs']) {
+			foreach ($resArr['docs'] as $entry) {
+				if ($entry->getAccessMode($userobj) >= M_READ) {
+					$entries[] = $entry;
+				}
+			}
+		}
+	}
+	$recs = array();
+	foreach ($entries as $entry) {
+		if(get_class($entry) == 'SeedDMS_Core_Document') {
+			$document = $entry;
+			$lc = $document->getLatestContent();
+			$recs[] = array(
+				'type'=>'document',
+				'id'=>$document->getId(),
+				'date'=>$document->getDate(),
+				'name'=>$document->getName(),
+				'mimetype'=>$lc->getMimeType(),
+				'version'=>$lc->getVersion(),
+				'comment'=>$document->getComment(),
+				'keywords'=>$document->getKeywords(),
+			);
+		} elseif(get_class($entry) == 'SeedDMS_Core_Folder') {
+			$folder = $entry;
+			$recs[] = array(
+				'type'=>'folder',
+				'id'=>$folder->getId(),
+				'name'=>$folder->getName(),
+				'comment'=>$folder->getComment(),
+				'date'=>$folder->getDate(),
+			);
+		}
+	}
+	$app->response()->header('Content-Type', 'application/json');
+	echo json_encode(array('success'=>true, 'message'=>'', 'data'=>$recs));
+} /* }}} */
+
 //$app = new Slim(array('mode'=>'development', '_session.handler'=>null));
 $app = new \Slim\Slim(array('mode'=>'development', '_session.handler'=>null));
 
@@ -704,6 +777,7 @@ $app->post('/login', 'doLogin');
 $app->get('/logout', 'doLogout');
 $app->get('/account', 'getAccount');
 $app->get('/search', 'doSearch');
+$app->get('/searchbyattr', 'doSearchByAttr');
 $app->get('/folder/:id', 'getFolder');
 $app->post('/folder/:id/move', 'moveFolder');
 $app->delete('/folder/:id', 'deleteFolder');

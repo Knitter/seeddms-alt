@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1891)
+//    Translators: Admin (1895)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -498,9 +498,13 @@ URL: [url]',
 'log_management' => 'Management der Log-Dateien',
 'manager' => 'Manager',
 'manager_of_group' => 'Sie sind der Manager dieser Gruppe',
+'mandatory_approvergroups' => 'Zwingende Gruppen von Freigebern',
 'mandatory_approvergroup_no_access' => 'Zwingende Gruppe von Freigebern \'[group]\' hat unzureichende Zugriffsrechte.',
+'mandatory_approvers' => 'Zwingende Freigeber',
 'mandatory_approver_no_access' => 'Zwingender Freigeber \'[user]\' hat unzureichende Zugriffsrechte.',
+'mandatory_reviewergroups' => 'Zwingende Gruppen von Prüfern',
 'mandatory_reviewergroup_no_access' => 'Zwingende Gruppe von Prüfern \'[group]\' hat unzureichende Zugriffsrechte.',
+'mandatory_reviewers' => 'Zwingende Prüfer',
 'mandatory_reviewer_no_access' => 'Zwingender Prüfer \'[user]\' hat nicht ausreichende Zugriffsrechte.',
 'march' => 'März',
 'max_upload_size' => 'Maximale Dateigröße',

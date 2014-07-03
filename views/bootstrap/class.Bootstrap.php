@@ -54,6 +54,8 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<link href="../styles/'.$this->theme.'/chosen/css/chosen.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/jqtree/jqtree.css" rel="stylesheet">'."\n";
 		echo '<link href="../styles/'.$this->theme.'/application.css" rel="stylesheet">'."\n";
+//		echo '<link href="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet">'."\n";
+
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery/jquery.min.js"></script>'."\n";
 		if($this->extraheader)
 			echo $this->extraheader;
@@ -64,6 +66,25 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";
 
+		/*
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/fileupload/jquery.iframe-transport.js"></script>'."\n";
+		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/fileupload/jquery.fileupload.js"></script>'."\n";
+		echo "
+<script>
+$(function () {
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+            });
+        }
+    });
+});
+</script>
+";
+		*/
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		if($this->params['session'] && $this->params['session']->getSu()) {
 ?>
@@ -795,12 +816,17 @@ $(document).ready(function () {
 			<div class="input-append">
 				<input type="text" class="form-control" readonly>
 				<span class="btn btn-default btn-file">
-					<?php printMLText("browse");?>&hellip; <input type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
+					<?php printMLText("browse");?>&hellip; <input id="<?php echo $varname; ?>" type="file" name="<?php echo $varname; ?>"<?php if($multiple) echo " multiple"; ?><?php if($accept) echo " accept=\"".$accept."\""; ?>>
 				</span>
 			</div>
 		</div>
 	</div>
 <?php
+/*
+  <script>
+    $('#<?php echo $varname; ?>').fileupload();
+  </script>
+*/
 	} /* }}} */
 
 	function printDateChooser($defDate = -1, $varName) { /* {{{ */
@@ -1519,7 +1545,7 @@ $('#delete-folder-btn-".$folderid."').popover({
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 			}
 			if($document->getAccessMode($user) >= M_READWRITE) {
-				$content .= '<a href="../out/out.EditDocument.php?documentid='.$docID.'"><i class="icon-edit"></i></a>';
+				$content .= '<a href="../out/out.EditDocument.php?documentid='.$docID.'" title="'.getMLText("edit_document_props").'"><i class="icon-edit"></i></a>';
 			} else {
 				$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>';
 			}
@@ -1591,7 +1617,7 @@ $('#delete-folder-btn-".$folderid."').popover({
 			$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-remove"></i></span>';
 		}
 		if($subFolder->getAccessMode($user) >= M_READWRITE) {
-			$content .= '<a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid='.$subFolder->getID().'"><i class="icon-edit"></i></a>';
+			$content .= '<a class_="btn btn-mini" href="../out/out.EditFolder.php?folderid='.$subFolder->getID().'" title="'.getMLText("edit_folder_props").'"><i class="icon-edit"></i></a>';
 		} else {
 			$content .= '<span style="padding: 2px; color: #CCC;"><i class="icon-edit"></i></span>';
 		}

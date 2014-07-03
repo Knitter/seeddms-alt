@@ -96,11 +96,7 @@ if ($_FILES['userfile']['error'] == 0) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("identical_version"));
 	}
 
-	$lastDotIndex = strrpos(basename($userfilename), ".");
-	if (is_bool($lastDotIndex) && !$lastDotIndex)
-		$fileType = ".";
-	else
-		$fileType = substr($userfilename, $lastDotIndex);
+	$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 
 	// Get the list of reviewers and approvers for this document.
 	$reviewers = array();
