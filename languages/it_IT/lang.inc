@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (709)
+//    Translators: Admin (717)
 
 $text = array(
 'accept' => 'Accetta',
@@ -163,8 +163,8 @@ $text = array(
 'choose_workflow' => '',
 'choose_workflow_action' => '',
 'choose_workflow_state' => '',
-'clear_clipboard' => '',
-'clipboard' => '',
+'clear_clipboard' => 'Cancella appunti',
+'clipboard' => 'Appunti',
 'close' => 'Chiudi',
 'comment' => 'Commento',
 'comment_for_current_version' => 'Commento per la versione',
@@ -435,7 +435,7 @@ $text = array(
 'march' => 'Marzo',
 'max_upload_size' => 'Dimensione massima caricabile per ogni file',
 'may' => 'Maggio',
-'mimetype' => '',
+'mimetype' => 'Tipo (MIME)',
 'minutes' => '',
 'misc' => 'Varie',
 'missing_checksum' => 'Checksum sconosciuto',
@@ -446,7 +446,7 @@ $text = array(
 'monthly' => 'Mensile',
 'month_view' => 'Vista mesile',
 'move' => 'Sposta',
-'move_clipboard' => '',
+'move_clipboard' => 'Sposta appunti',
 'move_document' => 'Sposta documento',
 'move_folder' => 'Sposta cartella',
 'my_account' => 'Account personale',
@@ -505,7 +505,7 @@ $text = array(
 'october' => 'Ottobre',
 'old' => 'Vecchio',
 'only_jpg_user_images' => 'Possono essere utilizzate solo immagini di tipo jpeg',
-'original_filename' => '',
+'original_filename' => 'Nome file originale',
 'owner' => 'Proprietario',
 'ownership_changed_email' => 'Proprietario cambiato',
 'ownership_changed_email_body' => '',
@@ -541,7 +541,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'previous_state' => '',
 'previous_versions' => 'Versioni precedenti',
 'pt_BR' => 'Portoghese (BR)',
-'quota' => '',
+'quota' => 'Quota',
 'quota_exceeded' => '',
 'quota_is_disabled' => '',
 'quota_warning' => '',
@@ -556,7 +556,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'removed_workflow_email_body' => '',
 'removed_workflow_email_subject' => '',
 'remove_marked_files' => '',
-'repaired' => '',
+'repaired' => 'riparato',
 'repairing_objects' => 'Riparazione documenti e cartelle in corso...',
 'results_page' => 'Pagina dei risultati',
 'return_from_subworkflow' => '',
@@ -620,7 +620,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'seconds' => '',
 'selection' => 'Selezione',
 'select_category' => 'Clicca per selezionare la categoria',
-'select_groups' => '',
+'select_groups' => 'Clicca per selezionare i gruppi',
 'select_grp_approvers' => '',
 'select_grp_reviewers' => '',
 'select_ind_approvers' => '',

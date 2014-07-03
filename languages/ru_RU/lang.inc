@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1228)
+//    Translators: Admin (1231)
 
 $text = array(
 'accept' => 'Принять',
@@ -135,7 +135,7 @@ URL: [url]',
 'backup_remove' => 'Удалить резервную копию',
 'backup_tools' => 'Резервные копии',
 'between' => 'между',
-'browse' => '',
+'browse' => 'Выбрать',
 'calendar' => 'Календарь',
 'calendar_week' => 'Неделя',
 'cancel' => 'Отмена',
@@ -1023,8 +1023,8 @@ URL: [url]',
 'splash_moved_clipboard' => 'Буфер обмена перенесён в текущий каталог',
 'splash_removed_from_clipboard' => 'Удалён из буфера обмена',
 'splash_rm_attribute' => 'Атрибут удалён',
-'splash_rm_document' => '',
-'splash_rm_folder' => '',
+'splash_rm_document' => 'Документ удалён',
+'splash_rm_folder' => 'Папка удалена',
 'splash_rm_group' => 'Группа удалена',
 'splash_rm_group_member' => 'Удалён член группы',
 'splash_rm_user' => 'Пользователь удалён',
