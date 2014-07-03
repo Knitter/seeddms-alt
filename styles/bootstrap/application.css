@@ -76,6 +76,14 @@ input[readonly] {
 	cursor: text !important;
 }
 
+div.mandatories {
+	font-size: 90%;
+	font-style: italic;
+	color: #888;
+}
+div.mandatories span {
+	font-weight: bold;
+}
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;

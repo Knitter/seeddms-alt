@@ -314,7 +314,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 			}
 			print "<div class=\"alert\">".getMLText("search_report", array("doccount" => $totaldocs, "foldercount" => $totalfolders, 'searchtime'=>$searchTime))."</div>";
 			$this->pageList($pageNumber, $totalpages, "../op/op.Search.php", $urlparams);
-			$this->contentContainerStart();
+//			$this->contentContainerStart();
 
 			print "<table class=\"table\">";
 			print "<thead>\n<tr>\n";
@@ -484,7 +484,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 				}
 			}
 			print "</tbody></table>\n";
-			$this->contentContainerEnd();
+//			$this->contentContainerEnd();
 			$this->pageList($pageNumber, $totalpages, "../op/op.Search.php", $_GET);
 		} else {
 			$numResults = $doccount + $foldercount;

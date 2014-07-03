@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1064)
+//    Translators: Admin (1066)
 
 $text = array(
 'accept' => 'وافق',
@@ -122,8 +122,8 @@ Parent folder: [folder_path]
 User: [username]
 URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - تم تغيير سمة',
-'attribute_count' => '',
-'attribute_value' => '',
+'attribute_count' => 'ﻉﺩﺩ ﻡﺭﺎﺗ ﺍﻸﺴﺘﺧﺩﺎﻣ',
+'attribute_value' => 'ﻖﻴﻣﺓ ﺎﻠﺴﻣﺓ',
 'attr_no_regex_match' => '',
 'at_least_n_users_of_group' => '',
 'august' => 'أغسطس',
@@ -491,9 +491,13 @@ URL: [url]',
 'log_management' => 'ادارة ملفات السجلات',
 'manager' => 'مدير',
 'manager_of_group' => '',
+'mandatory_approvergroups' => '',
 'mandatory_approvergroup_no_access' => '',
+'mandatory_approvers' => '',
 'mandatory_approver_no_access' => '',
+'mandatory_reviewergroups' => '',
 'mandatory_reviewergroup_no_access' => '',
+'mandatory_reviewers' => '',
 'mandatory_reviewer_no_access' => '',
 'march' => 'مارس',
 'max_upload_size' => 'الحجم الاقصى للملف',

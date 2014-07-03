@@ -77,8 +77,7 @@ if ($action == "adduser") {
 		{
 			$userfiletype = $_FILES["userfile"]["type"];
 			$userfilename = $_FILES["userfile"]["name"];
-			$lastDotIndex = strrpos(basename($userfilename), ".");
-			$fileType = substr($userfilename, $lastDotIndex);
+			$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 			if ($fileType != ".jpg" && $filetype != ".jpeg") {
 				UI::exitError(getMLText("admin_tools"),getMLText("only_jpg_user_images"));
 			} else {
@@ -269,8 +268,7 @@ else if ($action == "edituser") {
 	{
 		$userfiletype = $_FILES["userfile"]["type"];
 		$userfilename = $_FILES["userfile"]["name"];
-		$lastDotIndex = strrpos(basename($userfilename), ".");
-		$fileType = substr($userfilename, $lastDotIndex);
+		$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 		if ($fileType != ".jpg" && $filetype != ".jpeg") {
 			UI::exitError(getMLText("admin_tools"),getMLText("only_jpg_user_images"));
 		}

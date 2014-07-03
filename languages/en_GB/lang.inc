@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1030), netixw (14)
+//    Translators: Admin (1034), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -498,9 +498,13 @@ URL: [url]',
 'log_management' => 'Log files management',
 'manager' => 'Manager',
 'manager_of_group' => 'You are the manager of this group',
+'mandatory_approvergroups' => 'Mandatory Groups of approvers',
 'mandatory_approvergroup_no_access' => 'Mandatory group of approvers \'[group]\' has insufficient access rights.',
+'mandatory_approvers' => 'Mandatory approvers',
 'mandatory_approver_no_access' => 'Mandatory approver \'[user]\' has insufficient access rights.',
+'mandatory_reviewergroups' => 'Mandatory group of reviewers',
 'mandatory_reviewergroup_no_access' => 'Mandatory group of reviewers \'[group]\' has insufficient access rights.',
+'mandatory_reviewers' => 'Mandatory reviewers',
 'mandatory_reviewer_no_access' => 'Mandatory reviewer \'[user]\' has insufficient access rights.',
 'march' => 'March',
 'max_upload_size' => 'Maximum upload size',

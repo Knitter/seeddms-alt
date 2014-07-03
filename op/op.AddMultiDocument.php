@@ -172,9 +172,7 @@ if( move_uploaded_file( $source_file_path, $target_file_path ) ) {
 		$userfiletype = $_FILES[ $file_param_name ]["type"];
 		$userfilename = $_FILES[ $file_param_name ]["name"];
 
-		$lastDotIndex = strrpos(basename($userfilename), ".");
-		if (is_bool($lastDotIndex) && !$lastDotIndex) $fileType = ".";
-		else $fileType = substr($userfilename, $lastDotIndex);
+		$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 
 		if(isset($_POST["name"]) && $_POST["name"] != "")
 			$name = $_POST["name"];

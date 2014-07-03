@@ -24,6 +24,7 @@
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
 field for original filename is treated as utf-8
+declare SeeDMS_Lucene_Indexer::open() static
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">

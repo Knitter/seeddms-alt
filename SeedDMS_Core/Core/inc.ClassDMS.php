@@ -541,7 +541,7 @@ class SeedDMS_Core_DMS {
 	 * @param offset integer index of first item in result set
 	 * @param logicalmode string either AND or OR
 	 * @param searchin array() list of fields to search in
-	 *        1 = keywords, 2=name, 3=comment
+	 *        1 = keywords, 2=name, 3=comment, 4=attributes
 	 * @param startFolder object search in the folder only (null for root folder)
 	 * @param owner object search for documents owned by this user
 	 * @param status array list of status
@@ -613,6 +613,24 @@ class SeedDMS_Core_DMS {
 						$searchOwner = "`tblFolders`.`owner` IN (".implode(',', $ownerids).")";
 				} else {
 					$searchOwner = "`tblFolders`.`owner` = '".$owner->getId()."'";
+				}
+			}
+
+			// Check to see if the search has been restricted to a particular
+			// attribute.
+			$searchAttributes = array();
+			if ($attributes) {
+				foreach($attributes as $attrdefid=>$attribute) {
+					if($attribute) {
+						$attrdef = $this->getAttributeDefinition($attrdefid);
+						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) {
+							if($attrdef->getValueSet())
+								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value`='".$attribute."'";
+							else
+								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value` like '%".$attribute."%'";
+						} elseif($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
+						}
+					}
 				}
 			}
 

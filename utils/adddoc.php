@@ -149,9 +149,7 @@ if(is_readable($filename)) {
 		if(!$mimetype) {
 			$mimetype = $finfo->file($filename);
 		}
-		$lastDotIndex = strrpos(basename($filename), ".");
-		if (is_bool($lastDotIndex) && !$lastDotIndex) $filetype = ".";
-		else $filetype = substr($filename, $lastDotIndex);
+		$filetype = "." . pathinfo($filename, PATHINFO_EXTENSION);
 	} else {
 		echo "File has zero size\n";
 		exit(1);

@@ -230,9 +230,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	$userfiletype = $_FILES["userfile"]["type"][$file_num];
 	$userfilename = $_FILES["userfile"]["name"][$file_num];
 	
-	$lastDotIndex = strrpos(basename($userfilename), ".");
-	if (is_bool($lastDotIndex) && !$lastDotIndex) $fileType = ".";
-	else $fileType = substr($userfilename, $lastDotIndex);
+	$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 
 	if ((count($_FILES["userfile"]["tmp_name"])==1)&&($_POST["name"]!=""))
 		$name = $_POST["name"];
