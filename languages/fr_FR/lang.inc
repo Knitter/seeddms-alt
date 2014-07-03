@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (910), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (912), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -122,8 +122,8 @@ Répertoire parent: [folder_path]
 Utilisateur: [username]
 URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - Attribut changé',
-'attribute_count' => '',
-'attribute_value' => '',
+'attribute_count' => 'Nombre d\'utilisations',
+'attribute_value' => 'Valeur de l\'attribut',
 'attr_no_regex_match' => 'La valeur de l\'attribut ne correspond pas à l\'expression régulière.',
 'at_least_n_users_of_group' => '',
 'august' => 'Août',
