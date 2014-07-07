@@ -74,7 +74,6 @@ $(document).ready( function() {
 	/* Document chooser */
 	$("[id^=choosedocsearch]").typeahead({
 		minLength: 3,
-		formname: 'form1',
 		source: function(query, process) {
 //		console.log(this.options);
 			$.get('../op/op.Ajax.php', { command: 'searchdocument', query: query, limit: 8 }, function(data) {
@@ -86,8 +85,8 @@ $(document).ready( function() {
 		 * we use it to update a second input field with the doc id. */
 		updater: function (item) {
 			strarr = item.split("#");
-			//console.log(this.options.formname);
-			$('#docid' + this.options.formname).attr('value', strarr[0]);
+			target = this.$element.data('target');
+			$('#'+target).attr('value', strarr[0]);
 			return strarr[1];
 		},
 		/* Set a matcher that allows any returned value */
@@ -103,7 +102,6 @@ $(document).ready( function() {
 	/* Folder chooser */
 	$("[id^=choosefoldersearch]").typeahead({
 		minLength: 3,
-		formname: 'form1',
 		source: function(query, process) {
 //		console.log(this.options);
 			$.get('../op/op.Ajax.php', { command: 'searchfolder', query: query, limit: 8 }, function(data) {
@@ -115,8 +113,9 @@ $(document).ready( function() {
 		 * it to set the document location. */
 		updater: function (item) {
 			strarr = item.split("#");
-			//console.log(this.options.formname);
-			$('#targetid' + this.options.formname).attr('value', strarr[0]);
+			//console.log(this.$element.data('target'));
+			target = this.$element.data('target');
+			$('#'+target).attr('value', strarr[0]);
 			return strarr[1];
 		},
 		/* Set a matcher that allows any returned value */
