@@ -46,6 +46,7 @@ if (isset($_GET["userid"]) && (!is_numeric($_GET["userid"]) || $_GET["userid"]<-
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("unknown_user"));
 }
 
+$userid = 0;
 if(isset($_GET["userid"]))
 	$userid = $_GET["userid"];
 
@@ -71,7 +72,7 @@ if ($document->getAccessMode($user) < M_READ) {
 
 // delete notification
 if ($action == "delnotify"){
-	if (isset($userid)) {
+	if ($userid) {
 		$obj = $dms->getUser($userid);
 		$res = $document->removeNotify($userid, true);
 	} elseif (isset($groupid)) {
@@ -134,7 +135,7 @@ if ($action == "delnotify"){
 // add notification
 else if ($action == "addnotify") {
 
-	if ($userid != -1) {
+	if ($userid) {
 		$res = $document->addNotify($userid, true);
 		switch ($res) {
 			case -1:
