@@ -26,11 +26,11 @@ if (!$user->isAdmin()) {
 	UI::exitError(getMLText("admin_tools"),getMLText("access_denied"));
 }
 
-if (!isset($_GET["targetidform3"]) || !is_numeric($_GET["targetidform3"]) || intval($_GET["targetidform3"])<1) {
+if (!isset($_GET["targetid"]) || !is_numeric($_GET["targetid"]) || intval($_GET["targetid"])<1) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_folder_id"));
 }
 
-$folder = $dms->getFolder(intval($_GET["targetidform3"]));
+$folder = $dms->getFolder(intval($_GET["targetid"]));
 
 if (!is_object($folder)) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_folder_id"));
