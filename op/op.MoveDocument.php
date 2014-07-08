@@ -38,11 +38,11 @@ if (!is_object($document)) {
 
 $oldFolder = $document->getFolder();
 
-if (!isset($_GET["targetidform1"]) || !is_numeric($_GET["targetidform1"]) || $_GET["targetidform1"]<1) {
+if (!isset($_GET["targetid"]) || !is_numeric($_GET["targetid"]) || $_GET["targetid"]<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_target_folder"));
 }
 
-$targetid = $_GET["targetidform1"];
+$targetid = $_GET["targetid"];
 $targetFolder = $dms->getFolder($targetid);
 
 if (!is_object($targetFolder)) {

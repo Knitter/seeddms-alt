@@ -47,10 +47,10 @@ function createVersionigFiles($folder)
 	return true;
 }
 
-if (!isset($_GET["targetidform1"]) || !is_numeric($_GET["targetidform1"]) || intval($_GET["targetidform1"])<1) {
+if (!isset($_GET["targetid"]) || !is_numeric($_GET["targetid"]) || intval($_GET["targetid"])<1) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_folder_id"));
 }
-$folderid = $_GET["targetidform1"];
+$folderid = $_GET["targetid"];
 $folder = $dms->getFolder($folderid);
 
 if (!is_object($folder)) {
