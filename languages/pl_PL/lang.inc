@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (676), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (680), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -135,7 +135,7 @@ URL: [url]',
 'backup_remove' => 'Usuń plik backupu',
 'backup_tools' => 'Narzędzia kopii zapasowej',
 'between' => 'między',
-'browse' => '',
+'browse' => 'Przeglądaj',
 'calendar' => 'Kalendarz',
 'calendar_week' => 'Kalendarz tygodniowy',
 'cancel' => 'Anuluj',
@@ -159,8 +159,8 @@ URL: [url]',
 'change_password_message' => 'Twoje hasło zostało zmienione.',
 'change_status' => 'Zmień status',
 'charts' => 'Wykresy',
-'chart_docsaccumulated_title' => '',
-'chart_docspercategory_title' => '',
+'chart_docsaccumulated_title' => 'Liczba dokumentów',
+'chart_docspercategory_title' => 'Dokumentów na kategorię',
 'chart_docspermimetype_title' => '',
 'chart_docspermonth_title' => '',
 'chart_docsperstatus_title' => '',
@@ -1013,7 +1013,7 @@ URL: [url]',
 'splash_removed_from_clipboard' => 'Usunięto ze schowka',
 'splash_rm_attribute' => 'Usunięto atrybut',
 'splash_rm_document' => 'Dokument usunięto',
-'splash_rm_folder' => '',
+'splash_rm_folder' => 'Folder usunięty',
 'splash_rm_group' => 'Grupę usunięto',
 'splash_rm_group_member' => 'Usunięto członka grupy',
 'splash_rm_user' => 'Użytkownika usunięto',

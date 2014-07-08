@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (717)
+//    Translators: Admin (719)
 
 $text = array(
 'accept' => 'Accetta',
@@ -883,7 +883,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'splash_cleared_clipboard' => '',
 'splash_document_edited' => '',
 'splash_document_locked' => 'Documento bloccato',
-'splash_document_unlocked' => '',
+'splash_document_unlocked' => 'Documento sbloccato',
 'splash_edit_attribute' => '',
 'splash_edit_group' => '',
 'splash_edit_user' => '',
@@ -894,7 +894,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'splash_removed_from_clipboard' => '',
 'splash_rm_attribute' => '',
 'splash_rm_document' => 'Documento rimosso',
-'splash_rm_folder' => '',
+'splash_rm_folder' => 'Cartella eliminata',
 'splash_rm_group' => '',
 'splash_rm_group_member' => '',
 'splash_rm_user' => '',
