@@ -84,8 +84,8 @@ if ($_GET["type"]=="document"){
 } else if ($_GET["type"]=="folder") {
 
 	if ($_GET["action"]=="add"){
-		if (!isset($_POST["targetidform1"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
-		$folderid = $_POST["targetidform1"];
+		if (!isset($_POST["targetid"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
+		$folderid = $_POST["targetid"];
 	}else if ($_GET["action"]=="del"){
 		if (!isset($_GET["id"])) UI::exitError(getMLText("my_account"),getMLText("error_occured"));
 		$folderid = $_GET["id"];

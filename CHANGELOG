@@ -21,6 +21,7 @@
 - much improved document handling
 - list mandatory approvers/reviewers on AddDocument and UpdateDocument page (Bug #154)
 ₋ search in attributes of folders
+- fix document selection on ManageNotify page
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.8
