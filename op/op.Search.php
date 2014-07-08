@@ -220,8 +220,8 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 
 	// Check to see if the search has been restricted to a particular sub-tree in
 	// the folder hierarchy.
-	if (isset($_GET["targetidform1"]) && is_numeric($_GET["targetidform1"]) && $_GET["targetidform1"]>0) {
-		$targetid = $_GET["targetidform1"];
+	if (isset($_GET["targetid"]) && is_numeric($_GET["targetid"]) && $_GET["targetid"]>0) {
+		$targetid = $_GET["targetid"];
 		$startFolder = $dms->getFolder($targetid);
 	}
 	else {
