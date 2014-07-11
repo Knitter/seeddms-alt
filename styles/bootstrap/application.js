@@ -448,12 +448,11 @@ function onAddClipboard(ev) {
 		$.get('../op/op.Ajax.php',
 			{ command: 'addtoclipboard', type: source_type, id: source_id },
 			function(data) {
-				console.log(data);
 				if(data.success) {
 					$("#main-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=mainclipboard')
 					$("#menu-clipboard").html('Loading').load('../op/op.Ajax.php?command=view&view=menuclipboard')
 					noty({
-						text: attr_msg,
+						text: data.message,
 						type: 'success',
 						dismissQueue: true,
 						layout: 'topRight',
@@ -480,20 +479,30 @@ function onAddClipboard(ev) {
 
 (function( SeedDMSUpload, $, undefined ) {
 	var ajaxurl = "../op/op.Ajax.php";
-	var successMsg = "File uploaded";
-	var editBtnLabel = "Edit document";
+	var editBtnLabel = "Edit";
+	var abortBtnLabel = "Abort";
+	var maxFileSize = 100000;
+	var maxFileSizeMsg = 'File too large';
 	var rowCount=0;
 
 	SeedDMSUpload.setUrl = function(url)  {
 		ajaxurl = url;
 	}
-	
-	SeedDMSUpload.setSuccessMsg = function(msg)  {
-		successMsg = msg;
+
+	SeedDMSUpload.setAbortBtnLabel = function(label)  {
+		abortBtnLabel = label;
 	}
-	
+
 	SeedDMSUpload.setEditBtnLabel = function(label)  {
 		editBtnLabel = label;
+	}
+
+	SeedDMSUpload.setMaxFileSize = function(size)  {
+		maxFileSize = size;
+	}
+
+	SeedDMSUpload.setMaxFileSizeMsg = function(msg)  {
+		maxFileSizeMsg = msg;
 	}
 	
 	function sendFileToServer(formData,status) {
@@ -562,7 +571,7 @@ function onAddClipboard(ev) {
 		this.filename = $("<div class='filename'></div>").appendTo(this.statusbar);
 		this.size = $("<div class='filesize'></div>").appendTo(this.statusbar);
 		this.progressBar = $("<div class='progress'><div class='bar bar-success'></div></div>").appendTo(this.statusbar);
-		this.abort = $("<div class='btn btn-danger'>Abort</div>").appendTo(this.statusbar);
+		this.abort = $("<div class='btn btn-mini btn-danger'>" + abortBtnLabel + "</div>").appendTo(this.statusbar);
 //		$('.statusbar').empty();
 		obj.after(this.statusbar);
 		this.setFileNameSize = function(name,size) {
@@ -598,14 +607,25 @@ function onAddClipboard(ev) {
 		var target = obj.data('target');
 		if(target) {
 			for (var i = 0; i < files.length; i++) {
-				var fd = new FormData();
-				fd.append('folderid', target);
-				fd.append('formtoken', obj.data('formtoken'));
-				fd.append('userfile', files[i]);
+				if(files[i].size <= maxFileSize) {
+					var fd = new FormData();
+					fd.append('folderid', target);
+					fd.append('formtoken', obj.data('formtoken'));
+					fd.append('userfile', files[i]);
 
-				var status = new createStatusbar(obj); //Using this we can set progress.
-				status.setFileNameSize(files[i].name,files[i].size);
-				sendFileToServer(fd,status);
+					var status = new createStatusbar(obj);
+					status.setFileNameSize(files[i].name,files[i].size);
+					sendFileToServer(fd,status);
+				} else {
+					noty({
+						text: maxFileSizeMsg + '<br /><em>' + files[i].name + ' (' + files[i].size + ' Bytes)</em>',
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 5000,
+					});
+				}
 			}
 		}
 	}
