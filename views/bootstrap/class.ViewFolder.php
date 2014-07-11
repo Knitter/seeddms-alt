@@ -160,12 +160,10 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			$this->contentContainerStart();
 			echo "<table class=\"table-condensed\">\n";
 			if($user->isAdmin()) {
-				if($folder->inheritsAccess()) {
 					echo "<tr>";
 					echo "<td>".getMLText("id").":</td>\n";
 					echo "<td>".htmlspecialchars($folder->getID())."</td>\n";
 					echo "</tr>";
-				}
 			}
 			echo "<tr>";
 			echo "<td>".getMLText("owner").":</td>\n";
