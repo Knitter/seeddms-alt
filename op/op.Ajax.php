@@ -169,7 +169,7 @@ switch($command) {
 						break;
 				}
 				header('Content-Type: application/json');
-				echo json_encode(array('success'=>true));
+				echo json_encode(array('success'=>true, 'message'=>getMLText('splash_added_to_clipboard')));
 			} else {
 				header('Content-Type: application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('error')));
