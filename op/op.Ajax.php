@@ -18,6 +18,8 @@
 
 include("../inc/inc.Settings.php");
 include("../inc/inc.LogInit.php");
+include("../inc/inc.Utils.php");
+include("../inc/inc.ClassEmail.php");
 include("../inc/inc.DBInit.php");
 include("../inc/inc.Language.php");
 include("../inc/inc.ClassUI.php");
@@ -50,6 +52,12 @@ if (isset($_COOKIE["mydms_session"])) {
 		if($resArr["su"]) {
 			$user = $dms->getUser($resArr["su"]);
 		}
+	}
+	if($settings->_enableEmail) {
+		$notifier = new SeedDMS_Email();
+		$notifier->setSender($user);
+	} else {
+		$notifier = null;
 	}
 	include $settings->_rootDir . "languages/" . $resArr["language"] . "/lang.inc";
 } else {
@@ -452,7 +460,7 @@ switch($command) {
 
 				$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 
-				if ($_POST["name"]!="")
+				if (!empty($_POST["name"]))
 					$name = $_POST["name"];
 				else
 					$name = basename($userfilename);
@@ -466,13 +474,62 @@ switch($command) {
 					}
 				}
 
+				// Get the list of reviewers and approvers for this document.
+				$reviewers = array();
+				$approvers = array();
+				$reviewers["i"] = array();
+				$reviewers["g"] = array();
+				$approvers["i"] = array();
+				$approvers["g"] = array();
+
+				// add mandatory reviewers/approvers
+				$docAccess = $folder->getReadAccessList($settings->_enableAdminRevApp, $settings->_enableOwnerRevApp);
+				$res=$user->getMandatoryReviewers();
+				foreach ($res as $r){
+
+					if ($r['reviewerUserID']!=0){
+						foreach ($docAccess["users"] as $usr)
+							if ($usr->getID()==$r['reviewerUserID']){
+								$reviewers["i"][] = $r['reviewerUserID'];
+								break;
+							}
+					}
+					else if ($r['reviewerGroupID']!=0){
+						foreach ($docAccess["groups"] as $grp)
+							if ($grp->getID()==$r['reviewerGroupID']){
+								$reviewers["g"][] = $r['reviewerGroupID'];
+								break;
+							}
+					}
+				}
+				$res=$user->getMandatoryApprovers();
+				foreach ($res as $r){
+
+					if ($r['approverUserID']!=0){
+						foreach ($docAccess["users"] as $usr)
+							if ($usr->getID()==$r['approverUserID']){
+								$approvers["i"][] = $r['approverUserID'];
+								break;
+							}
+					}
+					else if ($r['approverGroupID']!=0){
+						foreach ($docAccess["groups"] as $grp)
+							if ($grp->getID()==$r['approverGroupID']){
+								$approvers["g"][] = $r['approverGroupID'];
+								break;
+							}
+					}
+				}
+
+				$workflow = $user->getMandatoryWorkflow();
+
 				$cats = array();
 
 				$res = $folder->addDocument($name, '', false, $user, '',
 																		array(), $userfiletmp, basename($userfilename),
 																		$fileType, $userfiletype, 0,
-																		array(), array(), 1,
-																		'', array(), array(), null);
+																		$reviewers, $approvers, 1,
+																		'', array(), array(), $workflow);
 
 				if (is_bool($res) && !$res) {
 					header('Content-Type', 'application/json');
@@ -530,8 +587,8 @@ switch($command) {
 						$params['folder_name'] = $folder->getName();
 						$params['folder_path'] = $folder->getFolderPathPlain();
 						$params['username'] = $user->getFullName();
-						$params['comment'] = $comment;
-						$params['version_comment'] = $version_comment;
+						$params['comment'] = '';
+						$params['version_comment'] = '';
 						$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 						$params['sitename'] = $settings->_siteName;
 						$params['http_root'] = $settings->_httpRoot;
