@@ -145,6 +145,8 @@ class Settings { /* {{{ */
 	var $_firstDayOfWeek = 0;
 	// enable/disable display of the clipboard
 	var $_enableClipboard = true;
+	// enable/disable display of the drop zone for file upload
+	var $_enableDropUpload = true;
 	// enable/disable display of the folder tree
 	var $_enableFolderTree = true;
 	// count documents and folders for folderview recursively
@@ -325,6 +327,7 @@ class Settings { /* {{{ */
 		$this->_enableEmail = Settings::boolVal($tab["enableEmail"]);
 		$this->_enableUsersView = Settings::boolVal($tab["enableUsersView"]);
 		$this->_enableClipboard = Settings::boolVal($tab["enableClipboard"]);
+		$this->_enableDropUpload = Settings::boolVal($tab["enableDropUpload"]);
 		$this->_enableFolderTree = Settings::boolVal($tab["enableFolderTree"]);
 		$this->_enableRecursiveCount = Settings::boolVal($tab["enableRecursiveCount"]);
 		$this->_maxRecursiveCount = intval($tab["maxRecursiveCount"]);
@@ -585,7 +588,8 @@ class Settings { /* {{{ */
     $this->setXMLAttributValue($node, "enableConverting", $this->_enableConverting);
     $this->setXMLAttributValue($node, "enableEmail", $this->_enableEmail);
     $this->setXMLAttributValue($node, "enableUsersView", $this->_enableUsersView);
-	$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
+		$this->setXMLAttributValue($node, "enableClipboard", $this->_enableClipboard);
+		$this->setXMLAttributValue($node, "enableDropUpload", $this->_enableDropUpload);
     $this->setXMLAttributValue($node, "enableFolderTree", $this->_enableFolderTree);
     $this->setXMLAttributValue($node, "enableRecursiveCount", $this->_enableRecursiveCount);
     $this->setXMLAttributValue($node, "maxRecursiveCount", $this->_maxRecursiveCount);
