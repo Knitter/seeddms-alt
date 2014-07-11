@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (680), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (688), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -122,8 +122,8 @@ Folder nadrzędny: [folder_path]
 Użytkownik: [username]
 URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: [name] - Zmiana atrybutu',
-'attribute_count' => '',
-'attribute_value' => '',
+'attribute_count' => 'liczba użyć',
+'attribute_value' => 'wartość atrybutu',
 'attr_no_regex_match' => 'Wartość atrybutu nie pasuje do wyrażenia regularnego',
 'at_least_n_users_of_group' => 'Przynajmniej [number_of_users] użytkowników grupy [group]',
 'august' => 'Sierpień',
@@ -161,9 +161,9 @@ URL: [url]',
 'charts' => 'Wykresy',
 'chart_docsaccumulated_title' => 'Liczba dokumentów',
 'chart_docspercategory_title' => 'Dokumentów na kategorię',
-'chart_docspermimetype_title' => '',
-'chart_docspermonth_title' => '',
-'chart_docsperstatus_title' => '',
+'chart_docspermimetype_title' => 'Dokumenty według typu mime',
+'chart_docspermonth_title' => 'Nowe dokumenty według miesięcy',
+'chart_docsperstatus_title' => 'Dokumenty według statusu',
 'chart_docsperuser_title' => 'Dokumenty na użytkownika',
 'chart_selection' => 'Wybierz wykres',
 'chart_sizeperuser_title' => 'Zajętość dysku na użytkownika',
@@ -294,8 +294,8 @@ URL: [url]',
 'draft_pending_review' => 'Szkic - w oczekiwaniu na opinię',
 'drag_icon_here' => 'Przeciągnij ikonę folderu lub dokumentu tutaj!',
 'dropfolder_file' => 'Plik z folderu rozwijanego',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => 'Szybki upload',
+'drop_files_here' => 'Przeciągnij tu pliki',
 'dump_creation' => 'Utworzenie zrzutu bazy danych',
 'dump_creation_warning' => 'Ta operacja utworzy plik będący zrzutem zawartości bazy danych. Po utworzeniu plik zrzutu będzie się znajdował w folderze danych na serwerze.',
 'dump_list' => 'Istniejące pliki zrzutu',
@@ -1099,7 +1099,7 @@ URL: [url]',
 'update_reviewers' => 'Aktualizuj listę recenzentów',
 'uploaded_by' => 'Przesłane przez',
 'uploading_failed' => 'Przesyłanie nie powiodło się. Skontaktuj się z administratorem.',
-'uploading_maxsize' => '',
+'uploading_maxsize' => 'Rozmiar pliku większy niż dopuszczalny',
 'uploading_zerosize' => 'Próba przesłania pustego pliku. Przesłanie zostało przerwane.',
 'used_discspace' => 'Użyta przestrzeń dyskowa',
 'user' => 'Użytkownik',
