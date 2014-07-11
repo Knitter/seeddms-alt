@@ -442,8 +442,8 @@ function onDrop(ev) {
 
 function onAddClipboard(ev) {
 	ev.preventDefault();
-	source_type = ev.dataTransfer.getData("type");
-	source_id = ev.dataTransfer.getData("id");
+	source_type = ev.originalEvent.dataTransfer.getData("type");
+	source_id = ev.originalEvent.dataTransfer.getData("id");
 	if(source_type == 'document' || source_type == 'folder') {
 		$.get('../op/op.Ajax.php',
 			{ command: 'addtoclipboard', type: source_type, id: source_id },
@@ -477,3 +477,182 @@ function onAddClipboard(ev) {
 		//document.location = url;
 	}
 }
+
+(function( SeedDMSUpload, $, undefined ) {
+	var ajaxurl = "../op/op.Ajax.php";
+	var successMsg = "File uploaded";
+	var editBtnLabel = "Edit document";
+	var rowCount=0;
+
+	SeedDMSUpload.setUrl = function(url)  {
+		ajaxurl = url;
+	}
+	
+	SeedDMSUpload.setSuccessMsg = function(msg)  {
+		successMsg = msg;
+	}
+	
+	SeedDMSUpload.setEditBtnLabel = function(label)  {
+		editBtnLabel = label;
+	}
+	
+	function sendFileToServer(formData,status) {
+		formData.append('command', 'uploaddocument');
+		var uploadURL = ajaxurl; //Upload URL
+		var extraData ={}; //Extra Data.
+		var jqXHR=$.ajax({
+			xhr: function() {
+			var xhrobj = $.ajaxSettings.xhr();
+			if (xhrobj.upload) {
+				xhrobj.upload.addEventListener('progress', function(event) {
+						var percent = 0;
+						var position = event.loaded || event.position;
+						var total = event.total;
+						if (event.lengthComputable) {
+								percent = Math.ceil(position / total * 100);
+						}
+						//Set progress
+						status.setProgress(percent);
+					}, false);
+				}
+				return xhrobj;
+			},
+			url: uploadURL,
+			type: "POST",
+			contentType: false,
+			dataType:"json",
+			processData: false,
+			cache: false,
+			data: formData,
+			success: function(data){
+				status.setProgress(100);
+//				console.log(data);
+				if(data.success) {
+					noty({
+						text: data.message,
+						type: 'success',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 1500,
+					});
+					status.statusbar.after($('<a href="../out/out.EditDocument.php?documentid=' + data.data + '" class="btn btn-mini btn-primary">' + editBtnLabel + '</a>'));
+				} else {
+					noty({
+						text: data.message,
+						type: 'error',
+						dismissQueue: true,
+						layout: 'topRight',
+						theme: 'defaultTheme',
+						timeout: 3500,
+					});
+				}
+			}
+		}); 
+
+		status.setAbort(jqXHR);
+	}
+
+	function createStatusbar(obj) {
+		rowCount++;
+		var row="odd";
+		this.obj = obj;
+		if(rowCount %2 ==0) row ="even";
+		this.statusbar = $("<div class='statusbar "+row+"'></div>");
+		this.filename = $("<div class='filename'></div>").appendTo(this.statusbar);
+		this.size = $("<div class='filesize'></div>").appendTo(this.statusbar);
+		this.progressBar = $("<div class='progress'><div class='bar bar-success'></div></div>").appendTo(this.statusbar);
+		this.abort = $("<div class='btn btn-danger'>Abort</div>").appendTo(this.statusbar);
+//		$('.statusbar').empty();
+		obj.after(this.statusbar);
+		this.setFileNameSize = function(name,size) {
+			var sizeStr="";
+			var sizeKB = size/1024;
+			if(parseInt(sizeKB) > 1024) {
+				var sizeMB = sizeKB/1024;
+				sizeStr = sizeMB.toFixed(2)+" MB";
+			} else {
+				sizeStr = sizeKB.toFixed(2)+" KB";
+			}
+
+			this.filename.html(name);
+			this.size.html(sizeStr);
+		}
+		this.setProgress = function(progress) {       
+			var progressBarWidth =progress*this.progressBar.width()/ 100;  
+			this.progressBar.find('div').animate({ width: progressBarWidth }, 10).html(progress + "% ");
+			if(parseInt(progress) >= 100) {
+				this.abort.hide();
+			}
+		}
+		this.setAbort = function(jqxhr) {
+			var sb = this.statusbar;
+			this.abort.click(function() {
+				jqxhr.abort();
+				sb.hide();
+			});
+		}
+	}
+
+	SeedDMSUpload.handleFileUpload = function(files,obj) {
+		var target = obj.data('target');
+		if(target) {
+			for (var i = 0; i < files.length; i++) {
+				var fd = new FormData();
+				fd.append('folderid', target);
+				fd.append('formtoken', obj.data('formtoken'));
+				fd.append('userfile', files[i]);
+
+				var status = new createStatusbar(obj); //Using this we can set progress.
+				status.setFileNameSize(files[i].name,files[i].size);
+				sendFileToServer(fd,status);
+			}
+		}
+	}
+}( window.SeedDMSUpload = window.SeedDMSUpload || {}, jQuery ));
+
+$(document).ready(function() {
+	var obj = $("#dragandrophandler");
+	obj.on('dragenter', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		$(this).css('border', '2px dotted #0B85A1');
+	});
+	obj.on('dragover', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+	});
+	obj.on('drop', function (e) {
+		$(this).css('border', '0px dotted #0B85A1');
+		e.preventDefault();
+		var files = e.originalEvent.dataTransfer.files;
+
+		//We need to send dropped files to Server
+		SeedDMSUpload.handleFileUpload(files,obj);
+	});
+
+	var clipboard = $("#main-clipboard");
+	clipboard.on('dragenter', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		$(this).css('border', '2px dotted #0B85A1');
+	});
+	clipboard.on('drop', function (e) {
+		$(this).css('border', '0px dotted #0B85A1');
+		onAddClipboard(e);
+	});
+
+	$(document).on('dragenter', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+	});
+	$(document).on('dragover', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+	});
+	$(document).on('drop', function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+	});
+ 
+}); 
