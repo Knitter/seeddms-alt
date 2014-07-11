@@ -963,6 +963,7 @@ $text = array(
 'update_reviewers' => 'Aktualizovať zoznam kontrolórov',
 'uploaded_by' => 'Nahral',
 'uploading_failed' => 'Nahranie zlyhalo. Prosám, kontaktujte správcu.',
+'uploading_maxsize' => '',
 'uploading_zerosize' => '',
 'used_discspace' => '',
 'user' => 'Používateľ',

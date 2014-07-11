@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1902)
+//    Translators: Admin (1903)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -1119,6 +1119,7 @@ URL: [url]',
 'update_reviewers' => 'Liste der Prüfer aktualisieren',
 'uploaded_by' => 'Hochgeladen durch',
 'uploading_failed' => 'Das Hochladen einer Datei ist fehlgeschlagen. Bitte überprüfen Sie die maximale Dateigröße für Uploads.',
+'uploading_maxsize' => 'Die Datei überschreitet die maximale Dateigröße für Uploads.',
 'uploading_zerosize' => 'Versuch eine leere Datei hochzuladen. Vorgang wird abgebrochen.',
 'used_discspace' => 'Verbrauchter Speicherplatz',
 'user' => 'Benutzer',

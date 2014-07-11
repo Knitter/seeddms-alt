@@ -963,6 +963,7 @@ $text = array(
 'update_reviewers' => 'Actualitzar llista de revisors',
 'uploaded_by' => 'Enviat per',
 'uploading_failed' => 'Enviament (Upload) fallat. Si us plau, contacteu amb l\'administrador.',
+'uploading_maxsize' => '',
 'uploading_zerosize' => '',
 'used_discspace' => '',
 'user' => 'Usuari',

@@ -963,6 +963,7 @@ $text = array(
 'update_reviewers' => '',
 'uploaded_by' => '',
 'uploading_failed' => '',
+'uploading_maxsize' => '',
 'uploading_zerosize' => '',
 'used_discspace' => '',
 'user' => '',

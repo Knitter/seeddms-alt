@@ -971,6 +971,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'update_reviewers' => 'Aggiornamento lista revisori',
 'uploaded_by' => 'Caricato da',
 'uploading_failed' => 'Upload fallito. Sei pregato di contattare l\'amministratore.',
+'uploading_maxsize' => '',
 'uploading_zerosize' => '',
 'used_discspace' => 'Spazio disco ereditato',
 'user' => 'Utente',
