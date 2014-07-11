@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (719)
+//    Translators: Admin (721)
 
 $text = array(
 'accept' => 'Accetta',
@@ -251,6 +251,8 @@ $text = array(
 'draft_pending_review' => 'Bozza in revisione',
 'drag_icon_here' => 'Trascina qui l\'icona della cartella o del documento',
 'dropfolder_file' => '',
+'dropupload' => '',
+'drop_files_here' => '',
 'dump_creation' => 'Creazione DB dump',
 'dump_creation_warning' => 'Con questa operazione è possibile creare un file di dump del contenuto del database. Dopo la creazione il file viene salvato nella cartella dati del server.',
 'dump_list' => 'List dei dump presenti',
@@ -543,7 +545,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'pt_BR' => 'Portoghese (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => '',
-'quota_is_disabled' => '',
+'quota_is_disabled' => 'Supporto per le quote è attualmente disattivata nelle impostazioni. L\'impostazione di un contingente utente non avrà alcun effetto finché non viene nuovamente abilitato.',
 'quota_warning' => '',
 'refresh' => 'Refresh',
 'rejected' => 'Rifiutato',
@@ -626,7 +628,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'select_ind_approvers' => '',
 'select_ind_reviewers' => '',
 'select_one' => 'Seleziona uno',
-'select_users' => '',
+'select_users' => 'Clicca per selezionare l\'utente',
 'select_workflow' => '',
 'september' => 'Settembre',
 'sequence' => 'Posizione',
@@ -687,6 +689,8 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'settings_enableClipboard_desc' => '',
 'settings_enableConverting' => 'Abilita conversione',
 'settings_enableConverting_desc' => 'Abilita/disabilita la conversione dei files',
+'settings_enableDropUpload' => '',
+'settings_enableDropUpload_desc' => '',
 'settings_enableDuplicateDocNames' => '',
 'settings_enableDuplicateDocNames_desc' => '',
 'settings_enableEmail' => 'Enable E-mail',
@@ -881,6 +885,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'splash_add_group_member' => '',
 'splash_add_user' => '',
 'splash_cleared_clipboard' => '',
+'splash_document_added' => '',
 'splash_document_edited' => '',
 'splash_document_locked' => 'Documento bloccato',
 'splash_document_unlocked' => 'Documento sbloccato',
