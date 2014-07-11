@@ -131,11 +131,11 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
 
-		$owner = $folder->getOwner();
 		if ($enableDropUpload) {
 			echo "<div class=\"row-fluid\">";
 			echo "<div class=\"span8\">";
 		}
+		$owner = $folder->getOwner();
 		$this->contentHeading(getMLText("folder_infos"));
 		$this->contentContainerStart();
 		echo "<table class=\"table-condensed\">\n";
@@ -236,8 +236,9 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			echo $this->documentListRow($document, $previewer);
 		}
 
-		if ((count($subFolders) > 0)||(count($documents) > 0))
+		if ((count($subFolders) > 0)||(count($documents) > 0)) {
 			echo "</tbody>\n</table>\n";
+		}
 
 		echo "</div>\n"; // End of right column div
 
