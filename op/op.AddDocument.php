@@ -310,22 +310,6 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 					$notifyList['groups'][] = $dms->getGroup($approvergrpid);
 				}
 			}
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("new_document_email");
-			$message = getMLText("new_document_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$name."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				getMLText("comment_for_current_version").": ".$version_comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			
-			$notifier->toList($user, $notifyList["users"], $subject, $message);
-			foreach ($notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 
 			$subject = "new_document_email_subject";
 			$message = "new_document_email_body";

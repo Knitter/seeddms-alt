@@ -1369,7 +1369,7 @@ $(function() {
 	 */
 	function printClipboard($clipboard){ /* {{{ */
 		$this->contentHeading(getMLText("clipboard"), true);
-		echo "<div id=\"main-clipboard\" _class=\"well\" ondragover=\"allowDrop(event)\" ondrop=\"onAddClipboard(event)\">\n";
+		echo "<div id=\"main-clipboard\" _class=\"well\" ondragover=\"allowDrop(event)\" _ondrop=\"onAddClipboard(event)\">\n";
 		echo $this->mainClipboard($clipboard);
 		echo "</div>\n";
 	} /* }}} */
