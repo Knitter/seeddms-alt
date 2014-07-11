@@ -435,16 +435,16 @@ switch($command) {
 					echo json_encode(array('success'=>false, 'message'=>getMLText("invalid_folder_id")));
 					exit;
 				}
-				if ($_FILES["userfile"]["size"]==0) {
-					header('Content-Type', 'application/json');
-					echo json_encode(array('success'=>false, 'message'=>getMLText("uploading_zerosize")));
-					exit;
-				} 
 				if (!is_uploaded_file($_FILES["userfile"]["tmp_name"]) || $_FILES['userfile']['error']!=0){
 					header('Content-Type', 'application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("uploading_failed")));
 					exit;
 				}
+				if ($_FILES["userfile"]["size"]==0) {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>getMLText("uploading_zerosize")));
+					exit;
+				} 
 
 				$userfiletmp = $_FILES["userfile"]["tmp_name"];
 				$userfiletype = $_FILES["userfile"]["type"];
@@ -543,7 +543,7 @@ switch($command) {
 					}
 				}
 				header('Content-Type', 'application/json');
-				echo json_encode(array('success'=>true, 'message'=>getMLText('upload_successful'), 'data'=>$document->getID()));
+				echo json_encode(array('success'=>true, 'message'=>getMLText('splash_document_added'), 'data'=>$document->getID()));
 			} else {
 				header('Content-Type', 'application/json');
 				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
