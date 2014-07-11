@@ -76,6 +76,24 @@ div.mandatories {
 div.mandatories span {
 	font-weight: bold;
 }
+
+div.statusbar {
+	font-size: 80%;
+}
+div.statusbar div.filename {
+	display: inline-block;
+}
+div.statusbar div.filesize {
+	display: inline-block;
+	float: right;
+}
+div.statusbar div.progress {
+	margin-bottom: 10px;
+}
+div.statusbar a.btn {
+	margin-bottom: 10px;
+}
+
 @media (max-width: 480px) { 
     .nav-tabs > li {
         float:none;
