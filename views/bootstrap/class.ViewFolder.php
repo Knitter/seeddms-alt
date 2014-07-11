@@ -78,6 +78,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		$orderby = $this->params['orderby'];
 		$enableFolderTree = $this->params['enableFolderTree'];
 		$enableClipboard = $this->params['enableClipboard'];
+		$enableDropUpload = $this->params['enableDropUpload'];
 		$expandFolderTree = $this->params['expandFolderTree'];
 		$showtree = $this->params['showtree'];
 		$cachedir = $this->params['cachedir'];
@@ -124,13 +125,18 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 				}
 			}
 			if ($enableClipboard) $this->printClipboard($this->params['session']->getClipboard());
+
 			echo "</div>\n";
 		}
 		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
-		$this->contentHeading(getMLText("folder_infos"));
 
 		$owner = $folder->getOwner();
+		if ($enableDropUpload) {
+			echo "<div class=\"row-fluid\">";
+			echo "<div class=\"span8\">";
+		}
+		$this->contentHeading(getMLText("folder_infos"));
 		$this->contentContainerStart();
 		echo "<table class=\"table-condensed\">\n";
 		if($user->isAdmin()) {
@@ -184,6 +190,19 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 		echo "</table>\n";
 		$this->contentContainerEnd();
+		if ($enableDropUpload) {
+			echo "</div>";
+			echo "<div class=\"span4\">";
+			$this->contentHeading(getMLText("dropupload"), true);
+			$this->addFooterJS("SeedDMSUpload.setUrl('../op/op.Ajax.php');");
+			$this->addFooterJS("SeedDMSUpload.setSuccessMsg('".getMLText("splash_document_added")."');");
+			$this->addFooterJS("SeedDMSUpload.setEditBtnLabel('".getMLText("edit_document_props")."');");
+?>
+<div id="dragandrophandler" class="well alert" data-target="<?php echo $folder->getID(); ?>" data-formtoken="<?php echo createFormKey('adddocument'); ?>"><?php printMLText('drop_files_here'); ?></div>
+<?php
+			echo "</div>";
+			echo "</div>";
+		}
 
 		$this->contentHeading(getMLText("folder_contents"));
 
