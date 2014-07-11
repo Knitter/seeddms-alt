@@ -417,5 +417,139 @@ switch($command) {
 		echo $content;
 
 		break; /* }}} */
+
+	case 'uploaddocument': /* {{{ */
+		if($user) {
+			if(checkFormKey('adddocument')) {
+				if (!isset($_POST["folderid"]) || !is_numeric($_POST["folderid"]) || intval($_POST["folderid"])<1) {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>getMLText("invalid_folder_id")));
+					exit;
+				}
+
+				$folderid = $_POST["folderid"];
+				$folder = $dms->getFolder($folderid);
+
+				if (!is_object($folder)) {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>getMLText("invalid_folder_id")));
+					exit;
+				}
+				if ($_FILES["userfile"]["size"]==0) {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>getMLText("uploading_zerosize")));
+					exit;
+				} 
+				if (!is_uploaded_file($_FILES["userfile"]["tmp_name"]) || $_FILES['userfile']['error']!=0){
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>getMLText("uploading_failed")));
+					exit;
+				}
+
+				$userfiletmp = $_FILES["userfile"]["tmp_name"];
+				$userfiletype = $_FILES["userfile"]["type"];
+				$userfilename = $_FILES["userfile"]["name"];
+
+				$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
+
+				if ($_POST["name"]!="")
+					$name = $_POST["name"];
+				else
+					$name = basename($userfilename);
+
+				/* Check if name already exists in the folder */
+				if(!$settings->_enableDuplicateDocNames) {
+					if($folder->hasDocumentByName($name)) {
+						header('Content-Type', 'application/json');
+						echo json_encode(array('success'=>false, 'message'=>getMLText("document_duplicate_name")));
+						exit;
+					}
+				}
+
+				$cats = array();
+
+				$res = $folder->addDocument($name, '', false, $user, '',
+																		array(), $userfiletmp, basename($userfilename),
+																		$fileType, $userfiletype, 0,
+																		array(), array(), 1,
+																		'', array(), array(), null);
+
+				if (is_bool($res) && !$res) {
+					header('Content-Type', 'application/json');
+					echo json_encode(array('success'=>false, 'message'=>getMLText("error_occured")));
+					exit;
+				} else {
+					$document = $res[0];
+					if(isset($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'])) {
+						foreach($GLOBALS['SEEDDMS_HOOKS']['postAddDocument'] as $hookObj) {
+							if (method_exists($hookObj, 'postAddDocument')) {
+								$hookObj->postAddDocument($document);
+							}
+						}
+					}
+					if($settings->_enableFullSearch) {
+						if(!empty($settings->_luceneClassDir))
+							require_once($settings->_luceneClassDir.'/Lucene.php');
+						else
+							require_once('SeedDMS/Lucene.php');
+
+						$index = SeedDMS_Lucene_Indexer::open($settings->_luceneDir);
+						if($index) {
+							SeedDMS_Lucene_Indexer::init($settings->_stopWordsFile);
+							$index->addDocument(new SeedDMS_Lucene_IndexedDocument($dms, $document, isset($settings->_convcmd) ? $settings->_convcmd : null, true));
+						}
+					}
+
+					/* Add a default notification for the owner of the document */
+					if($settings->_enableOwnerNotification) {
+						$res = $document->addNotify($user->getID(), true);
+					}
+					// Send notification to subscribers of folder.
+					if($notifier) {
+						$notifyList = $folder->getNotifyList();
+						if($settings->_enableNotificationAppRev) {
+							/* Reviewers and approvers will be informed about the new document */
+							foreach($reviewers['i'] as $reviewerid) {
+								$notifyList['users'][] = $dms->getUser($reviewerid);
+							}
+							foreach($approvers['i'] as $approverid) {
+								$notifyList['users'][] = $dms->getUser($approverid);
+							}
+							foreach($reviewers['g'] as $reviewergrpid) {
+								$notifyList['groups'][] = $dms->getGroup($reviewergrpid);
+							}
+							foreach($approvers['g'] as $approvergrpid) {
+								$notifyList['groups'][] = $dms->getGroup($approvergrpid);
+							}
+						}
+
+						$subject = "new_document_email_subject";
+						$message = "new_document_email_body";
+						$params = array();
+						$params['name'] = $name;
+						$params['folder_name'] = $folder->getName();
+						$params['folder_path'] = $folder->getFolderPathPlain();
+						$params['username'] = $user->getFullName();
+						$params['comment'] = $comment;
+						$params['version_comment'] = $version_comment;
+						$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
+						$params['sitename'] = $settings->_siteName;
+						$params['http_root'] = $settings->_httpRoot;
+						$notifier->toList($user, $notifyList["users"], $subject, $message, $params);
+						foreach ($notifyList["groups"] as $grp) {
+							$notifier->toGroup($user, $grp, $subject, $message, $params);
+						}
+
+					}
+				}
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>true, 'message'=>getMLText('upload_successful'), 'data'=>$document->getID()));
+			} else {
+				header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>getMLText('invalid_request_token'), 'data'=>''));
+			}
+		}
+		break; /* }}} */
+
 }
 ?>
