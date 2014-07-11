@@ -195,8 +195,10 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 			echo "<div class=\"span4\">";
 			$this->contentHeading(getMLText("dropupload"), true);
 			$this->addFooterJS("SeedDMSUpload.setUrl('../op/op.Ajax.php');");
-			$this->addFooterJS("SeedDMSUpload.setSuccessMsg('".getMLText("splash_document_added")."');");
+			$this->addFooterJS("SeedDMSUpload.setAbortBtnLabel('".getMLText("cancel")."');");
 			$this->addFooterJS("SeedDMSUpload.setEditBtnLabel('".getMLText("edit_document_props")."');");
+			$this->addFooterJS("SeedDMSUpload.setMaxFileSize(".SeedDMS_Core_File::parse_filesize(ini_get("upload_max_filesize")).");");
+			$this->addFooterJS("SeedDMSUpload.setMaxFileSizeMsg('".getMLText("uploading_maxsize")."');");
 ?>
 <div id="dragandrophandler" class="well alert" data-target="<?php echo $folder->getID(); ?>" data-formtoken="<?php echo createFormKey('adddocument'); ?>"><?php printMLText('drop_files_here'); ?></div>
 <?php
