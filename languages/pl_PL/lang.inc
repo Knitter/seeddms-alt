@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (688), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (689), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -295,7 +295,7 @@ URL: [url]',
 'drag_icon_here' => 'Przeciągnij ikonę folderu lub dokumentu tutaj!',
 'dropfolder_file' => 'Plik z folderu rozwijanego',
 'dropupload' => 'Szybki upload',
-'drop_files_here' => 'Przeciągnij tu pliki',
+'drop_files_here' => 'Przeciągnij tu pliki!',
 'dump_creation' => 'Utworzenie zrzutu bazy danych',
 'dump_creation_warning' => 'Ta operacja utworzy plik będący zrzutem zawartości bazy danych. Po utworzeniu plik zrzutu będzie się znajdował w folderze danych na serwerze.',
 'dump_list' => 'Istniejące pliki zrzutu',

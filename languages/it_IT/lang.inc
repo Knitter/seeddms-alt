@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (721)
+//    Translators: Admin (729)
 
 $text = array(
 'accept' => 'Accetta',
@@ -120,7 +120,7 @@ $text = array(
 'backup_remove' => 'Elimina file di backup',
 'backup_tools' => 'Strumenti di backup',
 'between' => 'tra',
-'browse' => '',
+'browse' => 'Carica file',
 'calendar' => 'Calendario',
 'calendar_week' => 'Calendario Settimanale',
 'cancel' => 'Annulla',
@@ -157,7 +157,7 @@ $text = array(
 'choose_group' => '--Seleziona gruppo--',
 'choose_target_category' => 'Selezione categoria',
 'choose_target_document' => 'Seleziona documento',
-'choose_target_file' => '',
+'choose_target_file' => 'Scegli file',
 'choose_target_folder' => 'Seleziona cartella',
 'choose_user' => '--Seleziona utente--',
 'choose_workflow' => '',
@@ -245,12 +245,12 @@ $text = array(
 'download' => 'Scarica',
 'do_object_repair' => 'Repaira tutte le cartelle e i documenti.',
 'do_object_setchecksum' => '',
-'do_object_setfilesize' => '',
+'do_object_setfilesize' => 'Imposta dimensione del file',
 'do_object_unlink' => '',
 'draft_pending_approval' => 'Bozza in approvazione',
 'draft_pending_review' => 'Bozza in revisione',
 'drag_icon_here' => 'Trascina qui l\'icona della cartella o del documento',
-'dropfolder_file' => '',
+'dropfolder_file' => 'Scegli file dal server',
 'dropupload' => '',
 'drop_files_here' => '',
 'dump_creation' => 'Creazione DB dump',
@@ -623,10 +623,10 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'selection' => 'Selezione',
 'select_category' => 'Clicca per selezionare la categoria',
 'select_groups' => 'Clicca per selezionare i gruppi',
-'select_grp_approvers' => '',
-'select_grp_reviewers' => '',
-'select_ind_approvers' => '',
-'select_ind_reviewers' => '',
+'select_grp_approvers' => 'Seleziona gruppo approvatori',
+'select_grp_reviewers' => 'Seleziona gruppo revisori',
+'select_ind_approvers' => 'Seleziona approvatore',
+'select_ind_reviewers' => 'Seleziona revisore',
 'select_one' => 'Seleziona uno',
 'select_users' => 'Clicca per selezionare l\'utente',
 'select_workflow' => '',
