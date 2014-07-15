@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (729)
+//    Translators: Admin (732)
 
 $text = array(
 'accept' => 'Accetta',
@@ -251,8 +251,8 @@ $text = array(
 'draft_pending_review' => 'Bozza in revisione',
 'drag_icon_here' => 'Trascina qui l\'icona della cartella o del documento',
 'dropfolder_file' => 'Scegli file dal server',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => 'Caricamento Rapido',
+'drop_files_here' => 'Trascina qui il file!',
 'dump_creation' => 'Creazione DB dump',
 'dump_creation_warning' => 'Con questa operazione è possibile creare un file di dump del contenuto del database. Dopo la creazione il file viene salvato nella cartella dati del server.',
 'dump_list' => 'List dei dump presenti',
@@ -971,7 +971,7 @@ Se hai ancora problemi al login, allora contatta il tuo amministratore di sistem
 'update_reviewers' => 'Aggiornamento lista revisori',
 'uploaded_by' => 'Caricato da',
 'uploading_failed' => 'Upload fallito. Sei pregato di contattare l\'amministratore.',
-'uploading_maxsize' => '',
+'uploading_maxsize' => 'Il file caricato supera la dimensione massima consentita.',
 'uploading_zerosize' => '',
 'used_discspace' => 'Spazio disco ereditato',
 'user' => 'Utente',

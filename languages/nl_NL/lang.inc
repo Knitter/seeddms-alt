@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (673), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (678), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -294,8 +294,8 @@ URL: [url]',
 'draft_pending_review' => 'Draft - in afwachting van controle',
 'drag_icon_here' => 'Versleep icoon van de folder of bestand hier!',
 'dropfolder_file' => 'Bestand van dropfolder',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => 'Snel toevoegen',
+'drop_files_here' => 'Sleep bestanden hier!',
 'dump_creation' => 'DB dump aanmaken',
 'dump_creation_warning' => 'M.b.v. deze functie maakt U een DB dump file. het bestand wordt opgeslagen in uw data-map op de Server',
 'dump_list' => 'Bestaande dump bestanden',
@@ -1111,7 +1111,7 @@ URL: [url]',
 'update_reviewers' => 'Bijwerken lijst van [Controleurs]',
 'uploaded_by' => 'Ge-upload door',
 'uploading_failed' => 'Upload mislukt. Neem contact op met de [Beheerder].',
-'uploading_maxsize' => '',
+'uploading_maxsize' => 'Het geuploade bestand overschrijdt de maximum grootte.',
 'uploading_zerosize' => 'Uploaden van een leeg bestand. Upload wordt geannuleerd.',
 'used_discspace' => 'Gebruike schijf ruimte',
 'user' => 'Gebruiker',
