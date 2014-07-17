@@ -154,7 +154,7 @@ function getFolder($id) { /* {{{ */
 		$folder = $dms->getFolder($id);
 	else {
 		$parentid = $app->request()->get('parentid');
-		$folder = $dms->getFolderByName($id, $parentid);
+		$folder = $dms->getFolderByName($id, $dms->getFolder($id));
 	}
 	if($folder) {
 		if($folder->getAccessMode($userobj) >= M_READ) {

@@ -1,6 +1,7 @@
 <?php
 
 include 'DocumentAPI.php';
+include 'FolderAPI.php';
 
 /** @var $app Slim */
 $app->any('/', function() {
@@ -37,4 +38,10 @@ $app->post('/document', function() {
     global $dms, $userobj, $settings;
 
     DocumentAPI::add($dms, $userobj, $settings);
+});
+
+$app->get('/folder2/:path', function($path) {
+    global $db;
+
+    FolderAPI::pathId($db, $path);
 });
