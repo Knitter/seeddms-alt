@@ -263,6 +263,12 @@ function getFolderChildren($id) { /* {{{ */
 
 function createFolder($id) { /* {{{ */
 	global $app, $dms, $userobj;
+
+	if(!$userobj) {
+		$app->response()->header('Content-Type', 'application/json');
+		echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+	}
+
 	if($id == 0) {
 		echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
 		return;
@@ -296,6 +302,12 @@ function createFolder($id) { /* {{{ */
 
 function moveFolder($id) { /* {{{ */
 	global $app, $dms, $userobj;
+
+	if(!$userobj) {
+		$app->response()->header('Content-Type', 'application/json');
+		echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+	}
+
 	$mfolder = $dms->getFolder($id);
 	if($mfolder) {
 		if ($mfolder->getAccessMode($userobj) >= M_READ) {
@@ -329,6 +341,16 @@ function moveFolder($id) { /* {{{ */
 
 function deleteFolder($id) { /* {{{ */
 	global $app, $dms, $userobj;
+
+	if(!$userobj) {
+		$app->response()->header('Content-Type', 'application/json');
+		echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+	}
+
+	if($id == 0) {
+		echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
+		return;
+	}
 	$mfolder = $dms->getFolder($id);
 	if($mfolder) {
 		if ($mfolder->getAccessMode($userobj) >= M_READWRITE) {
@@ -338,6 +360,52 @@ function deleteFolder($id) { /* {{{ */
 			} else {
 				$app->response()->header('Content-Type', 'application/json');
 				echo json_encode(array('success'=>false, 'message'=>'Error deleting folder', 'data'=>''));
+			}
+		} else {
+			$app->response()->header('Content-Type', 'application/json');
+			echo json_encode(array('success'=>false, 'message'=>'No access', 'data'=>''));
+		}
+	} else {
+		$app->response()->header('Content-Type', 'application/json');
+		echo json_encode(array('success'=>false, 'message'=>'No folder', 'data'=>''));
+	}
+} /* }}} */
+
+function uploadDocument($id) { /* {{{ */
+	global $app, $dms, $userobj;
+
+	if(!$userobj) {
+		$app->response()->header('Content-Type', 'application/json');
+		echo json_encode(array('success'=>false, 'message'=>'Not logged in', 'data'=>''));
+	}
+
+	if($id == 0) {
+		echo json_encode(array('success'=>true, 'message'=>'id is 0', 'data'=>''));
+		return;
+	}
+	$mfolder = $dms->getFolder($id);
+	if($mfolder) {
+		if ($mfolder->getAccessMode($userobj) >= M_READWRITE) {
+			$docname = $app->request()->get('name');
+			$origfilename = $app->request()->get('origfilename');
+			$content = $app->getInstance()->request()->getBody();
+			$temp = tempnam('/tmp', 'lajflk');
+			$handle = fopen($temp, "w");
+			fwrite($handle, $content);
+			fclose($handle);
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$userfiletype = finfo_file($finfo, $temp);
+			finfo_close($finfo);
+			$res = $mfolder->addDocument($docname, '', 0, $userobj, '', array(), $temp, $origfilename ? $origfilename : basename($temp), '.', $userfiletype, 0);
+			unlink($temp);
+			if($res) {
+				$doc = $res[0];
+				$rec = array('id'=>$doc->getId(), 'name'=>$doc->getName());
+				$app->response()->header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>true, 'message'=>'Upload succeded', 'data'=>$rec));
+			} else {
+				$app->response()->header('Content-Type', 'application/json');
+				echo json_encode(array('success'=>false, 'message'=>'Upload failed', 'data'=>''));
 			}
 		} else {
 			$app->response()->header('Content-Type', 'application/json');
@@ -785,6 +853,7 @@ $app->get('/folder/:id/children', 'getFolderChildren');
 $app->get('/folder/:id/parent', 'getFolderParent');
 $app->get('/folder/:id/path', 'getFolderPath');
 $app->post('/folder/:id/createfolder', 'createFolder');
+$app->put('/folder/:id/document', 'uploadDocument');
 $app->get('/document/:id', 'getDocument');
 $app->delete('/document/:id', 'deleteDocument');
 $app->post('/document/:id/move', 'moveDocument');
