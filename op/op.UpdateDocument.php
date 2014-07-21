@@ -223,6 +223,8 @@ if ($_FILES['userfile']['error'] == 0) {
 			$params['name'] = $document->getName();
 			$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
+			$params['comment'] = $document->getComment();
+			$params['version_comment'] = $contentResult->getContent()->getComment();
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;
