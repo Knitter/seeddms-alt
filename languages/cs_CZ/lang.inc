@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (613), kreml (429)
+//    Translators: Admin (614), kreml (429)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -288,6 +288,8 @@ URL: [url]',
 Dokument: [name]
 Nadřízená složka: [folder_path]
 Uživatel: [username]
+Komentář: [comment]
+Komentář k verzi: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Dokument aktualizován',
 'does_not_expire' => 'Platnost nikdy nevyprší',

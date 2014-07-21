@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1903)
+//    Translators: Admin (1904)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -288,6 +288,8 @@ URL: [url]',
 Dokument: [name]
 Elternordner: [folder_path]
 Benutzer: [username]
+Kommentar: [comment]
+Kommentar der Version: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Dokument aktualisiert',
 'does_not_expire' => 'Kein Ablaufdatum',

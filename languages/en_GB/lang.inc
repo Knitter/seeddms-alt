@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1042), netixw (14)
+//    Translators: Admin (1044), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -288,6 +288,8 @@ URL: [url]',
 Document: [name]
 Parent folder: [folder_path]
 User: [username]
+Comment: [comment]
+Version comment: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Document updated',
 'does_not_expire' => 'Does not expire',

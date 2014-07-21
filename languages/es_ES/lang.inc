@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (920), angel (123), francisco (2), jaimem (14)
+//    Translators: Admin (924), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -288,6 +288,8 @@ URL: [url]',
 Documento: [name]
 Carpeta principal: [folder_path]
 Usuario: [username]
+Comentario: [comment]
+Versión comentario: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Documento actualizado',
 'does_not_expire' => 'No caduca',
@@ -301,8 +303,8 @@ URL: [url]',
 'draft_pending_review' => 'Borrador - pendiente de revisión',
 'drag_icon_here' => 'Arrastre carpeta o documento aquí!',
 'dropfolder_file' => 'Fichero de la carpeta destino',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => 'Carga Rapida',
+'drop_files_here' => 'Arrastre archivos aquí!',
 'dump_creation' => 'Creación de volcado de BDD',
 'dump_creation_warning' => 'Con esta operación se creará un volcado a fichero del contenido de la base de datos. Después de la creación del volcado el fichero se guardará en la carpeta de datos de su servidor.',
 'dump_list' => 'Ficheros de volcado existentes',
@@ -1120,7 +1122,7 @@ URL: [url]',
 'update_reviewers' => 'Actualizar lista de revisores',
 'uploaded_by' => 'Enviado por',
 'uploading_failed' => 'Envío (Upload) fallido. Por favor contacte con el Administrador.',
-'uploading_maxsize' => '',
+'uploading_maxsize' => 'El archivo subido supera el tamaño máximo de upload',
 'uploading_zerosize' => 'Subiendo un fichero vacío. -Subida cancelada.',
 'used_discspace' => 'Espacio de disco utilizado',
 'user' => 'Usuario',
