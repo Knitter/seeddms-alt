@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (689), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (691), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -281,6 +281,8 @@ URL: [url]',
 Dokument: [name]
 Folder macierzysty: [folder_path]
 Użytkownik: [username]
+Komentarz: [comment]
+Komentarz wersji: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Aktualizacja dokumentu',
 'does_not_expire' => 'Nigdy nie wygasa',
@@ -642,7 +644,7 @@ Jeśli nadal będą problemy z zalogowaniem, prosimy o kontakt z administratorem
 'pt_BR' => 'Portugalski(BR)',
 'quota' => 'Przydział',
 'quota_exceeded' => 'Twój limit przydzielonej przestrzeni dyskowej został przekroczony o [bytes].',
-'quota_is_disabled' => '',
+'quota_is_disabled' => 'Wsparcie limitów dyskowych jest obecnie wyłączone w ustawieniach. Ustawiony limit dyskowy użytkownika nie będzie działał dopóki wparcie nie zostanie ponownie włączone.',
 'quota_warning' => 'Przekroczono użycie dysku o [bytes]. Usuń dokumenty lub poprzednie wersje.',
 'refresh' => 'Odśwież',
 'rejected' => 'Odrzucony',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1080), tmichelfelder (106)
+//    Translators: Admin (1081), tmichelfelder (106)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -281,6 +281,8 @@ URL: [url]',
 Dokument: [name]
 Överordnade katalog: [folder_path]
 Användare: [username]
+Kommentar: [comment]
+Versions kommentar: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Dokument har uppdaterats',
 'does_not_expire' => 'Löper aldrig ut',

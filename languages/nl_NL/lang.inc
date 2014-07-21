@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (678), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (679), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -281,6 +281,8 @@ URL: [url]',
 Document: [name]
 Bovenliggende map: [folder_path]
 Gebruiker: [username]
+Commentaar: [comment]
+Commentaar versie: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Document geupdate',
 'does_not_expire' => 'Verloopt niet',

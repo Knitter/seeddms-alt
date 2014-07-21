@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (547), flaviove (627), lfcristofoli (334)
+//    Translators: Admin (548), flaviove (627), lfcristofoli (334)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -287,6 +287,8 @@ Usuário: [username] rnURL: [url]',
 Documento: [name]
 Pasta mãe: [folder_path]
 Usuário: [username]
+Comentário: [comment]
+Versão comentário: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Documento atualizado',
 'does_not_expire' => 'Não Expira',

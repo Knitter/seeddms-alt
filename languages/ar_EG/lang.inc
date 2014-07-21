@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1066)
+//    Translators: Admin (1067)
 
 $text = array(
 'accept' => 'وافق',
@@ -281,6 +281,8 @@ URL: [url]',
 المستند: [name]
 Parent folder: [folder_path]
 المستخدم: [username]
+تعليق: [comment]
+تعليق الاصدار: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - تم تحديث المستند',
 'does_not_expire' => 'لا ينتهى صلاحيته',

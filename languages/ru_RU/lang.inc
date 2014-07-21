@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1231)
+//    Translators: Admin (1232)
 
 $text = array(
 'accept' => 'Принять',
@@ -281,6 +281,8 @@ URL: [url]',
 Документ: [name]
 Родительский каталог: [folder_path]
 Пользователь: [username]
+Коментарий: [comment]
+Комментарий версии: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: обновлён документ «[name]»',
 'does_not_expire' => 'Без срока',
