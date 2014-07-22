@@ -87,7 +87,6 @@ function checkForm()
 </div>
 <?php
 		$this->contentContainerStart();
-//		$this->addFooterJS("$('#fileupload').fileupload();");
 ?>
 
 <form action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="fileupload" onsubmit="return checkForm();">
