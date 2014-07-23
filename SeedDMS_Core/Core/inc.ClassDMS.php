@@ -952,9 +952,6 @@ class SeedDMS_Core_DMS {
 		} else {
 			$docresult = array('totalDocs'=>0, 'docs'=>array());
 		}
-		} else {
-			$docresult = array('totalDocs'=>0, 'docs'=>array());
-		}
 
 		if($limit) {
 			$totalPages = (integer)(($totalDocs+$totalFolders)/$limit);
