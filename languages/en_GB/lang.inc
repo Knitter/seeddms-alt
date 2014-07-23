@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1044), netixw (14)
+//    Translators: Admin (1046), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -356,6 +356,8 @@ URL: [url]',
 'files_deletion' => 'Files deletion',
 'files_deletion_warning' => 'With this option you can delete all files of entire DMS folders. The versioning information will remain visible.',
 'file_size' => 'Filesize',
+'filter_for_documents' => 'Additional filter for documents',
+'filter_for_folders' => 'Additional filter for folders',
 'folder' => 'Folder',
 'folders' => 'Folders',
 'folders_and_documents_statistic' => 'Contents overview',
