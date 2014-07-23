@@ -20,7 +20,8 @@
 - fix drag and drop from clipboard
 - much improved document handling
 - list mandatory approvers/reviewers on AddDocument and UpdateDocument page (Bug #154)
-₋ search in attributes of folders
+₋ search in attributes of folders, reorganize search form, do not search
+  unless a search criteria is given
 - fix document selection on ManageNotify page
 - add file upload via Drag&Drop
 
