@@ -623,12 +623,11 @@ class SeedDMS_Core_DMS {
 				foreach($attributes as $attrdefid=>$attribute) {
 					if($attribute) {
 						$attrdef = $this->getAttributeDefinition($attrdefid);
-						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) {
+						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) {
 							if($attrdef->getValueSet())
 								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value`='".$attribute."'";
 							else
 								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value` like '%".$attribute."%'";
-						} elseif($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
 						}
 					}
 				}
@@ -665,11 +664,14 @@ class SeedDMS_Core_DMS {
 			if (strlen($searchCreateDate)>0) {
 				$searchQuery .= " AND (".$searchCreateDate.")";
 			}
+			if ($searchAttributes) {
+				$searchQuery .= " AND (".implode(" AND ", $searchAttributes).")";
+			}
 
 			/* Do not search for folders if not at least a search for a key,
 			 * an owner, or creation date is requested.
 			 */
-			if($searchKey || $searchOwner || $searchCreateDate) {
+			if($searchKey || $searchOwner || $searchCreateDate || $searchAttributes) {
 				// Count the number of rows that the search will produce.
 				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
 				if ($resArr && isset($resArr[0]) && is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
@@ -895,53 +897,57 @@ class SeedDMS_Core_DMS {
 				$searchQuery .= " AND `tblDocumentStatusLog`.`status` IN (".implode(',', $status).")";
 			}
 
-			// Count the number of rows that the search will produce.
-			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
-			$totalDocs = 0;
-			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
-				$totalDocs = (integer)$resArr[0]["num"];
-			}
+			if($searchKey || $searchOwner || $searchCategories || $searchCreateDate || $searchExpirationDate || $searchAttributes || $status) {
+				// Count the number of rows that the search will produce.
+				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
+				$totalDocs = 0;
+				if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
+					$totalDocs = (integer)$resArr[0]["num"];
+				}
 
-			// If there are no results from the count query, then there is no real need
-			// to run the full query. TODO: re-structure code to by-pass additional
-			// queries when no initial results are found.
+				// If there are no results from the count query, then there is no real need
+				// to run the full query. TODO: re-structure code to by-pass additional
+				// queries when no initial results are found.
 
-			// Prepare the complete search query, including the LIMIT clause.
-			$searchQuery = "SELECT DISTINCT `tblDocuments`.*, ".
-				"`tblDocumentContent`.`version`, ".
-				"`tblDocumentStatusLog`.`status`, `tblDocumentLocks`.`userID` as `lockUser` ".$searchQuery;
+				// Prepare the complete search query, including the LIMIT clause.
+				$searchQuery = "SELECT DISTINCT `tblDocuments`.*, ".
+					"`tblDocumentContent`.`version`, ".
+					"`tblDocumentStatusLog`.`status`, `tblDocumentLocks`.`userID` as `lockUser` ".$searchQuery;
 
-			// calculate the remaining entrїes of the current page
-			// If page is not full yet, get remaining entries
-			if($limit) {
-				$remain = $limit - count($folderresult['folders']);
-				if($remain) {
-					if($remain == $limit)
-						$offset -= $totalFolders;
-					else
-						$offset = 0;
-					if($limit)
-						$searchQuery .= " LIMIT ".$offset.",".$remain;
+				// calculate the remaining entrїes of the current page
+				// If page is not full yet, get remaining entries
+				if($limit) {
+					$remain = $limit - count($folderresult['folders']);
+					if($remain) {
+						if($remain == $limit)
+							$offset -= $totalFolders;
+						else
+							$offset = 0;
+						if($limit)
+							$searchQuery .= " LIMIT ".$offset.",".$remain;
 
+						// Send the complete search query to the database.
+						$resArr = $this->db->getResultArray($searchQuery);
+					} else {
+						$resArr = array();
+					}
+				} else {
 					// Send the complete search query to the database.
 					$resArr = $this->db->getResultArray($searchQuery);
-				} else {
-					$resArr = array();
 				}
-			} else {
-				// Send the complete search query to the database.
-				$resArr = $this->db->getResultArray($searchQuery);
-			}
 
-			// ------------------- Ausgabe der Ergebnisse ----------------------------
-			$numResults = count($resArr);
-			if ($numResults == 0) {
-				$docresult = array('totalDocs'=>$totalDocs, 'docs'=>array());
-			} else {
-				foreach ($resArr as $docArr) {
-					$docs[] = $this->getDocument($docArr['id']);
+				// ------------------- Ausgabe der Ergebnisse ----------------------------
+				$numResults = count($resArr);
+				if ($numResults == 0) {
+					$docresult = array('totalDocs'=>$totalDocs, 'docs'=>array());
+				} else {
+					foreach ($resArr as $docArr) {
+						$docs[] = $this->getDocument($docArr['id']);
+					}
+					$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
 				}
-				$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
+			} else {
+				$docresult = array('totalDocs'=>0, 'docs'=>array());
 			}
 		} else {
 			$docresult = array('totalDocs'=>0, 'docs'=>array());
