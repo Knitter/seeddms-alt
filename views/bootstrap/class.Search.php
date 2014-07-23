@@ -261,6 +261,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
 	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
 </tr>
+
 <?php
 				}
 			}
@@ -271,7 +272,6 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
     </div>
   </div>
 </div>
-
 <?php
 		/* First check if any of the folder filters are set. If it is,
 		 * open the accordion.
