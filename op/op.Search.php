@@ -340,8 +340,8 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	 * also all folders of that user because the status doesn't apply
 	 * to folders.
 	 */
-	if($status)
-		$resultmode = 0x01;
+//	if($status)
+//		$resultmode = 0x01;
 
 	// category
 	$categories = array();
@@ -353,8 +353,8 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	}
 
 	/* Do not search for folders if result shall be filtered by categories. */
-	if($categories)
-		$resultmode = 0x01;
+//	if($categories)
+//		$resultmode = 0x01;
 
 	if (isset($_GET["attributes"]))
 		$attributes = $_GET["attributes"];
