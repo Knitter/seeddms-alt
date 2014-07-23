@@ -100,11 +100,11 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 	</ul>
 	<div class="tab-content">
 	  <div class="tab-pane <?php echo ($fullsearch == false) ? 'active' : ''; ?>" id="database">
+<form action="../op/op.Search.php" name="form1" onsubmit="return checkForm();">
 <?php
 // Database search Form {{{
 		$this->contentContainerStart();
 ?>
-<form action="../op/op.Search.php" name="form1" onsubmit="return checkForm();">
 <table class="table-condensed">
 <tr>
 <td><?php printMLText("search_query");?>:</td>
@@ -123,51 +123,6 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 <label class="checkbox" for="searchName"><input type="checkbox" name="searchin[]" id="searchName" value="2" <?php if(in_array('2', $searchin)) echo " checked"; ?>><?php printMLText("name");?></label>
 <label class="checkbox" for="comment"><input type="checkbox" name="searchin[]" id="comment" value="3" <?php if(in_array('3', $searchin)) echo " checked"; ?>><?php printMLText("comment");?></label>
 <label class="checkbox" for="attributes"><input type="checkbox" name="searchin[]" id="attributes" value="4" <?php if(in_array('4', $searchin)) echo " checked"; ?>><?php printMLText("attributes");?></label>
-</td>
-</tr>
-<?php
-		if($attrdefs) {
-			foreach($attrdefs as $attrdef) {
-?>
-<tr>
-	<td><?php echo htmlspecialchars($attrdef->getName()); ?></td>
-	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
-</tr>
-<?php
-			}
-		}
-?>
-<tr>
-<td><?php printMLText("category");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
-<td>
-<select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
-<!--
-<option value="-1"><?php printMLText("all_categories");?>
--->
-<?php
-		$tmpcatids = array();
-		foreach($categories as $tmpcat)
-			$tmpcatids[] = $tmpcat->getID();
-		foreach ($allCats as $catObj) {
-			print "<option value=\"".$catObj->getID()."\" ".(in_array($catObj->getID(), $tmpcatids) ? "selected" : "").">" . htmlspecialchars($catObj->getName()) . "\n";
-		}
-?>
-</select>
-</td>
-</tr>
-<tr>
-<td><?php printMLText("status");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
-<td>
-<?php if($workflowmode == 'traditional') { ?>
-<label class="checkbox" for='pendingReview'><input type="checkbox" id="pendingReview" name="pendingReview" value="1" <?php echo in_array(S_DRAFT_REV, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_DRAFT_REV);?></label>
-<label class="checkbox" for='pendingApproval'><input type="checkbox" id="pendingApproval" name="pendingApproval" value="1" <?php echo in_array(S_DRAFT_APP, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_DRAFT_APP);?></label>
-<?php } else { ?>
-<label class="checkbox" for='inWorkflow'><input type="checkbox" id="inWorkflow" name="inWorkflow" value="1" <?php echo in_array(S_IN_WORKFLOW, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_IN_WORKFLOW);?></label>
-<?php } ?>
-<label class="checkbox" for='released'><input type="checkbox" id="released" name="released" value="1" <?php echo in_array(S_RELEASED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_RELEASED);?></label>
-<label class="checkbox" for='rejected'><input type="checkbox" id="rejected" name="rejected" value="1" <?php echo in_array(S_REJECTED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_REJECTED);?></label>
-<label class="checkbox" for='obsolete'><input type="checkbox" id="obsolete" name="obsolete" value="1" <?php echo in_array(S_OBSOLETE, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_OBSOLETE);?></label>
-<label class="checkbox" for='expired'><input type="checkbox" id="expired" name="expired" value="1" <?php echo in_array(S_EXPIRED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_EXPIRED);?></label>
 </td>
 </tr>
 <tr>
@@ -207,7 +162,79 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 </td>
 </tr>
 <tr>
-<td><?php printMLText("expires");?>:<br />(<?php printMLText('documents_only'); ?>)</td>
+<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
+</tr>
+
+</table>
+<?php
+		$this->contentContainerEnd();
+// }}}
+
+		/* First check if any of the folder filters are set. If it is,
+		 * open the accordion.
+		 */
+		$openfilterdlg = false;
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$attricon = '';
+				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
+					if(!empty($attributes[$attrdef->getID()]))
+						$openfilterdlg = true;
+			}
+		}
+		}
+		if($categories)
+			$openfilterdlg = true;
+		if($status)
+			$openfilterdlg = true;
+		if($expirationdate)
+			$openfilterdlg = true;
+?>
+<div class="accordion" id="accordion2">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        <?php printMLText('filter_for_documents'); ?>
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body <?php if(!$openfilterdlg) echo "collapse";?>" style="_height: 0px;">
+      <div class="accordion-inner">
+<table class="table-condensed">
+<tr>
+<td><?php printMLText("category");?>:</td>
+<td>
+<select class="chzn-select" name="categoryids[]" multiple="multiple" data-placeholder="<?php printMLText('select_category'); ?>" data-no_results_text="<?php printMLText('unknown_document_category'); ?>">
+<!--
+<option value="-1"><?php printMLText("all_categories");?>
+-->
+<?php
+		$tmpcatids = array();
+		foreach($categories as $tmpcat)
+			$tmpcatids[] = $tmpcat->getID();
+		foreach ($allCats as $catObj) {
+			print "<option value=\"".$catObj->getID()."\" ".(in_array($catObj->getID(), $tmpcatids) ? "selected" : "").">" . htmlspecialchars($catObj->getName()) . "\n";
+		}
+?>
+</select>
+</td>
+</tr>
+<tr>
+<td><?php printMLText("status");?>:</td>
+<td>
+<?php if($workflowmode == 'traditional') { ?>
+<label class="checkbox" for='pendingReview'><input type="checkbox" id="pendingReview" name="pendingReview" value="1" <?php echo in_array(S_DRAFT_REV, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_DRAFT_REV);?></label>
+<label class="checkbox" for='pendingApproval'><input type="checkbox" id="pendingApproval" name="pendingApproval" value="1" <?php echo in_array(S_DRAFT_APP, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_DRAFT_APP);?></label>
+<?php } else { ?>
+<label class="checkbox" for='inWorkflow'><input type="checkbox" id="inWorkflow" name="inWorkflow" value="1" <?php echo in_array(S_IN_WORKFLOW, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_IN_WORKFLOW);?></label>
+<?php } ?>
+<label class="checkbox" for='released'><input type="checkbox" id="released" name="released" value="1" <?php echo in_array(S_RELEASED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_RELEASED);?></label>
+<label class="checkbox" for='rejected'><input type="checkbox" id="rejected" name="rejected" value="1" <?php echo in_array(S_REJECTED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_REJECTED);?></label>
+<label class="checkbox" for='obsolete'><input type="checkbox" id="obsolete" name="obsolete" value="1" <?php echo in_array(S_OBSOLETE, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_OBSOLETE);?></label>
+<label class="checkbox" for='expired'><input type="checkbox" id="expired" name="expired" value="1" <?php echo in_array(S_EXPIRED, $status) ? "checked" : ""; ?>><?php printOverallStatusText(S_EXPIRED);?></label>
+</td>
+</tr>
+<tr>
+<td><?php printMLText("expires");?>:</td>
 <td>
         <label class="checkbox inline">
 				  <input type="checkbox" name="expirationdate" value="true" <?php if($expirationdate) echo "checked"; ?>/><?php printMLText("between");?>
@@ -223,16 +250,73 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
         </span>
 </td>
 </tr>
+<?php
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$attricon = '';
+				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
+?>
 <tr>
-<td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
 </tr>
 
-</table>
-</form>
 <?php
-		$this->contentContainerEnd();
-// }}}
+				}
+			}
+		}
 ?>
+</table>
+      </div>
+    </div>
+  </div>
+</div>
+<?php
+		/* First check if any of the folder filters are set. If it is,
+		 * open the accordion.
+		 */
+		$openfilterdlg = false;
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$attricon = '';
+				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) {
+					if(!empty($attributes[$attrdef->getID()]))
+						$openfilterdlg = true;
+				}
+			}
+		}
+?>
+<div class="accordion" id="accordion3">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseFolder">
+        <?php printMLText('filter_for_folders'); ?>
+      </a>
+    </div>
+    <div id="collapseFolder" class="accordion-body <?php if(!$openfilterdlg) echo "collapse";?>" style="_height: 0px;">
+      <div class="accordion-inner">
+<table class="table-condensed">
+<?php
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$attricon = '';
+				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) {
+?>
+<tr>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
+</tr>
+<?php
+				}
+			}
+		}
+?>
+</table>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
 		</div>
 <?php
 		if($enablefullsearch) {

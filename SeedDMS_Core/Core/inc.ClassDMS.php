@@ -623,12 +623,11 @@ class SeedDMS_Core_DMS {
 				foreach($attributes as $attrdefid=>$attribute) {
 					if($attribute) {
 						$attrdef = $this->getAttributeDefinition($attrdefid);
-						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) {
+						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) {
 							if($attrdef->getValueSet())
 								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value`='".$attribute."'";
 							else
 								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value` like '%".$attribute."%'";
-						} elseif($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
 						}
 					}
 				}
@@ -665,11 +664,14 @@ class SeedDMS_Core_DMS {
 			if (strlen($searchCreateDate)>0) {
 				$searchQuery .= " AND (".$searchCreateDate.")";
 			}
+			if ($searchAttributes) {
+				$searchQuery .= " AND (".implode(" AND ", $searchAttributes).")";
+			}
 
 			/* Do not search for folders if not at least a search for a key,
 			 * an owner, or creation date is requested.
 			 */
-			if($searchKey || $searchOwner || $searchCreateDate) {
+			if($searchKey || $searchOwner || $searchCreateDate || $searchAttributes) {
 				// Count the number of rows that the search will produce.
 				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
 				if ($resArr && isset($resArr[0]) && is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
@@ -895,6 +897,7 @@ class SeedDMS_Core_DMS {
 				$searchQuery .= " AND `tblDocumentStatusLog`.`status` IN (".implode(',', $status).")";
 			}
 
+			if($searchKey || $searchOwner || $searchCategories || $searchCreateDate || $searchExpirationDate || $searchAttributes || $status) {
 			// Count the number of rows that the search will produce.
 			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
 			$totalDocs = 0;
@@ -943,6 +946,9 @@ class SeedDMS_Core_DMS {
 				}
 				$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
 			}
+		} else {
+			$docresult = array('totalDocs'=>0, 'docs'=>array());
+		}
 		} else {
 			$docresult = array('totalDocs'=>0, 'docs'=>array());
 		}

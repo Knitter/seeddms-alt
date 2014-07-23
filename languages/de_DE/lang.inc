@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1904)
+//    Translators: Admin (1906)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -356,6 +356,8 @@ URL: [url]',
 'files_deletion' => 'Dateien löschen',
 'files_deletion_warning' => 'Durch diese Operation können Sie Dokumente des DMS löschen. Die Versions-Information bleibt erhalten.',
 'file_size' => 'Dateigröße',
+'filter_for_documents' => 'Zusätzliche Filter für Dokumente',
+'filter_for_folders' => 'Zusätzliche Filter für Ordner',
 'folder' => 'Ordner',
 'folders' => 'Verzeichnisse',
 'folders_and_documents_statistic' => 'Ordner- und Dokumentenübersicht',
