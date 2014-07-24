@@ -716,6 +716,7 @@ class SeedDMS_Core_DMS {
 
 		/*--------- Do it all over again for documents -------------*/
 
+		$totalDocs = 0;
 		if($mode & 0x1) {
 			$searchKey = "";
 			$searchFields = array();
