@@ -50,9 +50,12 @@ if (!isset($login) || strlen($login)==0) {
 	exit;
 }
 
-$pwd = (string) $_POST["pwd"];
-if (get_magic_quotes_gpc()) {
-	$pwd = stripslashes($pwd);
+$pwd = '';
+if(isset($_POST['pwd'])) {
+	$pwd = (string) $_POST["pwd"];
+	if (get_magic_quotes_gpc()) {
+		$pwd = stripslashes($pwd);
+	}
 }
 
 $guestUser = $dms->getUser($settings->_guestID);
