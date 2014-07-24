@@ -67,7 +67,10 @@ if (!is_object($object)) {
 	exit;
 }
 
-$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $_GET["width"]);
+if(!empty($_GET["width"]))
+	$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir, $_GET["width"]);
+else
+	$previewer = new SeedDMS_Preview_Previewer($settings->_cacheDir);
 if(!$previewer->hasPreview($object))
 	$previewer->createPreview($object);
 header('Content-Type: image/png');
