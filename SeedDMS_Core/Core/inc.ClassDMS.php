@@ -716,6 +716,7 @@ class SeedDMS_Core_DMS {
 
 		/*--------- Do it all over again for documents -------------*/
 
+		$totalDocs = 0;
 		if($mode & 0x1) {
 			$searchKey = "";
 			$searchFields = array();
@@ -900,7 +901,6 @@ class SeedDMS_Core_DMS {
 			if($searchKey || $searchOwner || $searchCategories || $searchCreateDate || $searchExpirationDate || $searchAttributes || $status) {
 			// Count the number of rows that the search will produce.
 			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
-			$totalDocs = 0;
 			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 				$totalDocs = (integer)$resArr[0]["num"];
 			}
