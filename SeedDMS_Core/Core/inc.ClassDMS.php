@@ -243,7 +243,7 @@ class SeedDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.3.8';
+			$this->version = '4.3.9';
 	} /* }}} */
 
 	function getDB() { /* {{{ */
@@ -541,7 +541,7 @@ class SeedDMS_Core_DMS {
 	 * @param offset integer index of first item in result set
 	 * @param logicalmode string either AND or OR
 	 * @param searchin array() list of fields to search in
-	 *        1 = keywords, 2=name, 3=comment
+	 *        1 = keywords, 2=name, 3=comment, 4=attributes
 	 * @param startFolder object search in the folder only (null for root folder)
 	 * @param owner object search for documents owned by this user
 	 * @param status array list of status
@@ -616,6 +616,23 @@ class SeedDMS_Core_DMS {
 				}
 			}
 
+			// Check to see if the search has been restricted to a particular
+			// attribute.
+			$searchAttributes = array();
+			if ($attributes) {
+				foreach($attributes as $attrdefid=>$attribute) {
+					if($attribute) {
+						$attrdef = $this->getAttributeDefinition($attrdefid);
+						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) {
+							if($attrdef->getValueSet())
+								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value`='".$attribute."'";
+							else
+								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value` like '%".$attribute."%'";
+						}
+					}
+				}
+			}
+
 			// Is the search restricted to documents created between two specific dates?
 			$searchCreateDate = "";
 			if ($creationstartdate) {
@@ -647,13 +664,16 @@ class SeedDMS_Core_DMS {
 			if (strlen($searchCreateDate)>0) {
 				$searchQuery .= " AND (".$searchCreateDate.")";
 			}
+			if ($searchAttributes) {
+				$searchQuery .= " AND (".implode(" AND ", $searchAttributes).")";
+			}
 
 			/* Do not search for folders if not at least a search for a key,
 			 * an owner, or creation date is requested.
 			 */
-			if($searchKey || $searchOwner || $searchCreateDate) {
+			if($searchKey || $searchOwner || $searchCreateDate || $searchAttributes) {
 				// Count the number of rows that the search will produce.
-				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num ".$searchQuery);
+				$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblFolders`.id ".$searchQuery.") a");
 				if ($resArr && isset($resArr[0]) && is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 					$totalFolders = (integer)$resArr[0]["num"];
 				}
@@ -696,6 +716,7 @@ class SeedDMS_Core_DMS {
 
 		/*--------- Do it all over again for documents -------------*/
 
+		$totalDocs = 0;
 		if($mode & 0x1) {
 			$searchKey = "";
 			$searchFields = array();
@@ -877,9 +898,9 @@ class SeedDMS_Core_DMS {
 				$searchQuery .= " AND `tblDocumentStatusLog`.`status` IN (".implode(',', $status).")";
 			}
 
+			if($searchKey || $searchOwner || $searchCategories || $searchCreateDate || $searchExpirationDate || $searchAttributes || $status) {
 			// Count the number of rows that the search will produce.
 			$resArr = $this->db->getResultArray("SELECT COUNT(*) AS num FROM (SELECT DISTINCT `tblDocuments`.id ".$searchQuery.") a");
-			$totalDocs = 0;
 			if (is_numeric($resArr[0]["num"]) && $resArr[0]["num"]>0) {
 				$totalDocs = (integer)$resArr[0]["num"];
 			}
@@ -925,6 +946,9 @@ class SeedDMS_Core_DMS {
 				}
 				$docresult = array('totalDocs'=>$totalDocs, 'docs'=>$docs);
 			}
+		} else {
+			$docresult = array('totalDocs'=>0, 'docs'=>array());
+		}
 		} else {
 			$docresult = array('totalDocs'=>0, 'docs'=>array());
 		}
@@ -1200,6 +1224,8 @@ class SeedDMS_Core_DMS {
 		}
 		if($role == '')
 			$role = '0';
+		if(trim($pwdexpiration) == '')
+			$pwdexpiration = '0000-00-00 00:00:00';
 		$queryStr = "INSERT INTO tblUsers (login, pwd, fullName, email, language, theme, comment, role, hidden, disabled, pwdExpiration) VALUES (".$db->qstr($login).", ".$db->qstr($pwd).", ".$db->qstr($fullName).", ".$db->qstr($email).", '".$language."', '".$theme."', ".$db->qstr($comment).", '".intval($role)."', '".intval($isHidden)."', '".intval($isDisabled)."', ".$db->qstr($pwdexpiration).")";
 		$res = $this->db->getResult($queryStr);
 		if (!$res)

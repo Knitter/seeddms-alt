@@ -49,6 +49,13 @@ if ($folder->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("folder_title", array("foldername" => $folder->getName())),getMLText("access_denied"));
 }
 
+if($settings->_quota > 0) {
+	$remain = checkQuota($user);
+	if ($remain < 0) {
+		UI::exitError(getMLText("folder_title", array("foldername" => htmlspecialchars($folder->getName()))),getMLText("quota_exceeded", array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain)))));
+	}
+}
+
 $comment  = $_POST["comment"];
 $version_comment = $_POST["version_comment"];
 if($version_comment == "" && isset($_POST["use_comment"]))
@@ -222,9 +229,7 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 	$userfiletype = $_FILES["userfile"]["type"][$file_num];
 	$userfilename = $_FILES["userfile"]["name"][$file_num];
 	
-	$lastDotIndex = strrpos(basename($userfilename), ".");
-	if (is_bool($lastDotIndex) && !$lastDotIndex) $fileType = ".";
-	else $fileType = substr($userfilename, $lastDotIndex);
+	$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 
 	if ((count($_FILES["userfile"]["tmp_name"])==1)&&($_POST["name"]!=""))
 		$name = $_POST["name"];
@@ -296,22 +301,6 @@ for ($file_num=0;$file_num<count($_FILES["userfile"]["tmp_name"]);$file_num++){
 					$notifyList['groups'][] = $dms->getGroup($approvergrpid);
 				}
 			}
-/*
-			$subject = "###SITENAME###: ".$folder->getName()." - ".getMLText("new_document_email");
-			$message = getMLText("new_document_email")."\r\n";
-			$message .= 
-				getMLText("name").": ".$name."\r\n".
-				getMLText("folder").": ".$folder->getFolderPathPlain()."\r\n".
-				getMLText("comment").": ".$comment."\r\n".
-				getMLText("comment_for_current_version").": ".$version_comment."\r\n".
-				"URL: ###URL_PREFIX###out/out.ViewDocument.php?documentid=".$document->getID()."\r\n";
-
-			
-			$notifier->toList($user, $notifyList["users"], $subject, $message);
-			foreach ($notifyList["groups"] as $grp) {
-				$notifier->toGroup($user, $grp, $subject, $message);
-			}
-*/
 
 			$subject = "new_document_email_subject";
 			$message = "new_document_email_body";

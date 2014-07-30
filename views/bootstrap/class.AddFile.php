@@ -89,12 +89,16 @@ function checkForm()
 		$this->contentContainerStart();
 ?>
 
-<form action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" onsubmit="return checkForm();">
-<input type="Hidden" name="documentid" value="<?php print $document->getId(); ?>">
+<form action="../op/op.AddFile.php" enctype="multipart/form-data" method="post" name="form1" id="fileupload" onsubmit="return checkForm();">
+<input type="hidden" name="documentid" value="<?php print $document->getId(); ?>">
 <table class="table-condensed">
 <tr>
 	<td><?php printMLText("local_file");?>:</td>
-	<td><input type="File" name="userfile" size="60"></td>
+	<td><!-- <input type="File" name="userfile" size="60"> -->
+<?php
+	$this->printFileChooser('userfile', false);
+?>
+	</td>
 </tr>
 <tr>
 	<td><?php printMLText("name");?>:</td>

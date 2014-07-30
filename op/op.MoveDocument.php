@@ -38,11 +38,11 @@ if (!is_object($document)) {
 
 $oldFolder = $document->getFolder();
 
-if (!isset($_GET["targetidform1"]) || !is_numeric($_GET["targetidform1"]) || $_GET["targetidform1"]<1) {
+if (!isset($_GET["targetid"]) || !is_numeric($_GET["targetid"]) || $_GET["targetid"]<1) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_target_folder"));
 }
 
-$targetid = $_GET["targetidform1"];
+$targetid = $_GET["targetid"];
 $targetFolder = $dms->getFolder($targetid);
 
 if (!is_object($targetFolder)) {
@@ -51,6 +51,13 @@ if (!is_object($targetFolder)) {
 
 if (($document->getAccessMode($user) < M_READWRITE) || ($targetFolder->getAccessMode($user) < M_READWRITE)) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+}
+
+if($document->isLocked()) {
+	$lockingUser = $document->getLockingUser();
+	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user) != M_ALL)) {
+		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName()))));
+	}
 }
 
 if ($targetid != $oldFolder->getID()) {

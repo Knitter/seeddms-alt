@@ -11,11 +11,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2013-08-13</date>
- <time>21:56:55</time>
+ <date>2014-07-30</date>
+ <time>09:00:34</time>
  <version>
-  <release>1.1.4</release>
-  <api>1.1.4</api>
+  <release>1.1.5</release>
+  <api>1.1.5</api>
  </version>
  <stability>
   <release>stable</release>
@@ -23,7 +23,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-class SeedDMS_Lucene_Search::search returns false if query is invalid instead of an empty result record
+field for original filename is treated as utf-8
+declare SeeDMS_Lucene_Indexer::open() static
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -151,6 +152,22 @@ parse query term and catch errors before using it
    <notes>
 explicitly set encoding to utf-8 when adding fields
 do not check if deleting document from index fails, update it in any case
+   </notes>
+  </release>
+  <release>
+   <date>2013-08-13</date>
+   <time>21:56:55</time>
+   <version>
+    <release>1.1.4</release>
+    <api>1.1.4</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+class SeedDMS_Lucene_Search::search returns false if query is invalid instead of an empty result record
    </notes>
   </release>
  </changelog>

@@ -44,11 +44,14 @@ if ($document->getAccessMode($user) < M_READ) {
 if(isset($_GET["version"])) {
 	$version = $_GET["version"];
 
-	if (!isset($version) || !is_numeric($version) || intval($version)<1) {
+	if (!is_numeric($version)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));
 	}
-
-	$content = $document->getContentByVersion($version);
+	
+	if(intval($version)<1)
+		$content = $document->getLatestContent();
+	else
+		$content = $document->getContentByVersion($version);
 
 	if (!is_object($content)) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("invalid_version"));

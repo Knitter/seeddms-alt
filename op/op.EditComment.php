@@ -43,11 +43,15 @@ if (!is_object($document)) {
 	UI::exitError(getMLText("document_title", array("documentname" => getMLText("invalid_doc_id"))),getMLText("invalid_doc_id"));
 }
 
-$folder = $document->getFolder();
-$docPathHTML = getFolderPathHTML($folder, true). " / <a href=\"../out/out.ViewDocument.php?documentid=".$documentid."\">".$document->getName()."</a>";
-
 if ($document->getAccessMode($user) < M_READWRITE) {
 	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+}
+
+if($document->isLocked()) {
+	$lockingUser = $document->getLockingUser();
+	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user) != M_ALL)) {
+		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("lock_message", array("email" => $lockingUser->getEmail(), "username" => htmlspecialchars($lockingUser->getFullName()))));
+	}
 }
 
 $versionid = $_POST["version"];
@@ -63,6 +67,7 @@ if (($oldcomment = $version->getComment()) != $comment) {
 	if($version->setComment($comment)) {
 		if($notifier) {
 			$notifyList = $document->getNotifyList();
+			$folder = $document->getFolder();
 
 /*
 			$subject = "###SITENAME###: ".$document->getName().", v.".$version->_version." - ".getMLText("document_comment_changed_email");

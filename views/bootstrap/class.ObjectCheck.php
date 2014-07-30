@@ -222,7 +222,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				echo "<td>".$error['id']."</td>";
 				echo "<td>".$error['parent']."</td>";
 				echo "<td>".$error['msg']."</td>";
-				echo "<td><a class=\"btn movefolder\" source=\"".$error['id']."\" dest=\"".$rootfolder->getID()."\">Move</a> </td>";
+				echo "<td><a class=\"btn movefolder\" source=\"".$error['id']."\" dest=\"".$rootfolder->getID()."\" formtoken=\"".createFormKey('movefolder')."\">Move</a> </td>";
 				echo "</tr>";
 			}
 			print "</tbody></table>\n";
@@ -246,7 +246,7 @@ class SeedDMS_View_ObjectCheck extends SeedDMS_Bootstrap_Style {
 				echo "<td>".$error['id']."</td>";
 				echo "<td>".$error['parent']."</td>";
 				echo "<td>".$error['msg']."</td>";
-				echo "<td><a class=\"btn movedocument\" source=\"".$error['id']."\" dest=\"".$rootfolder->getID()."\">Move</a> </td>";
+				echo "<td><a class=\"btn movedocument\" source=\"".$error['id']."\" dest=\"".$rootfolder->getID()."\" formtoken=\"".createFormKey('movedocument')."\">Move</a> </td>";
 				echo "</tr>";
 			}
 			print "</tbody></table>\n";

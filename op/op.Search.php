@@ -220,8 +220,8 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 
 	// Check to see if the search has been restricted to a particular sub-tree in
 	// the folder hierarchy.
-	if (isset($_GET["targetidform1"]) && is_numeric($_GET["targetidform1"]) && $_GET["targetidform1"]>0) {
-		$targetid = $_GET["targetidform1"];
+	if (isset($_GET["targetid"]) && is_numeric($_GET["targetid"]) && $_GET["targetid"]>0) {
+		$targetid = $_GET["targetid"];
 		$startFolder = $dms->getFolder($targetid);
 	}
 	else {
@@ -340,8 +340,8 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	 * also all folders of that user because the status doesn't apply
 	 * to folders.
 	 */
-	if($status)
-		$resultmode = 0x01;
+//	if($status)
+//		$resultmode = 0x01;
 
 	// category
 	$categories = array();
@@ -353,8 +353,8 @@ if(isset($_GET["fullsearch"]) && $_GET["fullsearch"]) {
 	}
 
 	/* Do not search for folders if result shall be filtered by categories. */
-	if($categories)
-		$resultmode = 0x01;
+//	if($categories)
+//		$resultmode = 0x01;
 
 	if (isset($_GET["attributes"]))
 		$attributes = $_GET["attributes"];
@@ -436,7 +436,7 @@ if(count($entries) == 1 && ($resArr['totalDocs'] + $resArr['totalFolders']) == 1
 		$view->setParam('status', isset($status) ? $status : array());
 		$view->setParam('categories', isset($categories) ? $categories : '');
 		$view->setParam('attributes', isset($attributes) ? $attributes : '');
-		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_documentcontent/*, SeedDMS_Core_AttributeDefinition::objtype_all*/));
+		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_folder/*, SeedDMS_Core_AttributeDefinition::objtype_all*/));
 		$view->setParam('attrdefs', $attrdefs);
 		$allCats = $dms->getDocumentCategories();
 		$view->setParam('allcategories', $allCats);

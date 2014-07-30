@@ -38,13 +38,20 @@ if (!is_object($document)) {
 }
 
 if ($document->getAccessMode($user) < M_READWRITE) {
-	UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("access_denied"));
+	UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("access_denied"));
+}
+
+if($settings->_quota > 0) {
+	$remain = checkQuota($user);
+	if ($remain < 0) {
+		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("quota_exceeded", array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain)))));
+	}
 }
 
 if ($document->isLocked()) {
 	$lockingUser = $document->getLockingUser();
 	if (($lockingUser->getID() != $user->getID()) && ($document->getAccessMode($user) != M_ALL)) {
-		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("no_update_cause_locked"));
+		UI::exitError(getMLText("document_title", array("documentname" => htmlspecialchars($document->getName()))),getMLText("no_update_cause_locked"));
 	}
 	else $document->setLocked(false);
 }
@@ -89,11 +96,7 @@ if ($_FILES['userfile']['error'] == 0) {
 		UI::exitError(getMLText("document_title", array("documentname" => $document->getName())),getMLText("identical_version"));
 	}
 
-	$lastDotIndex = strrpos(basename($userfilename), ".");
-	if (is_bool($lastDotIndex) && !$lastDotIndex)
-		$fileType = ".";
-	else
-		$fileType = substr($userfilename, $lastDotIndex);
+	$fileType = ".".pathinfo($userfilename, PATHINFO_EXTENSION);
 
 	// Get the list of reviewers and approvers for this document.
 	$reviewers = array();
@@ -220,6 +223,8 @@ if ($_FILES['userfile']['error'] == 0) {
 			$params['name'] = $document->getName();
 			$params['folder_path'] = $folder->getFolderPathPlain();
 			$params['username'] = $user->getFullName();
+			$params['comment'] = $document->getComment();
+			$params['version_comment'] = $contentResult->getContent()->getComment();
 			$params['url'] = "http".((isset($_SERVER['HTTPS']) && (strcmp($_SERVER['HTTPS'],'off')!=0)) ? "s" : "")."://".$_SERVER['HTTP_HOST'].$settings->_httpRoot."out/out.ViewDocument.php?documentid=".$document->getID();
 			$params['sitename'] = $settings->_siteName;
 			$params['http_root'] = $settings->_httpRoot;

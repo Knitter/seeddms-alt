@@ -157,10 +157,10 @@ function createFolderTar($folder,$ark) { /* {{{ */
 	return true;
 } /* }}} */
 
-if (!isset($_GET["targetidform2"]) || !is_numeric($_GET["targetidform2"]) || intval($_GET["targetidform2"])<1) {
+if (!isset($_GET["targetid"]) || !is_numeric($_GET["targetid"]) || intval($_GET["targetid"])<1) {
 	UI::exitError(getMLText("admin_tools"),getMLText("invalid_folder_id"));
 }
-$folderid = $_GET["targetidform2"];
+$folderid = $_GET["targetid"];
 $folder = $dms->getFolder($folderid);
 
 if (!is_object($folder)) {

@@ -104,14 +104,14 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 			printMLText("empty_notify_list");
 		}
 		else {
+			$previewer = new SeedDMS_Preview_Previewer($this->cachedir, $this->previewwidth);
+
 			print "<table class=\"table-condensed\">";
 			print "<thead>\n<tr>\n";
 			print "<th></th>\n";
 			print "<th>".getMLText("name")."</th>\n";
-			print "<th>".getMLText("owner")."</th>\n";
 			print "<th>".getMLText("status")."</th>\n";
-			print "<th>".getMLText("version")."</th>\n";
-			print "<th>".getMLText("actions")."</th>\n";
+			print "<th>".getMLText("action")."</th>\n";
 			print "</tr></thead>\n<tbody>\n";
 			foreach ($ret as $ID) {
 				$doc = $this->dms->getDocument($ID);
@@ -119,12 +119,25 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 					$owner = $doc->getOwner();
 					$latest = $doc->getLatestContent();
 					$status = $latest->getStatus();
+					$previewer->createPreview($latest);
 					print "<tr>\n";
-					print "<td><i class=\"icon-file\"></i></td>";
-					print "<td><a href=\"../out/out.ViewDocument.php?documentid=".$ID."\">" . htmlspecialchars($doc->getName()) . "</a></td>\n";
-					print "<td>".htmlspecialchars($owner->getFullName())."</td>";
+					print "<td>";
+					if($previewer->hasPreview($latest)) {
+						print "<img class=\"mimeicon\" width=\"".$this->previewwidth."\"src=\"../op/op.Preview.php?documentid=".$doc->getID()."&version=".$latest->getVersion()."&width=".$this->previewwidth."\" title=\"".htmlspecialchars($latest->getMimeType())."\">";
+					} else {
+						print "<img class=\"mimeicon\" src=\"".$this->getMimeIcon($latest->getFileType())."\" title=\"".htmlspecialchars($latest->getMimeType())."\">";
+					}
+					print "</td>";
+
+					print "<td><a href=\"out.ViewDocument.php?documentid=".$ID."\">" . htmlspecialchars($doc->getName()) . "</a>";
+					print "<br /><span style=\"font-size: 85%; font-style: italic; color: #666; \">".getMLText('owner').": <b>".htmlspecialchars($owner->getFullName())."</b>, ".getMLText('creation_date').": <b>".date('Y-m-d', $doc->getDate())."</b>, ".getMLText('version')." <b>".$latest->getVersion()."</b> - <b>".date('Y-m-d', $latest->getDate())."</b></span>";
+					$comment = $latest->getComment();
+					if($comment) {
+						print "<br /><span style=\"font-size: 85%;\">".htmlspecialchars($comment)."</span>";
+					}
+					print "</td>\n";
+
 					print "<td>".getOverallStatusText($status["status"])."</td>";
-					print "<td class=\"center\">".$latest->getVersion()."</td>";
 					print "<td>";
 					if ($deleteaction) print "<a href='../op/op.ManageNotify.php?id=".$ID."&type=document&action=del' class=\"btn btn-mini\"><i class=\"icon-remove\"></i> ".getMLText("delete")."</a>";
 					else print "<a href='../out/out.DocumentNotify.php?documentid=".$ID."' class=\"btn btn-mini\">".getMLText("edit")."</a>";
@@ -138,6 +151,8 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$this->dms = $this->params['dms'];
 		$this->user = $this->params['user'];
+		$this->cachedir = $this->params['cachedir'];
+		$this->previewwidth = $this->params['previewWidthList'];
 		$this->db = $this->dms->getDB();
 
 		$this->htmlStartPage(getMLText("my_account"));
@@ -145,7 +160,9 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		$this->contentStart();
 		$this->pageNavigation(getMLText("my_account"), "my_account");
 
-		$this->contentHeading(getMLText("edit_existing_notify"));
+		echo "<div class=\"row-fluid\">";
+		echo "<div class=\"span6\">";
+		$this->contentHeading(getMLText("edit_folder_notify"));
 		$this->contentContainerStart();
 
 		print "<form method=\"post\" action=\"../op/op.ManageNotify.php?type=folder&action=add\" name=\"form1\">";
@@ -161,40 +178,55 @@ class SeedDMS_View_ManageNotify extends SeedDMS_Bootstrap_Style {
 		print "</label>";
 		print "<button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
 		print "</form>";
+		$this->contentContainerEnd();
+		echo "</div>";
 
+		echo "<div class=\"span6\">";
+		$this->contentHeading(getMLText("edit_document_notify"));
+		$this->contentContainerStart();
 		print "<form method=\"post\" action=\"../op/op.ManageNotify.php?type=document&action=add\" name=\"form2\">";
 		$this->contentSubHeading(getMLText("choose_target_document"));
 		/* 'form1' must be passed to printDocumentChooser() because the typeahead
 		 * function is currently hardcoded on this value */
 		$this->printDocumentChooser("form2");
-		print "<button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
+		print "<br /><button type='submit' class='btn'><i class=\"icon-plus\"></i> ".getMLText("add")."</button>";
 		print "</form>";
 
 		$this->contentContainerEnd();
+		echo "</div>";
+		echo "</div>";
 
 
 		//
 		// Display the results.
 		//
-		$this->contentHeading(getMLText("edit_folder_notify"));
+		echo "<div class=\"row-fluid\">";
+		echo "<div class=\"span6\">";
+		$this->contentHeading(getMLText("user"));
 		$this->contentContainerStart();
-		$this->contentSubHeading(getMLText("user"));
 		$ret=$this->getNotificationList(false,true);
 		$this->printFolderNotificationList($ret);
-		$this->contentSubHeading(getMLText("group"));
+		$this->contentContainerEnd();
+		$this->contentHeading(getMLText("group"));
+		$this->contentContainerStart();
 		$ret=$this->getNotificationList(true,true);
 		$this->printFolderNotificationList($ret,false);
 		$this->contentContainerEnd();
+		echo "</div>";
 
-		$this->contentHeading(getMLText("edit_document_notify"));
+		echo "<div class=\"span6\">";
+		$this->contentHeading(getMLText("user"));
 		$this->contentContainerStart();
-		$this->contentSubHeading(getMLText("user"));
 		$ret=$this->getNotificationList(false,false);
 		$this->printDocumentNotificationList($ret);
-		$this->contentSubHeading(getMLText("group"));
+		$this->contentContainerEnd();
+		$this->contentHeading(getMLText("group"));
+		$this->contentContainerStart();
 		$ret=$this->getNotificationList(true,false);
 		$this->printDocumentNotificationList($ret,false);
 		$this->contentContainerEnd();
+		echo "</div>";
+		echo "</div>";
 
 		$this->htmlEndPage();
 	} /* }}} */

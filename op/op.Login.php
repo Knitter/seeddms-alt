@@ -50,9 +50,12 @@ if (!isset($login) || strlen($login)==0) {
 	exit;
 }
 
-$pwd = (string) $_POST["pwd"];
-if (get_magic_quotes_gpc()) {
-	$pwd = stripslashes($pwd);
+$pwd = '';
+if(isset($_POST['pwd'])) {
+	$pwd = (string) $_POST["pwd"];
+	if (get_magic_quotes_gpc()) {
+		$pwd = stripslashes($pwd);
+	}
 }
 
 $guestUser = $dms->getUser($settings->_guestID);
@@ -232,9 +235,14 @@ else {
 
 $session = new SeedDMS_Session($db);
 
-// Delete all sessions that are more than 24 hours old. Probably not the most
+// Delete all sessions that are more than 1 week or the configured
+// cookie lifetime old. Probably not the most
 // reliable place to put this check -- move to inc.Authentication.php?
-if(!$session->deleteByTime(86400)) {
+if($settings->_cookieLifetime)
+	$lifetime = intval($settings->_cookieLifetime);
+else
+	$lifetime = 7*86400;
+if(!$session->deleteByTime($lifetime)) {
 	_printMessage(getMLText("login_error_title"), getMLText("error_occured").": ".$db->getErrorMsg());
 	exit;
 }
@@ -254,6 +262,7 @@ if (isset($_COOKIE["mydms_session"])) {
 		header("Location: " . $settings->_httpRoot . "out/out.Login.php?referuri=".$refer);
 		exit;
 	} else {
+		$session->updateAccess($dms_session);
 		$session->setUser($userid);
 	}
 } else {

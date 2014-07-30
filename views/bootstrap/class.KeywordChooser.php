@@ -37,7 +37,7 @@ class SeedDMS_View_KeywordChooser extends SeedDMS_Bootstrap_Style {
 		$categories = $this->params['categories'];
 		$form = $this->params['form'];
 
-		$this->htmlStartPage(getMLText("use_default_keywords"));
+//		$this->htmlStartPage(getMLText("use_default_keywords"));
 ?>
 <script language="JavaScript">
 var targetObj = document.<?php echo $form ?>.keywords;
@@ -196,7 +196,7 @@ myTA.focus();
 </script>
 <?php
 //		$this->htmlEndPage();
-		echo "</body>\n</html>\n";
+//		echo "</body>\n</html>\n";
 	} /* }}} */
 }
 ?>

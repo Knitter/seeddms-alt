@@ -179,6 +179,8 @@ class SeedDMS_Core_DatabaseAccess {
 		switch($this->_driver) {
 			case 'mysql':
 				$this->_conn->exec('SET NAMES utf8');
+				/* Turn this on if you want strict checking of default values, etc. */
+//				$this->_conn->exec("SET SESSION sql_mode = 'STRICT_TRANS_TABLES'");
 				break;
 			case 'sqlite':
 				$this->_conn->exec('PRAGMA foreign_keys = ON');

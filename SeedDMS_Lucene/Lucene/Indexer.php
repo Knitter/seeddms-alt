@@ -29,7 +29,7 @@ class SeedDMS_Lucene_Indexer {
 	 */
 	protected $indexname;
 
-	function open($luceneDir) { /* {{{ */
+	static function open($luceneDir) { /* {{{ */
 		try {
 		$index = Zend_Search_Lucene::open($luceneDir);
 		return($index);

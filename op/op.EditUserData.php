@@ -39,7 +39,9 @@ $fullname = $_POST["fullname"];
 $email    = $_POST["email"];
 $comment  = $_POST["comment"];
 $language  = $_POST["language"];
-$mytheme  = $_POST["theme"];
+/* 'theme' won't be set, if themeselector is turn off */
+if(isset($_POST["theme"]))
+	$mytheme  = $_POST["theme"];
 $current_pwd  = $_POST["currentpwd"];
 
 if($user->getPwd() != md5($current_pwd)) {
@@ -94,7 +96,7 @@ if ($user->getComment() != $comment)
 if ($user->getLanguage() != $language)
 	$user->setLanguage($language);
 
-if ($user->getTheme() != $mytheme)
+if (isset($mytheme) && $user->getTheme() != $mytheme)
 	$user->setTheme($mytheme);
 
 if (isset($_FILES["userfile"]) && is_uploaded_file($_FILES["userfile"]["tmp_name"]) && $_FILES["userfile"]["size"] > 0 && $_FILES['userfile']['error']==0)
