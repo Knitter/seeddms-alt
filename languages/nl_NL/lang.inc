@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (679), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (680), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -646,7 +646,7 @@ Mocht u de komende minuten geen email ontvangen, probeer het dan nogmaals en con
 'pt_BR' => 'Portugees (BR)',
 'quota' => 'Quote',
 'quota_exceeded' => 'Uw data quota is overschreden met [bytes].',
-'quota_is_disabled' => '',
+'quota_is_disabled' => 'Quota support is momenteel niet aktief in de eigenschappen. Een user quota zetten zal geen effect hebben tot quotas actief zijn.',
 'quota_warning' => 'Uw maximale data gebruik is overschreden met [bytes]. Gelieve documenten of eerdere versies te verwijderen.',
 'refresh' => 'Verversen',
 'rejected' => 'Afgewezen',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1232)
+//    Translators: Admin (1237)
 
 $text = array(
 'accept' => 'Принять',
@@ -122,8 +122,8 @@ URL: [url]',
 Пользователь: [username]
 URL: [url]',
 'attribute_changed_email_subject' => '[sitename]: изменён атрибут «[name]»',
-'attribute_count' => '',
-'attribute_value' => '',
+'attribute_count' => 'Использован раз',
+'attribute_value' => 'Значение атрибута',
 'attr_no_regex_match' => 'Значение атрибута не соответствует регулярному выражению',
 'at_least_n_users_of_group' => '[number_of_users] польз. группы [group]',
 'august' => 'Август',
@@ -296,8 +296,8 @@ URL: [url]',
 'draft_pending_review' => '<b>Черновик</b> — ожидает рецензии',
 'drag_icon_here' => 'Перетащите сюда значок каталога или документа.',
 'dropfolder_file' => 'Файл из проходного каталога',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => 'Быстрая загрузка',
+'drop_files_here' => 'Переместите файлы сюда',
 'dump_creation' => 'Создать дамп БД',
 'dump_creation_warning' => 'Эта операция создаст дамп базы данных. После создания, файл будет сохранен в каталоге данных сервера.',
 'dump_list' => 'Существующие дампы',
@@ -1114,7 +1114,7 @@ URL: [url]',
 'update_reviewers' => 'Обновить список рецензирующих',
 'uploaded_by' => 'Загрузил(а)',
 'uploading_failed' => 'Загрузка не удалась. Свяжитесь с администратором.',
-'uploading_maxsize' => '',
+'uploading_maxsize' => 'Размер загруженного файла превышает максимально возможный',
 'uploading_zerosize' => 'Отменена загрузка пустого файла.',
 'used_discspace' => 'Занятое дисковое пространство',
 'user' => 'Пользователь',
