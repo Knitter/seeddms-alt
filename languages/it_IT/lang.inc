@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (732)
+//    Translators: Admin (734)
 
 $text = array(
 'accept' => 'Accetta',
@@ -171,11 +171,11 @@ $text = array(
 'confirm_create_fulltext_index' => 'Yes, I would like to recreate the fulltext index!',
 'confirm_pwd' => 'Conferma Password',
 'confirm_rm_backup' => 'Vuoi davvero rimuovere il file "[arkname]"?<br>Attenzione: Questa operazione non può essere annullata.',
-'confirm_rm_document' => 'Vuoi veramente eliminare il documento "[documentname]"?<br>Attenzione: L\'operazione è irreversibile',
+'confirm_rm_document' => 'Vuoi veramente eliminare il documento \'[documentname]\'?<br>Attenzione: L\'operazione è irreversibile',
 'confirm_rm_dump' => 'Vuoi davvero rimuovere il file "[dumpname]"?<br>Attenzione: Questa operazione non può essere annullata.',
 'confirm_rm_event' => 'Vuoli davvero rimuovere l\'evento "[name]"?<br>Attenzione: Questa operazione non può essere annullata.',
 'confirm_rm_file' => 'Vuoi veramente eliminare il file "[name]" del documento "[documentname]"?<br>Attenzione: L\'operazione è irreversibile',
-'confirm_rm_folder' => 'Vuoi veramente eliminare la cartella "[foldername]" e tutto il suo contenuto?<br>Attenzione: L\'operazione è irreversibile',
+'confirm_rm_folder' => 'Vuoi veramente eliminare la cartella \'[foldername]\' e tutto il suo contenuto?<br>Attenzione: L\'operazione è irreversibile',
 'confirm_rm_folder_files' => 'Vuoi davvero rimuovere tutti i file dalla cartella "[foldername]" e dalle sue sottocartelle?<br>Attenzione: Questa operazione non può essere annullata.',
 'confirm_rm_group' => 'Vuoi davvero rimuovere il gruppo "[groupname]"?<br>Attenzione: Questa operazione non può essere annullata.',
 'confirm_rm_log' => 'Vuoi davvero rimuovere il file di log "[logname]"?<br>Attenzione: Questa operazione non può essere annullata.',

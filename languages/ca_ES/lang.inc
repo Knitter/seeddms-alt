@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (553)
+//    Translators: Admin (555)
 
 $text = array(
 'accept' => 'Acceptar',
@@ -171,11 +171,11 @@ $text = array(
 'confirm_create_fulltext_index' => 'Yes, I would like to recreate the fulltext index!',
 'confirm_pwd' => 'Confirmar contrasenya',
 'confirm_rm_backup' => '¿Vol realment eliminar el fitxer "[arkname]"?<br />Atenció: aquesta acció no es pot desfer.',
-'confirm_rm_document' => '¿Vol realment eliminar el document "[documentname]"?<br/>Atenció: aquesta acció no es pot desfer.',
+'confirm_rm_document' => '¿Vol realment eliminar el document \'[documentname]\'?<br/>Atenció: aquesta acció no es pot desfer.',
 'confirm_rm_dump' => '¿Vol realment eliminar el fitxer "[dumpname]"?<br />Atenció: aquesta acció no es pot desfer.',
 'confirm_rm_event' => '¿Vol realment eliminar l\'event "[name]"?<br />Atenció: aquesta acció no es pot desfer.',
 'confirm_rm_file' => '¿Vol realment eliminar el fitxer "[name]" del document "[documentname]"?<br />Atenció: aquesta acció no es pot desfer.',
-'confirm_rm_folder' => '¿Vol realment eliminar el directori "[foldername]" i tot el seu contingut?<br />Atenció: aquesta acció no es pot desfer.',
+'confirm_rm_folder' => '¿Vol realment eliminar el directori \'[foldername]\' i tot el seu contingut?<br />Atenció: aquesta acció no es pot desfer.',
 'confirm_rm_folder_files' => '¿Vol realment eliminar tots els fitxers de la carpeta "[foldername]" i de les seves subcarpetes?<br />Atenció: aquesta acció no es pot desfer.',
 'confirm_rm_group' => '¿Vol realment eliminar el grup "[groupname]"?<br />atenció: aquesta acció no es pot desfer.',
 'confirm_rm_log' => '¿Vol realment eliminar el fitxer de registre "[logname]"?<br />Atenció: aquesta acció no es pot desfer.',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1067)
+//    Translators: Admin (1069)
 
 $text = array(
 'accept' => 'وافق',
@@ -186,11 +186,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'نعم: اود اعادة انشاء فهرس للنص الكامل !',
 'confirm_pwd' => 'تأكيد كلمة السر',
 'confirm_rm_backup' => 'هل تود حقا ازالة الملف  "[arkname]"?<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
-'confirm_rm_document' => 'هل تود حقا ازالة المستند "[documentname]"?<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
+'confirm_rm_document' => 'هل تود حقا ازالة المستند \'[documentname]\'?<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
 'confirm_rm_dump' => 'هل تود حقا ازالة الملف "[dumpname]"?<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
 'confirm_rm_event' => 'هل تود حقا ازالة الحدث "[name]"?<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
 'confirm_rm_file' => 'هل تود حقا ازالة الملف "[name]" الخاص بالمستند "[documentname]"?<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
-'confirm_rm_folder' => 'هل تود حقا ازالة المجلد "[foldername]" وكل محتوياته؟<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
+'confirm_rm_folder' => 'هل تود حقا ازالة المجلد \'[foldername]\' وكل محتوياته؟<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
 'confirm_rm_folder_files' => 'هل تود حقا ازالة كل الملفات الموجودة بالمجلد "[foldername]" وكل مافي المجلدات الفرعية؟<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
 'confirm_rm_group' => 'هل تود حقا ازالة المجموعة "[groupname]"?<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',
 'confirm_rm_log' => 'هل تود حقا ازالة ملف السجل "[logname]"?<br>كن حذرا: هذا الاجراء لايمكن التراجع فيه',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (680), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (682), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -186,11 +186,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Ja, Ik wil de volledigetekst index opnieuw maken!',
 'confirm_pwd' => 'Bevestig wachtwoord',
 'confirm_rm_backup' => 'Weet U zeker dat U het bestand "[arkname]" wilt verwijderen?<br>Let op: deze handeling kan niet ongedaan worden gemaakt.',
-'confirm_rm_document' => 'Weet U zeker dat U het document "[documentname]" wilt verwijderen?<br>Pas op: deze handeling kan niet ongedaan worden gemaakt.',
+'confirm_rm_document' => 'Weet U zeker dat U het document \'[documentname]\' wilt verwijderen?<br>Pas op: deze handeling kan niet ongedaan worden gemaakt.',
 'confirm_rm_dump' => 'Weet U zeker dat U het bestand "[dumpname]" wilt verwijderen?<br>Let op: deze handeling kan niet ongedaan worden gemaakt.',
 'confirm_rm_event' => 'Weet U zeker dat U de activiteit "[name]" wilt verwijderen?<br>Let op: deze handeling kan niet ongedaan worden gemaakt.',
 'confirm_rm_file' => 'Weet U zeker dat U file "[name]" van document "[documentname]" wilt verwijderen?<br>Let op: Deze actie kan niet ongedaan worden gemaakt.',
-'confirm_rm_folder' => 'Weet U zeker dat U de map "[foldername]" en haar inhoud wilt verwijderen?<br>Pas op: deze handeling kan niet ongedaan worden gemaakt.',
+'confirm_rm_folder' => 'Weet U zeker dat U de map \'[foldername]\'en haar inhoud wilt verwijderen?<br>Pas op: deze handeling kan niet ongedaan worden gemaakt.',
 'confirm_rm_folder_files' => 'Weet U zeker dat U alle bestanden en submappen van de map "[foldername]" wilt verwijderen?<br>Let op: deze actie kan niet ongedaan worden gemaakt.',
 'confirm_rm_group' => 'Weet U zeker dat U de Groep "[groupname]" wilt verwijderen?<br>Let op: deze handeling kan niet ongedaan worden gemaakt.',
 'confirm_rm_log' => 'Weet U zeker dat U het logbestand "[logname]" wilt verwijderen?<br>Let op: deze handeling kan niet ongedaan worden gemaakt.',

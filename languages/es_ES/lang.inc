@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (924), angel (123), francisco (2), jaimem (14)
+//    Translators: Admin (926), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -193,11 +193,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => '¡Sí, quiero regenerar el índice te texto completo¡',
 'confirm_pwd' => 'Confirmar contraseña',
 'confirm_rm_backup' => '¿Desea realmente eliminar el fichero "[arkname]"?<br />Atención: Esta acción no se puede deshacer.',
-'confirm_rm_document' => '¿Desea realmente eliminar el documento "[documentname]"?<br />Atención: Esta acción no se puede deshacer.',
+'confirm_rm_document' => '¿Desea realmente eliminar el documento \'[documentname]\'?<br />Atención: Esta acción no se puede deshacer.',
 'confirm_rm_dump' => '¿Desea realmente eliminar el fichero "[dumpname]"?<br />Atención: Esta acción no se puede deshacer.',
 'confirm_rm_event' => '¿Desea realmente eliminar el evento "[name]"?<br />Atención: Esta acción no se puede deshacer.',
 'confirm_rm_file' => '¿Desea realmente eliminar el fichero "[name]" del documento "[documentname]"?<br />Atención: Esta acción no se puede deshacer.',
-'confirm_rm_folder' => '¿Desea realmente eliminar la carpeta "[foldername]" y su contenido?<br />Atención: Esta acción no se puede deshacer.',
+'confirm_rm_folder' => '¿Desea realmente eliminar la carpeta \'[foldername]\' y su contenido?<br />Atención: Esta acción no se puede deshacer.',
 'confirm_rm_folder_files' => '¿Desea realmente eliminar todos los ficheros de la carpeta "[foldername]" y de sus subcarpetas?<br />Atención: Esta acción no se puede deshacer.',
 'confirm_rm_group' => '¿Desea realmente eliminar el grupo "[groupname]"?<br />Atención: Esta acción no se puede deshacer.',
 'confirm_rm_log' => '¿Desea realmente eliminar el fichero de registro "[logname]"?<br />Atención: Esta acción no se puede deshacer.',

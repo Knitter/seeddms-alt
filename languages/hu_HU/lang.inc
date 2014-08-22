@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (539), ribaz (1019)
+//    Translators: Admin (541), ribaz (1019)
 
 $text = array(
 'accept' => 'Elfogad',
@@ -193,11 +193,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Igen, szeretném újra létrehozni a teljes szöveg indexet!',
 'confirm_pwd' => 'Jelszó megerősítése',
 'confirm_rm_backup' => 'Biztosan el kívánja távolítani ezt az állományt "[arkname]"?<br>Legyen óvatos: Ez a művelet nem vonható vissza.',
-'confirm_rm_document' => 'Biztosan el kívánja távolítani ezt a dokumentumot "[documentname]"?<br> Legyen óvatos: Ezt a műveletet nem vonható vissza.',
+'confirm_rm_document' => 'Biztosan el kívánja távolítani ezt a dokumentumot \'[documentname]\'?<br> Legyen óvatos: Ezt a műveletet nem vonható vissza.',
 'confirm_rm_dump' => 'Biztosan el kívánja távolítani ezt az állományt "[dumpname]"?<br>Legyen óvatos: Ez a művelet nem vonható vissza.',
 'confirm_rm_event' => 'Biztosan el kívánja távolítani ezt az eseményt "[name]"?<br>Legyen óvatos: Ez a művelet nem vonható vissza.',
 'confirm_rm_file' => 'Biztosan el kívánja távolítani ezt az állományt "[name]" ebből a dokumentumból "[documentname]"?<br>Legyen óvatos: Ez a művelet nem vonható vissza.',
-'confirm_rm_folder' => 'Biztosan el kívánja távolítani ezt a könyvtárat "[foldername]" és annak tartalmát?<br>Legyen óvatos: Ezt a művelet nem vonható vissza.',
+'confirm_rm_folder' => 'Biztosan el kívánja távolítani ezt a könyvtárat \'[foldername]\' és annak tartalmát?<br>Legyen óvatos: Ezt a művelet nem vonható vissza.',
 'confirm_rm_folder_files' => 'Biztosan el kívánja távolítani az összes állományt és almappát a "[foldername]" mappából?<br>Legyen óvatos: Ez a művelet nem vonható vissza.',
 'confirm_rm_group' => 'Biztosan el kívánja távolítani ezt a csoportot "[groupname]"?<br>Legyen óvatos: Ez a művelet nem vonható vissza.',
 'confirm_rm_log' => 'Biztosan el kívánja távolítani ezt a napló állományt "[logname]"?<br>Legyen óvatos: Ez a művelet nem vonható vissza.',

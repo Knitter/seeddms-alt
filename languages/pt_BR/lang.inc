@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (860), flaviove (627), lfcristofoli (352)
+//    Translators: Admin (862), flaviove (627), lfcristofoli (352)
 
 $text = array(
 'accept' => 'Aceitar',
@@ -193,11 +193,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Sim, eu gostaria de recriar o índice de texto completo!',
 'confirm_pwd' => 'Confirme Senha',
 'confirm_rm_backup' => 'Do you really want to remove the file "[arkname]"?<br>Be careful: This action cannot be undone.',
-'confirm_rm_document' => 'Deseja realmente remover o documento "[documentname]"?<br>Por favor, tenha cuidado porque esta ação não poderá ser desfeita.',
+'confirm_rm_document' => 'Deseja realmente remover o documento \'[documentname]\'?<br>Por favor, tenha cuidado porque esta ação não poderá ser desfeita.',
 'confirm_rm_dump' => 'Do you really want to remove the file "[dumpname]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_event' => 'Do you really want to remove event "[name]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_file' => 'Do you really want to remove file "[name]" of document "[documentname]"?<br>Be careful: This action cannot be undone.',
-'confirm_rm_folder' => 'Deseja realmente remover a "[foldername]" e seu conteúdo ?<br>Por favor, tenha cuidado porque esta ação não poderá ser desfeita.',
+'confirm_rm_folder' => 'Deseja realmente remover a \'[foldername]\' e seu conteúdo ?<br>Por favor, tenha cuidado porque esta ação não poderá ser desfeita.',
 'confirm_rm_folder_files' => 'Você realmente deseja remover todos os arquivos da pasta "[foldername]" e de suas subpastas <br> Cuidado: Eáa ação não pode ser desfeita.',
 'confirm_rm_group' => 'Do you really want to remove the group "[groupname]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_log' => 'Do you really want to remove log file "[logname]"?<br>Be careful: This action cannot be undone.',

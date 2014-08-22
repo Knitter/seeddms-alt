@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (694), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (696), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -186,11 +186,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Tak, chcę ponownie utworzyć indeks pełnotekstowy!',
 'confirm_pwd' => 'Potwierdź hasło',
 'confirm_rm_backup' => 'Czy rzeczywiście chcesz usunąć plik "[arkname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
-'confirm_rm_document' => 'Czy rzeczywiście chcesz usunąć dokument "[documentname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
+'confirm_rm_document' => 'Czy rzeczywiście chcesz usunąć dokument \'[documentname]\'?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_dump' => 'Czy rzeczywiście chcesz usunąć plik "[dumpname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_event' => 'Czy rzeczywiście chcesz usunąć zdarzenie "[name]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_file' => 'Czy rzeczywiście chcesz usunąć plik "[name]" dokumentu "[documentname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
-'confirm_rm_folder' => 'Czy rzeczywiście chcesz usunąć folder "[foldername]" wraz z zawartością?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
+'confirm_rm_folder' => 'Czy rzeczywiście chcesz usunąć folder \'[foldername]\' wraz z zawartością?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_folder_files' => 'Czy rzeczywiście chcesz usunąć wszystkie pliki z folderu "[foldername]" oraz jego podfoldery?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_group' => 'Czy rzeczywiście chcesz usunąć grupę "[groupname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_log' => 'Czy rzeczywiście chcesz usunąć plik dziennika "[logname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',

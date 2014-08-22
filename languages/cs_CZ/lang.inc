@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (614), kreml (441)
+//    Translators: Admin (616), kreml (441)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -193,11 +193,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Ano, chci znovu vytvořit fulltext indes!',
 'confirm_pwd' => 'Potvrzení hesla',
 'confirm_rm_backup' => 'Skutečně chcete odstranit soubor "[arkname]"?<br>Pozor: Akci nelze vrátit zpět.',
-'confirm_rm_document' => 'Skutečně chcete odstranit dokument "[documentname]"?<br>Buďte opatrní: Tuto činnost není možné vrátit zpět.',
+'confirm_rm_document' => 'Skutečně chcete odstranit dokument \'[documentname]\'?<br>Buďte opatrní: Tuto činnost není možné vrátit zpět.',
 'confirm_rm_dump' => 'Skutečně chcete odstranit soubor "[dumpname]"?<br>Pozor: Akce je nevratná.',
 'confirm_rm_event' => 'Skutečně chcete odstranit akci "[name]"?<br>Pozor: Akci nelze vrátit zpìt.',
 'confirm_rm_file' => 'Skutečně chcete odstranit soubor "[name]" - "[documentname]"?<br>Pozor: Akci nelze vrátit zpět.',
-'confirm_rm_folder' => 'Skutečně chcete odstranit "[foldername]" a jeho obsah?<br>Buďte opatrní: Tuto činnost není možné vrátit zpět.',
+'confirm_rm_folder' => 'Skutečně chcete odstranit \'[foldername]\' a jeho obsah?<br>Buďte opatrní: Tuto činnost není možné vrátit zpět.',
 'confirm_rm_folder_files' => 'Skutečně chcete odstranit všechny soubory z podsložky "[foldername]" ?<br>Buďte opatrní: Tuto akci nelze vrátit zpět.',
 'confirm_rm_group' => 'Skutečně chcete odstranit skupinu "[groupname]"?<br>Pozor: Akce je nevratná.',
 'confirm_rm_log' => 'Skutečně chcete odstranit LOG soubor "[logname]"?<br>Pozor: Akci nelze vrátit zpět.',

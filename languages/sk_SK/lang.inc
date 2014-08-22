@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (383)
+//    Translators: Admin (385)
 
 $text = array(
 'accept' => 'Prijať',
@@ -171,11 +171,11 @@ $text = array(
 'confirm_create_fulltext_index' => '',
 'confirm_pwd' => 'Potvrdenie hesla',
 'confirm_rm_backup' => 'Skutočne si prajete odstrániť zálohu "[arkname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
-'confirm_rm_document' => 'Naozaj chcete odstrániť dokument "[documentname]"?<br>Buďte opatrní: Túto činnosť nemožno vrátiť späť.',
+'confirm_rm_document' => 'Naozaj chcete odstrániť dokument \'[documentname]\'?<br>Buďte opatrní: Túto činnosť nemožno vrátiť späť.',
 'confirm_rm_dump' => 'Skutočne si prajete odstrániť "[dumpname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
 'confirm_rm_event' => 'Skutočne si prajete odstrániť udalosť "[name]"?<br>Buďte opatrní, táto akcia je nezvratná.',
 'confirm_rm_file' => 'Skutočne si prajete odstrániť súbor "[name]" z dokumentu "[documentname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
-'confirm_rm_folder' => 'Naozaj chcete odstrániť "[foldername]" a jeho obsah?<br>Buďte opatrní: Túto činnosť nemožno vrátiť späť.',
+'confirm_rm_folder' => 'Naozaj chcete odstrániť \'[foldername]\' a jeho obsah?<br>Buďte opatrní: Túto činnosť nemožno vrátiť späť.',
 'confirm_rm_folder_files' => 'Skutočne si prajete odstrániť všetky súbory zložky "[foldername]" a všetkých jej podzložiek?<br>Buďte opatrní, táto akcia je nezvratná.',
 'confirm_rm_group' => 'Skutočne si prajete odstrániť skupinu "[groupname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
 'confirm_rm_log' => 'Skutočne si prajete zmazať protokol "[logname]"?<br>Buďte opatrní, táto akcia je nezvratná.',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (531), fengjohn (5)
+//    Translators: Admin (533), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -175,11 +175,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => '',
 'confirm_pwd' => '确认密码',
 'confirm_rm_backup' => '您确定要删除"[arkname]"备份文档?<br>请注意：此动作执行后不能撤销.',
-'confirm_rm_document' => '您确定要删除"[documentname]"文档?<br>请注意：此动作执行后不能撤销.',
+'confirm_rm_document' => '您确定要删除\'[documentname]\'文档?<br>请注意：此动作执行后不能撤销.',
 'confirm_rm_dump' => '您确定要删除"[dumpname]"转储文件?<br>请注意：此动作执行后不能撤销.',
 'confirm_rm_event' => '您确定要删除"[name]"事件?<br>请注意：此动作执行后不能撤销.',
 'confirm_rm_file' => '您确定要删除"[documentname]"文档中的"[name]"文件 ?<br>请注意：此动作执行后不能撤销.',
-'confirm_rm_folder' => '您确定要删除"[foldername]"文件夹 及其内文件?<br>请注意：此动作执行后不能撤销.',
+'confirm_rm_folder' => '您确定要删除\'[foldername]\'文件夹 及其内文件?<br>请注意：此动作执行后不能撤销.',
 'confirm_rm_folder_files' => '您确定要删除"[foldername]" 中所有文件及其子文件夹?<br>请注意：此动作执行后不能撤销.',
 'confirm_rm_group' => '您确定要删除"[groupname]"组?<br>请注意：此动作执行后不能撤销.',
 'confirm_rm_log' => '您确定要删除"[logname]"日志文件?<br>请注意：此动作执行后不能撤销.',
