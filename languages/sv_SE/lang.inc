@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1077), tmichelfelder (106)
+//    Translators: Admin (1081), tmichelfelder (106)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -281,6 +281,8 @@ URL: [url]',
 Dokument: [name]
 Överordnade katalog: [folder_path]
 Användare: [username]
+Kommentar: [comment]
+Versions kommentar: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Dokument har uppdaterats',
 'does_not_expire' => 'Löper aldrig ut',
@@ -294,8 +296,8 @@ URL: [url]',
 'draft_pending_review' => 'Utkast: väntar på granskning',
 'drag_icon_here' => 'Dra ikon av mappen eller dokument hit!',
 'dropfolder_file' => 'Fil från mellanlagrings-mappen',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => 'Snabb uppladdning',
+'drop_files_here' => 'Släpp filer här!',
 'dump_creation' => 'Skapa DB-dump',
 'dump_creation_warning' => 'Med denna funktion kan du skapa en dumpfil av innehållet i din databas. När dumpfilen har skapats, kommer den att sparas i datamappen på servern.',
 'dump_list' => 'Befintliga dumpfiler',
@@ -347,6 +349,8 @@ URL: [url]',
 'files_deletion' => 'Ta bort alla filer',
 'files_deletion_warning' => 'Med detta alternativ kan du ta bort alla filer i en dokumentkatalog. Versionsinformationen kommer fortfarande att visas.',
 'file_size' => 'Filstorlek',
+'filter_for_documents' => '',
+'filter_for_folders' => '',
 'folder' => 'Katalog',
 'folders' => 'Kataloger',
 'folders_and_documents_statistic' => 'Innehållsöversikt',
@@ -1105,7 +1109,7 @@ URL: [url]',
 'update_reviewers' => 'Uppdatera listan med personer som granskar',
 'uploaded_by' => 'Uppladdat av',
 'uploading_failed' => 'Fel vid uppladdningen. Kontakta administratören.',
-'uploading_maxsize' => '',
+'uploading_maxsize' => 'Uppladdade filen översteg maxgränsen för storleken på filstorlek',
 'uploading_zerosize' => 'Uppladdning av tom fil. Uppladdningen avbryts.',
 'used_discspace' => 'Använt minne',
 'user' => 'Användare',

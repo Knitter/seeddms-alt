@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (912), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (916), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -135,7 +135,7 @@ URL: [url]',
 'backup_remove' => 'Supprimer le fichier de sauvegarde',
 'backup_tools' => 'Outils de sauvegarde',
 'between' => 'entre',
-'browse' => '',
+'browse' => 'Parcourir',
 'calendar' => 'Agenda',
 'calendar_week' => 'Semaine',
 'cancel' => 'Annuler',
@@ -280,6 +280,8 @@ URL: [url]',
 'document_updated_email_body' => 'Document mis à jour
 Document: [name]
 Dossier parent: [folder_path]
+Commentaire: [comment]
+Commentaire de version: [version_comment]
 Utilisateur: [username]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Document mis à jour',
@@ -347,6 +349,8 @@ URL: [url]',
 'files_deletion' => 'Suppression de fichiers',
 'files_deletion_warning' => 'Avec cette option, vous pouvez supprimer tous les fichiers d\'un dossier DMS. Les informations de version resteront visibles.',
 'file_size' => 'Taille',
+'filter_for_documents' => '',
+'filter_for_folders' => '',
 'folder' => 'Dossier',
 'folders' => 'Dossiers',
 'folders_and_documents_statistic' => 'Aperçu du contenu',
@@ -639,7 +643,7 @@ En cas de problème persistant, veuillez contacter votre administrateur.',
 'pt_BR' => 'Portuguais (BR)',
 'quota' => 'Quota',
 'quota_exceeded' => 'Votre quota de disque est dépassé de [bytes].',
-'quota_is_disabled' => '',
+'quota_is_disabled' => 'Le support des quota est actuellement désactivé dans les réglages. Affecter un quota utilisateur n\'aura pas d\'effet jusqu\'à ce qu\'il soit de nouveau activé.',
 'quota_warning' => 'Votre taille maximale de disque est dépassée de [bytes]. SVP supprimer des documents ou d\'anciennes versions.',
 'refresh' => 'Actualiser',
 'rejected' => 'Rejeté',
@@ -666,7 +670,7 @@ URL: [url]',
 'return_from_subworkflow' => 'Revenir du sous-workflow',
 'return_from_subworkflow_email_body' => '',
 'return_from_subworkflow_email_subject' => '',
-'reverse_links' => '',
+'reverse_links' => 'Documents liés au document courant',
 'reviewers' => 'Correcteurs',
 'reviewer_already_assigned' => 'est déjà déclaré en tant que correcteur',
 'reviewer_already_removed' => 'a déjà été retiré du processus de correction ou a déjà soumis une correction',

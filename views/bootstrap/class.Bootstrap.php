@@ -65,26 +65,6 @@ class SeedDMS_Bootstrap_Style extends SeedDMS_View_Common {
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/noty/themes/default.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jqtree/tree.jquery.js"></script>'."\n";
 		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-cookie/jquery.cookie.js"></script>'."\n";
-
-		/*
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/fileupload/jquery.iframe-transport.js"></script>'."\n";
-		echo '<script type="text/javascript" src="../styles/'.$this->theme.'/fileupload/jquery.fileupload.js"></script>'."\n";
-		echo "
-<script>
-$(function () {
-    $('#fileupload').fileupload({
-        dataType: 'json',
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo(document.body);
-            });
-        }
-    });
-});
-</script>
-";
-		*/
 		echo '<link rel="shortcut icon" href="../styles/'.$this->theme.'/favicon.ico" type="image/x-icon"/>'."\n";
 		if($this->params['session'] && $this->params['session']->getSu()) {
 ?>
@@ -822,11 +802,6 @@ $(document).ready(function () {
 		</div>
 	</div>
 <?php
-/*
-  <script>
-    $('#<?php echo $varname; ?>').fileupload();
-  </script>
-*/
 	} /* }}} */
 
 	function printDateChooser($defDate = -1, $varName) { /* {{{ */

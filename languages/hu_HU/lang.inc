@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (538), ribaz (1019)
+//    Translators: Admin (539), ribaz (1019)
 
 $text = array(
 'accept' => 'Elfogad',
@@ -288,6 +288,8 @@ URL: [url]',
 Dokumentum: [name]
 Szülő mappa: [folder_path]
 Felhasználó: [username]
+Megjegyzés: [comment]
+Verzió megjegyzés: [version_comment]
 URL: [url]',
 'document_updated_email_subject' => '[sitename]: [name] - Dokumentum frissült',
 'does_not_expire' => 'Soha nem jár le',
@@ -354,6 +356,8 @@ URL: [url]',
 'files_deletion' => 'Állományok törlése',
 'files_deletion_warning' => 'Ezzel az opcióval törölheti az összes állományt valamennyi DMS mappában. A változási információk láthatók maradnak.',
 'file_size' => 'Állomány méret',
+'filter_for_documents' => '',
+'filter_for_folders' => '',
 'folder' => 'Mappa',
 'folders' => 'Mappák',
 'folders_and_documents_statistic' => 'Tartalmak áttekintése',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (523), fengjohn (5)
+//    Translators: Admin (527), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -255,8 +255,8 @@ URL: [url]',
 'draft_pending_review' => '待校对',
 'drag_icon_here' => '拖动图标到这里',
 'dropfolder_file' => '',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => '快速上传',
+'drop_files_here' => '拖入这里',
 'dump_creation' => '转储数据',
 'dump_creation_warning' => '通过此操作，您可以创建一个您数据库的转储文件，之后可以将转储数据保存到您服务器所在的数据文件夹中',
 'dump_list' => '存在转储文件',
@@ -304,6 +304,8 @@ URL: [url]',
 'files_deletion' => '删除文件',
 'files_deletion_warning' => '通过此操作，您可以删除整个DMS(文档管理系统)文件夹里的所有文件.但版本信息将被保留',
 'file_size' => '文件大小',
+'filter_for_documents' => '',
+'filter_for_folders' => '',
 'folder' => '文件夹',
 'folders' => '文件夹',
 'folders_and_documents_statistic' => '内容概要',
@@ -967,7 +969,7 @@ URL: [url]',
 'update_reviewers' => '更新校对人名单',
 'uploaded_by' => '上传者',
 'uploading_failed' => '文件太大无法上传！请处理后重新上传。',
-'uploading_maxsize' => '',
+'uploading_maxsize' => '最大上传限制',
 'uploading_zerosize' => '上传失败！请检查是否没有选择上传的文件。',
 'used_discspace' => '使用磁盘空间',
 'user' => '用户',
