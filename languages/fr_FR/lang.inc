@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (918), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (921), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -296,8 +296,8 @@ URL: [url]',
 'draft_pending_review' => 'Ebauche - En cours de correction',
 'drag_icon_here' => 'Glisser/déposer le fichier ou document ici!',
 'dropfolder_file' => 'Fichier du dossier déposé',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => 'Téléchargement rapide',
+'drop_files_here' => 'Glissez fichiers ici!',
 'dump_creation' => 'création sauvegarde BD',
 'dump_creation_warning' => 'Avec cette opération, vous pouvez créer une sauvegarde du contenu de votre base de données. Après la création, le fichier de sauvegarde sera sauvegardé dans le dossier de données de votre serveur.',
 'dump_list' => 'Fichiers de sauvegarde existants',
@@ -1084,7 +1084,7 @@ URL: [url]',
 'update_reviewers' => 'Mise à jour de la liste de correcteurs',
 'uploaded_by' => 'Déposé par',
 'uploading_failed' => 'Dépose du document échoué. SVP Contactez le responsable.',
-'uploading_maxsize' => '',
+'uploading_maxsize' => 'La taille du fichier téléchargé excède la taille maximale accepté',
 'uploading_zerosize' => 'Chargement d\'un fichier vide. Chargement annulé.',
 'used_discspace' => 'Espace disque utilisé',
 'user' => 'Utilisateur',

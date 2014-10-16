@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1069)
+//    Translators: Admin (1070)
 
 $text = array(
 'accept' => 'وافق',
@@ -135,7 +135,7 @@ URL: [url]',
 'backup_remove' => 'ازالة ملف النسخ الاحتياطي',
 'backup_tools' => 'أدوات النسخ الاحتياطي',
 'between' => 'بين',
-'browse' => '',
+'browse' => 'ﺖﺼﻔﺣ',
 'calendar' => 'النتيجة',
 'calendar_week' => '',
 'cancel' => 'الغاء',

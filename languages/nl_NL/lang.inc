@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (682), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (684), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -135,7 +135,7 @@ URL: [url]',
 'backup_remove' => 'Verwijder backup bestand',
 'backup_tools' => 'Backup gereedschap',
 'between' => 'tussen',
-'browse' => '',
+'browse' => 'Browse',
 'calendar' => 'Kalender',
 'calendar_week' => 'Weekkalender',
 'cancel' => 'Annuleren',
@@ -824,7 +824,7 @@ URL: [url]',
 'settings_enableClipboard_desc' => 'Activeer/ blokkeer het klembord',
 'settings_enableConverting' => 'Inschakelen Conversie',
 'settings_enableConverting_desc' => 'Inschakelen/uitschakelen conversie van bestanden',
-'settings_enableDropUpload' => '',
+'settings_enableDropUpload' => 'Inschakelen Snelle Upload',
 'settings_enableDropUpload_desc' => '',
 'settings_enableDuplicateDocNames' => 'Sta duplicaten van documentnamen toe',
 'settings_enableDuplicateDocNames_desc' => 'Staat het toe om documentnamen te dupliceren in een folder.',

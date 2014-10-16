@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (541), ribaz (1019)
+//    Translators: Admin (545), ribaz (1019)
 
 $text = array(
 'accept' => 'Elfogad',
@@ -303,8 +303,8 @@ URL: [url]',
 'draft_pending_review' => 'Piszkozat - felülvizsgálat folyamatban',
 'drag_icon_here' => 'Húzza a mappa vagy dokumentum ikonját ide!',
 'dropfolder_file' => 'Állomány a dropfolder-ből',
-'dropupload' => '',
-'drop_files_here' => '',
+'dropupload' => 'Gyors feltöltés',
+'drop_files_here' => 'Húzz ide egy fájlt',
 'dump_creation' => 'Adatbázis mentés létrehozása',
 'dump_creation_warning' => 'Ezzel a művelettel az adatbázis tartalmáról lehet adatbázis mentést készíteni. Az adatbázis mentés létrehozását követően a mentési állomány a kiszolgáló adat mappájába lesz mentve.',
 'dump_list' => 'Meglévő adatbázis metések',
@@ -832,7 +832,7 @@ URL: [url]',
 'settings_enableClipboard_desc' => 'Vágólap engedélyezés/tiltás',
 'settings_enableConverting' => 'Konvertálás engedélyezése',
 'settings_enableConverting_desc' => 'Engedélyezi/tiltja az állományok konverzióját',
-'settings_enableDropUpload' => '',
+'settings_enableDropUpload' => 'Gyorsfeltöltés engedélyezése',
 'settings_enableDropUpload_desc' => '',
 'settings_enableDuplicateDocNames' => 'Azonos dokumentum név engedélyezése',
 'settings_enableDuplicateDocNames_desc' => 'Engedélyezi az azonos dokumentum neveket egy mappában.',
@@ -1123,7 +1123,7 @@ URL: [url]',
 'update_reviewers' => 'Felülvizsgálók listájának frissítése',
 'uploaded_by' => 'Feltöltötte',
 'uploading_failed' => 'Állományai egyikének feltöltése sikertelen. Kérjük ellenőrizze a legnagyobb feltölthető állomány méretet.',
-'uploading_maxsize' => '',
+'uploading_maxsize' => 'A feltöltött fájl nagyobb, mint a megengedezz maximális méret',
 'uploading_zerosize' => 'Üres állomány feltöltése. Feltöltés megszakítva.',
 'used_discspace' => 'Felhasznált lemezterület',
 'user' => 'Felhasználó',
