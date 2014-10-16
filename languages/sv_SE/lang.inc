@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1081), tmichelfelder (106)
+//    Translators: Admin (1083), tmichelfelder (106)
 
 $text = array(
 'accept' => 'Godkänn',
@@ -186,11 +186,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Ja, jag vill återskapa fulltext-sökindex !',
 'confirm_pwd' => 'Bekräfta lösenord',
 'confirm_rm_backup' => 'Vill du verkligen ta bort filen "[arkname]"?<br>OBS! Om filen tas bort, kan den inte återskapas!',
-'confirm_rm_document' => 'Vill du verkligen ta bort dokumentet "[documentname]"?<br>OBS! Om dokumentet tas bort, kan det inte återskapas!',
+'confirm_rm_document' => 'Vill du verkligen ta bort dokumentet \'[documentname]\'?<br>OBS! Om dokumentet tas bort, kan det inte återskapas!',
 'confirm_rm_dump' => 'Vill du verkligen ta bort filen "[dumpname]"?<br>OBS! Om filen tas bort, kan den inte återskapas!',
 'confirm_rm_event' => 'Vill du verkligen ta bort händelsen "[name]"?<br>OBS! Om händelsen tas bort, kan den inte återskapas!',
 'confirm_rm_file' => 'Vill du verkligen ta bort filen "[name]" i dokumentet "[documentname]"?<br>OBS! Om filen tas bort, kan den inte återskapas!',
-'confirm_rm_folder' => 'Vill du verkligen ta bort katalogen "[foldername]" och katalogens innehåll?<br>OBS! Katalogen och innehållet kan inte återskapas!',
+'confirm_rm_folder' => 'Vill du verkligen ta bort katalogen \'[foldername]\' och katalogens innehåll?<br>OBS! Katalogen och innehållet kan inte återskapas!',
 'confirm_rm_folder_files' => 'Vill du verkligen ta bort alla filer i katalogen "[foldername]" och i katalogens undermappar?<br>OBS! Filerna kan inte återskapas!',
 'confirm_rm_group' => 'Vill du verkligen ta bort gruppen "[groupname]"?<br>OBS! Gruppen kan inte återskapas!',
 'confirm_rm_log' => 'Vill du verkligen ta bort loggfilen "[logname]"?<br>OBS! Loggfilen kan inte återskapas!',

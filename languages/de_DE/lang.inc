@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1906)
+//    Translators: Admin (1910)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -193,11 +193,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Ja, Ich möchte den Volltextindex neu erzeugen!.',
 'confirm_pwd' => 'Passwort-Bestätigung',
 'confirm_rm_backup' => 'Möchten Sie wirklich das Backup "[arkname]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
-'confirm_rm_document' => 'Wollen Sie das Dokument "[documentname]" wirklich löschen?<br>Achtung: Dieser Vorgang kann nicht rückgängig gemacht werden.',
+'confirm_rm_document' => 'Wollen Sie das Dokument \'[documentname]\' wirklich löschen?<br>Achtung: Dieser Vorgang kann nicht rückgängig gemacht werden.',
 'confirm_rm_dump' => 'Möchten Sie wirklich den DB dump "[dumpname]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
 'confirm_rm_event' => 'Möchten Sie wirklich das Ereignis "[name]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
 'confirm_rm_file' => 'Möchten Sie wirklich die Datei "[name]" des Dokuments "[documentname]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
-'confirm_rm_folder' => 'Wollen Sie den Ordner "[foldername]" mitsamt seines Inhalts wirklich löschen?<br>Achtung: Dieser Vorgang kann nicht rückgängig gemacht werden.',
+'confirm_rm_folder' => 'Wollen Sie den Ordner \'[foldername]\' mitsamt seines Inhalts wirklich löschen?<br>Achtung: Dieser Vorgang kann nicht rückgängig gemacht werden.',
 'confirm_rm_folder_files' => 'Möchten Sie wirklich alle Dateien und Unterordner des Ordner "[foldername]" löschen?<br>Vorsicht: Diese Operation kann nicht rückgängig gemacht werden.',
 'confirm_rm_group' => 'Möchten Sie wirklich die Gruppe "[groupname]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
 'confirm_rm_log' => 'Möchten Sie wirklich die Log-Datei "[logname]" löschen?<br />Beachten Sie, dass diese Operation nicht rückgängig gemacht werden kann.',
@@ -817,8 +817,8 @@ URL: [url]',
 'settings_dbUser_desc' => 'Der Benutzername, um auf die Datenbank zugreifen zu können.',
 'settings_dbVersion' => 'Datenbankschema zu alt',
 'settings_delete_install_folder' => 'Um SeedDMS nutzen zu können, müssen Sie die Datei ENABLE_INSTALL_TOOL aus dem Konfigurationsverzeichnis löschen.',
-'settings_disableSelfEdit' => 'Ändern des eigenen Profils',
-'settings_disableSelfEdit_desc' => 'Anwählen, um das Ändern des eigenen Profiles zu erlauben.',
+'settings_disableSelfEdit' => 'Kein Ändern des eigenen Profils',
+'settings_disableSelfEdit_desc' => 'Anwählen, um das Ändern des eigenen Profiles zu verhindern.',
 'settings_disable_install' => 'Lösche ENABLE_INSTALL_TOOL wenn möglich',
 'settings_Display' => 'Anzeige-Einstellungen',
 'settings_dropFolderDir' => 'Verzeichnis für Ablageordner',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (383)
+//    Translators: Admin (388)
 
 $text = array(
 'accept' => 'Prijať',
@@ -171,11 +171,11 @@ $text = array(
 'confirm_create_fulltext_index' => '',
 'confirm_pwd' => 'Potvrdenie hesla',
 'confirm_rm_backup' => 'Skutočne si prajete odstrániť zálohu "[arkname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
-'confirm_rm_document' => 'Naozaj chcete odstrániť dokument "[documentname]"?<br>Buďte opatrní: Túto činnosť nemožno vrátiť späť.',
+'confirm_rm_document' => 'Naozaj chcete odstrániť dokument \'[documentname]\'?<br>Buďte opatrní: Túto činnosť nemožno vrátiť späť.',
 'confirm_rm_dump' => 'Skutočne si prajete odstrániť "[dumpname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
 'confirm_rm_event' => 'Skutočne si prajete odstrániť udalosť "[name]"?<br>Buďte opatrní, táto akcia je nezvratná.',
 'confirm_rm_file' => 'Skutočne si prajete odstrániť súbor "[name]" z dokumentu "[documentname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
-'confirm_rm_folder' => 'Naozaj chcete odstrániť "[foldername]" a jeho obsah?<br>Buďte opatrní: Túto činnosť nemožno vrátiť späť.',
+'confirm_rm_folder' => 'Naozaj chcete odstrániť \'[foldername]\' a jeho obsah?<br>Buďte opatrní: Túto činnosť nemožno vrátiť späť.',
 'confirm_rm_folder_files' => 'Skutočne si prajete odstrániť všetky súbory zložky "[foldername]" a všetkých jej podzložiek?<br>Buďte opatrní, táto akcia je nezvratná.',
 'confirm_rm_group' => 'Skutočne si prajete odstrániť skupinu "[groupname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
 'confirm_rm_log' => 'Skutočne si prajete zmazať protokol "[logname]"?<br>Buďte opatrní, táto akcia je nezvratná.',
@@ -413,7 +413,7 @@ $text = array(
 'linked_files' => 'Prílohy',
 'link_alt_updatedocument' => '',
 'local_file' => 'Lokálny súbor',
-'locked_by' => '',
+'locked_by' => 'Uzamkol',
 'lock_document' => 'Zamknúť',
 'lock_message' => 'Tento dokument zamkol <a href="mailto:[email]">[username]</a>.<br>Iba oprávnení používatelia ho môžu odomknúť (pozri koniec stránky).',
 'lock_status' => 'Stav',
@@ -881,8 +881,8 @@ $text = array(
 'splash_cleared_clipboard' => '',
 'splash_document_added' => '',
 'splash_document_edited' => '',
-'splash_document_locked' => '',
-'splash_document_unlocked' => '',
+'splash_document_locked' => 'Dokument uzamknutý',
+'splash_document_unlocked' => 'Dokument odomknutý',
 'splash_edit_attribute' => '',
 'splash_edit_group' => '',
 'splash_edit_user' => '',

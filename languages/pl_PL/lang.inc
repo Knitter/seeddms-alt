@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (691), netixw (84), romi (93), uGn (112)
+//    Translators: Admin (696), netixw (84), romi (93), uGn (112)
 
 $text = array(
 'accept' => 'Akceptuj',
@@ -186,11 +186,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Tak, chcę ponownie utworzyć indeks pełnotekstowy!',
 'confirm_pwd' => 'Potwierdź hasło',
 'confirm_rm_backup' => 'Czy rzeczywiście chcesz usunąć plik "[arkname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
-'confirm_rm_document' => 'Czy rzeczywiście chcesz usunąć dokument "[documentname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
+'confirm_rm_document' => 'Czy rzeczywiście chcesz usunąć dokument \'[documentname]\'?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_dump' => 'Czy rzeczywiście chcesz usunąć plik "[dumpname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_event' => 'Czy rzeczywiście chcesz usunąć zdarzenie "[name]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_file' => 'Czy rzeczywiście chcesz usunąć plik "[name]" dokumentu "[documentname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
-'confirm_rm_folder' => 'Czy rzeczywiście chcesz usunąć folder "[foldername]" wraz z zawartością?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
+'confirm_rm_folder' => 'Czy rzeczywiście chcesz usunąć folder \'[foldername]\' wraz z zawartością?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_folder_files' => 'Czy rzeczywiście chcesz usunąć wszystkie pliki z folderu "[foldername]" oraz jego podfoldery?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_group' => 'Czy rzeczywiście chcesz usunąć grupę "[groupname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
 'confirm_rm_log' => 'Czy rzeczywiście chcesz usunąć plik dziennika "[logname]"?<br>Ostrożnie: Ta operacja nie może być cofnięta.',
@@ -349,8 +349,8 @@ URL: [url]',
 'files_deletion' => 'Usuwanie plików',
 'files_deletion_warning' => 'Ta operacja pozwala usunąć wszystkie pliki z repozytorium. Informacje o wersjonowaniu pozostaną widoczne.',
 'file_size' => 'Rozmiar pliku',
-'filter_for_documents' => '',
-'filter_for_folders' => '',
+'filter_for_documents' => 'Dodatkowe filtrowanie dla dokumentów',
+'filter_for_folders' => 'Dodatkowe filtrowanie dla folderów',
 'folder' => 'Folder',
 'folders' => 'Foldery',
 'folders_and_documents_statistic' => 'Podsumowanie zawartości',
@@ -596,7 +596,7 @@ URL: [url]',
 'no_review_needed' => 'Brak dokumentów w trakcie opiniowania.',
 'no_update_cause_locked' => 'Nie możesz zaktualizować tego dokumentu. Proszę skontaktuj się z osobą która go blokuje.',
 'no_user_image' => 'Nie znaleziono obrazu',
-'no_version_check' => '',
+'no_version_check' => 'Poszukiwanie nowej wersji DeedDMS nie powiodło się! To może być spowodowane ustawieniem opcji \'allow_url_fopen = 0\' w twojej konfiguracji PHP.',
 'objectcheck' => 'Sprawdź Katalog/Dokument',
 'obsolete' => 'Zdezaktualizowany',
 'october' => 'Październik',
