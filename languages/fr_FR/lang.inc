@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (921), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (923), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -349,8 +349,8 @@ URL: [url]',
 'files_deletion' => 'Suppression de fichiers',
 'files_deletion_warning' => 'Avec cette option, vous pouvez supprimer tous les fichiers d\'un dossier DMS. Les informations de version resteront visibles.',
 'file_size' => 'Taille',
-'filter_for_documents' => '',
-'filter_for_folders' => '',
+'filter_for_documents' => 'Filtre additionnel pour les documents',
+'filter_for_folders' => 'Filtre additionnel pour les dossiers',
 'folder' => 'Dossier',
 'folders' => 'Dossiers',
 'folders_and_documents_statistic' => 'Aperçu du contenu',

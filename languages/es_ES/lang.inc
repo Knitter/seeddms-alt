@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (928), angel (123), francisco (2), jaimem (14)
+//    Translators: Admin (930), angel (123), francisco (2), jaimem (14)
 
 $text = array(
 'accept' => 'Aceptar',
@@ -833,8 +833,8 @@ URL: [url]',
 'settings_enableClipboard_desc' => 'Habilitar/deshabilitar el portapapeles',
 'settings_enableConverting' => 'Habilitar conversión',
 'settings_enableConverting_desc' => 'Habilitar/Deshabilitar conversión de ficheros',
-'settings_enableDropUpload' => '',
-'settings_enableDropUpload_desc' => '',
+'settings_enableDropUpload' => 'Habilitar Subida Rapida',
+'settings_enableDropUpload_desc' => 'Habilite/Deshabilite el área de drop en la pagina \'\'Ver folder\' para subir archivos por Drag&Drop',
 'settings_enableDuplicateDocNames' => 'Permite tener nombres de documento duplicados',
 'settings_enableDuplicateDocNames_desc' => 'Permite tener un nombre de documento duplicado en una carpeta.',
 'settings_enableEmail' => 'Habilitar E-mail',
