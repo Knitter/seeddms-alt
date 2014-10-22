@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (684), pepijn (45), reinoutdijkstra@hotmail.com (270)
+//    Translators: Admin (688), pepijn (45), reinoutdijkstra@hotmail.com (270)
 
 $text = array(
 'accept' => 'Accept',
@@ -76,7 +76,7 @@ URL: [url]',
 'apply' => 'Toepassen',
 'approval_deletion_email' => 'Goedkeuring verzoek verwijderd',
 'approval_group' => 'Goedkeuring Groep',
-'approval_log' => '',
+'approval_log' => 'Goedkeuring overzicht',
 'approval_request_email' => 'Goedkeuring verzoek',
 'approval_request_email_body' => 'Toestemming vereist
 Document: [name]
@@ -349,8 +349,8 @@ URL: [url]',
 'files_deletion' => 'Bestanden verwijderen',
 'files_deletion_warning' => 'Met deze handeling verwijdert U ALLE bestanden uit het DMS. Versie informatie blijft beschikbaar',
 'file_size' => 'Bestandsomvang',
-'filter_for_documents' => '',
-'filter_for_folders' => '',
+'filter_for_documents' => 'Extra filter voor documenten',
+'filter_for_folders' => 'Extra filter voor mappen',
 'folder' => 'Map',
 'folders' => 'Mappen',
 'folders_and_documents_statistic' => 'Inhoudsopgave',
@@ -686,7 +686,7 @@ URL: [url]',
 'reviewer_already_removed' => 'is reeds verwijderd uit het [Controle] process of heeft reeds [Controle] uitgevoerd',
 'review_deletion_email' => 'Controle verzoek gewijzigd',
 'review_group' => '[Controle] Groep',
-'review_log' => '',
+'review_log' => 'Reviseer overzicht',
 'review_request_email' => 'Controle verzoek',
 'review_status' => '[Controle] Status',
 'review_submit_email' => 'Uitgevoerde [Controle]',

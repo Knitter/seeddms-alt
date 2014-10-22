@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (540), fengjohn (5)
+//    Translators: Admin (541), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -773,7 +773,7 @@ URL: [url]',
 'settings_more_settings' => '',
 'settings_notfound' => '',
 'settings_Notification' => '通知设置',
-'settings_notwritable' => '',
+'settings_notwritable' => '设置_不可写',
 'settings_no_content_dir' => '',
 'settings_partitionSize' => '',
 'settings_partitionSize_desc' => '',

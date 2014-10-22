@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1237)
+//    Translators: Admin (1240)
 
 $text = array(
 'accept' => 'Принять',
@@ -159,7 +159,7 @@ URL: [url]',
 'change_password_message' => 'Пароль изменён',
 'change_status' => 'Изменить статус',
 'charts' => 'Диаграммы',
-'chart_docsaccumulated_title' => '',
+'chart_docsaccumulated_title' => 'Количество документов',
 'chart_docspercategory_title' => '',
 'chart_docspermimetype_title' => '',
 'chart_docspermonth_title' => '',
@@ -349,8 +349,8 @@ URL: [url]',
 'files_deletion' => 'Удалить файлы',
 'files_deletion_warning' => 'Эта операция удалит все файлы во всех каталогах. Информация о версиях останется доступна',
 'file_size' => 'Размер',
-'filter_for_documents' => '',
-'filter_for_folders' => '',
+'filter_for_documents' => 'Дополнительный фильтр по документам',
+'filter_for_folders' => 'Дополнительный фильтр по папкам',
 'folder' => 'Каталог',
 'folders' => 'кат.',
 'folders_and_documents_statistic' => 'Обзор содержимого',

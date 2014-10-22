@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (388)
+//    Translators: Admin (392)
 
 $text = array(
 'accept' => 'Prijať',
@@ -54,7 +54,7 @@ $text = array(
 'add_multiple_documents' => '',
 'add_multiple_files' => 'Pridať viacero súborov (názov súboru sa použije ako názov dokumentu)',
 'add_subfolder' => 'Pridať podzložku',
-'add_to_clipboard' => '',
+'add_to_clipboard' => 'Pridaj do schránky',
 'add_user' => 'Pridať nového používatela',
 'add_user_to_group' => '',
 'add_workflow' => '',
@@ -164,7 +164,7 @@ $text = array(
 'choose_workflow_action' => '',
 'choose_workflow_state' => '',
 'clear_clipboard' => '',
-'clipboard' => '',
+'clipboard' => 'Schránka',
 'close' => '',
 'comment' => 'Komentár',
 'comment_for_current_version' => 'Version comment',
@@ -347,7 +347,7 @@ $text = array(
 'hours' => '',
 'human_readable' => 'Použivateľský archív',
 'hu_HU' => '',
-'id' => '',
+'id' => 'ID',
 'identical_version' => '',
 'include_documents' => 'Vrátane súborov',
 'include_subdirectories' => 'Vrátane podzložiek',
@@ -873,7 +873,7 @@ $text = array(
 'sign_out_user' => '',
 'sk_SK' => '',
 'space_used_on_data_folder' => 'Space used on data folder',
-'splash_added_to_clipboard' => '',
+'splash_added_to_clipboard' => 'Pridané do schránky',
 'splash_add_attribute' => '',
 'splash_add_group' => '',
 'splash_add_group_member' => '',

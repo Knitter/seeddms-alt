@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2014-07-30</date>
- <time>09:03:59</time>
+ <date>2014-10-22</date>
+ <time>14:13:32</time>
  <version>
-  <release>4.3.9</release>
-  <api>4.3.9</api>
+  <release>4.3.10</release>
+  <api>4.3.10</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,8 +24,7 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-- SeedDMS_Core_KeywordCategory::getKeywordLists() sorts keywords aphabetically
-- SeedDMS_Core_DMS::addUser() doesn't throw an error if sql_mode is set to STRICT_TRANS_TABLES and pwdexpiration is not set to a valid date.
+new release
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -683,6 +682,23 @@ no changes
    <notes>
 - new method SeedDMS_Core_DMS::getStatisticalData()
    </notes>
+  </release>
+  <release>
+	 <date>2014-07-30</date>
+	 <time>09:03:59</time>
+	 <version>
+		<release>4.3.9</release>
+		<api>4.3.9</api>
+	 </version>
+	 <stability>
+		<release>stable</release>
+		<api>stable</api>
+	 </stability>
+	 <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+	 <notes>
+- SeedDMS_Core_KeywordCategory::getKeywordLists() sorts keywords aphabetically
+- SeedDMS_Core_DMS::addUser() doesn't throw an error if sql_mode is set to STRICT_TRANS_TABLES and pwdexpiration is not set to a valid date.
+	 </notes>
   </release>
  </changelog>
 </package>
