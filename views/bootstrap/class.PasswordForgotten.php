@@ -34,7 +34,7 @@ class SeedDMS_View_PasswordForgotten extends SeedDMS_Bootstrap_Style {
 	function show() { /* {{{ */
 		$referrer = $this->params['referrer'];
 
-		$this->htmlStartPage(getMLText("password_forgotten"), "login");
+		$this->htmlStartPage(getMLText("password_forgotten"), "passwordforgotten");
 		$this->globalBanner();
 		$this->contentStart();
 		$this->pageNavigation(getMLText("password_forgotten"));

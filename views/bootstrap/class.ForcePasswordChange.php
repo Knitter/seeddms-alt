@@ -36,7 +36,7 @@ class SeedDMS_View_ForcePasswordChange extends SeedDMS_Bootstrap_Style {
 		$user = $this->params['user'];
 		$passwordstrength = $this->params['passwordstrength'];
 
-		$this->htmlStartPage(getMLText("sign_in"), "login");
+		$this->htmlStartPage(getMLText("sign_in"), "forcepasswordchange");
 		$this->globalBanner();
 		$this->contentStart();
 		echo "<h3>".getMLText('password_expiration')."</h3>";
