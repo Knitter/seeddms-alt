@@ -457,6 +457,7 @@ $text = array(
 'my_documents' => 'Els meus documents',
 'name' => 'Nom',
 'needs_workflow_action' => '',
+'never' => '',
 'new' => 'Nou',
 'new_attrdef' => '',
 'new_default_keywords' => 'Afegir mots clau',

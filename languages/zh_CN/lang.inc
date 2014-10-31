@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (541), fengjohn (5)
+//    Translators: Admin (542), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -124,7 +124,7 @@ URL: [url]',
 'backup_remove' => '删除备份',
 'backup_tools' => '备份工具',
 'between' => '时间段',
-'browse' => '',
+'browse' => '浏览',
 'calendar' => '日历',
 'calendar_week' => '',
 'cancel' => '取消',
@@ -461,6 +461,7 @@ URL: [url]',
 'my_documents' => '我的文档',
 'name' => '名称',
 'needs_workflow_action' => '',
+'never' => '',
 'new' => 'New',
 'new_attrdef' => '添加属性',
 'new_default_keywords' => '添加关键字',

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1048), netixw (14)
+//    Translators: Admin (1049), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -533,6 +533,7 @@ URL: [url]',
 'my_documents' => 'My Documents',
 'name' => 'Name',
 'needs_workflow_action' => 'This document requires your attention. Please check the workflow tab.',
+'never' => 'never',
 'new' => 'New',
 'new_attrdef' => 'Add attribute defintion',
 'new_default_keywords' => 'Add keywords',

@@ -457,6 +457,7 @@ $text = array(
 'my_documents' => 'Documenti personali',
 'name' => 'Nome',
 'needs_workflow_action' => '',
+'never' => '',
 'new' => 'Nuovo',
 'new_attrdef' => 'Nuovo attributo',
 'new_default_keywords' => 'Aggiungi parole chiave',
