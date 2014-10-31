@@ -457,6 +457,7 @@ $text = array(
 'my_documents' => 'Moje dokumenty',
 'name' => 'Meno',
 'needs_workflow_action' => '',
+'never' => '',
 'new' => 'Nove',
 'new_attrdef' => '',
 'new_default_keywords' => 'Pridať kľúčové slová',

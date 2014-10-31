@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1910)
+//    Translators: Admin (1911)
 
 $text = array(
 'accept' => 'Übernehmen',
@@ -533,6 +533,7 @@ URL: [url]',
 'my_documents' => 'Meine Dokumente',
 'name' => 'Name',
 'needs_workflow_action' => 'Diese Dokument erfordert eine Aktion. Bitte schauen Sie auf den Workflow-Reiter.',
+'never' => 'nie',
 'new' => 'Neu',
 'new_attrdef' => 'Neue Attributdefinition',
 'new_default_keywords' => 'Neue Vorlage',
