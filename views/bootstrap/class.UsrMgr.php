@@ -157,7 +157,7 @@ function showUser(selectObj) {
 ?>
 		<tr>
 			<td><?php printMLText("password_expiration");?>:</td>
-			<td><select name="pwdexpiration"><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option></select></td>
+			<td><select name="pwdexpiration"><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option><option value="0000-00-00"><?php printMLText("never");?></option></select></td>
 		</tr>
 <?php
 		}
@@ -378,7 +378,7 @@ function showUser(selectObj) {
 ?>
 		<tr>
 			<td><?php printMLText("password_expiration");?>:</td>
-			<td><select name="pwdexpiration"><option value=""><?php printMLText("keep");?></option><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option></select> <?php echo $currUser->getPwdExpiration(); ?></td>
+			<td><select name="pwdexpiration"><option value=""><?php printMLText("keep");?></option><option value="<?php echo date('Y-m-d H:i:s'); ?>"><?php printMLText("now");?></option><option value="<?php echo date('Y-m-d H:i:s', time()+$passwordexpiration*86400); ?>"><?php printMLText("according_settings");?></option><option value="0000-00-00"><?php printMLText("never");?></option></select> <?php echo $currUser->getPwdExpiration(); ?></td>
 		</tr>
 <?php
 	}
