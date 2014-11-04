@@ -750,7 +750,8 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		if($attributes) {
 			foreach($attributes as $attrdefid=>$attribute) {
-				if(trim($attribute))
+				/* $attribute can be a string or an array */
+				if($attribute)
 					if(!$document->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
 						$document->remove();
 						$db->rollbackTransaction();
