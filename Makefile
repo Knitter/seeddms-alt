@@ -1,4 +1,4 @@
-VERSION=4.3.10
+VERSION=4.3.11
 SRC=CHANGELOG inc conf utils index.php languages views op out README.md README.Notification README.Ubuntu drop-tables-innodb.sql styles js TODO LICENSE Makefile webdav install restapi
 # webapp
 
