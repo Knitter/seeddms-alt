@@ -3,7 +3,9 @@
 --------------------------------------------------------------------------------
 - translation updates
 - password expiration can be set to 'never'
+- fixed saving multi value attributes
 - do not close browser window anymore when keywords are chosen (Bug #141)
+- fix almost unrestricted fast upload (Bug #175)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.10
