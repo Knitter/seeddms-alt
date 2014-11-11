@@ -131,7 +131,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		echo "<div class=\"span".$RightColumnSpan."\">\n";
 
 
-		if ($enableDropUpload) {
+		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
 			echo "<div class=\"row-fluid\">";
 			echo "<div class=\"span8\">";
 		}
@@ -190,7 +190,7 @@ class SeedDMS_View_ViewFolder extends SeedDMS_Bootstrap_Style {
 		}
 		echo "</table>\n";
 		$this->contentContainerEnd();
-		if ($enableDropUpload) {
+		if ($enableDropUpload && $folder->getAccessMode($user) >= M_READWRITE) {
 			echo "</div>";
 			echo "<div class=\"span4\">";
 			$this->contentHeading(getMLText("dropupload"), true);
