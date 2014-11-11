@@ -443,6 +443,20 @@ switch($command) {
 					echo json_encode(array('success'=>false, 'message'=>getMLText("invalid_folder_id")));
 					exit;
 				}
+
+				if ($folder->getAccessMode($user) < M_READWRITE) {
+					echo json_encode(array('success'=>false, 'message'=>getMLText("access_denied")));
+					exit;
+				}
+
+				if($settings->_quota > 0) {
+					$remain = checkQuota($user);
+					if ($remain < 0) {
+						echo json_encode(array('success'=>false, 'message'=>getMLText("quota_exceeded", array('bytes'=>SeedDMS_Core_File::format_filesize(abs($remain))))));
+						exit;
+					}
+				}
+
 				if (!is_uploaded_file($_FILES["userfile"]["tmp_name"]) || $_FILES['userfile']['error']!=0){
 					header('Content-Type', 'application/json');
 					echo json_encode(array('success'=>false, 'message'=>getMLText("uploading_failed")));
