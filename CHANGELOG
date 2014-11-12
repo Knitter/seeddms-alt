@@ -6,6 +6,7 @@
 - fixed saving multi value attributes
 - do not close browser window anymore when keywords are chosen (Bug #141)
 - fix almost unrestricted fast upload (Bug #175)
+- no more php warning on Workflow summary page (Bug #177)
 
 --------------------------------------------------------------------------------
                      Changes in version 4.3.10
