@@ -91,7 +91,32 @@ class SeedDMS_Core_Attribute { /* {{{ */
 
 	function getID() { return $this->_id; }
 
+	/**
+	 * Return attribute value as stored in database
+	 *
+	 * This function will return the value of multi value attributes
+	 * including the separator char.
+	 *
+	 * @return string the attribute value as it is stored in the database.
+	 */
 	function getValue() { return $this->_value; }
+
+	/**
+	 * Return attribute values as an array
+	 *
+	 * This function returns the attribute value as an array. Such an array
+	 * has one element for non multi value attributes and n elements for
+	 * multi value attributes.
+	 *
+	 * @return array the attribute values
+	 */
+	function getValueAsArray() { /* {{{ */
+		if($this->_attrdef->getMultipleValues()) {
+			return explode($this->_value[0], substr($this->_value, 1));
+		} else {
+			return array($this->_value);
+		}
+	} /* }}} */
 
 	/**
 	 * Set a value of an attribute
