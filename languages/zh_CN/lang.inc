@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (542), fengjohn (5)
+//    Translators: Admin (544), fengjohn (5)
 
 $text = array(
 'accept' => '接受',
@@ -188,7 +188,9 @@ URL: [url]',
 'content' => '内容',
 'continue' => '继续',
 'create_fulltext_index' => '创建全文索引',
-'create_fulltext_index_warning' => '',
+'create_fulltext_index_warning' => '你将重新创建全
+文索引。这将花费一定的时间但是会提升系统的整体表现。如果你想要重新创建索引，请确
+认你的操作',
 'creation_date' => '创建日期',
 'cs_CZ' => '捷克语',
 'current_password' => '',

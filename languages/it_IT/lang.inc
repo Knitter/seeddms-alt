@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (764)
+//    Translators: Admin (766)
 
 $text = array(
 'accept' => 'Accetta',
@@ -300,8 +300,8 @@ $text = array(
 'files_deletion' => 'Cancellazione file',
 'files_deletion_warning' => 'Con questa operazione è possible cancellare i file di intere cartelle. Dopo la cancellazione le informazioni di versionamento resteranno disponibili.',
 'file_size' => 'Grandezza',
-'filter_for_documents' => '',
-'filter_for_folders' => '',
+'filter_for_documents' => 'Filtro aggiuntivo per i documenti',
+'filter_for_folders' => 'Filtro aggiuntivo per le cartelle',
 'folder' => 'Cartella',
 'folders' => 'Cartelle',
 'folders_and_documents_statistic' => 'Visualizzazione generale',
