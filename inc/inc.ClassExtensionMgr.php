@@ -57,19 +57,25 @@ class SeedDMS_Extension_Mgr {
 		return $this->cachedir."/extensions.php";
 	} /* }}} */
 
+	/**
+	 * Create the cached file containing extension information
+	 *
+	 * This function will always create a file, even if no extensions
+	 * are installed.
+	 */
 	function createExtensionConf() { /* {{{ */
 		$extensions = self::getExtensions();
+		$fp = fopen($this->cachedir."/extensions.php", "w");
 		if($extensions) {
-			$fp = fopen($this->cachedir."/extensions.php", "w");
 			foreach($extensions as $_ext) {
 				if(file_exists($this->extdir . "/" . $_ext . "/conf.php")) {
 					$content = file_get_contents($this->extdir . "/" . $_ext . "/conf.php");
 					fwrite($fp, $content);
 				}
 			}
-			fclose($fp);
-			include($this->cachedir."/extensions.php");
 		}
+		fclose($fp);
+		//include($this->cachedir."/extensions.php");
 	} /* }}} */
 
 	function getExtensions() { /* {{{ */
