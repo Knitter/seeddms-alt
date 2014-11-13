@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (616), kreml (441)
+//    Translators: Admin (616), kreml (442)
 
 $text = array(
 'accept' => 'Přijmout',
@@ -533,7 +533,7 @@ URL: [url]',
 'my_documents' => 'Moje dokumenty',
 'name' => 'Název',
 'needs_workflow_action' => 'Tento dokument vyžaduje Vaši pozornost. Prosím zkontrolujte záložku pracovního postupu.',
-'never' => '',
+'never' => 'nikdy',
 'new' => 'Nový',
 'new_attrdef' => 'Přidat definici atributu',
 'new_default_keywords' => 'Přidat klíčová slova',

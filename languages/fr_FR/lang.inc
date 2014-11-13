@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (923), jeromerobert (50), lonnnew (9)
+//    Translators: Admin (926), jeromerobert (50), lonnnew (9)
 
 $text = array(
 'accept' => 'Accepter',
@@ -127,7 +127,7 @@ URL: [url]',
 'attr_no_regex_match' => 'La valeur de l\'attribut ne correspond pas à l\'expression régulière.',
 'at_least_n_users_of_group' => '',
 'august' => 'Août',
-'authentication' => '',
+'authentication' => 'Authentification',
 'automatic_status_update' => 'Changement de statut automatique',
 'back' => 'Retour',
 'backup_list' => 'Liste de sauvegardes existantes',
@@ -219,7 +219,7 @@ URL: [url]',
 'details_version' => 'Détails de la version: [version]',
 'de_DE' => 'Allemand',
 'disclaimer' => 'Cet espace est protégé. Son accès est strictement réservé aux utilisateurs autorisés.<br/>Tout accès non autorisé est punissable par les lois internationales.',
-'discspace' => '',
+'discspace' => 'Espace disque',
 'document' => 'Document',
 'documents' => 'Documents',
 'documents_in_process' => 'Documents en cours',
@@ -475,7 +475,7 @@ URL: [url]',
 'keywords' => 'Mots-clés',
 'keyword_exists' => 'Mot-clé déjà existant',
 'language' => 'Langue',
-'lastaccess' => '',
+'lastaccess' => 'Dernière connexion',
 'last_update' => 'Dernière modification',
 'legend' => 'Légende',
 'linked_documents' => 'Documents liés',
