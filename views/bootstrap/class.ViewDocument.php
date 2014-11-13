@@ -241,7 +241,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 ?>
 		    <tr>
 					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-					<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
+					<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
 		    </tr>
 <?php
 			}
@@ -345,7 +345,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 		if($attributes) {
 			foreach($attributes as $attribute) {
 				$attrdef = $attribute->getAttributeDefinition();
-				print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
+				print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
 			}
 		}
 		print "</ul>\n";
@@ -933,7 +933,7 @@ class SeedDMS_View_ViewDocument extends SeedDMS_Bootstrap_Style {
 				if($attributes) {
 					foreach($attributes as $attribute) {
 						$attrdef = $attribute->getAttributeDefinition();
-						print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($attribute->getValue())."</li>\n";
+						print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $attribute->getValueAsArray()))."</li>\n";
 					}
 				}
 				print "</ul>\n";

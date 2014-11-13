@@ -475,7 +475,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					if($lcattributes) {
 						foreach($lcattributes as $lcattribute) {
 							$attrdef = $lcattribute->getAttributeDefinition();
-							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($lcattribute->getValue())."</li>\n";
+							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $lcattribute->getValueAsArray()))."</li>\n";
 						}
 					}
 					print "</ul>\n";
@@ -484,7 +484,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					if($docttributes) {
 						foreach($docttributes as $docttribute) {
 							$attrdef = $docttribute->getAttributeDefinition();
-							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($docttribute->getValue())."</li>\n";
+							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $docttribute->getValueAsArray()))."</li>\n";
 						}
 					}
 					print "</ul>\n";
@@ -549,7 +549,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					if($folderattributes) {
 						foreach($folderattributes as $folderattribute) {
 							$attrdef = $folderattribute->getAttributeDefinition();
-							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($folderattribute->getValue())."</li>\n";
+							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $folderattribute->getValueAsArray()))."</li>\n";
 						}
 					}
 					print "</td>";
