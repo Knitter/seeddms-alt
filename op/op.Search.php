@@ -436,7 +436,7 @@ if(count($entries) == 1 && ($resArr['totalDocs'] + $resArr['totalFolders']) == 1
 		$view->setParam('status', isset($status) ? $status : array());
 		$view->setParam('categories', isset($categories) ? $categories : '');
 		$view->setParam('attributes', isset($attributes) ? $attributes : '');
-		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_folder/*, SeedDMS_Core_AttributeDefinition::objtype_all*/));
+		$attrdefs = $dms->getAllAttributeDefinitions(array(SeedDMS_Core_AttributeDefinition::objtype_document, SeedDMS_Core_AttributeDefinition::objtype_documentcontent, SeedDMS_Core_AttributeDefinition::objtype_folder, SeedDMS_Core_AttributeDefinition::objtype_all));
 		$view->setParam('attrdefs', $attrdefs);
 		$allCats = $dms->getDocumentCategories();
 		$view->setParam('allcategories', $allCats);
