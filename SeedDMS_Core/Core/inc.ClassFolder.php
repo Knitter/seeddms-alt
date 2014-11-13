@@ -451,7 +451,7 @@ class SeedDMS_Core_Folder extends SeedDMS_Core_Object {
 
 		if($attributes) {
 			foreach($attributes as $attrdefid=>$attribute) {
-				if(trim($attribute))
+				if($attribute)
 					if(!$newFolder->setAttributeValue($this->_dms->getAttributeDefinition($attrdefid), $attribute)) {
 						$db->rollbackTransaction();
 						return false;
