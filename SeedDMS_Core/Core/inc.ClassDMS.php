@@ -243,7 +243,7 @@ class SeedDMS_Core_DMS {
 		$this->convertFileTypes = array();
 		$this->version = '@package_version@';
 		if($this->version[0] == '@')
-			$this->version = '4.3.10';
+			$this->version = '4.3.11';
 	} /* }}} */
 
 	function getDB() { /* {{{ */
@@ -550,7 +550,9 @@ class SeedDMS_Core_DMS {
 	 * @param modificationstartdate array search for documents modified after this date
 	 * @param modificationenddate array search for documents modified before this date
 	 * @param categories array list of categories the documents must have assigned
-	 * @param attributes array list of attributes
+	 * @param attributes array list of attributes. The key of this array is the
+	 * attribute definition id. The value of the array is the value of the
+	 * attribute. If the attribute may have multiple values it must be an array.
 	 * @param mode int decide whether to search for documents/folders
 	 *        0x1 = documents only
 	 *        0x2 = folders only
@@ -623,10 +625,13 @@ class SeedDMS_Core_DMS {
 				foreach($attributes as $attrdefid=>$attribute) {
 					if($attribute) {
 						$attrdef = $this->getAttributeDefinition($attrdefid);
-						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder) {
-							if($attrdef->getValueSet())
-								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value`='".$attribute."'";
-							else
+						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_folder || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_all) {
+							if($valueset = $attrdef->getValueSet()) {
+								if($attrdef->getMultipleValues()) {
+									$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND (`tblFolderAttributes`.`value` like '".$valueset[0].implode("%' OR `tblFolderAttributes`.`value` like '".$valueset[0], $attribute)."%')";
+								} else
+									$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentAttributes`.`value`='".$attribute."'";
+							} else
 								$searchAttributes[] = "`tblFolderAttributes`.`attrdef`=".$attrdefid." AND `tblFolderAttributes`.`value` like '%".$attribute."%'";
 						}
 					}
@@ -783,10 +788,13 @@ class SeedDMS_Core_DMS {
 				foreach($attributes as $attrdefid=>$attribute) {
 					if($attribute) {
 						$attrdef = $this->getAttributeDefinition($attrdefid);
-						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document) {
-							if($attrdef->getValueSet())
-								$searchAttributes[] = "`tblDocumentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentAttributes`.`value`='".$attribute."'";
-							else
+						if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_document || $attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_all) {
+							if($valueset = $attrdef->getValueSet()) {
+								if($attrdef->getMultipleValues()) {
+									$searchAttributes[] = "`tblDocumentAttributes`.`attrdef`=".$attrdefid." AND (`tblDocumentAttributes`.`value` like '".$valueset[0].implode("%' OR `tblDocumentAttributes`.`value` like '".$valueset[0], $attribute)."%')";
+								} else
+									$searchAttributes[] = "`tblDocumentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentAttributes`.`value`='".$attribute."'";
+							} else
 								$searchAttributes[] = "`tblDocumentAttributes`.`attrdef`=".$attrdefid." AND `tblDocumentAttributes`.`value` like '%".$attribute."%'";
 						} elseif($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_documentcontent) {
 							if($attrdef->getValueSet())

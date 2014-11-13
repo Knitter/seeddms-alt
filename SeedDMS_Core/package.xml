@@ -12,11 +12,11 @@
   <email>uwe@steinmann.cx</email>
   <active>yes</active>
  </lead>
- <date>2014-10-22</date>
- <time>14:13:32</time>
+ <date>2014-11-13</date>
+ <time>09:09:35</time>
  <version>
-  <release>4.3.10</release>
-  <api>4.3.10</api>
+  <release>4.3.11</release>
+  <api>4.3.11</api>
  </version>
  <stability>
   <release>stable</release>
@@ -24,7 +24,8 @@
  </stability>
  <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
  <notes>
-new release
+- fixed saving multivalue attributes
+- add method SeedDMS_Core_Attribute::getValueAsArray()
  </notes>
  <contents>
   <dir baseinstalldir="SeedDMS" name="/">
@@ -699,6 +700,22 @@ no changes
 - SeedDMS_Core_KeywordCategory::getKeywordLists() sorts keywords aphabetically
 - SeedDMS_Core_DMS::addUser() doesn't throw an error if sql_mode is set to STRICT_TRANS_TABLES and pwdexpiration is not set to a valid date.
 	 </notes>
+  </release>
+  <release>
+   <date>2014-10-22</date>
+   <time>14:13:32</time>
+   <version>
+    <release>4.3.10</release>
+    <api>4.3.10</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://opensource.org/licenses/gpl-license">GPL License</license>
+   <notes>
+new release
+   </notes>
   </release>
  </changelog>
 </package>

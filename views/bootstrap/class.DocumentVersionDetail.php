@@ -120,7 +120,7 @@ class SeedDMS_View_DocumentVersionDetail extends SeedDMS_Bootstrap_Style {
 ?>
 		    <tr>
 					<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
-					<td><?php echo htmlspecialchars($attribute->getValue()); ?></td>
+					<td><?php echo htmlspecialchars(implode(', ', $attribute->getValueAsArray())); ?></td>
 		    </tr>
 <?php
 			}
