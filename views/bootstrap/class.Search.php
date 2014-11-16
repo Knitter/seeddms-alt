@@ -162,6 +162,24 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
         </span>
 </td>
 </tr>
+
+<?php
+		if($attrdefs) {
+			foreach($attrdefs as $attrdef) {
+				$attricon = '';
+				if($attrdef->getObjType() == SeedDMS_Core_AttributeDefinition::objtype_all) {
+?>
+<tr>
+	<td><?php echo htmlspecialchars($attrdef->getName()); ?>:</td>
+	<td><?php $this->printAttributeEditField($attrdef, isset($attributes[$attrdef->getID()]) ? $attributes[$attrdef->getID()] : '') ?></td>
+</tr>
+
+<?php
+				}
+			}
+		}
+?>
+
 <tr>
 <td></td><td><button type="submit" class="btn"><i class="icon-search"></i> <?php printMLText("search"); ?></button></td>
 </tr>
@@ -462,7 +480,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 						if($lcattributes) {
 							foreach($lcattributes as $lcattribute) {
 								$attrdef = $lcattribute->getAttributeDefinition();
-								print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($lcattribute->getValue())."</li>\n";
+								print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $lcattribute->getValueAsArray()))."</li>\n";
 							}
 						}
 						print "</ul>\n";
@@ -471,7 +489,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 						if($docttributes) {
 							foreach($docttributes as $docttribute) {
 								$attrdef = $docttribute->getAttributeDefinition();
-								print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($docttribute->getValue())."</li>\n";
+								print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $docttribute->getValueAsArray()))."</li>\n";
 							}
 						}
 						print "</ul>\n";
@@ -537,7 +555,7 @@ class SeedDMS_View_Search extends SeedDMS_Bootstrap_Style {
 					if($folderattributes) {
 						foreach($folderattributes as $folderattribute) {
 							$attrdef = $folderattribute->getAttributeDefinition();
-							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars($folderattribute->getValue())."</li>\n";
+							print "<li>".htmlspecialchars($attrdef->getName()).": ".htmlspecialchars(implode(', ', $folderattribute->getValueAsArray()))."</li>\n";
 						}
 					}
 					print "</td>";

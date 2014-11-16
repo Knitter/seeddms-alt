@@ -63,13 +63,13 @@ function insertKeywords(keywords) {
 }
 
 function cancel() {
-	window.close();
+//	window.close();
 	return true;
 }
 
 function acceptKeywords() {
 	targetObj.value = myTA.value;
-	window.close();
+//	window.close();
 	return true;
 }
 

@@ -19,7 +19,7 @@
 //    along with this program; if not, write to the Free Software
 //    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
-//    Translators: Admin (1046), netixw (14)
+//    Translators: Admin (1049), netixw (14)
 
 $text = array(
 'accept' => 'Accept',
@@ -193,11 +193,11 @@ URL: [url]',
 'confirm_create_fulltext_index' => 'Yes, I would like to recreate the fulltext index!',
 'confirm_pwd' => 'Confirm Password',
 'confirm_rm_backup' => 'Do you really want to remove the file "[arkname]"?<br>Be careful: This action cannot be undone.',
-'confirm_rm_document' => 'Do you really want to remove the document "[documentname]"?<br>Be careful: This action cannot be undone.',
+'confirm_rm_document' => 'Do you really want to remove the document \'[documentname]\'?<br>Be careful: This action cannot be undone.',
 'confirm_rm_dump' => 'Do you really want to remove the file "[dumpname]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_event' => 'Do you really want to remove event "[name]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_file' => 'Do you really want to remove file "[name]" of document "[documentname]"?<br>Be careful: This action cannot be undone.',
-'confirm_rm_folder' => 'Do you really want to remove the folder "[foldername]" and its content?<br>Be careful: This action cannot be undone.',
+'confirm_rm_folder' => 'Do you really want to remove the folder \'[foldername]\' and its content?<br>Be careful: This action cannot be undone.',
 'confirm_rm_folder_files' => 'Do you really want to remove all the files of the folder "[foldername]" and of its subfolders?<br>Be careful: This action cannot be undone.',
 'confirm_rm_group' => 'Do you really want to remove the group "[groupname]"?<br>Be careful: This action cannot be undone.',
 'confirm_rm_log' => 'Do you really want to remove log file "[logname]"?<br>Be careful: This action cannot be undone.',
@@ -533,6 +533,7 @@ URL: [url]',
 'my_documents' => 'My Documents',
 'name' => 'Name',
 'needs_workflow_action' => 'This document requires your attention. Please check the workflow tab.',
+'never' => 'never',
 'new' => 'New',
 'new_attrdef' => 'Add attribute defintion',
 'new_default_keywords' => 'Add keywords',

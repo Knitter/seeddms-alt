@@ -77,7 +77,8 @@ background-image: linear-gradient(to bottom, #882222, #111111);;
 </style>
 <?php
 		}
-		echo "<title>".(strlen($this->params['sitename'])>0 ? $this->params['sitename'] : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
+		$sitename = trim(strip_tags($this->params['sitename']));
+		echo "<title>".(strlen($sitename)>0 ? $sitename : "SeedDMS").(strlen($title)>0 ? ": " : "").htmlspecialchars($title)."</title>\n";
 		echo "</head>\n";
 		echo "<body".(strlen($bodyClass)>0 ? " class=\"".$bodyClass."\"" : "").">\n";
 		if($this->params['session'] && $flashmsg = $this->params['session']->getSplashMsg()) {
@@ -1376,7 +1377,7 @@ $('#delete-document-btn-".$docid."').popover({
 	title: '".getMLText("rm_document")."',
 	placement: 'left',
 	html: true,
-	content: '<div>".getMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName(), ENT_QUOTES)))."</div><div><button class=\"btn btn-danger removedocument\" style=\"float: right; margin:10px 0px;\" rel=\"".$docid."\" msg=\"".getMLText($msg)."\" formtoken=\"".createFormKey('removedocument')."\" id=\"confirm-delete-document-btn-".$docid."\"><i class=\"icon-remove\"></i> ".getMLText("rm_document")."</button> <button type=\"button\" class=\"btn\" style=\"float: right; margin:10px 10px;\" onclick=\"$(&quot;#delete-document-btn-".$docid."&quot;).popover(&quot;hide&quot;);\">".getMLText('cancel')."</button></div>'});
+	content: \"<div>".getMLText("confirm_rm_document", array ("documentname" => htmlspecialchars($document->getName(), ENT_QUOTES)))."</div><div><button class='btn btn-danger removedocument' style='float: right; margin:10px 0px;' rel='".$docid."' msg='".getMLText($msg)."' formtoken='".createFormKey('removedocument')."' id='confirm-delete-document-btn-".$docid."'><i class='icon-remove'></i> ".getMLText("rm_document")."</button> <button type='button' class='btn' style='float: right; margin:10px 10px;' onclick='$(&quot;#delete-document-btn-".$docid."&quot;).popover(&quot;hide&quot;);'>".getMLText('cancel')."</button></div>\"});
 ");
 		if($return)
 			return $content;
@@ -1405,7 +1406,7 @@ $('#delete-folder-btn-".$folderid."').popover({
 	title: '".getMLText("rm_folder")."',
 	placement: 'left',
 	html: true,
-	content: '<div>".getMLText("confirm_rm_folder", array ("foldername" => htmlspecialchars($folder->getName(), ENT_QUOTES)))."</div><div><button class=\"btn btn-danger removefolder\" style=\"float: right; margin:10px 0px;\" rel=\"".$folderid."\" msg=\"".getMLText($msg)."\" formtoken=\"".createFormKey('removefolder')."\" id=\"confirm-delete-folder-btn-".$folderid."\"><i class=\"icon-remove\"></i> ".getMLText("rm_folder")."</button> <button type=\"button\" class=\"btn\" style=\"float: right; margin:10px 10px;\" onclick=\"$(&quot;#delete-folder-btn-".$folderid."&quot;).popover(&quot;hide&quot;);\">".getMLText('cancel')."</button></div>'});
+	content: \"<div>".getMLText("confirm_rm_folder", array ("foldername" => htmlspecialchars($folder->getName(), ENT_QUOTES)))."</div><div><button class='btn btn-danger removefolder' style='float: right; margin:10px 0px;' rel='".$folderid."' msg='".getMLText($msg)."' formtoken='".createFormKey('removefolder')."' id='confirm-delete-folder-btn-".$folderid."'><i class='icon-remove'></i> ".getMLText("rm_folder")."</button> <button type='button' class='btn' style='float: right; margin:10px 10px;' onclick='$(&quot;#delete-folder-btn-".$folderid."&quot;).popover(&quot;hide&quot;);'>".getMLText('cancel')."</button></div>\"});
 ");
 		if($return)
 			return $content;
